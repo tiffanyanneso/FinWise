@@ -1,16 +1,15 @@
-package ph.edu.dlsu.finwise.child
+package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import android.view.View
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.FinancialActivity
 import ph.edu.dlsu.finwise.GoalConfirmationActivity
 import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -36,6 +35,17 @@ class ChildNewGoal : AppCompatActivity() {
             binding.etAmount.text = bundle.getString("amount")
             binding.etTargetDate.text = bundle.getString("targetDate")
         }*/
+
+
+        /*if (currentUserType == "Child") {
+            binding.tvFinancialDecisionMakingActivity.visibility = View.GONE
+            binding.checkBoxes.visibility = View.GONE
+        } else if (currentUserType == "Parent") {
+            binding.tvFinancialDecisionMakingActivity.visibility = View.VISIBLE
+            binding.checkBoxes.visibility = View.VISIBLE
+        }*/
+
+
 
 
         binding.btnNext.setOnClickListener {

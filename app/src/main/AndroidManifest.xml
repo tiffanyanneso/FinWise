@@ -19,6 +19,13 @@
             android:name=".BudgetActivity"
             android:exported="false" />
         <activity
+            android:name=".FinancialActivityGoalDeposit"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".PFMEditTransactionActivity"
             android:exported="false" />
         <activity
@@ -63,6 +70,10 @@
         </activity>
         <activity
             android:name=".child.ChildEditGoal"
+            android:exported="false"/>
+
+        <activity
+            android:name=".financialActivitiesModule.ChildEditGoal"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -71,6 +82,9 @@
         <activity
             android:name=".child.ChildNewGoal"
             android:exported="true" />
+        <activity
+            android:name=".financialActivitiesModule.ChildNewGoal"
+            android:exported="true"></activity>
         <activity
             android:name=".StartGoalActivity"
             android:exported="false" />

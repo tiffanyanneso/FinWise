@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PFMRecordDepositActivity">
+    tools:context=".FinancialActivityGoalDeposit">
 
     <TextView
         android:id="@+id/tv_title"
@@ -34,14 +34,15 @@
         android:layout_marginStart="20dp"
         />
 
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spinner_goal"
+    <TextView
+        android:id="@+id/tv_goal_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_goal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:entries="@array/pfm_income_category"
         android:layout_marginTop="5dp"
+        android:text="Goal Name"
+        android:textColor="@color/black"
         android:textSize="14dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"/>
@@ -50,7 +51,7 @@
         android:id="@+id/tv_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_goal"
+        app:layout_constraintTop_toBottomOf="@+id/tv_goal_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="14dp"
@@ -158,7 +159,7 @@
             />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_confirm"
+            android:id="@+id/btn_next"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -169,5 +170,6 @@
             />
 
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

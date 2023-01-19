@@ -8,6 +8,12 @@
     android:layout_marginBottom="10dp"
     android:backgroundTint="@color/light_green">
 
+    <TextView
+        android:id="@+id/tv_goal_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="hi"
+            android:text="Goal Name"
             android:textSize="20sp"
             android:textStyle="bold"
             android:maxLines="1"/>

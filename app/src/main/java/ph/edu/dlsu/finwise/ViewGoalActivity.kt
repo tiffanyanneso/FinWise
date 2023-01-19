@@ -7,9 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.child.ChildEditGoal
-import ph.edu.dlsu.finwise.databinding.ActivityStartGoalBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.ChildEditGoal
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 

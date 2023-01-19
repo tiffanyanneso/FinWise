@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.child
+package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,10 +16,18 @@ class ChildEditGoal : AppCompatActivity() {
         setContentView(binding.root)
         getFinancialGoal()
 
+        /*if (currentUserType == "Child") {
+            binding.tvFinancialDecisionMakingActivity.visibility = View.GONE
+            binding.checkBoxes.visibility = View.GONE
+        } else if (currentUserType == "Parent") {
+            binding.tvFinancialDecisionMakingActivity.visibility = View.VISIBLE
+            binding.checkBoxes.visibility = View.VISIBLE
+        }*/
+
+
         /*binding.btnSave.setOnClickListener {
 
         }*/
-
 
     }
 

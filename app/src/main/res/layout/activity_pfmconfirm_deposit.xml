@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ph.edu.dlsu.capstone.PFMConfirmDepositActivity">
+    tools:context=".PFMConfirmDepositActivity">
 
     <TextView
         android:id="@+id/tv_title"
@@ -125,17 +125,17 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:text="Category"
+                android:text="Date"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 />
 
             <TextView
-                android:id="@+id/tv_category"
+                android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="Category"
+                android:text="Date"
                 android:gravity="end"
                 android:textSize="16sp"
                 android:textColor="@color/black"
