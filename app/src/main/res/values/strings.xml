@@ -38,6 +38,7 @@
     <string name="get_started_2">Get Started</string>
     <string name="goal_progress">Goal Progress</string>
     <string name="goal_details">Goal Details</string>
+    <string name="goal_name">Goal Name</string>
     <string name="date_set">Date Set</string>
     <string name="decision_making_activities">Decision Making Activities</string>
     <string name="start_working"> Start working on your goal!</string>
@@ -45,6 +46,12 @@
     <string name="have_accomplished_goal">You have accomplished your goal.</string>
     <string name="status">Status</string>
     <string name="finish">Finish</string>
+
+    <string name="saving">Saving</string>
+    <string name="savings">Savings</string>
+    <string name="view_all">View All</string>
+    <string name="deposit">+ Deposit</string>
+    <string name="deposit_history">Deposit History</string>
 
     <string-array name="status_list">
         <item>--Status--</item>

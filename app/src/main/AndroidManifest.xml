@@ -13,8 +13,14 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".SavingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".BudgetActivity"
+            android:exported="false" />
+        <activity
             android:name=".PFMEditTransactionActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".PFMTransactionDetailsActivity"
             android:exported="false" />
@@ -33,15 +39,12 @@
         <activity
             android:name=".PFMRecordDepositActivity"
             android:exported="false" />
-
         <activity
             android:name=".PFMRecordIncomeActivity"
             android:exported="false" />
-
         <activity
-            android:name="ph.edu.dlsu.finwise.GoalAccomplishedActivity"
+            android:name=".GoalAccomplishedActivity"
             android:exported="false" />
-
         <activity
             android:name=".PFMRecordIncomeActivity"
             android:exported="false" />
@@ -50,37 +53,38 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
-            android:name="ph.edu.dlsu.finwise.child.ChildEditGoal"
+            android:name=".child.ChildEditGoal"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name="ph.edu.dlsu.finwise.child.ChildNewGoal"
-            android:exported="true">
-        </activity>
+            android:name=".child.ChildNewGoal"
+            android:exported="true" />
         <activity
-            android:name="ph.edu.dlsu.finwise.StartGoalActivity"
+            android:name=".StartGoalActivity"
             android:exported="false" />
         <activity
-            android:name="ph.edu.dlsu.finwise.ViewGoalActivity"
+            android:name=".ViewGoalActivity"
             android:exported="false" />
         <activity
-            android:name="ph.edu.dlsu.finwise.GoalConfirmationActivity"
+            android:name=".GoalConfirmationActivity"
             android:exported="false" />
         <activity
-            android:name="ph.edu.dlsu.finwise.FinancialActivity"
-            android:exported="false"/>
-        <!--<intent-filter>
+            android:name=".FinancialActivity"
+            android:exported="false" />
+        <!--
+<intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
@@ -88,27 +92,28 @@
         <meta-data
             android:name="android.app.lib_name"
             android:value="" />
-    </activity>-->
+    </activity>
+        -->
         <activity
-            android:name="ph.edu.dlsu.finwise.ParentRegisterChildActivity"
+            android:name=".ParentRegisterChildActivity"
             android:exported="false" />
         <activity
-            android:name="ph.edu.dlsu.finwise.ParentRegisterMayaActivity"
+            android:name=".ParentRegisterMayaActivity"
             android:exported="false" />
         <activity
-            android:name="ph.edu.dlsu.finwise.ParentRegisterActivity"
+            android:name=".ParentRegisterActivity"
             android:exported="false" />
         <activity
-            android:name="ph.edu.dlsu.finwise.PasswordResetActivity"
+            android:name=".PasswordResetActivity"
             android:exported="false" />
         <activity
-            android:name="ph.edu.dlsu.finwise.ResetPasswordActivity"
+            android:name=".ResetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name="ph.edu.dlsu.finwise.LoginActivity"
+            android:name=".LoginActivity"
             android:exported="false" />
         <activity
-            android:name="ph.edu.dlsu.finwise.MainActivity"
+            android:name=".MainActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
