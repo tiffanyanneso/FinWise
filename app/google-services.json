@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "938715918693",
+    "project_id": "finwise-1ca4a",
+    "storage_bucket": "finwise-1ca4a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938715918693:android:0342df3e9a53e04009718c",
+        "android_client_info": {
+          "package_name": "ph.edu.dlsu.capstone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "938715918693-avvr7ffut16k58v6elsn6ffn7jsvbl6m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmFMyp9OynobDJStzLh6TkMdfJoLgibcY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "938715918693-avvr7ffut16k58v6elsn6ffn7jsvbl6m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938715918693:android:d69081a91503601909718c",
+        "android_client_info": {
+          "package_name": "ph.edu.dlsu.finwise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "938715918693-avvr7ffut16k58v6elsn6ffn7jsvbl6m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmFMyp9OynobDJStzLh6TkMdfJoLgibcY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "938715918693-avvr7ffut16k58v6elsn6ffn7jsvbl6m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    card_view:cardCornerRadius="10dp"
+    android:foreground="@drawable/border"
+    android:layout_marginBottom="10dp"
+    android:backgroundTint="@color/light_green">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_goal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="hi"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:maxLines="1"/>
+
+            <LinearLayout
+                android:id="@+id/linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/tv_goal">
+
+                <TextView
+                    android:id="@+id/tv_target_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_goal"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:text="Target Date"
+                    android:maxLines="1"/>
+
+                <TextView
+                    android:id="@+id/tv_progress_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_goal"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:text="Progress amount"
+                    android:maxLines="1"/>
+            </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linear_layout"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:maxLines="1"
+            android:text="progress bar here"/>
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

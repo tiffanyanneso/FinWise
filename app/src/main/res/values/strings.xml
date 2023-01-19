@@ -1,0 +1,112 @@
+<resources>
+    <string name="app_name">FinWise</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="no_account_register">Don\'t have an account? <font color="#058B47">Register</font></string>
+    <string name="reset_password">Reset Password</string>
+    <string name="password_reset">Password Reset!</string>
+    <string name="sucessful_reset">Your password has been \n successfully reset.</string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="edit">Edit</string>
+
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="contact_number">Contact Number</string>
+    <string name="birthday">Birthday</string>
+
+    <string name="my_goals">My Goals</string>
+    <string name="new_goal">+ New Goal</string>
+    <string name="new_goal_text">New Goal</string>
+    <string name="edit_goal_text">Edit Goal</string>
+    <string name="goal">Goal</string>
+    <string name="activity">Activity</string>
+    <string name="amount">Amount</string>
+    <string name="target_date">Target Date</string>
+    <string name="review_goal">Review Goal</string>
+
+
+    <string name="get_started">Get Started!</string>
+    <string name="get_started_2">Get Started</string>
+    <string name="goal_progress">Goal Progress</string>
+    <string name="goal_details">Goal Details</string>
+    <string name="date_set">Date Set</string>
+    <string name="decision_making_activities">Decision Making Activities</string>
+    <string name="start_working"> Start working on your goal!</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="have_accomplished_goal">You have accomplished your goal.</string>
+    <string name="status">Status</string>
+    <string name="finish">Finish</string>
+
+    <string-array name="status_list">
+        <item>--Status--</item>
+        <item>In Progress</item>
+        <item>For Review</item>
+        <item>For Editing</item>
+        <item>Disapproved</item>
+        <item>Achieved</item>
+    </string-array>
+
+    <string-array name="decision_making_activities_list">
+        <item>--Activity--</item>
+        <item>In Progress</item>
+        <item>For Review</item>
+        <item>For Editing</item>
+        <item>Disapproved</item>
+        <item>Achieved</item>
+    </string-array>
+
+    <string name="title_decision_making_activities">Financial Decision Making Activities</string>
+
+
+    <string-array name="financial_activity">
+        <item>--Select Activity--</item>
+        <item>Buying Items</item>
+        <item>Planning An Event</item>
+        <item>Saving For Emegency Funds</item>
+        <item>Donating to Charity</item>
+        <item>Situational Shopping</item>
+        <item>Earning Money</item>
+    </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="pfm_income_category">
+        <item>--Select Category--</item>
+        <item>Allowance</item>
+        <item>Gift</item>
+        <item>Birthday</item>
+        <item>Reward</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="pfm_expense_category">
+        <item>--Select Category--</item>
+        <item>Food</item>
+        <item>Toy</item>
+        <item>Game</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="pfm_category">
+        <item>--Select Category--</item>
+        <item>Allowance</item>
+        <item>Gift</item>
+        <item>Birthday</item>
+        <item>Reward</item>
+        <item>Other</item>
+        <item>Food</item>
+        <item>Toy</item>
+        <item>Game</item>
+        <item>Other</item>
+    </string-array>
+
+</resources>
