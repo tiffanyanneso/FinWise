@@ -8,15 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import ph.edu.dlsu.finwise.databinding.ItemTransactionBinding
 import ph.edu.dlsu.finwise.model.Transactions
 
-class TransactionsAdapter : RecyclerView.Adapter<TransactionsAdapter.TransactionViewHolder>{
-
-    private var transactionsArrayList = ArrayList<Transactions>()
-    private lateinit var context: Context
-
-    public constructor(context: Context, transactionsArrayList:ArrayList<Transactions>) {
-        this.context = context
-        this.transactionsArrayList = transactionsArrayList
-    }
+class TransactionsAdapter(
+    private var context: Context,
+    private var transactionsArrayList: ArrayList<Transactions>
+) : RecyclerView.Adapter<TransactionsAdapter.TransactionViewHolder>() {
 
     override fun getItemCount(): Int {
         return transactionsArrayList.size
@@ -49,7 +44,7 @@ class TransactionsAdapter : RecyclerView.Adapter<TransactionsAdapter.Transaction
             this.transaction = transaction
             itemBinding.tvName.text = transaction.transactionName
             itemBinding.tvDate.text = transaction.date
-            itemBinding.tvAmount.text = transaction.amount.toString()
+            itemBinding.tvAmount.text = "₱"+ transaction.amount.toString()
         }
 
         override fun onClick(p0: View?) {
