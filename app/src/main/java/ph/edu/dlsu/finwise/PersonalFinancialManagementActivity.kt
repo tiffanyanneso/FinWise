@@ -24,14 +24,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
         getTransactions()
 
-        // Goes to Deposit Screen
-        binding.btnGoal.setOnClickListener {
-            Toast.makeText(this, "This is my Toast message!",
-                Toast.LENGTH_LONG).show()
-            val goToActivity = Intent(applicationContext, PFMRecordDepositActivity::class.java)
-            startActivity(goToActivity)
-        }
-            //goToGoal()
+        goToDepositGoalActivity()
+        goToIncomeActivity()
     }
 
     private fun getTransactions() {
@@ -54,11 +48,20 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         }
     }
 
-    private fun goToGoal() {
+    private fun goToDepositGoalActivity() {
         binding.btnGoal.setOnClickListener {
             Toast.makeText(this, "This is my Toast message!",
                 Toast.LENGTH_LONG).show()
             val goToActivity = Intent(applicationContext, PFMRecordDepositActivity::class.java)
+            startActivity(goToActivity)
+        }
+    }
+
+    private fun goToIncomeActivity() {
+        binding.btnGoal.setOnClickListener {
+            Toast.makeText(this, "This is my Toast message!",
+                Toast.LENGTH_LONG).show()
+            val goToActivity = Intent(applicationContext, PFMRecordIncomeActivity::class.java)
             startActivity(goToActivity)
         }
     }
