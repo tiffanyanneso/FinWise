@@ -4,17 +4,17 @@
 
     <item android:title=""
         android:icon="@drawable/personalfinance"
-        android:id="@+id/finance"/>
+        android:id="@+id/nav_finance"/>
     <item android:title=""
         android:icon="@drawable/goal"
-        android:id="@+id/goal"/>
+        android:id="@+id/nav_goal"/>
     <item android:title=""
         android:icon="@drawable/baseline_dashboard_24"
-        android:id="@+id/dashboard"/>
+        android:id="@+id/nav_dashboard"/>
     <item android:title=""
         android:icon="@drawable/baseline_assessment_24"
-        android:id="@+id/assessment"/>
+        android:id="@+id/nav_assessment"/>
     <item android:title=""
         android:icon="@drawable/baseline_profile_24"
-        android:id="@+id/profile"/>
+        android:id="@+id/nav_profile"/>
 </menu>
