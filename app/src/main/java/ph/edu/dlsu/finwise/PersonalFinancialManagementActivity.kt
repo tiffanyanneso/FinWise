@@ -10,6 +10,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
 import ph.edu.dlsu.finwise.model.Transactions
 
 class PersonalFinancialManagementActivity : AppCompatActivity() {
@@ -26,6 +27,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
         goToDepositGoalActivity()
         goToIncomeActivity()
+        goToExpenseActivity()
     }
 
     private fun getTransactions() {
@@ -52,17 +54,26 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         binding.btnGoal.setOnClickListener {
             Toast.makeText(this, "This is my Toast message!",
                 Toast.LENGTH_LONG).show()
-            val goToActivity = Intent(applicationContext, PFMRecordDepositActivity::class.java)
-            startActivity(goToActivity)
+            val goToDepositGoalActivity = Intent(applicationContext, PFMRecordDepositActivity::class.java)
+            startActivity(goToDepositGoalActivity)
         }
     }
 
     private fun goToIncomeActivity() {
-        binding.btnGoal.setOnClickListener {
+        binding.btnIncome.setOnClickListener {
             Toast.makeText(this, "This is my Toast message!",
                 Toast.LENGTH_LONG).show()
-            val goToActivity = Intent(applicationContext, PFMRecordIncomeActivity::class.java)
-            startActivity(goToActivity)
+            val goToIncomeActivity = Intent(applicationContext, PFMRecordIncomeActivity::class.java)
+            startActivity(goToIncomeActivity)
+        }
+    }
+
+    private fun goToExpenseActivity() {
+        binding.btnExpense.setOnClickListener {
+            Toast.makeText(this, "This is my Toast message!",
+                Toast.LENGTH_LONG).show()
+            val goToExpenseActivity = Intent(applicationContext, PFMRecordExpenseActivity::class.java)
+            startActivity(goToExpenseActivity)
         }
     }
 

@@ -9,6 +9,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.FinancialActivity
 import ph.edu.dlsu.finwise.GoalConfirmationActivity
+import ph.edu.dlsu.finwise.PersonalFinancialManagementActivity
 import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
 import java.util.*
 
@@ -72,8 +73,8 @@ class ChildNewGoal : AppCompatActivity() {
         }
 
         binding.btnCancel.setOnClickListener {
-            var goToGoalList = Intent(context, FinancialActivity::class.java)
-            context.startActivity(goToGoalList)
+            val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
+            startActivity(goToPFM)
         }
     }
 }

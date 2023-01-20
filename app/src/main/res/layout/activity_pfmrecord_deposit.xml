@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:textAllCaps = "true"
         android:text="Goal"
         android:layout_marginTop="20dp"
@@ -42,7 +42,7 @@
         android:ems="10"
         android:entries="@array/pfm_income_category"
         android:layout_marginTop="5dp"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"/>
 
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toBottomOf="@+id/spinner_goal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:layout_marginTop="20dp"
         android:textAllCaps = "true"
         android:text="Goal Progress"
@@ -124,7 +124,7 @@
         app:layout_constraintTop_toBottomOf="@+id/et_amount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:layout_marginTop="20dp"
         android:text="You currently have ₱XXX.XX"
         android:textColor="@color/black"
@@ -154,7 +154,7 @@
             android:textColor="@color/black"
             android:backgroundTint="@color/light_grey"
             android:background="@drawable/button_border_grey"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp"
             />
 
         <androidx.appcompat.widget.AppCompatButton
