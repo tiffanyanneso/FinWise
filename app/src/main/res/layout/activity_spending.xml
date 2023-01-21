@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SavingActivity"
+    tools:context=".SpendingActivity"
     android:padding="20dp">
 
     <LinearLayout
@@ -36,10 +36,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:text="@string/saving"
+                    android:text="@string/spending"
                     android:textSize="20sp"
                     android:textColor="@color/black"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="15dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -47,13 +48,13 @@
                     android:orientation="vertical"
                     android:padding="20dp"
                     android:background="@drawable/layout_bg_green"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="5dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16dp"
-                        android:text="@string/savings"
+                        android:text="@string/total_spending"
                         android:textAllCaps = "true"
                         android:textColor="@color/black"
                         />
@@ -63,7 +64,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="24dp"
-                        android:text="₱ XXXXX.XX / ₱ XXXXX.XX "
+                        android:text="₱ XXXXX.XX"
                         android:textColor="@color/black"
                         android:textStyle="bold"/>
 
@@ -76,15 +77,60 @@
                         />
                 </LinearLayout>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="@string/deposit_history"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="20dp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:background="@drawable/layout_bg_green"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:text="progress bar"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16dp"
+                        android:text="₱ <spending> out of ₱ <budget> spent."
+                        android:textColor="@color/black"
+                        />
+                </LinearLayout>
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_finish"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/deposit"
+                    android:text="@string/expense_2"
                     android:textColor="@color/off_white"
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/dark_green"
                     android:background="@drawable/button_border"
+                    />
+
+                <TextView
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:text="pie chart here"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
                     />
 
                 <LinearLayout
@@ -97,7 +143,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20dp"
-                        android:text="@string/deposit_history"
+                        android:text="@string/spending_history"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:layout_marginTop="10dp"
