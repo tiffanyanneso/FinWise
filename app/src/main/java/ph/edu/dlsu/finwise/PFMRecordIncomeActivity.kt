@@ -31,10 +31,10 @@ class PFMRecordIncomeActivity : AppCompatActivity() {
     }
 
     private fun setBundle() {
-        var name =  binding.etName.text.toString()
-        var category = binding.spinnerCategory.selectedItem.toString()
-        var amount = binding.etAmount.text.toString().toFloat()
-        var goal = binding.spinnerGoal.selectedItem.toString()
+        val name =  binding.etName.text.toString()
+        val category = binding.spinnerCategory.selectedItem.toString()
+        val amount = binding.etAmount.text.toString().toFloat()
+        val goal = binding.spinnerGoal.selectedItem.toString()
 
         //Time
         val formatter = SimpleDateFormat("MM/dd/yyyy")

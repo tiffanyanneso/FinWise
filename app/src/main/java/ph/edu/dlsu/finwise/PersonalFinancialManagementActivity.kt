@@ -35,6 +35,14 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         goToDepositGoalActivity()
         goToIncomeActivity()
         goToExpenseActivity()
+        goToTransactionHistory()
+    }
+
+    private fun goToTransactionHistory() {
+        binding.tvViewAll.setOnClickListener {
+            val goToDepositGoalActivity = Intent(applicationContext, PFMTransactionHistoryActivity::class.java)
+            startActivity(goToDepositGoalActivity)
+        }
     }
 
     private fun getTransactions() {
@@ -47,20 +55,21 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             for (transactionSnapshot in documents) {
                 //creating the object from list retrieved in db
                 val transaction = transactionSnapshot.toObject<Transactions>()
-                transactionArrayList.add(transaction!!)
+                transactionArrayList.add(transaction)
             }
 
-            binding.rvViewTransactions.layoutManager = LinearLayoutManager(applicationContext)
+
             transactionAdapter = TransactionsAdapter(applicationContext, transactionArrayList)
             binding.rvViewTransactions.adapter = transactionAdapter
+            binding.rvViewTransactions.layoutManager = LinearLayoutManager(applicationContext,
+                LinearLayoutManager.VERTICAL,
+                false)
 
         }
     }
 
     private fun goToDepositGoalActivity() {
         binding.btnGoal.setOnClickListener {
-            Toast.makeText(this, "This is my Toast message!",
-                Toast.LENGTH_LONG).show()
             val goToDepositGoalActivity = Intent(applicationContext, PFMRecordDepositActivity::class.java)
             startActivity(goToDepositGoalActivity)
         }
@@ -68,8 +77,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private fun goToIncomeActivity() {
         binding.btnIncome.setOnClickListener {
-            Toast.makeText(this, "This is my Toast message!",
-                Toast.LENGTH_LONG).show()
             val goToIncomeActivity = Intent(applicationContext, PFMRecordIncomeActivity::class.java)
             startActivity(goToIncomeActivity)
         }
@@ -77,8 +84,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private fun goToExpenseActivity() {
         binding.btnExpense.setOnClickListener {
-            Toast.makeText(this, "This is my Toast message!",
-                Toast.LENGTH_LONG).show()
             val goToExpenseActivity = Intent(applicationContext, PFMRecordExpenseActivity::class.java)
             startActivity(goToExpenseActivity)
         }

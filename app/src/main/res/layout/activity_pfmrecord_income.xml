@@ -25,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:textAllCaps = "true"
         android:text="Name"
         android:layout_marginTop="20dp"
@@ -44,7 +44,7 @@
         android:hint="Name of income"
         android:ems="10"
         android:inputType="text"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         />
@@ -56,7 +56,7 @@
         app:layout_constraintTop_toBottomOf="@+id/et_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:layout_marginTop="20dp"
         android:textAllCaps = "true"
         android:text="Income Category"
@@ -72,7 +72,7 @@
         android:ems="10"
         android:entries="@array/pfm_income_category"
         android:layout_marginTop="5dp"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"/>
 
@@ -83,7 +83,7 @@
             app:layout_constraintTop_toBottomOf="@+id/spinner_category"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:layout_marginTop="20dp"
             android:textAllCaps = "true"
             android:text="@string/amount"
@@ -102,7 +102,7 @@
             android:hint="@string/amount"
             android:ems="10"
             android:inputType="numberDecimal"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             />
@@ -112,7 +112,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/et_amount"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:textAllCaps = "true"
         android:text="Goal (optional)"
         android:layout_marginTop="20dp"
@@ -129,7 +129,7 @@
         android:ems="10"
         android:entries="@array/pfm_income_category"
         android:layout_marginTop="5dp"
-        android:textSize="14dp"
+        android:textSize="14sp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"/>
 
