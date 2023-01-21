@@ -68,6 +68,10 @@
     <string name="total_spending">Total Spending</string>
     <string name="spending_history">Spending History</string>
 
+    <string name="view_deposits">View Deposits</string>
+
+    <string name="budgeting">Budgeting</string>
+    <string name="budget">Budget</string>
 
     <string-array name="status_list">
         <item>--Status--</item>
