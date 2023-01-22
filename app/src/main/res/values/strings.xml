@@ -52,6 +52,23 @@
     <string name="view_all">View All</string>
     <string name="deposit">+ Deposit</string>
     <string name="deposit_history">Deposit History</string>
+    <string name="budgeting">Budgeting</string>
+    <string name="budget">Budget</string>
+    <string name="budget_amount">Budget Amount</string>
+    <string name="spend_on">What I Need to Spend On</string>
+    <string name="new_category">+ New Category</string>
+    <string name="category">Category</string>
+    <string name="category_items">Category Items</string>
+    <string name="add_item">+ Add Item</string>
+    <string name="spending">Spending</string>
+    <string name="expense_1">Expense</string>
+    <string name="budget_spent">Budget Spent</string>
+    <string name="expense_2">+ Expense</string>
+    <string name="spending_categories">Spending Categories</string>
+    <string name="total_spending">Total Spending</string>
+    <string name="spending_history">Spending History</string>
+
+    <string name="view_deposits">View Deposits</string>
 
     <string-array name="status_list">
         <item>--Status--</item>
