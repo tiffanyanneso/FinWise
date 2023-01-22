@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PersonalFinancialManagementActivity"
+
     android:background="@color/off_white">
 
     <androidx.cardview.widget.CardView
@@ -70,7 +71,7 @@
 
     <LinearLayout
         android:id="@+id/linear_layout_3"
-        android:layout_width="330dp"
+        android:layout_width="340dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/cardview_current_balance"
         app:layout_constraintEnd_toEndOf="parent"
@@ -126,7 +127,7 @@
 
     <LinearLayout
         android:id="@+id/linear_layout_4"
-        android:layout_width="330dp"
+        android:layout_width="340dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/linear_layout_3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -164,8 +165,6 @@
 
     </LinearLayout>
 
-
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_view_transactions"
         android:layout_width="match_parent"
@@ -175,7 +174,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linear_layout_4"
         tools:listitem="@layout/item_transaction"
-        android:padding="20dp"/>
+        android:padding="15dp"/>
 
 
     <!--Bottom navigation bar-->
@@ -188,8 +187,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_nav"
         android:background="@color/white"
-        app:itemIconSize="36dp"
-        app:labelVisibilityMode="labeled"/>
+        app:labelVisibilityMode="labeled"
+        app:itemIconSize="36dp"/>
+
 
 
 
