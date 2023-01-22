@@ -4,14 +4,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.FinancialActivity
-import ph.edu.dlsu.finwise.GoalConfirmationActivity
 import ph.edu.dlsu.finwise.PersonalFinancialManagementActivity
 import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
-import java.util.*
+import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 
 
 class ChildNewGoal : AppCompatActivity() {
@@ -58,10 +55,24 @@ class ChildNewGoal : AppCompatActivity() {
             var amount = binding.etAmount.text.toString().toFloat()
             var targetDate =(binding.etTargetDate.month + 1).toString() + "/" +
                     (binding.etTargetDate.dayOfMonth).toString() + "/" + (binding.etTargetDate.year).toString()
+
+            //see which decision making activities were selected
+            var decisionMakingActivities = ArrayList<String>()
+
+            if (binding.cbBudgeting.isChecked)
+                decisionMakingActivities.add("Setting a Budget")
+            if (binding.cbSaving.isChecked)
+                decisionMakingActivities.add("Deciding to Save")
+            if (binding.cbSpending.isChecked)
+                decisionMakingActivities.add("Deciding to Spend")
+
+            println("new goal " + decisionMakingActivities)
+
             bundle.putString("goalName", goalName)
             bundle.putString("activity", activity)
             bundle.putFloat("amount", amount)
             bundle.putString("targetDate", targetDate)
+            bundle.putStringArrayList("decisionActivities", decisionMakingActivities)
 
             //TODO: reset spinner and date to default value
             binding.etGoal.text.clear()

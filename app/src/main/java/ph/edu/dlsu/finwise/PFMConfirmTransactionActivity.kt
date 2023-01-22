@@ -45,6 +45,9 @@ class PFMConfirmTransactionActivity : AppCompatActivity() {
         if (transactionType == "income") {
             binding.tvTitle.text = "Confirm Income"
             binding.tvTransactionType.text = "Income Amount"
+        } else {
+            binding.tvTitle.text = "Confirm Expense"
+            binding.tvTransactionType.text = "Expense Amount"
         }
 
         binding.tvName.text = name
@@ -60,12 +63,12 @@ class PFMConfirmTransactionActivity : AppCompatActivity() {
             var transaction = hashMapOf(
                 //TODO: add childID, createdBy
                 "transactionName" to name,
+                "transactionType" to transactionType,
                 "date" to date ,
                 "createdBy" to "",
                 "amount" to amount?.toFloat(),
                 "goal" to goal,
             )
-            Toast.makeText(this, name + date + amount + goal, Toast.LENGTH_SHORT).show()
 
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
                 Toast.makeText(this, "Goal added", Toast.LENGTH_SHORT).show()
