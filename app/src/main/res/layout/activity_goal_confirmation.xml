@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".GoalConfirmationActivity"
+    tools:context=".financialActivitiesModule.GoalConfirmationActivity"
     android:padding="20dp"
     android:background="@color/off_white">
 
@@ -147,6 +147,41 @@
                 />
         </LinearLayout>
 
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/title_decision_activities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_2"
+        android:textColor="@color/black"
+        android:layout_marginTop="15dp"
+        android:text="@string/title_decision_making_activities"/>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_decision_activities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_decision_activities"
+        android:padding="20dp"
+        android:background="@drawable/layout_bg_green"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/text_decision_activities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:textSize="14dp"/>
     </LinearLayout>
 
     <LinearLayout

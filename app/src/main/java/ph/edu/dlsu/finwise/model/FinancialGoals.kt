@@ -9,7 +9,7 @@ class FinancialGoals(
     var targetAmount:Float?=null,
     var currentAmount:Float?=null,
     var financialActivity:String?=null,
-    //var decisionMakingActivities
+    var decisionMakingActivities:ArrayList<DecisionMakingActivities>?=null,
     var lastUpdated:String?=null,
     var status:String?=null
 ){}

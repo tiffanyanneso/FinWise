@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.content.Context
 import android.content.Intent
@@ -6,12 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialBinding
 import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
-import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
-import ph.edu.dlsu.finwise.model.FinancialGoals
 
 class FinancialActivity : AppCompatActivity() {
 
@@ -37,21 +34,21 @@ class FinancialActivity : AppCompatActivity() {
     }
 
     private fun getGoals() {
-        var goalArrayList = ArrayList<FinancialGoals>()
+        var goalIDArrayList = ArrayList<String>()
 
         //TODO:change to get goals of current user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        //firestore.collection("Internships").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->
+        //firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).get().addOnSuccessListener{ documents ->
 
         firestore.collection("FinancialGoals").get().addOnSuccessListener{ documents ->
             for (goalSnapshot in documents) {
                 //creating the object from list retrieved in db
-                val goal = goalSnapshot.toObject<FinancialGoals>()
-                goalArrayList.add(goal!!)
+                val goalID = goalSnapshot.id
+                goalIDArrayList.add(goalID!!)
             }
 
             binding.rvViewGoals.setLayoutManager(LinearLayoutManager(applicationContext))
-            goalAdapter = ChildGoalAdapter(applicationContext, goalArrayList)
+            goalAdapter = ChildGoalAdapter(applicationContext, goalIDArrayList)
             binding.rvViewGoals.setAdapter(goalAdapter)
         }
     }

@@ -1,25 +1,33 @@
 package ph.edu.dlsu.finwise.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 import ph.edu.dlsu.finwise.databinding.ItemGoalBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 
 class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHolder>{
 
-    private var goalsArrayList = ArrayList<FinancialGoals>()
+    private var goalsIDArrayList = ArrayList<String>()
     private lateinit var context: Context
 
-    public constructor(context: Context, goalsArrayList:ArrayList<FinancialGoals>) {
+    private var firestore = Firebase.firestore
+
+    public constructor(context: Context, goalsIDArrayList:ArrayList<String>) {
         this.context = context
-        this.goalsArrayList = goalsArrayList
+        this.goalsIDArrayList = goalsIDArrayList
     }
 
     override fun getItemCount(): Int {
-        return goalsArrayList.size
+        return goalsIDArrayList.size
     }
 
     override fun onCreateViewHolder(
@@ -35,7 +43,7 @@ class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHold
 
     override fun onBindViewHolder(holder: ChildGoalAdapter.ChildGoalViewHolder,
                                   position: Int) {
-        holder.bindGoal(goalsArrayList[position])
+        holder.bindGoal(goalsIDArrayList[position])
     }
 
     inner class ChildGoalViewHolder(private val itemBinding: ItemGoalBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
@@ -45,26 +53,30 @@ class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHold
             itemView.setOnClickListener(this)
         }
 
-        fun bindGoal(goal: FinancialGoals){
-            this.goal = goal
-            itemBinding.tvGoal.text = goal.goalName
-            itemBinding.tvTargetDate.text = goal.targetDate
-            itemBinding.tvProgressAmount.text = goal.currentAmount.toString()  + "/" + goal.targetAmount.toString()
+        fun bindGoal(goalID: String){
+            firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener{ document ->
+
+                var goal = document.toObject<FinancialGoals>()
+                itemBinding.tvGoalId.text = document.id
+                itemBinding.tvGoal.text = goal?.goalName
+                itemBinding.tvTargetDate.text = goal?.targetDate
+                itemBinding.tvProgressAmount.text = goal?.currentAmount.toString()  + "/" + goal?.targetAmount.toString()
+                /*for (goalSnapshot in documents) {
+                    val goalID = goalSnapshot.id
+                    goalIDArrayList.add(goalID!!)
+                }*/
+            }
         }
 
         override fun onClick(p0: View?) {
-            /*var viewGoal = Intent(context, ViewGoal::class.java)
+            var viewGoal = Intent(context, ViewGoalActivity::class.java)
             var bundle = Bundle()
 
-            bundle.putString("title", internship.title)
-            bundle.putString("function", internship.function)
-            bundle.putString("type", internship.type)
-            bundle.putString("description", internship.description)
-            bundle.putString("link", internship.link)
-
-            goToSpecificJobListing.putExtras(bundle)
-            goToSpecificJobListing.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(viewGoal)*/
+            var goalID = itemBinding.tvGoalId.text.toString()
+            bundle.putString ("goalID", goalID)
+            viewGoal.putExtras(bundle)
+            viewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(viewGoal)
         }
     }
 }

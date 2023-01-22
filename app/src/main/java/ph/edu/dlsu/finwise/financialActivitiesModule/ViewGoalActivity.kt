@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.content.Context
 import android.content.Intent
@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.financialActivitiesModule.ChildEditGoal
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 

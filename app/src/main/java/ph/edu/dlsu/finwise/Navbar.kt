@@ -3,12 +3,13 @@ package ph.edu.dlsu.finwise
 import android.content.Context
 import android.content.Intent
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 
 class Navbar(bottomNavigationView: BottomNavigationView, appCon: Context, navItem: Int) {
     init {
 
         // Initializes the navigation in the bottom navbar
-        bottomNavigationView.selectedItemId = navItem
+        /*bottomNavigationView.selectedItemId = navItem
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_finance -> {
@@ -32,7 +33,7 @@ class Navbar(bottomNavigationView: BottomNavigationView, appCon: Context, navIte
                 }
             }
             true
-        }
+        }*/
     }
 
 
