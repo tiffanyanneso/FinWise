@@ -22,7 +22,7 @@
             android:name=".SavingViewDepositActivity"
             android:exported="false" />
         <activity
-            android:name=".SavingActivity"
+            android:name=".financialActivitiesModule.SavingActivity"
             android:exported="false" />
         <activity
             android:name=".BudgetActivity"
@@ -64,15 +64,6 @@
         <activity
             android:name=".PersonalFinancialManagementActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
         </activity>
         <activity
             android:name=".financialActivitiesModule.ChildEditGoal"
@@ -84,7 +75,6 @@
         <activity
             android:name=".financialActivitiesModule.ChildNewGoal"
             android:exported="true">
-
         </activity>
 
         <activity
@@ -95,44 +85,43 @@
 
 
         <activity
-            android:name=".StartGoalActivity"
+            android:name=".financialActivitiesModule.StartGoalActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewGoalActivity"
+            android:name=".financialActivitiesModule.ViewGoalActivity"
             android:exported="false" />
         <activity
-            android:name=".GoalConfirmationActivity"
+            android:name=".financialActivitiesModule.GoalConfirmationActivity"
             android:exported="false" />
 
-        <!--
-<intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-
-        <meta-data
-            android:name="android.app.lib_name"
-            android:value="" />
-    </activity>
-        -->
         <activity
-            android:name=".ParentRegisterChildActivity"
+            android:name=".loginRegisterModule.ParentRegisterChildActivity"
             android:exported="false" />
         <activity
             android:name=".ParentRegisterMayaActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentRegisterActivity"
+            android:name=".loginRegisterModule.ParentRegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".PasswordResetActivity"
+            android:name=".loginRegisterModule.PasswordResetActivity"
             android:exported="false" />
         <activity
-            android:name=".ResetPasswordActivity"
+            android:name=".loginRegisterModule.ResetPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
-            android:exported="false" />
+            android:name=".loginRegisterModule.LoginActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="false">
