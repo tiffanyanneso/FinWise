@@ -5,13 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ph.edu.dlsu.finwise.PFMTransactionHistoryActivity
 import ph.edu.dlsu.finwise.databinding.ItemTransactionBinding
 import ph.edu.dlsu.finwise.model.Transactions
 
 class TransactionsAdapter(
-    private var context: Context,
-    private var transactionsArrayList: ArrayList<Transactions>
+    private var transactionsArrayList: ArrayList<Transactions>,
+    private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<TransactionsAdapter.TransactionViewHolder>() {
+
+    interface OnItemClickListener {
+        fun onLoadClick(position: Int)
+    }
 
     override fun getItemCount(): Int {
         return transactionsArrayList.size
@@ -37,14 +42,22 @@ class TransactionsAdapter(
         var transaction  = Transactions()
 
         init {
-            itemView.setOnClickListener(this)
+            itemView.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onLoadClick(position)
+                }
+            }
         }
 
         fun bindtransaction(transaction: Transactions){
             this.transaction = transaction
             itemBinding.tvName.text = transaction.transactionName
             itemBinding.tvDate.text = transaction.date
-            itemBinding.tvAmount.text = "₱"+ transaction.amount.toString()
+            if (transaction.transactionType == "income")
+                itemBinding.tvAmount.text = "+₱"+ transaction.amount.toString()
+            else
+                itemBinding.tvAmount.text = "-₱"+ transaction.amount.toString()
         }
 
         override fun onClick(p0: View?) {
