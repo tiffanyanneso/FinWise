@@ -10,7 +10,7 @@ class Navbar(bottomNavigationView: BottomNavigationView, appCon: Context, navIte
     init {
 
         // Initializes the navigation in the bottom navbar
-        /*bottomNavigationView.selectedItemId = navItem
+        bottomNavigationView.selectedItemId = navItem
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
 
@@ -23,7 +23,7 @@ class Navbar(bottomNavigationView: BottomNavigationView, appCon: Context, navIte
                     val intent = Intent(appCon, FinancialActivity::class.java)
                     appCon.startActivity(intent)
                 }
-
+/*
                 R.id.nav_dashboard -> {
                 val intent = Intent(appCon, DashboardActivity::class.java)
                 appCon.startActivity(intent)
@@ -37,9 +37,9 @@ class Navbar(bottomNavigationView: BottomNavigationView, appCon: Context, navIte
                 R.id.nav_profile -> {
                     val intent = Intent(appCon, ProfileActivity::class.java)
                     appCon.startActivity(intent)
-                }
+                }*/
             }
             true
-        }*/
+        }
     }
 }
