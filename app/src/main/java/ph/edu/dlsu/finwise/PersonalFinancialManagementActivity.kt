@@ -13,11 +13,12 @@ import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBindin
 import ph.edu.dlsu.finwise.model.Transactions
 
 
-class PersonalFinancialManagementActivity : AppCompatActivity() {
+class PersonalFinancialManagementActivity : AppCompatActivity(), TransactionsAdapter.OnItemClickListener {
 
     private lateinit var binding: ActivityPersonalFinancialManagementBinding
     private lateinit var transactionAdapter: TransactionsAdapter
     private var firestore = Firebase.firestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPersonalFinancialManagementBinding.inflate(layoutInflater)
@@ -44,7 +45,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     }
 
     private fun getTransactions() {
-        var transactionArrayList = ArrayList<Transactions>()
+        val transactionArrayList = ArrayList<Transactions>()
         //TODO:change to get transactions of current user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         //firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->
@@ -56,14 +57,20 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 transactionArrayList.add(transaction)
             }
 
-
-            transactionAdapter = TransactionsAdapter(applicationContext, transactionArrayList)
+            transactionAdapter = TransactionsAdapter( transactionArrayList, this)
             binding.rvViewTransactions.adapter = transactionAdapter
             binding.rvViewTransactions.layoutManager = LinearLayoutManager(applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false)
 
         }
+    }
+
+    override fun onLoadClick(position: Int) {
+        // Goes to the exercises of the workout
+        var gotoBurstWorkoutExercisesActivity = Intent(applicationContext, PFMViewTransactionActivity::class.java)
+        gotoBurstWorkoutExercisesActivity.putExtra("position", position)
+        startActivity(gotoBurstWorkoutExercisesActivity)
     }
 
     private fun goToDepositGoalActivity() {
