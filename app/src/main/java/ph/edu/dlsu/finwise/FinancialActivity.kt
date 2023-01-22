@@ -27,6 +27,11 @@ class FinancialActivity : AppCompatActivity() {
         binding = ActivityFinancialBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Hides actionbar,
+        // and initializes the navbar
+       supportActionBar?.hide()
+       Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+
         getGoals()
 
         binding.btnNewGoal.setOnClickListener {
