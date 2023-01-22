@@ -4,22 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PFMViewTransactionActivity">
+    tools:context=".personalFinancialManagementModule.ViewTransactionActivity">
 
 
-    <TextView
-        android:id="@+id/tv_title"
+    <LinearLayout
+        android:id="@+id/linear_layout_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:orientation="horizontal"
         app:layout_constraintTop_toTopOf="parent"
-        android:textSize="24sp"
-        android:text="Transaction Details"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:layout_marginTop="50dp"
-        android:textColor="@color/black"/>
+        android:padding="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:id="@+id/tv_my_goals"
+            android:text="Financial Goal"
+            android:textSize="24sp"
+            android:textColor="@color/black"
+            android:paddingBottom="5dp"
+            android:gravity="center_vertical"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_edit_transaction"
+            android:layout_width="100dp"
+            android:layout_height="31dp"
+            android:background="@drawable/button_border"
+            android:backgroundTint="@color/dark_green"
+            android:text="@string/edit"
+            android:textColor="@color/off_white" />
+    </LinearLayout>
 
     <androidx.cardview.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -29,20 +45,20 @@
         card_view:cardBackgroundColor="@color/light_grey"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_1"
         android:padding="20dp"
         android:layout_marginTop="20dp"
         card_view:cardCornerRadius="10dp">
 
         <LinearLayout
-            android:id="@+id/linear_layout_1"
+            android:id="@+id/linear_layout_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             >
 
             <LinearLayout
-                android:id="@+id/linear_layout_2"
+                android:id="@+id/linear_layout_3"
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"
                 android:orientation="vertical"
@@ -76,7 +92,7 @@
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
-        android:id="@+id/linear_layout_3"
+        android:id="@+id/linear_layout_4"
         android:layout_width="360dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"

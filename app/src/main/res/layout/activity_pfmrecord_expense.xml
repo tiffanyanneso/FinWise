@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PFMRecordExpenseActivity"
+    tools:context=".personalFinancialManagementModule.RecordExpenseActivity"
     android:padding="20dp">
 
     <TextView
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:hint="Name of income"
+        android:hint="Name of expense"
         android:ems="10"
         android:inputType="text"
         android:textSize="14sp"
