@@ -1,4 +1,12 @@
 package ph.edu.dlsu.finwise
 
-class FinancialAssessmentActivity {
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+
+class FinancialAssessmentActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_financial_assessment)
+    }
 }
