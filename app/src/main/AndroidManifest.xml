@@ -86,6 +86,14 @@
             android:exported="true">
 
         </activity>
+
+        <activity
+            android:name=".financialActivitiesModule.FinancialActivity"
+            android:exported="true">
+
+        </activity>
+
+
         <activity
             android:name=".StartGoalActivity"
             android:exported="false" />
@@ -95,9 +103,7 @@
         <activity
             android:name=".GoalConfirmationActivity"
             android:exported="false" />
-        <activity
-            android:name=".FinancialActivity"
-            android:exported="false" />
+
         <!--
 <intent-filter>
             <action android:name="android.intent.action.MAIN" />
