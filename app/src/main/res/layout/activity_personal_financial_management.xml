@@ -172,7 +172,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linear_layout_4"
         tools:listitem="@layout/item_transaction"
-        android:padding="50dp"/>
+        android:padding="20dp"/>
 
 
     <!--Bottom navigation bar-->
