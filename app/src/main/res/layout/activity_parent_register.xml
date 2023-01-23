@@ -209,11 +209,11 @@
             />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_next"
+            android:id="@+id/btn_save"
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/next"
+            android:text="@string/save"
             android:textColor="@color/off_white"
             android:backgroundTint="@color/dark_green"
             android:background="@drawable/button_border"

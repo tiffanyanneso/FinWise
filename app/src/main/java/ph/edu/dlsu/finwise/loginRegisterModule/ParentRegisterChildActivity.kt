@@ -22,7 +22,7 @@ class ParentRegisterChildActivity : AppCompatActivity() {
         binding = ActivityParentRegisterChildBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnNext.setOnClickListener {
+        binding.btnSave.setOnClickListener {
             var firstName = binding.etFirstName.text.toString()
             var lastName = binding.etLastName.text.toString()
             var email = binding.etEmail.text.toString()
@@ -72,7 +72,7 @@ class ParentRegisterChildActivity : AppCompatActivity() {
         }
 
 
-        binding.btnBack.setOnClickListener {
+        binding.btnCancel.setOnClickListener {
             val goToParentRegiser = Intent(this, ParentRegisterActivity::class.java)
             startActivity(goToParentRegiser)
         }
