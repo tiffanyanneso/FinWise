@@ -7,6 +7,6 @@ class Transactions(
     var transactionName:String?=null,
     var amount:Float?=null,
     var category:String?=null,
-    var goalName:String?=null,
+    var goal:String?=null,
     var date:String?=null
 ){}

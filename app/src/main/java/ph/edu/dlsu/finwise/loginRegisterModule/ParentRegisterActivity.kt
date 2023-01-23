@@ -23,7 +23,7 @@ class ParentRegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        binding.btnNext.setOnClickListener {
+        binding.btnSave.setOnClickListener {
             var firstName = binding.etFirstName.text.toString()
             var lastName = binding.etLastName.text.toString()
             var email = binding.etEmail.text.toString()

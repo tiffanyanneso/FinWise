@@ -1,53 +1,55 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
-import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordExpenseBinding
-import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordIncomeBinding
+import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordDepositBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PFMRecordExpenseActivity : AppCompatActivity() {
+class RecordDepositActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityPfmrecordExpenseBinding
+    private lateinit var binding : ActivityPfmrecordDepositBinding
     var bundle = Bundle()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPfmrecordExpenseBinding.inflate(layoutInflater)
+        binding = ActivityPfmrecordDepositBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         goToConfirmation()
+        cancel()
+    }
+
+    private fun cancel() {
+        binding.btnCancel.setOnClickListener {
+            val goBack = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
+            startActivity(goBack)
+        }
     }
 
     private fun goToConfirmation() {
         binding.btnConfirm.setOnClickListener {
             setBundle()
-            var goToConfirmTransaction = Intent(this, PFMConfirmTransactionActivity::class.java)
-            goToConfirmTransaction.putExtras(bundle)
-            goToConfirmTransaction.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(goToConfirmTransaction)
+            var goToConfirmDeposit = Intent(this, ConfirmDepositActivity::class.java)
+            goToConfirmDeposit.putExtras(bundle)
+            goToConfirmDeposit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(goToConfirmDeposit)
         }
     }
 
     private fun setBundle() {
-        val name =  binding.etName.text.toString()
-        val category = binding.spinnerCategory.selectedItem.toString()
         val amount = binding.etAmount.text.toString().toFloat()
         val goal = binding.spinnerGoal.selectedItem.toString()
+        /*Get logged in user's balance'
+        val userBalance = */
 
         //Time
         val formatter = SimpleDateFormat("MM/dd/yyyy")
         val time = Calendar.getInstance().time
         val current = formatter.format(time)
         var date = current
-        bundle.putString("transactionType", "expense")
-        bundle.putString("transactionName", name)
-        bundle.putString("category", category)
+        bundle.putString("transactionType", "goal")
         bundle.putFloat("amount", amount)
         bundle.putString("goal", goal)
         bundle.putString("date", date)

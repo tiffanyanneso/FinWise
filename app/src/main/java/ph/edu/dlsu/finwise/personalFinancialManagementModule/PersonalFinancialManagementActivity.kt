@@ -1,19 +1,18 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
-import ph.edu.dlsu.finwise.model.Transactions
 
 
-class PersonalFinancialManagementActivity : AppCompatActivity(), TransactionsAdapter.OnItemClickListener {
+class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPersonalFinancialManagementBinding
     private lateinit var transactionAdapter: TransactionsAdapter
@@ -39,13 +38,13 @@ class PersonalFinancialManagementActivity : AppCompatActivity(), TransactionsAda
 
     private fun goToTransactionHistory() {
         binding.tvViewAll.setOnClickListener {
-            val goToDepositGoalActivity = Intent(applicationContext, PFMTransactionHistoryActivity::class.java)
+            val goToDepositGoalActivity = Intent(applicationContext, TransactionHistoryActivity::class.java)
             startActivity(goToDepositGoalActivity)
         }
     }
 
     private fun getTransactions() {
-        val transactionArrayList = ArrayList<Transactions>()
+        var transactionIDArrayList = ArrayList<String>()
         //TODO:change to get transactions of current user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         //firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->
@@ -53,43 +52,35 @@ class PersonalFinancialManagementActivity : AppCompatActivity(), TransactionsAda
         firestore.collection("Transactions").get().addOnSuccessListener { documents ->
             for (transactionSnapshot in documents) {
                 //creating the object from list retrieved in db
-                val transaction = transactionSnapshot.toObject<Transactions>()
-                transactionArrayList.add(transaction)
+                val transactionID = transactionSnapshot.id
+                transactionIDArrayList.add(transactionID)
             }
 
-            transactionAdapter = TransactionsAdapter( transactionArrayList, this)
+            transactionAdapter = TransactionsAdapter(applicationContext, transactionIDArrayList)
             binding.rvViewTransactions.adapter = transactionAdapter
             binding.rvViewTransactions.layoutManager = LinearLayoutManager(applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false)
-
         }
-    }
-
-    override fun onLoadClick(position: Int) {
-        // Goes to the exercises of the workout
-        var gotoBurstWorkoutExercisesActivity = Intent(applicationContext, PFMViewTransactionActivity::class.java)
-        gotoBurstWorkoutExercisesActivity.putExtra("position", position)
-        startActivity(gotoBurstWorkoutExercisesActivity)
     }
 
     private fun goToDepositGoalActivity() {
         binding.btnGoal.setOnClickListener {
-            val goToDepositGoalActivity = Intent(applicationContext, PFMRecordDepositActivity::class.java)
+            val goToDepositGoalActivity = Intent(applicationContext, RecordDepositActivity::class.java)
             startActivity(goToDepositGoalActivity)
         }
     }
 
     private fun goToIncomeActivity() {
         binding.btnIncome.setOnClickListener {
-            val goToIncomeActivity = Intent(applicationContext, PFMRecordIncomeActivity::class.java)
+            val goToIncomeActivity = Intent(applicationContext, RecordIncomeActivity::class.java)
             startActivity(goToIncomeActivity)
         }
     }
 
     private fun goToExpenseActivity() {
         binding.btnExpense.setOnClickListener {
-            val goToExpenseActivity = Intent(applicationContext, PFMRecordExpenseActivity::class.java)
+            val goToExpenseActivity = Intent(applicationContext, RecordExpenseActivity::class.java)
             startActivity(goToExpenseActivity)
         }
     }

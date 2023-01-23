@@ -17,11 +17,11 @@ import ph.edu.dlsu.finwise.model.FinancialGoals
 class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHolder>{
 
     private var goalsIDArrayList = ArrayList<String>()
-    private lateinit var context: Context
+    private var context: Context
 
     private var firestore = Firebase.firestore
 
-    public constructor(context: Context, goalsIDArrayList:ArrayList<String>) {
+     constructor(context: Context, goalsIDArrayList:ArrayList<String>) {
         this.context = context
         this.goalsIDArrayList = goalsIDArrayList
     }

@@ -8,7 +8,6 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.PersonalFinancialManagementActivity
 import ph.edu.dlsu.finwise.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {

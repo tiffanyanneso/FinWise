@@ -1,29 +1,37 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Intent
-import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordIncomeBinding
+import android.os.Bundle
+import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordExpenseBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PFMRecordIncomeActivity : AppCompatActivity() {
+class RecordExpenseActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityPfmrecordIncomeBinding
+    private lateinit var binding : ActivityPfmrecordExpenseBinding
     var bundle = Bundle()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPfmrecordIncomeBinding.inflate(layoutInflater)
+        binding = ActivityPfmrecordExpenseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         goToConfirmation()
+        cancel()
+    }
+
+    private fun cancel() {
+        binding.btnCancel.setOnClickListener {
+            val goBack = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
+            startActivity(goBack)
+        }
     }
 
     private fun goToConfirmation() {
         binding.btnConfirm.setOnClickListener {
             setBundle()
-            var goToConfirmTransaction = Intent(this, PFMConfirmTransactionActivity::class.java)
+            var goToConfirmTransaction = Intent(this, ConfirmTransactionActivity::class.java)
             goToConfirmTransaction.putExtras(bundle)
             goToConfirmTransaction.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(goToConfirmTransaction)
@@ -41,7 +49,7 @@ class PFMRecordIncomeActivity : AppCompatActivity() {
         val time = Calendar.getInstance().time
         val current = formatter.format(time)
         var date = current
-        bundle.putString("transactionType", "income")
+        bundle.putString("transactionType", "expense")
         bundle.putString("transactionName", name)
         bundle.putString("category", category)
         bundle.putFloat("amount", amount)
@@ -54,6 +62,4 @@ class PFMRecordIncomeActivity : AppCompatActivity() {
          binding.spinnerCategory.clear()
          binding.spinnerGoal.adapter(null)*/
     }
-
-
 }

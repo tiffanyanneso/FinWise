@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.ConfirmDepositActivity
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialGoalDepositBinding
 
 class FinancialActivityGoalDeposit : AppCompatActivity() {
@@ -31,7 +31,7 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
             bundle.putString("goalName", goalName)
             bundle.putFloat("amount", amount)
 
-            var goToDepositConfirmation = Intent(context, PFMConfirmDepositActivity::class.java)
+            var goToDepositConfirmation = Intent(context, ConfirmDepositActivity::class.java)
             goToDepositConfirmation.putExtras(bundle)
             goToDepositConfirmation.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(goToDepositConfirmation)

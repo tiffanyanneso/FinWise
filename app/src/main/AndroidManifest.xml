@@ -13,8 +13,24 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
-            android:name=".PFMViewTransactionActivity"
+
+            android:name=".personalFinancialManagementModule.ViewTransactionActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".TabbedActivityExample"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <activity
             android:name=".SpendingActivity"
             android:exported="false" />
@@ -37,51 +53,73 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <activity android:name=".DashboardActivity"
+            android:exported="true">
+    </activity>
+
+        <activity android:name=".FinancialAssessmentActivity"
+            android:exported="true">
+        </activity>
+
+        <activity android:name=".ProfileActivity"
+            android:exported="true">
+        </activity>
+
+
+
         <activity
-            android:name=".PFMEditTransactionActivity"
+            android:name=".personalFinancialManagementModule.EditTransactionActivity"
             android:exported="false" />
         <activity
-            android:name=".PFMTransactionDetailsActivity"
+            android:name=".personalFinancialManagementModule.TransactionDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".PFMTransactionHistoryActivity"
+            android:name=".personalFinancialManagementModule.TransactionHistoryActivity"
             android:exported="false" />
         <activity
-            android:name=".PFMConfirmDepositActivity"
+            android:name=".personalFinancialManagementModule.ConfirmDepositActivity"
             android:exported="false" />
         <activity
-            android:name=".PFMConfirmTransactionActivity"
+            android:name=".personalFinancialManagementModule.ConfirmTransactionActivity"
             android:exported="false" />
         <activity
-            android:name=".PFMRecordExpenseActivity"
+            android:name=".personalFinancialManagementModule.RecordExpenseActivity"
             android:exported="false" />
         <activity
-            android:name=".PFMRecordDepositActivity"
+            android:name=".personalFinancialManagementModule.RecordDepositActivity"
             android:exported="false" />
         <activity
-            android:name=".PFMRecordIncomeActivity"
+            android:name=".personalFinancialManagementModule.RecordIncomeActivity"
             android:exported="false" />
         <activity
             android:name=".GoalAccomplishedActivity"
             android:exported="false" />
         <activity
-            android:name=".PersonalFinancialManagementActivity"
-            android:exported="true">
-        </activity>
+            android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
+            android:exported="false"/>
+
         <activity
             android:name=".financialActivitiesModule.ChildEditGoal"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:exported="false"/>
         <activity
             android:name=".financialActivitiesModule.ChildNewGoal"
-            android:exported="true">
+            android:exported="false">
         </activity>
+
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
-            android:exported="false"/>
+            android:exported="true">
+
+           <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+
+    <meta-data
+        android:name="android.app.lib_name"
+        android:value="" />
+</activity>
 
         <activity
             android:name=".financialActivitiesModule.StartGoalActivity"
@@ -97,9 +135,6 @@
             android:name=".loginRegisterModule.ParentRegisterChildActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentRegisterMayaActivity"
-            android:exported="false" />
-        <activity
             android:name=".loginRegisterModule.ParentRegisterActivity"
             android:exported="false" />
         <activity
@@ -110,9 +145,9 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-            android:exported="true">
+            android:exported="false"/>
 
-            <intent-filter>
+        <!--    <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
@@ -120,7 +155,7 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-        </activity>
+        </activity>-->
         <activity
             android:name=".MainActivity"
             android:exported="false">

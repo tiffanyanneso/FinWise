@@ -1,19 +1,14 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
-import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
 import ph.edu.dlsu.finwise.databinding.ActivityPfmtransactionHistoryBinding
-import ph.edu.dlsu.finwise.model.Transactions
 
-class PFMTransactionHistoryActivity : AppCompatActivity(), TransactionsAdapter.OnItemClickListener {
+class TransactionHistoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPfmtransactionHistoryBinding
     private lateinit var transactionAdapter: TransactionsAdapter
     private var firestore = Firebase.firestore
@@ -30,7 +25,7 @@ class PFMTransactionHistoryActivity : AppCompatActivity(), TransactionsAdapter.O
     }
 
     private fun getTransactions() {
-        var transactionArrayList = ArrayList<Transactions>()
+        var transactionIDArrayList = ArrayList<String>()
         //TODO:change to get transactions of current user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         //firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->
@@ -38,22 +33,16 @@ class PFMTransactionHistoryActivity : AppCompatActivity(), TransactionsAdapter.O
         firestore.collection("Transactions").get().addOnSuccessListener { documents ->
             for (transactionSnapshot in documents) {
                 //creating the object from list retrieved in db
-                val transaction = transactionSnapshot.toObject<Transactions>()
-                transactionArrayList.add(transaction)
+                val transactionID = transactionSnapshot.id
+                transactionIDArrayList.add(transactionID)
             }
 
-            transactionAdapter = TransactionsAdapter(transactionArrayList, this)
+            transactionAdapter = TransactionsAdapter(this, transactionIDArrayList)
             binding.rvViewTransactions.adapter = transactionAdapter
             binding.rvViewTransactions.layoutManager = LinearLayoutManager(applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false)
-
         }
     }
 
-    override fun onLoadClick(position: Int) {
-        var gotoBurstWorkoutExercisesActivity = Intent(applicationContext, PFMViewTransactionActivity::class.java)
-        gotoBurstWorkoutExercisesActivity.putExtra("position", position)
-        startActivity(gotoBurstWorkoutExercisesActivity)
-    }
 }

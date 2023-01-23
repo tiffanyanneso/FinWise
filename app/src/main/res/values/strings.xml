@@ -70,6 +70,7 @@
     <string name="spending_history">Spending History</string>
 
     <string name="view_deposits">View Deposits</string>
+    <string name="profile_picture">Profile Picture</string>
 
     <string-array name="status_list">
         <item>--Status--</item>
@@ -133,5 +134,8 @@
         <item>Game</item>
         <item>Other</item>
     </string-array>
+    <string name="title_activity_tabbed">TabbedActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 
 </resources>
