@@ -46,11 +46,5 @@ class ViewTransactionActivity : AppCompatActivity() {
                 }
             }
         }
-
-        binding.btnEditTransaction.setOnClickListener {
-            var goToEditTransaction = Intent(this, EditTransactionActivity::class.java)
-            goToEditTransaction.putExtra("transactionID", bundle)
-            startActivity(goToEditTransaction)
-        }
     }
 }
