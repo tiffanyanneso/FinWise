@@ -49,16 +49,13 @@ class GoalDecisionMakingActivitiesAdapter: RecyclerView.Adapter<GoalDecisionMaki
     }
 
     inner class GoalDecisionMakingActivitiesViewHolder(private val itemBinding: ItemDecisionMakingActivityBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
-        var goal  = FinancialGoals()
 
         init {
             itemView.setOnClickListener(this)
         }
 
         fun bindGoal(decisionMakingActivity: DecisionMakingActivities){
-            /*firestore.collection("FinancialGoals").document(decisionMakingActivity.decisonMakingActivity.toString()).get().addOnSuccessListener{ document ->
-
-            }*/
+            itemBinding.tvName.text = decisionMakingActivity.decisonMakingActivity
         }
 
         override fun onClick(p0: View?) {

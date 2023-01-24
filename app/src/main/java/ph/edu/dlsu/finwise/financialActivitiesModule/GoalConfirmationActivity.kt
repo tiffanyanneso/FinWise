@@ -47,32 +47,11 @@ class GoalConfirmationActivity : AppCompatActivity() {
             val formatter = SimpleDateFormat("MM/dd/yyyy")
             val current = formatter.format(time)
 
-            var decisionActivities = bundle.getStringArrayList("decisionActivities")
-            var decisionActivitiesObjectArrayList = arrayListOf<DecisionMakingActivities>()
-            
-            if (decisionActivities!=null) {
-                for (i in decisionActivities.indices) {
-                    var decisionMakingActivitiesObject = DecisionMakingActivities()
-                    if (decisionActivities[i].contentEquals("Setting a Budget")) {
-                        decisionMakingActivitiesObject.decisonMakingActivity = "Setting a Budget"
-                        decisionActivitiesObjectArrayList.add(decisionMakingActivitiesObject)
-                    }
-                    if (decisionActivities[i].contentEquals("Deciding to Save")) {
-                        decisionMakingActivitiesObject.decisonMakingActivity = "Deciding to Save"
-                        decisionActivitiesObjectArrayList.add(decisionMakingActivitiesObject)
-                    }
-                    if (decisionActivities[i].contentEquals("Deciding to Spend")) {
-                        decisionMakingActivitiesObject.decisonMakingActivity = "Deciding to Spend"
-                        decisionActivitiesObjectArrayList.add(decisionMakingActivitiesObject)
-                    }
-                }
-            }
-
             var goal = hashMapOf(
                 //TODO: add childID, createdBy
                 "childID" to "",
                 "goalName" to bundle.getString("goalName"),
-                "dateCreated" to current ,
+                "dateCreated" to current,
                 "createdBy" to "",
                 "targetDate" to bundle.getString("targetDate"),
                 "targetAmount" to bundle.getFloat("amount"),
@@ -80,21 +59,45 @@ class GoalConfirmationActivity : AppCompatActivity() {
                 "financialActivity" to bundle.getString("activity"),
                 "lastUpdated" to current,
                 "status" to "In Progress",
-                "decisionMakingActivities" to decisionActivitiesObjectArrayList
+                //"decisionMakingActivities" to decisionActivitiesObjectArrayList
             )
-            firestore.collection("FinancialGoals").add(goal).addOnSuccessListener {
-                Toast.makeText(this, "Goal added", Toast.LENGTH_SHORT).show()
-                var goToStartGoal = Intent(context, StartGoalActivity::class.java)
-                var bundle1: Bundle = intent.extras!!
-                bundle1.putString("goalID", it.id)
-                goToStartGoal.putExtras(bundle1)
-                goToStartGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(goToStartGoal)
 
-            }
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to add goal", Toast.LENGTH_SHORT).show()
+            //add goal to DB
+            firestore.collection("FinancialGoals").add(goal).addOnSuccessListener {
+
+                //add decision making activities in inner collection of FinancialGoals
+                var decisionActivities = bundle.getStringArrayList("decisionActivities")
+                if (decisionActivities != null) {
+                    for (i in decisionActivities.indices) {
+                        var decisionMakingActivity = DecisionMakingActivities()
+                        if (decisionActivities[i].contentEquals("Setting a Budget")) {
+                            decisionMakingActivity.decisonMakingActivity = "Setting a Budget"
+                            decisionMakingActivity.targetAmount = bundle.getFloat("amount")
+                        }
+                        if (decisionActivities[i].contentEquals("Deciding to Save")) {
+                            decisionMakingActivity.decisonMakingActivity = "Deciding to Save"
+                            decisionMakingActivity.targetAmount = bundle.getFloat("amount")
+                        }
+                        if (decisionActivities[i].contentEquals("Deciding to Spend")) {
+                            decisionMakingActivity.decisonMakingActivity = "Deciding to Spend"
+                            decisionMakingActivity.targetAmount = bundle.getFloat("amount")
+                        }
+
+                        firestore.collection("FinancialGoals").document(it.id)
+                            .collection("DecisionMakingActivities").add(decisionMakingActivity)
+                            .addOnSuccessListener {
+                            }
+                    }
+                    var goToStartGoal = Intent(context, StartGoalActivity::class.java)
+                    var bundle1: Bundle = intent.extras!!
+                    bundle1.putString("goalID", it.id)
+                    goToStartGoal.putExtras(bundle1)
+                    goToStartGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(goToStartGoal)
                 }
+            }.addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to add goal", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.btnBack.setOnClickListener {

@@ -5,15 +5,22 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
+import ph.edu.dlsu.finwise.adapter.GoalDecisionMakingActivitiesAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
+import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 
 class ViewGoalActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityViewGoalBinding
     private var firestore = Firebase.firestore
+
+    private lateinit var decisionMakingActivitiesAdapater: GoalDecisionMakingActivitiesAdapter
 
     private lateinit var context: Context
 
@@ -41,6 +48,7 @@ class ViewGoalActivity : AppCompatActivity() {
                     binding.tvDateSet.text = goal?.dateCreated.toString()
                     binding.tvTargetDate.text = goal?.targetDate.toString()
                     binding.tvStatus.text = goal?.status.toString()
+                    getDecisionMakingActivities(goalID)
                 }
             }
         }
@@ -51,4 +59,19 @@ class ViewGoalActivity : AppCompatActivity() {
             context.startActivity(goToEditGoal)
         }
     }
+
+    private fun getDecisionMakingActivities(goalID:String) {
+        firestore.collection("FinancialGoals").document(goalID).collection("DecisionMakingActivities").get().addOnSuccessListener { documents ->
+            var decisionMakingActivitiesArray = ArrayList<DecisionMakingActivities>()
+            for (decisionActivitySnapshot in documents) {
+                var decisionActivity = decisionActivitySnapshot.toObject<DecisionMakingActivities>()
+                decisionMakingActivitiesArray.add(decisionActivity)
+            }
+
+            binding.rvViewDecisionMakingActivities.setLayoutManager(LinearLayoutManager(applicationContext))
+            decisionMakingActivitiesAdapater = GoalDecisionMakingActivitiesAdapter(applicationContext, decisionMakingActivitiesArray)
+            binding.rvViewDecisionMakingActivities.setAdapter(decisionMakingActivitiesAdapater)
+        }
+    }
+
 }
