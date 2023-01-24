@@ -37,7 +37,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
             for (i in decisionActivities.indices)
                 //TODO: how to fix extra space
                 decisionActivitiesString += decisionActivities[i].toString() + "\n"
-            binding.textDecisionActivities.text = decisionActivitiesString
+                binding.textDecisionActivities.text = decisionActivitiesString
         }
 
 

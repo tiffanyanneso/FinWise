@@ -71,6 +71,19 @@
 
     <string name="view_deposits">View Deposits</string>
     <string name="profile_picture">Profile Picture</string>
+    <string name="setting_a_goal">Setting A Goal</string>
+    <string name="review">Review</string>
+    <string name="get_started_soon">Get Started Soon!</string>
+    <string name="sent_to_parent">Your goal will be sent to your parent, Name for approval.</string>
+    <string name="smart_rating">SMART Rating</string>
+    <string name="specific">Specific</string>
+    <string name="measureable">Measurable</string>
+    <string name="achievable">Achievable</string>
+    <string name="relevant">Relevant</string>
+    <string name="time_bound">Time Bound</string>
+    <string name="overall_rating">Overall Rating</string>
+    <string name="comment">Comment</string>
+    <string name="submit">Submit</string>
 
     <string-array name="status_list">
         <item>--Status--</item>
@@ -79,6 +92,13 @@
         <item>For Editing</item>
         <item>Disapproved</item>
         <item>Achieved</item>
+    </string-array>
+
+    <string-array name="goal_status_list">
+        <item>--Status--</item>
+        <item>Approved</item>
+        <item>For Editing</item>
+        <item>Disapproved</item>
     </string-array>
 
     <string-array name="decision_making_activities_list">
