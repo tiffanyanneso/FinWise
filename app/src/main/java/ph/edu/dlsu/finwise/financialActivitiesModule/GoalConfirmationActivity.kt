@@ -70,21 +70,17 @@ class GoalConfirmationActivity : AppCompatActivity() {
                 if (decisionActivities != null) {
                     for (i in decisionActivities.indices) {
                         var decisionMakingActivity = DecisionMakingActivities()
-                        if (decisionActivities[i].contentEquals("Setting a Budget")) {
-                            decisionMakingActivity.decisonMakingActivity = "Setting a Budget"
-                            decisionMakingActivity.targetAmount = bundle.getFloat("amount")
-                        }
-                        if (decisionActivities[i].contentEquals("Deciding to Save")) {
-                            decisionMakingActivity.decisonMakingActivity = "Deciding to Save"
-                            decisionMakingActivity.targetAmount = bundle.getFloat("amount")
-                        }
-                        if (decisionActivities[i].contentEquals("Deciding to Spend")) {
-                            decisionMakingActivity.decisonMakingActivity = "Deciding to Spend"
-                            decisionMakingActivity.targetAmount = bundle.getFloat("amount")
-                        }
+                        decisionMakingActivity.financialGoalID = it.id
+                        decisionMakingActivity.targetAmount = bundle.getFloat("amount")
 
-                        firestore.collection("FinancialGoals").document(it.id)
-                            .collection("DecisionMakingActivities").add(decisionMakingActivity)
+                        if (decisionActivities[i].contentEquals("Setting a Budget"))
+                            decisionMakingActivity.decisonMakingActivity = "Setting a Budget"
+                        if (decisionActivities[i].contentEquals("Deciding to Save"))
+                            decisionMakingActivity.decisonMakingActivity = "Deciding to Save"
+                        if (decisionActivities[i].contentEquals("Deciding to Spend"))
+                            decisionMakingActivity.decisonMakingActivity = "Deciding to Spend"
+
+                        firestore.collection("DecisionMakingActivities").add(decisionMakingActivity)
                             .addOnSuccessListener {
                             }
                     }

@@ -40,7 +40,6 @@ class ViewGoalActivity : AppCompatActivity() {
             firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener { document ->
                 if (document != null) {
                     //TODO: compute remaining days
-                    Toast.makeText(this, goalID, Toast.LENGTH_SHORT).show()
                     var goal = document.toObject(FinancialGoals::class.java)
                     binding.tvMyGoals.text = goal?.goalName.toString()
                     binding.tvGoal.text = goal?.currentAmount.toString() + "/" + goal?.targetAmount.toString()
@@ -61,10 +60,10 @@ class ViewGoalActivity : AppCompatActivity() {
     }
 
     private fun getDecisionMakingActivities(goalID:String) {
-        firestore.collection("FinancialGoals").document(goalID).collection("DecisionMakingActivities").get().addOnSuccessListener { documents ->
-            var decisionMakingActivitiesArray = ArrayList<DecisionMakingActivities>()
+        firestore.collection("DecisionMakingActivities").whereEqualTo("financialGoalID", goalID).get().addOnSuccessListener { documents ->
+            var decisionMakingActivitiesArray = ArrayList<String>()
             for (decisionActivitySnapshot in documents) {
-                var decisionActivity = decisionActivitySnapshot.toObject<DecisionMakingActivities>()
+                var decisionActivity = decisionActivitySnapshot.id
                 decisionMakingActivitiesArray.add(decisionActivity)
             }
 

@@ -1,7 +1,8 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ph.edu.dlsu.finwise.R
 
 class SpendingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

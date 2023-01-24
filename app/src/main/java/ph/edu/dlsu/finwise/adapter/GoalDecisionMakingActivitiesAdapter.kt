@@ -12,24 +12,27 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemDecisionMakingActivityBinding
 import ph.edu.dlsu.finwise.databinding.ItemGoalBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.SavingActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.SpendingActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 
 class GoalDecisionMakingActivitiesAdapter: RecyclerView.Adapter<GoalDecisionMakingActivitiesAdapter.GoalDecisionMakingActivitiesViewHolder> {
 
-    private var decisionMakingActivitiesArrayList = ArrayList<DecisionMakingActivities>()
+    private var decisionMakingActivitiesIDArrayList = ArrayList<String>()
     private lateinit var context: Context
 
     private var firestore = Firebase.firestore
 
-    public constructor(context: Context, decisionMakingActivitiesArrayList:ArrayList<DecisionMakingActivities>) {
+    public constructor(context: Context, decisionMakingActivitiesIDArrayList:ArrayList<String>) {
         this.context = context
-        this.decisionMakingActivitiesArrayList = decisionMakingActivitiesArrayList
+        this.decisionMakingActivitiesIDArrayList = decisionMakingActivitiesIDArrayList
     }
 
     override fun getItemCount(): Int {
-        return decisionMakingActivitiesArrayList.size
+        return decisionMakingActivitiesIDArrayList.size
     }
 
     override fun onCreateViewHolder(
@@ -45,7 +48,7 @@ class GoalDecisionMakingActivitiesAdapter: RecyclerView.Adapter<GoalDecisionMaki
 
     override fun onBindViewHolder(holder: GoalDecisionMakingActivitiesAdapter.GoalDecisionMakingActivitiesViewHolder,
                                   position: Int) {
-        holder.bindGoal(decisionMakingActivitiesArrayList[position])
+        holder.bindGoal(decisionMakingActivitiesIDArrayList[position])
     }
 
     inner class GoalDecisionMakingActivitiesViewHolder(private val itemBinding: ItemDecisionMakingActivityBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
@@ -54,12 +57,42 @@ class GoalDecisionMakingActivitiesAdapter: RecyclerView.Adapter<GoalDecisionMaki
             itemView.setOnClickListener(this)
         }
 
-        fun bindGoal(decisionMakingActivity: DecisionMakingActivities){
-            itemBinding.tvName.text = decisionMakingActivity.decisonMakingActivity
+        fun bindGoal(decisionMakingActivityID: String){
+            firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
+                var decisionActivity = it.toObject<DecisionMakingActivities>()
+                itemBinding.tvDecisionActivityId.text= it.id
+                itemBinding.tvName.text = decisionActivity?.decisonMakingActivity
+            }
         }
 
         override fun onClick(p0: View?) {
+            var decisionActivityName = itemBinding.tvName.text.toString()
 
+            var decisionActivityID = itemBinding.tvDecisionActivityId.text.toString()
+            var bundle = Bundle()
+            bundle.putString ("decisionActivityID", decisionActivityID)
+            
+            if (decisionActivityName.equals("Setting a Budget")) {
+                var budgetActivity = Intent(context, BudgetActivity::class.java)
+                budgetActivity.putExtras(bundle)
+                budgetActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(budgetActivity)
+            }
+
+            if (decisionActivityName.equals("Deciding to Save")) {
+                var savingActivity = Intent(context, SavingActivity::class.java)
+                savingActivity.putExtras(bundle)
+                savingActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(savingActivity)
+            }
+
+            if (decisionActivityName.equals("Deciding to Spend")) {
+                var spendingActivity = Intent(context, SpendingActivity::class.java)
+                spendingActivity.putExtras(bundle)
+                spendingActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(spendingActivity)
+            }
+            
         }
     }
 }
