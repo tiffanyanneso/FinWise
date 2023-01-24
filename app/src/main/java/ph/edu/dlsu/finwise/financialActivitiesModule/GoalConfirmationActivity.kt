@@ -20,7 +20,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
     private lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+       super.onCreate(savedInstanceState)
         binding = ActivityGoalConfirmationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context= this
