@@ -58,6 +58,7 @@
     <string name="budget_amount">Budget Amount</string>
     <string name="spend_on">What I Need to Spend On</string>
     <string name="new_category">+ New Category</string>
+    <string name="title_new_category">New Category</string>
     <string name="category">Category</string>
     <string name="category_items">Category Items</string>
     <string name="add_item">+ Add Item</string>
