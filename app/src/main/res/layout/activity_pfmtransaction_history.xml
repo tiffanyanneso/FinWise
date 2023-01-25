@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".personalFinancialManagementModule.TransactionHistoryActivity"
-    android:padding="20dp">
+    tools:context=".personalFinancialManagementModule.TransactionHistoryActivity">
 
     <TextView
         android:id="@+id/tv_title"
@@ -15,10 +14,10 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:textSize="24sp"
-        android:text="Record Income"
+        android:text="@string/transaction_history"
         android:gravity="center"
         android:textStyle="bold"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/black"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -29,6 +28,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        tools:listitem="@layout/item_transaction"/>
+        tools:listitem="@layout/item_transaction"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

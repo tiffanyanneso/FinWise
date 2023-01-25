@@ -87,6 +87,11 @@
     <string name="submit">Submit</string>
     <string name="children">Children</string>
     <string name="add_child">+ Add Child</string>
+    <string name="name">Name</string>
+
+    <string name="date">Date</string>
+    <string name="deposit_amount">Deposit Amount</string>
+    <string name="transaction_history">Transaction History</string>
 
     <string-array name="status_list">
         <item>--Status--</item>
