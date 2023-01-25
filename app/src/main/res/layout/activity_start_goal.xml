@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".financialActivitiesModule.StartGoalActivity"
-    android:padding="20dp"
     android:background="@color/off_white">
 
     <TextView
@@ -19,7 +18,10 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"/>
 
     <TextView
         android:id="@+id/tv_good_job"
@@ -31,6 +33,8 @@
         android:textSize="16dp"
         android:text="Start working on your goal!"
         android:textColor="@color/black"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         />
 
     <LinearLayout
@@ -43,7 +47,9 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_good_job"
         android:padding="20dp"
         android:background="@drawable/layout_bg_green"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -74,7 +80,9 @@
         app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
         android:padding="20dp"
         android:background="@drawable/layout_bg_green"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
 
 
         <LinearLayout
@@ -107,7 +115,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -170,7 +179,9 @@
         app:layout_constraintTop_toBottomOf="@+id/linear_layout_2"
         android:padding="20dp"
         android:background="@drawable/layout_bg_green"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -198,7 +209,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_margin="20dp">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_get_started"

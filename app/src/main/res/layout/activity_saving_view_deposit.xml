@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SavingViewDepositActivity"
-    android:padding="20dp"
     android:background="@color/off_white">
 
     <TextView
@@ -19,7 +18,8 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="20dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_view_deposit_history"
@@ -28,6 +28,7 @@
         android:layout_weight="8"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:layout_margin="20dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
