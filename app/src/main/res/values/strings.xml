@@ -102,6 +102,13 @@
         <item>Achieved</item>
     </string-array>
 
+    <string-array name="transaction_type_list">
+        <item>--All--</item>
+        <item>Expense</item>
+        <item>Income</item>
+        <item>Goal</item>
+    </string-array>
+
     <string-array name="goal_status_list">
         <item>--Status--</item>
         <item>Approved</item>
