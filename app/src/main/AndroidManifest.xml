@@ -38,6 +38,9 @@
             android:name=".financialActivitiesModule.BudgetCategoryActivity"
             android:exported="false" />
         <activity
+            android:name=".financialActivitiesModule.StartGoalActivity"
+            android:exported="false" />
+        <activity
             android:name=".SavingViewDepositActivity"
             android:exported="false" />
         <activity

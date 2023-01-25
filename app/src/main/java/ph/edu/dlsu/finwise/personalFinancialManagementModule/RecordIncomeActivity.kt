@@ -30,7 +30,7 @@ class RecordIncomeActivity : AppCompatActivity() {
     private fun goToConfirmation() {
         binding.btnConfirm.setOnClickListener {
             setBundle()
-            var goToConfirmTransaction = Intent(this, ConfirmTransactionActivity::class.java)
+            val goToConfirmTransaction = Intent(this, ConfirmTransactionActivity::class.java)
             goToConfirmTransaction.putExtras(bundle)
             goToConfirmTransaction.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(goToConfirmTransaction)
@@ -61,6 +61,5 @@ class RecordIncomeActivity : AppCompatActivity() {
          binding.spinnerCategory.clear()
          binding.spinnerGoal.adapter(null)*/
     }
-
 
 }

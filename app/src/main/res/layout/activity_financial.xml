@@ -91,9 +91,10 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:menu="@menu/bottom_nav"
-            android:background="@color/white"
+            android:background="#5EC57E"
             app:labelVisibilityMode="labeled"
-            app:itemIconSize="36dp"/>
+            app:itemIconSize="36dp"
+            app:itemIconTint="@drawable/selector"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
