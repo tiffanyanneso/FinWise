@@ -85,6 +85,8 @@
     <string name="overall_rating">Overall Rating</string>
     <string name="comment">Comment</string>
     <string name="submit">Submit</string>
+    <string name="children">Children</string>
+    <string name="add_child">+ Add Child</string>
 
     <string-array name="status_list">
         <item>--Status--</item>
