@@ -22,13 +22,15 @@ import ph.edu.dlsu.finwise.model.FinancialGoals
 class GoalDecisionMakingActivitiesAdapter: RecyclerView.Adapter<GoalDecisionMakingActivitiesAdapter.GoalDecisionMakingActivitiesViewHolder> {
 
     private var decisionMakingActivitiesIDArrayList = ArrayList<String>()
+    private var goalID:String
     private lateinit var context: Context
 
     private var firestore = Firebase.firestore
 
-    public constructor(context: Context, decisionMakingActivitiesIDArrayList:ArrayList<String>) {
+    public constructor(context: Context, decisionMakingActivitiesIDArrayList:ArrayList<String>, goalID:String) {
         this.context = context
         this.decisionMakingActivitiesIDArrayList = decisionMakingActivitiesIDArrayList
+        this.goalID = goalID
     }
 
     override fun getItemCount(): Int {
@@ -67,10 +69,10 @@ class GoalDecisionMakingActivitiesAdapter: RecyclerView.Adapter<GoalDecisionMaki
 
         override fun onClick(p0: View?) {
             var decisionActivityName = itemBinding.tvName.text.toString()
-
             var decisionActivityID = itemBinding.tvDecisionActivityId.text.toString()
             var bundle = Bundle()
             bundle.putString ("decisionActivityID", decisionActivityID)
+            bundle.putString("goalID", goalID)
             
             if (decisionActivityName.equals("Setting a Budget")) {
                 var budgetActivity = Intent(context, BudgetActivity::class.java)

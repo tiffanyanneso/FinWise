@@ -9,23 +9,41 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
+import ph.edu.dlsu.finwise.model.DecisionMakingActivities
+import ph.edu.dlsu.finwise.model.FinancialGoals
 
 class BudgetActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityBudgetBinding
-
     private var firestore = Firebase.firestore
-
-    private lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBudgetBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        var bundle: Bundle = intent.extras!!
+        var decisionMakingActivityID = bundle.getString("decisionActivityID").toString()
+
+        //get the amount of needed for the decision making activity
+        firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
+            var decisionMakingActvity = it.toObject<DecisionMakingActivities>()
+            binding.tvBudgetAmount.text = decisionMakingActvity?.targetAmount.toString()
+
+            //get the name of financial goal
+            firestore.collection("FinancialGoals").document(decisionMakingActvity?.financialGoalID.toString()).get().addOnSuccessListener {
+                var financialGoal = it.toObject<FinancialGoals>()
+                binding.tvGoalName.text = financialGoal?.goalName.toString()
+            }
+        }
+
+
+
 
         binding.btnNewCategory.setOnClickListener {
             showNewBudgetCategoryDialog()
@@ -43,7 +61,7 @@ class BudgetActivity : AppCompatActivity() {
 
 
         btnSave.setOnClickListener {
-            Toast.makeText(this, "Save category", Toast.LENGTH_SHORT).show()
+            //TODO: SAVE TO DB
         }
 
         btnCancel.setOnClickListener {

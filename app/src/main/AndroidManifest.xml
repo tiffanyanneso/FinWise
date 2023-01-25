@@ -13,12 +13,18 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".FinancialActivityConfirmDeposit"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ParentSettingAGoalActivity"
             android:exported="false" />
         <activity
             android:name=".ReviewGoalActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".SettingAGoalActivity"
             android:exported="false" />
@@ -27,7 +33,7 @@
             android:exported="false" />
         <activity
             android:name=".TabbedActivityExample"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.SpendingActivity"
             android:exported="false" />
@@ -35,7 +41,7 @@
             android:name=".financialActivitiesModule.BudgetCategoryActivity"
             android:exported="false" />
         <activity
-            android:name=".SavingViewDepositActivity"
+            android:name=".financialActivitiesModule.SavingViewDepositActivity"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.SavingActivity"
@@ -44,7 +50,7 @@
             android:name=".financialActivitiesModule.BudgetActivity"
             android:exported="false" />
         <activity
-            android:name=".FinancialActivityGoalDeposit"
+            android:name=".financialActivitiesModule.FinancialActivityGoalDeposit"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -52,13 +58,13 @@
         </activity>
         <activity
             android:name=".DashboardActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".FinancialAssessmentActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ProfileActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <!--
 <activity
             android:name=".personalFinancialManagementModule.EditTransactionActivity"
@@ -96,8 +102,10 @@
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.ChildNewGoal"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
+        <activity
+            android:name=".financialActivitiesModule.FinancialActivityConfirmDeposit"
+            android:exported="true"></activity>
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
             android:exported="true">

@@ -44,15 +44,10 @@ class RecordDepositActivity : AppCompatActivity() {
         /*Get logged in user's balance'
         val userBalance = */
 
-        //Time
-        val formatter = SimpleDateFormat("MM/dd/yyyy")
-        val time = Calendar.getInstance().time
-        val current = formatter.format(time)
-        var date = current
         bundle.putString("transactionType", "goal")
         bundle.putFloat("amount", amount)
         bundle.putString("goal", goal)
-        bundle.putString("date", date)
+        bundle.putString("source", "PFMDepositToGoal")
 
         //TODO: reset spinner and date to default value
         /* binding.etName.text.clear()

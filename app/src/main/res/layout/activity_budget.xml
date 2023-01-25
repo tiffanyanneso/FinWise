@@ -68,7 +68,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textStyle="bold"
-                            android:id="@+id/tv_my_goals"
+                            android:id="@+id/tv_budget_amount"
                             android:textSize="24sp"
                             android:text="₱ XXXXX.XX"
                             android:textColor="@color/black"

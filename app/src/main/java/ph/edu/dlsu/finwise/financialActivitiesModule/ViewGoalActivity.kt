@@ -24,20 +24,16 @@ class ViewGoalActivity : AppCompatActivity() {
 
     private lateinit var context: Context
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityViewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        context= this
 
         var bundle: Bundle = intent.extras!!
         var goalID = bundle.getString("goalID")
-        println (goalID)
-
 
         if (goalID != null) {
-            firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener { document ->
+            firestore.collection("FinancialGoals").document(goalID!!).get().addOnSuccessListener { document ->
                 if (document != null) {
                     //TODO: compute remaining days
                     var goal = document.toObject(FinancialGoals::class.java)
@@ -68,7 +64,7 @@ class ViewGoalActivity : AppCompatActivity() {
             }
 
             binding.rvViewDecisionMakingActivities.setLayoutManager(LinearLayoutManager(applicationContext))
-            decisionMakingActivitiesAdapater = GoalDecisionMakingActivitiesAdapter(applicationContext, decisionMakingActivitiesArray)
+            decisionMakingActivitiesAdapater = GoalDecisionMakingActivitiesAdapter(applicationContext, decisionMakingActivitiesArray, goalID)
             binding.rvViewDecisionMakingActivities.setAdapter(decisionMakingActivitiesAdapater)
         }
     }

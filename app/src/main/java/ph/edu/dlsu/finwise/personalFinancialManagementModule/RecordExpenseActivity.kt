@@ -1,8 +1,8 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordExpenseBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -17,7 +17,11 @@ class RecordExpenseActivity : AppCompatActivity() {
         binding = ActivityPfmrecordExpenseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        goToConfirmation()
+        binding.btnConfirm.setOnClickListener {
+
+        }
+
+        //goToConfirmation()
         cancel()
     }
 
