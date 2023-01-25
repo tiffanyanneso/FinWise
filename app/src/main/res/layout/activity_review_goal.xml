@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReviewGoalActivity"
-    android:padding="20dp">
+    tools:context=".ReviewGoalActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,7 +57,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="5dp">
 
                         <TextView
                             android:layout_width="60dp"
@@ -86,7 +86,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="5dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -113,7 +114,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="5dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -346,7 +348,7 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/tv_overall_rating"
+                    android:id="@+id/tv_overall_rating_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/et_contact_number"
@@ -360,13 +362,14 @@
                     android:textColor="@color/black"/>
 
                 <TextView
+                    android:id="@+id/tv_overall_rating"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="24dp"
                     android:text="X/X"
                     android:textColor="@color/black"
                     android:textStyle="bold"
-                    android:gravity="center"/>
+                    android:gravity="center" />
 
                 <TextView
                     android:id="@+id/tv_status"

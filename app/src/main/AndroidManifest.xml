@@ -20,6 +20,9 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".ParentLandingPageActivity"
+            android:exported="false" />
+        <activity
             android:name=".ParentSettingAGoalActivity"
             android:exported="false" />
         <activity
@@ -41,7 +44,10 @@
             android:name=".financialActivitiesModule.BudgetCategoryActivity"
             android:exported="false" />
         <activity
-            android:name=".financialActivitiesModule.SavingViewDepositActivity"
+            android:name=".financialActivitiesModule.StartGoalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SavingViewDepositActivity"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.SavingActivity"
@@ -119,9 +125,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name=".financialActivitiesModule.StartGoalActivity"
-            android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"
             android:exported="false" />

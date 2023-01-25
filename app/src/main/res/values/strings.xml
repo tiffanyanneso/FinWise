@@ -85,6 +85,13 @@
     <string name="overall_rating">Overall Rating</string>
     <string name="comment">Comment</string>
     <string name="submit">Submit</string>
+    <string name="children">Children</string>
+    <string name="add_child">+ Add Child</string>
+    <string name="name">Name</string>
+
+    <string name="date">Date</string>
+    <string name="deposit_amount">Deposit Amount</string>
+    <string name="transaction_history">Transaction History</string>
 
     <string-array name="status_list">
         <item>--Status--</item>
@@ -93,6 +100,13 @@
         <item>For Editing</item>
         <item>Disapproved</item>
         <item>Achieved</item>
+    </string-array>
+
+    <string-array name="transaction_type_list">
+        <item>--All--</item>
+        <item>Expense</item>
+        <item>Income</item>
+        <item>Goal</item>
     </string-array>
 
     <string-array name="goal_status_list">
