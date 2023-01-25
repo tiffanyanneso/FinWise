@@ -32,7 +32,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:text="Item"
-                android:textSize="20sp"
+                android:textSize="16sp"
+                android:paddingLeft="10dp"
                 android:textStyle="bold"
                 android:layout_weight="1"/>
 
@@ -43,7 +44,7 @@
                 android:layout_below="@id/tv_goal"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 android:text="Amount"
                 android:maxLines="1"
                 android:gravity="right"

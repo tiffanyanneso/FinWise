@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintTop_toTopOf="parent"
-            android:padding="25dp"
+            android:padding="20dp"
             >
 
             <LinearLayout
