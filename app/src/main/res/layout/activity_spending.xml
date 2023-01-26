@@ -164,7 +164,9 @@
                     android:id="@+id/rv_view_deposit_history"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="8"/>
+                    android:layout_weight="8"
+                    android:layout_marginTop="10dp"
+                    tools:listitem="@layout/item_transaction"/>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
