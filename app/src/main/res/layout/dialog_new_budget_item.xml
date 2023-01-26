@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/dialog_et_category_name"
             android:hint="Amount"
+            android:inputType="numberDecimal"
             />
 
     </LinearLayout>

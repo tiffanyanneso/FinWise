@@ -12,6 +12,8 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityParentRegisterChildBinding
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ParentRegisterChildActivity : AppCompatActivity() {
 
@@ -53,6 +55,7 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                         firestore.collection("ChildUser").document(currentUser).set(user)
                             .addOnSuccessListener {
                                 clearForm()
+                                createChildWallet(currentUser)
 
                                 var bundle: Bundle = intent.extras!!
                                 firestore.collection("ParentUser").document(bundle.getString("parentUserID").toString()).update("childUserID", currentUser)
@@ -93,6 +96,23 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                 }
             else
                 Toast.makeText(this, "Failed to register! Try again!", Toast.LENGTH_SHORT).show()
+
+        }
+    }
+
+    private fun createChildWallet(childUserID:String) {
+
+        val time = Calendar.getInstance().time
+        //val formatter = SimpleDateFormat("MM/dd/yyyy")
+        //val current = formatter.format(time)
+
+        var wallet = hashMapOf(
+            "childID" to childUserID,
+            "currentBalance" to 0,
+            "lastUpdated" to time
+        )
+
+        firestore.collection("ChildWallet").add(wallet).addOnSuccessListener {
 
         }
     }

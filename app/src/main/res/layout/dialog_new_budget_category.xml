@@ -38,7 +38,6 @@
         <EditText
             android:padding="10dp"
             android:id="@+id/dialog_et_category_name"
-            android:id="@+id/et_category_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -61,6 +60,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/dialog_et_category_name"
             android:hint="Amount"
+            android:inputType="numberDecimal"
             />
 
     </LinearLayout>

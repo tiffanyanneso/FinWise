@@ -125,7 +125,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     android:hint="@string/email"
                     android:ems="10"
-                    android:inputType="text"
+                    android:inputType="textEmailAddress"
                     android:textSize="14dp"
                     />
 

@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.app.Dialog
+import android.content.ServiceConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -27,6 +28,9 @@ class BudgetCategoryActivity : AppCompatActivity() {
     private lateinit var budgetCategoryID: String
     private lateinit var bundle:Bundle
 
+    private var spent = 0.00F
+    private var totalBudget = 0.00F
+
     private var budgetItemIDArrayList = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,13 +43,15 @@ class BudgetCategoryActivity : AppCompatActivity() {
         budgetCategoryID = bundle.getString("categoryID").toString()
 
 
+        getSpentAmount()
+        getBudgetItems()
+
         firestore.collection("BudgetCategories").document(budgetCategoryID).get().addOnSuccessListener {
             var budgetCategory = it.toObject<BudgetCategory>()
+            totalBudget = budgetCategory!!.amount!!.toFloat()
             binding.tvCategoryName.text = budgetCategory?.budgetCategory
-            binding.tvCategoryAmount.text = "₱ " +  budgetCategory?.amount.toString()
+            binding.tvCategoryAmount.text = "₱ " + spent + " / ₱ " +  budgetCategory!!.amount
         }
-
-        getBudgetItems()
 
         binding.btnNewCategory.setOnClickListener {
             showNewItemDialog()
@@ -53,15 +59,29 @@ class BudgetCategoryActivity : AppCompatActivity() {
     }
 
     private fun getBudgetItems() {
-        firestore.collection("BudgetItems").whereEqualTo("budgetCategoryID", budgetCategoryID).get().addOnSuccessListener { budgetCategories ->
-            for (document in budgetCategories) {
-                var budgetItem = document.id
-                budgetItemIDArrayList.add(budgetItem)
+        firestore.collection("BudgetItems").whereEqualTo("budgetCategoryID", budgetCategoryID).get().addOnSuccessListener { budgetItems ->
+            for (document in budgetItems) {
+                var budgetItemID = document.id
+                budgetItemIDArrayList.add(budgetItemID)
             }
             budgetCategoryItemAdapter = BudgetCategoryItemAdapter(this, budgetItemIDArrayList)
             binding.rvViewItems.adapter = budgetCategoryItemAdapter
             binding.rvViewItems.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         }
+    }
+
+    private fun getSpentAmount() {
+        firestore.collection("BudgetItems").whereEqualTo("budgetCategoryID", budgetCategoryID).get().addOnSuccessListener { documentSnapshot ->
+            for (budgetItemSnapshot in documentSnapshot) {
+                var budgetItem = budgetItemSnapshot.toObject<BudgetCategoryItem>()
+                spent += budgetItem.amount!!
+            }
+        }
+    }
+
+    private fun updateSpent(itemAmount:Float) {
+        spent += itemAmount
+        binding.tvCategoryAmount.text = "₱ " + spent + " / ₱ "  + totalBudget
     }
 
     private fun showNewItemDialog() {
@@ -81,6 +101,7 @@ class BudgetCategoryActivity : AppCompatActivity() {
                 budgetItemIDArrayList.add(it.id)
                 budgetCategoryItemAdapter.notifyDataSetChanged()
                 dialog.dismiss()
+                updateSpent(itemAmount)
             }
         }
 
