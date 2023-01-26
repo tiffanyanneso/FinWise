@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="90dp"
+    android:layout_height="70dp"
     card_view:cardCornerRadius="10dp"
     android:foreground="@drawable/border"
     android:layout_marginBottom="10dp"
@@ -35,7 +35,7 @@
                 android:textColor="@color/black"
                 android:text="Name"
                 android:layout_weight="1"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 android:maxLines="1"/>
 
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/linear_layout"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:maxLines="1"
             android:text="XX/XX/XXXX"/>
     </RelativeLayout>

@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".financialActivitiesModule.FinancialActivityGoalDeposit"
-    android:padding="20dp">
+    tools:context=".financialActivitiesModule.FinancialActivityGoalDeposit">
 
     <TextView
         android:id="@+id/tv_title"
@@ -18,7 +17,7 @@
         android:text="Deposit to Goal"
         android:gravity="center"
         android:textStyle="bold"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:textColor="@color/black"/>
 
     <TextView
@@ -127,13 +126,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:text="You currently have ₱XXX.XX"
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         />
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -143,7 +140,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginBottom="70dp">
+        android:layout_marginBottom="20dp">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_cancel"
@@ -164,7 +161,7 @@
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="NEXT"
+            android:text="@string/next"
             android:textColor="@color/off_white"
             android:backgroundTint="@color/dark_green"
             android:background="@drawable/button_border"
