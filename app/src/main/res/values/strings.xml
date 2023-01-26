@@ -62,6 +62,7 @@
     <string name="category">Category</string>
     <string name="category_items">Category Items</string>
     <string name="add_item">+ Add Item</string>
+    <string name="title_add_item">Add Item</string>
     <string name="spending">Spending</string>
     <string name="expense_1">Expense</string>
     <string name="budget_spent">Budget Spent</string>

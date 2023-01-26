@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18dp"
-        android:text="@string/title_new_category"
+        android:text="@string/title_add_item"
         android:gravity="center"
         android:textColor="@color/black"/>
 
@@ -24,14 +24,14 @@
 
         <EditText
             android:padding="10dp"
-            android:id="@+id/dialog_et_category_name"
+            android:id="@+id/dialog_et_item_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:hint="Category"/>
+            android:hint="Item"/>
 
         <EditText
-            android:id="@+id/dialog_et_category_amount"
+            android:id="@+id/dialog_et_item_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/dialog_et_category_name"
