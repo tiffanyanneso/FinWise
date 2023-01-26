@@ -71,7 +71,7 @@ class GoalDecisionMakingActivitiesAdapter: RecyclerView.Adapter<GoalDecisionMaki
             var decisionActivityName = itemBinding.tvName.text.toString()
             var decisionActivityID = itemBinding.tvDecisionActivityId.text.toString()
             var bundle = Bundle()
-            bundle.putString ("decisionActivityID", decisionActivityID)
+            bundle.putString ("decisionMakingActivityID", decisionActivityID)
             bundle.putString("goalID", goalID)
             
             if (decisionActivityName.equals("Setting a Budget")) {

@@ -22,6 +22,11 @@ class SavingActivity : AppCompatActivity() {
 
     private lateinit  var goalViewDepositAdapater:GoalViewDepositAdapater
 
+
+    private lateinit var decisionMakingActivityID:String
+    private lateinit var goalID:String
+    private var currentAmount:Float = 0.00F
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySavingBinding.inflate(layoutInflater)
@@ -29,11 +34,8 @@ class SavingActivity : AppCompatActivity() {
         context=this
 
         var bundle: Bundle = intent.extras!!
-        var decisionMakingActivityID = bundle.getString("decisionActivityID").toString()
-        var goalID = bundle.getString("goalID")
-
-        var currentAmount:Float = 0.00F
-
+        decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
+        goalID = bundle.getString("goalID").toString()
 
         firestore.collection("Transactions").whereEqualTo("decisionMakingActivityID", decisionMakingActivityID).get().addOnSuccessListener { transactionsSnapshot ->
             var transactionsArrayList = ArrayList<Transactions>()
@@ -51,7 +53,7 @@ class SavingActivity : AppCompatActivity() {
 
         firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
             var decisionMakingActvity = it.toObject<DecisionMakingActivities>()
-            binding.tvGoalAmount.text = currentAmount.toString() + " / " + decisionMakingActvity!!.targetAmount.toString()
+            binding.tvGoalAmount.text = "₱ " + currentAmount.toString() + " / ₱ " + decisionMakingActvity!!.targetAmount.toString()
         }
 
 
