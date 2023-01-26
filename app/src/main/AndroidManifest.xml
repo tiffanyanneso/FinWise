@@ -113,6 +113,9 @@
             android:name=".financialActivitiesModule.FinancialActivityConfirmDeposit"
             android:exported="true"></activity>
         <activity
+            android:name=".financialActivitiesModule.SavingViewDepositActivity"
+            android:exported="true"></activity>
+        <activity
             android:name=".financialActivitiesModule.FinancialActivity"
             android:exported="true">
             <intent-filter>

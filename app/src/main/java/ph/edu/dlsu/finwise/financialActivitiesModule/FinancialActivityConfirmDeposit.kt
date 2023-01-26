@@ -49,7 +49,11 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 "decisionMakingActivityID" to decisionActivityID
             )
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
+                var bundle = Bundle()
+                bundle.putString("decisionMakingActivityID", decisionActivityID)
                 var viewDeposits = Intent(this, SavingViewDepositActivity::class.java)
+                viewDeposits.putExtras(bundle)
+                viewDeposits.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(viewDeposits)
 
             }

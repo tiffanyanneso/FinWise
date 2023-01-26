@@ -38,7 +38,7 @@ class BudgetActivity : AppCompatActivity() {
             //get the name of financial goal
             firestore.collection("FinancialGoals").document(decisionMakingActvity?.financialGoalID.toString()).get().addOnSuccessListener {
                 var financialGoal = it.toObject<FinancialGoals>()
-                binding.tvGoalName.text = financialGoal?.goalName.toString()
+                //binding.tvGoalName.text = financialGoal?.goalName.toString()
             }
         }
 
