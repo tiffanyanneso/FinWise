@@ -13,7 +13,7 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
-            android:name=".FinancialActivityConfirmDeposit"
+            android:name=".financialActivitiesModule.FinancialActivityConfirmDeposit"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -47,7 +47,7 @@
             android:name=".financialActivitiesModule.StartGoalActivity"
             android:exported="false" />
         <activity
-            android:name=".SavingViewDepositActivity"
+            android:name=".financialActivitiesModule.SavingViewDepositActivity"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.SavingActivity"
@@ -70,7 +70,17 @@
             android:exported="true" />
         <activity
             android:name=".ProfileActivity"
-            android:exported="true" />
+            android:exported="true">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+
+        <meta-data
+            android:name="android.app.lib_name"
+            android:value="" />
+        </activity>
         <!--
 <activity
             android:name=".personalFinancialManagementModule.EditTransactionActivity"
@@ -108,12 +118,6 @@
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.ChildNewGoal"
-            android:exported="true"></activity>
-        <activity
-            android:name=".financialActivitiesModule.FinancialActivityConfirmDeposit"
-            android:exported="true"></activity>
-        <activity
-            android:name=".financialActivitiesModule.SavingViewDepositActivity"
             android:exported="true"></activity>
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
