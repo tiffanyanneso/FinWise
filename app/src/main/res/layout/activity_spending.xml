@@ -1,53 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".financialActivitiesModule.SpendingActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="20dp">
-
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            >
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/tv_goal_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     android:textStyle="bold"
                     android:text="@string/goal_name"
                     android:textSize="24sp"
                     android:textColor="@color/black"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:paddingTop="20dp"/>
 
                 <TextView
+                    android:id="@+id/tv_spending"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_goal_name"
                     android:text="@string/spending"
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:gravity="center_vertical"
-                    android:layout_marginTop="15dp"/>
+                    android:layout_marginTop="15dp"
+                    android:layout_marginStart="20dp"
+                    />
 
                 <LinearLayout
+                    android:id="@+id/linear_layout_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_spending"
                     android:orientation="vertical"
                     android:padding="20dp"
                     android:background="@drawable/layout_bg_green"
-                    android:layout_marginTop="5dp">
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -77,22 +90,32 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tv_deposit_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
                     android:textSize="20dp"
                     android:text="@string/deposit_history"
                     android:textStyle="bold"
                     android:textColor="@color/black"
                     android:layout_marginTop="20dp"
+                    android:layout_marginStart="20dp"
                     />
 
                 <LinearLayout
+                    android:id="@+id/linear_layout_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_deposit_history"
                     android:orientation="vertical"
                     android:padding="20dp"
                     android:background="@drawable/layout_bg_green"
-                    android:layout_marginTop="5dp">
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -112,62 +135,90 @@
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_finish"
+                    android:id="@+id/btn_expense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linear_layout_2"
                     android:text="@string/expense_2"
                     android:textColor="@color/off_white"
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/dark_green"
                     android:background="@drawable/button_border"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
                     />
 
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="pie chart here"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btn_expense"
+                    app:tabGravity="fill"
+                    app:tabSelectedTextColor="@color/teal_700"
+                    app:tabIndicatorColor="@color/teal_700"
+                    android:layout_marginTop="20dp"/>
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="500dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tabLayout"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+<!--                <TextView-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="20dp"-->
+<!--                    android:text="pie chart here"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    />-->
 
-                    <TextView
-                        android:layout_weight="1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20dp"
-                        android:text="@string/spending_history"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:layout_marginTop="10dp"
-                        />
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal">-->
 
-                    <TextView
-                        android:layout_weight="1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16dp"
-                        android:text="@string/view_all"
-                        android:textColor="@color/black"
-                        android:layout_marginTop="10dp"
-                        android:gravity="right"
-                        />
-                </LinearLayout>
+<!--                    <TextView-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textSize="20dp"-->
+<!--                        android:text="@string/spending_history"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        />-->
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_view_deposit_history"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8"
-                    android:layout_marginTop="10dp"
-                    tools:listitem="@layout/item_transaction"/>
-            </LinearLayout>
+<!--                    <TextView-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textSize="16dp"-->
+<!--                        android:text="@string/view_all"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:layout_marginTop="10dp"-->
+<!--                        android:gravity="right"-->
+<!--                        />-->
+<!--                </LinearLayout>-->
+
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/rv_view_deposit_history"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:layout_weight="8"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    tools:listitem="@layout/item_transaction"/>-->
+<!--            </LinearLayout>-->
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
-    </LinearLayout>
-</androidx.drawerlayout.widget.DrawerLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
