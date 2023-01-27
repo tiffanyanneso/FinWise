@@ -1,9 +1,16 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
+import android.R
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordExpenseBinding
+import ph.edu.dlsu.finwise.model.BudgetCategory
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -11,18 +18,30 @@ class RecordExpenseActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityPfmrecordExpenseBinding
     var bundle = Bundle()
+    private var firestore = Firebase.firestore
+
+    private var goals = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPfmrecordExpenseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnConfirm.setOnClickListener {
-
-        }
-
+        getGoals()
         goToConfirmation()
         cancel()
+    }
+
+    private fun getGoals() {
+        //TODO: UPDATE LATER WITH CHILD ID
+        firestore.collection("FinancialGoals").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+            for (goal in results) {
+                var goalObject = goal.toObject<FinancialGoals>()
+                goals.add(goalObject.goalName.toString())
+            }
+            val adapter = ArrayAdapter(this, R.layout.simple_list_item_1, goals)
+            binding.spinnerGoal.adapter = adapter
+        }
     }
 
     private fun cancel() {
