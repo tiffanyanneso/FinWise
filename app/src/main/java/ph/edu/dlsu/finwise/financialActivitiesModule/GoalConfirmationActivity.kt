@@ -73,13 +73,14 @@ class GoalConfirmationActivity : AppCompatActivity() {
                         var decisionMakingActivity = DecisionMakingActivities()
                         decisionMakingActivity.financialGoalID = it.id
                         decisionMakingActivity.targetAmount = bundle.getFloat("amount")
+                        //TODO: ADD STATUS FOR DECISION MAKING ACTIVITY
 
                         if (decisionActivities[i].contentEquals("Setting a Budget"))
-                            decisionMakingActivity.decisonMakingActivity = "Setting a Budget"
+                            decisionMakingActivity.decisionMakingActivity = "Setting a Budget"
                         if (decisionActivities[i].contentEquals("Deciding to Save"))
-                            decisionMakingActivity.decisonMakingActivity = "Deciding to Save"
+                            decisionMakingActivity.decisionMakingActivity = "Deciding to Save"
                         if (decisionActivities[i].contentEquals("Deciding to Spend"))
-                            decisionMakingActivity.decisonMakingActivity = "Deciding to Spend"
+                            decisionMakingActivity.decisionMakingActivity = "Deciding to Spend"
 
                         firestore.collection("DecisionMakingActivities").add(decisionMakingActivity)
                             .addOnSuccessListener {

@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
@@ -42,7 +44,26 @@ class ChildNewGoal : AppCompatActivity() {
             binding.checkBoxes.visibility = View.VISIBLE
         }*/
 
+        binding.spinnerActivity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+               var currentSelected = binding.spinnerActivity.selectedItem.toString()
+                resetCheckbox()
+                if (currentSelected == "Buying Items" || currentSelected == "Planning An Event" || currentSelected == "Situational Shopping") {
+                    setCheckbox (true, false, false, true, true, false)
+                } else if (currentSelected == "Saving For Emergency Funds") {
+                    setCheckbox (false, false, true, false, false, false)
+                } else if (currentSelected == "Donating to Charity" ) {
+                    setCheckbox (false, false, false, true, true, false)
+                } else if (currentSelected == "Earning Money") {
+                    setCheckbox (false, false, true, false, false, false)
+                }
+            }
 
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                resetCheckbox() 
+            }
+
+        }
 
 
         binding.btnNext.setOnClickListener {
@@ -86,5 +107,24 @@ class ChildNewGoal : AppCompatActivity() {
             val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
             startActivity(goToPFM)
         }
+    }
+
+    private fun resetCheckbox() {
+        binding.cbBudgeting.isChecked = false
+        binding.cbBudgeting.isClickable = true
+        binding.cbSaving.isChecked = false
+        binding.cbSaving.isClickable = true
+        binding.cbSpending.isChecked = false
+        binding.cbSpending.isClickable = true
+    }
+
+    private fun setCheckbox (budgetChecked:Boolean, budgetCheckable:Boolean, savingChecked:Boolean, savingCheckable:Boolean,
+                                   spendingChecked :Boolean, spendingCheckable:Boolean) {
+        binding.cbBudgeting.isChecked = budgetChecked
+        binding.cbBudgeting.isClickable = budgetCheckable
+        binding.cbSaving.isChecked = savingChecked
+        binding.cbSaving.isClickable = savingCheckable
+        binding.cbSpending.isChecked = spendingChecked
+        binding.cbSpending.isClickable = spendingCheckable
     }
 }

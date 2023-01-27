@@ -64,7 +64,7 @@ class GoalDecisionMakingActivitiesAdapter: RecyclerView.Adapter<GoalDecisionMaki
                 var decisionActivity = it.toObject<DecisionMakingActivities>()
                 itemBinding.tvDecisionActivityId.text= it.id
                 itemBinding.tvFinancialGoalId.text = decisionActivity?.financialGoalID
-                itemBinding.tvName.text = decisionActivity?.decisonMakingActivity
+                itemBinding.tvName.text = decisionActivity?.decisionMakingActivity
             }
         }
 
