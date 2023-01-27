@@ -43,7 +43,7 @@ class BudgetActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         var bundle: Bundle = intent.extras!!
-        decisionMakingActivityID = bundle.getString("decisionActivityID").toString()
+        decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
 
 
         //get amount already allocated

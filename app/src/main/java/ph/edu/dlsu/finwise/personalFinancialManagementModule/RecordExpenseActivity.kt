@@ -21,7 +21,7 @@ class RecordExpenseActivity : AppCompatActivity() {
 
         }
 
-        //goToConfirmation()
+        goToConfirmation()
         cancel()
     }
 

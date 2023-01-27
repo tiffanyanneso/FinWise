@@ -34,7 +34,7 @@
                     android:paddingTop="20dp"/>
 
                 <TextView
-                    android:id="@+id/tv_spending"
+                    android:id="@+id/title_spending"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
@@ -54,7 +54,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_spending"
+                    app:layout_constraintTop_toBottomOf="@+id/title_spending"
                     android:orientation="vertical"
                     android:padding="20dp"
                     android:background="@drawable/layout_bg_green"
@@ -72,7 +72,7 @@
                         />
 
                     <TextView
-                        android:id="@+id/tv_goal"
+                        android:id="@+id/tv_spending"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="24dp"
@@ -126,6 +126,7 @@
                         />
 
                     <TextView
+                        android:id="@+id/tv_spending_progress"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16dp"
@@ -135,7 +136,7 @@
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_expense"
+                    android:id="@+id/btn_add_expense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintLeft_toLeftOf="parent"

@@ -63,15 +63,16 @@ class GoalDecisionMakingActivitiesAdapter: RecyclerView.Adapter<GoalDecisionMaki
             firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
                 var decisionActivity = it.toObject<DecisionMakingActivities>()
                 itemBinding.tvDecisionActivityId.text= it.id
+                itemBinding.tvFinancialGoalId.text = decisionActivity?.financialGoalID
                 itemBinding.tvName.text = decisionActivity?.decisonMakingActivity
             }
         }
 
         override fun onClick(p0: View?) {
             var decisionActivityName = itemBinding.tvName.text.toString()
-            var decisionActivityID = itemBinding.tvDecisionActivityId.text.toString()
             var bundle = Bundle()
-            bundle.putString ("decisionMakingActivityID", decisionActivityID)
+            bundle.putString("financialGoalID", itemBinding.tvFinancialGoalId.text.toString())
+            bundle.putString ("decisionMakingActivityID", itemBinding.tvDecisionActivityId.text.toString())
             bundle.putString("goalID", goalID)
             
             if (decisionActivityName.equals("Setting a Budget")) {

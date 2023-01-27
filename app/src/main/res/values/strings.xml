@@ -70,6 +70,7 @@
     <string name="spending_categories">Spending Categories</string>
     <string name="total_spending">Total Spending</string>
     <string name="spending_history">Spending History</string>
+    <string name="expense_category">Expense Category</string>
 
     <string name="view_deposits">View Deposits</string>
     <string name="profile_picture">Profile Picture</string>
