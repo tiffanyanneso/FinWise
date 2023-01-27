@@ -22,7 +22,19 @@ class ViewTransactionActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         loadTransactionDetails()
+
+        goToBack()
+
     }
+
+    private fun goToBack() {
+        binding.btnBack.setOnClickListener{
+
+            val goBack= Intent(this, PersonalFinancialManagementActivity::class.java)
+            startActivity(goBack)
+        }
+    }
+
 
     private fun loadTransactionDetails() {
         var bundle: Bundle = intent.extras!!
