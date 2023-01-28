@@ -33,6 +33,7 @@ class RecordDepositActivity : AppCompatActivity() {
 
     private fun getGoals() {
         //TODO: UPDATE LATER WITH CHILD ID
+        goals.add("None")
         firestore.collection("FinancialGoals").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             for (goal in results) {
                 var goalObject = goal.toObject<FinancialGoals>()

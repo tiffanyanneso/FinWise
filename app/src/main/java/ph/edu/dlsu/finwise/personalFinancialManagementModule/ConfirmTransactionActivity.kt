@@ -43,6 +43,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         category = bundle!!.getString("category")
         amount = bundle!!.getFloat("amount").toString()
         goal = bundle!!.getString("goal")
+
         date = bundle!!.getString("date")
         transactionType = bundle!!.getString("transactionType")
         if (transactionType == "income") {
@@ -74,6 +75,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
                 "goal" to goal,
             )
 
+            // change collection
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
                 Toast.makeText(this, "Goal added", Toast.LENGTH_SHORT).show()
                 var goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)

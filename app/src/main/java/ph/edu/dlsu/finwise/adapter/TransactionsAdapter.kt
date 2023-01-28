@@ -52,6 +52,8 @@ class TransactionsAdapter: RecyclerView.Adapter<TransactionsAdapter.TransactionV
         }
 
         fun bindTransaction(transactionID: String){
+            // Might need to change the collection to "users" to find the specific transactions
+            // (sub collection) for that user
             firestore.collection("Transactions").document(transactionID).get().addOnSuccessListener{ document ->
 
                 var transaction = document.toObject<Transactions>()

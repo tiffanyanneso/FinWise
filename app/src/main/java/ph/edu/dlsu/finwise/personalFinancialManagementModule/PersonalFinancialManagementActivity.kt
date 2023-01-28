@@ -12,6 +12,7 @@ import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
 
 
+
 class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPersonalFinancialManagementBinding
@@ -46,8 +47,10 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun getTransactions() {
         var transactionIDArrayList = ArrayList<String>()
         //TODO:change to get transactions of current user
+        // Dito may collection na transaction at hindi nakanest yung collection sa user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        //firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->
+        //firestore.collection("Transactions").whereEqualTo("transactionID", currentUser).get()
+        // .addOnSuccessListener{ documents ->
 
         firestore.collection("Transactions").get().addOnSuccessListener { documents ->
             for (transactionSnapshot in documents) {

@@ -19,7 +19,6 @@ class RecordExpenseActivity : AppCompatActivity() {
     private lateinit var binding : ActivityPfmrecordExpenseBinding
     var bundle = Bundle()
     private var firestore = Firebase.firestore
-
     private var goals = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +33,7 @@ class RecordExpenseActivity : AppCompatActivity() {
 
     private fun getGoals() {
         //TODO: UPDATE LATER WITH CHILD ID
+        goals.add("None")
         firestore.collection("FinancialGoals").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             for (goal in results) {
                 var goalObject = goal.toObject<FinancialGoals>()
