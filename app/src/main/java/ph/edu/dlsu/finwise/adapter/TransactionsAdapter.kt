@@ -28,6 +28,7 @@ class TransactionsAdapter: RecyclerView.Adapter<TransactionsAdapter.TransactionV
         return transactionIDArrayList.size
     }
 
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
