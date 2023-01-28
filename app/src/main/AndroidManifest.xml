@@ -13,6 +13,9 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".ParentSendMoney"
+            android:exported="false" />
+        <activity
             android:name=".financialActivitiesModule.FinancialActivityConfirmSpending"
             android:exported="false">
             <meta-data

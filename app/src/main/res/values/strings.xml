@@ -90,10 +90,14 @@
     <string name="children">Children</string>
     <string name="add_child">+ Add Child</string>
     <string name="name">Name</string>
+    <string name="budget_set">Budget Set</string>
 
     <string name="date">Date</string>
     <string name="deposit_amount">Deposit Amount</string>
     <string name="transaction_history">Transaction History</string>
+    <string name="current_balance_child">Current Balance of Child</string>
+    <string name="send_money">+ Send Money</string>
+
 
     <string-array name="status_list">
         <item>--Status--</item>
