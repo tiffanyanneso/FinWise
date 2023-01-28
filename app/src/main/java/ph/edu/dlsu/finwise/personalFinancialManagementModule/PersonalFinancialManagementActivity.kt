@@ -2,15 +2,19 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
-
+import ph.edu.dlsu.finwise.model.ChildWallet
+import kotlin.math.abs
 
 
 class PersonalFinancialManagementActivity : AppCompatActivity() {
@@ -29,12 +33,29 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
 
+        loadBalance()
         getTransactions()
-
         goToDepositGoalActivity()
         goToIncomeActivity()
         goToExpenseActivity()
         goToTransactionHistory()
+    }
+
+    private fun loadBalance() {
+        /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
+        firestore.collection("ChildWallet").whereEqualTo("childID", "JoCGIUSVMWTQ2IB7Rf41ropAv3S2")
+            .get().addOnSuccessListener { documents ->
+                lateinit var id: String
+                for (document in documents) {
+                    id = document.id
+                }
+                firestore.collection("ChildWallet").document(id).get()
+                    .addOnSuccessListener { document ->
+                    val balance = document.toObject<ChildWallet>()
+                        binding.tvBalance.text = balance?.currentBalance.toString()
+                }
+            }
+
     }
 
     private fun goToTransactionHistory() {

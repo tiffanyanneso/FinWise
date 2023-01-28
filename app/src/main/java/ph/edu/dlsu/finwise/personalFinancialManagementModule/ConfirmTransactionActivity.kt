@@ -4,9 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityPfmconfirmTransactionBinding
+import ph.edu.dlsu.finwise.model.ChildWallet
+import ph.edu.dlsu.finwise.model.Transactions
+import kotlin.math.abs
 
 class ConfirmTransactionActivity : AppCompatActivity() {
     private lateinit var binding : ActivityPfmconfirmTransactionBinding
@@ -74,10 +80,9 @@ class ConfirmTransactionActivity : AppCompatActivity() {
                 "amount" to amount?.toFloat(),
                 "goal" to goal,
             )
-
+            adjustUserBalance()
             // change collection
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
-                Toast.makeText(this, "Goal added", Toast.LENGTH_SHORT).show()
                 var goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
                 goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(goToPFM)
@@ -88,4 +93,22 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         }
     }
 
-}
+    private fun adjustUserBalance() {
+        //TODO: Change user based on who is logged in
+        /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
+        firestore.collection("ChildWallet").whereEqualTo("childID", "JoCGIUSVMWTQ2IB7Rf41ropAv3S2")
+            .get().addOnSuccessListener { documents ->
+                lateinit var id: String
+                for (document in documents) {
+                    id = document.id
+                }
+                var adjustedBalance = amount?.toDouble()
+                if (transactionType == "expense")
+                    adjustedBalance = -abs(adjustedBalance!!)
+
+                firestore.collection("ChildWallet").document(id)
+                    .update("currentBalance", FieldValue.increment(adjustedBalance!!))
+            }
+        }
+
+    }

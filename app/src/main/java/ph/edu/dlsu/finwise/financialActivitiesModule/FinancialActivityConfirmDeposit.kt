@@ -2,14 +2,16 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialConfirmDepositBinding
-import ph.edu.dlsu.finwise.databinding.ActivityPfmconfirmDepositBinding
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.abs
 
 class FinancialActivityConfirmDeposit : AppCompatActivity() {
 
@@ -23,6 +25,8 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
     val time = Calendar.getInstance().time
     val current = formatter.format(time)
 
+    var amount : String? =null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,16 +34,17 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         setContentView(binding.root)
         context=this
 
-        var bundle: Bundle = intent.extras!!
+        val bundle: Bundle = intent.extras!!
         binding.tvDate.text = current
+        amount = bundle.getFloat("amount").toString()
         binding.tvAmount.text = "₱ " + bundle.getFloat("amount").toString()
         binding.tvGoal.text= bundle.getString("goalName")
 
         binding.btnConfirm.setOnClickListener {
-            var goalName = bundle.getString("goalName").toString()
-            var decisionActivityID = bundle.getString("decisionMakingActivityID").toString()
+            val goalName = bundle.getString("goalName").toString()
+            val decisionActivityID = bundle.getString("decisionMakingActivityID").toString()
 
-            var transaction = hashMapOf(
+            val transaction = hashMapOf(
                 "transactionName" to goalName,
                 "transactionType" to "Deposit",
                 //"category" to "Deposit",
@@ -48,6 +53,9 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 "amount" to bundle.getFloat("amount"),
                 "decisionMakingActivityID" to decisionActivityID
             )
+
+            //adjustUserBalance()
+
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
                 val bundle = Bundle()
                 bundle.putString("decisionMakingActivityID", decisionActivityID)
@@ -59,4 +67,24 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
             }
         }
     }
+
+    private fun adjustUserBalance() {
+        //TODO: Change user based on who is logged in
+        /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
+        firestore.collection("ChildWallet").whereEqualTo("childID", "JoCGIUSVMWTQ2IB7Rf41ropAv3S2")
+            .get().addOnSuccessListener { documents ->
+                lateinit var id: String
+                for (document in documents) {
+                    id = document.id
+                }
+
+                var adjustedBalance = amount?.toDouble()
+                adjustedBalance = -abs(adjustedBalance!!)
+                Toast.makeText(this, adjustedBalance.toString(), Toast.LENGTH_SHORT).show()
+
+                firestore.collection("ChildWallet").document(id)
+                    .update("currentBalance", FieldValue.increment(adjustedBalance))
+            }
+    }
+
 }

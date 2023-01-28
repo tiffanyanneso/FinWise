@@ -21,7 +21,7 @@
         android:textColor="@color/black"/>
 
     <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spinner_activity"
+        android:id="@+id/spinner_sort"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -29,9 +29,10 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:entries="@array/transaction_type_list"
-        android:layout_marginTop="5dp"
+        android:layout_margin="10dp"
+        android:layout_marginStart="20dp"
         android:textAlignment="center"
-        android:textSize="14dp"/>
+        android:textSize="14sp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_view_transactions"
@@ -40,7 +41,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_activity"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_sort"
         tools:listitem="@layout/item_transaction"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"/>

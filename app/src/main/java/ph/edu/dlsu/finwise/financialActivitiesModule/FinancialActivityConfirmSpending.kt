@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialConfirmSpendingBinding
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialRecordExpenseBinding
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.abs
 
 class FinancialActivityConfirmSpending : AppCompatActivity() {
 
@@ -21,6 +23,9 @@ class FinancialActivityConfirmSpending : AppCompatActivity() {
     val time = Calendar.getInstance().time
     val formatter = SimpleDateFormat("MM/dd/yyyy")
     val current = formatter.format(time)
+
+    var amount : String? =null
+
 
     private lateinit var context: Context
 
@@ -45,6 +50,9 @@ class FinancialActivityConfirmSpending : AppCompatActivity() {
                "decisionMakingActivityID" to bundle.getString("decisionMakingActivityID"),
                "date" to current
            )
+
+            //adjustUserBalance()
+
             firestore.collection("Transactions").add(expense).addOnSuccessListener {
                 var spending = Intent(this, SpendingActivity::class.java)
                 spending.putExtras(bundle)
@@ -56,9 +64,28 @@ class FinancialActivityConfirmSpending : AppCompatActivity() {
     }
 
     private fun setFields() {
+        amount = bundle.getFloat("amount").toString()
         binding.tvAmount.text = "₱ " + bundle.getFloat("amount").toString()
         binding.tvName.text = bundle.getString("expenseName")
         binding.tvCategory.text = bundle.getString("expenseCategory")
         binding.tvDate.text = current
     }
+
+    private fun adjustUserBalance() {
+        //TODO: Change user based on who is logged in
+        /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
+        firestore.collection("ChildWallet").whereEqualTo("childID", "JoCGIUSVMWTQ2IB7Rf41ropAv3S2")
+            .get().addOnSuccessListener { documents ->
+                lateinit var id: String
+                for (document in documents) {
+                    id = document.id
+                }
+                var adjustedBalance = amount?.toDouble()
+                    adjustedBalance = -abs(adjustedBalance!!)
+
+                firestore.collection("ChildWallet").document(id)
+                    .update("currentBalance", FieldValue.increment(adjustedBalance))
+            }
+    }
+
 }

@@ -4,9 +4,11 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityPfmconfirmDepositBinding
+import kotlin.math.abs
 
 class ConfirmDepositActivity : AppCompatActivity() {
 
@@ -59,7 +61,7 @@ class ConfirmDepositActivity : AppCompatActivity() {
                 "amount" to amount?.toFloat(),
                 "goal" to goal,
             )
-            Toast.makeText(this, name + date + amount + goal, Toast.LENGTH_SHORT).show()
+            adjustUserBalance()
 
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
                 Toast.makeText(this, "Goal added", Toast.LENGTH_SHORT).show()
@@ -72,5 +74,24 @@ class ConfirmDepositActivity : AppCompatActivity() {
                 }
         }
     }
+
+    private fun adjustUserBalance() {
+        //TODO: Change user based on who is logged in
+        /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
+        firestore.collection("ChildWallet").whereEqualTo("childID", "JoCGIUSVMWTQ2IB7Rf41ropAv3S2")
+            .get().addOnSuccessListener { documents ->
+                lateinit var id: String
+                for (document in documents) {
+                    id = document.id
+                }
+                var adjustedBalance = amount?.toDouble()
+                    adjustedBalance = -abs(adjustedBalance!!)
+                Toast.makeText(this, adjustedBalance.toString(), Toast.LENGTH_SHORT).show()
+
+                firestore.collection("ChildWallet").document(id)
+                    .update("currentBalance", FieldValue.increment(adjustedBalance))
+            }
+    }
+
 
 }
