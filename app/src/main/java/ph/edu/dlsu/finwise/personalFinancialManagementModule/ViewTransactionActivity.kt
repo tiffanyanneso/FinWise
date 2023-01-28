@@ -54,7 +54,7 @@ class ViewTransactionActivity : AppCompatActivity() {
                     binding.tvName.text = transaction?.transactionName.toString()
                     binding.tvCategory.text = transaction?.category.toString()
                     binding.tvDate.text = transaction?.date.toString()
-                    binding.tvGoal.text = transaction?.financialGoalID.toString()
+                    binding.tvGoal.text = transaction?.goal.toString()
                 }
             }
         }

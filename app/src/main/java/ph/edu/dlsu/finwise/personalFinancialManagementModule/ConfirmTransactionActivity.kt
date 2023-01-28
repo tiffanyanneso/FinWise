@@ -43,8 +43,6 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         category = bundle!!.getString("category")
         amount = bundle!!.getFloat("amount").toString()
         goal = bundle!!.getString("goal")
-        if (goal == "--Select Goal--")
-            goal = ""
 
         date = bundle!!.getString("date")
         transactionType = bundle!!.getString("transactionType")

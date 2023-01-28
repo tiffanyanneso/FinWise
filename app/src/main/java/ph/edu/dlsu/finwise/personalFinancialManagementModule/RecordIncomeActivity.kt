@@ -65,12 +65,11 @@ class RecordIncomeActivity : AppCompatActivity() {
         val category = binding.spinnerCategory.selectedItem.toString()
         val amount = binding.etAmount.text.toString().toFloat()
         val goal = binding.spinnerGoal.selectedItem.toString()
-
         //Time
         val formatter = SimpleDateFormat("MM/dd/yyyy")
         val time = Calendar.getInstance().time
         val current = formatter.format(time)
-        var date = current
+        val date = current
         bundle.putString("transactionType", "income")
         bundle.putString("transactionName", name)
         bundle.putString("category", category)
