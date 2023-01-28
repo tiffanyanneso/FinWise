@@ -24,6 +24,10 @@ class ViewGoalActivity : AppCompatActivity() {
 
     private lateinit var context: Context
 
+    private var totalDecisionActivities =0
+    private var completedDecisionActivities =0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityViewGoalBinding.inflate(layoutInflater)
@@ -38,7 +42,7 @@ class ViewGoalActivity : AppCompatActivity() {
                     //TODO: compute remaining days
                     var goal = document.toObject(FinancialGoals::class.java)
                     binding.tvMyGoals.text = goal?.goalName.toString()
-                    binding.tvGoal.text = "₱ " + goal?.currentAmount.toString() + " / ₱ " + goal?.targetAmount.toString()
+                    //binding.tvGoal.text = "₱ " + goal?.currentAmount.toString() + " / ₱ " + goal?.targetAmount.toString()
                     binding.tvActivity.text = goal?.financialActivity.toString()
                     binding.tvDateSet.text = goal?.dateCreated.toString()
                     binding.tvTargetDate.text = goal?.targetDate.toString()
@@ -55,13 +59,40 @@ class ViewGoalActivity : AppCompatActivity() {
         }
     }
 
+
     private fun getDecisionMakingActivities(goalID:String) {
         firestore.collection("DecisionMakingActivities").whereEqualTo("financialGoalID", goalID).get().addOnSuccessListener { documents ->
             var decisionMakingActivitiesArray = ArrayList<String>()
+            var index =0
             for (decisionActivitySnapshot in documents) {
-                var decisionActivity = decisionActivitySnapshot.id
-                decisionMakingActivitiesArray.add(decisionActivity)
+
+                //check how many decision making activities has already been completed
+                var decisionActivityObject = decisionActivitySnapshot.toObject<DecisionMakingActivities>()
+                if (decisionActivityObject.status == "In Progress" || decisionActivityObject.status == "Completed")
+                    completedDecisionActivities++
+
+                //check the priority of the decision making activity
+                if (index == 0)
+                    decisionMakingActivitiesArray.add(decisionActivitySnapshot.id)
+                if (index == 1) {
+                    if (decisionActivityObject.priority == 1)
+                        decisionMakingActivitiesArray.add(0, decisionActivitySnapshot.id)
+                    else if (decisionActivityObject.priority == 2 || decisionActivityObject.priority == 2)
+                        decisionMakingActivitiesArray.add(1, decisionActivitySnapshot.id)
+                }
+                if (index == 2) {
+                    if (decisionActivityObject.priority == 1)
+                        decisionMakingActivitiesArray.add(0, decisionActivitySnapshot.id)
+                    else if (decisionActivityObject.priority == 2)
+                        decisionMakingActivitiesArray.add(1, decisionActivitySnapshot.id)
+                    else if (decisionActivityObject.priority == 3)
+                        decisionMakingActivitiesArray.add(2, decisionActivitySnapshot.id)
+                }
+                index++
             }
+
+            totalDecisionActivities = decisionMakingActivitiesArray.size
+            binding.tvGoal.text = completedDecisionActivities.toString() + " / " + totalDecisionActivities.toString()
 
             binding.rvViewDecisionMakingActivities.setLayoutManager(LinearLayoutManager(applicationContext))
             decisionMakingActivitiesAdapater = GoalDecisionMakingActivitiesAdapter(applicationContext, decisionMakingActivitiesArray, goalID)

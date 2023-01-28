@@ -69,11 +69,18 @@ class GoalConfirmationActivity : AppCompatActivity() {
                 //add decision making activities in inner collection of FinancialGoals
                 var decisionActivities = bundle.getStringArrayList("decisionActivities")
                 if (decisionActivities != null) {
+                    var priority = 1
                     for (i in decisionActivities.indices) {
                         var decisionMakingActivity = DecisionMakingActivities()
                         decisionMakingActivity.financialGoalID = it.id
                         decisionMakingActivity.targetAmount = bundle.getFloat("amount")
-                        //TODO: ADD STATUS FOR DECISION MAKING ACTIVITY
+                        decisionMakingActivity.priority = priority
+                        if (priority == 1)
+                            decisionMakingActivity.status = "In Progress"
+                        else
+                            decisionMakingActivity.status = "Not Yet Started"
+
+                        priority++
 
                         if (decisionActivities[i].contentEquals("Setting a Budget"))
                             decisionMakingActivity.decisionMakingActivity = "Setting a Budget"

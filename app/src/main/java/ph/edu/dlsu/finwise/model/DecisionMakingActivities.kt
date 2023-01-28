@@ -5,5 +5,6 @@ class DecisionMakingActivities(
     var currentAmount:Float?=null,
     var targetAmount:Float?=null,
     var financialGoalID:String?=null,
+    var priority:Int?=null,
     var status:String?=null
 ) {}

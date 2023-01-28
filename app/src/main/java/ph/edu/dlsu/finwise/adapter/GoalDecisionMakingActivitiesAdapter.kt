@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -62,40 +63,46 @@ class GoalDecisionMakingActivitiesAdapter: RecyclerView.Adapter<GoalDecisionMaki
         fun bindGoal(decisionMakingActivityID: String){
             firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
                 var decisionActivity = it.toObject<DecisionMakingActivities>()
-                itemBinding.tvDecisionActivityId.text= it.id
-                itemBinding.tvFinancialGoalId.text = decisionActivity?.financialGoalID
-                itemBinding.tvName.text = decisionActivity?.decisionMakingActivity
+                if (decisionActivity!=null) {
+                    itemBinding.tvDecisionActivityId.text= it.id
+                    itemBinding.tvFinancialGoalId.text = decisionActivity.financialGoalID
+                    itemBinding.tvName.text = decisionActivity.decisionMakingActivity
+                    itemBinding.tvStatus.text = decisionActivity.status
+                }
             }
         }
 
         override fun onClick(p0: View?) {
-            var decisionActivityName = itemBinding.tvName.text.toString()
-            var bundle = Bundle()
-            bundle.putString("financialGoalID", itemBinding.tvFinancialGoalId.text.toString())
-            bundle.putString ("decisionMakingActivityID", itemBinding.tvDecisionActivityId.text.toString())
-            bundle.putString("goalID", goalID)
-            
-            if (decisionActivityName.equals("Setting a Budget")) {
-                var budgetActivity = Intent(context, BudgetActivity::class.java)
-                budgetActivity.putExtras(bundle)
-                budgetActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(budgetActivity)
-            }
+            if (itemBinding.tvStatus.text == "In Progress" || itemBinding.tvStatus.text == "Completed") {
+                var decisionActivityName = itemBinding.tvName.text.toString()
+                var bundle = Bundle()
+                bundle.putString("financialGoalID", itemBinding.tvFinancialGoalId.text.toString())
+                bundle.putString("decisionMakingActivityID", itemBinding.tvDecisionActivityId.text.toString())
+                bundle.putString("goalID", goalID)
 
-            if (decisionActivityName.equals("Deciding to Save")) {
-                var savingActivity = Intent(context, SavingActivity::class.java)
-                savingActivity.putExtras(bundle)
-                savingActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(savingActivity)
-            }
+                if (decisionActivityName.equals("Setting a Budget")) {
+                    var budgetActivity = Intent(context, BudgetActivity::class.java)
+                    budgetActivity.putExtras(bundle)
+                    budgetActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(budgetActivity)
+                }
 
-            if (decisionActivityName.equals("Deciding to Spend")) {
-                var spendingActivity = Intent(context, SpendingActivity::class.java)
-                spendingActivity.putExtras(bundle)
-                spendingActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(spendingActivity)
+                if (decisionActivityName.equals("Deciding to Save")) {
+                    var savingActivity = Intent(context, SavingActivity::class.java)
+                    savingActivity.putExtras(bundle)
+                    savingActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(savingActivity)
+                }
+
+                if (decisionActivityName.equals("Deciding to Spend")) {
+                    var spendingActivity = Intent(context, SpendingActivity::class.java)
+                    spendingActivity.putExtras(bundle)
+                    spendingActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    context.startActivity(spendingActivity)
+                }
+            } else if (itemBinding.tvStatus.text == "Not Yet Started") {
+                //TODO: SHOW ALERT IF PREVIOUS DECISION MAKING ACTIVITY HAS NOT BEEN COMPLETED YET
             }
-            
         }
     }
 }

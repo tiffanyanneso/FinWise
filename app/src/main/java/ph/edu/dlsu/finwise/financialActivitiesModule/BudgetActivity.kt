@@ -103,6 +103,7 @@ class BudgetActivity : AppCompatActivity() {
         val dialog = Dialog(this)
 
         dialog.setContentView(R.layout.dialog_new_budget_category)
+        dialog.window!!.setLayout(800, 900)
 
         val btnSave = dialog.findViewById<Button>(R.id.btn_save)
         var btnCancel = dialog.findViewById<Button>(R.id.btn_cancel)
