@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordDepositBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.SimpleDateFormat
@@ -25,6 +26,11 @@ class RecordDepositActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPfmrecordDepositBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Hides actionbar,
+        // and initializes the navbar
+        supportActionBar?.hide()
+        Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
 
         getGoals()
         goToConfirmation()

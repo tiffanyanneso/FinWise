@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmviewTransactionBinding
 import ph.edu.dlsu.finwise.model.Transactions
 
@@ -21,9 +23,17 @@ class ViewTransactionActivity : AppCompatActivity() {
         binding = ActivityPfmviewTransactionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Hides actionbar,
+        // and initializes the navbar
+        supportActionBar?.hide()
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+
         loadTransactionDetails()
 
         goToBack()
+
+
+
 
     }
 
