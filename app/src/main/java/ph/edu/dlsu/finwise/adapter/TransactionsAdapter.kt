@@ -13,6 +13,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.ViewTransactionActivity
 import ph.edu.dlsu.finwise.databinding.ItemTransactionBinding
 import ph.edu.dlsu.finwise.model.Transactions
+import java.text.DecimalFormat
 
 class TransactionsAdapter: RecyclerView.Adapter<TransactionsAdapter.TransactionViewHolder> {
 
@@ -56,15 +57,17 @@ class TransactionsAdapter: RecyclerView.Adapter<TransactionsAdapter.TransactionV
             // Might need to change the collection to "users" to find the specific transactions
             // (sub collection) for that user
             firestore.collection("Transactions").document(transactionID).get().addOnSuccessListener{ document ->
+                val transaction = document.toObject<Transactions>()
 
-                var transaction = document.toObject<Transactions>()
+                val dec = DecimalFormat("#,###.00")
+                val amount = dec.format(transaction?.amount)
                 itemBinding.tvTransactionId.text = document.id
                 itemBinding.tvName.text = transaction?.transactionName
                 itemBinding.tvDate.text = transaction?.date
                 if (transaction?.transactionType == "income")
-                    itemBinding.tvAmount.text = "+₱"+ transaction?.amount.toString()
+                    itemBinding.tvAmount.text = "+₱"+ amount
                 else
-                    itemBinding.tvAmount.text = "-₱"+ transaction?.amount.toString()
+                    itemBinding.tvAmount.text = "-₱"+ amount
             }
         }
 

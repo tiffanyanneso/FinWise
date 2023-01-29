@@ -39,7 +39,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
     }
 
     private fun sortTransactions() {
-        var sortSpinner = binding.spinnerSort
+        val sortSpinner = binding.spinnerSort
         sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>?,

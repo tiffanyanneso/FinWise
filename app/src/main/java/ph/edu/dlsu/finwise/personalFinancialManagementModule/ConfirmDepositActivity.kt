@@ -10,6 +10,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmconfirmDepositBinding
+import java.text.DecimalFormat
 import kotlin.math.abs
 
 class ConfirmDepositActivity : AppCompatActivity() {
@@ -50,13 +51,17 @@ class ConfirmDepositActivity : AppCompatActivity() {
         amount = bundle.getFloat("amount").toString()
         goal = bundle.getString("goal")
         date = bundle.getString("date")
-        binding.tvAmount.text = amount
+        val dec = DecimalFormat("#,###.00")
+        var textAmount = dec.format(bundle!!.getFloat("amount"))
+        binding.tvAmount.text = textAmount
         binding.tvGoal.text = goal
 
     }
 
     private fun confirm() {
         binding.btnConfirm.setOnClickListener {
+            val dec = DecimalFormat("#,###.00")
+            amount = dec.format(amount)
         val name = "Deposit to Goal"
             var transaction = hashMapOf(
                 //TODO: add childID, createdBy

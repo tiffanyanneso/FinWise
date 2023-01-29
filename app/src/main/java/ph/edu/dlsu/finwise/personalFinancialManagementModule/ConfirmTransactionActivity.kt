@@ -14,6 +14,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmconfirmTransactionBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.Transactions
+import java.text.DecimalFormat
 import kotlin.math.abs
 
 class ConfirmTransactionActivity : AppCompatActivity() {
@@ -66,12 +67,14 @@ class ConfirmTransactionActivity : AppCompatActivity() {
             binding.tvTitle.text = "Confirm Expense"
             binding.tvTransactionType.text = "Expense Amount"
         }
-
+        val dec = DecimalFormat("#,###.00")
+        var textAmount = dec.format(bundle!!.getFloat("amount"))
         binding.tvName.text = name
         binding.tvCategory.text = category
-        binding.tvAmount.text = "₱$amount"
+        binding.tvAmount.text = "₱$textAmount"
         binding.tvGoal.text = goal
         binding.tvDate.text = date
+
     }
 
     private fun confirm() {
@@ -90,7 +93,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
             adjustUserBalance()
             // change collection
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
-                var goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
+                val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
                 goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(goToPFM)
             }

@@ -2,17 +2,19 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.R
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordDepositBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
-import java.text.SimpleDateFormat
-import java.util.*
+import java.text.DecimalFormat
 
 class RecordDepositActivity : AppCompatActivity() {
 
@@ -20,7 +22,10 @@ class RecordDepositActivity : AppCompatActivity() {
     var bundle = Bundle()
     private var firestore = Firebase.firestore
 
+    private var hi = "hi"
     private var goals = ArrayList<String>()
+    private var goalArrayID = ArrayList<String>()
+    private var goal = FinancialGoals()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,21 +37,66 @@ class RecordDepositActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
 
+
         getGoals()
         goToConfirmation()
         cancel()
     }
 
+    private fun getGoalProgress() {
+        val sortSpinner = binding.spinnerGoal
+        sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parentView: AdapterView<*>?,
+                selectedItemView: View?,
+                position: Int,
+                id: Long
+            ) {
+                val goalID = goalArrayID[position]
+                //check if may laman sa baba yung goalarrayID
+                /*Toast.makeText(applicationContext, position,
+                    Toast.LENGTH_LONG).show()*/
+                firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener { document ->
+                        goal = document.toObject<FinancialGoals>()!!
+                        setProgressBar()
+                    }
+            }
+
+            override fun onNothingSelected(parentView: AdapterView<*>?) {
+                // your code here
+            }
+        }
+    }
+
+    private fun setProgressBar() {
+        binding.progressGoal.max = goal.targetAmount!!.toInt()
+        binding.progressGoal.progress = goal.currentAmount!!.toInt()
+        val dec = DecimalFormat("#,###.00")
+        var targetAmount = dec.format(goal.targetAmount)
+        var currentAmount = dec.format(goal.currentAmount)
+        binding.tvBalance.text = "₱$currentAmount / $targetAmount"
+    }
+
+
     private fun getGoals() {
         //TODO: UPDATE LATER WITH CHILD ID
         firestore.collection("FinancialGoals").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             for (goal in results) {
-                var goalObject = goal.toObject<FinancialGoals>()
+                val goalObject = goal.toObject<FinancialGoals>()
                 goals.add(goalObject.goalName.toString())
+                goalArrayID.add(goal.id)
             }
+
             val adapter = ArrayAdapter(this, R.layout.simple_list_item_1, goals)
             binding.spinnerGoal.adapter = adapter
+
+            getGoalProgress()
         }
+
+    }
+
+    private fun setGoalArrayID(goalArrayIDTemp: ArrayList<String>) {
+        goalArrayID = goalArrayIDTemp
     }
 
     private fun cancel() {
@@ -59,7 +109,7 @@ class RecordDepositActivity : AppCompatActivity() {
     private fun goToConfirmation() {
         binding.btnConfirm.setOnClickListener {
             setBundle()
-            var goToConfirmDeposit = Intent(this, ConfirmDepositActivity::class.java)
+            val goToConfirmDeposit = Intent(this, ConfirmDepositActivity::class.java)
             goToConfirmDeposit.putExtras(bundle)
             goToConfirmDeposit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(goToConfirmDeposit)

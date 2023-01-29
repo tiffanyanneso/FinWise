@@ -14,6 +14,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
+import java.text.DecimalFormat
 import kotlin.math.abs
 
 
@@ -52,7 +53,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 firestore.collection("ChildWallet").document(id).get()
                     .addOnSuccessListener { document ->
                     val balance = document.toObject<ChildWallet>()
-                        binding.tvBalance.text = balance?.currentBalance.toString()
+                    val dec = DecimalFormat("#,###.00")
+                        binding.tvBalance.text = "₱"+dec.format(balance?.currentBalance)
                 }
             }
 

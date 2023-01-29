@@ -48,6 +48,48 @@
         android:layout_marginEnd="20dp"/>
 
     <TextView
+        android:id="@+id/tv_goal_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_goal"
+        android:textSize="14sp"
+        android:textAllCaps = "true"
+        android:text="Goal"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_balance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_goal_progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="14sp"
+        android:layout_marginTop="5dp"
+        android:text="₱X.XX / ₱XXX.XX"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        />
+
+    <ProgressBar
+        android:id="@+id/progress_goal"
+        style="?android:attr/progressBarStyleHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_balance"
+        android:layout_width="370dp"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content"
+        android:scaleY="5"/>
+
+
+    <TextView
         android:id="@+id/tv_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,7 +101,7 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_goal"
+        app:layout_constraintTop_toBottomOf="@+id/progress_goal"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"/>
 
@@ -78,20 +120,7 @@
         android:layout_marginEnd="20dp"
         />
 
-    <TextView
-        android:id="@+id/tv_balance"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/et_amount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="14sp"
-        android:layout_marginTop="5dp"
-        android:text="You currently have ₱XXX.XX."
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        />
+
 
     <LinearLayout
         android:layout_width="match_parent"
