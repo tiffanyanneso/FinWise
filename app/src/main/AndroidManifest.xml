@@ -63,7 +63,7 @@
             android:exported="false" />
         <activity
             android:name=".ReviewGoalActivity"
-            android:exported="true" />
+            android:exported="false" />
         <activity
             android:name=".SettingAGoalActivity"
             android:exported="false" />
@@ -79,6 +79,7 @@
         <activity
             android:name=".financialActivitiesModule.BudgetCategoryActivity"
             android:exported="false" />
+
         <activity
             android:name=".financialActivitiesModule.StartGoalActivity"
             android:exported="false" />
