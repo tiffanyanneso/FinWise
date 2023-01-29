@@ -23,17 +23,18 @@ class EditProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        context= this
 
         getProfileData()
 
         binding.btnSave.setOnClickListener{
             updateInternProfile()
-            var goToProfile = Intent(context, ProfileActivity::class.java)
+            var goToProfile = Intent(this, ProfileActivity::class.java)
             context.startActivity(goToProfile)
         }
 
         binding.btnCancel.setOnClickListener {
-            var goToProfile = Intent(context, ProfileActivity::class.java)
+            var goToProfile = Intent(this, ProfileActivity::class.java)
             context.startActivity(goToProfile)
         }
 

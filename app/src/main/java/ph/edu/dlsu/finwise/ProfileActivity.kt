@@ -26,6 +26,7 @@ class ProfileActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        context= this
 
         val adapter = ViewPagerAdapter(supportFragmentManager)
 
@@ -38,7 +39,7 @@ class ProfileActivity : AppCompatActivity(){
         getProfileData()
 
         binding.btnEditProfile.setOnClickListener {
-            var gotoEditProfile = Intent(context, EditProfileActivity::class.java)
+            val gotoEditProfile = Intent(this, EditProfileActivity::class.java)
             context.startActivity(gotoEditProfile)
         }
 
