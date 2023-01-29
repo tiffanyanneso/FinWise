@@ -101,6 +101,11 @@
     <string name="goal_settings">Goal Settings</string>
 
 
+    <string name="error_budget_category">Cannot input amount greater than budget</string>
+
+    <string name="done_setting_budget">Done Setting Budget</string>
+
+
     <string-array name="status_list">
         <item>--Status--</item>
         <item>In Progress</item>

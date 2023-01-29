@@ -116,6 +116,14 @@
                     android:layout_weight="8"
                     android:layout_marginTop="10dp"
                     tools:listitem="@layout/item_category"/>
+
+                <Button
+                    android:id="@+id/btn_done_setting_budget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/done_setting_budget"
+                    android:backgroundTint="@color/dark_green"
+                    />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

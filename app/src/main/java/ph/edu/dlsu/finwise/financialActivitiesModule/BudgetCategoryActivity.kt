@@ -4,8 +4,10 @@ import android.app.Dialog
 import android.content.ServiceConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -29,7 +31,7 @@ class BudgetCategoryActivity : AppCompatActivity() {
     private lateinit var bundle:Bundle
 
     private var spent = 0.00F
-    private var totalBudget = 0.00F
+    private var totalBudgetCategory = 0.00F
 
     private var budgetItemIDArrayList = ArrayList<String>()
 
@@ -56,7 +58,7 @@ class BudgetCategoryActivity : AppCompatActivity() {
     private fun getBudgetCategoryAllocation() {
         firestore.collection("BudgetCategories").document(budgetCategoryID).get().addOnSuccessListener {
             var budgetCategory = it.toObject<BudgetCategory>()
-            totalBudget = budgetCategory!!.amount!!.toFloat()
+            totalBudgetCategory = budgetCategory!!.amount!!.toFloat()
             binding.tvCategoryName.text = budgetCategory?.budgetCategory
             binding.tvCategoryAmount.text = "₱ " + spent + " / ₱ " +  budgetCategory!!.amount
         }
@@ -85,7 +87,7 @@ class BudgetCategoryActivity : AppCompatActivity() {
 
     private fun updateSpent(itemAmount:Float) {
         spent += itemAmount
-        binding.tvCategoryAmount.text = "₱ " + spent + " / ₱ "  + totalBudget
+        binding.tvCategoryAmount.text = "₱ " + spent + " / ₱ "  + totalBudgetCategory
     }
 
     private fun showNewItemDialog() {
@@ -102,11 +104,16 @@ class BudgetCategoryActivity : AppCompatActivity() {
             var itemName = dialog.findViewById<EditText>(R.id.dialog_et_item_name).text.toString()
             var itemAmount = dialog.findViewById<EditText>(R.id.dialog_et_item_amount).text.toString().toFloat()
             var budgetItem = BudgetCategoryItem(itemName, budgetCategoryID, decisionMakingActivityID, itemAmount)
-            firestore.collection("BudgetItems").add(budgetItem).addOnSuccessListener {
-                budgetItemIDArrayList.add(it.id)
-                budgetCategoryItemAdapter.notifyDataSetChanged()
-                dialog.dismiss()
-                updateSpent(itemAmount)
+            if (itemAmount+spent > totalBudgetCategory)
+                dialog.findViewById<TextView>(R.id.tv_error).visibility = View.VISIBLE
+            else {
+                firestore.collection("BudgetItems").add(budgetItem).addOnSuccessListener {
+                    dialog.findViewById<TextView>(R.id.tv_error).visibility = View.GONE
+                    budgetItemIDArrayList.add(it.id)
+                    budgetCategoryItemAdapter.notifyDataSetChanged()
+                    dialog.dismiss()
+                    updateSpent(itemAmount)
+                }
             }
         }
 

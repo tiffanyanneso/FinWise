@@ -61,6 +61,15 @@
             android:inputType="numberDecimal"
             />
 
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:text="@string/error_budget_category"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"/>
+
     </LinearLayout>
 
     <LinearLayout
