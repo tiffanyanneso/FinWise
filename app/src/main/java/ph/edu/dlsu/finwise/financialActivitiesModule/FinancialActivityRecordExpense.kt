@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialRecordExpenseBinding
 import ph.edu.dlsu.finwise.model.BudgetCategory
 
@@ -29,6 +30,11 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
         binding = ActivityFinancialRecordExpenseBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context=  this
+
+        // Hides actionbar,
+        // and initializes the navbar
+        supportActionBar?.hide()
+        Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_goal)
 
         var bundle: Bundle = intent.extras!!
         decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()

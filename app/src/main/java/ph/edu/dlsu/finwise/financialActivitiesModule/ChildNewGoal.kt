@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.AdapterView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
 
@@ -25,6 +27,11 @@ class ChildNewGoal : AppCompatActivity() {
         binding = ActivityChildNewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context=this
+
+        // Hides actionbar,
+        // and initializes the navbar
+        supportActionBar?.hide()
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         //TODO: how to bring back values to edit text fields
         /*var bundle: Bundle = intent.extras!!

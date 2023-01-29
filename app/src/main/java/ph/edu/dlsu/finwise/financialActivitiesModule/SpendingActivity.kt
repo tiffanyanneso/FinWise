@@ -38,6 +38,11 @@ class SpendingActivity : AppCompatActivity() {
         setContentView(binding.root)
         context = this
 
+        // Hides actionbar,
+        // and initializes the navbar
+        supportActionBar?.hide()
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+
         var bundle: Bundle = intent.extras!!
         decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
         financialGoalID = bundle.getString("financialGoalID").toString()

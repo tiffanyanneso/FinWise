@@ -7,6 +7,8 @@ import android.os.Bundle
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialConfirmSpendingBinding
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialRecordExpenseBinding
 import java.text.SimpleDateFormat
@@ -36,6 +38,11 @@ class FinancialActivityConfirmSpending : AppCompatActivity() {
         setContentView(binding.root)
         context=  this
         bundle = intent.extras!!
+
+        // Hides actionbar,
+        // and initializes the navbar
+        supportActionBar?.hide()
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         setFields()
 

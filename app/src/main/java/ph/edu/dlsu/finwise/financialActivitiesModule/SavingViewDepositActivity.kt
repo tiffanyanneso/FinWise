@@ -8,6 +8,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.GoalViewDepositAdapater
 import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
@@ -29,6 +30,11 @@ class SavingViewDepositActivity : AppCompatActivity() {
         binding = ActivitySavingViewDepositBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context=this
+
+        // Hides actionbar,
+        // and initializes the navbar
+        supportActionBar?.hide()
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         var bundle: Bundle = intent.extras!!
         var decisionActivityID = bundle.getString("decisionMakingActivityID")
