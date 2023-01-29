@@ -25,7 +25,7 @@ class EditProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         getProfileData()
-        
+
         binding.btnSave.setOnClickListener{
             updateInternProfile()
             var goToProfile = Intent(context, ProfileActivity::class.java)
