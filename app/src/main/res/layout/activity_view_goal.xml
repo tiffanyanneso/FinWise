@@ -75,13 +75,12 @@
                         android:textColor="@color/black"
                         android:textStyle="bold"/>
 
-                    <TextView
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16dp"
-                        android:text="progress bar"
-                        android:textColor="@color/black"
-                        />
+                         android:layout_height="30dp"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:scaleY="4" />
 
                     <TextView
                         android:id="@+id/tv_days_left"

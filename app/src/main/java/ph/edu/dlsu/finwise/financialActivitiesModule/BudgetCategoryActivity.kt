@@ -45,16 +45,20 @@ class BudgetCategoryActivity : AppCompatActivity() {
 
         getSpentAmount()
         getBudgetItems()
+        getBudgetCategoryAllocation()
 
+
+        binding.btnNewCategory.setOnClickListener {
+            showNewItemDialog()
+        }
+    }
+
+    private fun getBudgetCategoryAllocation() {
         firestore.collection("BudgetCategories").document(budgetCategoryID).get().addOnSuccessListener {
             var budgetCategory = it.toObject<BudgetCategory>()
             totalBudget = budgetCategory!!.amount!!.toFloat()
             binding.tvCategoryName.text = budgetCategory?.budgetCategory
             binding.tvCategoryAmount.text = "₱ " + spent + " / ₱ " +  budgetCategory!!.amount
-        }
-
-        binding.btnNewCategory.setOnClickListener {
-            showNewItemDialog()
         }
     }
 

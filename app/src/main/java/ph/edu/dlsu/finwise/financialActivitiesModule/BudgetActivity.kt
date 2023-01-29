@@ -45,23 +45,7 @@ class BudgetActivity : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
 
-
-        //get amount already allocated
-        //getSpentAmount()
-
-        //get the amount of needed for the decision making activity
-        firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
-            var decisionMakingActivity = it.toObject<DecisionMakingActivities>()
-            totalBudget = decisionMakingActivity!!.targetAmount!!
-            binding.tvBudgetAmount.text = "₱ " + spent + "/ ₱ "  + decisionMakingActivity!!.targetAmount!!
-
-            //get the name of financial goal
-            firestore.collection("FinancialGoals").document(decisionMakingActivity?.financialGoalID.toString()).get().addOnSuccessListener {
-                var financialGoal = it.toObject<FinancialGoals>()
-                //binding.tvGoalName.text = financialGoal?.goalName.toString()
-            }
-        }
-
+        getBudgetInfo()
         getBudgetCategories()
 
 
@@ -70,15 +54,6 @@ class BudgetActivity : AppCompatActivity() {
         }
     }
 
-    private fun getSpentAmount() {
-        firestore.collection("BudgetCategories").whereEqualTo("decisionMakingActivityID", decisionMakingActivityID).get().addOnSuccessListener { documentSnapshot ->
-            for (budgetCategorySnapshot in documentSnapshot) {
-                var budgetCategory = budgetCategorySnapshot.toObject<BudgetCategory>()
-                spent += budgetCategory.amount!!.toFloat()
-            }
-        }
-    }
-    
     private fun getBudgetCategories() {
         firestore.collection("BudgetCategories").whereEqualTo("decisionMakingActivityID", decisionMakingActivityID).get().addOnSuccessListener { budgetCategories ->
             for (document in budgetCategories) {
@@ -91,6 +66,21 @@ class BudgetActivity : AppCompatActivity() {
             budgetCategoryAdapter = BudgetCategoryAdapter(this, budgetCategoryIDArrayList)
             binding.rvViewCategories.adapter = budgetCategoryAdapter
             binding.rvViewCategories.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+        }
+    }
+
+    private fun getBudgetInfo() {
+        //get the amount of needed for the decision making activity
+        firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
+            var decisionMakingActivity = it.toObject<DecisionMakingActivities>()
+            totalBudget = decisionMakingActivity!!.targetAmount!!
+            binding.tvBudgetAmount.text = "₱ " + spent + " / ₱ "  + decisionMakingActivity!!.targetAmount!!
+
+            //get the name of financial goal
+            firestore.collection("FinancialGoals").document(decisionMakingActivity?.financialGoalID.toString()).get().addOnSuccessListener {
+                var financialGoal = it.toObject<FinancialGoals>()
+                //binding.tvGoalName.text = financialGoal?.goalName.toString()
+            }
         }
     }
 

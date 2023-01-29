@@ -25,7 +25,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/tv_first_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -42,7 +41,6 @@
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             android:hint="Category"/>
-
 
         <TextView
             android:layout_width="match_parent"

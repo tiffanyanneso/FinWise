@@ -27,6 +27,8 @@ class ViewGoalActivity : AppCompatActivity() {
     private var totalDecisionActivities =0
     private var completedDecisionActivities =0
 
+    private lateinit var goalID:String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,23 +36,9 @@ class ViewGoalActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         var bundle: Bundle = intent.extras!!
-        var goalID = bundle.getString("goalID")
+        goalID = bundle.getString("goalID").toString()
 
-        if (goalID != null) {
-            firestore.collection("FinancialGoals").document(goalID!!).get().addOnSuccessListener { document ->
-                if (document != null) {
-                    //TODO: compute remaining days
-                    var goal = document.toObject(FinancialGoals::class.java)
-                    binding.tvMyGoals.text = goal?.goalName.toString()
-                    //binding.tvGoal.text = "₱ " + goal?.currentAmount.toString() + " / ₱ " + goal?.targetAmount.toString()
-                    binding.tvActivity.text = goal?.financialActivity.toString()
-                    binding.tvDateSet.text = goal?.dateCreated.toString()
-                    binding.tvTargetDate.text = goal?.targetDate.toString()
-                    binding.tvStatus.text = goal?.status.toString()
-                    getDecisionMakingActivities(goalID)
-                }
-            }
-        }
+        getGoal()
 
         binding.btnEditGoal.setOnClickListener {
             var goToEditGoal = Intent(context, ChildEditGoal::class.java)
@@ -68,7 +56,7 @@ class ViewGoalActivity : AppCompatActivity() {
 
                 //check how many decision making activities has already been completed
                 var decisionActivityObject = decisionActivitySnapshot.toObject<DecisionMakingActivities>()
-                if (decisionActivityObject.status == "In Progress" || decisionActivityObject.status == "Completed")
+                if (decisionActivityObject.status == "Completed")
                     completedDecisionActivities++
 
                 //check the priority of the decision making activity
@@ -94,9 +82,31 @@ class ViewGoalActivity : AppCompatActivity() {
             totalDecisionActivities = decisionMakingActivitiesArray.size
             binding.tvGoal.text = completedDecisionActivities.toString() + " / " + totalDecisionActivities.toString()
 
+            //set values for progress bar
+            binding.progressBar.progress = completedDecisionActivities
+            binding.progressBar.max = totalDecisionActivities
+
             binding.rvViewDecisionMakingActivities.setLayoutManager(LinearLayoutManager(applicationContext))
             decisionMakingActivitiesAdapater = GoalDecisionMakingActivitiesAdapter(applicationContext, decisionMakingActivitiesArray, goalID)
             binding.rvViewDecisionMakingActivities.setAdapter(decisionMakingActivitiesAdapater)
+        }
+    }
+
+    private fun getGoal() {
+        if (goalID != null) {
+            firestore.collection("FinancialGoals").document(goalID!!).get().addOnSuccessListener { document ->
+                if (document != null) {
+                    //TODO: compute remaining days
+                    var goal = document.toObject(FinancialGoals::class.java)
+                    binding.tvMyGoals.text = goal?.goalName.toString()
+                    //binding.tvGoal.text = "₱ " + goal?.currentAmount.toString() + " / ₱ " + goal?.targetAmount.toString()
+                    binding.tvActivity.text = goal?.financialActivity.toString()
+                    binding.tvDateSet.text = goal?.dateCreated.toString()
+                    binding.tvTargetDate.text = goal?.targetDate.toString()
+                    binding.tvStatus.text = goal?.status.toString()
+                    getDecisionMakingActivities(goalID)
+                }
+            }
         }
     }
 

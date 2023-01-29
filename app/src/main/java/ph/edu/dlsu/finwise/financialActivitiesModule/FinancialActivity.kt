@@ -30,6 +30,7 @@ class FinancialActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        context = this
 
         // Hides actionbar,
         // and initializes the navbar

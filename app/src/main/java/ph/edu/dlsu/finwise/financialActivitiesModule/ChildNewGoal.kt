@@ -58,11 +58,9 @@ class ChildNewGoal : AppCompatActivity() {
                     setCheckbox (false, false, true, false, false, false)
                 }
             }
-
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 resetCheckbox() 
             }
-
         }
 
 

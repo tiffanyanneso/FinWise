@@ -37,24 +37,8 @@ class SavingActivity : AppCompatActivity() {
         decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
         goalID = bundle.getString("goalID").toString()
 
-        firestore.collection("Transactions").whereEqualTo("decisionMakingActivityID", decisionMakingActivityID).get().addOnSuccessListener { transactionsSnapshot ->
-            var transactionsArrayList = ArrayList<Transactions>()
-            for (document in transactionsSnapshot) {
-                var transaction = document.toObject<Transactions>()
-                transactionsArrayList.add(transaction)
-                currentAmount += transaction.amount!!.toFloat()
-            }
-            goalViewDepositAdapater = GoalViewDepositAdapater(this, transactionsArrayList)
-            binding.rvViewDepositHistory.adapter = goalViewDepositAdapater
-            binding.rvViewDepositHistory.layoutManager = LinearLayoutManager(applicationContext,
-                LinearLayoutManager.VERTICAL,
-                false)
-        }
-
-        firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
-            var decisionMakingActvity = it.toObject<DecisionMakingActivities>()
-            binding.tvGoalAmount.text = "₱ " + currentAmount.toString() + " / ₱ " + decisionMakingActvity!!.targetAmount.toString()
-        }
+        getDepositHistory()
+        getSavingProgress()
 
 
         binding.btnDeposit.setOnClickListener {
@@ -72,6 +56,31 @@ class SavingActivity : AppCompatActivity() {
             var viewDeposit = Intent(this, SavingViewDepositActivity::class.java)
             viewDeposit.putExtras(bundle)
             context.startActivity(viewDeposit)
+        }
+    }
+
+    private fun getDepositHistory() {
+        firestore.collection("Transactions").whereEqualTo("decisionMakingActivityID", decisionMakingActivityID).get().addOnSuccessListener { transactionsSnapshot ->
+            var transactionsArrayList = ArrayList<Transactions>()
+            for (document in transactionsSnapshot) {
+                var transaction = document.toObject<Transactions>()
+                transactionsArrayList.add(transaction)
+                currentAmount += transaction.amount!!.toFloat()
+            }
+            goalViewDepositAdapater = GoalViewDepositAdapater(this, transactionsArrayList)
+            binding.rvViewDepositHistory.adapter = goalViewDepositAdapater
+            binding.rvViewDepositHistory.layoutManager = LinearLayoutManager(applicationContext,
+                LinearLayoutManager.VERTICAL,
+                false)
+        }
+    }
+
+    private fun getSavingProgress() {
+        firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
+            var decisionMakingActvity = it.toObject<DecisionMakingActivities>()
+            binding.tvGoalAmount.text = "₱ " + currentAmount.toString() + " / ₱ " + decisionMakingActvity!!.targetAmount.toString()
+            binding.progressBar.progress = currentAmount.toInt()
+            binding.progressBar.max = decisionMakingActvity.targetAmount.toString().toInt()
         }
     }
 }
