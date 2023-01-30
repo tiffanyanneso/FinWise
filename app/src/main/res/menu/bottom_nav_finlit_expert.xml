@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item android:title=""
+        android:icon="@drawable/baseline_assessment_24"
+        android:id="@+id/nav_finlit_assessment"/>
+    <item android:title=""
+        android:icon="@drawable/question_mark"
+        android:id="@+id/nav_finlit_question"/>
+    <item android:title=""
+        android:icon="@drawable/baseline_profile_24"
+        android:id="@+id/nav_finlit_profile"/>
+
+</menu>
