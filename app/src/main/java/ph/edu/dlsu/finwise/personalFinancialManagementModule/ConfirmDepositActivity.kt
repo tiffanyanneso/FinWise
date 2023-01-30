@@ -47,21 +47,21 @@ class ConfirmDepositActivity : AppCompatActivity() {
     }
 
     private fun setText() {
-        var bundle: Bundle = intent.extras!!
+        val bundle: Bundle = intent.extras!!
         amount = bundle.getFloat("amount").toString()
         goal = bundle.getString("goal")
         date = bundle.getString("date")
         val dec = DecimalFormat("#,###.00")
-        var textAmount = dec.format(bundle!!.getFloat("amount"))
+        val textAmount = dec.format(bundle.getFloat("amount"))
         binding.tvAmount.text = textAmount
         binding.tvGoal.text = goal
+        binding.tvDate.text = date
 
     }
 
     private fun confirm() {
         binding.btnConfirm.setOnClickListener {
-            val dec = DecimalFormat("#,###.00")
-            amount = dec.format(amount)
+
         val name = "Deposit to Goal"
             var transaction = hashMapOf(
                 //TODO: add childID, createdBy
