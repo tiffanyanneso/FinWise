@@ -61,16 +61,17 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
     }
 
     private fun setExpenseCategories() {
-        //TODO: NEEDS WORK
-        firestore.collection("BudgetCategories").whereEqualTo("decisionMakingActivityID", "decisionMakingActivityID").get().addOnSuccessListener { results ->
-            for (category in results) {
-                var categoryObject = category.toObject<BudgetCategory>()
-                println("category  " +  categoryObject.budgetCategory.toString())
-                expenseCategories.add(categoryObject.budgetCategory.toString())
-
+        //GET THE DECISION MAKING ACTIVITY ID FOR THE BUDGET CATEGORIES
+        firestore.collection("DecisionMakingActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("decisionMakingActivity", "Setting a Budget").get().addOnSuccessListener {
+            var budgetingDecisionMakingActivityID = it.documents[0].id
+            firestore.collection("BudgetCategories").whereEqualTo("decisionMakingActivityID", budgetingDecisionMakingActivityID).get().addOnSuccessListener { results ->
+                for (category in results) {
+                    var categoryObject = category.toObject<BudgetCategory>()
+                    expenseCategories.add(categoryObject.budgetCategory.toString())
+                }
+                val adapter = ArrayAdapter (this, R.layout.simple_list_item_1, expenseCategories)
+                binding.spinnerExpenseCategory.adapter = adapter
             }
-            val adapter = ArrayAdapter(this, R.layout.simple_list_item_1, expenseCategories)
-            binding.spinnerExpenseCategory.adapter = adapter
         }
     }
 }
