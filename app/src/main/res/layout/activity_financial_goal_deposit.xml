@@ -85,6 +85,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="10dp"
         android:scaleY="4"
+        android:max="100"
         />
 
     <TextView

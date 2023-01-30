@@ -60,7 +60,6 @@ class BudgetActivity : AppCompatActivity() {
         decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
 
         getBudgetCategories()
-        getBudgetInfo()
 
         binding.btnNewCategory.setOnClickListener {
             showNewBudgetCategoryDialog()
@@ -96,6 +95,7 @@ class BudgetActivity : AppCompatActivity() {
                 var budgetCategory = document.toObject<BudgetCategory>()
                 allocated += budgetCategory.amount!!.toFloat()
             }
+            getBudgetInfo()
             budgetCategoryAdapter = BudgetCategoryAdapter(this, budgetCategoryIDArrayList)
             binding.rvViewCategories.adapter = budgetCategoryAdapter
             binding.rvViewCategories.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)

@@ -71,7 +71,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4" />
+                        android:scaleY="4"
+                        android:max="100"/>
                 </LinearLayout>
 
                 <androidx.appcompat.widget.AppCompatButton

@@ -28,6 +28,8 @@ class SavingActivity : AppCompatActivity() {
     private lateinit var decisionMakingActivityID:String
     private lateinit var goalID:String
     private var currentAmount:Float = 0.00F
+    private var targetAmount:Float = 0.00F
+    private var progress = 0.00F
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,13 +47,15 @@ class SavingActivity : AppCompatActivity() {
         goalID = bundle.getString("goalID").toString()
 
         getDepositHistory()
-        getSavingProgress()
 
 
         binding.btnDeposit.setOnClickListener {
             var bundle = Bundle()
             bundle.putString("goalID", goalID)
             bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
+            bundle.putInt("progress", progress.toInt())
+            bundle.putFloat("currentAmount", currentAmount)
+            bundle.putFloat("targetAmount", targetAmount)
             var savingActivity = Intent(this, FinancialActivityGoalDeposit::class.java)
             savingActivity.putExtras(bundle)
             context.startActivity(savingActivity)
@@ -73,20 +77,24 @@ class SavingActivity : AppCompatActivity() {
             for (document in transactionsSnapshot) {
                 var transaction = document.toObject<Transactions>()
                 transactionsArrayList.add(transaction)
-                currentAmount += transaction.amount!!.toFloat()
+                currentAmount += transaction.amount!!
             }
             goalViewDepositAdapater = GoalViewDepositAdapater(this, transactionsArrayList)
             binding.rvViewDepositHistory.adapter = goalViewDepositAdapater
             binding.rvViewDepositHistory.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+            getSavingProgress()
         }
     }
 
     private fun getSavingProgress() {
         firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
             var decisionMakingActvity = it.toObject<DecisionMakingActivities>()
-            binding.tvGoalAmount.text = "₱ " + currentAmount.toString() + " / ₱ " + decisionMakingActvity!!.targetAmount.toString()
-            binding.progressBar.progress = currentAmount.toInt()
-            binding.progressBar.max = decisionMakingActvity.targetAmount!!.toInt()
+            targetAmount = decisionMakingActvity!!.targetAmount!!
+            binding.tvGoalAmount.text = "₱ " + currentAmount.toString() + " / ₱ " + targetAmount.toString()
+            progress = (currentAmount?.div(decisionMakingActvity!!.targetAmount!!))?.times(100)!!
+            if (progress != null) {
+                binding.progressBar.progress  = progress.toInt()
+            }
         }
     }
 }

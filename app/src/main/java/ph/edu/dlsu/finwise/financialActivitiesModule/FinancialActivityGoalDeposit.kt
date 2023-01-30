@@ -40,6 +40,8 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
         firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
             binding.tvGoalName.text = financialGoal?.goalName
+            binding.tvProgressAmount.text = "₱ " + dataBundle.getFloat("currentAmount") + " / ₱ " + dataBundle.getFloat("targetAmount")
+            binding.pbProgress.progress = dataBundle.getInt("progress")
         }
 
 
