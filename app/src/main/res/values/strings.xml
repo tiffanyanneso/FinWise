@@ -104,6 +104,7 @@
     <string name="error_budget_category">Cannot input amount greater than budget</string>
 
     <string name="done_setting_budget">Done Setting Budget</string>
+    <string name="done_spending">Done Spending</string>
 
 
     <string-array name="status_list">

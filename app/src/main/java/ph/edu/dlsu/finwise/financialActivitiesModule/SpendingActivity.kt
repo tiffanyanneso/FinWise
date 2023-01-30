@@ -1,9 +1,15 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -15,7 +21,9 @@ import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetBinding
 import ph.edu.dlsu.finwise.databinding.ActivityProfileBinding
 import ph.edu.dlsu.finwise.databinding.ActivitySpendingBinding
+import ph.edu.dlsu.finwise.model.BudgetCategory
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
 
 class SpendingActivity : AppCompatActivity() {
@@ -47,6 +55,9 @@ class SpendingActivity : AppCompatActivity() {
         decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
         financialGoalID = bundle.getString("financialGoalID").toString()
 
+
+        //checks status of goal. if goal is achieved, do not show "Done Spending" button
+        showButton()
         getSpent()
         firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
             if (it!=null) {
@@ -66,6 +77,10 @@ class SpendingActivity : AppCompatActivity() {
             context.startActivity(recordExpense)
         }
 
+        binding.btnDoneSpending.setOnClickListener {
+            showConfirmDialog()
+        }
+
         val adapter = ViewPagerAdapter(supportFragmentManager)
 
         adapter.addFragment(SpendingCategoriesFragment(),"Categories")
@@ -73,6 +88,19 @@ class SpendingActivity : AppCompatActivity() {
 
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
+    }
+
+    private fun showButton(){
+        firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
+            var decisionMakingActivity = it.toObject<DecisionMakingActivities>()
+            if (decisionMakingActivity?.status == "In Progress") {
+                binding.btnAddExpense.visibility = View.VISIBLE
+                binding.btnDoneSpending.visibility = View.VISIBLE
+            } else {
+                binding.btnAddExpense.visibility = View.GONE
+                binding.btnDoneSpending.visibility = View.GONE
+            }
+        }
     }
 
     private fun getSpent() {
@@ -84,6 +112,33 @@ class SpendingActivity : AppCompatActivity() {
             binding.tvSpending.text = "₱ " + spentAmount
         }
     }
+
+    private fun showConfirmDialog() {
+        val dialog = Dialog(this)
+
+        dialog.setContentView(R.layout.dialog_done_spending)
+        dialog.window!!.setLayout(900, 700)
+
+        val btnOk = dialog.findViewById<Button>(R.id.btn_ok)
+        var btnCancel = dialog.findViewById<Button>(R.id.btn_cancel)
+
+
+        btnOk.setOnClickListener {
+            firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).update("status", "Completed")
+            firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Achieved")
+            var goalAchieved = Intent(this, GoalAccomplishedActivity::class.java)
+            var bundle = Bundle()
+            bundle.putString("financialGoalID", financialGoalID)
+            goalAchieved.putExtras(bundle)
+            this.startActivity(goalAchieved)
+        }
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){
 

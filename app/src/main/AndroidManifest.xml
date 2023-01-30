@@ -145,7 +145,7 @@
             android:name=".personalFinancialManagementModule.RecordIncomeActivity"
             android:exported="false" />
         <activity
-            android:name=".GoalAccomplishedActivity"
+            android:name=".financialActivitiesModule.GoalAccomplishedActivity"
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
