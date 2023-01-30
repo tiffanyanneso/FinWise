@@ -34,6 +34,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
 
+        transactionIDArrayList.clear()
         getAllTransactions()
         sortTransactions()
     }
@@ -50,7 +51,6 @@ class TransactionHistoryActivity : AppCompatActivity() {
                 type = sortSpinner.selectedItem.toString()
 
                 if (type == "--All--") {
-                    transactionIDArrayList.clear()
                     getAllTransactions()
                 }
                 else {
@@ -76,11 +76,10 @@ class TransactionHistoryActivity : AppCompatActivity() {
     }
 
     private fun getAllTransactions() {
-
+        transactionIDArrayList.clear()
         //TODO:change to get transactions of current user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         //firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->
-
         firestore.collection("Transactions").get().addOnSuccessListener { documents ->
             for (transactionSnapshot in documents) {
                 //creating the object from list retrieved in db

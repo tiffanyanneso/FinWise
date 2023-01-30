@@ -15,6 +15,9 @@ import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordDepositBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RecordDepositActivity : AppCompatActivity() {
 
@@ -22,10 +25,11 @@ class RecordDepositActivity : AppCompatActivity() {
     var bundle = Bundle()
     private var firestore = Firebase.firestore
 
-    private var hi = "hi"
     private var goals = ArrayList<String>()
     private var goalArrayID = ArrayList<String>()
     private var goal = FinancialGoals()
+    lateinit var amount: String
+    lateinit var date: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,10 +99,6 @@ class RecordDepositActivity : AppCompatActivity() {
 
     }
 
-    private fun setGoalArrayID(goalArrayIDTemp: ArrayList<String>) {
-        goalArrayID = goalArrayIDTemp
-    }
-
     private fun cancel() {
         binding.btnCancel.setOnClickListener {
             val goBack = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
@@ -106,31 +106,55 @@ class RecordDepositActivity : AppCompatActivity() {
         }
     }
 
+    private fun validateAndSetUserInput(): Boolean {
+        var valid = true
+        // Check if edit text is empty and valid
+        if (binding.etAmount.text.toString().trim().isEmpty()) {
+            binding.etAmount.error = "Please enter the amount."
+            binding.etAmount.requestFocus()
+            valid = false
+        } else amount = binding.etAmount.text.toString().trim()
+
+        return valid
+    }
+
     private fun goToConfirmation() {
         binding.btnConfirm.setOnClickListener {
-            setBundle()
-            val goToConfirmDeposit = Intent(this, ConfirmDepositActivity::class.java)
-            goToConfirmDeposit.putExtras(bundle)
-            goToConfirmDeposit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(goToConfirmDeposit)
+            if (validateAndSetUserInput()) {
+                setBundle()
+                val goToConfirmDeposit = Intent(this, ConfirmDepositActivity::class.java)
+                goToConfirmDeposit.putExtras(bundle)
+                goToConfirmDeposit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(goToConfirmDeposit)
+            } else {
+                Toast.makeText(
+                    baseContext, "Please fill up correctly the form.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
     private fun setBundle() {
-        val amount = binding.etAmount.text.toString().toFloat()
+        getCurrentTime()
         val goal = binding.spinnerGoal.selectedItem.toString()
-        /*Get logged in user's balance'
-        val userBalance = */
 
         bundle.putString("transactionType", "goal")
-        bundle.putFloat("amount", amount)
+        bundle.putFloat("amount", amount.toFloat())
         bundle.putString("goal", goal)
         bundle.putString("source", "PFMDepositToGoal")
+        bundle.putString("date", date)
 
         //TODO: reset spinner and date to default value
         /* binding.etName.text.clear()
          binding.etAmount.text.clear()
          binding.spinnerCategory.clear()
          binding.spinnerGoal.adapter(null)*/
+    }
+    private fun getCurrentTime() {
+        //Time
+        val formatter = SimpleDateFormat("MM/dd/yyyy")
+        val time = Calendar.getInstance().time
+        date = formatter.format(time)
     }
 }

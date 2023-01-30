@@ -3,7 +3,9 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 import android.R
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -21,6 +23,12 @@ class RecordExpenseActivity : AppCompatActivity() {
     var bundle = Bundle()
     private var firestore = Firebase.firestore
     private var goals = ArrayList<String>()
+
+    lateinit var name: String
+    lateinit var amount: String
+    lateinit var category: String
+    lateinit var goal: String
+    lateinit var date: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +58,34 @@ class RecordExpenseActivity : AppCompatActivity() {
         }
     }
 
+    private fun validateAndSetUserInput(): Boolean {
+        var valid = true
+        // Check if edit text is empty and valid
+        if (binding.etName.text.toString().trim().isEmpty()) {
+            binding.etName.error = "Please enter the name of the transaction."
+            binding.etName.requestFocus()
+            valid = false
+        } else name = binding.etName.text.toString().trim()
+
+        if (binding.spinnerCategory.selectedItem.toString() == "--Select Category--") {
+            binding.tvErrorSpinner.visibility = View.VISIBLE
+            valid = false
+        } else {
+            binding.tvErrorSpinner.visibility = View.GONE
+            category = binding.spinnerCategory.selectedItem.toString()
+        }
+
+
+        if (binding.etAmount.text.toString().trim().isEmpty()) {
+            binding.etAmount.error = "Please enter the amount."
+            binding.etAmount.requestFocus()
+            valid = false
+        } else amount = binding.etAmount.text.toString().trim()
+
+        return valid
+    }
+
+
     private fun cancel() {
         binding.btnCancel.setOnClickListener {
             val goBack = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
@@ -59,29 +95,29 @@ class RecordExpenseActivity : AppCompatActivity() {
 
     private fun goToConfirmation() {
         binding.btnConfirm.setOnClickListener {
-            setBundle()
-            var goToConfirmTransaction = Intent(this, ConfirmTransactionActivity::class.java)
-            goToConfirmTransaction.putExtras(bundle)
-            goToConfirmTransaction.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(goToConfirmTransaction)
+            if (validateAndSetUserInput()) {
+                setBundle()
+                val goToConfirmTransaction = Intent(this, ConfirmTransactionActivity::class.java)
+                goToConfirmTransaction.putExtras(bundle)
+                goToConfirmTransaction.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(goToConfirmTransaction)
+            } else {
+                Toast.makeText(
+                    baseContext, "Please fill up correctly the form.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
     private fun setBundle() {
-        val name =  binding.etName.text.toString()
-        val category = binding.spinnerCategory.selectedItem.toString()
-        val amount = binding.etAmount.text.toString().toFloat()
+        getCurrentTime()
         val goal = binding.spinnerGoal.selectedItem.toString()
 
-        //Time
-        val formatter = SimpleDateFormat("MM/dd/yyyy")
-        val time = Calendar.getInstance().time
-        val current = formatter.format(time)
-        var date = current
         bundle.putString("transactionType", "expense")
         bundle.putString("transactionName", name)
         bundle.putString("category", category)
-        bundle.putFloat("amount", amount)
+        bundle.putFloat("amount", amount.toFloat())
         bundle.putString("goal", goal)
         bundle.putString("date", date)
 
@@ -90,5 +126,12 @@ class RecordExpenseActivity : AppCompatActivity() {
          binding.etAmount.text.clear()
          binding.spinnerCategory.clear()
          binding.spinnerGoal.adapter(null)*/
+    }
+
+    private fun getCurrentTime() {
+        //Time
+        val formatter = SimpleDateFormat("MM/dd/yyyy")
+        val time = Calendar.getInstance().time
+        date = formatter.format(time)
     }
 }
