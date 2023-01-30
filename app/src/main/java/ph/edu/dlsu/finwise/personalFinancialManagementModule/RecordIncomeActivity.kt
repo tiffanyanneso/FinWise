@@ -51,8 +51,8 @@ class RecordIncomeActivity : AppCompatActivity() {
                     val goalObject = goal.toObject<FinancialGoals>()
                     goals.add(goalObject.goalName.toString())
                 }
-                val adapter = ArrayAdapter(this, R.layout.simple_list_item_1, goals)
-                binding.spinnerGoal.adapter = adapter
+//                val adapter = ArrayAdapter(this, R.layout.simple_list_item_1, goals)
+//                binding.spinnerGoal.adapter = adapter
             }
 
     }
@@ -80,6 +80,9 @@ class RecordIncomeActivity : AppCompatActivity() {
             valid = false
         } else amount = binding.etAmount.text.toString().trim()
 
+        date =(binding.etDate.month + 1).toString() + "/" +
+                (binding.etDate.dayOfMonth).toString() + "/" + (binding.etDate.year).toString()
+        
         return valid
     }
 
@@ -111,14 +114,14 @@ class RecordIncomeActivity : AppCompatActivity() {
     }
 
     private fun setBundle() {
-        getCurrentTime()
-        val goal = binding.spinnerGoal.selectedItem.toString()
+        //getCurrentTime()
+//        val goal = binding.spinnerGoal.selectedItem.toString()
 
         bundle.putString("transactionType", "income")
         bundle.putString("transactionName", name)
         bundle.putString("category", category)
         bundle.putFloat("amount", amount.toFloat())
-        bundle.putString("goal", goal)
+//        bundle.putString("goal", goal)
         bundle.putString("date", date)
 
         //TODO: reset spinner and date to default value

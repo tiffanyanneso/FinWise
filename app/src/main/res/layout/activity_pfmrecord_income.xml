@@ -119,29 +119,55 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_amount" />
 
     <TextView
-        android:id="@+id/tv_goal"
+        android:id="@+id/tv_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:text="Goal (optional)"
-        android:textAllCaps="true"
-        android:textColor="@color/black"
-        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@+id/et_amount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="14dp"
+        android:layout_marginTop="10dp"
+        android:textAllCaps = "true"
+        android:text="@string/target_date"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/et_amount" />
-
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spinner_goal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:textColor="@color/black"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
-        android:ems="10"
-        android:entries="@array/pfm_income_category"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@+id/tv_goal" />
+        android:layout_marginEnd="20dp"/>
+
+    <DatePicker
+        android:id="@+id/et_date"
+        app:layout_constraintTop_toBottomOf="@+id/tv_date"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner" />
+
+
+    <!--    <TextView-->
+<!--        android:id="@+id/tv_goal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:text="Goal (optional)"-->
+<!--        android:textAllCaps="true"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/et_amount" />-->
+
+<!--    <androidx.appcompat.widget.AppCompatSpinner-->
+<!--        android:id="@+id/spinner_goal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:ems="10"-->
+<!--        android:entries="@array/pfm_income_category"-->
+<!--        android:textSize="14sp"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tv_goal" />-->
 
     <LinearLayout
         android:layout_width="match_parent"

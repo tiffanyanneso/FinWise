@@ -108,7 +108,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="+ GOAL"
+            android:text="+ DEPOSIT"
             android:textColor="@color/white"
             android:backgroundTint="@color/yellow"
             android:background="@drawable/button_border_grey"
