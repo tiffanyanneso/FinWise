@@ -63,7 +63,7 @@ class TransactionsAdapter: RecyclerView.Adapter<TransactionsAdapter.TransactionV
                 val amount = dec.format(transaction?.amount)
                 itemBinding.tvTransactionId.text = document.id
                 itemBinding.tvName.text = transaction?.transactionName
-                itemBinding.tvDate.text = transaction?.date
+                itemBinding.tvDate.text = transaction?.date!!.toDate().toString()
                 if (transaction?.transactionType == "income")
                     itemBinding.tvAmount.text = "+₱"+ amount
                 else

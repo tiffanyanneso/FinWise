@@ -56,7 +56,7 @@ class GoalViewDepositAdapater : RecyclerView.Adapter<GoalViewDepositAdapater.Goa
         }
 
         fun bindGoal(depositTransaction: Transactions){
-            itemBinding.tvTransactionDate.text = depositTransaction.date
+            itemBinding.tvTransactionDate.text = depositTransaction.date!!.toDate().toString()
             itemBinding.tvAmount.text = "₱ " + depositTransaction.amount
         }
 

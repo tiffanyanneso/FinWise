@@ -124,7 +124,7 @@ class SavingActivity : AppCompatActivity() {
         //get deposit for a specific date
         var xAxis =0.00
         //TODO: SORT DATES
-        for (date in dates) {
+        /*for (date in dates) {
             var depositTotal = 0.00F
             for (transaction in transactionsArrayList) {
                 if (transaction.date == date)
@@ -132,7 +132,7 @@ class SavingActivity : AppCompatActivity() {
             }
             dataPoints.add(DataPoint(xAxis, depositTotal.toDouble()))
             xAxis++
-        }
+        }*/
 
 
         //plot data to

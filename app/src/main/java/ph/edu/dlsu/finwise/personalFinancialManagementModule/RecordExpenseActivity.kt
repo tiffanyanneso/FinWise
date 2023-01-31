@@ -28,7 +28,7 @@ class RecordExpenseActivity : AppCompatActivity() {
     lateinit var amount: String
     lateinit var category: String
     lateinit var goal: String
-    lateinit var date: String
+    lateinit var date: Date
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,8 +82,8 @@ class RecordExpenseActivity : AppCompatActivity() {
             valid = false
         } else amount = binding.etAmount.text.toString().trim()
 
-        date =(binding.etDate.month + 1).toString() + "/" +
-                (binding.etDate.dayOfMonth).toString() + "/" + (binding.etDate.year).toString()
+        date = SimpleDateFormat("MM-dd-yyyy").parse((binding.etDate.month+1).toString() + "-" +
+                binding.etDate.dayOfMonth.toString() + "-" + binding.etDate.year)
 
         return valid
     }
@@ -114,7 +114,6 @@ class RecordExpenseActivity : AppCompatActivity() {
     }
 
     private fun setBundle() {
-        //getCurrentTime()
         //val goal = binding.spinnerGoal.selectedItem.toString()
 
         bundle.putString("transactionType", "expense")
@@ -122,7 +121,7 @@ class RecordExpenseActivity : AppCompatActivity() {
         bundle.putString("category", category)
         bundle.putFloat("amount", amount.toFloat())
        // bundle.putString("goal", goal)
-        bundle.putString("date", date)
+        bundle.putSerializable("date", date)
 
         //TODO: reset spinner and date to default value
         /* binding.etName.text.clear()
@@ -131,10 +130,10 @@ class RecordExpenseActivity : AppCompatActivity() {
          binding.spinnerGoal.adapter(null)*/
     }
 
-    private fun getCurrentTime() {
+    /*private fun getCurrentTime() {
         //Time
         val formatter = SimpleDateFormat("MM/dd/yyyy")
         val time = Calendar.getInstance().time
         date = formatter.format(time)
-    }
+    }*/
 }

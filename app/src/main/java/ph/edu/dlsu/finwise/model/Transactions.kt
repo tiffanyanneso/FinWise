@@ -1,5 +1,7 @@
 package ph.edu.dlsu.finwise.model
 
+import com.google.firebase.Timestamp
+
 class Transactions(
     var childID:String?=null,
     var transactionType:String?=null,
@@ -9,5 +11,5 @@ class Transactions(
     var financialGoalID:String?=null,
     var goal:String?=null,
     var decisionMakingActivityID:String?=null,
-    var date:String?=null
+    var date:Timestamp?=null
 ){}

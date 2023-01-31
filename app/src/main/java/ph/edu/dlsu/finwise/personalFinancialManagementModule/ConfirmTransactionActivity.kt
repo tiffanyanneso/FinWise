@@ -58,7 +58,8 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         amount = bundle!!.getFloat("amount").toString()
         goal = bundle!!.getString("goal")
 
-        date = bundle!!.getString("date")
+        date = bundle!!.getSerializable("date").toString()
+
         transactionType = bundle!!.getString("transactionType")
         if (transactionType == "income") {
             binding.tvTitle.text = "Confirm Income"
@@ -72,7 +73,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         binding.tvName.text = name
         binding.tvCategory.text = category
         binding.tvAmount.text = "₱$textAmount"
-        binding.tvGoal.text = goal
+        //binding.tvGoal.text = goal
         binding.tvDate.text = date
 
     }
@@ -85,7 +86,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
                 "transactionName" to name,
                 "transactionType" to transactionType,
                 "category" to category,
-                "date" to date ,
+                "date" to bundle!!.getSerializable("date"),
                 "createdBy" to "",
                 "amount" to amount?.toFloat(),
                 "goal" to goal,

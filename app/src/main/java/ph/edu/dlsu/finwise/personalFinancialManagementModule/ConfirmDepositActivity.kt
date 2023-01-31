@@ -11,6 +11,7 @@ import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmconfirmDepositBinding
 import java.text.DecimalFormat
+import java.util.*
 import kotlin.math.abs
 
 class ConfirmDepositActivity : AppCompatActivity() {
@@ -21,7 +22,7 @@ class ConfirmDepositActivity : AppCompatActivity() {
     var bundle: Bundle? = null
     var amount : String? =null
     var goal : String? =null
-    var date : String? =null
+    var date : Date? =null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,12 +51,12 @@ class ConfirmDepositActivity : AppCompatActivity() {
         val bundle: Bundle = intent.extras!!
         amount = bundle.getFloat("amount").toString()
         goal = bundle.getString("goal")
-        date = bundle.getString("date")
+        date = bundle.getSerializable("date") as Date
         val dec = DecimalFormat("#,###.00")
         val textAmount = dec.format(bundle.getFloat("amount"))
         binding.tvAmount.text = textAmount
         binding.tvGoal.text = goal
-        binding.tvDate.text = date
+        binding.tvDate.text = date.toString()
 
     }
 
