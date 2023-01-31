@@ -59,7 +59,7 @@ class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHold
                 var goal = document.toObject<FinancialGoals>()
                 itemBinding.tvGoalId.text = document.id
                 itemBinding.tvGoal.text = goal?.goalName
-                itemBinding.tvTargetDate.text = goal?.targetDate
+                itemBinding.tvTargetDate.text = goal?.targetDate.toString()
                 itemBinding.tvProgressAmount.text = "₱ " +  goal?.currentAmount.toString()  + "/ ₱ " + goal?.targetAmount.toString()
                 /*for (goalSnapshot in documents) {
                     val goalID = goalSnapshot.id

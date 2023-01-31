@@ -39,7 +39,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
             binding.tvGoal.text = financialGoal?.goalName
             binding.tvActivity.text = financialGoal?.financialActivity
             binding.tvAmount.text = "₱ " + financialGoal?.targetAmount.toString()
-            binding.tvTargetDate.text = financialGoal?.targetDate
+            binding.tvTargetDate.text = financialGoal?.targetDate.toString()
         }
     }
 }

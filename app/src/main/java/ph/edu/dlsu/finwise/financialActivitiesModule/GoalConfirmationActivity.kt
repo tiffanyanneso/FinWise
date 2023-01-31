@@ -2,17 +2,23 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import  androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.type.DateTime
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalConfirmationBinding
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.*
+
 
 class GoalConfirmationActivity : AppCompatActivity() {
 
@@ -21,6 +27,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
     private lateinit var context: Context
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
        super.onCreate(savedInstanceState)
         binding = ActivityGoalConfirmationBinding.inflate(layoutInflater)
@@ -36,7 +43,8 @@ class GoalConfirmationActivity : AppCompatActivity() {
         binding.tvGoalName.text = bundle.getString("goalName")
         binding.tvActivity.text = bundle.getString("activity")
         binding.tvAmount.text = bundle.getFloat("amount").toString()
-        binding.tvTargetDate.text = bundle.getString("targetDate")
+        var targetDate = bundle.getSerializable("targetDate")
+        binding.tvTargetDate.text = targetDate.toString()
 
         var decisionActivities = bundle.getStringArrayList("decisionActivities")
         var decisionActivitiesString = ""
@@ -50,22 +58,18 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
 
 
-        binding.btnConfirm.setOnClickListener {
-            val time = Calendar.getInstance().time
-            val formatter = SimpleDateFormat("MM/dd/yyyy")
-            val current = formatter.format(time)
-
+        binding.btnConfirm.setOnClickListener{
             var goal = hashMapOf(
                 //TODO: add childID, createdBy
                 "childID" to "",
                 "goalName" to bundle.getString("goalName"),
-                "dateCreated" to current,
+                "dateCreated" to Timestamp.now(),
                 "createdBy" to "",
-                "targetDate" to bundle.getString("targetDate"),
+                "targetDate" to targetDate,
                 "targetAmount" to bundle.getFloat("amount"),
                 "currentAmount" to 0,
                 "financialActivity" to bundle.getString("activity"),
-                "lastUpdated" to current,
+                "lastUpdated" to Timestamp.now(),
                 "status" to "In Progress",
                 //"decisionMakingActivities" to decisionActivitiesObjectArrayList
             )

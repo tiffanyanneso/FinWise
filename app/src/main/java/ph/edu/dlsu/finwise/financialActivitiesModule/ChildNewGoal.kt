@@ -2,16 +2,24 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
+import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Date
 
 
 class ChildNewGoal : AppCompatActivity() {
@@ -22,6 +30,7 @@ class ChildNewGoal : AppCompatActivity() {
     private lateinit var context: Context
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChildNewGoalBinding.inflate(layoutInflater)
@@ -78,8 +87,9 @@ class ChildNewGoal : AppCompatActivity() {
             var goalName =  binding.etGoal.text.toString()
             var activity = binding.spinnerActivity.selectedItem.toString()
             var amount = binding.etAmount.text.toString().toFloat()
-            var targetDate =(binding.etTargetDate.month + 1).toString() + "/" +
-                    (binding.etTargetDate.dayOfMonth).toString() + "/" + (binding.etTargetDate.year).toString()
+            var targetDate = SimpleDateFormat("MM-dd-yyyy").parse((binding.etTargetDate.month+1).toString() + "-" +
+                    binding.etTargetDate.dayOfMonth.toString() + "-" + binding.etTargetDate.year)
+
 
             //see which decision making activities were selected
             var decisionMakingActivities = ArrayList<String>()
@@ -91,12 +101,10 @@ class ChildNewGoal : AppCompatActivity() {
             if (binding.cbSpending.isChecked)
                 decisionMakingActivities.add("Deciding to Spend")
 
-            println("new goal " + decisionMakingActivities)
-
             bundle.putString("goalName", goalName)
             bundle.putString("activity", activity)
             bundle.putFloat("amount", amount)
-            bundle.putString("targetDate", targetDate)
+            bundle.putSerializable("targetDate", targetDate)
             bundle.putStringArrayList("decisionActivities", decisionMakingActivities)
 
             //TODO: reset spinner and date to default value

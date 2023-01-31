@@ -39,7 +39,7 @@ class StartGoalActivity : AppCompatActivity() {
                     binding.tvGoalName.text = goal?.goalName.toString()
                     binding.tvActivity.text = goal?.financialActivity.toString()
                     binding.tvAmount.text = goal?.targetAmount.toString()
-                    binding.tvTargetDate.text = goal?.targetDate.toString()
+                    binding.tvTargetDate.text = goal?.targetDate!!.toDate().toString()
                 } else {
                     Toast.makeText(this, "No data", Toast.LENGTH_SHORT)
                 }
@@ -47,7 +47,7 @@ class StartGoalActivity : AppCompatActivity() {
         }
 
 
-        computeDays(bundle.getString("targetDate")!!)
+        //computeDays(bundle.getString("targetDate")!!)
 
         binding.btnGetStarted.setOnClickListener {
             var goToViewGoal = Intent(context, ViewGoalActivity::class.java)
