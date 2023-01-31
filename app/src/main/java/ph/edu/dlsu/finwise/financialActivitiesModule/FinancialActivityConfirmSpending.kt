@@ -35,14 +35,11 @@ class FinancialActivityConfirmSpending : AppCompatActivity() {
     private lateinit var spendingDecisionMakingActivityID:String
     private lateinit var budgetCategoryID:String
 
-    private lateinit var context: Context
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialConfirmSpendingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        context=  this
         bundle = intent.extras!!
 
         // Hides actionbar,
@@ -70,7 +67,8 @@ class FinancialActivityConfirmSpending : AppCompatActivity() {
             firestore.collection("Transactions").add(expense).addOnSuccessListener {
                 var spending = Intent(this, SpendingActivity::class.java)
                 spending.putExtras(bundle)
-                context.startActivity(spending)
+                this.startActivity(spending)
+                finish()
             }
         }
 

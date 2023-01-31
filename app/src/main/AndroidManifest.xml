@@ -13,6 +13,20 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".ConfirmWithdraw"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".WithdrawActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".TestFinancialActivity"
             android:exported="true">
             <intent-filter>
@@ -30,8 +44,7 @@
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.GoalSettingsActivity"
-            android:exported="true" >
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".ParentSendMoney"
             android:exported="false" />
@@ -80,7 +93,6 @@
         <activity
             android:name=".financialActivitiesModule.BudgetCategoryActivity"
             android:exported="false" />
-
         <activity
             android:name=".financialActivitiesModule.StartGoalActivity"
             android:exported="false" />
@@ -109,7 +121,9 @@
         <activity
             android:name=".ProfileActivity"
             android:exported="false">
-         <!--   <intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -117,24 +131,18 @@
 
             <meta-data
                 android:name="android.app.lib_name"
-                android:value="" />-->
+                android:value="" />
+            -->
         </activity>
-
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity"
-            android:exported="false">
-        </activity>
-
+            android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertQuestionsActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertProfileActivity"
-            android:exported="false">
-    </activity>
-
-
-
+            android:exported="false" />
         <!--
 <activity
             android:name=".personalFinancialManagementModule.EditTransactionActivity"
@@ -166,6 +174,12 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
+            android:exported="false" />
+        <activity
+            android:name=".financialActivitiesModule.WithdrawActivity"
+            android:exported="false" />
+        <activity
+            android:name=".financialActivitiesModule.ConfirmWithdraw"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.ChildEditGoal"

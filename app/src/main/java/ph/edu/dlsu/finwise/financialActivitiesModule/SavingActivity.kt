@@ -54,6 +54,17 @@ class SavingActivity : AppCompatActivity() {
 
         getDepositHistory()
 
+        binding.btnWithdraw.setOnClickListener {
+            var bundle = Bundle()
+            bundle.putString("financialGoalID", financialGoalID)
+            bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
+            bundle.putInt("progress", progress.toInt())
+            bundle.putFloat("currentAmount", currentAmount)
+            bundle.putFloat("targetAmount", targetAmount)
+            var goalWithdraw = Intent(this, WithdrawActivity::class.java)
+            goalWithdraw.putExtras(bundle)
+            context.startActivity(goalWithdraw)
+        }
 
         binding.btnDeposit.setOnClickListener {
             var bundle = Bundle()
@@ -62,9 +73,9 @@ class SavingActivity : AppCompatActivity() {
             bundle.putInt("progress", progress.toInt())
             bundle.putFloat("currentAmount", currentAmount)
             bundle.putFloat("targetAmount", targetAmount)
-            var savingActivity = Intent(this, FinancialActivityGoalDeposit::class.java)
-            savingActivity.putExtras(bundle)
-            context.startActivity(savingActivity)
+            var goalDeposit = Intent(this, FinancialActivityGoalDeposit::class.java)
+            goalDeposit.putExtras(bundle)
+            context.startActivity(goalDeposit)
         }
 
         binding.tvViewAllDeposit.setOnClickListener {
@@ -95,9 +106,9 @@ class SavingActivity : AppCompatActivity() {
     private fun getSavingProgress() {
         firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
             var decisionMakingActvity = it.toObject<DecisionMakingActivities>()
-            targetAmount = decisionMakingActvity!!.targetAmount!!
+            targetAmount = decisionMakingActvity?.targetAmount!!
             binding.tvGoalAmount.text = "₱ " + currentAmount.toString() + " / ₱ " + targetAmount.toString()
-            progress = (currentAmount?.div(decisionMakingActvity!!.targetAmount!!))?.times(100)!!
+            progress = (currentAmount?.div(decisionMakingActvity?.targetAmount!!))?.times(100)!!
             if (progress != null) {
                 binding.progressBar.progress  = progress.toInt()
             }

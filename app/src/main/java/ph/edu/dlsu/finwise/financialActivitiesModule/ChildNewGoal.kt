@@ -27,15 +27,11 @@ class ChildNewGoal : AppCompatActivity() {
     private lateinit var binding : ActivityChildNewGoalBinding
     private var firestore = Firebase.firestore
 
-    private lateinit var context: Context
-
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChildNewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        context=this
 
         // Hides actionbar,
         // and initializes the navbar
@@ -81,7 +77,7 @@ class ChildNewGoal : AppCompatActivity() {
 
 
         binding.btnNext.setOnClickListener {
-            var goToGoalConfirmation = Intent(context, GoalConfirmationActivity::class.java)
+            var goToGoalConfirmation = Intent(this, GoalConfirmationActivity::class.java)
             var bundle = Bundle()
 
             var goalName =  binding.etGoal.text.toString()
@@ -114,12 +110,12 @@ class ChildNewGoal : AppCompatActivity() {
 
             goToGoalConfirmation.putExtras(bundle)
             goToGoalConfirmation.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(goToGoalConfirmation)
+            this.startActivity(goToGoalConfirmation)
         }
 
         binding.btnCancel.setOnClickListener {
-            val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
-            startActivity(goToPFM)
+            val goalList = Intent(this, FinancialActivity::class.java)
+            this.startActivity(goalList)
         }
     }
 

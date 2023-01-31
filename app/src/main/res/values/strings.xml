@@ -95,6 +95,10 @@
     <string name="name">Name</string>
     <string name="budget_set">Budget Set</string>
 
+    <string name="withdraw">- Withdraw</string>
+    <string name="title_withdraw">Withdraw From Goal</string>
+    <string name="confirm_withdrawal">Confirm Withdrawal</string>
+
     <string name="date">Date</string>
     <string name="deposit_amount">Deposit Amount</string>
     <string name="transaction_history">Transaction History</string>

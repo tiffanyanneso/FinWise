@@ -62,7 +62,6 @@ class GoalConfirmationActivity : AppCompatActivity() {
         }
 
 
-
         binding.btnConfirm.setOnClickListener{
             var goal = hashMapOf(
                 //TODO: add childID, createdBy
