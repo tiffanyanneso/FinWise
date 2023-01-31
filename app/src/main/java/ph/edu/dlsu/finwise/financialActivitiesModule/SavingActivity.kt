@@ -4,17 +4,20 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.jjoe64.graphview.GraphView
+import com.jjoe64.graphview.series.DataPoint
+import com.jjoe64.graphview.series.LineGraphSeries
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.GoalViewDepositAdapater
 import ph.edu.dlsu.finwise.databinding.ActivitySavingBinding
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import ph.edu.dlsu.finwise.model.Transactions
+import java.sql.DataTruncation
 
 class SavingActivity : AppCompatActivity() {
 
@@ -26,10 +29,14 @@ class SavingActivity : AppCompatActivity() {
 
 
     private lateinit var decisionMakingActivityID:String
-    private lateinit var goalID:String
+    private lateinit var financialGoalID:String
     private var currentAmount:Float = 0.00F
     private var targetAmount:Float = 0.00F
     private var progress = 0.00F
+
+    private lateinit var lineGraphView: GraphView
+
+    private var transactionsArrayList = ArrayList<Transactions>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,14 +51,14 @@ class SavingActivity : AppCompatActivity() {
 
         var bundle: Bundle = intent.extras!!
         decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
-        goalID = bundle.getString("goalID").toString()
+        financialGoalID = bundle.getString("financialGoalID").toString()
 
         getDepositHistory()
 
 
         binding.btnDeposit.setOnClickListener {
             var bundle = Bundle()
-            bundle.putString("goalID", goalID)
+            bundle.putString("financialGoalID", financialGoalID)
             bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
             bundle.putInt("progress", progress.toInt())
             bundle.putFloat("currentAmount", currentAmount)
@@ -73,7 +80,6 @@ class SavingActivity : AppCompatActivity() {
     private fun getDepositHistory() {
         firestore.collection("Transactions").whereEqualTo("decisionMakingActivityID", decisionMakingActivityID).get().addOnSuccessListener { transactionsSnapshot ->
             currentAmount = 0.00F
-            var transactionsArrayList = ArrayList<Transactions>()
             for (document in transactionsSnapshot) {
                 var transaction = document.toObject<Transactions>()
                 transactionsArrayList.add(transaction)
@@ -83,6 +89,7 @@ class SavingActivity : AppCompatActivity() {
             binding.rvViewDepositHistory.adapter = goalViewDepositAdapater
             binding.rvViewDepositHistory.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
             getSavingProgress()
+            initializeLineGraph()
         }
     }
 
@@ -96,5 +103,63 @@ class SavingActivity : AppCompatActivity() {
                 binding.progressBar.progress  = progress.toInt()
             }
         }
+    }
+
+    private fun initializeLineGraph() {
+        // on below line we are initializing
+        // our variable with their ids.
+        lineGraphView = findViewById(R.id.line_graph)
+
+
+        var dates = ArrayList<String>()
+        var dataPoints = ArrayList<DataPoint>()
+
+        //get unique dates in transaction arraylist
+        for (transaction in transactionsArrayList) {
+            //if array of dates doesn't contain date of the transaction, add the date to the arraylist
+            if (!dates.contains(transaction.date.toString()))
+                dates.add(transaction.date.toString())
+        }
+
+        //get deposit for a specific date
+        var xAxis =0.00
+        //TODO: SORT DATES
+        for (date in dates) {
+            var depositTotal = 0.00F
+            for (transaction in transactionsArrayList) {
+                if (transaction.date == date)
+                    depositTotal += transaction.amount!!
+            }
+            dataPoints.add(DataPoint(xAxis, depositTotal.toDouble()))
+            xAxis++
+        }
+
+
+        //plot data to
+        // on below line we are adding data to our graph view.
+        val series: LineGraphSeries<DataPoint> = LineGraphSeries(dataPoints.toTypedArray())
+
+        // on below line adding animation
+        //lineGraphView.animate()
+
+        // on below line we are setting scrollable
+        // for point graph view
+        //lineGraphView.viewport.isScrollable = true
+
+        // on below line we are setting scalable.
+        //lineGraphView.viewport.isScalable = true
+
+        // on below line we are setting scalable y
+        //lineGraphView.viewport.setScalableY(true)
+
+        // on below line we are setting scrollable y
+        //lineGraphView.viewport.setScrollableY(true)
+
+        // on below line we are setting color for series.
+        series.color = R.color.purple_200
+
+        // on below line we are adding
+        // data series to our graph view.
+        lineGraphView.addSeries(series)
     }
 }

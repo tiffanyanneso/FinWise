@@ -78,7 +78,6 @@ class GoalDecisionMakingActivitiesAdapter: RecyclerView.Adapter<GoalDecisionMaki
                 var bundle = Bundle()
                 bundle.putString("financialGoalID", itemBinding.tvFinancialGoalId.text.toString())
                 bundle.putString("decisionMakingActivityID", itemBinding.tvDecisionActivityId.text.toString())
-                bundle.putString("goalID", goalID)
 
                 if (decisionActivityName.equals("Setting a Budget")) {
                     var budgetActivity = Intent(context, BudgetActivity::class.java)

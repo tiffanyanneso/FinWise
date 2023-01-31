@@ -73,6 +73,7 @@
     <string name="expense_category">Expense Category</string>
     <string name="category_item">Item Name</string>
     <string name="take_assessment">Take Assessment</string>
+    <string name="assessment_name">Assessment Name</string>
 
     <string name="view_deposits">View Deposits</string>
     <string name="profile_picture">Profile Picture</string>

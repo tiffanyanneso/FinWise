@@ -72,4 +72,7 @@ dependencies {
 
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:30.0.0')
+
+    //for line graph
+    implementation 'com.jjoe64:graphview:4.2.2'
 }

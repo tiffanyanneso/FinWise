@@ -11,7 +11,6 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
 import ph.edu.dlsu.finwise.adapter.GoalDecisionMakingActivitiesAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
@@ -31,7 +30,6 @@ class ViewGoalActivity : AppCompatActivity() {
 
     private lateinit var goalID:String
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityViewGoalBinding.inflate(layoutInflater)
@@ -45,6 +43,8 @@ class ViewGoalActivity : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         goalID = bundle.getString("goalID").toString()
 
+        //get goal details
+        //also contains functions that gets decision making activities from db
         getGoal()
 
         binding.btnEditGoal.setOnClickListener {

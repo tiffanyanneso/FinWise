@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
