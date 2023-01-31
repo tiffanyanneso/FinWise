@@ -48,10 +48,35 @@
         android:layout_marginEnd="20dp"/>
 
     <TextView
-        android:id="@+id/tv_progress"
+        android:id="@+id/tv_target_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/tv_goal_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="14dp"
+        android:layout_marginTop="10dp"
+        android:textAllCaps = "true"
+        android:text="@string/date"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"/>
+
+    <DatePicker
+        android:id="@+id/et_transaction_date"
+        app:layout_constraintTop_toBottomOf="@+id/tv_target_date"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner" />
+
+    <TextView
+        android:id="@+id/tv_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/et_transaction_date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="14dp"
