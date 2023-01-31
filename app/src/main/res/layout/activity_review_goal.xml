@@ -430,23 +430,25 @@
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_cancel"
-                        android:layout_width="180dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/cancel"
                         android:textColor="@color/black"
                         android:backgroundTint="@color/light_grey"
                         android:background="@drawable/button_border_grey"
                         android:layout_marginRight="10dp"
+                        android:layout_weight="1"
                         />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_submit"
-                        android:layout_width="180dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/submit"
                         android:textColor="@color/off_white"
                         android:backgroundTint="@color/dark_green"
                         android:background="@drawable/button_border"
+                        android:layout_weight="1"
                         />
 
                 </LinearLayout>
