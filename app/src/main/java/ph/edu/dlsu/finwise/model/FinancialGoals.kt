@@ -11,5 +11,6 @@ class FinancialGoals(
     var financialActivity:String?=null,
     var decisionMakingActivities:ArrayList<DecisionMakingActivities>?=null,
     var lastUpdated:String?=null,
-    var status:String?=null
+    var status:String?=null,
+    var goalIsForSelf:Boolean?=null
 ){}

@@ -37,6 +37,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
         binding.tvActivity.text = bundle.getString("activity")
         binding.tvAmount.text = bundle.getFloat("amount").toString()
         binding.tvTargetDate.text = bundle.getString("targetDate")
+        binding.tvIsForChild.text = bundle.getBoolean("goalIsForSelf").toString()
 
         var decisionActivities = bundle.getStringArrayList("decisionActivities")
         var decisionActivitiesString = ""
@@ -67,6 +68,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
                 "financialActivity" to bundle.getString("activity"),
                 "lastUpdated" to current,
                 "status" to "In Progress",
+                "goalIsForSelf" to bundle.getBoolean("goalIsForSelf")
                 //"decisionMakingActivities" to decisionActivitiesObjectArrayList
             )
 

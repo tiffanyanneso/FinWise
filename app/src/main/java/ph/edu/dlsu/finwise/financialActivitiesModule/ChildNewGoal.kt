@@ -80,6 +80,7 @@ class ChildNewGoal : AppCompatActivity() {
             var amount = binding.etAmount.text.toString().toFloat()
             var targetDate =(binding.etTargetDate.month + 1).toString() + "/" +
                     (binding.etTargetDate.dayOfMonth).toString() + "/" + (binding.etTargetDate.year).toString()
+            var goalIsForSelf = binding.cbGoalSelf.isChecked
 
             //see which decision making activities were selected
             var decisionMakingActivities = ArrayList<String>()
@@ -98,6 +99,7 @@ class ChildNewGoal : AppCompatActivity() {
             bundle.putFloat("amount", amount)
             bundle.putString("targetDate", targetDate)
             bundle.putStringArrayList("decisionActivities", decisionMakingActivities)
+            bundle.putBoolean("goalIsForSelf", goalIsForSelf)
 
             //TODO: reset spinner and date to default value
             binding.etGoal.text.clear()

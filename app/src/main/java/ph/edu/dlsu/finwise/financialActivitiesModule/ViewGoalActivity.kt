@@ -111,6 +111,7 @@ class ViewGoalActivity : AppCompatActivity() {
                     binding.tvDateSet.text = goal?.dateCreated.toString()
                     binding.tvTargetDate.text = goal?.targetDate.toString()
                     binding.tvStatus.text = goal?.status.toString()
+                    binding.tvIsForChild.text = goal?.goalIsForSelf.toString()
                     getDecisionMakingActivities(goalID)
                 }
             }
