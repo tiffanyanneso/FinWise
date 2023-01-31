@@ -50,11 +50,21 @@
         android:layout_marginEnd="20dp"
         />
 
+    <CheckBox
+        android:id="@+id/cb_goal_self"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Goal for Self"
+        app:layout_constraintTop_toBottomOf="@+id/et_goal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16sp"/>
+
     <TextView
         android:id="@+id/tv_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/et_goal"
+        app:layout_constraintTop_toBottomOf="@+id/cb_goal_self"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="14dp"
