@@ -13,6 +13,7 @@ import ph.edu.dlsu.finwise.personalFinancialManagementModule.ConfirmDepositActiv
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialGoalDepositBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.text.SimpleDateFormat
 
 class FinancialActivityGoalDeposit : AppCompatActivity() {
 
@@ -52,8 +53,8 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
             bundle.putString("decisionMakingActivityID", decisionActivityID)
             bundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
             bundle.putString("source", "DirectGoalDeposit")
-            bundle.putString("date", (binding.etTransactionDate.month + 1).toString() + "/" +
-                    (binding.etTransactionDate.dayOfMonth).toString() + "/" + (binding.etTransactionDate.year).toString())
+            bundle.putSerializable("date", SimpleDateFormat("MM-dd-yyyy").parse((binding.etTransactionDate.month+1).toString() + "-" +
+                    binding.etTransactionDate.dayOfMonth.toString() + "-" + binding.etTransactionDate.year))
 
             var goToDepositConfirmation = Intent(context, FinancialActivityConfirmDeposit::class.java)
             goToDepositConfirmation.putExtras(bundle)

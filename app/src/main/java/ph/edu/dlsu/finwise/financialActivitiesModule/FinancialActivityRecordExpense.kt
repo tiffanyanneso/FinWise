@@ -12,6 +12,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialRecordExpenseBinding
 import ph.edu.dlsu.finwise.model.BudgetCategory
+import java.text.SimpleDateFormat
 
 class FinancialActivityRecordExpense : AppCompatActivity() {
 
@@ -49,6 +50,8 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
             bundle.putString("expenseName", binding.etExpenseName.text.toString())
             bundle.putString("expenseCategory", binding.spinnerExpenseCategory.selectedItem.toString())
             bundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
+            bundle.putSerializable("date", SimpleDateFormat("MM-dd-yyyy").parse((binding.etTransactionDate.month+1).toString() + "-" +
+                    binding.etTransactionDate.dayOfMonth.toString() + "-" + binding.etTransactionDate.year))
             var confirmSpending = Intent(this, FinancialActivityConfirmSpending::class.java)
             confirmSpending.putExtras(bundle)
             context.startActivity(confirmSpending)

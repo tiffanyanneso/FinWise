@@ -62,7 +62,7 @@ class FinancialActivityConfirmSpending : AppCompatActivity() {
                "category" to budgetCategoryID,
                "financialGoalID" to financialGoalID,
                "decisionMakingActivityID" to spendingDecisionMakingActivityID,
-               "date" to current
+               "date" to bundle.getSerializable("date")
            )
 
             //adjustUserBalance()
@@ -84,7 +84,7 @@ class FinancialActivityConfirmSpending : AppCompatActivity() {
         binding.tvAmount.text = "₱ " + bundle.getFloat("amount").toString()
         binding.tvName.text = bundle.getString("expenseName")
         binding.tvCategory.text = bundle.getString("expenseCategory")
-        binding.tvDate.text = current
+        binding.tvDate.text = bundle.getSerializable("date").toString()
     }
 
     private fun getBudgetCategoryID(expenseCategoryName:String) {

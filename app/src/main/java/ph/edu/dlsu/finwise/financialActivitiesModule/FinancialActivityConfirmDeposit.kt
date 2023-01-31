@@ -47,7 +47,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         val bundle: Bundle = intent.extras!!
         decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
         financialGoalID = bundle.getString("financialGoalID").toString()
-        binding.tvDate.text = bundle.getString("date")
+        binding.tvDate.text = bundle.getSerializable("date").toString()
         amount = bundle.getFloat("amount").toString()
         binding.tvAmount.text = "₱ " + bundle.getFloat("amount").toString()
         binding.tvGoal.text= bundle.getString("goalName")
@@ -59,7 +59,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 "transactionName" to goalName,
                 "transactionType" to "Deposit",
                 //"category" to "Deposit",
-                "date" to bundle.getString("date"),
+                "date" to bundle.getSerializable("date"),
                 "createdBy" to "",
                 "amount" to bundle.getFloat("amount"),
                 "decisionMakingActivityID" to decisionMakingActivityID
