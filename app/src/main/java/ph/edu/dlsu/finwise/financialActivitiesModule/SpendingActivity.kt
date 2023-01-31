@@ -62,7 +62,7 @@ class SpendingActivity : AppCompatActivity() {
         firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
             if (it!=null) {
                 var decisionActivity = it.toObject<DecisionMakingActivities>()
-                binding.tvSpendingProgress.text = "₱ " + spentAmount + " / ₱ " + decisionActivity?.targetAmount
+                binding.tvSpending.text = "₱ " + spentAmount + " / ₱ " + decisionActivity?.targetAmount
                 binding.progressBar.max = decisionActivity?.targetAmount!!.toInt()
                 binding.progressBar.progress = spentAmount.toInt()
             }
@@ -109,7 +109,7 @@ class SpendingActivity : AppCompatActivity() {
                 var transaction = document.toObject<Transactions>()
                 spentAmount += transaction.amount!!.toFloat()
             }
-            binding.tvSpending.text = "₱ " + spentAmount
+           // binding.tvSpending.text = "₱ " + spentAmount
         }
     }
 

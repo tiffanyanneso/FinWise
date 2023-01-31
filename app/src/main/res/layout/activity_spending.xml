@@ -80,59 +80,58 @@
                         android:textColor="@color/black"
                         android:textStyle="bold"/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16dp"
-                        android:text="progress bar"
-                        android:textColor="@color/black"
-                        />
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tv_deposit_history"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
-                    android:textSize="20dp"
-                    android:text="@string/spending_history"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginStart="20dp"
-                    />
-
-                <LinearLayout
-                    android:id="@+id/linear_layout_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_deposit_history"
-                    android:orientation="vertical"
-                    android:padding="20dp"
-                    android:background="@drawable/layout_bg_green"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp">
-
                     <ProgressBar
                         android:id="@+id/progress_bar"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4" />
-
-                    <TextView
-                        android:id="@+id/tv_spending_progress"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16dp"
-                        android:text="₱ spending out of ₱ budget spent."
-                        android:textColor="@color/black"
-                        />
                 </LinearLayout>
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_deposit_history"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"-->
+<!--                    android:textSize="20dp"-->
+<!--                    android:text="@string/spending_history"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:layout_marginStart="20dp"-->
+<!--                    />-->
+
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/linear_layout_2"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintLeft_toLeftOf="parent"-->
+<!--                    app:layout_constraintRight_toRightOf="parent"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/tv_deposit_history"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:padding="20dp"-->
+<!--                    android:background="@drawable/layout_bg_green"-->
+<!--                    android:layout_marginTop="5dp"-->
+<!--                    android:layout_marginStart="20dp"-->
+<!--                    android:layout_marginEnd="20dp">-->
+
+<!--&lt;!&ndash;                    <ProgressBar&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:id="@+id/progress_bar"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_height="30dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:scaleY="4" />&ndash;&gt;-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/tv_spending_progress"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textSize="16dp"-->
+<!--                        android:text="₱ spending out of ₱ budget spent."-->
+<!--                        android:textColor="@color/black"-->
+<!--                        />-->
+<!--                </LinearLayout>-->
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_add_expense"
@@ -140,7 +139,7 @@
                     android:layout_height="wrap_content"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linear_layout_2"
+                    app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
                     android:text="@string/expense_2"
                     android:textColor="@color/off_white"
                     android:layout_marginTop="10dp"
