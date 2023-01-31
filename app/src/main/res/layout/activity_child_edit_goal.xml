@@ -20,41 +20,69 @@
         android:textColor="@color/black"
         android:paddingTop="20dp"/>
 
-    <TextView
-        android:id="@+id/tv_new_goal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/title"
-        android:textSize="14dp"
-        android:textStyle="bold"
-        android:textAllCaps="true"
-        android:text="@string/goal"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_new_goal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/title"-->
+<!--        android:textSize="14dp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textAllCaps="true"-->
+<!--        android:text="@string/goal"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        />-->
 
-    <EditText
-        android:id="@+id/et_goal"
+<!--    <EditText-->
+<!--        android:id="@+id/et_goal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tv_new_goal"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:hint="@string/goal"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="text"-->
+<!--        android:textSize="14dp"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        />-->
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/goal_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_new_goal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:hint="@string/goal"
-        android:ems="10"
-        android:inputType="text"
-        android:textSize="14dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        />
+        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title"
+        android:layout_marginHorizontal="20dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:helperTextEnabled="true"
+        app:helperText=""
+        app:helperTextTextColor="@color/red"
+        android:paddingBottom="10dp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_goal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lines="1"
+            android:inputType="text"
+            android:textSize="16dp"
+            android:hint="@string/goal"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/tv_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/et_goal"
+        app:layout_constraintTop_toBottomOf="@+id/goal_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="14dp"
@@ -78,42 +106,68 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"/>
 
-    <TextView
-        android:id="@+id/tv_amount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_activity"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="14dp"
-        android:layout_marginTop="10dp"
-        android:textAllCaps = "true"
-        android:text="@string/amount"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"/>
+<!--    <TextView-->
+<!--        android:id="@+id/tv_amount"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/spinner_activity"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:textSize="14dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:textAllCaps = "true"-->
+<!--        android:text="@string/amount"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"/>-->
 
-    <EditText
-        android:id="@+id/et_amount"
+<!--    <EditText-->
+<!--        android:id="@+id/et_amount"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tv_amount"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:hint="@string/amount"-->
+<!--        android:ems="10"-->
+<!--        android:inputType="numberDecimal"-->
+<!--        android:textSize="14dp"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        />-->
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/amount_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_amount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:hint="@string/amount"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:textSize="14dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        />
+        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/spinner_activity"
+        android:layout_marginHorizontal="20dp"
+        app:helperTextEnabled="true"
+        app:helperText=""
+        app:helperTextTextColor="@color/red"
+        android:paddingBottom="10dp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_amount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lines="1"
+            android:inputType="numberDecimal"
+            android:textSize="16dp"
+            android:hint="@string/amount"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/tv_target_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/et_amount"
+        app:layout_constraintTop_toBottomOf="@+id/amount_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="14dp"

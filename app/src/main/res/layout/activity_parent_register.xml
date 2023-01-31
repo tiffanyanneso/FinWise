@@ -136,33 +136,33 @@
 <!--        android:layout_marginEnd="20dp"-->
 <!--        />-->
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/container_email"
+
+
+<!--    <TextView--> <com.google.android.material.textfield.TextInputLayout
+    android:id="@+id/container_email"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/container_last_name"
+    android:layout_marginHorizontal="20dp"
+    app:helperTextEnabled="true"
+    app:helperText=""
+    app:helperTextTextColor="@color/red"
+    android:paddingBottom="10dp"
+    >
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/et_email"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container_last_name"
-        android:layout_marginHorizontal="20dp"
-        app:helperTextEnabled="true"
-        app:helperText=""
-        app:helperTextTextColor="@color/red"
-        android:paddingBottom="10dp"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_email"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:lines="1"
-            android:inputType="textEmailAddress"
-            android:textSize="16dp"
-            android:hint="@string/email"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
-
-<!--    <TextView-->
+        android:layout_height="match_parent"
+        android:lines="1"
+        android:inputType="textEmailAddress"
+        android:textSize="16dp"
+        android:hint="@string/email"
+        />
+</com.google.android.material.textfield.TextInputLayout>
 <!--        android:id="@+id/tv_email"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->
@@ -263,6 +263,7 @@
         app:helperText=""
         app:helperTextTextColor="@color/red"
         android:paddingBottom="10dp"
+        app:passwordToggleEnabled="true"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -319,7 +320,7 @@
         app:helperTextEnabled="true"
         app:helperText=""
         app:helperTextTextColor="@color/red"
-        >
+        app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_confirm_password"

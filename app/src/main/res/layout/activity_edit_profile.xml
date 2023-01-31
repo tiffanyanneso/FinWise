@@ -21,7 +21,8 @@
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingTop="20dp"/>
 
         <TextView
             android:id="@+id/tv_profile_picture"
@@ -35,61 +36,141 @@
             android:textAllCaps = "true"
             android:text="@string/profile_picture"
             android:textStyle="bold"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:layout_marginHorizontal="20dp"/>
 
-        <TextView
-            android:id="@+id/tv_first_name"
+<!--        <TextView-->
+<!--            android:id="@+id/tv_first_name"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tv_profile_picture"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:textSize="14dp"-->
+<!--            android:textAllCaps = "true"-->
+<!--            android:text="@string/first_name"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textColor="@color/black"/>-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/et_first_name"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tv_first_name"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            android:hint="@string/first_name"-->
+<!--            android:ems="10"-->
+<!--            android:inputType="text"-->
+<!--            android:textSize="14dp"-->
+<!--            />-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/container_first_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_profile_picture"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="20dp"
-            android:textSize="14dp"
-            android:textAllCaps = "true"
-            android:text="@string/first_name"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
+            android:layout_marginHorizontal="20dp"
+            app:helperTextEnabled="true"
+            app:helperText=""
+            app:helperTextTextColor="@color/red"
+            android:paddingBottom="10dp"
+            >
 
-        <EditText
-            android:id="@+id/et_first_name"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_first_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:lines="1"
+                android:inputType="text"
+                android:textSize="16dp"
+                android:hint="@string/first_name"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+<!--        <TextView-->
+<!--            android:id="@+id/tv_last_name"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/et_first_name"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            android:textSize="14dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:textAllCaps = "true"-->
+<!--            android:text="@string/last_name"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textColor="@color/black"/>-->
+
+<!--        <EditText-->
+<!--            android:id="@+id/et_last_name"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tv_last_name"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            android:hint="@string/last_name"-->
+<!--            android:ems="10"-->
+<!--            android:inputType="text"-->
+<!--            android:textSize="14dp"-->
+<!--            />-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/container_last_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_first_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:hint="@string/first_name"
-            android:ems="10"
-            android:inputType="text"
-            android:textSize="14dp"
-            />
+            style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_profile_picture"
+            android:layout_marginHorizontal="20dp"
+            app:helperTextEnabled="true"
+            app:helperText=""
+            app:helperTextTextColor="@color/red"
+            android:paddingBottom="10dp"
+            >
 
-        <TextView
-            android:id="@+id/tv_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/et_first_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="14dp"
-            android:layout_marginTop="10dp"
-            android:textAllCaps = "true"
-            android:text="@string/last_name"
-            android:textStyle="bold"
-            android:textColor="@color/black"/>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_last_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:lines="1"
+                android:inputType="text"
+                android:textSize="16dp"
+                android:hint="@string/last_name"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/et_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_last_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:hint="@string/last_name"
-            android:ems="10"
-            android:inputType="text"
-            android:textSize="14dp"
-            />
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:id="@+id/container_birthday"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            style= "@style/Widget.MaterialComponents.MaterialCalendar"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tv_profile_picture"-->
+<!--            android:layout_marginHorizontal="20dp"-->
+<!--            app:helperTextEnabled="true"-->
+<!--            app:helperText=""-->
+<!--            app:helperTextTextColor="@color/red"-->
+<!--            android:paddingBottom="10dp"-->
+<!--            >-->
+
+<!--            <com.google.android.material.textfield.TextInputEditText-->
+<!--                android:id="@+id/et_birthday"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:lines="1"-->
+<!--                android:inputType="text"-->
+<!--                android:textSize="16dp"-->
+<!--                android:hint="@string/last_name"-->
+<!--                />-->
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
 
         <TextView
             android:id="@+id/tv_birthday"
@@ -103,7 +184,8 @@
             android:textAllCaps = "true"
             android:text="@string/birthday"
             android:textStyle="bold"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:layout_marginHorizontal="20dp"/>
 
         <DatePicker
             android:id="@+id/et_birthday"
