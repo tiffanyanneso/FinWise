@@ -109,8 +109,8 @@ class ChildNewGoal : AppCompatActivity() {
             bundle.putBoolean("goalIsForSelf", goalIsForSelf)
 
             //TODO: reset spinner and date to default value
-            binding.etGoal.text!!.clear()
-            binding.etAmount.text!!.clear()
+            binding.etGoal.text?.clear()
+            binding.etAmount.text?.clear()
 
             goToGoalConfirmation.putExtras(bundle)
             goToGoalConfirmation.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

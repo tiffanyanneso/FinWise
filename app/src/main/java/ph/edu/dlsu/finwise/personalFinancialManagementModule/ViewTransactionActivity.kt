@@ -10,6 +10,8 @@ import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmviewTransactionBinding
 import ph.edu.dlsu.finwise.model.Transactions
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ViewTransactionActivity : AppCompatActivity() {
 
@@ -63,7 +65,10 @@ class ViewTransactionActivity : AppCompatActivity() {
                     binding.tvAmount.text = "₱" + transaction?.amount.toString()
                     binding.tvName.text = transaction?.transactionName.toString()
                     binding.tvCategory.text = transaction?.category.toString()
-                    binding.tvDate.text = transaction?.date.toString()
+                    // convert timestamp to date string
+                    val formatter = SimpleDateFormat("MM/dd/yyyy")
+                    val date = formatter.format(transaction?.date?.toDate())
+                    binding.tvDate.text = date.toString()
                     binding.tvGoal.text = transaction?.goal.toString()
                 }
             }

@@ -57,7 +57,6 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         category = bundle!!.getString("category")
         amount = bundle!!.getFloat("amount").toString()
         goal = bundle!!.getString("goal")
-
         date = bundle!!.getSerializable("date").toString()
 
         transactionType = bundle!!.getString("transactionType")

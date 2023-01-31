@@ -15,6 +15,7 @@ import ph.edu.dlsu.finwise.adapter.GoalDecisionMakingActivitiesAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.text.SimpleDateFormat
 
 class ViewGoalActivity : AppCompatActivity() {
 
@@ -108,8 +109,14 @@ class ViewGoalActivity : AppCompatActivity() {
                     binding.tvMyGoals.text = goal?.goalName.toString()
                     //binding.tvGoal.text = "₱ " + goal?.currentAmount.toString() + " / ₱ " + goal?.targetAmount.toString()
                     binding.tvActivity.text = goal?.financialActivity.toString()
-                    binding.tvDateSet.text = goal?.dateCreated!!.toDate().toString()
-                    binding.tvTargetDate.text = goal?.targetDate!!.toDate().toString()
+
+                    //convert timestamp to string date
+                    val formatter = SimpleDateFormat("MM/dd/yyyy")
+                    val dateCreated = formatter.format(goal?.dateCreated?.toDate())
+                    binding.tvDateSet.text = dateCreated.toString()
+
+                    val targetDate = formatter.format(goal?.targetDate?.toDate())
+                    binding.tvTargetDate.text = targetDate.toString()
                     binding.tvStatus.text = goal?.status.toString()
                     binding.tvIsForChild.text = goal?.goalIsForSelf.toString()
                     getDecisionMakingActivities(goalID)

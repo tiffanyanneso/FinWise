@@ -17,7 +17,6 @@ import ph.edu.dlsu.finwise.adapter.GoalViewDepositAdapater
 import ph.edu.dlsu.finwise.databinding.ActivitySavingBinding
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import ph.edu.dlsu.finwise.model.Transactions
-import java.sql.DataTruncation
 
 class SavingActivity : AppCompatActivity() {
 

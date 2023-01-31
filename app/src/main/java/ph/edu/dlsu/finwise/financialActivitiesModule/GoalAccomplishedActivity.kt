@@ -10,6 +10,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalAccomplishedBinding
 import ph.edu.dlsu.finwise.databinding.ActivitySpendingBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.text.SimpleDateFormat
 
 class GoalAccomplishedActivity : AppCompatActivity() {
 
@@ -39,7 +40,11 @@ class GoalAccomplishedActivity : AppCompatActivity() {
             binding.tvGoal.text = financialGoal?.goalName
             binding.tvActivity.text = financialGoal?.financialActivity
             binding.tvAmount.text = "₱ " + financialGoal?.targetAmount.toString()
-            binding.tvTargetDate.text = financialGoal?.targetDate.toString()
+
+            // convert timestamp to date string
+            val formatter = SimpleDateFormat("MM/dd/yyyy")
+            val date = formatter.format(financialGoal?.targetDate?.toDate())
+            binding.tvTargetDate.text = date.toString()
         }
     }
 }

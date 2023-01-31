@@ -9,7 +9,7 @@
 
     <androidx.cardview.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cardview_current_balance"
+        android:id="@+id/cv_current_balance"
         android:layout_width="match_parent"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
@@ -40,7 +40,7 @@
                 />
 
             <LinearLayout
-                android:id="@+id/linear_layout_2"
+                android:id="@+id/linear_layout_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
@@ -73,10 +73,10 @@
     </androidx.cardview.widget.CardView>
 
     <LinearLayout
-        android:id="@+id/linear_layout_3"
+        android:id="@+id/linear_layout_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/cardview_current_balance"
+        app:layout_constraintTop_toBottomOf="@id/cv_current_balance"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:orientation="horizontal"
@@ -130,11 +130,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linear_layout_4"
+        android:id="@+id/linear_layout_3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/linear_layout_3"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="20dp"
@@ -163,7 +163,54 @@
             android:gravity="center_vertical"/>
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
+    <androidx.cardview.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cv_income_pie_chart"
+        android:layout_width="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_height="150dp"
+        card_view:cardBackgroundColor="@color/light_green"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout_3"
+        android:padding="20dp"
+        android:layout_marginTop="20dp"
+        card_view:cardCornerRadius="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INCOME PIE Chart"
+            android:layout_gravity="center"
+            android:textStyle="bold"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cv_expense_pie_chart"
+        android:layout_width="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_height="150dp"
+        card_view:cardBackgroundColor="@color/light_green"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_income_pie_chart"
+        android:padding="20dp"
+        android:layout_marginTop="20dp"
+        card_view:cardCornerRadius="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INCOME PIE Chart"
+            android:layout_gravity="center"
+            android:textStyle="bold"/>
+
+    </androidx.cardview.widget.CardView>
+    <!--<androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_view_transactions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -173,7 +220,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linear_layout_4"
         android:backgroundTint="@color/white"
-        tools:listitem="@layout/item_transaction" />
+        tools:listitem="@layout/item_transaction" />-->
+
+
 
     <!--Bottom navigation bar-->
     <com.google.android.material.bottomnavigation.BottomNavigationView

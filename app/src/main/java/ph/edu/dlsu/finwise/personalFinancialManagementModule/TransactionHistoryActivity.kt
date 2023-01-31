@@ -76,7 +76,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
     }
 
     private fun getAllTransactions() {
-        transactionIDArrayList.clear()
+        var allTransactions = ArrayList<String>()
         //TODO:change to get transactions of current user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         //firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->
@@ -84,9 +84,9 @@ class TransactionHistoryActivity : AppCompatActivity() {
             for (transactionSnapshot in documents) {
                 //creating the object from list retrieved in db
                 val transactionID = transactionSnapshot.id
-                transactionIDArrayList.add(transactionID)
+                allTransactions.add(transactionID)
             }
-            loadRecyclerView(transactionIDArrayList)
+            loadRecyclerView(allTransactions)
         }
     }
 

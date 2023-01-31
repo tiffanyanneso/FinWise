@@ -14,6 +14,7 @@ import ph.edu.dlsu.finwise.personalFinancialManagementModule.ViewTransactionActi
 import ph.edu.dlsu.finwise.databinding.ItemTransactionBinding
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 
 class TransactionsAdapter: RecyclerView.Adapter<TransactionsAdapter.TransactionViewHolder> {
 
@@ -63,7 +64,11 @@ class TransactionsAdapter: RecyclerView.Adapter<TransactionsAdapter.TransactionV
                 val amount = dec.format(transaction?.amount)
                 itemBinding.tvTransactionId.text = document.id
                 itemBinding.tvName.text = transaction?.transactionName
-                itemBinding.tvDate.text = transaction?.date!!.toDate().toString()
+
+                //convert timestamp to date string
+                val formatter = SimpleDateFormat("MM/dd/yyyy")
+                val date = formatter.format(transaction?.date?.toDate())
+                itemBinding.tvDate.text =  date.toString()
                 if (transaction?.transactionType == "income")
                     itemBinding.tvAmount.text = "+₱"+ amount
                 else

@@ -130,7 +130,7 @@ class ParentRegisterActivity : AppCompatActivity() {
             valid = false
         }
 
-        if (binding.etPassword.text!!.length < 6) {
+        if (binding.etPassword.text?.length!! < 6) {
             binding.etPassword.error = "Minimum password length should be six (6) characters."
             binding.etPassword.requestFocus()
             setPW = false
@@ -154,12 +154,12 @@ class ParentRegisterActivity : AppCompatActivity() {
     }
 
     private fun clearForm() {
-        binding.etFirstName.text!!.clear()
-        binding.etLastName.text!!.clear()
-        binding.etEmail.text!!.clear()
-        binding.etContactNumber.text!!.clear()
-        binding.etPassword.text!!.clear()
-        binding.etConfirmPassword.text!!.clear()
+        binding.etFirstName.text?.clear()
+        binding.etLastName.text?.clear()
+        binding.etEmail.text?.clear()
+        binding.etContactNumber.text?.clear()
+        binding.etPassword.text?.clear()
+        binding.etConfirmPassword.text?.clear()
     }
 
     private fun setCancel() {

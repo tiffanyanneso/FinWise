@@ -35,7 +35,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
 
         loadBalance()
-        getTransactions()
+        //getTransactions()
         goToDepositGoalActivity()
         goToIncomeActivity()
         goToExpenseActivity()
@@ -54,7 +54,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                     .addOnSuccessListener { document ->
                     val balance = document.toObject<ChildWallet>()
                     val dec = DecimalFormat("#,###.00")
-                        binding.tvBalance.text = "₱"+dec.format(balance?.currentBalance)
+                    binding.tvBalance.text = "₱"+dec.format(balance?.currentBalance)
                 }
             }
 
@@ -67,7 +67,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         }
     }
 
-    private fun getTransactions() {
+    /*private fun getTransactions() {
         var transactionIDArrayList = ArrayList<String>()
         //TODO:change to get transactions of current user
         // Dito may collection na transaction at hindi nakanest yung collection sa user
@@ -88,7 +88,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 LinearLayoutManager.VERTICAL,
                 false)
         }
-    }
+    }*/
 
     private fun goToDepositGoalActivity() {
         binding.btnGoal.setOnClickListener {

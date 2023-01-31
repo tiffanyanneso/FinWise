@@ -15,6 +15,7 @@ import ph.edu.dlsu.finwise.databinding.ItemGoalTransactionBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
+import java.text.SimpleDateFormat
 
 class GoalViewDepositAdapater : RecyclerView.Adapter<GoalViewDepositAdapater.GoalViewDepositViewHolder> {
 
@@ -56,7 +57,9 @@ class GoalViewDepositAdapater : RecyclerView.Adapter<GoalViewDepositAdapater.Goa
         }
 
         fun bindGoal(depositTransaction: Transactions){
-            itemBinding.tvTransactionDate.text = depositTransaction.date!!.toDate().toString()
+            val formatter = SimpleDateFormat("MM/dd/yyyy")
+            val date = formatter.format(depositTransaction.date?.toDate())
+            itemBinding.tvTransactionDate.text = date.toString()
             itemBinding.tvAmount.text = "₱ " + depositTransaction.amount
         }
 
