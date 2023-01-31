@@ -51,7 +51,8 @@
         app:helperText=""
         app:helperTextTextColor="@color/red"
         android:paddingBottom="10dp"
-       >
+        android:paddingTop="20dp"
+        >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_goal"

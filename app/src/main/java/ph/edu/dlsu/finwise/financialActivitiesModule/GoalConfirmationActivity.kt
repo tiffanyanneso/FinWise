@@ -3,20 +3,19 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import  androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.type.DateTime
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalConfirmationBinding
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import java.text.SimpleDateFormat
-import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -44,7 +43,11 @@ class GoalConfirmationActivity : AppCompatActivity() {
         binding.tvActivity.text = bundle.getString("activity")
         binding.tvAmount.text = bundle.getFloat("amount").toString()
         var targetDate = bundle.getSerializable("targetDate")
-        binding.tvTargetDate.text = targetDate.toString()
+
+
+        var formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+        var formattedDate = targetDate.toString().format(formatter)
+        binding.tvTargetDate.text = formattedDate
 
         binding.tvIsForChild.text = bundle.getBoolean("goalIsForSelf").toString()
 
