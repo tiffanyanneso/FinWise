@@ -14,6 +14,7 @@ import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalConfirmationBinding
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -41,7 +42,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         binding.tvGoalName.text = bundle.getString("goalName")
         binding.tvActivity.text = bundle.getString("activity")
-        binding.tvAmount.text = bundle.getFloat("amount").toString()
+        binding.tvAmount.text = DecimalFormat("#,##0.00").format(bundle.getFloat("amount").toString())
         var targetDate = bundle.getSerializable("targetDate")
 
 
@@ -114,6 +115,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
                     goToStartGoal.putExtras(bundle1)
                     goToStartGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     context.startActivity(goToStartGoal)
+                    finish()
                 }
             }.addOnFailureListener { e ->
                 Toast.makeText(this, "Failed to add goal", Toast.LENGTH_SHORT).show()

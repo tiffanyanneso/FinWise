@@ -6,20 +6,16 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.GoalViewDepositAdapater
-import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
-import ph.edu.dlsu.finwise.databinding.ActivityFinancialConfirmDepositBinding
-import ph.edu.dlsu.finwise.databinding.ActivitySavingViewDepositBinding
-import ph.edu.dlsu.finwise.model.DecisionMakingActivities
+import ph.edu.dlsu.finwise.databinding.ActivitySavingViewTransactionsBinding
 import ph.edu.dlsu.finwise.model.Transactions
 
-class SavingViewDepositActivity : AppCompatActivity() {
+class SavingViewTransactionsActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivitySavingViewDepositBinding
+    private lateinit var binding : ActivitySavingViewTransactionsBinding
     private var firestore = Firebase.firestore
     private lateinit  var goalViewDepositAdapater:GoalViewDepositAdapater
 
@@ -27,7 +23,7 @@ class SavingViewDepositActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySavingViewDepositBinding.inflate(layoutInflater)
+        binding = ActivitySavingViewTransactionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context=this
 

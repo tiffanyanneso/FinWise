@@ -84,7 +84,7 @@ class SavingActivity : AppCompatActivity() {
         binding.tvViewAllDeposit.setOnClickListener {
             var bundle = Bundle()
             bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-            var viewDeposit = Intent(this, SavingViewDepositActivity::class.java)
+            var viewDeposit = Intent(this, SavingViewTransactionsActivity::class.java)
             viewDeposit.putExtras(bundle)
             context.startActivity(viewDeposit)
         }
@@ -101,6 +101,7 @@ class SavingActivity : AppCompatActivity() {
                 else if (transaction.transactionType == "Withdrawal")
                     currentAmount -= transaction.amount!!
             }
+            transactionsArrayList.sortByDescending { it.date }
             goalViewDepositAdapater = GoalViewDepositAdapater(this, transactionsArrayList)
             binding.rvViewDepositHistory.adapter = goalViewDepositAdapater
             binding.rvViewDepositHistory.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
@@ -136,7 +137,7 @@ class SavingActivity : AppCompatActivity() {
                 dates.add(transaction.date?.toDate()!!)
         }
 
-        var sortedDate = dates.sortedByDescending { it.date }
+        var sortedDate = dates.sortedBy { it }
         //get deposit for a specific date
         var xAxis =0.00
         for (date in sortedDate) {
