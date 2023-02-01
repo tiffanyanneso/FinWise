@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityLoginBinding
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -34,17 +36,16 @@ class LoginActivity : AppCompatActivity() {
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             val currentUser: String = FirebaseAuth.getInstance().currentUser!!.uid
-                            //Todo: Check if child or parent
-                            /*firestore.collection("Companies").document(currentUser).get().addOnSuccessListener {
+                            firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
                             if (it.exists()) {
-                                val intent = Intent(this, CompanyMenu::class.java)
+                                val intent = Intent(this, ParentLandingPageActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             } else {
                                 val currentUser: String = FirebaseAuth.getInstance().currentUser!!.uid
-                                firestore.collection("Interns").document(currentUser).get().addOnSuccessListener { documentSnapshot->
+                                firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener { documentSnapshot->
                                     if (documentSnapshot.exists()) {
-                                        val intent = Intent(this, InternMenu::class.java)
+                                        val intent = Intent(this, PersonalFinancialManagementActivity::class.java)
                                         startActivity(intent)
                                         finish()
                                     } else
@@ -55,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
                                         ).show()
                                 }
                             }
-                        }*/
+                        }
                         }
 
                     }

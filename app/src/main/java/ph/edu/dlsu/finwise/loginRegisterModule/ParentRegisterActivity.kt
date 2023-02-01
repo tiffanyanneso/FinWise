@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityParentRegisterBinding
 
 class ParentRegisterActivity : AppCompatActivity() {
@@ -50,11 +51,11 @@ class ParentRegisterActivity : AppCompatActivity() {
                            .addOnSuccessListener {
                                clearForm()
 
-                               val childRegister = Intent (this, ParentRegisterChildActivity::class.java)
+                               val parentLandingPage = Intent (this, ParentLandingPageActivity::class.java)
                                var bundle = Bundle()
                                bundle.putString("parentUserID", currentUser)
-                               childRegister.putExtras(bundle)
-                               startActivity (childRegister)
+                               parentLandingPage.putExtras(bundle)
+                               startActivity (parentLandingPage)
                            }
                            /*.addOnFailureListener { exception ->
                                Toast.makeText(this, "Failed to Register", Toast.LENGTH_SHORT).show()

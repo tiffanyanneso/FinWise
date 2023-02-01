@@ -5,5 +5,5 @@ class ParentUser (
     var firstName:String?=null,
     var lastName:String?=null,
     val number:String?=null,
-    val childUserID:String?=null
+    //val childUserID:String?=null
 ) {}

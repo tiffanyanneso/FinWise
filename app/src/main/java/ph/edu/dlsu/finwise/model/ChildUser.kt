@@ -5,5 +5,5 @@ class ChildUser (
     var firstName:String?=null,
     var lastName:String?=null,
     var birthday:String?=null,
-    var type:String?=null //child, parent, finliy expert
+    var parentID:String?=null
 ){}

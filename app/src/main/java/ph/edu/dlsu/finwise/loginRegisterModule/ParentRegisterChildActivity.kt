@@ -11,7 +11,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityParentRegisterChildBinding
+import ph.edu.dlsu.finwise.model.GoalSettings
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,7 +42,11 @@ class ParentRegisterChildActivity : AppCompatActivity() {
     private fun save() {
         binding.btnSave.setOnClickListener {
 
-            if (validateAndSetUserInput())
+            if (validateAndSetUserInput()) {
+                val parentuserID = FirebaseAuth.getInstance().currentUser!!.uid
+                println("current/parent user   " + parentuserID)
+
+                //current user is changed to child after creating user
                 FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         //registers the user
@@ -48,25 +54,23 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                             "firstName" to firstName,
                             "lastName" to lastName,
                             "username" to username,
-                            "birthday" to birthday
-                        )
+                            "birthday" to birthday,
+                            "parentID" to parentuserID)
 
-                        val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-                        firestore.collection("ChildUser").document(currentUser).set(user)
-                            .addOnSuccessListener {
-                                clearForm()
-                                createChildWallet(currentUser)
+                        println("current/child user   " + FirebaseAuth.getInstance().currentUser!!.uid.toString())
 
-                                var bundle: Bundle = intent.extras!!
-                                firestore.collection("ParentUser").document(bundle.getString("parentUserID").toString()).update("childUserID", currentUser)
-                                //TODO: CHANGE REDIRECTION TO LOGIN
-                                Toast.makeText(this, "Child register successful", Toast.LENGTH_SHORT).show()
-                                /*val childRegister = Intent (this, ParentRegisterChildActivity::class.java)
-                                var bundle = Bundle()
-                                bundle.putString("parentUserID", currentUser)
-                                childRegister.putExtras(bundle)
-                                startActivity (childRegister)*/
-                            }
+                        val childUserID = FirebaseAuth.getInstance().currentUser!!.uid
+
+                        firestore.collection("ChildUser").document(childUserID).set(user).addOnSuccessListener { childUser ->
+                            clearForm()
+                            createChildWallet(childUserID)
+                            createGoalSettings(parentuserID, childUserID)
+                            Toast.makeText(this, "Child register successful", Toast.LENGTH_SHORT).show()
+                            //TODO: change current user back to parent
+                            println("current/parent user   " + FirebaseAuth.getInstance().currentUser!!.uid.toString())
+                            val parentLandingPage = Intent (this, ParentLandingPageActivity::class.java)
+                            startActivity (parentLandingPage)
+                        }
                         /*.addOnFailureListener { exception ->
                             Toast.makeText(this, "Failed to Register", Toast.LENGTH_SHORT).show()
                             //Log.w(TAG, "Error adding document $exception")
@@ -94,6 +98,7 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                         }
                     }
                 }
+            }
             else
                 Toast.makeText(this, "Failed to register! Try again!", Toast.LENGTH_SHORT).show()
 
@@ -115,6 +120,11 @@ class ParentRegisterChildActivity : AppCompatActivity() {
         firestore.collection("ChildWallet").add(wallet).addOnSuccessListener {
 
         }
+    }
+
+    private fun createGoalSettings(parentID:String, childID:String) {
+        var settings = GoalSettings(parentID, childID, false, false, false)
+        firestore.collection("GoalSettings").add(settings)
     }
 
     private fun validateAndSetUserInput(): Boolean {

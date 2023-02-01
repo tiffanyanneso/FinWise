@@ -37,6 +37,13 @@
                 android:textSize="20sp"
                 android:gravity="center_vertical"
                 android:text="@string/username"/>
+
+            <TextView
+                android:id="@+id/tv_child_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                />
         </LinearLayout>
     </RelativeLayout>
 
