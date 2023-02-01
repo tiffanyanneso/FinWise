@@ -141,6 +141,22 @@
         </activity>
 
         <activity
+            android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertEditAssessmentActivity"
+            android:exported="false" >
+         <!--        <intent-filter>
+                     <action android:name="android.intent.action.MAIN" />
+
+                     <category android:name="android.intent.category.LAUNCHER" />
+                 </intent-filter>
+
+                 <meta-data
+                     android:name="android.app.lib_name"
+                     android:value="" />-->
+        </activity>
+
+
+
+        <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertQuestionsActivity"
             android:exported="false" />
         <activity
@@ -198,8 +214,8 @@
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
-            android:exported="false">
-           <!-- <intent-filter>
+            android:exported="true">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -207,7 +223,7 @@
 
             <meta-data
                 android:name="android.app.lib_name"
-                android:value="" />-->
+                android:value="" />
         </activity>
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"

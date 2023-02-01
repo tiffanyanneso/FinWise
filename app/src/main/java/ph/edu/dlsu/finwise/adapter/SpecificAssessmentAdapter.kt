@@ -4,8 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import ph.edu.dlsu.finwise.fragment.DetailsFragment
-import ph.edu.dlsu.finwise.fragment.QuestionsFragment
+import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.fragment.DetailsFragment
+import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.fragment.QuestionsFragment
 
 class SpecificAssessmentAdapter (fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter (fragmentManager, lifecycle)
 {
