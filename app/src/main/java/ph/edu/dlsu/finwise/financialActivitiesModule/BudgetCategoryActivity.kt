@@ -20,6 +20,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityBudgetBinding
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetCategoryBinding
 import ph.edu.dlsu.finwise.model.BudgetCategory
 import ph.edu.dlsu.finwise.model.BudgetCategoryItem
+import java.text.DecimalFormat
 
 class BudgetCategoryActivity : AppCompatActivity() {
 
@@ -64,9 +65,9 @@ class BudgetCategoryActivity : AppCompatActivity() {
     private fun getBudgetCategoryAllocation() {
         firestore.collection("BudgetCategories").document(budgetCategoryID).get().addOnSuccessListener {
             var budgetCategory = it.toObject<BudgetCategory>()
-            totalBudgetCategory = budgetCategory!!.amount!!.toFloat()
+            totalBudgetCategory = budgetCategory?.amount!!.toFloat()
             binding.tvCategoryName.text = budgetCategory?.budgetCategory
-            binding.tvCategoryAmount.text = "₱ " + spent + " / ₱ " +  budgetCategory!!.amount
+            binding.tvCategoryAmount.text = "₱ " + DecimalFormat("#,###.00").format(spent) + " / ₱ " +  DecimalFormat("#,###.00").format(budgetCategory?.amount)
         }
     }
 
@@ -93,7 +94,7 @@ class BudgetCategoryActivity : AppCompatActivity() {
 
     private fun updateSpent(itemAmount:Float) {
         spent += itemAmount
-        binding.tvCategoryAmount.text = "₱ " + spent + " / ₱ "  + totalBudgetCategory
+        binding.tvCategoryAmount.text = "₱ " + DecimalFormat("#,##0.00").format(spent) + " / ₱ "+ DecimalFormat("#,##0.00").format(totalBudgetCategory)
     }
 
     private fun showNewItemDialog() {

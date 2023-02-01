@@ -13,6 +13,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 import ph.edu.dlsu.finwise.databinding.ItemGoalBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
 class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHolder>{
@@ -64,7 +65,7 @@ class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHold
                 val formatter = SimpleDateFormat("MM/dd/yyyy")
                 val date = formatter.format(goal?.targetDate?.toDate())
                 itemBinding.tvTargetDate.text = date.toString()
-                itemBinding.tvProgressAmount.text = "₱ " +  goal?.currentAmount.toString()  + "/ ₱ " + goal?.targetAmount.toString()
+                itemBinding.tvProgressAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(goal?.currentAmount) + "/ ₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
                 /*for (goalSnapshot in documents) {
                     val goalID = goalSnapshot.id
                     goalIDArrayList.add(goalID!!)

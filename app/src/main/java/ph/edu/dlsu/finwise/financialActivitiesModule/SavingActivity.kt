@@ -17,6 +17,9 @@ import ph.edu.dlsu.finwise.adapter.GoalViewDepositAdapater
 import ph.edu.dlsu.finwise.databinding.ActivitySavingBinding
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import ph.edu.dlsu.finwise.model.Transactions
+import java.text.DecimalFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SavingActivity : AppCompatActivity() {
 
@@ -93,7 +96,10 @@ class SavingActivity : AppCompatActivity() {
             for (document in transactionsSnapshot) {
                 var transaction = document.toObject<Transactions>()
                 transactionsArrayList.add(transaction)
-                currentAmount += transaction.amount!!
+                if (transaction.transactionType == "Deposit")
+                    currentAmount += transaction.amount!!
+                else if (transaction.transactionType == "Withdrawal")
+                    currentAmount -= transaction.amount!!
             }
             goalViewDepositAdapater = GoalViewDepositAdapater(this, transactionsArrayList)
             binding.rvViewDepositHistory.adapter = goalViewDepositAdapater
@@ -107,7 +113,7 @@ class SavingActivity : AppCompatActivity() {
         firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
             var decisionMakingActvity = it.toObject<DecisionMakingActivities>()
             targetAmount = decisionMakingActvity?.targetAmount!!
-            binding.tvGoalAmount.text = "₱ " + currentAmount.toString() + " / ₱ " + targetAmount.toString()
+            binding.tvGoalAmount.text = "₱ " + DecimalFormat("#,##0.00").format(currentAmount).toString() + " / ₱ " + DecimalFormat("#,##0.00").format(targetAmount).toString()
             progress = (currentAmount?.div(decisionMakingActvity?.targetAmount!!))?.times(100)!!
             if (progress != null) {
                 binding.progressBar.progress  = progress.toInt()
@@ -120,29 +126,35 @@ class SavingActivity : AppCompatActivity() {
         // our variable with their ids.
         lineGraphView = findViewById(R.id.line_graph)
 
-
-        var dates = ArrayList<String>()
+        var dates = ArrayList<Date>()
         var dataPoints = ArrayList<DataPoint>()
 
         //get unique dates in transaction arraylist
         for (transaction in transactionsArrayList) {
             //if array of dates doesn't contain date of the transaction, add the date to the arraylist
-            if (!dates.contains(transaction.date.toString()))
-                dates.add(transaction.date.toString())
+            if (!dates.contains(transaction.date?.toDate()))
+                dates.add(transaction.date?.toDate()!!)
         }
 
+        var sortedDate = dates.sortedByDescending { it.date }
         //get deposit for a specific date
         var xAxis =0.00
-        //TODO: SORT DATES
-        /*for (date in dates) {
+        for (date in sortedDate) {
             var depositTotal = 0.00F
             for (transaction in transactionsArrayList) {
-                if (transaction.date == date)
-                    depositTotal += transaction.amount!!
+                //comparing the dates if they are equal
+                if (transaction != null ) {
+                    if (date.compareTo(transaction.date?.toDate()) == 0) {
+                        if (transaction.transactionType == "Deposit")
+                            depositTotal += transaction.amount!!
+                        else
+                            depositTotal -= transaction.amount!!
+                    }
+                }
             }
             dataPoints.add(DataPoint(xAxis, depositTotal.toDouble()))
             xAxis++
-        }*/
+        }
 
 
         //plot data to

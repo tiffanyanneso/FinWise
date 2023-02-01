@@ -10,9 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentInProgressBinding
+import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.util.*
+import kotlin.collections.ArrayList
 
 class InProgressFragment : Fragment() {
 
@@ -34,9 +38,13 @@ class InProgressFragment : Fragment() {
         return view
     }
 
+    class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
+    }
+
     private fun getInProgressGoals() {
         var goalIDArrayList = ArrayList<String>()
         var filter = "In Progress"
+        var goalFilterArrayList = ArrayList<GoalFilter>()
 
         //TODO:change to get transactions of current user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
@@ -45,9 +53,14 @@ class InProgressFragment : Fragment() {
         firestore.collection("FinancialGoals").whereEqualTo("status", filter).get().addOnSuccessListener { documents ->
             for (goalSnapshot in documents) {
                 //creating the object from list retrieved in db
-                val goalID = goalSnapshot.id
-                goalIDArrayList.add(goalID)
+                var goalID = goalSnapshot.id
+                var goal = goalSnapshot.toObject<FinancialGoals>()
+                //goalIDArrayList.add(goalID)
+                goalFilterArrayList.add(GoalFilter(goalID, goal?.targetDate!!.toDate()))
             }
+            goalFilterArrayList.sortBy { it.goalTargetDate }
+            for (goalFilter in goalFilterArrayList)
+                goalIDArrayList.add(goalFilter.financialGoalID!!)
             loadRecyclerView(goalIDArrayList)
         }
     }

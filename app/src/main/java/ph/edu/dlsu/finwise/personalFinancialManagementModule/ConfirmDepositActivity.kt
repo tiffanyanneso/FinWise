@@ -52,7 +52,7 @@ class ConfirmDepositActivity : AppCompatActivity() {
         amount = bundle.getFloat("amount").toString()
         goal = bundle.getString("goal")
         date = bundle.getSerializable("date") as Date
-        val dec = DecimalFormat("#,###.00")
+        val dec = DecimalFormat("#,##0.00")
         val textAmount = dec.format(bundle.getFloat("amount"))
         binding.tvAmount.text = textAmount
         binding.tvGoal.text = goal

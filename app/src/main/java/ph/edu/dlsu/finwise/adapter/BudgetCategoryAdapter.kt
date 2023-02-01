@@ -16,6 +16,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetCategoryActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 import ph.edu.dlsu.finwise.model.BudgetCategory
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.text.DecimalFormat
 
 class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetCategoryViewHolder>{
 
@@ -63,7 +64,7 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
                 itemBinding.tvCategoryId.text = it.id
                 itemBinding.decisionMakingActivityId.text = budgetCategory?.decisionMakingActivityID
                 itemBinding.tvCategory.text = budgetCategory?.budgetCategory
-                itemBinding.tvAmount.text = "₱ " + budgetCategory?.amount
+                itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(budgetCategory?.amount)
             }
         }
 

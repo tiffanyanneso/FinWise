@@ -15,6 +15,7 @@ import ph.edu.dlsu.finwise.databinding.ItemCategoryItemBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetCategoryActivity
 import ph.edu.dlsu.finwise.model.BudgetCategory
 import ph.edu.dlsu.finwise.model.BudgetCategoryItem
+import java.text.DecimalFormat
 
 class BudgetCategoryItemAdapter : RecyclerView.Adapter<BudgetCategoryItemAdapter.BudgetCategoryItemViewHolder>{
 
@@ -60,7 +61,7 @@ class BudgetCategoryItemAdapter : RecyclerView.Adapter<BudgetCategoryItemAdapter
             firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
                 var budgetItem = it.toObject<BudgetCategoryItem>()
                 itemBinding.tvItem.text = budgetItem?.budgetCategoryItem.toString()
-                itemBinding.tvAmount.text = "₱ " + budgetItem?.amount.toString()
+                itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(budgetItem?.amount.toString())
             }
         }
 

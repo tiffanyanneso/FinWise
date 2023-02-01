@@ -45,8 +45,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
         var targetDate = bundle.getSerializable("targetDate")
 
 
-        var formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
-        var formattedDate = targetDate.toString().format(formatter)
+        var formattedDate = SimpleDateFormat("MM/dd/yyyy").format(targetDate)
         binding.tvTargetDate.text = formattedDate
 
         binding.tvIsForChild.text = bundle.getBoolean("goalIsForSelf").toString()

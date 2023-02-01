@@ -26,6 +26,7 @@ import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
 import ph.edu.dlsu.finwise.model.BudgetCategory
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.text.DecimalFormat
 
 class BudgetActivity : AppCompatActivity() {
 
@@ -108,8 +109,8 @@ class BudgetActivity : AppCompatActivity() {
             var decisionMakingActivity = it.toObject<DecisionMakingActivities>()
             financialGoalID = decisionMakingActivity?.financialGoalID.toString()
             nextPriority = decisionMakingActivity?.priority.toString().toInt() + 1
-            totalBudget = decisionMakingActivity!!.targetAmount!!
-            binding.tvBudgetAmount.text = "₱ " + allocated + " / ₱ "  + decisionMakingActivity!!.targetAmount!!
+            totalBudget = decisionMakingActivity?.targetAmount!!
+            binding.tvBudgetAmount.text = "₱ " + DecimalFormat("#,###.00").format(allocated) + " / ₱ "  + DecimalFormat("#,###.00").format(decisionMakingActivity?.targetAmount)
 
             //hide done setting budget budget if the activity is already completed
             if (decisionMakingActivity.status == "Completed") {
@@ -130,7 +131,7 @@ class BudgetActivity : AppCompatActivity() {
 
     private fun updateAllocated(newCategoryAmount:Float) {
         allocated += newCategoryAmount
-        binding.tvBudgetAmount.text = "₱ " + allocated + "/ ₱ "  + totalBudget
+        binding.tvBudgetAmount.text = "₱ " + DecimalFormat("#,##0.00").format(allocated) + "/ ₱ "  + DecimalFormat("#,##0.00").format(totalBudget)
     }
 
     private fun showNewBudgetCategoryDialog() {
