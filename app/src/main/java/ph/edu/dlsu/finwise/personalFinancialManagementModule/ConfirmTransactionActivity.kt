@@ -91,7 +91,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
                 "goal" to goal,
             )
             adjustUserBalance()
-            // change collection
+            // TODO: Change where transaction is added
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
                 val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
                 goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

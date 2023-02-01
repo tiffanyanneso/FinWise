@@ -75,7 +75,7 @@ class ConfirmDepositActivity : AppCompatActivity() {
                 "goal" to goal,
             )
             adjustUserBalance()
-
+            // TODO: Change where transaction is added
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
                 Toast.makeText(this, "Goal added", Toast.LENGTH_SHORT).show()
                 var goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
