@@ -7,7 +7,7 @@
     tools:context=".financialActivitiesModule.GoalSettingsActivity">
 
     <TextView
-        android:id="@+id/tv_budgeting"
+        android:id="@+id/tv_goal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -20,121 +20,197 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/tv_set_own_goals"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linear_layout_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_budgeting"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:paddingTop="20dp"
-        android:textStyle="bold"
-        android:text="Allow child to set their own goals"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_goal">
 
-    <TextView
-        android:id="@+id/tv_set_own_goals_description"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_set_own_goals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_budgeting"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:textStyle="bold"
+                android:text="Allow child to set their own goals"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_weight="2"/>
+
+            <TextView
+                android:id="@+id/tv_set_own_goals_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_set_own_goals"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:paddingTop="5dp"
+                android:text="Enabling this would allow the child to set their own goals."
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <Switch
+            android:id="@+id/switch_set_own_goal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_set_own_goals_description"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:gravity="center_vertical"
+            android:paddingRight="20dp"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/div_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:dividerInsetStart="16dp"
+        app:dividerInsetEnd="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_set_own_goals"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:paddingTop="5dp"
-        android:text="Enabling this would allow the child to set their own goals."
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
+        android:layout_marginVertical="10dp"/>
 
-    <Switch
-        android:id="@+id/switch_set_own_goal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_set_own_goals_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:text="No"
-        android:layout_marginStart="20dp"/>
-
-    <TextView
-        android:id="@+id/tv_auto_approve"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linear_layout_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch_set_own_goal"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:paddingTop="20dp"
-        android:textStyle="bold"
-        android:text="Auto approve goals created by child"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        app:layout_constraintTop_toBottomOf="@+id/div_1"
+        android:paddingTop="10dp">
 
-    <TextView
-        android:id="@+id/tv_auto_approve_description"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tv_auto_approve"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:textStyle="bold"
+                android:text="Auto approve goals created by child"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_auto_approve_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_auto_approve"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:paddingTop="5dp"
+                android:text="Enabling this would require you to review and approve any goals created by the child before they are able to start."
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        <Switch
+            android:id="@+id/switch_auto_approve"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:gravity="center_vertical"
+            android:paddingRight="20dp"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/div_2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:dividerInsetStart="16dp"
+        app:dividerInsetEnd="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_auto_approve"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:paddingTop="5dp"
-        android:text="Enabling this would require you to review and approve any goals created by the child before they are able to start."
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        app:layout_constraintTop_toBottomOf="@+id/linear_layout_2"
+        android:layout_marginVertical="10dp"/>
 
-    <Switch
-        android:id="@+id/switch_auto_approve"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_auto_approve_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:text="No"
-        android:layout_marginStart="20dp"/>
-
-    <TextView
-        android:id="@+id/tv_unaccomplished_goal"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/linear_layout_3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch_auto_approve"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:paddingTop="20dp"
-        android:textStyle="bold"
-        android:text="Continue unaccomplished goals after target date"
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        app:layout_constraintTop_toBottomOf="@+id/div_2"
+        android:paddingTop="10dp">
 
-    <TextView
-        android:id="@+id/tv_unaccomplished_goal_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_unaccomplished_goal"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:paddingTop="5dp"
-        android:text="Enabling this would allow the child to continue their goals until they complete it even after the target date. Disabling this will mark goals as uncompleted if they are not completed after the target date."
-        android:textColor="@color/black"
-        android:textSize="16sp" />
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
 
-    <Switch
-        android:id="@+id/switch_unaccomplished_goal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_unaccomplished_goal_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp"
-        android:text="No"
-        android:layout_marginStart="20dp"/>
+            <TextView
+                android:id="@+id/tv_unaccomplished_goal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linear_layout_2"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:textStyle="bold"
+                android:text="Continue unaccomplished goals after target date"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_unaccomplished_goal_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_unaccomplished_goal"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:paddingTop="5dp"
+                android:text="Enabling this would allow the child to continue their goals until they complete it even after the target date. Disabling this will mark goals as uncompleted if they are not completed after the target date."
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <Switch
+            android:id="@+id/switch_unaccomplished_goal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_unaccomplished_goal_description"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="5dp"
+            android:gravity="center_vertical"
+            android:paddingRight="20dp"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
