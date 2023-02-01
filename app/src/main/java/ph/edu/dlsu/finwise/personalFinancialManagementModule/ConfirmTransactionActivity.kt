@@ -106,7 +106,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
     private fun adjustUserBalance() {
         //TODO: Change user based on who is logged in
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        firestore.collection("ChildWallet").whereEqualTo("childID", "JoCGIUSVMWTQ2IB7Rf41ropAv3S2")
+        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2")
             .get().addOnSuccessListener { documents ->
                 lateinit var id: String
                 for (document in documents) {
