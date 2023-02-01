@@ -7,220 +7,239 @@
     tools:context=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
     android:background="@color/off_white">
 
-    <androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cv_current_balance"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_height="110dp"
-        card_view:cardBackgroundColor="@color/light_green"
+        android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:padding="20dp"
-        android:layout_marginTop="20dp"
-        card_view:cardCornerRadius="10dp">
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav"
+        android:layout_marginBottom="50dp">
 
-        <LinearLayout
-            android:id="@+id/linear_layout_1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-            >
-            <ImageView
-                android:src="@drawable/peso_coin"
-                android:contentDescription="Peso logo"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:text="P"
-                />
+        <androidx.cardview.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cv_current_balance"
+            android:layout_width="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_height="110dp"
+            card_view:cardBackgroundColor="@color/light_green"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:padding="20dp"
+            android:layout_marginTop="20dp"
+            card_view:cardCornerRadius="10dp">
 
             <LinearLayout
-                android:id="@+id/linear_layout_text"
-                android:layout_width="match_parent"
+                android:id="@+id/linear_layout_1"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:padding="20dp">
+                android:orientation="horizontal"
 
-                <TextView
-                    android:id="@+id/current_balance_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:text="CURRENT BALANCE"
-                    android:textAllCaps ="true"
-                    android:textColor="@color/white"
-                    android:paddingTop="10dp"
+                >
+                <ImageView
+                    android:src="@drawable/peso_coin"
+                    android:contentDescription="Peso logo"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="20dp"
+                    android:text="P"
                     />
 
-                <TextView
-                    android:id="@+id/tv_balance"
+                <LinearLayout
+                    android:id="@+id/linear_layout_text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:text="₱ XXXX.XX"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"/>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/current_balance_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="CURRENT BALANCE"
+                        android:textAllCaps ="true"
+                        android:textColor="@color/white"
+                        android:paddingTop="10dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_balance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="24sp"
+                        android:text="₱ XXXX.XX"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"/>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
-    <LinearLayout
-        android:id="@+id/linear_layout_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/cv_current_balance"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:paddingTop="10dp">
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_expense"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="- EXPENSE"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/red"
-            android:background="@drawable/button_border_grey"
-            android:layout_marginRight="10dp"
-            />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_goal"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="+ DEPOSIT"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/yellow"
-            android:background="@drawable/button_border_grey"
-            android:layout_marginRight="10dp"
-            />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_income"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text=" + INCOME"
-            android:textColor="@color/off_white"
-            android:backgroundTint="@color/dark_green"
-            android:background="@drawable/button_border"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linear_layout_3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/linear_layout_2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:paddingTop="20dp">
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linear_layout_2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textStyle="bold"
-            android:text="Transactions"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:paddingBottom="5dp"
-            android:gravity="center_vertical"/>
+            app:layout_constraintTop_toBottomOf="@id/cv_current_balance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_expense"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="- EXPENSE"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/red"
+                android:background="@drawable/button_border_grey"
+                android:layout_marginRight="10dp"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_goal"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="+ DEPOSIT"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/yellow"
+                android:background="@drawable/button_border_grey"
+                android:layout_marginRight="10dp"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_income"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text=" + INCOME"
+                android:textColor="@color/off_white"
+                android:backgroundTint="@color/dark_green"
+                android:background="@drawable/button_border"
+                />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_view_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View All"
+            app:layout_constraintTop_toBottomOf="@id/linear_layout_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="View All Transactions"
             android:textSize="18sp"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:textColor="@color/black"
             android:gravity="center_vertical"/>
-    </LinearLayout>
 
-    <androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cv_income_pie_chart"
-        android:layout_width="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_height="150dp"
-        card_view:cardBackgroundColor="@color/light_green"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linear_layout_3"
-        android:padding="20dp"
-        android:layout_marginTop="20dp"
-        card_view:cardCornerRadius="10dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <androidx.cardview.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cv_income_pie_chart"
+            android:layout_width="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_height="350dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_view_all"
+            card_view:cardBackgroundColor="@color/light_green"
+            android:padding="20dp"
+            android:layout_marginTop="20dp"
+            card_view:cardCornerRadius="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Income Breakdown"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_margin="20dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pc_income"
+                android:layout_width="370dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="40dp"/>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cv_expense_pie_chart"
+            android:layout_width="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_height="350dp"
+            card_view:cardBackgroundColor="@color/light_green"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cv_income_pie_chart"
+            android:padding="20dp"
+            android:layout_marginTop="20dp"
+            card_view:cardCornerRadius="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Expense Breakdown"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_margin="20dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/pc_expense"
+                android:layout_width="370dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="40dp"/>
+
+        </androidx.cardview.widget.CardView>
+        <!--<androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_view_transactions"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="INCOME PIE Chart"
-            android:layout_gravity="center"
-            android:textStyle="bold"/>
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_layout_4"
+            android:backgroundTint="@color/white"
+            tools:listitem="@layout/item_transaction" />-->
 
-    </androidx.cardview.widget.CardView>
 
-    <androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cv_expense_pie_chart"
-        android:layout_width="match_parent"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_height="150dp"
-        card_view:cardBackgroundColor="@color/light_green"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_income_pie_chart"
-        android:padding="20dp"
-        android:layout_marginTop="20dp"
-        card_view:cardCornerRadius="10dp">
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="INCOME PIE Chart"
-            android:layout_gravity="center"
-            android:textStyle="bold"/>
-
-    </androidx.cardview.widget.CardView>
-    <!--<androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_view_transactions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_layout_4"
-        android:backgroundTint="@color/white"
-        tools:listitem="@layout/item_transaction" />-->
+    </ScrollView>
 
 
 
