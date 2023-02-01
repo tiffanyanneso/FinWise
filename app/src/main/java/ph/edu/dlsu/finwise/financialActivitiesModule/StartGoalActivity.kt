@@ -11,6 +11,7 @@ import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityStartGoalBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
 class StartGoalActivity : AppCompatActivity() {
@@ -39,7 +40,7 @@ class StartGoalActivity : AppCompatActivity() {
                     var goal = document.toObject(FinancialGoals::class.java)
                     binding.tvGoalName.text = goal?.goalName.toString()
                     binding.tvActivity.text = goal?.financialActivity.toString()
-                    binding.tvAmount.text = goal?.targetAmount.toString()
+                    binding.tvAmount.text = DecimalFormat("#,##0.00").format(goal?.targetAmount)
 
                     //Convert timestasmp to date string
                     val formatter = SimpleDateFormat("MM/dd/yyyy")
@@ -58,6 +59,7 @@ class StartGoalActivity : AppCompatActivity() {
             var goToViewGoal = Intent(context, ViewGoalActivity::class.java)
             goToViewGoal.putExtra("goalID", goalID)
             context.startActivity(goToViewGoal)
+            finish()
         }
     }
 

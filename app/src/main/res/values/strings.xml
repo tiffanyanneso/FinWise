@@ -95,6 +95,7 @@
     <string name="name">Name</string>
     <string name="budget_set">Budget Set</string>
 
+
     <string name="withdraw">- Withdraw</string>
     <string name="title_withdraw">Withdraw From Goal</string>
     <string name="confirm_withdrawal">Confirm Withdrawal</string>

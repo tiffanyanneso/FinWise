@@ -11,6 +11,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialConfirmDepositBinding
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
@@ -47,9 +48,9 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         val bundle: Bundle = intent.extras!!
         decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
         financialGoalID = bundle.getString("financialGoalID").toString()
-        binding.tvDate.text = bundle.getSerializable("date").toString()
+        binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
         amount = bundle.getFloat("amount").toString()
-        binding.tvAmount.text = "₱ " + bundle.getFloat("amount").toString()
+        binding.tvAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
         binding.tvGoal.text= bundle.getString("goalName")
 
         binding.btnConfirm.setOnClickListener {

@@ -97,7 +97,7 @@
             android:name=".financialActivitiesModule.StartGoalActivity"
             android:exported="false" />
         <activity
-            android:name=".financialActivitiesModule.SavingViewDepositActivity"
+            android:name=".financialActivitiesModule.SavingViewTransactionsActivity"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.SavingActivity"

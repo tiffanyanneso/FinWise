@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".financialActivitiesModule.SavingViewDepositActivity"
+    tools:context=".financialActivitiesModule.SavingViewTransactionsActivity"
     android:background="@color/off_white">
 
     <TextView
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="24dp"
-        android:text="@string/view_deposits"
+        android:text="@string/transaction_history"
         android:gravity="center"
         android:textColor="@color/black"
         android:textStyle="bold"
