@@ -185,8 +185,8 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="425dp"
-            android:layout_marginTop="10dp"
+            android:layout_height="560dp"
+            android:layout_margin="15dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/abl_breakdown">
