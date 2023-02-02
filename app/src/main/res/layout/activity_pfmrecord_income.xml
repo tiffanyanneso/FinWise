@@ -61,6 +61,7 @@
         app:helperTextTextColor="@color/red"
         android:paddingBottom="10dp"
         android:paddingTop="20dp"
+        app:startIconDrawable="@drawable/baseline_wallet_24"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -81,7 +82,8 @@
         android:layout_height="wrap_content"
         android:hint="Select Category"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_marginHorizontal="20dp">
+        android:layout_marginHorizontal="20dp"
+        app:startIconDrawable="@drawable/baseline_saved_search_24">
 
         <AutoCompleteTextView
             android:id="@+id/dropdown_category"
@@ -161,6 +163,7 @@
         app:helperText=""
         app:helperTextTextColor="@color/red"
         android:paddingVertical="10dp"
+        app:startIconDrawable="@drawable/baseline_money_24"
         >
 
         <com.google.android.material.textfield.TextInputEditText

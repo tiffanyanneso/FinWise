@@ -157,6 +157,7 @@
         app:helperText=""
         app:helperTextTextColor="@color/red"
         android:paddingTop="10dp"
+        app:startIconDrawable="@drawable/baseline_money_24"
         >
 
         <com.google.android.material.textfield.TextInputEditText

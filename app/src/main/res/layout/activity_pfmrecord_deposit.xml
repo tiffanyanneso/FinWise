@@ -43,7 +43,8 @@
         android:hint="Select Goal"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        app:startIconDrawable="@drawable/baseline_star_24">
 
         <AutoCompleteTextView
             android:id="@+id/dropdown_activity"
@@ -146,6 +147,7 @@
         app:helperText=""
         app:helperTextTextColor="@color/red"
         android:paddingVertical="10dp"
+        app:startIconDrawable="@drawable/baseline_money_24"
         >
 
         <com.google.android.material.textfield.TextInputEditText
