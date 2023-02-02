@@ -28,7 +28,17 @@
         </activity>
         <activity
             android:name=".TestFinancialActivity"
-            android:exported="true">
+            android:exported="false">
+<!--            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />-->
+
         </activity>
         <activity
             android:name=".EditProfileActivity"
@@ -161,7 +171,8 @@
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertProfileActivity"
-            android:exported="false" />
+            android:exported="false" >
+    </activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertSpecificAssessmentActivity"
             android:exported="false">
