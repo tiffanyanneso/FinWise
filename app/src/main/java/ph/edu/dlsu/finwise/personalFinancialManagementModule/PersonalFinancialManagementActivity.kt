@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -19,7 +20,9 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
+import ph.edu.dlsu.finwise.adapter.GoalViewDepositAdapater
 import ph.edu.dlsu.finwise.adapter.PFMBreakdownAdapter
+import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.breakdownFragments.ExpenseFragment
@@ -31,7 +34,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPersonalFinancialManagementBinding
     private var firestore = Firebase.firestore
-    lateinit var pieChart: PieChart
+    private lateinit var transactionAdapter: TransactionsAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +49,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
 
         setUpBreakdownTabs()
-        //loadBalance()
-        //getTransactions()
+        loadBalance()
+        getTransactions()
         goToDepositGoalActivity()
         goToIncomeActivity()
         goToExpenseActivity()
@@ -89,7 +93,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         }
     }
 
-    /*private fun getTransactions() {
+    private fun getTransactions() {
         var transactionIDArrayList = ArrayList<String>()
         //TODO:change to get transactions of current user
         // Dito may collection na transaction at hindi nakanest yung collection sa user
@@ -110,7 +114,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 LinearLayoutManager.VERTICAL,
                 false)
         }
-    }*/
+    }
 
     private fun goToDepositGoalActivity() {
         binding.btnGoal.setOnClickListener {
