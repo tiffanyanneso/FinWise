@@ -13,14 +13,14 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
-            android:name=".ConfirmWithdraw"
+            android:name=".financialActivitiesModule.ConfirmWithdraw"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".WithdrawActivity"
+            android:name=".financialActivitiesModule.WithdrawActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -201,12 +201,6 @@
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
             android:exported="false" />
         <activity
-            android:name=".financialActivitiesModule.WithdrawActivity"
-            android:exported="false" />
-        <activity
-            android:name=".financialActivitiesModule.ConfirmWithdraw"
-            android:exported="false" />
-        <activity
             android:name=".financialActivitiesModule.ChildEditGoal"
             android:exported="false" />
         <activity
@@ -215,15 +209,6 @@
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
         </activity>
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"

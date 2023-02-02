@@ -10,6 +10,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityLoginBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -45,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
                                 val currentUser: String = FirebaseAuth.getInstance().currentUser!!.uid
                                 firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener { documentSnapshot->
                                     if (documentSnapshot.exists()) {
-                                        val intent = Intent(this, PersonalFinancialManagementActivity::class.java)
+                                        val intent = Intent(this, FinancialActivity::class.java)
                                         startActivity(intent)
                                         finish()
                                     } else

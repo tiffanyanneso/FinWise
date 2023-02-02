@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.AchievedFragment
 import ph.edu.dlsu.finwise.InProgressFragment
@@ -19,6 +21,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialBinding
 import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityTestFinancialBinding
+import ph.edu.dlsu.finwise.model.GoalSettings
 
 class FinancialActivity : AppCompatActivity() {
 
@@ -26,7 +29,7 @@ class FinancialActivity : AppCompatActivity() {
 //    private lateinit var goalAdapter: ChildGoalAdapter
 //    private var goalIDArrayList = ArrayList<String>()
 //    private lateinit var status: String
-//    private var firestore = Firebase.firestore
+    private var firestore = Firebase.firestore
 
     private lateinit var context: Context
 
@@ -37,6 +40,7 @@ class FinancialActivity : AppCompatActivity() {
         context = this
 
         val adapter = ViewPagerAdapter(supportFragmentManager)
+        //checkSettings()
 
         // TODO: change the fragments added based on parent approval
         adapter.addFragment(InProgressFragment(),"In Progress")
@@ -71,6 +75,18 @@ class FinancialActivity : AppCompatActivity() {
         fun addFragment(fragment: Fragment, title:String){
             mFrgmentList.add(fragment)
             mFrgmentTitleList.add(title)
+        }
+    }
+
+    private fun checkSettings() {
+        var currentChildUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("GoalSettings").whereEqualTo("childID", currentChildUser).get().addOnSuccessListener {
+            var goalSettings = it.documents[0].toObject<GoalSettings>()
+            //hide button
+            if (goalSettings?.setOwnGoal == false)
+                binding.btnNewGoal.visibility = View.GONE
+            else if (goalSettings?.setOwnGoal == true)
+                binding.btnNewGoal.visibility = View.VISIBLE
         }
     }
 
