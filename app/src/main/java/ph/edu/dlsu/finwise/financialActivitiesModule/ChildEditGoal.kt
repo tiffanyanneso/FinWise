@@ -2,8 +2,10 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
 
 class ChildEditGoal : AppCompatActivity() {
@@ -15,6 +17,11 @@ class ChildEditGoal : AppCompatActivity() {
         binding = ActivityChildNewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getFinancialGoal()
+
+        // for the dropdown
+        val items = resources.getStringArray(R.array.financial_activity)
+        val adapter = ArrayAdapter(this, R.layout.list_item, items)
+        binding.dropdownActivity.setAdapter(adapter)
 
         /*if (currentUserType == "Child") {
             binding.tvFinancialDecisionMakingActivity.visibility = View.GONE

@@ -38,6 +38,11 @@ class RecordIncomeActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
 
+        // for the dropdown
+        val items = resources.getStringArray(ph.edu.dlsu.finwise.R.array.pfm_income_category)
+        val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, items)
+        binding.dropdownCategory.setAdapter(adapter)
+
         getGoals()
         goToConfirmation()
         cancel()
@@ -66,13 +71,13 @@ class RecordIncomeActivity : AppCompatActivity() {
             valid = false
         } else name = binding.etName.text.toString().trim()
 
-        if (binding.spinnerCategory.selectedItem.toString() == "--Select Category--") {
-            binding.tvErrorSpinner.visibility = View.VISIBLE
-            valid = false
-        } else {
-            binding.tvErrorSpinner.visibility = View.GONE
-            category = binding.spinnerCategory.selectedItem.toString()
-        }
+//        if (binding.spinnerCategory.selectedItem.toString() == "--Select Category--") {
+//            binding.tvErrorSpinner.visibility = View.VISIBLE
+//            valid = false
+//        } else {
+//            binding.tvErrorSpinner.visibility = View.GONE
+            category = binding.dropdownCategory.text.toString()
+//        }
 
         if (binding.etAmount.text.toString().trim().isEmpty()) {
             binding.etAmount.error = "Please enter the amount."

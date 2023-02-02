@@ -78,33 +78,35 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tv_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/container_activity"
         app:layout_constraintTop_toBottomOf="@+id/goal_container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="14dp"
-        android:layout_marginTop="10dp"
-        android:textAllCaps = "true"
-        android:text="@string/activity"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"/>
-
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spinner_activity"
-        app:layout_constraintTop_toBottomOf="@+id/tv_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:entries="@array/financial_activity"
-        android:layout_marginTop="5dp"
-        android:textSize="14dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"/>
+        android:hint="Select Activity"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_marginHorizontal="20dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/dropdown_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+<!--    <androidx.appcompat.widget.AppCompatSpinner-->
+<!--        android:id="@+id/spinner_activity"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tv_activity"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:entries="@array/financial_activity"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:textSize="14dp"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"/>-->
 
 <!--    <TextView-->
 <!--        android:id="@+id/tv_amount"-->
@@ -144,8 +146,9 @@
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_activity"
+        app:layout_constraintTop_toBottomOf="@+id/container_activity"
         android:layout_marginHorizontal="20dp"
+        android:paddingTop="5dp"
         app:helperTextEnabled="true"
         app:helperText=""
         app:helperTextTextColor="@color/red"

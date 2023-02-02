@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -38,6 +39,11 @@ class ChildNewGoal : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
+        // for the dropdown
+        val items = resources.getStringArray(R.array.financial_activity)
+        val adapter = ArrayAdapter(this, R.layout.list_item, items)
+        binding.dropdownActivity.setAdapter(adapter)
+
         //TODO: how to bring back values to edit text fields
         /*var bundle: Bundle = intent.extras!!
         if (bundle!=null) {
@@ -56,9 +62,9 @@ class ChildNewGoal : AppCompatActivity() {
             binding.checkBoxes.visibility = View.VISIBLE
         }*/
 
-        binding.spinnerActivity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.dropdownActivity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-               var currentSelected = binding.spinnerActivity.selectedItem.toString()
+               var currentSelected = binding.dropdownActivity.text.toString()
                 resetCheckbox()
                 if (currentSelected == "Buying Items" || currentSelected == "Planning An Event" || currentSelected == "Situational Shopping") {
                     setCheckbox (true, false, false, true, true, false)
@@ -81,7 +87,7 @@ class ChildNewGoal : AppCompatActivity() {
             var bundle = Bundle()
 
             var goalName =  binding.etGoal.text.toString()
-            var activity = binding.spinnerActivity.selectedItem.toString()
+            var activity = binding.dropdownActivity.text.toString()
             var amount = binding.etAmount.text.toString().toFloat()
             var targetDate = SimpleDateFormat("MM-dd-yyyy").parse((binding.etTargetDate.month+1).toString() + "-" +
                     binding.etTargetDate.dayOfMonth.toString() + "-" + binding.etTargetDate.year)

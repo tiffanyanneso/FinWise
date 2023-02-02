@@ -37,6 +37,7 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_goal)
 
+
         var bundle: Bundle = intent.extras!!
         decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
         financialGoalID = bundle.getString("financialGoalID").toString()
@@ -48,7 +49,7 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
             bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
             bundle.putString("financialGoalID", financialGoalID)
             bundle.putString("expenseName", binding.etExpenseName.text.toString())
-            bundle.putString("expenseCategory", binding.spinnerExpenseCategory.selectedItem.toString())
+            bundle.putString("expenseCategory", binding.dropdownCategory.text.toString())
             bundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
             bundle.putSerializable("date", SimpleDateFormat("MM-dd-yyyy").parse((binding.etTransactionDate.month+1).toString() + "-" +
                     binding.etTransactionDate.dayOfMonth.toString() + "-" + binding.etTransactionDate.year))
@@ -72,8 +73,10 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
                     var categoryObject = category.toObject<BudgetCategory>()
                     expenseCategories.add(categoryObject.budgetCategory.toString())
                 }
-                val adapter = ArrayAdapter (this, R.layout.simple_list_item_1, expenseCategories)
-                binding.spinnerExpenseCategory.adapter = adapter
+
+                val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, expenseCategories)
+                binding.dropdownCategory.setAdapter(adapter)
+                //binding.spinnerExpenseCategory.adapter = adapter
             }
         }
     }

@@ -48,7 +48,7 @@ class RecordDepositActivity : AppCompatActivity() {
     }
 
     private fun getGoalProgress() {
-        val sortSpinner = binding.spinnerGoal
+        val sortSpinner = binding.dropdownActivity
         sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>?,
@@ -91,8 +91,8 @@ class RecordDepositActivity : AppCompatActivity() {
                 goalArrayID.add(goal.id)
             }
 
-            val adapter = ArrayAdapter(this, R.layout.simple_list_item_1, goals)
-            binding.spinnerGoal.adapter = adapter
+            val adapter = ArrayAdapter(this, ph.edu.dlsu.finwise.R.layout.list_item, goals)
+            binding.dropdownActivity.setAdapter(adapter)
 
             getGoalProgress()
         }
@@ -137,7 +137,7 @@ class RecordDepositActivity : AppCompatActivity() {
 
     private fun setBundle() {
         //getCurrentTime()
-        val goal = binding.spinnerGoal.selectedItem.toString()
+        val goal = binding.dropdownActivity.text.toString()
 
         bundle.putString("transactionType", "goal")
         bundle.putFloat("amount", amount.toFloat())

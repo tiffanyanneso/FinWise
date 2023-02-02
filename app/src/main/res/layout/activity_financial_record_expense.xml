@@ -78,40 +78,42 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tv_category"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/container_expense_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="14sp"
-        android:layout_marginTop="10dp"
-        android:textAllCaps = "true"
-        android:text="@string/expense_category"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="10dp"/>
+<!--    <androidx.appcompat.widget.AppCompatSpinner-->
+<!--        android:id="@+id/spinner_expense_category"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tv_category"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:entries="@array/pfm_expense_category"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:textSize="14sp"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:layout_marginBottom="10dp"/>-->
 
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spinner_expense_category"
-        app:layout_constraintTop_toBottomOf="@+id/tv_category"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/container_category"
+        app:layout_constraintTop_toBottomOf="@+id/container_expense_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:entries="@array/pfm_expense_category"
-        android:layout_marginTop="5dp"
-        android:textSize="14sp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"/>
+        android:hint="Select Category"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_marginHorizontal="20dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/dropdown_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/tv_target_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_expense_category"
+        app:layout_constraintTop_toBottomOf="@+id/container_category"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="14dp"

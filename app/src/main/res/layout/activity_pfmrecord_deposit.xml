@@ -20,38 +20,57 @@
         android:layout_marginTop="20dp"
         android:textColor="@color/black"/>
 
-    <TextView
-        android:id="@+id/tv_goal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
-        android:textSize="14sp"
-        android:textAllCaps = "true"
-        android:text="Goal"
-        android:layout_marginTop="20dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_goal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tv_title"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textAllCaps = "true"-->
+<!--        android:text="Goal"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        />-->
 
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/spinner_goal"
-        app:layout_constraintTop_toBottomOf="@+id/tv_goal"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/container_goal"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:entries="@array/pfm_income_category"
-        android:layout_marginTop="10dp"
-        android:textSize="14sp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"/>
+        android:hint="Select Goal"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/dropdown_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+<!--    <androidx.appcompat.widget.AppCompatSpinner-->
+<!--        android:id="@+id/spinner_goal"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tv_goal"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:ems="10"-->
+<!--        android:entries="@array/pfm_income_category"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:textSize="14sp"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"/>-->
 
     <TextView
         android:id="@+id/tv_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_goal"
+        app:layout_constraintTop_toBottomOf="@+id/container_goal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="14dp"
