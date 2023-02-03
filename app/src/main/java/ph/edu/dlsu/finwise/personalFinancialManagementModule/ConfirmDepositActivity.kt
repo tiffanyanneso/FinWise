@@ -11,6 +11,7 @@ import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmconfirmDepositBinding
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.abs
 
@@ -54,9 +55,12 @@ class ConfirmDepositActivity : AppCompatActivity() {
         date = bundle.getSerializable("date") as Date
         val dec = DecimalFormat("#,##0.00")
         val textAmount = dec.format(bundle.getFloat("amount"))
-        binding.tvAmount.text = textAmount
+        binding.tvAmount.text = "₱$textAmount"
         binding.tvGoal.text = goal
-        binding.tvDate.text = date.toString()
+        val formatter = SimpleDateFormat("MM/dd/yyyy")
+        val dateSerializable = bundle.getSerializable("date")
+        val dateText = formatter.format(dateSerializable).toString()
+        binding.tvDate.text = dateText
 
     }
 

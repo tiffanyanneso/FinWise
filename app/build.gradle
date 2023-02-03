@@ -78,4 +78,7 @@ dependencies {
     // Pie Chart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+    //PayMaya Api
+    implementation 'com.github.paymaya:paymaya-android-sdk-v2:v2.1.0'
+
 }

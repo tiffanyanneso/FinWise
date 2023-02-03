@@ -45,12 +45,12 @@ class RecordExpenseActivity : AppCompatActivity() {
         val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, items)
         binding.dropdownCategory.setAdapter(adapter)
 
-        getGoals()
+       // getGoals()
         goToConfirmation()
         cancel()
     }
 
-    private fun getGoals() {
+   /* private fun getGoals() {
         //TODO: UPDATE LATER WITH CHILD ID
         goals.add("None")
         firestore.collection("FinancialGoals").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
@@ -61,7 +61,7 @@ class RecordExpenseActivity : AppCompatActivity() {
 //            val adapter = ArrayAdapter(this, R.layout.simple_list_item_1, goals)
 //            binding.spinnerGoal.adapter = adapter
         }
-    }
+    }*/
 
     private fun validateAndSetUserInput(): Boolean {
         var valid = true
@@ -72,14 +72,13 @@ class RecordExpenseActivity : AppCompatActivity() {
             valid = false
         } else name = binding.etName.text.toString().trim()
 
-//        if (binding.dropdownCategory.text.toString() == "--Select Category--") {
-//            binding.tvErrorSpinner.visibility = View.VISIBLE
-//            valid = false
-//        } else {
-//            binding.tvErrorSpinner.visibility = View.GONE
+        if (binding.dropdownCategory.text.toString() == "") {
+            binding.dropdownCategory.error = "Please select a category of the transaction."
+            valid = false
+        } else {
+            binding.dropdownCategory.error = null
             category = binding.dropdownCategory.text.toString()
-//        }
-
+        }
 
         if (binding.etAmount.text.toString().trim().isEmpty()) {
             binding.etAmount.error = "Please enter the amount."

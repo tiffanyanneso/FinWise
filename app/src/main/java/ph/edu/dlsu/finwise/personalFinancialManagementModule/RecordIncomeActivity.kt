@@ -1,9 +1,7 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
-import android.R
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +23,6 @@ class RecordIncomeActivity : AppCompatActivity() {
     lateinit var name: String
     lateinit var amount: String
     lateinit var category: String
-    lateinit var goal: String
     lateinit var date: Date
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,12 +40,12 @@ class RecordIncomeActivity : AppCompatActivity() {
         val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, items)
         binding.dropdownCategory.setAdapter(adapter)
 
-        getGoals()
+        //getGoals()
         goToConfirmation()
         cancel()
     }
 
-    private fun getGoals() {
+    /*private fun getGoals() {
         //TODO: UPDATE LATER WITH CHILD ID
         goals.add("None")
             firestore.collection("FinancialGoals").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
@@ -60,7 +57,7 @@ class RecordIncomeActivity : AppCompatActivity() {
 //                binding.spinnerGoal.adapter = adapter
             }
 
-    }
+    }*/
 
     private fun validateAndSetUserInput(): Boolean {
         var valid = true
@@ -71,13 +68,14 @@ class RecordIncomeActivity : AppCompatActivity() {
             valid = false
         } else name = binding.etName.text.toString().trim()
 
-//        if (binding.spinnerCategory.selectedItem.toString() == "--Select Category--") {
-//            binding.tvErrorSpinner.visibility = View.VISIBLE
-//            valid = false
-//        } else {
-//            binding.tvErrorSpinner.visibility = View.GONE
+        if (binding.dropdownCategory.text.toString() == "") {
+            binding.dropdownCategory.error = "Please select a category of the transaction."
+            valid = false
+        } else {
+            binding.dropdownCategory.error = null
             category = binding.dropdownCategory.text.toString()
-//        }
+        }
+
 
         if (binding.etAmount.text.toString().trim().isEmpty()) {
             binding.etAmount.error = "Please enter the amount."

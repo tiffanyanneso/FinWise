@@ -47,7 +47,7 @@ class RecordDepositActivity : AppCompatActivity() {
         cancel()
     }
 
-    private fun getGoalProgress() {
+   /* private fun getGoalProgress() {
         val sortSpinner = binding.dropdownActivity
         sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -58,8 +58,8 @@ class RecordDepositActivity : AppCompatActivity() {
             ) {
                 val goalID = goalArrayID[position]
                 //check if may laman sa baba yung goalarrayID
-                /*Toast.makeText(applicationContext, position,
-                    Toast.LENGTH_LONG).show()*/
+                Toast.makeText(applicationContext, position,
+                    Toast.LENGTH_LONG).show()
                 firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener { document ->
                         goal = document.toObject<FinancialGoals>()!!
                         setProgressBar()
@@ -79,7 +79,7 @@ class RecordDepositActivity : AppCompatActivity() {
         var targetAmount = dec.format(goal.targetAmount)
         var currentAmount = dec.format(goal.currentAmount)
         binding.tvBalance.text = "₱$currentAmount / $targetAmount"
-    }
+    }*/
 
 
     private fun getGoals() {
@@ -94,7 +94,7 @@ class RecordDepositActivity : AppCompatActivity() {
             val adapter = ArrayAdapter(this, ph.edu.dlsu.finwise.R.layout.list_item, goals)
             binding.dropdownActivity.setAdapter(adapter)
 
-            getGoalProgress()
+            //getGoalProgress()
         }
 
     }

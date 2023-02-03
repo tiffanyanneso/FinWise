@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -14,12 +15,19 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.MPPointF
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
-
+import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
+import ph.edu.dlsu.finwise.model.Transactions
 
 
 class ExpenseFragment : Fragment() {
     lateinit var pieChart: PieChart
+    private var firestore = Firebase.firestore
+    private var transactionsArrayList = ArrayList<Transactions>()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +48,20 @@ class ExpenseFragment : Fragment() {
     }
 
     private fun loadPieChart(pieChartLayout: Int) {
+            //TODO:change to get transactions of current user
+            //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+            //firestore.collection("Transactions").whereEqualTo("transactionID", currentUser).get()
+            // .addOnSuccessListener{ documents ->
+
+            firestore.collection("Transactions").get().addOnSuccessListener { documents ->
+                for (transactionSnapshot in documents) {
+                    //creating the object from list retrieved in db
+                    val transactionID = transactionSnapshot.id
+                    //transactionIDArrayList.add(transactionID)
+                }
+
+            }
+
 
         pieChart = view?.findViewById(pieChartLayout)!!
         //  setting user percent value, setting description as enabled, and offset for pie chart

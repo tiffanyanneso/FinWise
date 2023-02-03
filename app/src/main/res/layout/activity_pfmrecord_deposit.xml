@@ -93,7 +93,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_date"
         tools:layout_editor_absoluteX="0dp" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/tv_goal_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -132,7 +132,7 @@
         android:layout_width="370dp"
         android:layout_margin="10dp"
         android:layout_height="wrap_content"
-        android:scaleY="5"/>
+        android:scaleY="5"/>-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/amount_container"
@@ -141,7 +141,7 @@
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progress_goal"
+        app:layout_constraintTop_toBottomOf="@+id/et_date"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:helperText=""

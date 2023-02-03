@@ -4,17 +4,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmconfirmTransactionBinding
-import ph.edu.dlsu.finwise.model.ChildWallet
-import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 import kotlin.math.abs
 
 class ConfirmTransactionActivity : AppCompatActivity() {
@@ -26,7 +23,6 @@ class ConfirmTransactionActivity : AppCompatActivity() {
     var name : String? =null
     var category : String? =null
     var amount : String? =null
-    var goal : String? =null
     var date : String? =null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +52,6 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         name = bundle!!.getString("transactionName")
         category = bundle!!.getString("category")
         amount = bundle!!.getFloat("amount").toString()
-        goal = bundle!!.getString("goal")
         date = bundle!!.getSerializable("date").toString()
 
         transactionType = bundle!!.getString("transactionType")
@@ -73,7 +68,10 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         binding.tvCategory.text = category
         binding.tvAmount.text = "₱$textAmount"
         //binding.tvGoal.text = goal
-        binding.tvDate.text = date
+        val formatter = SimpleDateFormat("MM/dd/yyyy")
+        val dateSerializable = bundle!!.getSerializable("date")
+        val dateText = formatter.format(dateSerializable).toString()
+        binding.tvDate.text = dateText
 
     }
 
@@ -87,8 +85,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
                 "category" to category,
                 "date" to bundle!!.getSerializable("date"),
                 "createdBy" to "",
-                "amount" to amount?.toFloat(),
-                "goal" to goal,
+                "amount" to amount?.toFloat()
             )
             adjustUserBalance()
             // TODO: Change where transaction is added

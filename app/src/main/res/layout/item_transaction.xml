@@ -43,7 +43,6 @@
                 android:id="@+id/tv_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/tv_goal"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"

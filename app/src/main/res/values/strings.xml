@@ -168,7 +168,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="pfm_income_category">
-        <item>--Select Category--</item>
         <item>Allowance</item>
         <item>Gift</item>
         <item>Reward</item>
@@ -176,7 +175,6 @@
     </string-array>
 
     <string-array name="pfm_expense_category">
-        <item>--Select Category--</item>
         <item>Clothes</item>
         <item>Food</item>
         <item>Gift</item>

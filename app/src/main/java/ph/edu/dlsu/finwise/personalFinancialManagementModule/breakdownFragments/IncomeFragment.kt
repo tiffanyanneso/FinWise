@@ -17,11 +17,14 @@ import com.github.mikephil.charting.utils.MPPointF
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
 import ph.edu.dlsu.finwise.databinding.FragmentIncomeBinding
+import ph.edu.dlsu.finwise.model.Transactions
 
 
 class IncomeFragment : Fragment(R.layout.fragment_income) {
     private lateinit var pieChart: PieChart
     private lateinit var binding: FragmentIncomeBinding
+    private var transactionsArrayList = ArrayList<Transactions>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +47,8 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     }
 
     private fun loadPieChart(pieChartLayout: Int) {
+
+
 
         pieChart = view?.findViewById(pieChartLayout)!!
         //  setting user percent value, setting description as enabled, and offset for pie chart
