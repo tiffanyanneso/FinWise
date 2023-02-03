@@ -90,7 +90,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
                             android:layout_marginTop="10dp"
-                            android:text="Food"
+                            android:text="None"
                             android:textColor="@color/black"
                             android:textStyle="bold"/>
                     </LinearLayout>
@@ -107,7 +107,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="18sp"
-                            android:text="₱XXXX.XX"
+                            android:text="₱"
                             android:layout_marginTop="30dp"
                             android:textColor="@color/red"
                             android:gravity="right"

@@ -70,9 +70,9 @@ class TransactionsAdapter: RecyclerView.Adapter<TransactionsAdapter.TransactionV
                 val date = formatter.format(transaction?.date?.toDate())
                 itemBinding.tvDate.text =  date.toString()
                 if (transaction?.transactionType == "income")
-                    itemBinding.tvAmount.text = "+₱"+ amount
+                    itemBinding.tvAmount.text = "+₱$amount"
                 else
-                    itemBinding.tvAmount.text = "-₱"+ amount
+                    itemBinding.tvAmount.text = "-₱$amount"
             }
         }
 

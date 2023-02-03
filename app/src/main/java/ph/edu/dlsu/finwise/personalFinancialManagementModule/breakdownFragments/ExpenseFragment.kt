@@ -21,6 +21,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentExpenseBinding
 import ph.edu.dlsu.finwise.databinding.FragmentIncomeBinding
 import ph.edu.dlsu.finwise.model.Transactions
+import java.text.DecimalFormat
 
 
 class ExpenseFragment : Fragment(R.layout.fragment_expense) {
@@ -34,6 +35,12 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     var toysAndGamesPercentage = 0.00f
     var transportationPercentage = 0.00f
     var otherPercentage = 0.00f
+    var clothes = 0.00f
+    var food = 0.00f
+    var gift = 0.00f
+    var toysAndGames = 0.00f
+    var transportation = 0.00f
+    var other = 0.00f
 
 
 
@@ -72,13 +79,6 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     }
 
     private fun calculatePercentage() {
-        var clothes = 0.00f
-        var food = 0.00f
-        var gift = 0.00f
-        var toysAndGames = 0.00f
-        var transportation = 0.00f
-        var other = 0.00f
-
         for (transaction in transactionsArrayList) {
             when (transaction.category) {
                 "Clothes" -> clothes += transaction.amount!!.toFloat()
@@ -98,7 +98,47 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         transportationPercentage = transportation / total * 100
         otherPercentage = other / total * 100
 
+        topExpense()
         loadPieChartView()
+    }
+
+    private fun topExpense() {
+        if (clothes >= food && clothes >= gift && clothes >= toysAndGames
+            && clothes >= transportation && clothes >= other) {
+            binding.tvTopExpense.text = "Clothes"
+            val dec = DecimalFormat("#,###.00")
+            val amount = dec.format(clothes)
+            binding.tvExpenseTotal.text = "₱$amount"
+        } else if (food >= clothes && food >= gift && food >= toysAndGames &&
+            food >= transportation && food >= other) {
+            binding.tvTopExpense.text = "Food"
+            val dec = DecimalFormat("#,###.00")
+            val amount = dec.format(food)
+            binding.tvExpenseTotal.text = "₱$amount"
+        } else if (gift >= clothes && gift >= food && gift >= toysAndGames &&
+            gift >= transportation && gift >= other) {
+            binding.tvTopExpense.text = "Gift"
+            val dec = DecimalFormat("#,###.00")
+            val amount = dec.format(gift)
+            binding.tvTopExpense.text = "₱$amount"
+        } else if (toysAndGames >= clothes && toysAndGames >= gift && toysAndGames >= food &&
+            toysAndGames >= transportation && toysAndGames >= other) {
+            binding.tvTopExpense.text = "Toys & Games"
+            val dec = DecimalFormat("#,###.00")
+            val amount = dec.format(toysAndGames)
+            binding.tvExpenseTotal.text = "₱$amount"
+        } else if (transportation >= clothes && transportation >= gift && transportation >= toysAndGames
+            && transportation >= food && transportation >= other) {
+            binding.tvTopExpense.text = "Transportation"
+            val dec = DecimalFormat("#,###.00")
+            val amount = dec.format(transportation)
+            binding.tvExpenseTotal.text = "₱$amount"
+        } else {
+            binding.tvTopExpense.text = "Other"
+            val dec = DecimalFormat("#,###.00")
+            val amount = dec.format(other)
+            binding.tvExpenseTotal.text = "₱$amount"
+        }
     }
 
     private fun loadPieChartView() {

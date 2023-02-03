@@ -21,6 +21,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentIncomeBinding
 import ph.edu.dlsu.finwise.model.Transactions
+import java.text.DecimalFormat
 
 
 class IncomeFragment : Fragment(R.layout.fragment_income) {
@@ -32,6 +33,10 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     var giftPercentage = 0.00f
     var rewardPercentage = 0.00f
     var otherPercentage = 0.00f
+    var allowance = 0.00f
+    var gift = 0.00f
+    var reward = 0.00f
+    var other = 0.00f
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,10 +75,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     }
 
     private fun calculatePercentage() {
-        var allowance = 0.00f
-        var gift = 0.00f
-        var reward = 0.00f
-        var other = 0.00f
 
         for (transaction in transactionsArrayList) {
             when (transaction.category) {
@@ -90,7 +91,32 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         rewardPercentage = reward / total * 100
         otherPercentage = other / total * 100
 
+        topIncome()
         loadPieChartView()
+    }
+
+    private fun topIncome() {
+        if (allowance >= gift && allowance >= reward && allowance >= other) {
+            binding.tvTopIncome.text = "Allowance"
+            val dec = DecimalFormat("#,###.00")
+            val amount = dec.format(allowance)
+            binding.tvIncomeTotal.text = "₱$amount"
+        } else if (gift >= allowance && gift >= reward && gift >= other) {
+            binding.tvTopIncome.text = "Gift"
+            val dec = DecimalFormat("#,###.00")
+            val amount = dec.format(gift)
+            binding.tvIncomeTotal.text = "₱$amount"
+        } else if (reward >= allowance && reward >= gift && reward >= other) {
+            binding.tvTopIncome.text = "Reward"
+            val dec = DecimalFormat("#,###.00")
+            val amount = dec.format(reward)
+            binding.tvIncomeTotal.text = "₱$amount"
+        } else {
+            binding.tvTopIncome.text = "Other"
+            val dec = DecimalFormat("#,###.00")
+            val amount = dec.format(other)
+            binding.tvIncomeTotal.text = "₱$amount"
+        }
     }
 
     private fun loadPieChartView() {
@@ -176,7 +202,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     private fun initializeEntriesPieChart(): ArrayList<PieEntry> {
         val entries: ArrayList<PieEntry> = ArrayList()
 
-        if (allowancePercentage > 0.00f) 
+        if (allowancePercentage > 0.00f)
             entries.add(PieEntry(allowancePercentage, "Allowance"))
 
         if (giftPercentage > 0.00f)
