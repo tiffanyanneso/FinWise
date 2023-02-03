@@ -14,10 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.AchievedFragment
-import ph.edu.dlsu.finwise.InProgressFragment
-import ph.edu.dlsu.finwise.Navbar
-import ph.edu.dlsu.finwise.R
+import ph.edu.dlsu.finwise.*
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialBinding
 import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityTestFinancialBinding
@@ -44,9 +41,9 @@ class FinancialActivity : AppCompatActivity() {
 
         // TODO: change the fragments added based on parent approval
         adapter.addFragment(InProgressFragment(),"In Progress")
-//        adapter.addFragment(GoalForReviewFragment(),"For Review")
-//        adapter.addFragment(GoalForEditingFragment(),"For Editing")
-//        adapter.addFragment(GoalDisapprovedFragment(),"Disapproved")
+        adapter.addFragment(ForReviewFragment(),"For Review")
+        adapter.addFragment(ForEditingFragment(),"For Editing")
+        adapter.addFragment(DisapprovedFragment(),"Disapproved")
         adapter.addFragment(AchievedFragment(),"Achieved")
 
         binding.viewPager.adapter = adapter
