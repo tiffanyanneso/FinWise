@@ -29,9 +29,9 @@ class ParentGoalActivity : AppCompatActivity() {
 
         // TODO: change the fragments added based on parent approval
         adapter.addFragment(ParentInProgressFragment(),"In Progress")
-//        adapter.addFragment(GoalForReviewFragment(),"For Review")
-//        adapter.addFragment(GoalForEditingFragment(),"For Editing")
-//        adapter.addFragment(GoalDisapprovedFragment(),"Disapproved")
+        adapter.addFragment(ParentForReviewFragment(),"For Review")
+        adapter.addFragment(ParentForEditingFragment(),"For Editing")
+        adapter.addFragment(ParentDisapprovedFragment(),"Disapproved")
         adapter.addFragment(ParentAchievedFragment(),"Achieved")
 
         binding.viewPager.adapter = adapter
