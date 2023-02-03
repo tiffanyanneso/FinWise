@@ -14,25 +14,30 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
     private lateinit var binding : ActivityParentSettingAgoalBinding
     private lateinit var context: Context
 
+    private lateinit var financialGoalID:String
+    private lateinit var childUserID:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityParentSettingAgoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        context= this
+
+        var bundle = intent.extras!!
+        financialGoalID = bundle.getString("financialGoalID").toString()
+        childUserID = bundle.getString("childUserID").toString()
+
+
 
         binding.btnReviewGoal.setOnClickListener {
-            var goToReviewGoal = Intent(context, FinancialActivity::class.java)
+            var goToReviewGoal = Intent(context, ReviewGoalActivity::class.java)
             var bundle = Bundle()
 
-            bundle.putString("goal", binding.tvGoalName.text.toString())
-            bundle.putString("actvity", binding.tvActivity.text.toString())
-            bundle.putString("amount", binding.tvAmount.text.toString())
-            bundle.putString("target_date", binding.tvTargetDate.text.toString())
+            bundle.putString("financialGoalID", financialGoalID)
+            bundle.putString("childUserID", childUserID)
 
             goToReviewGoal.putExtras(bundle)
             goToReviewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-            context.startActivity(goToReviewGoal)
+            this.startActivity(goToReviewGoal)
         }
     }
 }
