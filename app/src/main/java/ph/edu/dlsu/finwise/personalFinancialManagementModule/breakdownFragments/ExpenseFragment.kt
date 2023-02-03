@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -16,16 +15,25 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.MPPointF
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
+import ph.edu.dlsu.finwise.databinding.FragmentExpenseBinding
+import ph.edu.dlsu.finwise.databinding.FragmentIncomeBinding
 import ph.edu.dlsu.finwise.model.Transactions
 
 
-class ExpenseFragment : Fragment() {
+class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     lateinit var pieChart: PieChart
+    private lateinit var binding: FragmentExpenseBinding
     private var firestore = Firebase.firestore
     private var transactionsArrayList = ArrayList<Transactions>()
+    var clothesPercentage = 0.00f
+    var foodPercentage = 0.00f
+    var giftPercentage = 0.00f
+    var toysAndGamesPercentage = 0.00f
+    var transportationPercentage = 0.00f
+    var otherPercentage = 0.00f
 
 
 
@@ -43,27 +51,58 @@ class ExpenseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        loadPieChart(R.id.pc_expense)
+        binding = FragmentExpenseBinding.bind(view)
+        loadPieChart()
     }
 
-    private fun loadPieChart(pieChartLayout: Int) {
-            //TODO:change to get transactions of current user
-            //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-            //firestore.collection("Transactions").whereEqualTo("transactionID", currentUser).get()
-            // .addOnSuccessListener{ documents ->
-
-            firestore.collection("Transactions").get().addOnSuccessListener { documents ->
-                for (transactionSnapshot in documents) {
-                    //creating the object from list retrieved in db
-                    val transactionID = transactionSnapshot.id
-                    //transactionIDArrayList.add(transactionID)
+    private fun loadPieChart() {
+        //TODO: Update data based on user
+        /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
+        firestore.collection("Transactions").get()
+            .addOnSuccessListener { transactionsSnapshot ->
+                lateinit var id: String
+                for (document in transactionsSnapshot) {
+                    var transaction = document.toObject<Transactions>()
+                    if (transaction.transactionType == "Expense")
+                        transactionsArrayList.add(transaction)
                 }
 
+                calculatePercentage()
             }
+    }
 
+    private fun calculatePercentage() {
+        var clothes = 0.00f
+        var food = 0.00f
+        var gift = 0.00f
+        var toysAndGames = 0.00f
+        var transportation = 0.00f
+        var other = 0.00f
 
-        pieChart = view?.findViewById(pieChartLayout)!!
+        for (transaction in transactionsArrayList) {
+            when (transaction.category) {
+                "Clothes" -> clothes += transaction.amount!!.toFloat()
+                "Food" -> food += transaction.amount!!.toFloat()
+                "Gift" -> gift += transaction.amount!!.toFloat()
+                "Toys & Games" -> toysAndGames += transaction.amount!!.toFloat()
+                "Transportation" -> transportation += transaction.amount!!.toFloat()
+                "Other" -> other += transaction.amount!!.toFloat()
+            }
+        }
+        val total = clothes + food + gift + toysAndGames + transportation + other
+
+        clothesPercentage = clothes / total * 100
+        foodPercentage = food / total * 100
+        giftPercentage = gift / total * 100
+        toysAndGamesPercentage = toysAndGames / total * 100
+        transportationPercentage = transportation / total * 100
+        otherPercentage = other / total * 100
+
+        loadPieChartView()
+    }
+
+    private fun loadPieChartView() {
+        pieChart = view?.findViewById(R.id.pc_expense)!!
         //  setting user percent value, setting description as enabled, and offset for pie chart
         pieChart.setUsePercentValues(true)
         pieChart.description.isEnabled = false
@@ -103,16 +142,7 @@ class ExpenseFragment : Fragment() {
 
         //  creating array list and
         // adding data to it to display in pie chart
-        // TODO: compute for percentage based on user
-        val entries: ArrayList<PieEntry> = ArrayList()
-        entries.add(PieEntry(25f, "Food"))
-        entries.add(PieEntry(10f, "Game"))
-        entries.add(PieEntry(2f, "Toy"))
-        entries.add(PieEntry(15f, "Transportation"))
-        entries.add(PieEntry(3f, "Other"))
-
-
-
+        val entries = initializeEntriesPieChart()
         // setting pie data set
         val dataSet = PieDataSet(entries, "")
 
@@ -150,5 +180,28 @@ class ExpenseFragment : Fragment() {
         pieChart.invalidate()
     }
 
+    private fun initializeEntriesPieChart(): ArrayList<PieEntry> {
+        val entries: ArrayList<PieEntry> = ArrayList()
+
+        if (clothesPercentage > 0.00f)
+            entries.add(PieEntry(clothesPercentage, "Clothes"))
+
+        if (foodPercentage > 0.00f)
+            entries.add(PieEntry(foodPercentage, "Food"))
+
+        if (toysAndGamesPercentage > 0.00f)
+            entries.add(PieEntry(toysAndGamesPercentage, "Gift"))
+
+        if (transportationPercentage > 0.00f)
+            entries.add(PieEntry(transportationPercentage, "Toys & Games"))
+
+        if (transportationPercentage > 0.00f)
+            entries.add(PieEntry(transportationPercentage, "Transportation"))
+
+        if (otherPercentage > 0.00f)
+            entries.add(PieEntry(otherPercentage, "Other"))
+
+        return entries
+    }
 
 }

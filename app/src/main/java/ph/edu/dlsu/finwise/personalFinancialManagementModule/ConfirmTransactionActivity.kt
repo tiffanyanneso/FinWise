@@ -55,7 +55,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         date = bundle!!.getSerializable("date").toString()
 
         transactionType = bundle!!.getString("transactionType")
-        if (transactionType == "income") {
+        if (transactionType == "Income") {
             binding.tvTitle.text = "Confirm Income"
             binding.tvTransactionType.text = "Income Amount"
         } else {

@@ -139,7 +139,7 @@ class RecordDepositActivity : AppCompatActivity() {
         //getCurrentTime()
         val goal = binding.dropdownActivity.text.toString()
 
-        bundle.putString("transactionType", "goal")
+        bundle.putString("transactionType", "Deposit")
         bundle.putFloat("amount", amount.toFloat())
         bundle.putString("goal", goal)
         bundle.putString("source", "PFMDepositToGoal")

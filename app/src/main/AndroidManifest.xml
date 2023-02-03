@@ -250,14 +250,11 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-<<<<<<< Updated upstream
             android:exported="false"/>
 
            <!-- <intent-filter>
-=======
             android:exported="true">
             <intent-filter>
->>>>>>> Stashed changes
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -266,12 +263,9 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
-<<<<<<< Updated upstream
 
         </activity>-->
 
-=======
-        </activity>
         <!--
     <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -283,7 +277,7 @@
                 android:value="" />
         </activity>
         -->
->>>>>>> Stashed changes
+
         <activity
             android:name=".MainActivity"
             android:exported="false">

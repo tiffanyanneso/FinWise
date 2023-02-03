@@ -126,7 +126,7 @@ class RecordExpenseActivity : AppCompatActivity() {
     private fun setBundle() {
         //val goal = binding.spinnerGoal.selectedItem.toString()
 
-        bundle.putString("transactionType", "expense")
+        bundle.putString("transactionType", "Expense")
         bundle.putString("transactionName", name)
         bundle.putString("category", category)
         bundle.putFloat("amount", amount.toFloat())

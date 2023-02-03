@@ -120,7 +120,7 @@ class RecordIncomeActivity : AppCompatActivity() {
         //getCurrentTime()
 //        val goal = binding.spinnerGoal.selectedItem.toString()
 
-        bundle.putString("transactionType", "income")
+        bundle.putString("transactionType", "Income")
         bundle.putString("transactionName", name)
         bundle.putString("category", category)
         bundle.putFloat("amount", amount.toFloat())

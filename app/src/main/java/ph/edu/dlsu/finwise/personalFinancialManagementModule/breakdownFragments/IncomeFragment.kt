@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -14,8 +15,10 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.utils.MPPointF
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
 import ph.edu.dlsu.finwise.databinding.FragmentIncomeBinding
 import ph.edu.dlsu.finwise.model.Transactions
 
@@ -23,7 +26,12 @@ import ph.edu.dlsu.finwise.model.Transactions
 class IncomeFragment : Fragment(R.layout.fragment_income) {
     private lateinit var pieChart: PieChart
     private lateinit var binding: FragmentIncomeBinding
+    private var firestore = Firebase.firestore
     private var transactionsArrayList = ArrayList<Transactions>()
+    var allowancePercentage = 0.00f
+    var giftPercentage = 0.00f
+    var rewardPercentage = 0.00f
+    var otherPercentage = 0.00f
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,15 +50,51 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentIncomeBinding.bind(view)
 
-
-        loadPieChart(R.id.pc_income)
+        loadPieChart()
     }
 
-    private fun loadPieChart(pieChartLayout: Int) {
+    private fun loadPieChart() {
+        //TODO: Update data based on user
+        /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
+        firestore.collection("Transactions").get()
+            .addOnSuccessListener { transactionsSnapshot ->
+                lateinit var id: String
+                for (document in transactionsSnapshot) {
+                    var transaction = document.toObject<Transactions>()
+                    if (transaction.transactionType == "Income")
+                        transactionsArrayList.add(transaction)
+                }
 
+                calculatePercentage()
+            }
+    }
 
+    private fun calculatePercentage() {
+        var allowance = 0.00f
+        var gift = 0.00f
+        var reward = 0.00f
+        var other = 0.00f
 
-        pieChart = view?.findViewById(pieChartLayout)!!
+        for (transaction in transactionsArrayList) {
+            when (transaction.category) {
+                "Allowance" -> allowance += transaction.amount!!.toFloat()
+                "Gift" -> gift += transaction.amount!!.toFloat()
+                "Reward" -> reward += transaction.amount!!.toFloat()
+                "Other" -> other += transaction.amount!!.toFloat()
+            }
+        }
+        val total = allowance + gift + reward + other
+
+        allowancePercentage = allowance / total * 100
+        giftPercentage = gift / total * 100
+        rewardPercentage = reward / total * 100
+        otherPercentage = other / total * 100
+
+        loadPieChartView()
+    }
+
+    private fun loadPieChartView() {
+        pieChart = view?.findViewById(R.id.pc_income)!!
         //  setting user percent value, setting description as enabled, and offset for pie chart
         pieChart.setUsePercentValues(true)
         pieChart.description.isEnabled = false
@@ -90,16 +134,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
 
         //  creating array list and
         // adding data to it to display in pie chart
-        // TODO: Update data
-        val entries: ArrayList<PieEntry> = ArrayList()
-        entries.add(PieEntry(25f, "Allowance"))
-        entries.add(PieEntry(10f, "Gift"))
-        entries.add(PieEntry(2f, "Birthday"))
-        entries.add(PieEntry(15f, "Reward"))
-        entries.add(PieEntry(3f, "Other"))
-
-
-
+        val entries = initializeEntriesPieChart()
 
         // setting pie data set
         val dataSet = PieDataSet(entries, "")
@@ -137,6 +172,28 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         // loading chart
         pieChart.invalidate()
     }
+
+    private fun initializeEntriesPieChart(): ArrayList<PieEntry> {
+        val entries: ArrayList<PieEntry> = ArrayList()
+
+        if (allowancePercentage > 0.00f) 
+            entries.add(PieEntry(allowancePercentage, "Allowance"))
+
+        if (giftPercentage > 0.00f)
+            entries.add(PieEntry(giftPercentage, "Gift"))
+
+        if (rewardPercentage > 0.00f)
+            entries.add(PieEntry(rewardPercentage, "Reward"))
+
+        if (otherPercentage > 0.00f)
+            entries.add(PieEntry(otherPercentage, "Other"))
+
+
+
+
+        return entries
+    }
+
 
 
 }

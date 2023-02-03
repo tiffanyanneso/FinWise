@@ -188,7 +188,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 val transactionID = transactionSnapshot.id
                 transactionIDArrayList.add(transactionID)
             }
-
+            transactionsArrayList.sortByDescending { it.date }
             transactionAdapter = TransactionsAdapter(applicationContext, transactionIDArrayList)
             binding.rvViewTransactions.adapter = transactionAdapter
             binding.rvViewTransactions.layoutManager = LinearLayoutManager(applicationContext,
