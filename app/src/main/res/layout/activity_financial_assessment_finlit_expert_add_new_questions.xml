@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity">
+    tools:context=".financialAssessmentModuleFinlitExpert.FinlitExpertAddNewQuestionsActivity">
+
 
     <TextView
         android:id="@+id/tv_title"
@@ -14,7 +15,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:textSize="24sp"
-        android:text="Assessment Name"
+        android:text="Add New Question"
         android:gravity="center"
         android:textStyle="bold"
         android:layout_marginTop="20dp"
@@ -31,23 +32,14 @@
 
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="Details"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tv_title_number_of_questions"
+            android:id="@+id/tv_title_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/tv_title"
             android:textSize="18dp"
             android:textAllCaps = "true"
-            android:text="@string/number_of_questions"
-            android:layout_marginTop="20dp"
+            android:text="@string/question"
+            android:layout_marginTop="60dp"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginStart="20dp"
@@ -66,50 +58,23 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"/>
 
-        <TextView
-            android:id="@+id/tv_title_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_goal_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="18dp"
-            android:layout_marginTop="10dp"
-            android:textAllCaps = "true"
-            android:text="@string/description"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"/>
 
-        <TextView
-            android:id="@+id/tv_description"
-            app:layout_constraintTop_toBottomOf="@+id/tv_goal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:layout_marginTop="5dp"
-            android:text="XXXX"
-            android:textColor="@color/black"
-            android:textSize="18dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="Questions"
+            android:text="Choices"
             android:textColor="@color/black"
             android:textSize="20dp"
             android:textStyle="bold" />
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_add_new_questions"
+            android:id="@+id/btn_add_new_choices"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_new_questions"
+            android:text="@string/add_new_choices"
             android:textColor="@color/off_white"
             android:backgroundTint="@color/dark_green"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -119,12 +84,12 @@
             />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_questions"
+            android:id="@+id/rv_view_choice"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="8"
             android:layout_marginTop="10dp"
-            tools:listitem="@layout/item_questions"/>
+            tools:listitem="@layout/item_add_new_choice"/>
 
     </LinearLayout>
 
@@ -158,26 +123,8 @@
         android:layout_marginEnd="20dp"
         />
 
-<!--
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_cancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="@string/cancel"
-        android:textColor="@color/black"
-        android:backgroundTint="@color/light_grey"
-        android:background="@drawable/button_border_grey"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="80dp"
 
-        />
--->
-
-
-    <!--Bottom navigation bar-->
+<!--Bottom navigation bar-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_finlit_expert"
         android:layout_width="match_parent"
