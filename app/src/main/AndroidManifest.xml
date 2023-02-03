@@ -13,6 +13,9 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".ParentGoalActivity"
+            android:exported="false" />
+        <activity
             android:name=".financialActivitiesModule.ConfirmWithdraw"
             android:exported="false">
             <meta-data
@@ -29,7 +32,9 @@
         <activity
             android:name=".TestFinancialActivity"
             android:exported="false">
-<!--            <intent-filter>
+
+            <!--
+                <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -37,7 +42,8 @@
 
             <meta-data
                 android:name="android.app.lib_name"
-                android:value="" />-->
+                android:value="" />
+            -->
 
         </activity>
         <activity
@@ -137,8 +143,10 @@
         </activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity"
-            android:exported="false" >
-   <!--     <intent-filter>
+            android:exported="false">
+
+            <!--
+            <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
@@ -147,13 +155,14 @@
         <meta-data
             android:name="android.app.lib_name"
             android:value="" />
--->
+            -->
         </activity>
-
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertEditAssessmentActivity"
-            android:exported="false" >
-         <!--        <intent-filter>
+            android:exported="false">
+
+            <!--
+                     <intent-filter>
                      <action android:name="android.intent.action.MAIN" />
 
                      <category android:name="android.intent.category.LAUNCHER" />
@@ -161,24 +170,18 @@
 
                  <meta-data
                      android:name="android.app.lib_name"
-                     android:value="" />-->
+                     android:value="" />
+            -->
         </activity>
-
-
-
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertQuestionsActivity"
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertProfileActivity"
-            android:exported="false" >
-    </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertSpecificAssessmentActivity"
-            android:exported="false">
-        </activity>
-
-
+            android:exported="false"></activity>
         <!--
 <activity
             android:name=".personalFinancialManagementModule.EditTransactionActivity"
@@ -226,8 +229,7 @@
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"
             android:exported="false" />
@@ -248,9 +250,14 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
+<<<<<<< Updated upstream
             android:exported="false"/>
 
            <!-- <intent-filter>
+=======
+            android:exported="true">
+            <intent-filter>
+>>>>>>> Stashed changes
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -259,9 +266,24 @@
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+<<<<<<< Updated upstream
 
         </activity>-->
 
+=======
+        </activity>
+        <!--
+    <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        -->
+>>>>>>> Stashed changes
         <activity
             android:name=".MainActivity"
             android:exported="false">
