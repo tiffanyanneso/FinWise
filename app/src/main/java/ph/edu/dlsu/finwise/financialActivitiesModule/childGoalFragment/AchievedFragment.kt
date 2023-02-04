@@ -37,7 +37,7 @@ class AchievedFragment : Fragment() {
 
     private fun getAchievedGoals() {
         var goalIDArrayList = ArrayList<String>()
-        var filter = "Achieved"
+        var filter = "Completed"
 
         //TODO:change to get transactions of current user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
