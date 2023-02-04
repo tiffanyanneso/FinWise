@@ -15,7 +15,7 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
     private lateinit var context: Context
 
     private lateinit var financialGoalID:String
-    private lateinit var childUserID:String
+    private lateinit var childID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +24,7 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
-        childUserID = bundle.getString("childUserID").toString()
+        childID = bundle.getString("childID").toString()
 
 
 
@@ -33,7 +33,7 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
             var bundle = Bundle()
 
             bundle.putString("financialGoalID", financialGoalID)
-            bundle.putString("childUserID", childUserID)
+            bundle.putString("childID", childID)
 
             goToReviewGoal.putExtras(bundle)
             goToReviewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

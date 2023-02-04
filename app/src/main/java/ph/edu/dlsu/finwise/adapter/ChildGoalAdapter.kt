@@ -62,8 +62,7 @@ class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHold
                 itemBinding.tvGoalId.text = document.id
                 itemBinding.tvGoal.text = goal?.goalName
                 // convert timestamp to date
-                val formatter = SimpleDateFormat("MM/dd/yyyy")
-                val date = formatter.format(goal?.targetDate?.toDate())
+                val date = SimpleDateFormat("MM/dd/yyyy").format(goal?.targetDate?.toDate())
                 itemBinding.tvTargetDate.text = date.toString()
                 itemBinding.tvProgressAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(goal?.currentAmount) + "/ ₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
                 /*for (goalSnapshot in documents) {

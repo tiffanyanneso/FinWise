@@ -9,6 +9,7 @@ class FinancialGoals(
     var dateCreated: Timestamp?=null,
     var createdBy:String?=null,
     var targetDate:Timestamp?=null,
+    var goalLength:String?=null,
     var targetAmount:Float?=null,
     var currentAmount:Float?=null,
     var financialActivity:String?=null,

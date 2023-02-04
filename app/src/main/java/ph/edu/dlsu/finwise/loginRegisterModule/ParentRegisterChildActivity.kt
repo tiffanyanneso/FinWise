@@ -59,12 +59,12 @@ class ParentRegisterChildActivity : AppCompatActivity() {
 
                         println("current/child user   " + FirebaseAuth.getInstance().currentUser!!.uid.toString())
 
-                        val childUserID = FirebaseAuth.getInstance().currentUser!!.uid
+                        val childID = FirebaseAuth.getInstance().currentUser!!.uid
 
-                        firestore.collection("ChildUser").document(childUserID).set(user).addOnSuccessListener { childUser ->
+                        firestore.collection("ChildUser").document(childID).set(user).addOnSuccessListener { childUser ->
                             clearForm()
-                            createChildWallet(childUserID)
-                            createGoalSettings(parentuserID, childUserID)
+                            createChildWallet(childID)
+                            createGoalSettings(parentuserID, childID)
                             Toast.makeText(this, "Child register successful", Toast.LENGTH_SHORT).show()
                             //TODO: change current user back to parent
                             println("current/parent user   " + FirebaseAuth.getInstance().currentUser!!.uid.toString())
@@ -105,14 +105,14 @@ class ParentRegisterChildActivity : AppCompatActivity() {
         }
     }
 
-    private fun createChildWallet(childUserID:String) {
+    private fun createChildWallet(childID:String) {
 
         val time = Calendar.getInstance().time
         //val formatter = SimpleDateFormat("MM/dd/yyyy")
         //val current = formatter.format(time)
 
         var wallet = hashMapOf(
-            "childID" to childUserID,
+            "childID" to childID,
             "currentBalance" to 0,
             "lastUpdated" to time
         )

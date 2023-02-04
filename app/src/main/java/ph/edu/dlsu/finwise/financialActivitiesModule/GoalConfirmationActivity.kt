@@ -20,6 +20,9 @@ import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import ph.edu.dlsu.finwise.model.GoalSettings
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -32,6 +35,8 @@ class GoalConfirmationActivity : AppCompatActivity() {
     private lateinit var context: Context
 
     private var goalStatus=""
+
+    private lateinit var goalLength:String
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +84,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
                 else if (goalSettings?.autoApproved == true)*/
                     goalStatus = "In Progress"
 
+                computeDateDifference(formattedDate)
 
                 var goal = hashMapOf(
                     //TODO: add childID, createdBy
@@ -87,6 +93,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
                     "dateCreated" to Timestamp.now(),
                     "createdBy" to "",
                     "targetDate" to targetDate,
+                    "goalLength" to goalLength,
                     "targetAmount" to bundle.getFloat("amount"),
                     "currentAmount" to 0,
                     "financialActivity" to bundle.getString("activity"),
@@ -145,5 +152,24 @@ class GoalConfirmationActivity : AppCompatActivity() {
             goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(goToNewGoal)
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun computeDateDifference(targetDate:String) {
+        val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+
+        val from = LocalDate.now()
+        val to = LocalDate.parse(targetDate, dateFormatter)
+
+        var difference = Period.between(from, to)
+        println("difference day  " + difference.days)
+        println("difference month  " + difference.months)
+
+        if (difference.days <= 14 && difference.months < 1 )
+            goalLength = "Short"
+        else if (difference.months < 1)
+            goalLength = "Medium"
+        else
+            goalLength = "Long"
     }
 }

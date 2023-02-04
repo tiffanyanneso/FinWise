@@ -10,9 +10,10 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
-import ph.edu.dlsu.finwise.databinding.ActivityFinancialBinding
 import ph.edu.dlsu.finwise.databinding.ActivityTestFinancialBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
+import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.AchievedFragment
+import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.InProgressFragment
 
 class TestFinancialActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.financialActivitiesModule.parentGoalFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,7 +10,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
-import ph.edu.dlsu.finwise.databinding.FragmentInProgressBinding
 import ph.edu.dlsu.finwise.databinding.FragmentParentInProgressBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.util.*
@@ -22,9 +21,12 @@ class ParentInProgressFragment : Fragment() {
     private var firestore = Firebase.firestore
     private lateinit var goalAdapter: ChildGoalAdapter
 
+    private lateinit var childID:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
+            childID = requireArguments().getString("childID").toString()
             getInProgressGoals()
         }
     }

@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,16 +11,16 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentDisapprovedBinding
-import ph.edu.dlsu.finwise.databinding.FragmentParentDisapprovedBinding
-import ph.edu.dlsu.finwise.databinding.FragmentParentForReviewBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.util.*
+import kotlin.collections.ArrayList
 
-class ParentDisapprovedFragment : Fragment() {
+class DisapprovedFragment : Fragment() {
 
     private lateinit var binding: FragmentDisapprovedBinding
     private var firestore = Firebase.firestore
     private lateinit var goalAdapter: ChildGoalAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +41,7 @@ class ParentDisapprovedFragment : Fragment() {
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
     }
 
+
     private fun getDisapprovedGoals() {
         var goalIDArrayList = ArrayList<String>()
         var filter = "Disapproved"
@@ -56,12 +57,7 @@ class ParentDisapprovedFragment : Fragment() {
                 var goalID = goalSnapshot.id
                 var goal = goalSnapshot.toObject<FinancialGoals>()
                 //goalIDArrayList.add(goalID)
-                goalFilterArrayList.add(
-                    GoalFilter(
-                        goalID,
-                        goal?.targetDate!!.toDate()
-                    )
-                )
+                goalFilterArrayList.add(GoalFilter(goalID, goal?.targetDate!!.toDate()))
             }
             goalFilterArrayList.sortBy { it.goalTargetDate }
             for (goalFilter in goalFilterArrayList)

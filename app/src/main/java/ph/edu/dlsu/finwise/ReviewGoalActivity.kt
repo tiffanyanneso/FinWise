@@ -18,7 +18,7 @@ class ReviewGoalActivity : AppCompatActivity() {
 
     private lateinit var financialGoalID:String
 
-    private lateinit var childUserID:String
+    private lateinit var childID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,7 @@ class ReviewGoalActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
-        childUserID = bundle.getString("childUserID").toString()
+        childID = bundle.getString("childID").toString()
 
         getGoalDetails()
 
@@ -49,7 +49,7 @@ class ReviewGoalActivity : AppCompatActivity() {
     private fun submitGoalRating() {
         var rating = hashMapOf(
             "parentID" to FirebaseAuth.getInstance().currentUser!!.uid,
-            "childID" to childUserID,
+            "childID" to childID,
             "financialGoalID" to financialGoalID,
             "specific" to binding.ratingBarSpecific.rating,
             "measurable" to binding.ratingBarMeasurable.rating,
