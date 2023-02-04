@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -8,6 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -81,6 +83,9 @@ class ChildNewGoal : AppCompatActivity() {
             }
         }
 
+        binding.etTargetDate.setOnClickListener{
+            showCalendar()
+        }
 
         binding.btnNext.setOnClickListener {
             var goToGoalConfirmation = Intent(this, GoalConfirmationActivity::class.java)
@@ -89,8 +94,10 @@ class ChildNewGoal : AppCompatActivity() {
             var goalName =  binding.etGoal.text.toString()
             var activity = binding.dropdownActivity.text.toString()
             var amount = binding.etAmount.text.toString().toFloat()
-            var targetDate = SimpleDateFormat("MM-dd-yyyy").parse((binding.etTargetDate.month+1).toString() + "-" +
-                    binding.etTargetDate.dayOfMonth.toString() + "-" + binding.etTargetDate.year)
+            var targetDate = binding.etTargetDate.toString()
+
+//                SimpleDateFormat("MM-dd-yyyy").parse((binding.etTargetDate.month+1).toString() + "-" +
+//                    binding.etTargetDate.dayOfMonth.toString() + "-" + binding.etTargetDate.year)
             var goalIsForSelf = binding.cbGoalSelf.isChecked
 
             //see which decision making activities were selected
@@ -122,6 +129,21 @@ class ChildNewGoal : AppCompatActivity() {
         binding.btnCancel.setOnClickListener {
             val goalList = Intent(this, FinancialActivity::class.java)
             this.startActivity(goalList)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showCalendar() {
+        val dialog = Dialog(this)
+
+        dialog.setContentView(R.layout.dialog_calendar)
+        dialog.window!!.setLayout(1000, 1500)
+
+        var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
+
+        calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
+            binding.etTargetDate.setText((mMonth.toString() + 1) + "/" + mDay.toString() + "/" + mYear.toString())
+            dialog.dismiss()
         }
     }
 
