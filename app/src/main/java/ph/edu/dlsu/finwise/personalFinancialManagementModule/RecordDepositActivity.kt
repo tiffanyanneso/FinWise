@@ -1,10 +1,7 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
-import android.R
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +11,6 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordDepositBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -27,7 +23,7 @@ class RecordDepositActivity : AppCompatActivity() {
 
     private var goals = ArrayList<String>()
     private var goalArrayID = ArrayList<String>()
-    private var goal = FinancialGoals()
+    lateinit var goal : String
     lateinit var amount: String
     lateinit var date: Date
 
@@ -115,6 +111,14 @@ class RecordDepositActivity : AppCompatActivity() {
             valid = false
         } else amount = binding.etAmount.text.toString().trim()
 
+        if (binding.dropdownActivity.text.toString() == "") {
+            binding.dropdownActivity.error = "Please select a Goal."
+            valid = false
+        } else {
+            binding.dropdownActivity.error = null
+            goal = binding.dropdownActivity.text.toString()
+        }
+
         return valid
     }
 
@@ -137,7 +141,6 @@ class RecordDepositActivity : AppCompatActivity() {
 
     private fun setBundle() {
         //getCurrentTime()
-        val goal = binding.dropdownActivity.text.toString()
 
         bundle.putString("transactionType", "Deposit")
         bundle.putFloat("amount", amount.toFloat())

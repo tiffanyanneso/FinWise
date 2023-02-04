@@ -26,8 +26,6 @@ class GoalViewDepositAdapater : RecyclerView.Adapter<GoalViewDepositAdapater.Goa
     private var depositTransactions = ArrayList<Transactions>()
     private var context: Context
 
-    private var firestore = Firebase.firestore
-
     constructor(context: Context, depositTransactions:ArrayList<Transactions>) {
         this.context = context
         this.depositTransactions = depositTransactions

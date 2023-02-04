@@ -2,12 +2,8 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
-import com.github.mikephil.charting.formatter.PercentFormatter
-import com.github.mikephil.charting.utils.MPPointF
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -16,7 +12,6 @@ import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.adapter.GoalViewDepositAdapater
 import ph.edu.dlsu.finwise.adapter.PFMBreakdownAdapter
 import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
@@ -26,14 +21,12 @@ import ph.edu.dlsu.finwise.personalFinancialManagementModule.breakdownFragments.
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.breakdownFragments.IncomeFragment
 import java.text.DecimalFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPersonalFinancialManagementBinding
     private var firestore = Firebase.firestore
-    private lateinit var transactionAdapter: TransactionsAdapter
     private lateinit var savingsLineGraphView: GraphView
     private lateinit var balanceLineGraphView: GraphView
     private var transactionsArrayList = ArrayList<Transactions>()
@@ -53,8 +46,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
         setUpBreakdownTabs()
         loadBalance()
-        getTransactions()
-        //initializeSavingsLineGraphData()
+        //getTransactions()
+        initializeSavingsLineGraphData()
         goToDepositGoalActivity()
         goToIncomeActivity()
         goToExpenseActivity()
@@ -62,80 +55,82 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     }
 
-    /*private fun initializeSavingsLineGraphData() {
-        firestore.collection("Transactions").whereEqualTo("decisionMakingActivityID", decisionMakingActivityID).get().addOnSuccessListener { transactionsSnapshot ->
-            for (document in transactionsSnapshot) {
-                var transaction = document.toObject<Transactions>()
+    private fun initializeSavingsLineGraphData() {
+        // on below line we are initializing
+        // our variable with their ids.
+        firestore.collection("Transactions")
+            .whereEqualTo("category", "Goal")
+            .get().addOnSuccessListener { documents ->
+            savingsLineGraphView = findViewById(R.id.savings_line_graph)
+
+            val dates = ArrayList<Date>()
+            val dataPoints = ArrayList<DataPoint>()
+
+            for (transactionSnapshot in documents) {
+                //creating the object from list retrieved in db
+                val transaction = transactionSnapshot.toObject<Transactions>()
                 transactionsArrayList.add(transaction)
             }
             transactionsArrayList.sortByDescending { it.date }
-            goalViewDepositAdapater = GoalViewDepositAdapater(this, transactionsArrayList)
-            binding.rvViewDepositHistory.adapter = goalViewDepositAdapater
-            binding.rvViewDepositHistory.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-            getSavingProgress()
-            initializeSavingsLineGraph()
-        }
-        // initializing our variable with their ids.
-        savingsLineGraphView = findViewById(R.id.line_graph)
 
-        var dates = ArrayList<Date>()
-        var dataPoints = ArrayList<DataPoint>()
-
-        //get unique dates in transaction arraylist
-        for (transaction in transactionsArrayList) {
-            //if array of dates doesn't contain date of the transaction, add the date to the arraylist
-            if (!dates.contains(transaction.date?.toDate()))
-                dates.add(transaction.date?.toDate()!!)
-        }
-
-        var sortedDate = dates.sortedBy { it }
-        //get deposit for a specific date
-        var xAxis =0.00
-        for (date in sortedDate) {
-            var depositTotal = 0.00F
+            //get unique dates in transaction arraylist
             for (transaction in transactionsArrayList) {
-                //comparing the dates if they are equal
-                if (transaction != null ) {
-                    if (date.compareTo(transaction.date?.toDate()) == 0) {
-                        if (transaction.transactionType == "Deposit")
-                            depositTotal += transaction.amount!!
-                        else
-                            depositTotal -= transaction.amount!!
+                //if array of dates doesn't contain date of the transaction, add the date to the arraylist
+                if (!dates.contains(transaction.date?.toDate()))
+                    dates.add(transaction.date?.toDate()!!)
+            }
+
+            val sortedDate = dates.sortedBy { it }
+            //get deposit for a specific date
+            var xAxis =0.00
+            for (date in sortedDate) {
+                var depositTotal = 0.00F
+                for (transaction in transactionsArrayList) {
+                    //comparing the dates if they are equal
+                    if (transaction != null ) {
+                        if (date.compareTo(transaction.date?.toDate()) == 0) {
+                            if (transaction.transactionType == "Deposit")
+                                depositTotal += transaction.amount!!
+                            else
+                                depositTotal -= transaction.amount!!
+                        }
                     }
                 }
+                dataPoints.add(DataPoint(xAxis, depositTotal.toDouble()))
+                xAxis++
             }
-            dataPoints.add(DataPoint(xAxis, depositTotal.toDouble()))
-            xAxis++
+
+            //plot data to
+            // on below line we are adding data to our graph view.
+            val series: LineGraphSeries<DataPoint> = LineGraphSeries(dataPoints.toTypedArray())
+
+            // on below line adding animation
+            savingsLineGraphView.animate()
+
+            // on below line we are setting scrollable
+            // for point graph view
+            savingsLineGraphView.viewport.isScrollable = true
+
+            // on below line we are setting scalable.
+            savingsLineGraphView.viewport.isScalable = true
+
+            // on below line we are setting scalable y
+            savingsLineGraphView.viewport.setScalableY(true)
+
+            // on below line we are setting scrollable y
+            savingsLineGraphView.viewport.setScrollableY(true)
+
+            // on below line we are setting color for series.
+            series.color = R.color.teal_200
+
+            // on below line we are adding
+            // data series to our graph view.
+            savingsLineGraphView.addSeries(series)
         }
 
 
-        //plot data to
-        // on below line we are adding data to our graph view.
-        val series: LineGraphSeries<DataPoint> = LineGraphSeries(dataPoints.toTypedArray())
+    }
 
-        // on below line adding animation
-        //lineGraphView.animate()
-
-        // on below line we are setting scrollable
-        // for point graph view
-        //lineGraphView.viewport.isScrollable = true
-
-        // on below line we are setting scalable.
-        //lineGraphView.viewport.isScalable = true
-
-        // on below line we are setting scalable y
-        //lineGraphView.viewport.setScalableY(true)
-
-        // on below line we are setting scrollable y
-        //lineGraphView.viewport.setScrollableY(true)
-
-        // on below line we are setting color for series.
-        series.color = R.color.purple_200
-
-        // on below line we are adding
-        // data series to our graph view.
-        savingsLineGraphView.addSeries(series)
-    }*/
 
 
     private fun setUpBreakdownTabs() {
@@ -174,7 +169,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         }
     }
 
-    private fun getTransactions() {
+    /*private fun getTransactions() {
         var transactionIDArrayList = ArrayList<String>()
         //TODO:change to get transactions of current user
         // Dito may collection na transaction at hindi nakanest yung collection sa user
@@ -188,14 +183,14 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 val transactionID = transactionSnapshot.id
                 transactionIDArrayList.add(transactionID)
             }
-            transactionsArrayList.sortByDescending { it.date }
+            //transactionsArrayList.sortByDescending { it.date }
             transactionAdapter = TransactionsAdapter(applicationContext, transactionIDArrayList)
             binding.rvViewTransactions.adapter = transactionAdapter
             binding.rvViewTransactions.layoutManager = LinearLayoutManager(applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false)
         }
-    }
+    }*/
 
     private fun goToDepositGoalActivity() {
         binding.btnGoal.setOnClickListener {

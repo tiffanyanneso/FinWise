@@ -69,7 +69,7 @@ class TransactionsAdapter: RecyclerView.Adapter<TransactionsAdapter.TransactionV
                 val formatter = SimpleDateFormat("MM/dd/yyyy")
                 val date = formatter.format(transaction?.date?.toDate())
                 itemBinding.tvDate.text =  date.toString()
-                if (transaction?.transactionType == "income")
+                if (transaction?.transactionType == "Income")
                     itemBinding.tvAmount.text = "+₱$amount"
                 else
                     itemBinding.tvAmount.text = "-₱$amount"

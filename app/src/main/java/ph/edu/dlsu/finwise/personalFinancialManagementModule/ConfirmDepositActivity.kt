@@ -67,20 +67,20 @@ class ConfirmDepositActivity : AppCompatActivity() {
     private fun confirm() {
         binding.btnConfirm.setOnClickListener {
 
-        val name = "Deposit to Goal"
+            var goalName = "Deposit to '$goal'"
             var transaction = hashMapOf(
                 //TODO: add childID, createdBy
-                "transactionName" to name,
-                "transactionType" to "goal",
-                "category" to "Deposit",
+                "transactionName" to goalName,
+                "transactionType" to "Deposit",
                 "date" to date ,
+                "category" to "Goal",
                 "createdBy" to "",
                 "amount" to amount?.toFloat(),
                 "goal" to goal,
             )
             adjustUserBalance()
             // TODO: Change where transaction is added
-            firestore.collection("Transactions").add(transaction).addOnSuccessListener {
+            firestore.collection("Test").add(transaction).addOnSuccessListener {
                 Toast.makeText(this, "Goal added", Toast.LENGTH_SHORT).show()
                 var goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
                 goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

@@ -59,7 +59,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
             val transaction = hashMapOf(
                 "transactionName" to goalName,
                 "transactionType" to "Deposit",
-                //"category" to "Deposit",
+                "category" to "Goal",
                 "date" to bundle.getSerializable("date"),
                 "createdBy" to "",
                 "amount" to bundle.getFloat("amount"),

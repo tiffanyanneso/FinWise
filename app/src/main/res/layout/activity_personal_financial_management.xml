@@ -171,7 +171,7 @@
                 android:layout_height="wrap_content"
                 android:text="Savings Trend"
                 android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textColor="@color/light_green"
                 android:textSize="18sp"
                 android:gravity="center"
                 android:layout_margin="10dp"/>
@@ -183,7 +183,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_gravity="center"
-                android:background="@color/black"
+                android:background="@color/white"
                 android:layout_below="@id/tv_savings" />
 
             </LinearLayout>
@@ -199,7 +199,7 @@
             android:layout_marginTop="10dp"
             android:elevation="5dp"
             android:layout_height="wrap_content"
-            card_view:cardBackgroundColor="@color/light_green"
+            card_view:cardBackgroundColor="@color/white"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cv_savings"
@@ -216,7 +216,7 @@
                     android:layout_height="wrap_content"
                     android:text="Balance Trend"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
+                    android:textColor="@color/light_green"
                     android:textSize="18sp"
                     android:gravity="center"
                     android:layout_margin="10dp"/>
@@ -248,7 +248,7 @@
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabBackground="@color/off_white"
+                app:tabBackground="@color/white"
                 app:tabGravity="fill"
                 app:tabMode="fixed"
                 app:tabTextColor="@color/black"

@@ -136,7 +136,7 @@
     </string-array>
 
     <string-array name="transaction_type_list">
-        <item>--All--</item>
+        <item>All</item>
         <item>Expense</item>
         <item>Income</item>
         <item>Goal</item>

@@ -199,17 +199,15 @@
 
 
         </activity>
-        <!--
-<activity
-            android:name=".personalFinancialManagementModule.EditTransactionActivity"
-            android:exported="false" />
-        -->
-        <activity
-            android:name=".personalFinancialManagementModule.TransactionDetailsActivity"
-            android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.TransactionHistoryActivity"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".personalFinancialManagementModule.ConfirmDepositActivity"
             android:exported="false" />
@@ -241,13 +239,13 @@
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
-            android:exported="true">
-            <intent-filter>
+            android:exported="false"/>
+            <!--<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
+        </activity>-->
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"
             android:exported="false" />

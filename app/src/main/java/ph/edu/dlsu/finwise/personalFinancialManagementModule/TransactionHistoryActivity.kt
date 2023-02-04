@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
@@ -50,14 +51,18 @@ class TransactionHistoryActivity : AppCompatActivity() {
             ) {
                 type = sortSpinner.selectedItem.toString()
 
-                if (type == "--All--") {
+                if (type == "All") {
                     getAllTransactions()
                 }
                 else {
-                    type = type.lowercase()
                     transactionIDArrayList.clear()
-                    firestore.collection("Transactions")
-                        .whereEqualTo("transactionType", type).get().addOnSuccessListener { documents ->
+                    var transactionType = "transactionType"
+                    if (type == "Goal")
+                        transactionType = "category"
+                    Toast.makeText(applicationContext, transactionType+" "+ type, Toast.LENGTH_SHORT).show()
+                    firestore.collection("Transactions").whereEqualTo(transactionType, type)
+                        .orderBy("date", Query.Direction.DESCENDING)
+                        .get().addOnSuccessListener { documents ->
                             for (transactionSnapshot in documents) {
                                 //creating the object from list retrieved in db
                                 val transactionID = transactionSnapshot.id
@@ -80,7 +85,8 @@ class TransactionHistoryActivity : AppCompatActivity() {
         //TODO:change to get transactions of current user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         //firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->
-        firestore.collection("Transactions").get().addOnSuccessListener { documents ->
+        firestore.collection("Transactions").orderBy("date", Query.Direction.DESCENDING)
+            .get().addOnSuccessListener { documents ->
             for (transactionSnapshot in documents) {
                 //creating the object from list retrieved in db
                 val transactionID = transactionSnapshot.id

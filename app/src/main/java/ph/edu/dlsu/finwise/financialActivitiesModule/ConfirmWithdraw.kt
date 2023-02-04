@@ -36,7 +36,7 @@ class ConfirmWithdraw : AppCompatActivity() {
                 "transactionType" to "Withdrawal",
                  "transactionName" to "",
                  "amount" to bundle.getFloat("amount"),
-                 "category" to "",
+                 "category" to "Goal",
                  "financialGoalID" to bundle.getString("financialGoalID"),
                  "decisionMakingActivityID" to bundle.getString("decisionMakingActivityID"),
                  "date" to bundle.getSerializable("date")
