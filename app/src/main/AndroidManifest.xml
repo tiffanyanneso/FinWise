@@ -13,9 +13,11 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".MayaPayment"
+            android:exported="false" />
+        <activity
             android:name=".parentFinancialActivitiesModule.ParentGoalActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".financialActivitiesModule.ConfirmWithdraw"
             android:exported="false">
@@ -177,17 +179,18 @@
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertQuestionsActivity"
             android:exported="false" />
-        <activity android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertAddNewQuestionsActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertAddNewQuestionsActivity"
+            android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertProfileActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertSpecificAssessmentActivity"
             android:exported="false">
 
-
-                   <!--  <intent-filter>
+            <!--
+                 <intent-filter>
                      <action android:name="android.intent.action.MAIN" />
 
                      <category android:name="android.intent.category.LAUNCHER" />
@@ -195,14 +198,13 @@
 
                  <meta-data
                      android:name="android.app.lib_name"
-                     android:value="" />-->
-
+                     android:value="" />
+            -->
 
         </activity>
         <activity
             android:name=".personalFinancialManagementModule.TransactionHistoryActivity"
-            android:exported="true" >
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".personalFinancialManagementModule.ConfirmDepositActivity"
             android:exported="false" />
@@ -223,9 +225,7 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
-            android:exported="true">
-        </activity>
-
+            android:exported="true"></activity>
         <activity
             android:name=".financialActivitiesModule.ChildEditGoal"
             android:exported="false" />
@@ -234,13 +234,15 @@
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
-            android:exported="false"/>
-            <!--<intent-filter>
+            android:exported="false" />
+        <!--
+<intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>-->
+        </activity>
+        -->
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"
             android:exported="false" />
@@ -268,8 +270,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-           <!-- <intent-filter>
+        <!--
+ <intent-filter>
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -281,8 +283,8 @@
                 android:name="android.app.lib_name"
                 android:value="" />
 
-        </activity>-->
-
+        </activity>
+        -->
         <!--
     <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -294,7 +296,6 @@
                 android:value="" />
         </activity>
         -->
-
         <activity
             android:name=".MainActivity"
             android:exported="false">
