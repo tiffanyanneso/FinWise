@@ -1,11 +1,15 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.R
+import android.app.Dialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.DatePicker
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -30,6 +34,7 @@ class RecordExpenseActivity : AppCompatActivity() {
     lateinit var goal: String
     lateinit var date: Date
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPfmrecordExpenseBinding.inflate(layoutInflater)
@@ -44,6 +49,10 @@ class RecordExpenseActivity : AppCompatActivity() {
         val items = resources.getStringArray(ph.edu.dlsu.finwise.R.array.pfm_expense_category)
         val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, items)
         binding.dropdownCategory.setAdapter(adapter)
+
+        binding.etDate.setOnClickListener{
+            showCalendar()
+        }
 
        // getGoals()
         goToConfirmation()
@@ -86,8 +95,8 @@ class RecordExpenseActivity : AppCompatActivity() {
             valid = false
         } else amount = binding.etAmount.text.toString().trim()
 
-        date = SimpleDateFormat("MM-dd-yyyy").parse((binding.etDate.month+1).toString() + "-" +
-                binding.etDate.dayOfMonth.toString() + "-" + binding.etDate.year)
+//        date = SimpleDateFormat("MM-dd-yyyy").parse((binding.etDate.month+1).toString() + "-" +
+//                binding.etDate.dayOfMonth.toString() + "-" + binding.etDate.year)
 
         if (binding.etDate.toString().trim().isEmpty()) {
             binding.etName.error = "Please enter the name of the transaction."
@@ -146,4 +155,21 @@ class RecordExpenseActivity : AppCompatActivity() {
         val time = Calendar.getInstance().time
         date = formatter.format(time)
     }*/
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showCalendar() {
+        val dialog = Dialog(this)
+
+        dialog.setContentView(ph.edu.dlsu.finwise.R.layout.dialog_calendar)
+        dialog.window!!.setLayout(1000, 1500)
+
+        var calendar = dialog.findViewById<DatePicker>(ph.edu.dlsu.finwise.R.id.et_date)
+
+        calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
+            binding.etDate.setText((mMonth.toString() + 1) + "/" + mDay.toString() + "/" + mYear.toString())
+            date = SimpleDateFormat("MM/dd/yyyy").parse((mMonth + 1).toString() + "/" +
+                    mDay.toString() + "/" + mYear.toString())
+            dialog.dismiss()
+        }
+    }
 }

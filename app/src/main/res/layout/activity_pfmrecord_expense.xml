@@ -180,59 +180,29 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tv_date"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/date_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/amount_container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="14dp"
-        android:layout_marginTop="10dp"
-        android:textAllCaps = "true"
-        android:text="@string/date"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"/>
+        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_marginHorizontal="20dp"
+        app:helperTextEnabled="true"
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/baseline_calendar_today_24"
+        android:hint="Date">
 
-
-    <!--    <TextView-->
-<!--        android:id="@+id/tv_goal"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/et_amount"-->
-<!--        android:textSize="14sp"-->
-<!--        android:textAllCaps = "true"-->
-<!--        android:text="Goal (optional)"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        />-->
-
-<!--    <androidx.appcompat.widget.AppCompatSpinner-->
-<!--        android:id="@+id/spinner_goal"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tv_goal"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:ems="10"-->
-<!--        android:entries="@array/pfm_expense_category"-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:textSize="14sp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp"/>-->
-
-    <DatePicker
-        android:id="@+id/et_date"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="8dp"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner"
-        app:layout_constraintTop_toBottomOf="@+id/tv_date"
-        tools:layout_editor_absoluteX="0dp"
-        />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lines="1"
+            android:inputType="numberDecimal"
+            android:textSize="16dp"
+            android:enabled="true"
+            android:focusable="false"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
