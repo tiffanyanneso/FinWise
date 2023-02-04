@@ -161,7 +161,7 @@ class RecordExpenseActivity : AppCompatActivity() {
         val dialog = Dialog(this)
 
         dialog.setContentView(ph.edu.dlsu.finwise.R.layout.dialog_calendar)
-        dialog.window!!.setLayout(1000, 1500)
+        dialog.window!!.setLayout(1000, 1200)
 
         var calendar = dialog.findViewById<DatePicker>(ph.edu.dlsu.finwise.R.id.et_date)
 
@@ -171,5 +171,6 @@ class RecordExpenseActivity : AppCompatActivity() {
                     mDay.toString() + "/" + mYear.toString())
             dialog.dismiss()
         }
+        dialog.show()
     }
 }

@@ -137,7 +137,7 @@ class ChildNewGoal : AppCompatActivity() {
         val dialog = Dialog(this)
 
         dialog.setContentView(R.layout.dialog_calendar)
-        dialog.window!!.setLayout(1000, 1500)
+        dialog.window!!.setLayout(1000, 1200)
 
         var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
 
@@ -145,6 +145,7 @@ class ChildNewGoal : AppCompatActivity() {
             binding.etTargetDate.setText((mMonth.toString() + 1) + "/" + mDay.toString() + "/" + mYear.toString())
             dialog.dismiss()
         }
+        dialog.show()
     }
 
     private fun resetCheckbox() {
