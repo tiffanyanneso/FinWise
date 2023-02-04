@@ -8,13 +8,22 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ph.edu.dlsu.finwise.*
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.*
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.GoalSettings
 
 class FinancialActivity : AppCompatActivity() {
@@ -25,31 +34,37 @@ class FinancialActivity : AppCompatActivity() {
 //    private lateinit var status: String
     private var firestore = Firebase.firestore
 
-    private lateinit var context: Context
+    private var shortTermRate = 0.00F
+    private var mediumTermRate = 0.00F
+    private var longTermRate = 0.00F
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        context = this
 
-        val adapter = ViewPagerAdapter(supportFragmentManager)
-        //checkSettings()
+        GlobalScope.launch(Dispatchers.IO) {
+            barChart()
+            withContext(Dispatchers.Main) {
+                val adapter = ViewPagerAdapter(supportFragmentManager)
+                //checkSettings()
 
-        // TODO: change the fragments added based on parent approval
-        adapter.addFragment(InProgressFragment(),"In Progress")
-        adapter.addFragment(ForReviewFragment(),"For Review")
-        adapter.addFragment(ForEditingFragment(),"For Editing")
-        adapter.addFragment(DisapprovedFragment(),"Disapproved")
-        adapter.addFragment(AchievedFragment(),"Achieved")
+                // TODO: change the fragments added based on parent approval
+                adapter.addFragment(InProgressFragment(),"In Progress")
+                adapter.addFragment(ForReviewFragment(),"For Review")
+                adapter.addFragment(ForEditingFragment(),"For Editing")
+                adapter.addFragment(DisapprovedFragment(),"Disapproved")
+                adapter.addFragment(AchievedFragment(),"Achieved")
 
-        binding.viewPager.adapter = adapter
-        binding.tabLayout.setupWithViewPager(binding.viewPager)
+                binding.viewPager.adapter = adapter
+                binding.tabLayout.setupWithViewPager(binding.viewPager)
+            }
+        }
 
         binding.btnNewGoal.setOnClickListener {
-            context=this
-            var goToNewGoal = Intent(context, ChildNewGoal::class.java)
-            context.startActivity(goToNewGoal)
+            var goToNewGoal = Intent(this, ChildNewGoal::class.java)
+            this.startActivity(goToNewGoal)
         }
 
         // Hides actionbar,
@@ -69,6 +84,61 @@ class FinancialActivity : AppCompatActivity() {
         fun addFragment(fragment: Fragment, title:String){
             mFrgmentList.add(fragment)
             mFrgmentTitleList.add(title)
+        }
+    }
+
+    //source: https://www.geeksforgeeks.org/android-create-barchart-with-kotlin/
+    private fun barChart() {
+
+        var completedShort = 0.00F
+        var completedMedium = 0.00F
+        var completedLong = 0.00F
+
+        var totalShort =0.00F
+        var totalMedium =0.00F
+        var totalLong = 0.00F
+
+        var barEntriesList = ArrayList<BarEntry>()
+
+        // TODO: ADD QUERY TO GET CURRENT USER'S GOALS
+        firestore.collection("FinancialGoals").get().addOnSuccessListener { results ->
+            for (goal in results ) {
+                var goalObject = goal.toObject<FinancialGoals>()
+                if (goalObject.goalLength == "Short"){
+                    totalShort++
+                    if (goalObject.status == "Completed")
+                        completedShort++
+                }
+                else if (goalObject.goalLength == "Medium"){
+                    totalMedium++
+                    if (goalObject.status == "Completed")
+                        completedMedium++
+                }
+                else if (goalObject.goalLength == "Long"){
+                    totalLong++
+                    if (goalObject.status == "Completed")
+                        completedLong++
+                }
+            }
+
+            if (totalShort!=0.00F)
+                shortTermRate = (completedShort/totalShort)*100
+            if (totalMedium!=0.00F)
+                mediumTermRate = (completedMedium/totalMedium) *100
+            if (totalLong!=0.00F)
+                longTermRate = (completedLong/totalLong) *100
+
+            // adding to our bar entries list
+            barEntriesList.add(BarEntry(1f, shortTermRate))
+            barEntriesList.add(BarEntry(2f, mediumTermRate))
+            barEntriesList.add(BarEntry(3f, longTermRate))
+
+            var barDataSet = BarDataSet(barEntriesList, "Completion Rate")
+            var barData =  BarData(barDataSet)
+
+            binding.barChart.data = barData
+            binding.barChart.invalidate()
+            binding.barChart.description.isEnabled = false
         }
     }
 

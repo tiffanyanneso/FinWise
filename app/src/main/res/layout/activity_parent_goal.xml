@@ -27,7 +27,8 @@
                 android:id="@+id/btn_settings"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/baseline_settings_24"/>
+                android:src="@drawable/baseline_settings_24"
+                android:layout_gravity="end"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -76,7 +77,8 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/layout_bg_green"
                 android:padding="20dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:layout_marginRight="5dp">
 
                 <TextView
                     android:id="@+id/tv_goals_in_progress"
@@ -92,7 +94,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
-                    android:text="IN PROGRESS"
+                    android:text="IN\n PROGRESS"
+                    android:textAlignment="center"
                     android:textAllCaps = "true"
                     android:textColor="@color/black"
                     android:layout_gravity="center"
@@ -106,7 +109,8 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/layout_bg_green"
                 android:padding="20dp"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:layout_marginLeft="5dp">
 
                 <TextView
                     android:id="@+id/tv_goals_nearing_completion"
@@ -122,13 +126,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
-                    android:text="NEARING COMPLETION"
+                    android:text="NEARING \n COMPLETION"
+                    android:textAlignment="center"
                     android:textAllCaps = "true"
                     android:textColor="@color/black"
                     android:layout_gravity="center"
                     />
             </LinearLayout>
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 
         <com.google.android.material.tabs.TabLayout
@@ -139,9 +143,10 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linear_layout_2"
             app:tabGravity="fill"
-            app:tabSelectedTextColor="@color/teal_700"
-            app:tabIndicatorColor="@color/teal_700"
-            android:layout_marginTop="20dp"/>
+            app:tabSelectedTextColor="@color/dark_green"
+            app:tabIndicatorColor="@color/dark_green"
+            android:layout_marginTop="20dp"
+            app:tabMode="scrollable"/>
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"

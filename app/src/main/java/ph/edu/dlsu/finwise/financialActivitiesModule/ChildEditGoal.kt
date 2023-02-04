@@ -1,8 +1,12 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.app.Dialog
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.DatePicker
+import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
@@ -12,6 +16,7 @@ class ChildEditGoal : AppCompatActivity() {
     private lateinit var binding : ActivityChildNewGoalBinding
     private var firestore = Firebase.firestore
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChildNewGoalBinding.inflate(layoutInflater)
@@ -22,6 +27,10 @@ class ChildEditGoal : AppCompatActivity() {
         val items = resources.getStringArray(R.array.financial_activity)
         val adapter = ArrayAdapter(this, R.layout.list_item, items)
         binding.dropdownActivity.setAdapter(adapter)
+
+        binding.etTargetDate.setOnClickListener{
+            showCalendar()
+        }
 
         /*if (currentUserType == "Child") {
             binding.tvFinancialDecisionMakingActivity.visibility = View.GONE
@@ -62,5 +71,20 @@ class ChildEditGoal : AppCompatActivity() {
                 binding.spinnerActivity.setSelection(finActivityIndex)
             }
         }*/
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showCalendar() {
+        val dialog = Dialog(this)
+
+        dialog.setContentView(R.layout.dialog_calendar)
+        dialog.window!!.setLayout(1000, 1500)
+
+        var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
+
+        calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
+            binding.etTargetDate.setText((mMonth.toString() + 1) + "/" + mDay.toString() + "/" + mYear.toString())
+            dialog.dismiss()
+        }
     }
 }

@@ -177,30 +177,29 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tv_date"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/date_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/amount_container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="14dp"
-        android:layout_marginTop="10dp"
-        android:textAllCaps = "true"
-        android:text="@string/target_date"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"/>
+        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_marginHorizontal="20dp"
+        app:helperTextEnabled="true"
+        app:endIconMode="custom"
+        app:endIconDrawable="@drawable/baseline_calendar_today_24"
+        android:hint="Date">
 
-    <DatePicker
-        android:id="@+id/et_date"
-        app:layout_constraintTop_toBottomOf="@+id/tv_date"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lines="1"
+            android:inputType="numberDecimal"
+            android:textSize="16dp"
+            android:enabled="true"
+            android:focusable="false"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <!--    <TextView-->

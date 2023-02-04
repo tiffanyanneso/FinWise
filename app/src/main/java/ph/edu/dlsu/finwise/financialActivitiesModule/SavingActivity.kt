@@ -122,6 +122,7 @@ class SavingActivity : AppCompatActivity() {
         }
     }
 
+    //source: https://www.geeksforgeeks.org/android-line-graph-view-with-kotlin/
     private fun initializeLineGraph() {
         // on below line we are initializing
         // our variable with their ids.
