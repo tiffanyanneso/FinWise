@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.financialActivitiesModule
+package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -25,11 +25,11 @@ class GoalSettingsActivity : AppCompatActivity() {
         binding = ActivityGoalSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadSettings()
-
         bundle = intent.extras!!
-        var parentID = FirebaseAuth.getInstance().currentUser!!.uid
-        var childID = bundle.getString("childID")
+        parentID = FirebaseAuth.getInstance().currentUser!!.uid
+        childID = bundle.getString("childID").toString()
+
+        loadSettings()
 
         var switchSetOwnGoal = binding.switchSetOwnGoal
         var switchAutoApprove = binding.switchAutoApprove
@@ -37,29 +37,20 @@ class GoalSettingsActivity : AppCompatActivity() {
 
         switchSetOwnGoal?.setOnCheckedChangeListener { _, isChecked ->
             updateSettings()
-            val message = if (isChecked) "Switch Set Own Goal:ON" else "Switch Set Own Goal:OFF"
-            Toast.makeText(
-                this, message,
-                Toast.LENGTH_SHORT
-            ).show()
+//            val message = if (isChecked) "Switch Set Own Goal:ON" else "Switch Set Own Goal:OFF"
+            Toast.makeText(this, "Settings updated", Toast.LENGTH_SHORT).show()
         }
 
         switchAutoApprove?.setOnCheckedChangeListener { _, isChecked ->
             updateSettings()
-            val message = if (isChecked) "Switch Auto Approve:ON" else "Switch Auto Approve:OFF"
-            Toast.makeText(
-                this, message,
-                Toast.LENGTH_SHORT
-            ).show()
+//            val message = if (isChecked) "Switch Auto Approve:ON" else "Switch Auto Approve:OFF"
+            Toast.makeText(this, "Settings updated", Toast.LENGTH_SHORT).show()
         }
 
         switchUnaccomplishedGoal?.setOnCheckedChangeListener { _, isChecked ->
             updateSettings()
-            val message = if (isChecked) "Switch Unaccomplished:ON" else "Switch Unaccomplished:OFF"
-            Toast.makeText(
-                this, message,
-                Toast.LENGTH_SHORT
-            ).show()
+//            val message = if (isChecked) "Switch Unaccomplished:ON" else "Switch Unaccomplished:OFF"
+            Toast.makeText(this, "Settings updated", Toast.LENGTH_SHORT).show()
         }
     }
 

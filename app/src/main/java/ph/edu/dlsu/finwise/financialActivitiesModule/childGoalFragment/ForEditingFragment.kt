@@ -24,9 +24,7 @@ class ForEditingFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            getForEditingGoals()
-        }
+        getForEditingGoals()
     }
 
     override fun onCreateView(

@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 
 import android.content.Context
 import android.content.Intent
@@ -10,8 +10,8 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityParentGoalBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.GoalSettingsActivity
-import ph.edu.dlsu.finwise.financialActivitiesModule.parentGoalFragment.*
+import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment.*
 
 class ParentGoalActivity : AppCompatActivity() {
 
@@ -27,16 +27,21 @@ class ParentGoalActivity : AppCompatActivity() {
         setContentView(binding.root)
         context = this
 
-        //var bundle = intent.extras!!
-        //childID = bundle.getString("childID").toString()
+        var bundle = intent.extras!!
+        childID = bundle.getString("childID").toString()
 
-        childID = "child id"
+        var sendBundle = Bundle()
+        bundle.putString("childID", childID)
+
+        binding.btnNewGoal.setOnClickListener {
+            var newGoal = Intent(this, ChildNewGoal::class.java)
+            newGoal.putExtras(sendBundle)
+            startActivity(newGoal)
+        }
 
         binding.btnSettings.setOnClickListener {
             var settings = Intent(this, GoalSettingsActivity::class.java)
-            var bundle = Bundle()
-            bundle.putString("childID", childID)
-            settings.putExtras(bundle)
+            settings.putExtras(sendBundle)
             startActivity(settings)
         }
 

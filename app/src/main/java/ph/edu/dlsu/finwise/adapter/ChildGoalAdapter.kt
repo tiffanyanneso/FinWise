@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentSettingAGoalActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 import ph.edu.dlsu.finwise.databinding.ItemGoalBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
@@ -22,6 +23,9 @@ class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHold
     private var context: Context
 
     private var firestore = Firebase.firestore
+
+    private lateinit var childID:String
+    private lateinit var goalStatus:String
 
      constructor(context: Context, goalsIDArrayList:ArrayList<String>) {
         this.context = context
@@ -60,6 +64,8 @@ class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHold
 
                 var goal = document.toObject<FinancialGoals>()
                 itemBinding.tvGoalId.text = document.id
+                goalStatus = goal?.status.toString()
+                childID = goal?.childID.toString()
                 itemBinding.tvGoal.text = goal?.goalName
                 // convert timestamp to date
                 val date = SimpleDateFormat("MM/dd/yyyy").format(goal?.targetDate?.toDate())
@@ -73,14 +79,22 @@ class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHold
         }
 
         override fun onClick(p0: View?) {
-            var viewGoal = Intent(context, ViewGoalActivity::class.java)
             var bundle = Bundle()
-
             var goalID = itemBinding.tvGoalId.text.toString()
             bundle.putString ("goalID", goalID)
-            viewGoal.putExtras(bundle)
-            viewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(viewGoal)
+            bundle.putString ("childID", childID)
+            if (goalStatus == "For Review") {
+                var reviewGoal = Intent(context, ParentSettingAGoalActivity::class.java)
+                reviewGoal.putExtras(bundle)
+                reviewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(reviewGoal)
+            } else {
+                var viewGoal = Intent(context, ViewGoalActivity::class.java)
+                viewGoal.putExtras(bundle)
+                viewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(viewGoal)
+            }
+
         }
     }
 }

@@ -1,12 +1,14 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.databinding.ActivityLoginBinding
 import ph.edu.dlsu.finwise.databinding.ActivityReviewGoalBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.SimpleDateFormat
@@ -26,7 +28,7 @@ class ReviewGoalActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         var bundle = intent.extras!!
-        financialGoalID = bundle.getString("financialGoalID").toString()
+        financialGoalID = bundle.getString("goalID").toString()
         childID = bundle.getString("childID").toString()
 
         getGoalDetails()
@@ -47,6 +49,10 @@ class ReviewGoalActivity : AppCompatActivity() {
     }
 
     private fun submitGoalRating() {
+        var comment = "None"
+        if (binding.etComment.text.toString() != "")
+            comment = binding.etComment.text.toString()
+
         var rating = hashMapOf(
             "parentID" to FirebaseAuth.getInstance().currentUser!!.uid,
             "childID" to childID,
@@ -56,11 +62,24 @@ class ReviewGoalActivity : AppCompatActivity() {
             "achievable" to binding.ratingBarAchievable.rating,
             "relevant" to binding.ratingBarRelevant.rating ,
             "timeBound" to binding.ratingBarTimeBound.rating,
-            "comment" to binding.etComment.text,
-            "overallRating" to binding.tvOverallRating
+            "comment" to comment,
+            "overallRating" to binding.tvOverallRating.text.toString(),
+            "lastUpdated" to Timestamp.now()
         )
 
-        firestore.collection("GoalRating").add(rating)
-        firestore.collection("FinancialGoals").document(financialGoalID).update("status", binding.spinnerGoalStatus.selectedItem)
+        firestore.collection("GoalRating").add(rating).addOnSuccessListener {
+            var status = binding.spinnerGoalStatus.selectedItem
+            if (status == "Approved")
+                status = "In Progress"
+            firestore.collection("FinancialGoals").document(financialGoalID).update("status", status).addOnSuccessListener {
+                Toast.makeText(this, "Rating saved", Toast.LENGTH_SHORT).show()
+                var viewGoal = Intent (this, ParentGoalActivity::class.java)
+                var bundle = Bundle()
+                bundle.putString("childID", childID)
+                viewGoal.putExtras(bundle)
+                this.startActivity(viewGoal)
+            }
+
+        }
     }
 }

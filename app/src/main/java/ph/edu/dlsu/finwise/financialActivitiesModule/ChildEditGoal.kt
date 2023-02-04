@@ -83,7 +83,7 @@ class ChildEditGoal : AppCompatActivity() {
         var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
-            binding.etTargetDate.setText((mMonth.toString() + 1) + "/" + mDay.toString() + "/" + mYear.toString())
+            binding.etTargetDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
             dialog.dismiss()
         }
         dialog.show()

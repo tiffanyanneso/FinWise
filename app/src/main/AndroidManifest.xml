@@ -13,7 +13,7 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
-            android:name=".ParentGoalActivity"
+            android:name=".parentFinancialActivitiesModule.ParentGoalActivity"
             android:exported="true">
         </activity>
         <activity
@@ -51,7 +51,7 @@
             android:name=".EditProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".financialActivitiesModule.GoalSettingsActivity"
+            android:name=".parentFinancialActivitiesModule.GoalSettingsActivity"
             android:exported="true" />
         <activity
             android:name=".ParentSendMoney"
@@ -78,13 +78,13 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".ParentLandingPageActivity"
+            android:name=".parentFinancialActivitiesModule.ParentLandingPageActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentSettingAGoalActivity"
+            android:name=".parentFinancialActivitiesModule.ParentSettingAGoalActivity"
             android:exported="false" />
         <activity
-            android:name=".ReviewGoalActivity"
+            android:name=".parentFinancialActivitiesModule.ReviewGoalActivity"
             android:exported="false" />
         <activity
             android:name=".SettingAGoalActivity"
@@ -202,11 +202,6 @@
         <activity
             android:name=".personalFinancialManagementModule.TransactionHistoryActivity"
             android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".personalFinancialManagementModule.ConfirmDepositActivity"
@@ -266,7 +261,13 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-            android:exported="false"/>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
            <!-- <intent-filter>
             android:exported="true">

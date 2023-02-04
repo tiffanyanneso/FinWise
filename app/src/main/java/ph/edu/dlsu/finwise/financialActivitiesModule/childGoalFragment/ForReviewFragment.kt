@@ -24,9 +24,7 @@ class ForReviewFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            getForReviewGoals()
-        }
+        getForReviewGoals()
     }
 
     override fun onCreateView(

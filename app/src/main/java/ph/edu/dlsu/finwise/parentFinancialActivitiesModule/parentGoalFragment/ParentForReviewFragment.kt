@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.financialActivitiesModule.parentGoalFragment
+package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,14 +10,13 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
-import ph.edu.dlsu.finwise.databinding.FragmentParentInProgressBinding
+import ph.edu.dlsu.finwise.databinding.FragmentParentForReviewBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.util.*
-import kotlin.collections.ArrayList
 
-class ParentInProgressFragment : Fragment() {
+class ParentForReviewFragment : Fragment() {
 
-    private lateinit var binding: FragmentParentInProgressBinding
+    private lateinit var binding: FragmentParentForReviewBinding
     private var firestore = Firebase.firestore
     private lateinit var goalAdapter: ChildGoalAdapter
 
@@ -25,17 +24,16 @@ class ParentInProgressFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            childID = requireArguments().getString("childID").toString()
-            getInProgressGoals()
-        }
+        var bundle = arguments
+        childID = bundle?.getString("childID").toString()
+        getForReviewGoals()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentParentInProgressBinding.inflate(inflater, container, false)
+        binding = FragmentParentForReviewBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
@@ -43,10 +41,9 @@ class ParentInProgressFragment : Fragment() {
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
     }
 
-
-    private fun getInProgressGoals() {
+    private fun getForReviewGoals() {
         var goalIDArrayList = ArrayList<String>()
-        var filter = "In Progress"
+        var filter = "For Review"
         var goalFilterArrayList = ArrayList<GoalFilter>()
 
         //TODO:change to get transactions of current user

@@ -38,12 +38,15 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
     private lateinit var goalLength:String
 
+    private lateinit var currentUserType:String
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
        super.onCreate(savedInstanceState)
         binding = ActivityGoalConfirmationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context= this
+        getCurrentUserType()
 
         // Hides actionbar,
         // and initializes the navbar
@@ -54,12 +57,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
         binding.tvGoalName.text = bundle.getString("goalName")
         binding.tvActivity.text = bundle.getString("activity")
         binding.tvAmount.text = DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
-        var targetDate = bundle.getSerializable("targetDate")
-
-
-        var formattedDate = SimpleDateFormat("MM/dd/yyyy").format(targetDate)
-        binding.tvTargetDate.text = formattedDate
-
+        binding.tvTargetDate.text = bundle.getSerializable("targetDate").toString()
         binding.tvIsForChild.text = bundle.getBoolean("goalIsForSelf").toString()
 
         var decisionActivities = bundle.getStringArrayList("decisionActivities")
@@ -84,15 +82,26 @@ class GoalConfirmationActivity : AppCompatActivity() {
                 else if (goalSettings?.autoApproved == true)*/
                     goalStatus = "In Progress"
 
-                computeDateDifference(formattedDate)
+                computeDateDifference(bundle.getSerializable("targetDate").toString())
+
+                lateinit var childID:String
+                lateinit var createdBy:String
+                if (currentUserType == "Parent") {
+                    var childIDBundle = intent.extras!!
+                    childID = childIDBundle.getString("childID").toString()
+                    createdBy = FirebaseAuth.getInstance().currentUser!!.uid
+                } else {
+                    childID = FirebaseAuth.getInstance().currentUser!!.uid
+                    createdBy = FirebaseAuth.getInstance().currentUser!!.uid
+                }
 
                 var goal = hashMapOf(
                     //TODO: add childID, createdBy
-                    "childID" to "",
+                    "childID" to childID,
                     "goalName" to bundle.getString("goalName"),
                     "dateCreated" to Timestamp.now(),
-                    "createdBy" to "",
-                    "targetDate" to targetDate,
+                    "createdBy" to createdBy,
+                    "targetDate" to bundle.getSerializable("targetDate"),
                     "goalLength" to goalLength,
                     "targetAmount" to bundle.getFloat("amount"),
                     "currentAmount" to 0,
@@ -100,7 +109,6 @@ class GoalConfirmationActivity : AppCompatActivity() {
                     "lastUpdated" to Timestamp.now(),
                     "status" to goalStatus,
                     "goalIsForSelf" to bundle.getBoolean("goalIsForSelf")
-                    //"decisionMakingActivities" to decisionActivitiesObjectArrayList
                 )
 
                 //add goal to DB
@@ -151,6 +159,16 @@ class GoalConfirmationActivity : AppCompatActivity() {
             goToNewGoal.putExtras(bundle)
             goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(goToNewGoal)
+        }
+    }
+
+    private fun getCurrentUserType() {
+        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+            if (it != null)
+                currentUserType = "Parent"
+            else
+                currentUserType ="Child"
         }
     }
 

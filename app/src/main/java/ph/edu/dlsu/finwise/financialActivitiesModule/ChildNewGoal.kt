@@ -11,6 +11,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
@@ -30,11 +31,14 @@ class ChildNewGoal : AppCompatActivity() {
     private lateinit var binding : ActivityChildNewGoalBinding
     private var firestore = Firebase.firestore
 
+    private lateinit var currentUserType:String
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChildNewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        getCurrentUserType()
 
         // Hides actionbar,
         // and initializes the navbar
@@ -102,7 +106,6 @@ class ChildNewGoal : AppCompatActivity() {
 
             //see which decision making activities were selected
             var decisionMakingActivities = ArrayList<String>()
-
             if (binding.cbBudgeting.isChecked)
                 decisionMakingActivities.add("Setting a Budget")
             if (binding.cbSaving.isChecked)
@@ -116,6 +119,11 @@ class ChildNewGoal : AppCompatActivity() {
             bundle.putSerializable("targetDate", targetDate)
             bundle.putStringArrayList("decisionActivities", decisionMakingActivities)
             bundle.putBoolean("goalIsForSelf", goalIsForSelf)
+
+            if(currentUserType == "Parent") {
+                var childIDBundle = intent.extras!!
+                bundle.putString("childID", childIDBundle.getString("childID"))
+            }
 
             //TODO: reset spinner and date to default value
             binding.etGoal.text?.clear()
@@ -132,6 +140,16 @@ class ChildNewGoal : AppCompatActivity() {
         }
     }
 
+    private fun getCurrentUserType() {
+        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+            if (it != null)
+                currentUserType = "Parent"
+            else
+                currentUserType ="Child"
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showCalendar() {
         val dialog = Dialog(this)
@@ -142,7 +160,7 @@ class ChildNewGoal : AppCompatActivity() {
         var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
-            binding.etTargetDate.setText((mMonth.toString() + 1) + "/" + mDay.toString() + "/" + mYear.toString())
+            binding.etTargetDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
             dialog.dismiss()
         }
         dialog.show()

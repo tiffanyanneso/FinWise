@@ -24,9 +24,7 @@ class DisapprovedFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            getDisapprovedGoals()
-        }
+        getDisapprovedGoals()
     }
 
     override fun onCreateView(

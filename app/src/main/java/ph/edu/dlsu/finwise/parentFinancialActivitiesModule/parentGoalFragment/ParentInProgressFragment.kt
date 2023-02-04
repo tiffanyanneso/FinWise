@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.financialActivitiesModule.parentGoalFragment
+package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,13 +10,14 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
-import ph.edu.dlsu.finwise.databinding.FragmentParentForReviewBinding
+import ph.edu.dlsu.finwise.databinding.FragmentParentInProgressBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.util.*
+import kotlin.collections.ArrayList
 
-class ParentForReviewFragment : Fragment() {
+class ParentInProgressFragment : Fragment() {
 
-    private lateinit var binding: FragmentParentForReviewBinding
+    private lateinit var binding: FragmentParentInProgressBinding
     private var firestore = Firebase.firestore
     private lateinit var goalAdapter: ChildGoalAdapter
 
@@ -24,27 +25,29 @@ class ParentForReviewFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            childID = requireArguments().getString("childID").toString()
-            getForReviewGoals()
-        }
+        var bundle = arguments
+        childID = bundle?.getString("childID").toString()
+        getInProgressGoals()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentParentForReviewBinding.inflate(inflater, container, false)
+        binding = FragmentParentInProgressBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
 
+
+    //created a class so that can arrange the financial goal IDs by when the target data is
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
     }
 
-    private fun getForReviewGoals() {
+
+    private fun getInProgressGoals() {
         var goalIDArrayList = ArrayList<String>()
-        var filter = "For Review"
+        var filter = "In Progress"
         var goalFilterArrayList = ArrayList<GoalFilter>()
 
         //TODO:change to get transactions of current user
@@ -57,12 +60,7 @@ class ParentForReviewFragment : Fragment() {
                 var goalID = goalSnapshot.id
                 var goal = goalSnapshot.toObject<FinancialGoals>()
                 //goalIDArrayList.add(goalID)
-                goalFilterArrayList.add(
-                    GoalFilter(
-                        goalID,
-                        goal?.targetDate!!.toDate()
-                    )
-                )
+                goalFilterArrayList.add(GoalFilter(goalID, goal?.targetDate!!.toDate()))
             }
             goalFilterArrayList.sortBy { it.goalTargetDate }
             for (goalFilter in goalFilterArrayList)

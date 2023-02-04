@@ -160,7 +160,7 @@ class RecordIncomeActivity : AppCompatActivity() {
         var calendar = dialog.findViewById<DatePicker>(ph.edu.dlsu.finwise.R.id.et_date)
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
-            binding.etDate.setText((mMonth.toString() + 1) + "/" + mDay.toString() + "/" + mYear.toString())
+            binding.etDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
             date = SimpleDateFormat("MM/dd/yyyy").parse((mMonth + 1).toString() + "/" +
                     mDay.toString() + "/" + mYear.toString())
             dialog.dismiss()

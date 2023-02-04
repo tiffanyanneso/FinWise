@@ -1,5 +1,8 @@
 package ph.edu.dlsu.finwise.model
 
+import com.google.firebase.Timestamp
+import java.util.*
+
 class GoalReview (
     var parentID:String?=null,
     var childID:String?=null,
@@ -10,5 +13,6 @@ class GoalReview (
     var relevant:Float?=null,
     var timeBound:Float?=null,
     var comment:String?=null,
-    var overallRating:Float?=null
+    var overallRating:Float?=null,
+    var lastUpdated: Timestamp?=null
 ) { }

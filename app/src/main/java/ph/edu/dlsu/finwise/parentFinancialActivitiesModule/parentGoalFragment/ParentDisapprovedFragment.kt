@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.financialActivitiesModule.parentGoalFragment
+package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -25,10 +25,9 @@ class ParentDisapprovedFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            childID = requireArguments().getString("childID").toString()
-            getDisapprovedGoals()
-        }
+        var bundle = arguments
+        childID = bundle?.getString("childID").toString()
+        getDisapprovedGoals()
     }
 
     override fun onCreateView(
