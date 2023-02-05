@@ -46,6 +46,10 @@
     <string name="overall_percentage">Overall Percentage</string>
     <string name="low_correct_answers">Low Correct Answer</string>
     <string name="number">Number</string>
+    <string name="title_add_new_choice">Add New Choice</string>
+    <string name="input_choice">Input Choice</string>
+    <string name="error_new_choice">Please Input a Choice</string>
+
 
     <string name="get_started">Get Started!</string>
     <string name="get_started_2">Get Started</string>

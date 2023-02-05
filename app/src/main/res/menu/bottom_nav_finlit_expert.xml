@@ -5,9 +5,9 @@
     <item android:title=""
         android:icon="@drawable/baseline_assessment_24"
         android:id="@+id/nav_finlit_assessment"/>
-    <item android:title=""
+<!--    <item android:title=""
         android:icon="@drawable/question_mark"
-        android:id="@+id/nav_finlit_question"/>
+        android:id="@+id/nav_finlit_question"/>-->
     <item android:title=""
         android:icon="@drawable/baseline_profile_24"
         android:id="@+id/nav_finlit_profile"/>

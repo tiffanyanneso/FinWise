@@ -9,7 +9,7 @@ class FinlitExpertProfileActivity : AppCompatActivity() {
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
-            setContentView(R.layout.activity_financial_assessment_finlit_expert_questions)
+            setContentView(R.layout.activity_financial_assessment_finlit_expert_profile)
 
             // Hides actionbar,
             // and initializes the navbar

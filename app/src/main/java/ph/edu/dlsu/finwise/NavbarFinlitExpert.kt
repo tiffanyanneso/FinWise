@@ -5,7 +5,6 @@ import android.content.Intent
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinlitExpertProfileActivity
-import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinlitExpertQuestionsActivity
 
 class NavbarFinlitExpert (bottomNavigationView: BottomNavigationView, appCon: Context, navItem: Int) {
     init {
@@ -20,10 +19,10 @@ class NavbarFinlitExpert (bottomNavigationView: BottomNavigationView, appCon: Co
                     appCon.startActivity(intent)
                 }
 
-                R.id.nav_finlit_question -> {
+         /*       R.id.nav_finlit_question -> {
                     val intent = Intent(appCon, FinlitExpertQuestionsActivity::class.java)
                     appCon.startActivity(intent)
-                }
+                }*/
 
                 R.id.nav_finlit_profile -> {
                     val intent = Intent(appCon, FinlitExpertProfileActivity::class.java)
