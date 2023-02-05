@@ -190,9 +190,9 @@
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertSpecificAssessmentActivity"
-            android:exported="true">
+            android:exported="false">
 
-                 <intent-filter>
+       <!--          <intent-filter>
                      <action android:name="android.intent.action.MAIN" />
 
                      <category android:name="android.intent.category.LAUNCHER" />
@@ -200,7 +200,7 @@
 
                  <meta-data
                      android:name="android.app.lib_name"
-                     android:value="" />
+                     android:value="" />-->
 
         </activity>
         <activity
@@ -265,12 +265,12 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-            android:exported="false">
-    <!--        <intent-filter>
+            android:exported="true">
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
         <!--
  <intent-filter>
