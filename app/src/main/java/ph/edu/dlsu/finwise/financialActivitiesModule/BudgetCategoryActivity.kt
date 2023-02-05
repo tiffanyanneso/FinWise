@@ -18,6 +18,8 @@ import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
 import ph.edu.dlsu.finwise.adapter.BudgetCategoryItemAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetBinding
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetCategoryBinding
+import ph.edu.dlsu.finwise.databinding.DialogNewBudgetItemBinding
+import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.model.BudgetCategory
 import ph.edu.dlsu.finwise.model.BudgetCategoryItem
 import java.text.DecimalFormat
@@ -98,16 +100,14 @@ class BudgetCategoryActivity : AppCompatActivity() {
     }
 
     private fun showNewItemDialog() {
-        val dialog = Dialog(this)
 
-        dialog.setContentView(R.layout.dialog_new_budget_item)
+        var dialogBinding= DialogNewBudgetItemBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
         dialog.window!!.setLayout(800, 900)
 
-        val btnSave = dialog.findViewById<Button>(R.id.btn_save)
-        var btnCancel = dialog.findViewById<Button>(R.id.btn_cancel)
-
-
-        btnSave.setOnClickListener {
+        dialogBinding.btnSave.setOnClickListener {
             var itemName = dialog.findViewById<EditText>(R.id.dialog_et_item_name).text.toString()
             var itemAmount = dialog.findViewById<EditText>(R.id.dialog_et_item_amount).text.toString().toFloat()
             var budgetItem = BudgetCategoryItem(itemName, budgetCategoryID, decisionMakingActivityID, itemAmount)
@@ -124,7 +124,7 @@ class BudgetCategoryActivity : AppCompatActivity() {
             }
         }
 
-        btnCancel.setOnClickListener {
+        dialogBinding.btnCancel.setOnClickListener {
             dialog.dismiss()
         }
         dialog.show()

@@ -23,6 +23,7 @@ import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
 import ph.edu.dlsu.finwise.adapter.GoalViewDepositAdapater
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
+import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.model.BudgetCategory
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
@@ -135,16 +136,14 @@ class BudgetActivity : AppCompatActivity() {
     }
 
     private fun showNewBudgetCategoryDialog() {
-        val dialog = Dialog(this)
 
-        dialog.setContentView(R.layout.dialog_new_budget_category)
+        var dialogBinding= DialogNewBudgetCategoryBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
         dialog.window!!.setLayout(900, 1000)
 
-        val btnSave = dialog.findViewById<Button>(R.id.btn_save)
-        var btnCancel = dialog.findViewById<Button>(R.id.btn_cancel)
-
-
-        btnSave.setOnClickListener {
+        dialogBinding.btnSave.setOnClickListener {
             var categoryName = dialog.findViewById<EditText>(R.id.dialog_et_category_name).text.toString()
             var categoryAmount = dialog.findViewById<EditText>(R.id.dialog_et_category_amount).text.toString()
             var budgetCategory = BudgetCategory(categoryName, decisionMakingActivityID, categoryAmount)
@@ -162,7 +161,7 @@ class BudgetActivity : AppCompatActivity() {
 
         }
 
-        btnCancel.setOnClickListener {
+        dialogBinding.btnCancel.setOnClickListener {
             dialog.dismiss()
         }
         dialog.show()

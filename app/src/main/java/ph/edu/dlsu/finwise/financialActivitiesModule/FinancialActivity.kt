@@ -1,10 +1,14 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.app.Dialog
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -22,6 +26,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ph.edu.dlsu.finwise.*
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialBinding
+import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.*
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.GoalSettings
@@ -38,6 +43,8 @@ class FinancialActivity : AppCompatActivity() {
     private var mediumTermRate = 0.00F
     private var longTermRate = 0.00F
 
+    private var ongoingGoals = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +53,7 @@ class FinancialActivity : AppCompatActivity() {
 
         GlobalScope.launch(Dispatchers.IO) {
             barChart()
+            setGoalCount()
             withContext(Dispatchers.Main) {
                 val adapter = ViewPagerAdapter(supportFragmentManager)
                 //checkSettings()
@@ -63,8 +71,13 @@ class FinancialActivity : AppCompatActivity() {
         }
 
         binding.btnNewGoal.setOnClickListener {
-            var goToNewGoal = Intent(this, ChildNewGoal::class.java)
-            this.startActivity(goToNewGoal)
+            if (ongoingGoals >= 5)
+                buildDialog()
+            else {
+                var goToNewGoal = Intent(this, ChildNewGoal::class.java)
+                this.startActivity(goToNewGoal)
+            }
+
         }
 
         // Hides actionbar,
@@ -84,6 +97,18 @@ class FinancialActivity : AppCompatActivity() {
         fun addFragment(fragment: Fragment, title:String){
             mFrgmentList.add(fragment)
             mFrgmentTitleList.add(title)
+        }
+    }
+
+    private fun setGoalCount() {
+        var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
+        //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+            for (goalSnapshot in results) {
+                var goal = goalSnapshot.toObject<FinancialGoals>()
+                if (goal?.status == "In Progress")
+                    ongoingGoals++
+            }
         }
     }
 
@@ -140,6 +165,29 @@ class FinancialActivity : AppCompatActivity() {
             binding.barChart.invalidate()
             binding.barChart.description.isEnabled = false
         }
+    }
+
+
+    private fun buildDialog() {
+
+        var dialogBinding=DialogNewGoalWarningBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+        // Initialize dialog
+
+        dialog.window!!.setLayout(900, 600)
+
+        dialogBinding.tvMessage.text= "You current have $ongoingGoals ongoing goals.\nAre you sure you want to create another new goal?"
+
+        dialogBinding.btnOk.setOnClickListener {
+            var newGoal = Intent (this, ChildNewGoal::class.java)
+            this.startActivity(newGoal)
+            dialog.dismiss()
+        }
+        dialogBinding.btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun checkSettings() {

@@ -8,9 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityParentGoalBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
+import ph.edu.dlsu.finwise.model.ChildUser
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment.*
 
 class ParentGoalActivity : AppCompatActivity() {
@@ -29,6 +32,8 @@ class ParentGoalActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
+        setChildName()
+        setGoalCount()
 
         var sendBundle = Bundle()
         sendBundle.putString("childID", childID)
@@ -61,6 +66,25 @@ class ParentGoalActivity : AppCompatActivity() {
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
 
+    }
+
+    private fun setChildName() {
+        firestore.collection("ChildUser").document(childID).get().addOnSuccessListener {
+            var child = it.toObject<ChildUser>()
+            binding.tvChildName.text = child?.firstName + "'s Goals"
+        }
+    }
+
+    private fun setGoalCount() {
+        var ongoing = 0
+        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
+            for (goalSnapshot in results) {
+                var goal = goalSnapshot.toObject<FinancialGoals>()
+                if (goal?.status == "In Progress")
+                    ongoing++
+            }
+            binding.tvGoalsInProgress.text = ongoing.toString()
+        }
     }
 
     private fun sendDataToFragment() {
