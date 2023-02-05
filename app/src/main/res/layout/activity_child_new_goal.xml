@@ -4,22 +4,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".financialActivitiesModule.ChildEditGoal"
-    >
+    tools:context=".financialActivitiesModule.ChildEditGoal">
 
-    <TextView
-        android:id="@+id/title"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/topbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="24sp"
-        android:text="@string/new_goal_text"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:paddingTop="20dp"/>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topA33333ppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleCentered="true"
+            app:title="New Goal"
+            app:menu="@menu/top_app_bar"
+            app:navigationIcon="@drawable/baseline_arrow_back_24"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:backgroundTint="@color/dark_green"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+
+<!--    <TextView-->
+<!--        android:id="@+id/title"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/topbar"-->
+<!--        android:textSize="24sp"-->
+<!--        android:text="@string/new_goal_text"-->
+<!--        android:gravity="center"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:paddingTop="20dp"/>-->
 
 <!--    <TextView-->
 <!--        android:id="@+id/tv_new_goal"-->
@@ -43,7 +63,7 @@
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/topbar"
         android:layout_marginHorizontal="20dp"
         app:counterEnabled="true"
         app:counterMaxLength="30"
@@ -65,50 +85,9 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-<!--    <EditText-->
-<!--        android:id="@+id/et_goal"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tv_new_goal"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:hint="@string/goal"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="text"-->
-<!--        android:textSize="18dp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        />-->
-
-    <CheckBox
-        android:id="@+id/cb_goal_self"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Goal for Self"
-        app:layout_constraintTop_toBottomOf="@+id/goal_container"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="14sp"
-        android:layout_marginHorizontal="20dp"/>
-
-<!--    <TextView-->
-<!--        android:id="@+id/tv_activity"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/cb_goal_self"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:textSize="14dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:textAllCaps = "true"-->
-<!--        android:text="@string/activity"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp"/>-->
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/container_activity"
-        app:layout_constraintTop_toBottomOf="@+id/cb_goal_self"
+        app:layout_constraintTop_toBottomOf="@+id/goal_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Select Activity"
@@ -145,8 +124,8 @@
         app:layout_constraintTop_toBottomOf="@+id/container_activity"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="14dp"
-        android:layout_marginTop="10dp"
+        android:textSize="16dp"
+        android:layout_marginTop="15dp"
         android:textAllCaps = "true"
         android:text="Financial Decision-Making Activity"
         android:textStyle="bold"
@@ -186,37 +165,6 @@
             android:textSize="16sp"/>
     </LinearLayout>
 
-<!--    <TextView-->
-<!--        android:id="@+id/tv_amount"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/checkBoxes"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:textSize="14dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:textAllCaps = "true"-->
-<!--        android:text="@string/amount"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp"/>-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/et_amount"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tv_amount"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:hint="@string/amount"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="numberDecimal"-->
-<!--        android:textSize="14dp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        />-->
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/amount_container"
         android:layout_width="match_parent"
@@ -230,7 +178,7 @@
         app:helperText=""
         app:helperTextTextColor="@color/red"
         android:paddingBottom="10dp"
-        app:startIconDrawable="@drawable/baseline_money_24"
+        app:startIconDrawable="@drawable/peso"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -244,22 +192,6 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-<!--    <TextView-->
-<!--        android:id="@+id/tv_target_date"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/amount_container"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:textSize="14dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:textAllCaps = "true"-->
-<!--        android:text="@string/target_date"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp"/>-->
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/date_container"
         android:layout_width="match_parent"
@@ -269,7 +201,7 @@
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:endIconMode="custom"
-        app:endIconDrawable="@drawable/baseline_calendar_today_24"
+        app:startIconDrawable="@drawable/baseline_calendar_today_24"
         android:hint="Target Date">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -284,15 +216,16 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-<!--    <DatePicker-->
-<!--        android:id="@+id/et_target_date"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tv_target_date"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="100dp"-->
-<!--        android:calendarViewShown="false"-->
-<!--        android:datePickerMode="spinner" />-->
-
+    <CheckBox
+        android:id="@+id/cb_goal_self"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Goal for Self"
+        app:layout_constraintTop_toBottomOf="@+id/date_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="14sp"
+        android:layout_marginHorizontal="20dp"
+        android:paddingRight="5dp"/>
 
     <LinearLayout
         android:id="@+id/linear_layout"

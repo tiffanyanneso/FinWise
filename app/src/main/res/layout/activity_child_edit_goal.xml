@@ -156,7 +156,7 @@
         app:helperText=""
         app:helperTextTextColor="@color/red"
         android:paddingBottom="10dp"
-        app:startIconDrawable="@drawable/baseline_money_24"
+        app:startIconDrawable="@drawable/peso"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -179,7 +179,7 @@
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:endIconMode="custom"
-        app:endIconDrawable="@drawable/baseline_calendar_today_24"
+        app:startIconDrawable="@drawable/baseline_calendar_today_24"
         android:hint="Target Date">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -208,15 +208,15 @@
        android:layout_marginHorizontal="20dp">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_cancel"
+            android:id="@+id/btn_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/cancel"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/light_grey"
+            android:text="Delete"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/red"
             android:background="@drawable/button_border_grey"
             android:layout_marginRight="10dp"
             android:layout_weight="1"

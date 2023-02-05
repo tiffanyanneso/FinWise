@@ -2,8 +2,10 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -14,6 +16,8 @@ import ph.edu.dlsu.finwise.databinding.ActivityFinancialGoalDepositBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class FinancialActivityGoalDeposit : AppCompatActivity() {
 
@@ -23,6 +27,7 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
     private lateinit var context: Context
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialGoalDepositBinding.inflate(layoutInflater)
@@ -53,8 +58,7 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
             bundle.putString("decisionMakingActivityID", decisionActivityID)
             bundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
             bundle.putString("source", "DirectGoalDeposit")
-            bundle.putSerializable("date", SimpleDateFormat("MM-dd-yyyy").parse((binding.etTransactionDate.month+1).toString() + "-" +
-                    binding.etTransactionDate.dayOfMonth.toString() + "-" + binding.etTransactionDate.year))
+            bundle.putSerializable("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")))
 
             var goToDepositConfirmation = Intent(context, FinancialActivityConfirmDeposit::class.java)
             goToDepositConfirmation.putExtras(bundle)

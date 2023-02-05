@@ -109,7 +109,7 @@
         app:helperText=""
         app:helperTextTextColor="@color/red"
         android:paddingVertical="10dp"
-        app:startIconDrawable="@drawable/baseline_money_24"
+        app:startIconDrawable="@drawable/peso"
         >
 
         <com.google.android.material.textfield.TextInputEditText

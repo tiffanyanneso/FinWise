@@ -76,7 +76,7 @@
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:endIconMode="custom"
-        app:endIconDrawable="@drawable/baseline_calendar_today_24"
+        app:startIconDrawable="@drawable/baseline_calendar_today_24"
         android:hint="Date"
         android:paddingTop="10dp">
 
@@ -146,7 +146,7 @@
         app:helperText=""
         app:helperTextTextColor="@color/red"
         android:paddingVertical="10dp"
-        app:startIconDrawable="@drawable/baseline_money_24"
+        app:startIconDrawable="@drawable/peso"
         >
 
         <com.google.android.material.textfield.TextInputEditText

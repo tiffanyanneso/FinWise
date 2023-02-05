@@ -11,20 +11,6 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="24dp"
-            android:text="Edit Profile"
-            android:gravity="center"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:paddingTop="20dp"/>
-
-        <TextView
             android:id="@+id/tv_profile_picture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
