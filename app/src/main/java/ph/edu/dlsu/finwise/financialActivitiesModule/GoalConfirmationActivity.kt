@@ -18,6 +18,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalConfirmationBinding
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import ph.edu.dlsu.finwise.model.GoalSettings
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -46,7 +47,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
         binding = ActivityGoalConfirmationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context= this
-        getCurrentUserType()
+        //getCurrentUserType()
 
         // Hides actionbar,
         // and initializes the navbar
@@ -56,9 +57,13 @@ class GoalConfirmationActivity : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         binding.tvGoalName.text = bundle.getString("goalName")
         binding.tvActivity.text = bundle.getString("activity")
-        binding.tvAmount.text = DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
-        binding.tvTargetDate.text = bundle.getSerializable("targetDate").toString()
+        binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
         binding.tvIsForChild.text = bundle.getBoolean("goalIsForSelf").toString()
+
+        var targetDate = bundle.getSerializable("targetDate")
+        var formattedDate = SimpleDateFormat("MM/dd/yyyy").format(targetDate)
+
+        binding.tvTargetDate.text = formattedDate
 
         var decisionActivities = bundle.getStringArrayList("decisionActivities")
         var decisionActivitiesString = ""
@@ -82,18 +87,18 @@ class GoalConfirmationActivity : AppCompatActivity() {
                 else if (goalSettings?.autoApproved == true)*/
                     goalStatus = "In Progress"
 
-                computeDateDifference(bundle.getSerializable("targetDate").toString())
+                computeDateDifference(formattedDate)
 
-                lateinit var childID:String
-                lateinit var createdBy:String
-                if (currentUserType == "Parent") {
-                    var childIDBundle = intent.extras!!
-                    childID = childIDBundle.getString("childID").toString()
-                    createdBy = FirebaseAuth.getInstance().currentUser!!.uid
-                } else {
-                    childID = FirebaseAuth.getInstance().currentUser!!.uid
-                    createdBy = FirebaseAuth.getInstance().currentUser!!.uid
-                }
+                 var childID:String = " "
+                 var createdBy:String =" "
+//                if (currentUserType == "Parent") {
+//                    var childIDBundle = intent.extras!!
+//                    childID = childIDBundle.getString("childID").toString()
+//                    createdBy = FirebaseAuth.getInstance().currentUser!!.uid
+//                } else if (currentUserType == "Child"){
+//                    childID = FirebaseAuth.getInstance().currentUser!!.uid
+//                    createdBy = FirebaseAuth.getInstance().currentUser!!.uid
+//                }
 
                 var goal = hashMapOf(
                     //TODO: add childID, createdBy
@@ -140,13 +145,24 @@ class GoalConfirmationActivity : AppCompatActivity() {
                                 .addOnSuccessListener {
                                 }
                         }
-                        var goToStartGoal = Intent(context, StartGoalActivity::class.java)
-                        var bundle1: Bundle = intent.extras!!
-                        bundle1.putString("goalID", it.id)
-                        goToStartGoal.putExtras(bundle1)
-                        goToStartGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        context.startActivity(goToStartGoal)
-                        finish()
+
+                        //if (currentUserType == "Child") {
+                            var goToStartGoal = Intent(context, StartGoalActivity::class.java)
+                            var bundle1: Bundle = intent.extras!!
+                            bundle1.putString("goalID", it.id)
+                            goToStartGoal.putExtras(bundle1)
+                            goToStartGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            context.startActivity(goToStartGoal)
+                            finish()
+//                        } else {
+//                            var parentGoal = Intent(this, ParentGoalActivity::class.java)
+//                            var bundle = Bundle()
+//                            bundle.putString("childID", childID)
+//                            parentGoal.putExtras(bundle)
+//                            startActivity(parentGoal)
+//                            finish()
+//                        }
+
                     }
                 }.addOnFailureListener { e ->
                     Toast.makeText(this, "Failed to add goal", Toast.LENGTH_SHORT).show()
@@ -165,7 +181,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
     private fun getCurrentUserType() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
-            if (it != null)
+            if (it.exists())
                 currentUserType = "Parent"
             else
                 currentUserType ="Child"

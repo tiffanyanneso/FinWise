@@ -32,13 +32,15 @@ class ChildNewGoal : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private lateinit var currentUserType:String
+    private lateinit var childID:String
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChildNewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        getCurrentUserType()
+        //getCurrentUserType()
+
 
         // Hides actionbar,
         // and initializes the navbar
@@ -98,7 +100,7 @@ class ChildNewGoal : AppCompatActivity() {
             var goalName =  binding.etGoal.text.toString()
             var activity = binding.dropdownActivity.text.toString()
             var amount = binding.etAmount.text.toString().toFloat()
-            var targetDate = binding.etTargetDate.toString()
+            var targetDate = binding.etTargetDate.text.toString()
 
 //                SimpleDateFormat("MM-dd-yyyy").parse((binding.etTargetDate.month+1).toString() + "-" +
 //                    binding.etTargetDate.dayOfMonth.toString() + "-" + binding.etTargetDate.year)
@@ -116,14 +118,12 @@ class ChildNewGoal : AppCompatActivity() {
             bundle.putString("goalName", goalName)
             bundle.putString("activity", activity)
             bundle.putFloat("amount", amount)
-            bundle.putSerializable("targetDate", targetDate)
+            bundle.putSerializable("targetDate",  SimpleDateFormat("MM/dd/yyyy").parse(targetDate))
             bundle.putStringArrayList("decisionActivities", decisionMakingActivities)
             bundle.putBoolean("goalIsForSelf", goalIsForSelf)
 
-            if(currentUserType == "Parent") {
-                var childIDBundle = intent.extras!!
-                bundle.putString("childID", childIDBundle.getString("childID"))
-            }
+//            if(currentUserType == "Parent")
+//                bundle.putString("childID", childID)
 
             //TODO: reset spinner and date to default value
             binding.etGoal.text?.clear()
@@ -143,8 +143,11 @@ class ChildNewGoal : AppCompatActivity() {
     private fun getCurrentUserType() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
-            if (it != null)
+            if (it.exists()) {
                 currentUserType = "Parent"
+                var childIDBundle = intent.extras!!
+                childID = childIDBundle.getString("childID").toString()
+            }
             else
                 currentUserType ="Child"
         }

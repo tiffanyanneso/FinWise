@@ -31,18 +31,20 @@ class ParentGoalActivity : AppCompatActivity() {
         childID = bundle.getString("childID").toString()
 
         var sendBundle = Bundle()
-        bundle.putString("childID", childID)
+        sendBundle.putString("childID", childID)
 
         binding.btnNewGoal.setOnClickListener {
             var newGoal = Intent(this, ChildNewGoal::class.java)
             newGoal.putExtras(sendBundle)
-            startActivity(newGoal)
+            newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(newGoal)
         }
 
         binding.btnSettings.setOnClickListener {
             var settings = Intent(this, GoalSettingsActivity::class.java)
             settings.putExtras(sendBundle)
-            startActivity(settings)
+            settings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(settings)
         }
 
         val adapter = ViewPagerAdapter(supportFragmentManager)
