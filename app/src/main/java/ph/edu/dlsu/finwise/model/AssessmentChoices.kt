@@ -1,7 +1,7 @@
 package ph.edu.dlsu.finwise.model
 
-class QuestionAnswers (
+class AssessmentChoices (
     var questionID:String?=null,
-    var answer:String?=null,
+    var choice:String?=null,
     var isCorrect: Boolean?=null)  {
 }

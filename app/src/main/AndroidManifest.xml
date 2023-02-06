@@ -184,7 +184,13 @@
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertAddNewQuestionsActivity"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertProfileActivity"
             android:exported="false" />
@@ -266,11 +272,6 @@
         <activity
             android:name=".loginRegisterModule.LoginActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <!--
  <intent-filter>

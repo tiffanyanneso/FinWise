@@ -37,7 +37,7 @@
             android:paddingTop="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dialog_et_category_name"
+                android:id="@+id/dialog_et_new_choice"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:lines="1"

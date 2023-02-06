@@ -64,7 +64,7 @@
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_name"
+                android:id="@+id/et_question"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:lines="1"
