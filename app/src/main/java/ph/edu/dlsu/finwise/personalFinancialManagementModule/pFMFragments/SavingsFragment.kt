@@ -99,22 +99,18 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_bar_chart) {
         // below line is to set position
         // to our x-axis to bottom.
         xAxis?.position = XAxis.XAxisPosition.BOTTOM
-
-
+        
         // below line is to set granularity
         // to our x axis labels.
         xAxis?.granularity = 1f
-
 
         // below line is to enable
         // granularity to our x axis.
         xAxis?.isGranularityEnabled = true
 
-
         // below line is to make our
         // bar chart as draggable.
         barChart?.isDragEnabled = true
-
 
         // below line is to make visible
         // range for our bar chart.
@@ -130,7 +126,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_bar_chart) {
 
         // we are setting width of
         // bar in below line.
-        data.barWidth = 0.3f
+        data.barWidth = 0.15f
 
         // below line is to set minimum
         // axis to our chart.
