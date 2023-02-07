@@ -56,8 +56,8 @@ class ViewTransactionActivity : AppCompatActivity() {
             firestore.collection("Transactions").document(transactionID).get().addOnSuccessListener { document ->
                 if (document != null) {
                     Toast.makeText(this, transactionID, Toast.LENGTH_SHORT).show()
-                    var transaction = document.toObject(Transactions::class.java)
-                    if (transaction?.transactionType.toString() == "goal")
+                    val transaction = document.toObject(Transactions::class.java)
+                    if (transaction?.category.toString() == "Goal")
                         binding.tvTransactionType.text = "Deposit to Goal"
                     else {
                         binding.tvTransactionType.text = transaction?.transactionType.toString()

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".personalFinancialManagementModule.breakdownFragments.IncomeFragment">
+    tools:context=".personalFinancialManagementModule.pFMFragments.IncomeFragment">
 
 
     <androidx.cardview.widget.CardView

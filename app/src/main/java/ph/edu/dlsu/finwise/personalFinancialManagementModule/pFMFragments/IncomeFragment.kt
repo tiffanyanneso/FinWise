@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.personalFinancialManagementModule.breakdownFragments
+package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 
 import android.graphics.Color
 import android.graphics.Typeface
@@ -18,30 +18,24 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.FragmentExpenseBinding
 import ph.edu.dlsu.finwise.databinding.FragmentIncomeBinding
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 
 
-class ExpenseFragment : Fragment(R.layout.fragment_expense) {
-    lateinit var pieChart: PieChart
-    private lateinit var binding: FragmentExpenseBinding
+class IncomeFragment : Fragment(R.layout.fragment_income) {
+    private lateinit var pieChart: PieChart
+    private lateinit var binding: FragmentIncomeBinding
     private var firestore = Firebase.firestore
     private var transactionsArrayList = ArrayList<Transactions>()
-    var clothesPercentage = 0.00f
-    var foodPercentage = 0.00f
+    var allowancePercentage = 0.00f
     var giftPercentage = 0.00f
-    var toysAndGamesPercentage = 0.00f
-    var transportationPercentage = 0.00f
+    var rewardPercentage = 0.00f
     var otherPercentage = 0.00f
-    var clothes = 0.00f
-    var food = 0.00f
+    var allowance = 0.00f
     var gift = 0.00f
-    var toysAndGames = 0.00f
-    var transportation = 0.00f
+    var reward = 0.00f
     var other = 0.00f
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,12 +47,13 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_expense, container, false)
+        return inflater.inflate(R.layout.fragment_income, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentExpenseBinding.bind(view)
+        binding = FragmentIncomeBinding.bind(view)
+
         loadPieChart()
     }
 
@@ -70,7 +65,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
                 lateinit var id: String
                 for (document in transactionsSnapshot) {
                     var transaction = document.toObject<Transactions>()
-                    if (transaction.transactionType == "Expense")
+                    if (transaction.transactionType == "Income")
                         transactionsArrayList.add(transaction)
                 }
 
@@ -79,70 +74,52 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     }
 
     private fun calculatePercentage() {
+
         for (transaction in transactionsArrayList) {
             when (transaction.category) {
-                "Clothes" -> clothes += transaction.amount!!.toFloat()
-                "Food" -> food += transaction.amount!!.toFloat()
+                "Allowance" -> allowance += transaction.amount!!.toFloat()
                 "Gift" -> gift += transaction.amount!!.toFloat()
-                "Toys & Games" -> toysAndGames += transaction.amount!!.toFloat()
-                "Transportation" -> transportation += transaction.amount!!.toFloat()
+                "Reward" -> reward += transaction.amount!!.toFloat()
                 "Other" -> other += transaction.amount!!.toFloat()
             }
         }
-        val total = clothes + food + gift + toysAndGames + transportation + other
+        val total = allowance + gift + reward + other
 
-        clothesPercentage = clothes / total * 100
-        foodPercentage = food / total * 100
+        allowancePercentage = allowance / total * 100
         giftPercentage = gift / total * 100
-        toysAndGamesPercentage = toysAndGames / total * 100
-        transportationPercentage = transportation / total * 100
+        rewardPercentage = reward / total * 100
         otherPercentage = other / total * 100
 
-        topExpense()
+        topIncome()
         loadPieChartView()
     }
 
-    private fun topExpense() {
-        if (clothes >= food && clothes >= gift && clothes >= toysAndGames
-            && clothes >= transportation && clothes >= other) {
-            binding.tvTopExpense.text = "Clothes"
+    private fun topIncome() {
+        if (allowance >= gift && allowance >= reward && allowance >= other) {
+            binding.tvTopIncome.text = "Allowance"
             val dec = DecimalFormat("#,###.00")
-            val amount = dec.format(clothes)
-            binding.tvExpenseTotal.text = "₱$amount"
-        } else if (food >= clothes && food >= gift && food >= toysAndGames &&
-            food >= transportation && food >= other) {
-            binding.tvTopExpense.text = "Food"
-            val dec = DecimalFormat("#,###.00")
-            val amount = dec.format(food)
-            binding.tvExpenseTotal.text = "₱$amount"
-        } else if (gift >= clothes && gift >= food && gift >= toysAndGames &&
-            gift >= transportation && gift >= other) {
-            binding.tvTopExpense.text = "Gift"
+            val amount = dec.format(allowance)
+            binding.tvIncomeTotal.text = "₱$amount"
+        } else if (gift >= allowance && gift >= reward && gift >= other) {
+            binding.tvTopIncome.text = "Gift"
             val dec = DecimalFormat("#,###.00")
             val amount = dec.format(gift)
-            binding.tvTopExpense.text = "₱$amount"
-        } else if (toysAndGames >= clothes && toysAndGames >= gift && toysAndGames >= food &&
-            toysAndGames >= transportation && toysAndGames >= other) {
-            binding.tvTopExpense.text = "Toys & Games"
+            binding.tvIncomeTotal.text = "₱$amount"
+        } else if (reward >= allowance && reward >= gift && reward >= other) {
+            binding.tvTopIncome.text = "Reward"
             val dec = DecimalFormat("#,###.00")
-            val amount = dec.format(toysAndGames)
-            binding.tvExpenseTotal.text = "₱$amount"
-        } else if (transportation >= clothes && transportation >= gift && transportation >= toysAndGames
-            && transportation >= food && transportation >= other) {
-            binding.tvTopExpense.text = "Transportation"
-            val dec = DecimalFormat("#,###.00")
-            val amount = dec.format(transportation)
-            binding.tvExpenseTotal.text = "₱$amount"
+            val amount = dec.format(reward)
+            binding.tvIncomeTotal.text = "₱$amount"
         } else {
-            binding.tvTopExpense.text = "Other"
+            binding.tvTopIncome.text = "Other"
             val dec = DecimalFormat("#,###.00")
             val amount = dec.format(other)
-            binding.tvExpenseTotal.text = "₱$amount"
+            binding.tvIncomeTotal.text = "₱$amount"
         }
     }
 
     private fun loadPieChartView() {
-        pieChart = view?.findViewById(R.id.pc_expense)!!
+        pieChart = view?.findViewById(R.id.pc_income)!!
         //  setting user percent value, setting description as enabled, and offset for pie chart
         pieChart.setUsePercentValues(true)
         pieChart.description.isEnabled = false
@@ -183,6 +160,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         //  creating array list and
         // adding data to it to display in pie chart
         val entries = initializeEntriesPieChart()
+
         // setting pie data set
         val dataSet = PieDataSet(entries, "")
 
@@ -223,25 +201,24 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     private fun initializeEntriesPieChart(): ArrayList<PieEntry> {
         val entries: ArrayList<PieEntry> = ArrayList()
 
-        if (clothesPercentage > 0.00f)
-            entries.add(PieEntry(clothesPercentage, "Clothes"))
+        if (allowancePercentage > 0.00f)
+            entries.add(PieEntry(allowancePercentage, "Allowance"))
 
-        if (foodPercentage > 0.00f)
-            entries.add(PieEntry(foodPercentage, "Food"))
+        if (giftPercentage > 0.00f)
+            entries.add(PieEntry(giftPercentage, "Gift"))
 
-        if (toysAndGamesPercentage > 0.00f)
-            entries.add(PieEntry(toysAndGamesPercentage, "Gift"))
-
-        if (transportationPercentage > 0.00f)
-            entries.add(PieEntry(transportationPercentage, "Toys & Games"))
-
-        if (transportationPercentage > 0.00f)
-            entries.add(PieEntry(transportationPercentage, "Transportation"))
+        if (rewardPercentage > 0.00f)
+            entries.add(PieEntry(rewardPercentage, "Reward"))
 
         if (otherPercentage > 0.00f)
             entries.add(PieEntry(otherPercentage, "Other"))
 
+
+
+
         return entries
     }
+
+
 
 }

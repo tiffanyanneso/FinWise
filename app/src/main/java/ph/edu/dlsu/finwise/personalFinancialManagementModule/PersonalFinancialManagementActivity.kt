@@ -2,56 +2,28 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.jjoe64.graphview.GraphView
 import ph.edu.dlsu.finwise.Navbar
-import ph.edu.dlsu.finwise.adapter.PFMBreakdownAdapter
+import ph.edu.dlsu.finwise.adapter.PFMAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.Transactions
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.breakdownFragments.ExpenseFragment
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.breakdownFragments.IncomeFragment
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.ExpenseFragment
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.SavingsFragment
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.BalanceFragment
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.IncomeFragment
 import java.text.DecimalFormat
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.log
 
 
 class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPersonalFinancialManagementBinding
     private var firestore = Firebase.firestore
-    private lateinit var savingsLineGraphView: GraphView
-    private var transactionsArrayList = ArrayList<Transactions>()
-
-    // Balance bar chart
-    // variable for our bar chart
-    private var barChart: BarChart? = null
-
-    // variable for bar data set.
-    private var barDataSet1: BarDataSet? = null
-    // variable for bar data set.
-    private var barDataSet2: BarDataSet? = null
-
-    // array list for storing entries.
-    private var barEntriesIncome = ArrayList<BarEntry>()
-    private var barEntriesExpense = ArrayList<BarEntry>()
-
-    // creating a string array for displaying days.
-    private var datesBar = arrayListOf<String>()
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,18 +37,18 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
 
         setUpBreakdownTabs()
+        setUpChartTabs()
         loadBalance()
-        //getTransactions()
-        initializeBalanceBarGraph()
-        //initializeSavingsBarGraph()
         goToDepositGoalActivity()
         goToIncomeActivity()
         goToExpenseActivity()
-        goToTransactionHistory()
-
+        //getTransactions()
+        //initializeBalanceBarGraph()
+        //initializeSavingsBarGraph()
+        //goToTransactionHistory()
     }
 
-    private fun initializeBalanceBarGraph() {
+   /* private fun initializeBalanceBarGraph() {
         firestore.collection("Transactions")
             .get().addOnSuccessListener { documents ->
 
@@ -215,39 +187,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 // our bar chart.
                 barChart?.invalidate()
             }
-    }
-
-    private fun getBarEntriesOne(): ArrayList<BarEntry> {
-
-        // creating a new array list
-        barEntriesIncome = ArrayList<BarEntry>()
-
-        // adding new entry to our array list with bar
-        // entry and passing x and y axis value to it.
-        barEntriesIncome.add(BarEntry(1f, 4f))
-        barEntriesIncome.add(BarEntry(2f, 6f))
-        barEntriesIncome.add(BarEntry(3f, 8f))
-        barEntriesIncome.add(BarEntry(4f, 2f))
-        barEntriesIncome.add(BarEntry(5f, 4f))
-        barEntriesIncome.add(BarEntry(6f, 1f))
-        return barEntriesIncome
-    }
-
-    private fun getBarEntriesTwo(): ArrayList<BarEntry> {
-
-        // creating a new array list
-        barEntriesIncome = ArrayList<BarEntry>()
-
-        // adding new entry to our array list with bar
-        // entry and passing x and y axis value to it.
-        barEntriesIncome.add(BarEntry(1f, 8f))
-        barEntriesIncome.add(BarEntry(2f, 12f))
-        barEntriesIncome.add(BarEntry(3f, 4f))
-        barEntriesIncome.add(BarEntry(4f, 1f))
-        barEntriesIncome.add(BarEntry(5f, 7f))
-        barEntriesIncome.add(BarEntry(6f, 3f))
-        return barEntriesIncome
-    }
+    }*/
 
  /*   private fun initializeSavingsLineGraphData() {
          // on below line we are initializing
@@ -325,10 +265,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
      }*/
 
-
-
     private fun setUpBreakdownTabs() {
-        val adapter = PFMBreakdownAdapter(supportFragmentManager)
+        val adapter = PFMAdapter(supportFragmentManager)
         adapter.addFragment(IncomeFragment(), "Income")
         adapter.addFragment(ExpenseFragment(), "Expense")
         binding.viewPager.adapter = adapter
@@ -336,6 +274,17 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
         binding.tabs.getTabAt(0)?.text = "Income"
         binding.tabs.getTabAt(1)?.text = "Expense"
+    }
+
+    private fun setUpChartTabs() {
+        val adapter = PFMAdapter(supportFragmentManager)
+        adapter.addFragment(BalanceFragment(), "Balance")
+        adapter.addFragment(SavingsFragment(), "Savings")
+        binding.viewPagerBarCharts.adapter = adapter
+        binding.tabsBarCharts.setupWithViewPager(binding.viewPagerBarCharts)
+
+        binding.tabsBarCharts.getTabAt(0)?.text = "Balance"
+        binding.tabsBarCharts.getTabAt(1)?.text = "Savings"
     }
 
     private fun loadBalance() {
@@ -356,12 +305,12 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     }
 
-    private fun goToTransactionHistory() {
+    /*private fun goToTransactionHistory() {
         binding.tvViewAll.setOnClickListener {
             val goToDepositGoalActivity = Intent(applicationContext, TransactionHistoryActivity::class.java)
             startActivity(goToDepositGoalActivity)
         }
-    }
+    }*/
 
     /*private fun getTransactions() {
         var transactionIDArrayList = ArrayList<String>()
