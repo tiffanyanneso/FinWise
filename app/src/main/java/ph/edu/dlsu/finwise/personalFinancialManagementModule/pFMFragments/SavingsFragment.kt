@@ -54,6 +54,24 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_bar_chart) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSavingsBarChartBinding.bind(view)
         initializeSavingsBarGraph()
+        initializeTotals()
+    }
+
+    private fun initializeTotals() {
+        firestore.collection("Transactions").whereEqualTo("category", "Goal")
+            .get().addOnSuccessListener { documents ->
+                var totalDeposit = 0.00f
+                var totalWithdrawal= 0.00f
+                for (transaction in documents) {
+                    val transactionObject = transaction.toObject<Transactions>()
+                    if (transactionObject.transactionType == "Deposit")
+                        totalDeposit += transactionObject.amount!!
+                    else totalWithdrawal += transactionObject.amount!!
+                }
+                binding.tvDepositTotal.text = "₱"+totalDeposit
+                binding.tvWithdrawalTotal.text = "₱"+totalWithdrawal
+
+            }
     }
 
     private fun initializeSavingsBarGraph() {
@@ -99,7 +117,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_bar_chart) {
         // below line is to set position
         // to our x-axis to bottom.
         xAxis?.position = XAxis.XAxisPosition.BOTTOM
-        
+
         // below line is to set granularity
         // to our x axis labels.
         xAxis?.granularity = 1f

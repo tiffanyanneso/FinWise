@@ -54,6 +54,24 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_bar_chart) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentBalanceBarChartBinding.bind(view)
         initializeBalanceBarGraph()
+        initializeTotals()
+    }
+
+    private fun initializeTotals() {
+        firestore.collection("Transactions")
+            .get().addOnSuccessListener { documents ->
+                var totalIncome = 0.00f
+                var totalExpense= 0.00f
+                for (transaction in documents) {
+                    val transactionObject = transaction.toObject<Transactions>()
+                    if (transactionObject.transactionType == "Income")
+                        totalIncome += transactionObject.amount!!
+                    else totalExpense += transactionObject.amount!!
+                }
+                binding.tvIncomeTotal.text = "₱"+totalIncome
+                binding.tvExpenseTotal.text = "₱"+totalExpense
+
+            }
     }
 
     private fun initializeBalanceBarGraph() {

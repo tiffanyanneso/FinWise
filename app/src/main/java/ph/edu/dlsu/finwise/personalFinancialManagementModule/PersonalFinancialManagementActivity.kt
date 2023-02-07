@@ -298,8 +298,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 firestore.collection("ChildWallet").document(id).get()
                     .addOnSuccessListener { document ->
                     val balance = document.toObject<ChildWallet>()
-                    val dec = DecimalFormat("#,###.00")
-                    binding.tvBalance.text = "₱"+dec.format(balance?.currentBalance)
+                    binding.tvBalance.text = "₱"+balance?.currentBalance
                 }
             }
 
