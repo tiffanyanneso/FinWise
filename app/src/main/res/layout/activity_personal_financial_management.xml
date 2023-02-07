@@ -166,25 +166,24 @@
                 android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_savings"
+                android:id="@+id/tv_balance_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Savings Trend"
+                android:text="Balance Trend"
                 android:textStyle="bold"
                 android:textColor="@color/light_green"
                 android:textSize="18sp"
                 android:gravity="center"
                 android:layout_margin="10dp"/>
 
-            <com.jjoe64.graphview.GraphView
-                android:id="@+id/savings_line_graph"
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/bar_chart_balance"
                 android:layout_width="350dp"
-                android:layout_height="250dp"
+                android:layout_height="400dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_gravity="center"
-                android:background="@color/white"
-                android:layout_below="@id/tv_savings" />
+                android:background="@color/white"/>
 
             </LinearLayout>
 
@@ -211,10 +210,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_balance_title"
+                    android:id="@+id/tv_savings_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Balance Trend"
+                    android:text="Savings Trend"
                     android:textStyle="bold"
                     android:textColor="@color/light_green"
                     android:textSize="18sp"
@@ -227,8 +226,7 @@
                     android:layout_height="250dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginStart="5dp"
-                    android:layout_gravity="center"
-                    android:layout_below="@id/tv_savings" />
+                    android:layout_gravity="center"/>
 
             </LinearLayout>
 

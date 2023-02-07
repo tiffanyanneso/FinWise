@@ -179,17 +179,17 @@
                      android:value="" />
             -->
         </activity>
-        <activity
+        <!--<activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertQuestionsActivity"
-            android:exported="false" />
+            android:exported="false" />-->
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertAddNewQuestionsActivity"
             android:exported="true" >
-            <intent-filter>
+           <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertProfileActivity"
@@ -232,7 +232,14 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity
             android:name=".financialActivitiesModule.ChildEditGoal"
             android:exported="false" />
