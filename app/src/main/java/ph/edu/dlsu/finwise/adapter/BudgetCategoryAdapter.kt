@@ -62,7 +62,7 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
             firestore.collection("BudgetCategories").document(budgetCategoryID).get().addOnSuccessListener {
                 var budgetCategory = it.toObject<BudgetCategory>()
                 itemBinding.tvCategoryId.text = it.id
-                itemBinding.decisionMakingActivityId.text = budgetCategory?.decisionMakingActivityID
+                //itemBinding.decisionMakingActivityId.text = budgetCategory?.decisionMakingActivityID
                 itemBinding.tvCategory.text = budgetCategory?.budgetCategory
                 itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(budgetCategory?.amount)
             }

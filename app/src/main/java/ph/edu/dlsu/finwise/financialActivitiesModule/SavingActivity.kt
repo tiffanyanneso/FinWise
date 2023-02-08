@@ -13,7 +13,7 @@ import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.adapter.GoalViewDepositAdapater
+import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivitySavingBinding
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import ph.edu.dlsu.finwise.model.Transactions
@@ -27,7 +27,7 @@ class SavingActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
     private lateinit var context: Context
 
-    private lateinit  var goalViewDepositAdapater:GoalViewDepositAdapater
+    private lateinit  var goalViewDepositAdapater:GoalTransactionsAdapater
 
 
     private lateinit var decisionMakingActivityID:String
@@ -102,7 +102,7 @@ class SavingActivity : AppCompatActivity() {
                     currentAmount -= transaction.amount!!
             }
             transactionsArrayList.sortByDescending { it.date }
-            goalViewDepositAdapater = GoalViewDepositAdapater(this, transactionsArrayList)
+            goalViewDepositAdapater = GoalTransactionsAdapater(this, transactionsArrayList)
             binding.rvViewDepositHistory.adapter = goalViewDepositAdapater
             binding.rvViewDepositHistory.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
             getSavingProgress()

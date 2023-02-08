@@ -31,7 +31,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
     var amount : String? =null
 
     private lateinit var decisionMakingActivityID:String
-    private lateinit var financialGoalID:String
+    private lateinit var goalID:String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,33 +46,31 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         val bundle: Bundle = intent.extras!!
-        decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
-        financialGoalID = bundle.getString("financialGoalID").toString()
+        //decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
+        goalID = bundle.getString("goalID").toString()
         binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
-        amount = bundle.getFloat("amount").toString()
         binding.tvAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
         binding.tvGoal.text= bundle.getString("goalName")
 
         binding.btnConfirm.setOnClickListener {
-            val goalName = bundle.getString("goalName").toString()
-
             val transaction = hashMapOf(
-                "transactionName" to goalName,
+                "transactionName" to bundle.getString("goalName").toString() + " Deposit",
                 "transactionType" to "Deposit",
                 "category" to "Goal",
                 "date" to bundle.getSerializable("date"),
                 "createdBy" to "",
                 "amount" to bundle.getFloat("amount"),
-                "decisionMakingActivityID" to decisionMakingActivityID
+                "financialGoalID" to goalID
+                //"decisionMakingActivityID" to decisionMakingActivityID
             )
 
             //adjustUserBalance()
 
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
                 val bundle = Bundle()
-                bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-                bundle.putString("financialGoalID", financialGoalID)
-                val savingActivity = Intent(this, SavingActivity::class.java)
+                //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
+                bundle.putString("goalID", goalID)
+                val savingActivity = Intent(this, ViewGoalActivity::class.java)
                 savingActivity.putExtras(bundle)
                 savingActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(savingActivity)

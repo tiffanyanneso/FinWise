@@ -1,13 +1,10 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
@@ -16,14 +13,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.util.Date
 
 
 class ChildNewGoal : AppCompatActivity() {
@@ -70,25 +61,6 @@ class ChildNewGoal : AppCompatActivity() {
             binding.checkBoxes.visibility = View.VISIBLE
         }*/
 
-        binding.dropdownActivity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-               var currentSelected = binding.dropdownActivity.text.toString()
-                resetCheckbox()
-                if (currentSelected == "Buying Items" || currentSelected == "Planning An Event" || currentSelected == "Situational Shopping") {
-                    setCheckbox (true, false, false, true, true, false)
-                } else if (currentSelected == "Saving For Emergency Funds") {
-                    setCheckbox (false, false, true, false, false, false)
-                } else if (currentSelected == "Donating to Charity" ) {
-                    setCheckbox (false, false, false, true, true, false)
-                } else if (currentSelected == "Earning Money") {
-                    setCheckbox (false, false, true, false, false, false)
-                }
-            }
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                resetCheckbox() 
-            }
-        }
-
         binding.etTargetDate.setOnClickListener{
             showCalendar()
         }
@@ -106,20 +78,10 @@ class ChildNewGoal : AppCompatActivity() {
 //                    binding.etTargetDate.dayOfMonth.toString() + "-" + binding.etTargetDate.year)
             var goalIsForSelf = binding.cbGoalSelf.isChecked
 
-            //see which decision making activities were selected
-            var decisionMakingActivities = ArrayList<String>()
-            if (binding.cbBudgeting.isChecked)
-                decisionMakingActivities.add("Setting a Budget")
-            if (binding.cbSaving.isChecked)
-                decisionMakingActivities.add("Deciding to Save")
-            if (binding.cbSpending.isChecked)
-                decisionMakingActivities.add("Deciding to Spend")
-
             bundle.putString("goalName", goalName)
             bundle.putString("activity", activity)
             bundle.putFloat("amount", amount)
             bundle.putSerializable("targetDate",  SimpleDateFormat("MM/dd/yyyy").parse(targetDate))
-            bundle.putStringArrayList("decisionActivities", decisionMakingActivities)
             bundle.putBoolean("goalIsForSelf", goalIsForSelf)
 
 //            if(currentUserType == "Parent")
@@ -167,24 +129,5 @@ class ChildNewGoal : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
-    }
-
-    private fun resetCheckbox() {
-        binding.cbBudgeting.isChecked = false
-        binding.cbBudgeting.isClickable = true
-        binding.cbSaving.isChecked = false
-        binding.cbSaving.isClickable = true
-        binding.cbSpending.isChecked = false
-        binding.cbSpending.isClickable = true
-    }
-
-    private fun setCheckbox (budgetChecked:Boolean, budgetCheckable:Boolean, savingChecked:Boolean, savingCheckable:Boolean,
-                                   spendingChecked :Boolean, spendingCheckable:Boolean) {
-        binding.cbBudgeting.isChecked = budgetChecked
-        binding.cbBudgeting.isClickable = budgetCheckable
-        binding.cbSaving.isChecked = savingChecked
-        binding.cbSaving.isClickable = savingCheckable
-        binding.cbSpending.isChecked = spendingChecked
-        binding.cbSpending.isClickable = spendingCheckable
     }
 }

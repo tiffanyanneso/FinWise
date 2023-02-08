@@ -1,11 +1,16 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.app.Dialog
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.DatePicker
+import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivitySpendingBinding
 import ph.edu.dlsu.finwise.databinding.ActivityWithdrawBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
@@ -16,11 +21,12 @@ class WithdrawActivity : AppCompatActivity() {
     private lateinit var binding:ActivityWithdrawBinding
     private var firestore = Firebase.firestore
 
-    private lateinit var financialGoalID:String
+    private lateinit var goalID:String
     private lateinit var decisionMakingActivityID:String
 
     private lateinit var bundle:Bundle
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWithdrawBinding.inflate(layoutInflater)
@@ -29,15 +35,17 @@ class WithdrawActivity : AppCompatActivity() {
         bundle = intent.extras!!
         setData()
 
+        binding.etDate.setOnClickListener {
+            showCalendar()
+        }
+
         binding.btnNext.setOnClickListener {
             var bundle = Bundle()
             bundle.putString("goalName", binding.tvGoalName.text.toString())
-            bundle.putString("financialGoalID",financialGoalID)
-            bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
+            bundle.putString("goalID",goalID)
+            //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
             bundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
-            bundle.putSerializable("date", SimpleDateFormat("MM-dd-yyyy").parse((binding.etTransactionDate.month+1).toString() + "-" +
-                    binding.etTransactionDate.dayOfMonth.toString() + "-" + binding.etTransactionDate.year))
-
+            bundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
 
 
             var confirmWithdraw = Intent (this, ConfirmWithdraw::class.java)
@@ -47,15 +55,31 @@ class WithdrawActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showCalendar() {
+        val dialog = Dialog(this)
+
+        dialog.setContentView(R.layout.dialog_calendar)
+        dialog.window!!.setLayout(1000, 1200)
+
+        var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
+
+        calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
+            binding.etDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
     private fun setData() {
-        financialGoalID = bundle.getString("financialGoalID").toString()
+        goalID = bundle.getString("goalID").toString()
         decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
 
-        firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
+        firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
             binding.tvGoalName.text = financialGoal?.goalName
-            binding.tvProgressAmount.text = "₱ " + bundle.getFloat("currentAmount") + " / ₱ " + bundle.getFloat("targetAmount")
-            binding.pbProgress.progress = bundle.getInt("progress")
+            //binding.tvProgressAmount.text = "₱ " + bundle.getFloat("currentAmount") + " / ₱ " + bundle.getFloat("targetAmount")
+            //binding.pbProgress.progress = bundle.getInt("progress")
         }
     }
 }

@@ -90,17 +90,17 @@
         app:layout_constraintTop_toBottomOf="@+id/goal_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Select Activity"
+        android:hint="Reason"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_marginHorizontal="20dp"
+        android:paddingBottom="10dp"
         app:startIconDrawable="@drawable/baseline_directions_run_24">
 
         <AutoCompleteTextView
             android:id="@+id/dropdown_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"
-            />
+            android:inputType="none" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -117,53 +117,53 @@
 <!--        android:layout_marginEnd="20dp"/>-->
 
 
-    <TextView
-        android:id="@+id/tv_financial_decision_making_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/container_activity"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="16dp"
-        android:layout_marginTop="15dp"
-        android:textAllCaps = "true"
-        android:text="Financial Decision-Making Activity"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"/>
+<!--    <TextView-->
+<!--        android:id="@+id/tv_financial_decision_making_activity"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/container_activity"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:textSize="16dp"-->
+<!--        android:layout_marginTop="15dp"-->
+<!--        android:textAllCaps = "true"-->
+<!--        android:text="Financial Decision-Making Activity"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp"/>-->
 
-    <LinearLayout
-        android:id="@+id/checkBoxes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_financial_decision_making_activity"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/checkBoxes"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tv_financial_decision_making_activity"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:layout_marginEnd="20dp">-->
 
-        <CheckBox
-            android:id="@+id/cb_budgeting"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Setting a Budget"
-            android:textSize="16sp"/>
+<!--        <CheckBox-->
+<!--            android:id="@+id/cb_budgeting"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Setting a Budget"-->
+<!--            android:textSize="16sp"/>-->
 
-        <CheckBox
-            android:id="@+id/cb_saving"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Deciding to Save"
-            android:textSize="16sp"/>
+<!--        <CheckBox-->
+<!--            android:id="@+id/cb_saving"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Deciding to Save"-->
+<!--            android:textSize="16sp"/>-->
 
-        <CheckBox
-            android:id="@+id/cb_spending"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Deciding to Spend"
-            android:textSize="16sp"/>
-    </LinearLayout>
+<!--        <CheckBox-->
+<!--            android:id="@+id/cb_spending"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Deciding to Spend"-->
+<!--            android:textSize="16sp"/>-->
+<!--    </LinearLayout>-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/amount_container"
@@ -172,7 +172,7 @@
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBoxes"
+        app:layout_constraintTop_toBottomOf="@+id/container_activity"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:helperText=""

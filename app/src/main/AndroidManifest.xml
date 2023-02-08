@@ -13,14 +13,18 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
-            android:name=".MayaPayment"
-            android:exported="false" >
+            android:name=".financialActivitiesModule.ViewGoalDetails"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
         </activity>
         <activity
+            android:name=".MayaPayment"
+            android:exported="false"></activity>
+        <activity
             android:name=".parentFinancialActivitiesModule.ParentGoalActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".financialActivitiesModule.ConfirmWithdraw"
             android:exported="false">
@@ -179,17 +183,22 @@
                      android:value="" />
             -->
         </activity>
-        <!--<activity
+        <!--
+<activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertQuestionsActivity"
-            android:exported="false" />-->
+            android:exported="false" />
+        -->
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertAddNewQuestionsActivity"
-            android:exported="true" >
-           <!-- <intent-filter>
+            android:exported="true">
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertProfileActivity"
@@ -198,7 +207,8 @@
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertSpecificAssessmentActivity"
             android:exported="false">
 
-       <!--          <intent-filter>
+            <!--
+                     <intent-filter>
                      <action android:name="android.intent.action.MAIN" />
 
                      <category android:name="android.intent.category.LAUNCHER" />
@@ -206,12 +216,13 @@
 
                  <meta-data
                      android:name="android.app.lib_name"
-                     android:value="" />-->
+                     android:value="" />
+            -->
 
         </activity>
         <activity
             android:name=".personalFinancialManagementModule.TransactionHistoryActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".personalFinancialManagementModule.ConfirmDepositActivity"
             android:exported="false" />
@@ -233,22 +244,22 @@
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
         </activity>
         <activity
             android:name=".financialActivitiesModule.ChildEditGoal"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.ChildNewGoal"
-            android:exported="true" />
+            android:exported="true">
+        </activity>
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <!--
 <intent-filter>
@@ -278,8 +289,7 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <!--
  <intent-filter>
             android:exported="true">

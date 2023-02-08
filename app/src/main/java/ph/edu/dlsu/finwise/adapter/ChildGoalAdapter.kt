@@ -82,7 +82,7 @@ class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHold
             var bundle = Bundle()
             var goalID = itemBinding.tvGoalId.text.toString()
             bundle.putString ("goalID", goalID)
-            bundle.putString ("childID", childID)
+            //bundle.putString ("childID", childID)
             if (goalStatus == "For Review") {
                 var reviewGoal = Intent(context, ParentSettingAGoalActivity::class.java)
                 reviewGoal.putExtras(bundle)
