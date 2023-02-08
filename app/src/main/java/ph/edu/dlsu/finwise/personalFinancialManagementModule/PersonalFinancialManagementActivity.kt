@@ -2,6 +2,7 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -289,18 +290,13 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private fun loadBalance() {
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2")
-            .get().addOnSuccessListener { documents ->
-                lateinit var id: String
-                for (document in documents) {
-                    id = document.id
-                }
-                firestore.collection("ChildWallet").document(id).get()
-                    .addOnSuccessListener { document ->
-                    val balance = document.toObject<ChildWallet>()
-                    binding.tvBalance.text = "₱"+balance?.currentBalance
-                }
-            }
+        firestore.collection("ChildWallet").document("eWZNOIb9qEf8kVNdvdRzKt4AYrA2").get()
+            .addOnSuccessListener { document ->
+            val balance = document.toObject<ChildWallet>()
+            binding.tvBalance.text = "₱abc"+balance?.currentBalance
+                Toast.makeText(this, balance?.currentBalance.toString(), Toast.LENGTH_SHORT).show()
+        }
+
 
     }
 
