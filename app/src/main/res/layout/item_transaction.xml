@@ -6,7 +6,7 @@
     card_view:cardCornerRadius="10dp"
     android:foreground="@drawable/border"
     android:layout_marginBottom="10dp"
-    android:backgroundTint="@color/very_light_green">
+    android:id="@+id/card_view">
 
     <TextView
         android:id="@+id/tv_transaction_id"

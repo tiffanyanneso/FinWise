@@ -1,21 +1,16 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.app.Dialog
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.utils.ColorTemplate
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -52,7 +47,6 @@ class FinancialActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         GlobalScope.launch(Dispatchers.IO) {
-            barChart()
             setGoalCount()
             withContext(Dispatchers.Main) {
                 val adapter = ViewPagerAdapter(supportFragmentManager)
@@ -109,61 +103,6 @@ class FinancialActivity : AppCompatActivity() {
                 if (goal?.status == "In Progress")
                     ongoingGoals++
             }
-        }
-    }
-
-    //source: https://www.geeksforgeeks.org/android-create-barchart-with-kotlin/
-    private fun barChart() {
-
-        var completedShort = 0.00F
-        var completedMedium = 0.00F
-        var completedLong = 0.00F
-
-        var totalShort =0.00F
-        var totalMedium =0.00F
-        var totalLong = 0.00F
-
-        var barEntriesList = ArrayList<BarEntry>()
-
-        // TODO: ADD QUERY TO GET CURRENT USER'S GOALS
-        firestore.collection("FinancialGoals").get().addOnSuccessListener { results ->
-            for (goal in results ) {
-                var goalObject = goal.toObject<FinancialGoals>()
-                if (goalObject.goalLength == "Short"){
-                    totalShort++
-                    if (goalObject.status == "Completed")
-                        completedShort++
-                }
-                else if (goalObject.goalLength == "Medium"){
-                    totalMedium++
-                    if (goalObject.status == "Completed")
-                        completedMedium++
-                }
-                else if (goalObject.goalLength == "Long"){
-                    totalLong++
-                    if (goalObject.status == "Completed")
-                        completedLong++
-                }
-            }
-
-            if (totalShort!=0.00F)
-                shortTermRate = (completedShort/totalShort)*100
-            if (totalMedium!=0.00F)
-                mediumTermRate = (completedMedium/totalMedium) *100
-            if (totalLong!=0.00F)
-                longTermRate = (completedLong/totalLong) *100
-
-            // adding to our bar entries list
-            barEntriesList.add(BarEntry(1f, shortTermRate))
-            barEntriesList.add(BarEntry(2f, mediumTermRate))
-            barEntriesList.add(BarEntry(3f, longTermRate))
-
-            var barDataSet = BarDataSet(barEntriesList, "Completion Rate")
-            var barData =  BarData(barDataSet)
-
-            binding.barChart.data = barData
-            binding.barChart.invalidate()
-            binding.barChart.description.isEnabled = false
         }
     }
 

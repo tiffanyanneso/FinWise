@@ -9,7 +9,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.adapter.GoalViewDepositAdapater
+import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivitySavingViewTransactionsBinding
 import ph.edu.dlsu.finwise.model.Transactions
 
@@ -17,7 +17,7 @@ class SavingViewTransactionsActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivitySavingViewTransactionsBinding
     private var firestore = Firebase.firestore
-    private lateinit  var goalViewDepositAdapater:GoalViewDepositAdapater
+    private lateinit  var goalViewDepositAdapater:GoalTransactionsAdapater
 
     private lateinit var context: Context
 
@@ -42,7 +42,7 @@ class SavingViewTransactionsActivity : AppCompatActivity() {
                 transactionsArrayList.add(transaction)
             }
 
-            goalViewDepositAdapater = GoalViewDepositAdapater(this, transactionsArrayList)
+            goalViewDepositAdapater = GoalTransactionsAdapater(this, transactionsArrayList)
             binding.rvViewDepositHistory.adapter = goalViewDepositAdapater
             binding.rvViewDepositHistory.layoutManager = LinearLayoutManager(applicationContext,
                 LinearLayoutManager.VERTICAL,

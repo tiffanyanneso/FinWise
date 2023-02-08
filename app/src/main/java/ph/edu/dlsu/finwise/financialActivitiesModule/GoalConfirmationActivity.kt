@@ -4,25 +4,21 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalConfirmationBinding
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
-import ph.edu.dlsu.finwise.model.GoalSettings
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
+import ph.edu.dlsu.finwise.model.FinancialActivities
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -64,16 +60,6 @@ class GoalConfirmationActivity : AppCompatActivity() {
         var formattedDate = SimpleDateFormat("MM/dd/yyyy").format(targetDate)
 
         binding.tvTargetDate.text = formattedDate
-
-        var decisionActivities = bundle.getStringArrayList("decisionActivities")
-        var decisionActivitiesString = ""
-        if (decisionActivities!=null) {
-            for (i in decisionActivities.indices)
-                //TODO: how to fix extra space
-                decisionActivitiesString += decisionActivities[i].toString() + "\n"
-
-            binding.textDecisionActivities.text = decisionActivitiesString
-        }
 
 
         binding.btnConfirm.setOnClickListener{
@@ -118,33 +104,8 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
                 //add goal to DB
                 firestore.collection("FinancialGoals").add(goal).addOnSuccessListener {
-                    //add decision making activities in inner collection of FinancialGoals
-                    var decisionActivities = bundle.getStringArrayList("decisionActivities")
-                    if (decisionActivities != null) {
-                        var priority = 1
-                        for (i in decisionActivities.indices) {
-                            var decisionMakingActivity = DecisionMakingActivities()
-                            decisionMakingActivity.financialGoalID = it.id
-                            decisionMakingActivity.targetAmount = bundle.getFloat("amount")
-                            decisionMakingActivity.priority = priority
-                            if (priority == 1)
-                                decisionMakingActivity.status = "In Progress"
-                            else
-                                decisionMakingActivity.status = "Not Yet Started"
 
-                            priority++
-
-                            if (decisionActivities[i].contentEquals("Setting a Budget"))
-                                decisionMakingActivity.decisionMakingActivity = "Setting a Budget"
-                            if (decisionActivities[i].contentEquals("Deciding to Save"))
-                                decisionMakingActivity.decisionMakingActivity = "Deciding to Save"
-                            if (decisionActivities[i].contentEquals("Deciding to Spend"))
-                                decisionMakingActivity.decisionMakingActivity = "Deciding to Spend"
-
-                            firestore.collection("DecisionMakingActivities").add(decisionMakingActivity)
-                                .addOnSuccessListener {
-                                }
-                        }
+                    saveFinancialActivities(bundle.getString("activity").toString(), it.id)
 
                         //if (currentUserType == "Child") {
                             var goToStartGoal = Intent(context, StartGoalActivity::class.java)
@@ -163,8 +124,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
 //                            finish()
 //                        }
 
-                    }
-                }.addOnFailureListener { e ->
+                    }.addOnFailureListener { e ->
                     Toast.makeText(this, "Failed to add goal", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -175,6 +135,17 @@ class GoalConfirmationActivity : AppCompatActivity() {
             goToNewGoal.putExtras(bundle)
             goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(goToNewGoal)
+        }
+    }
+
+    private fun saveFinancialActivities(financialActivity:String, goalID:String) {
+        var savingActivity = FinancialActivities (goalID, "Saving", "In Progress")
+        firestore.collection("FinancialActivities").add(savingActivity)
+        if (financialActivity == "Buying Items" ||financialActivity == "Planning An Event" || financialActivity == "Situational Shopping") {
+            var budgetingActivity = FinancialActivities(goalID, "Budgeting", "In Progress")
+            var spendingActivity = FinancialActivities(goalID, "Spending", "Not Yet Started")
+            firestore.collection("FinancialActivities").add(budgetingActivity)
+            firestore.collection("FinancialActivities").add(spendingActivity)
         }
     }
 
@@ -196,8 +167,6 @@ class GoalConfirmationActivity : AppCompatActivity() {
         val to = LocalDate.parse(targetDate, dateFormatter)
 
         var difference = Period.between(from, to)
-        println("difference day  " + difference.days)
-        println("difference month  " + difference.months)
 
         if (difference.days <= 14 && difference.months < 1 )
             goalLength = "Short"

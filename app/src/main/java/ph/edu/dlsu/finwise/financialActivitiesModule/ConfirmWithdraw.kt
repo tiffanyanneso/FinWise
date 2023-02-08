@@ -19,7 +19,7 @@ class ConfirmWithdraw : AppCompatActivity() {
 
     private lateinit var bundle:Bundle
 
-    private lateinit var financialGoalID:String
+    private lateinit var goalID:String
     private lateinit var decisionMakingActivityID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,21 +32,20 @@ class ConfirmWithdraw : AppCompatActivity() {
 
         binding.btnConfirm.setOnClickListener {
             var withdrawal = hashMapOf(
-                "childID" to "",
+                "transactionName" to bundle.getString("goalName").toString() + " Withdrawal",
                 "transactionType" to "Withdrawal",
-                 "transactionName" to "",
-                 "amount" to bundle.getFloat("amount"),
-                 "category" to "Goal",
-                 "financialGoalID" to bundle.getString("financialGoalID"),
-                 "decisionMakingActivityID" to bundle.getString("decisionMakingActivityID"),
-                 "date" to bundle.getSerializable("date")
+                "category" to "Goal",
+                "date" to bundle.getSerializable("date"),
+                "createdBy" to "",
+                "amount" to bundle.getFloat("amount"),
+                "financialGoalID" to goalID
             )
             firestore.collection("Transactions").add(withdrawal).addOnSuccessListener {
                 //TODO: ADJUST USER BALANCE (INCREASE WALLET BALANCE)
                 var bundle = Bundle()
-                bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-                bundle.putString("financialGoalID", financialGoalID)
-                var saving = Intent (this, SavingActivity::class.java)
+                //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
+                bundle.putString("goalID", goalID)
+                var saving = Intent (this, ViewGoalActivity::class.java)
                 saving.putExtras(bundle)
                 saving.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this.startActivity(saving)
@@ -56,10 +55,10 @@ class ConfirmWithdraw : AppCompatActivity() {
     }
 
     private fun setData() {
-        financialGoalID = bundle.getString("financialGoalID").toString()
-        decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
+        goalID = bundle.getString("goalID").toString()
+        //decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
         binding.tvGoal.text = bundle.getString("goalName")
         binding.tvAmount.text = "₱ " + DecimalFormat("#,###.00").format(bundle.getFloat("amount")).toString()
-        binding.tvDate.text = SimpleDateFormat("MM-dd-yyyy").format(bundle.getSerializable("date") as Date).toString()
+        binding.tvDate.text = SimpleDateFormat("MM-dd-yyyy").format(bundle.getSerializable("date"))
     }
 }

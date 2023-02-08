@@ -111,6 +111,9 @@
     <string name="name">Name</string>
     <string name="budget_set">Budget Set</string>
 
+
+    <string name="savings_deposit">Savings Deposit</string>
+    <string name="goal_amount">Goal Amount</string>
     <string name="withdraw">- Withdraw</string>
     <string name="title_withdraw">Withdraw From Goal</string>
     <string name="confirm_withdrawal">Confirm Withdrawal</string>

@@ -10,6 +10,6 @@ class Transactions(
     var category:String?=null,
     var financialGoalID:String?=null,
     var goal:String?=null,
-    var decisionMakingActivityID:String?=null,
+    //var decisionMakingActivityID:String?=null,
     var date:Timestamp?=null
 ){}

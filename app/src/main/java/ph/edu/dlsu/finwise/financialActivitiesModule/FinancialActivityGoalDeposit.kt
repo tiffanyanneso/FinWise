@@ -1,19 +1,19 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.ConfirmDepositActivity
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialGoalDepositBinding
-import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
@@ -40,32 +40,50 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         var dataBundle: Bundle = intent.extras!!
-        var financialGoalID = dataBundle.getString("financialGoalID").toString()
-        var decisionActivityID = dataBundle.getString("decisionMakingActivityID").toString()
-
-        firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
+        var goalID = dataBundle.getString("goalID").toString()
+//        var decisionActivityID = dataBundle.getString("decisionMakingActivityID").toString()
+//
+        firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
             binding.tvGoalName.text = financialGoal?.goalName
-            binding.tvProgressAmount.text = "₱ " + dataBundle.getFloat("currentAmount") + " / ₱ " + dataBundle.getFloat("targetAmount")
-            binding.pbProgress.progress = dataBundle.getInt("progress")
+            //binding.tvProgressAmount.text = "₱ " + dataBundle.getFloat("currentAmount") + " / ₱ " + dataBundle.getFloat("targetAmount")
+            //binding.pbProgress.progress = dataBundle.getInt("progress")
+        }
+
+        binding.etDate.setOnClickListener {
+            showCalendar()
         }
 
 
         binding.btnNext.setOnClickListener {
             var bundle = Bundle()
             bundle.putString("goalName", binding.tvGoalName.text.toString())
-            bundle.putString("financialGoalID",financialGoalID)
-            bundle.putString("decisionMakingActivityID", decisionActivityID)
+            bundle.putString("goalID",goalID)
+            //bundle.putString("decisionMakingActivityID", decisionActivityID)
             bundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
-            bundle.putString("source", "DirectGoalDeposit")
-            bundle.putSerializable("date", LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")))
+            //bundle.putString("source", "DirectGoalDeposit")
+            bundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
 
             var goToDepositConfirmation = Intent(context, FinancialActivityConfirmDeposit::class.java)
             goToDepositConfirmation.putExtras(bundle)
             goToDepositConfirmation.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(goToDepositConfirmation)
-
         }
+    }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showCalendar() {
+        val dialog = Dialog(this)
+
+        dialog.setContentView(R.layout.dialog_calendar)
+        dialog.window!!.setLayout(1000, 1200)
+
+        var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
+
+        calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
+            binding.etDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 }

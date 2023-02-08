@@ -6,9 +6,7 @@ import android.os.Bundle
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalAccomplishedBinding
-import ph.edu.dlsu.finwise.databinding.ActivitySpendingBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.SimpleDateFormat
 

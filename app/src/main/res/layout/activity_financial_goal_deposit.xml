@@ -48,6 +48,31 @@
         android:layout_marginEnd="20dp"
         android:paddingBottom="10dp"/>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_marginTop="10dp"
+        android:id="@+id/date_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_goal_name"
+        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_marginHorizontal="20dp"
+        app:helperTextEnabled="true"
+        app:endIconMode="custom"
+        app:startIconDrawable="@drawable/baseline_calendar_today_24"
+        android:hint="Date">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lines="1"
+            android:inputType="numberDecimal"
+            android:textSize="16dp"
+            android:enabled="true"
+            android:focusable="false"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
 <!--    <com.google.android.material.textfield.TextInputLayout-->
 <!--        android:id="@+id/date_container"-->
 <!--        android:layout_width="match_parent"-->
@@ -76,7 +101,7 @@
         android:id="@+id/tv_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_goal_name"
+        app:layout_constraintTop_toBottomOf="@+id/date_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="16dp"
@@ -112,6 +137,8 @@
         android:scaleY="4"
         android:max="100"
         />
+
+
 
 <!--    <TextView-->
 <!--        android:id="@+id/tv_amount"-->
@@ -184,6 +211,8 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         />
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
