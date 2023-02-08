@@ -204,7 +204,6 @@
             android:id="@+id/btn_back"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
             android:background="@drawable/button_border_green"
             android:backgroundTint="@color/dark_green"
             android:text="@string/back"
