@@ -62,15 +62,23 @@
                     android:maxLines="1"/>
             </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_progress_bar"
+        <LinearLayout
+            android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/linear_layout"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:maxLines="1"
-            android:text="progress bar here"/>
+            android:orientation="horizontal"
+            android:layout_below="@+id/linear_layout"
+            >
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:scaleY="4"
+                android:max="100"/>
+        </LinearLayout>
     </RelativeLayout>
+
 
 </androidx.cardview.widget.CardView>

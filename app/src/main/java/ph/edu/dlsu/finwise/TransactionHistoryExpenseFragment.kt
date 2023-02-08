@@ -24,9 +24,7 @@ class TransactionHistoryExpenseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            getExpenseTransactions()
-        }
+        getExpenseTransactions()
     }
 
     override fun onCreateView(
@@ -66,9 +64,9 @@ class TransactionHistoryExpenseFragment : Fragment() {
                 var transactionID = transactionSnapshot.id
                 var transaction = transactionSnapshot.toObject<Transactions>()
 
-               // if (transaction.transactionType == "Expense" || transaction.transactionType == "Deposit") {
+                if (transaction.transactionType == "Expense" || transaction.transactionType == "Deposit") {
                     transactionFilterArrayList.add(TransactionFilter(transactionID, transaction?.date!!.toDate()))
-                //}
+                }
             }
             transactionFilterArrayList.sortBy { it.transactionDate }
 

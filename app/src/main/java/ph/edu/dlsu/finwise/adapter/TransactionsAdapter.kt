@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.TransactionHistoryExpenseFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.ViewTransactionActivity
 import ph.edu.dlsu.finwise.databinding.ItemTransactionBinding
@@ -70,10 +72,14 @@ class TransactionsAdapter: RecyclerView.Adapter<TransactionsAdapter.TransactionV
                 val formatter = SimpleDateFormat("MM/dd/yyyy")
                 val date = formatter.format(transaction?.date?.toDate())
                 itemBinding.tvDate.text =  date.toString()
-                if (transaction?.transactionType == "Income")
+                if (transaction?.transactionType == "Income" || transaction?.transactionType == "Withdrawal") {
                     itemBinding.tvAmount.text = "+₱$amount"
-                else
+                    itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.very_light_green))
+                }
+                else if (transaction?.transactionType == "Expense" || transaction?.transactionType == "Deposit") {
                     itemBinding.tvAmount.text = "-₱$amount"
+                    itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.light_red))
+                }
             }
         }
 

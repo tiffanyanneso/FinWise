@@ -75,12 +75,19 @@
                         android:textColor="@color/black"
                         android:textStyle="bold"/>
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                         android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4" />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ProgressBar
+                            android:id="@+id/progress_bar"
+                            android:layout_width="match_parent"
+                             android:layout_height="30dp"
+                            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                            android:scaleY="4"
+                            android:max="100"/>
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/tv_remaining"

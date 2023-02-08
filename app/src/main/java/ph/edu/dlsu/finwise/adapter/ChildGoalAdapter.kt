@@ -14,6 +14,7 @@ import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentSettingAGoalAct
 import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 import ph.edu.dlsu.finwise.databinding.ItemGoalBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
@@ -70,11 +71,21 @@ class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHold
                 // convert timestamp to date
                 val date = SimpleDateFormat("MM/dd/yyyy").format(goal?.targetDate?.toDate())
                 itemBinding.tvTargetDate.text = date.toString()
-                itemBinding.tvProgressAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(goal?.currentAmount) + "/ ₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
-                /*for (goalSnapshot in documents) {
-                    val goalID = goalSnapshot.id
-                    goalIDArrayList.add(goalID!!)
-                }*/
+
+                var savedAmount = 0.00F
+                firestore.collection("Transactions").whereEqualTo("financialGoalID", goalID).get().addOnSuccessListener { results ->
+                    for (transaction in results) {
+                        var transactionObject = transaction.toObject<Transactions>()
+                        if (transactionObject.transactionType == "Deposit")
+                            savedAmount += transactionObject.amount!!
+                        else if (transactionObject.transactionType == "Withdrawal")
+                            savedAmount-= transactionObject.amount!!
+                    }
+                    itemBinding.tvProgressAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(savedAmount) + "/ ₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
+                    itemBinding.progressBar.progress = (savedAmount/ goal?.targetAmount!! * 100).toInt()
+                }
+
+
             }
         }
 

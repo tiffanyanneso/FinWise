@@ -123,12 +123,11 @@ class ViewGoalActivity : AppCompatActivity() {
                     var formatSaved = DecimalFormat("#,###.00").format(savedAmount)
                     var formatTarget = DecimalFormat("#,###.00").format(goal?.targetAmount)
                     binding.tvGoalProgress.text = "₱$formatSaved / " + "₱ $formatTarget"
+                    binding.progressBar.progress = (savedAmount/ goal?.targetAmount!! * 100).toInt()
 
                     goalTransactionsAdapter = GoalTransactionsAdapater(this, transactionsArrayList)
                     binding.rvSavingsDeposit.adapter = goalTransactionsAdapter
                     binding.rvSavingsDeposit.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-
-
 
 
                     //compute remaining days

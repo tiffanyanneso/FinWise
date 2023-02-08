@@ -23,9 +23,8 @@ class TransactionHistoryIncomeFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            getIncomeTransactions()
-        }
+        getIncomeTransactions()
+
     }
 
     override fun onCreateView(
