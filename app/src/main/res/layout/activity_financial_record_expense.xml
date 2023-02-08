@@ -55,19 +55,6 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-<!--    <androidx.appcompat.widget.AppCompatSpinner-->
-<!--        android:id="@+id/spinner_expense_category"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tv_category"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:ems="10"-->
-<!--        android:entries="@array/pfm_expense_category"-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:textSize="14sp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:layout_marginBottom="10dp"/>-->
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/container_category"
         app:layout_constraintTop_toBottomOf="@+id/container_expense_name"
@@ -76,7 +63,8 @@
         android:hint="Select Category"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_marginHorizontal="20dp"
-        app:startIconDrawable="@drawable/baseline_saved_search_24">
+        app:startIconDrawable="@drawable/baseline_saved_search_24"
+        android:paddingBottom="10dp">
 
         <AutoCompleteTextView
             android:id="@+id/dropdown_category"
@@ -87,63 +75,29 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tv_target_date"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/date_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/container_category"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="14dp"
-        android:layout_marginTop="10dp"
-        android:textAllCaps = "true"
-        android:text="@string/date"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"/>
+        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_marginHorizontal="20dp"
+        app:helperTextEnabled="true"
+        app:endIconMode="custom"
+        app:startIconDrawable="@drawable/baseline_calendar_today_24"
+        android:hint="Date">
 
-    <DatePicker
-        android:id="@+id/et_transaction_date"
-        app:layout_constraintTop_toBottomOf="@+id/tv_target_date"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:calendarViewShown="false"
-        android:datePickerMode="spinner" />
-
-<!--    <TextView-->
-<!--        android:id="@+id/tv_amount"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/spinner_expense_category"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:textSize="14sp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:textAllCaps = "true"-->
-<!--        android:text="@string/amount"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginBottom="10dp"-->
-<!--        />-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/et_amount"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tv_amount"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:hint="@string/amount"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="numberDecimal"-->
-<!--        android:textSize="14sp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        android:layout_marginBottom="10dp"-->
-<!--        />-->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_transaction_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lines="1"
+            android:inputType="numberDecimal"
+            android:textSize="16dp"
+            android:enabled="true"
+            android:focusable="false"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/container_amount"
@@ -152,7 +106,7 @@
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_transaction_date"
+        app:layout_constraintTop_toBottomOf="@+id/date_container"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:helperText=""
