@@ -6,6 +6,27 @@
     android:layout_height="match_parent"
     tools:context="ph.edu.dlsu.finwise.financialActivitiesModule.GoalAccomplishedActivity">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleCentered="true"
+            app:title="Goal Accomplished"
+            app:menu="@menu/top_app_bar"
+            app:navigationIcon="@drawable/baseline_arrow_back_24"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:backgroundTint="@color/dark_green"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+
     <LinearLayout
         android:id="@+id/linear_layout_1"
         android:layout_width="match_parent"
@@ -13,7 +34,7 @@
         android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topbar"
         android:padding="20dp"
         android:background="@drawable/layout_bg_green"
         android:layout_marginTop="20dp"

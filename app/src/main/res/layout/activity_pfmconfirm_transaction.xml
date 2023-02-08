@@ -7,19 +7,26 @@
     tools:context=".personalFinancialManagementModule.ConfirmTransactionActivity"
     >
 
-    <TextView
-        android:id="@+id/tv_title"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/topbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="24sp"
-        android:text="Confirm"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/black"/>
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleCentered="true"
+            app:title="Confirm Transaction"
+            app:menu="@menu/top_app_bar"
+            app:navigationIcon="@drawable/baseline_arrow_back_24"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:backgroundTint="@color/dark_green"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:id="@+id/linear_layout_1"
@@ -28,7 +35,7 @@
         android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintTop_toBottomOf="@id/topbar"
         android:padding="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/layout_bg_green"
