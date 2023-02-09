@@ -14,10 +14,14 @@ class SpecificAssessmentAdapter (fragmentManager: FragmentManager, lifecycle: Li
     }
 
     override fun createFragment(position: Int): Fragment {
+        TODO("Not yet implemented")
+    }
+
+    /*override fun createFragment(position: Int): Fragment {
         when(position){
             0 -> return AssessmentDetailsFragment()
             1 -> return QuestionsFragment()
             else -> return AssessmentDetailsFragment()
         }
-    }
+    }*/
 }

@@ -109,7 +109,7 @@
                         </View>
 
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/btn_goal"
+                            android:id="@+id/btn_expense"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:textColor="@color/white"
@@ -133,7 +133,7 @@
                         </View>
 
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/btn_expense"
+                            android:id="@+id/btn_goal"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:textColor="@color/white"

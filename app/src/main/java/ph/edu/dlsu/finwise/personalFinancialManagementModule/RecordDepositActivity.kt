@@ -127,6 +127,12 @@ class RecordDepositActivity : AppCompatActivity() {
             goal = binding.dropdownActivity.text.toString()
         }
 
+        if (binding.etDate.text.toString().trim().isEmpty()) {
+            binding.etDate.error = "Please enter the name of the transaction."
+            binding.etDate.requestFocus()
+            valid = false
+        }
+
         return valid
     }
 

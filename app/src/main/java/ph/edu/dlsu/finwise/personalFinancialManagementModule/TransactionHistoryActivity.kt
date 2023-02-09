@@ -13,10 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.TransactionHistoryExpenseFragment
@@ -29,12 +26,13 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.*
 class TransactionHistoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPfmtransactionHistoryBinding
     private lateinit var context: Context
-//    private lateinit var transactionAdapter: TransactionsAdapter
-//    private var firestore = Firebase.firestore
-//    private var transactionIDArrayList = ArrayList<String>()
-//    private lateinit var type: String
+    private lateinit var transactionAdapter: TransactionsAdapter
+    private var firestore = Firebase.firestore
+    private var transactionIDArrayList = ArrayList<String>()
+    private lateinit var type: String
 
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPfmtransactionHistoryBinding.inflate(layoutInflater)

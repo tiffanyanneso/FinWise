@@ -93,11 +93,11 @@ class RecordExpenseActivity : AppCompatActivity() {
 //        date = SimpleDateFormat("MM-dd-yyyy").parse((binding.etDate.month+1).toString() + "-" +
 //                binding.etDate.dayOfMonth.toString() + "-" + binding.etDate.year)
 
-        if (binding.etDate.toString().trim().isEmpty()) {
-            binding.etName.error = "Please enter the name of the transaction."
-            binding.etName.requestFocus()
+        if (binding.etDate.text.toString().trim().isEmpty()) {
+            binding.etDate.error = "Please enter the name of the transaction."
+            binding.etDate.requestFocus()
             valid = false
-        } else name = binding.etName.text.toString().trim()
+        }
 
         return valid
     }
