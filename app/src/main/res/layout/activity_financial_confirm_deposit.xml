@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".financialActivitiesModule.FinancialActivityConfirmDeposit">
+    tools:context=".financialActivitiesModule.FinancialActivityConfirmDeposit"
+    android:background="@color/very_light_green">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/topbar"
@@ -32,7 +33,7 @@
         android:id="@+id/cv_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@color/light_grey"
+        card_view:cardBackgroundColor="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topbar"
@@ -82,15 +83,17 @@
 
     <LinearLayout
         android:id="@+id/linear_layout_3"
-        android:layout_width="360dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cv_amount"
         android:padding="20dp"
-        android:background="@drawable/layout_bg_gray"
-        android:layout_marginTop="20dp">
+        android:background="@drawable/button_border_white"
+        android:backgroundTint="@color/white"
+        android:layout_marginTop="15dp"
+        android:layout_marginHorizontal="20dp">
 
 
         <LinearLayout

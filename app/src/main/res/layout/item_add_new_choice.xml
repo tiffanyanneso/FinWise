@@ -6,7 +6,7 @@
     card_view:cardCornerRadius="10dp"
     android:foreground="@drawable/border"
     android:layout_marginBottom="10dp"
-    android:backgroundTint="@color/light_green">
+    android:backgroundTint="@color/very_light_green">
 
     <TextView
         android:id="@+id/tv_choice_id"
@@ -44,9 +44,7 @@
                 android:layout_width="20dp"
                 android:layout_height="30dp"
                 android:src="@drawable/edit_pencil"
-                android:layout_gravity="center_vertical"
-
-                />
+                android:layout_gravity="center_vertical" />
 
             <Switch
                 android:id="@+id/switch_set_choices"

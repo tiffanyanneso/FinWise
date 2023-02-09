@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".financialActivitiesModule.ConfirmWithdraw">
+    tools:context=".financialActivitiesModule.ConfirmWithdraw"
+    android:background="@color/very_light_green">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/topbar"
@@ -27,58 +28,37 @@
             />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cv_amount"
+    <LinearLayout
+        android:id="@+id/linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@color/light_grey"
+        android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topbar"
+        app:layout_constraintTop_toBottomOf="@+id/topbar"
         android:padding="20dp"
+        android:background="@drawable/border_green_bg_white"
         android:layout_marginTop="20dp"
-        card_view:cardCornerRadius="10dp"
-        android:layout_marginHorizontal="20dp">
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp">
 
-        <LinearLayout
-            android:id="@+id/linear_layout_1"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:text="Withdrawal Amount"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
-            <LinearLayout
-                android:id="@+id/linear_layout_2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:padding="20dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:text="Withdrawal Amount"
-                    android:textAllCaps ="true"
-                    android:textColor="@color/black"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_amount"
-
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="₱ XXXX.XX"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"/>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        <TextView
+            android:id="@+id/tv_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="₱ XXXX.XX"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linear_layout_3"
@@ -87,11 +67,12 @@
         android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cv_amount"
+        app:layout_constraintTop_toBottomOf="@+id/linear_layout"
         android:padding="20dp"
         android:layout_marginHorizontal="20dp"
-        android:background="@drawable/layout_bg_gray"
-        android:layout_marginTop="20dp">
+        android:background="@drawable/button_border_white"
+        android:backgroundTint="@color/white"
+        android:layout_marginTop="15dp">
 
 
         <LinearLayout

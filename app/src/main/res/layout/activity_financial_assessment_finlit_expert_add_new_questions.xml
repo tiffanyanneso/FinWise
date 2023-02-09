@@ -31,119 +31,110 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="20dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:padding="20dp">
 
-
-        <TextView
-            android:id="@+id/tv_title_question"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title"
-            android:textSize="18dp"
-            android:textAllCaps = "true"
-            android:text="@string/question"
-            android:layout_marginTop="60dp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginStart="20dp"
-            />
+            android:layout_height="wrap_content">
 
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/container_expense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title"
-            android:layout_marginHorizontal="20dp"
-            app:helperTextEnabled="true"
-            app:helperText=""
-            app:helperTextTextColor="@color/red"
-            android:paddingBottom="10dp"
-            android:paddingTop="5dp"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_question"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:lines="1"
-                android:inputType="text"
-                android:textSize="16dp"
-                android:hint="Add New Question"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
+        <!--        <TextView-->
+        <!--            android:id="@+id/tv_title_question"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            app:layout_constraintTop_toBottomOf="@+id/tv_title"-->
+        <!--            android:textSize="18dp"-->
+        <!--            android:textAllCaps = "true"-->
+        <!--            android:text="@string/question"-->
+        <!--            android:layout_marginTop="60dp"-->
+        <!--            android:textStyle="bold"-->
+        <!--            android:textColor="@color/black"-->
+        <!--            />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="Choices"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/container_expense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                    app:helperTextEnabled="true"
+                    app:helperText=""
+                    app:helperTextTextColor="@color/red"
+                    android:paddingTop="5dp"
+                    android:layout_marginTop="50dp">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_question"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:lines="1"
+                        android:inputType="text"
+                        android:textSize="16dp"
+                        android:hint="Question" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_add_new_choices"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_new_choices"
-            android:textColor="@color/off_white"
-            android:backgroundTint="@color/dark_green"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/button_border"
-            />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="Choices"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_view_choice"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:layout_marginTop="10dp"
-            tools:listitem="@layout/item_add_new_choice"/>
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_add_new_choices"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="+ Add New"
+                    android:textColor="@color/off_white"
+                    android:backgroundTint="@color/dark_green"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/button_border"
+                    />
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_view_choice"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="8"
+                    android:layout_marginTop="10dp"
+                    tools:listitem="@layout/item_add_new_choice"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/dark_green"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/bottom_nav_finlit_expert" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/cancel"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/light_grey"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/bottom_nav_finlit_expert"
+                android:layout_marginBottom="50dp" />
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/dark_green"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav_finlit_expert"
-        android:layout_marginBottom="70dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_cancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        android:textColor="@color/black"
-        android:backgroundTint="@color/light_grey"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav_finlit_expert"
-        android:layout_marginBottom="30dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        />
-
 
 <!--Bottom navigation bar-->
     <com.google.android.material.bottomnavigation.BottomNavigationView

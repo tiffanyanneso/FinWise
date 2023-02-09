@@ -27,157 +27,160 @@
             />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="24sp"
-        android:text="Assessment Name"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/black"/>
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="20dp"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:layout_marginTop="50dp">
 
-
-        <TextView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:text="Details"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_title_number_of_questions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title"
-            android:textSize="18dp"
-            android:textAllCaps = "true"
-            android:text="@string/number_of_questions"
-            android:layout_marginTop="20dp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginStart="20dp"
-            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_number_of_questions"
-            app:layout_constraintTop_toBottomOf="@+id/tv_goal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:layout_marginTop="5dp"
-            android:text="XXXXX"
-            android:textColor="@color/black"
-            android:textSize="18dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"/>
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:textSize="24sp"
+                    android:text="Assessment Name"
+                    android:gravity="center"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
 
-        <TextView
-            android:id="@+id/tv_title_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_goal_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textSize="18dp"
-            android:layout_marginTop="10dp"
-            android:textAllCaps = "true"
-            android:text="@string/description"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="Details"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tv_description"
-            app:layout_constraintTop_toBottomOf="@+id/tv_goal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:layout_marginTop="5dp"
-            android:text="XXXX"
-            android:textColor="@color/black"
-            android:textSize="18dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"/>
+                <TextView
+                    android:id="@+id/tv_title_number_of_questions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_title"
+                    android:textSize="18dp"
+                    android:textAllCaps = "true"
+                    android:text="@string/number_of_questions"
+                    android:layout_marginTop="20dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="20dp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="Questions"
-            android:textColor="@color/black"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tv_number_of_questions"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_goal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:layout_marginTop="5dp"
+                    android:text="XXXXX"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"/>
 
+                <TextView
+                    android:id="@+id/tv_title_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_goal_name"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:textSize="18dp"
+                    android:layout_marginTop="10dp"
+                    android:textAllCaps = "true"
+                    android:text="@string/description"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"/>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_add_new_questions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/add_new_questions"
-            android:textColor="@color/off_white"
-            android:backgroundTint="@color/dark_green"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/button_border"
-            />
+                <TextView
+                    android:id="@+id/tv_description"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_goal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:layout_marginTop="5dp"
+                    android:text="XXXX"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_questions"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="8"
-            android:layout_marginTop="10dp"
-            tools:listitem="@layout/item_questions"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="Questions"
+                    android:textColor="@color/black"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_add_new_questions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_new_questions"
+                    android:textColor="@color/off_white"
+                    android:backgroundTint="@color/dark_green"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/button_border"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_questions"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="8"
+                    android:layout_marginTop="10dp"
+                    tools:listitem="@layout/item_questions"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_save"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/dark_green"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/bottom_nav_finlit_expert"
+                    android:layout_marginBottom="70dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel"
+                    android:textColor="@color/black"
+                    android:backgroundTint="@color/light_grey"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/bottom_nav_finlit_expert"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    />
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_save"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/save"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/dark_green"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav_finlit_expert"
-        android:layout_marginBottom="70dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_cancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/cancel"
-        android:textColor="@color/black"
-        android:backgroundTint="@color/light_grey"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_nav_finlit_expert"
-        android:layout_marginBottom="30dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        />
 
 <!--
     <androidx.appcompat.widget.AppCompatButton
