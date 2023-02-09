@@ -59,7 +59,7 @@
             android:name=".ParentSendMoney"
             android:exported="false" />
         <activity
-            android:name=".financialActivitiesModule.FinancialActivityConfirmSpending"
+            android:name=".financialActivitiesModule.FinancialActivityConfirmExpense"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -101,7 +101,7 @@
             android:name=".financialActivitiesModule.SpendingActivity"
             android:exported="true" />
         <activity
-            android:name=".financialActivitiesModule.BudgetCategoryActivity"
+            android:name=".financialActivitiesModule.BudgetExpenseActivity"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.StartGoalActivity"
@@ -131,38 +131,15 @@
         <activity
             android:name=".ProfileActivity"
             android:exported="false">
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-            -->
         </activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity"
             android:exported="true">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertEditAssessmentActivity"
             android:exported="false">
         </activity>
-        <!--
-<activity
-            android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertQuestionsActivity"
-            android:exported="false" />
-        -->
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertAddNewQuestionsActivity"
             android:exported="true">
@@ -211,6 +188,10 @@
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"

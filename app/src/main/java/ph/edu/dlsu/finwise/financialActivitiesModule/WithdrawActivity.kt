@@ -24,7 +24,7 @@ class WithdrawActivity : AppCompatActivity() {
     private lateinit var goalID:String
     private lateinit var decisionMakingActivityID:String
 
-    private lateinit var bundle:Bundle
+    private lateinit var dataBundle:Bundle
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +32,7 @@ class WithdrawActivity : AppCompatActivity() {
         binding = ActivityWithdrawBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        bundle = intent.extras!!
+        dataBundle = intent.extras!!
         setData()
 
         binding.etDate.setOnClickListener {
@@ -46,6 +46,7 @@ class WithdrawActivity : AppCompatActivity() {
             //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
             bundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
             bundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
+            bundle.putString("savingActivityID", dataBundle.getString("savingActivityID"))
 
 
             var confirmWithdraw = Intent (this, ConfirmWithdraw::class.java)
@@ -72,8 +73,8 @@ class WithdrawActivity : AppCompatActivity() {
     }
 
     private fun setData() {
-        goalID = bundle.getString("goalID").toString()
-        decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
+        goalID = dataBundle.getString("goalID").toString()
+        decisionMakingActivityID = dataBundle.getString("decisionMakingActivityID").toString()
 
         firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()

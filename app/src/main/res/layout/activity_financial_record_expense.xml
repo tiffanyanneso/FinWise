@@ -55,31 +55,31 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/container_category"
-        app:layout_constraintTop_toBottomOf="@+id/container_expense_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Select Category"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_marginHorizontal="20dp"
-        app:startIconDrawable="@drawable/baseline_saved_search_24"
-        android:paddingBottom="10dp">
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/container_category"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/container_expense_name"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="Select Category"-->
+<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"-->
+<!--        android:layout_marginHorizontal="20dp"-->
+<!--        app:startIconDrawable="@drawable/baseline_saved_search_24"-->
+<!--        android:paddingBottom="10dp">-->
 
-        <AutoCompleteTextView
-            android:id="@+id/dropdown_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            />
+<!--        <AutoCompleteTextView-->
+<!--            android:id="@+id/dropdown_category"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:inputType="none"-->
+<!--            />-->
 
-    </com.google.android.material.textfield.TextInputLayout>
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/date_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/container_category"
+        app:layout_constraintTop_toBottomOf="@+id/container_expense_name"
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"

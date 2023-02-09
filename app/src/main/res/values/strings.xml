@@ -126,6 +126,12 @@
     <string name="goal_settings">Goal Settings</string>
     <string name="your_previous_score">Your Previous Score</string>
 
+    <string name="goal_savings_available">Goal Savings Available</string>
+    <string name="budget_item">Budget Item</string>
+    <string name="new_item">+ New Item</string>
+    <string name="budget_expense">Budget Expense</string>
+    <string name="record_expense">Record Expense</string>
+
 
     <string name="error_budget_category">Cannot input amount greater than budget</string>
 

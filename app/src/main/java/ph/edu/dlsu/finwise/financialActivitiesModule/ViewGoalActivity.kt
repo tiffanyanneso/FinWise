@@ -14,6 +14,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.GoalDecisionMakingActivitiesAdapter
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
+import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
@@ -36,6 +37,10 @@ class ViewGoalActivity : AppCompatActivity() {
     private lateinit var goalTransactionsAdapter:GoalTransactionsAdapater
     var transactionsArrayList = ArrayList<Transactions>()
 
+    private lateinit var savingActivityID:String
+    private lateinit var budgetingActivityID:String
+    private lateinit var spendingActivityID:String
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,9 +56,8 @@ class ViewGoalActivity : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         goalID = bundle.getString("goalID").toString()
 
-        //get goal details
-        getSavedAmount()
-        setFields()
+        setFinancialActivityID()
+
 
         var sendBundle = Bundle()
         sendBundle.putString("goalID", goalID)
@@ -70,6 +74,7 @@ class ViewGoalActivity : AppCompatActivity() {
 //            bundle.putFloat("currentAmount", currentAmount)
 //            bundle.putFloat("targetAmount", targetAmount)
             var goalWithdraw = Intent(this, WithdrawActivity::class.java)
+            sendBundle.putString("savingActivityID", savingActivityID)
             goalWithdraw.putExtras(sendBundle)
             this.startActivity(goalWithdraw)
         }
@@ -80,25 +85,42 @@ class ViewGoalActivity : AppCompatActivity() {
 //            bundle.putFloat("currentAmount", currentAmount)
 //            bundle.putFloat("targetAmount", targetAmount)
             var goalDeposit = Intent(this, FinancialActivityGoalDeposit::class.java)
+            sendBundle.putString("savingActivityID", savingActivityID)
             goalDeposit.putExtras(sendBundle)
             this.startActivity(goalDeposit)
         }
 
         binding.layoutGoalDetails.setOnClickListener {
             var goalDetails = Intent(this, ViewGoalDetails::class.java)
-            var bundle = Bundle()
-            bundle.putString("goalID", goalID)
-            goalDetails.putExtras(bundle)
+            goalDetails.putExtras(sendBundle)
             this.startActivity(goalDetails)
         }
 
         binding.layoutActivityName.setOnClickListener {
-
+            var budgeting  = Intent (this, BudgetActivity::class.java)
+            sendBundle.putString("budgetActivityID", budgetingActivityID)
+            sendBundle.putString("savingActivityID", savingActivityID)
+            budgeting.putExtras(sendBundle)
+            this.startActivity(budgeting)
         }
     }
 
+    private fun setFinancialActivityID() {
+        firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", goalID).get().addOnSuccessListener { results ->
+            for (finActivity in results) {
+                var activityObject = finActivity.toObject<FinancialActivities>()
+                if (activityObject.financialActivityName == "Saving")
+                    savingActivityID = finActivity.id
+                if (activityObject.financialActivityName == "Budgeting")
+                    budgetingActivityID = finActivity.id
+                if (activityObject.financialActivityName == "Spending")
+                    spendingActivityID = finActivity.id
+            }
+        }.continueWith { getSavedAmount() }
+    }
+
     private fun getSavedAmount() {
-        firestore.collection("Transactions").whereEqualTo("financialGoalID", goalID).get().addOnSuccessListener { results ->
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->
             for (transaction in results) {
                 var transactionObject = transaction.toObject<Transactions>()
                 transactionsArrayList.add(transactionObject)
@@ -107,7 +129,7 @@ class ViewGoalActivity : AppCompatActivity() {
                 else if (transactionObject.transactionType == "Withdrawal")
                     savedAmount-= transactionObject.amount!!
             }
-        }
+        }.continueWith {setFields() }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -128,7 +150,6 @@ class ViewGoalActivity : AppCompatActivity() {
                     goalTransactionsAdapter = GoalTransactionsAdapater(this, transactionsArrayList)
                     binding.rvSavingsDeposit.adapter = goalTransactionsAdapter
                     binding.rvSavingsDeposit.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-
 
                     //compute remaining days
                     val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")

@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -17,9 +18,8 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
-import ph.edu.dlsu.finwise.model.BudgetCategory
-import ph.edu.dlsu.finwise.model.DecisionMakingActivities
-import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.model.BudgetItem
+import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 
 class BudgetActivity : AppCompatActivity() {
@@ -30,7 +30,8 @@ class BudgetActivity : AppCompatActivity() {
     private lateinit var context:Context
 
 
-    private lateinit var decisionMakingActivityID:String
+    private lateinit var budgetActivityID:String
+    private lateinit var savingActivityID:String
     private lateinit var financialGoalID:String
     private var budgetCategoryIDArrayList = ArrayList<String>()
 
@@ -38,6 +39,8 @@ class BudgetActivity : AppCompatActivity() {
     private var totalBudget = 0.00F
 
     private var nextPriority = 0
+
+    private var balance = 0.00F
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,52 +55,66 @@ class BudgetActivity : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         var bundle: Bundle = intent.extras!!
-        decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
+        financialGoalID = bundle.getString("goalID").toString()
+        budgetActivityID = bundle.getString("budgetActivityID").toString()
+        savingActivityID = bundle.getString("savingActivityID").toString()
 
-        getBudgetCategories()
+
+        getBalance()
 
         binding.btnNewCategory.setOnClickListener {
-            showNewBudgetCategoryDialog()
+            showNewBudgetItemDialog()
         }
 
         binding.btnDoneSettingBudget.setOnClickListener {
-            firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).update("status", "Completed").addOnSuccessListener {
-                //set the status of the next decision making activity to in progress
-                activateNextDecisionMakingActivity()
-                val viewGoal = Intent(this, ViewGoalActivity::class.java)
-                var bundle = Bundle()
-                bundle.putString("goalID", financialGoalID)
-                viewGoal.putExtras(bundle)
-                viewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(viewGoal)
-            }
+
         }
     }
 
-    private fun activateNextDecisionMakingActivity(){
+    private fun deductExpenses() {
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", budgetActivityID).get().addOnSuccessListener { results ->
+            for (transaction in results) {
+                var transactionObject = transaction.toObject<Transactions>()
+                if (transactionObject.transactionType == "Expense")
+                    balance -= transactionObject.amount!!
+            }
+            binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(balance)
+        }.continueWith {  getBudgetItems() }
+    }
+
+    private fun getBalance() {
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->
+            for (transaction in results) {
+                var transactionObject = transaction.toObject<Transactions>()
+                if (transactionObject.transactionType == "Deposit")
+                    balance += transactionObject.amount!!
+                else if (transactionObject.transactionType == "Withdrawal" ||transactionObject.transactionType == "Expense" )
+                    balance-= transactionObject.amount!!
+            }
+        }.continueWith { deductExpenses() }
+    }
+
+    /*private fun activateNextDecisionMakingActivity(){
         firestore.collection("DecisionMakingActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("priority", nextPriority).get().addOnSuccessListener {
             var documentID = it.documents[0].id
             firestore.collection("DecisionMakingActivities").document(documentID).update("status", "In Progress")
         }
-    }
+    }*/
 
-    private fun getBudgetCategories() {
-        firestore.collection("BudgetCategories").whereEqualTo("decisionMakingActivityID", decisionMakingActivityID).get().addOnSuccessListener { budgetCategories ->
-            for (document in budgetCategories) {
-                var budgetCategoryID = document.id
-                budgetCategoryIDArrayList.add(budgetCategoryID)
-
-                var budgetCategory = document.toObject<BudgetCategory>()
-                allocated += budgetCategory.amount!!.toFloat()
+    private fun getBudgetItems() {
+        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).get().addOnSuccessListener { budgetItems ->
+            for (item in budgetItems) {
+                budgetCategoryIDArrayList.add(item.id)
+                //var budgetCategory = item.toObject<BudgetItem>()
             }
-            getBudgetInfo()
+            //getBudgetInfo()
             budgetCategoryAdapter = BudgetCategoryAdapter(this, budgetCategoryIDArrayList)
             binding.rvViewCategories.adapter = budgetCategoryAdapter
             binding.rvViewCategories.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         }
     }
 
-    private fun getBudgetInfo() {
+    /*private fun getBudgetInfo() {
         //get the amount of needed for the decision making activity
         firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
             var decisionMakingActivity = it.toObject<DecisionMakingActivities>()
@@ -121,14 +138,9 @@ class BudgetActivity : AppCompatActivity() {
                 //binding.tvGoalName.text = financialGoal?.goalName.toString()
             }
         }
-    }
+    }*/
 
-    private fun updateAllocated(newCategoryAmount:Float) {
-        allocated += newCategoryAmount
-        binding.tvBudgetAmount.text = "₱ " + DecimalFormat("#,##0.00").format(allocated) + "/ ₱ "  + DecimalFormat("#,##0.00").format(totalBudget)
-    }
-
-    private fun showNewBudgetCategoryDialog() {
+    private fun showNewBudgetItemDialog() {
 
         var dialogBinding= DialogNewBudgetCategoryBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
@@ -137,10 +149,19 @@ class BudgetActivity : AppCompatActivity() {
         dialog.window!!.setLayout(900, 1000)
 
         dialogBinding.btnSave.setOnClickListener {
-            var categoryName = dialog.findViewById<EditText>(R.id.dialog_et_category_name).text.toString()
-            var categoryAmount = dialog.findViewById<EditText>(R.id.dialog_et_category_amount).text.toString()
-            var budgetCategory = BudgetCategory(categoryName, decisionMakingActivityID, categoryAmount)
-            if (categoryAmount.toFloat()+allocated > totalBudget)
+            var itemName = dialogBinding.dialogEtCategoryName.text.toString()
+            var itemAmount = dialogBinding.dialogEtCategoryAmount.text.toString().toFloat()
+            var budgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, Timestamp.now(), 1)
+
+            firestore.collection("BudgetItems").add(budgetCategory).addOnSuccessListener {
+                budgetCategoryIDArrayList.add(it.id)
+                budgetCategoryAdapter.notifyDataSetChanged()
+                dialog.dismiss()
+            }
+
+
+            //TODO: VALIDATION
+            /*if (itemAmount.toFloat()+allocated > totalBudget)
                 dialog.findViewById<TextView>(R.id.tv_error).visibility = View.VISIBLE
             else {
                 firestore.collection("BudgetCategories").add(budgetCategory).addOnSuccessListener {
@@ -148,10 +169,8 @@ class BudgetActivity : AppCompatActivity() {
                     dialog.dismiss()
                     budgetCategoryIDArrayList.add(it.id)
                     budgetCategoryAdapter.notifyDataSetChanged()
-                    updateAllocated(categoryAmount.toFloat())
                 }
-            }
-
+            }*/
         }
 
         dialogBinding.btnCancel.setOnClickListener {

@@ -42,7 +42,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16dp"
-                        android:text="@string/budget_set"
+                        android:text="@string/goal_savings_available"
                         android:textAllCaps = "true"
                         android:textColor="@color/black"
                         />
@@ -57,56 +57,44 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textStyle="bold"
-                            android:id="@+id/tv_budget_amount"
+                            android:id="@+id/tv_savings_available"
                             android:textSize="24sp"
                             android:text="₱ XXXXX.XX"
                             android:textColor="@color/black"
                             android:paddingBottom="5dp"
                             android:gravity="center_vertical"/>
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:src="@drawable/edit_pencil"
-                            android:layout_gravity="center_vertical"
-                            />
+<!--                        <ImageView-->
+<!--                            android:layout_width="20dp"-->
+<!--                            android:layout_height="20dp"-->
+<!--                            android:src="@drawable/edit_pencil"-->
+<!--                            android:layout_gravity="center_vertical"-->
+<!--                            />-->
                     </LinearLayout>
                 </LinearLayout>
-
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:textSize="20dp"
-                   android:text="@string/spend_on"
-                   android:textStyle="bold"
-                   android:textColor="@color/black"
-                   android:layout_marginTop="10dp"
-                   />
-
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="pie chart here"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="end">
+                android:orientation="horizontal">
+                
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/budget_item"
+                    android:textStyle="bold"
+                    android:textSize="20dp"
+                    android:textColor="@color/black"
+                    />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_new_category"
-                    android:layout_width="200dp"
+                    android:layout_width="150dp"
                     android:layout_height="40dp"
-                    android:text="@string/new_category"
-                    android:textColor="@color/off_white"
+                    android:background="@drawable/button_border"
                     android:backgroundTint="@color/dark_green"
-                    android:background="@drawable/button_border"/>
+                    android:text="@string/new_item"
+                    android:textColor="@color/off_white" />
             </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView

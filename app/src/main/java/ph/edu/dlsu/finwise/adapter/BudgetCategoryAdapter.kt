@@ -11,11 +11,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemCategoryBinding
-import ph.edu.dlsu.finwise.databinding.ItemGoalBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetCategoryActivity
-import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
-import ph.edu.dlsu.finwise.model.BudgetCategory
-import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetExpenseActivity
+import ph.edu.dlsu.finwise.model.BudgetItem
 import java.text.DecimalFormat
 
 class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetCategoryViewHolder>{
@@ -45,8 +42,6 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
         return BudgetCategoryViewHolder(itemBinding)
     }
 
-
-
     override fun onBindViewHolder(holder: BudgetCategoryAdapter.BudgetCategoryViewHolder,
                                   position: Int) {
         holder.bindCategory(budgetCategoryIDArrayList[position])
@@ -58,22 +53,22 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
             itemView.setOnClickListener(this)
         }
 
-        fun bindCategory(budgetCategoryID: String){
-            firestore.collection("BudgetCategories").document(budgetCategoryID).get().addOnSuccessListener {
-                var budgetCategory = it.toObject<BudgetCategory>()
-                itemBinding.tvCategoryId.text = it.id
-                //itemBinding.decisionMakingActivityId.text = budgetCategory?.decisionMakingActivityID
-                itemBinding.tvCategory.text = budgetCategory?.budgetCategory
+        fun bindCategory(budgetItemID: String){
+            firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
+                var budgetCategory = it.toObject<BudgetItem>()
+                itemBinding.tvBudgetItemId.text = it.id
+                itemBinding.budgetActivityId.text = budgetCategory?.financialActivityID
+                itemBinding.tvBudgetItemName.text = budgetCategory?.budgetItemName
                 itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(budgetCategory?.amount)
             }
         }
 
         override fun onClick(p0: View?) {
-            var budgetCategory = Intent(context, BudgetCategoryActivity::class.java)
+            var budgetCategory = Intent(context, BudgetExpenseActivity::class.java)
             var bundle = Bundle()
 
-            bundle.putString ("categoryID", itemBinding.tvCategoryId.text.toString())
-            bundle.putString ("decisionMakingActivityID", itemBinding.decisionMakingActivityId.text.toString())
+            bundle.putString ("budgetItemID", itemBinding.tvBudgetItemId.text.toString())
+            bundle.putString ("budgetActivityID", itemBinding.budgetActivityId.text.toString())
             budgetCategory.putExtras(bundle)
             budgetCategory.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(budgetCategory)

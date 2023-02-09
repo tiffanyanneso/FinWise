@@ -69,7 +69,7 @@ class ViewTransactionActivity : AppCompatActivity() {
                     val formatter = SimpleDateFormat("MM/dd/yyyy")
                     val date = formatter.format(transaction?.date?.toDate())
                     binding.tvDate.text = date.toString()
-                    binding.tvGoal.text = transaction?.goal.toString()
+                    //binding.tvGoal.text = transaction?.goal.toString()
                 }
             }
         }

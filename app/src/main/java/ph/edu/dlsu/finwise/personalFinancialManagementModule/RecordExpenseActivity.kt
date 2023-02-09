@@ -1,23 +1,18 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
-import android.R
 import android.app.Dialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordExpenseBinding
-import ph.edu.dlsu.finwise.model.BudgetCategory
-import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.SimpleDateFormat
 import java.util.*
 

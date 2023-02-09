@@ -41,6 +41,7 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
 
         var dataBundle: Bundle = intent.extras!!
         var goalID = dataBundle.getString("goalID").toString()
+        var savingActivityID = dataBundle.getString("savingActivityID")
 //        var decisionActivityID = dataBundle.getString("decisionMakingActivityID").toString()
 //
         firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
@@ -63,6 +64,8 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
             bundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
             //bundle.putString("source", "DirectGoalDeposit")
             bundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
+            bundle.putString("savingActivityID", savingActivityID)
+
 
             var goToDepositConfirmation = Intent(context, FinancialActivityConfirmDeposit::class.java)
             goToDepositConfirmation.putExtras(bundle)

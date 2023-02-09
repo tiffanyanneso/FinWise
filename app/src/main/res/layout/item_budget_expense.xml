@@ -63,14 +63,6 @@
                 android:maxLines="1"
                 android:gravity="right"
                 android:layout_marginRight="10dp"/>
-
-            <ImageView
-                android:id="@+id/edit_category_budget"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/edit_pencil"
-                android:layout_gravity="center_vertical"
-                />
         </LinearLayout>
     </RelativeLayout>
 

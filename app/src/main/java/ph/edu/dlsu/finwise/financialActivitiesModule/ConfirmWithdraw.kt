@@ -38,7 +38,7 @@ class ConfirmWithdraw : AppCompatActivity() {
                 "date" to bundle.getSerializable("date"),
                 "createdBy" to "",
                 "amount" to bundle.getFloat("amount"),
-                "financialGoalID" to goalID
+                "financialActivityID" to bundle.getString("savingActivityID")
             )
             firestore.collection("Transactions").add(withdrawal).addOnSuccessListener {
                 //TODO: ADJUST USER BALANCE (INCREASE WALLET BALANCE)

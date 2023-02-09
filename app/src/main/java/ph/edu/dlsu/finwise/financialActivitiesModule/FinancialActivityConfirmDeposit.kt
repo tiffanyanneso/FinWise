@@ -30,7 +30,6 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
 
     var amount : String? =null
 
-    private lateinit var decisionMakingActivityID:String
     private lateinit var goalID:String
 
 
@@ -47,10 +46,10 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
 
         val bundle: Bundle = intent.extras!!
         //decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
-        goalID = bundle.getString("goalID").toString()
         binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
         binding.tvAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
         binding.tvGoal.text= bundle.getString("goalName")
+        goalID = bundle.getString("goalID").toString()
 
         binding.btnConfirm.setOnClickListener {
             val transaction = hashMapOf(
@@ -60,7 +59,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 "date" to bundle.getSerializable("date"),
                 "createdBy" to "",
                 "amount" to bundle.getFloat("amount"),
-                "financialGoalID" to goalID
+                "financialActivityID" to bundle.getString("savingActivityID")
                 //"decisionMakingActivityID" to decisionMakingActivityID
             )
 

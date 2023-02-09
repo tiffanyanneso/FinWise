@@ -1,6 +1,5 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
-import android.R
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -11,11 +10,9 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialRecordExpenseBinding
-import ph.edu.dlsu.finwise.model.BudgetCategory
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -27,11 +24,10 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
 
     private lateinit var context:Context
 
-    private lateinit var decisionMakingActivityID:String
-    private lateinit var financialGoalID:String
+    private lateinit var budgetActivityID:String
+    private lateinit var budgetItemID:String
 
     private var expenseCategories = ArrayList<String>()
-    lateinit var date: Date
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,10 +43,9 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
 
 
         var bundle: Bundle = intent.extras!!
-        decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
-        financialGoalID = bundle.getString("financialGoalID").toString()
+        budgetActivityID = bundle.getString("budgetActivityID").toString()
+        budgetItemID = bundle.getString("budgetItemID").toString()
 
-        setExpenseCategories()
 
         binding.etTransactionDate.setOnClickListener{
             showCalendar()
@@ -58,37 +53,22 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
 
         binding.btnNext.setOnClickListener {
             var bundle = Bundle()
-            bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-            bundle.putString("financialGoalID", financialGoalID)
             bundle.putString("expenseName", binding.etExpenseName.text.toString())
-            bundle.putString("expenseCategory", binding.dropdownCategory.text.toString())
             bundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
-            bundle.putSerializable("date", date)
-            var confirmSpending = Intent(this, FinancialActivityConfirmSpending::class.java)
+            bundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etTransactionDate.text.toString()))
+            bundle.putString("budgetActivityID", budgetActivityID)
+            bundle.putString("budgetItemID", budgetItemID)
+            var confirmSpending = Intent(this, FinancialActivityConfirmExpense::class.java)
             confirmSpending.putExtras(bundle)
             context.startActivity(confirmSpending)
         }
 
         binding.btnCancel.setOnClickListener {
-            var spendingActivity = Intent(this, SpendingActivity::class.java)
-            context.startActivity(spendingActivity)
-        }
-    }
-
-    private fun setExpenseCategories() {
-        //GET THE DECISION MAKING ACTIVITY ID FOR THE BUDGET CATEGORIES
-        firestore.collection("DecisionMakingActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("decisionMakingActivity", "Setting a Budget").get().addOnSuccessListener {
-            var budgetingDecisionMakingActivityID = it.documents[0].id
-            firestore.collection("BudgetCategories").whereEqualTo("decisionMakingActivityID", budgetingDecisionMakingActivityID).get().addOnSuccessListener { results ->
-                for (category in results) {
-                    var categoryObject = category.toObject<BudgetCategory>()
-                    expenseCategories.add(categoryObject.budgetCategory.toString())
-                }
-
-                val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, expenseCategories)
-                binding.dropdownCategory.setAdapter(adapter)
-                //binding.spinnerExpenseCategory.adapter = adapter
-            }
+            var budgetExpense = Intent(this, BudgetExpenseActivity::class.java)
+            var bundle = Bundle()
+            bundle.putString("budgetActivityID", budgetActivityID)
+            bundle.putString("budgetItemID", budgetItemID)
+            context.startActivity(budgetExpense)
         }
     }
 
@@ -103,8 +83,6 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
             binding.etTransactionDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
-            date = SimpleDateFormat("MM/dd/yyyy").parse((mMonth + 1).toString() + "/" +
-                    mDay.toString() + "/" + mYear.toString())
             dialog.dismiss()
         }
         dialog.show()
