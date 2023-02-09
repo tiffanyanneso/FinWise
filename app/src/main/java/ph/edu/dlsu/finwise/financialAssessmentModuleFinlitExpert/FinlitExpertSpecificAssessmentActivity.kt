@@ -10,6 +10,7 @@ import ph.edu.dlsu.finwise.NavbarFinlitExpert
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.SpecificAssessmentAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertSpecificAssessmentBinding
+import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.fragment.AssessmentDetailsFragment
 
 
 class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
@@ -33,6 +34,21 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
             tab, position ->
                 tab.text = tabTitle[position]
         } .attach()
+
+        //pass data data to fragment
+        var bundle = intent.extras!!
+        var assessmentCategory = bundle.getString("assessmentCategory")
+        var assessmentType = bundle.getString("assessmentType")
+        val mFragmentManager = supportFragmentManager
+        var fragmentBundle = Bundle()
+        fragmentBundle.putString("assessmentCategory", assessmentCategory)
+        fragmentBundle.putString("assessmentType", assessmentType)
+
+        val assessmentDetailsFragmentTransaction = mFragmentManager.beginTransaction()
+        var assessmentDetailsFragment = AssessmentDetailsFragment()
+        assessmentDetailsFragment.arguments = fragmentBundle
+        assessmentDetailsFragmentTransaction.add(binding.viewPager2.id, assessmentDetailsFragment).commit()
+
 
         // Hides actionbar,
         // and initializes the navbar

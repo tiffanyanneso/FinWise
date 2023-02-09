@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".financialAssessmentModuleFinlitExpert.FinlitExpertCategoryActivity">
+    tools:context=".financialAssessmentModuleFinlitExpert.FinlitExpertAssessmentTypeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/topbar"
@@ -40,7 +40,7 @@
 
         <!--  First Category layout-->
         <LinearLayout
-            android:id="@+id/btn_finlit_financial_goals"
+            android:id="@+id/btn_preliminary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -60,7 +60,7 @@
 
 
             <TextView
-                android:id="@+id/tv_finlit_financial_goals"
+                android:id="@+id/tv_preliminary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Preliminary"
@@ -73,7 +73,7 @@
 
         <!--  Second Category layout-->
         <LinearLayout
-            android:id="@+id/btn_finlit_saving"
+            android:id="@+id/btn_post"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -91,7 +91,7 @@
                 android:layout_marginStart="30dp"
                 />
             <TextView
-                android:id="@+id/tv_finlit_saving"
+                android:id="@+id/tv_post"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Post"

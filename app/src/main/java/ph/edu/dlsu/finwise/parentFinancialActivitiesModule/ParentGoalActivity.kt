@@ -45,12 +45,12 @@ class ParentGoalActivity : AppCompatActivity() {
             this.startActivity(newGoal)
         }
 
-        binding.btnSettings.setOnClickListener {
+        /*binding.btnSettings.setOnClickListener {
             var settings = Intent(this, GoalSettingsActivity::class.java)
             settings.putExtras(sendBundle)
             settings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(settings)
-        }
+        }*/
 
         val adapter = ViewPagerAdapter(supportFragmentManager)
         //checkSettings()
@@ -71,7 +71,7 @@ class ParentGoalActivity : AppCompatActivity() {
     private fun setChildName() {
         firestore.collection("ChildUser").document(childID).get().addOnSuccessListener {
             var child = it.toObject<ChildUser>()
-            binding.tvChildName.text = child?.firstName + "'s Goals"
+            //binding.tvChildName.text = child?.firstName + "'s Goals"
         }
     }
 

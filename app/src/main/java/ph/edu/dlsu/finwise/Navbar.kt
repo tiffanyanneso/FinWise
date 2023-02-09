@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise
 import android.content.Context
 import android.content.Intent
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 
 

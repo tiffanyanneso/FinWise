@@ -34,7 +34,7 @@ class ViewGoalDetails : AppCompatActivity() {
                 if (document != null) {
                     //TODO: compute remaining days
                     var goal = document.toObject(FinancialGoals::class.java)
-                    binding.tvMyGoals.text = goal?.goalName.toString()
+                    //binding.tvMyGoals.text = goal?.goalName.toString()
                     binding.tvGoalAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
                     binding.tvActivity.text = goal?.financialActivity.toString()
 

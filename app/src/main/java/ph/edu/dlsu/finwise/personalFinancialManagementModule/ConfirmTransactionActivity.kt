@@ -56,10 +56,10 @@ class ConfirmTransactionActivity : AppCompatActivity() {
 
         transactionType = bundle!!.getString("transactionType")
         if (transactionType == "Income") {
-            binding.tvTitle.text = "Confirm Income"
+            //binding.tvTitle.text = "Confirm Income"
             binding.tvTransactionType.text = "Income Amount"
         } else {
-            binding.tvTitle.text = "Confirm Expense"
+            //binding.tvTitle.text = "Confirm Expense"
             binding.tvTransactionType.text = "Expense Amount"
         }
         val dec = DecimalFormat("#,###.00")

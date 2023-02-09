@@ -1,9 +1,11 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.financialAssessmentModule
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 
-    class FinancialAssessmentActivity : AppCompatActivity() {
+class FinancialAssessmentActivity : AppCompatActivity() {
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
