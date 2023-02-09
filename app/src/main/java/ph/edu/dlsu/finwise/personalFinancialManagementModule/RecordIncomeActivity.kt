@@ -22,8 +22,6 @@ class RecordIncomeActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityPfmrecordIncomeBinding
     var bundle = Bundle()
-    private var firestore = Firebase.firestore
-    private var goals = ArrayList<String>()
     lateinit var name: String
     lateinit var amount: String
     lateinit var category: String
@@ -94,6 +92,12 @@ class RecordIncomeActivity : AppCompatActivity() {
 
 //        date = SimpleDateFormat("MM-dd-yyyy").parse((binding.etDate.month+1).toString() + "-" +
 //                binding.etDate.dayOfMonth.toString() + "-" + binding.etDate.year)
+
+        if (binding.etDate.text.toString().trim().isEmpty()) {
+            binding.etDate.error = "Please enter the name of the transaction."
+            binding.etDate.requestFocus()
+            valid = false
+        }
         
         return valid
     }

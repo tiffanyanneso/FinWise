@@ -42,7 +42,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         goToDepositGoalActivity()
         goToIncomeActivity()
         goToExpenseActivity()
-        //getTransactions()
+        goToTransactions()
         //initializeBalanceBarGraph()
         //initializeSavingsBarGraph()
         //goToTransactionHistory()
@@ -333,6 +333,13 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 false)
         }
     }*/
+
+    private fun goToTransactions() {
+        binding.btnViewTransactions.setOnClickListener {
+            val goToTransactions = Intent(applicationContext, TransactionHistoryActivity::class.java)
+            startActivity(goToTransactions)
+        }
+    }
 
     private fun goToDepositGoalActivity() {
         binding.btnGoal.setOnClickListener {
