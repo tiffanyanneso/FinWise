@@ -131,6 +131,10 @@
     <string name="new_item">+ New Item</string>
     <string name="budget_expense">Budget Expense</string>
     <string name="record_expense">Record Expense</string>
+    <string name="expense_amount">Expense Amount</string>
+    <string name="merchant">Merchant</string>
+    <string name="current_balance">Current Balance</string>
+    <string name="updated_balance">Updated Balance</string>
 
 
     <string name="error_budget_category">Cannot input amount greater than budget</string>

@@ -307,7 +307,7 @@
 
                         <TextView
                             android:text="Pay\nWith Maya"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:textColor="@color/off_white"
                             android:id="@+id/tv_pay_with_maya"
                             android:layout_width="wrap_content"
