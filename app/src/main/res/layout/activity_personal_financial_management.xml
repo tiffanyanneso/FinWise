@@ -29,7 +29,7 @@
             android:layout_marginStart="20dp"
             android:elevation="5dp"
             android:layout_marginEnd="20dp"
-            android:layout_height="330dp"
+            android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -41,8 +41,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:background="@drawable/gradient_balance_card"
-                >
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:id="@+id/linear_layout_text"
@@ -51,37 +52,31 @@
                     android:orientation="vertical"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:padding="15dp">
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <TextView
-                        android:id="@+id/current_balance_text"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="12sp"
-                        android:text="Balance"
-                        android:layout_margin="10dp"
-                        android:gravity="center"
-                        android:textAllCaps ="true"
-                        android:textColor="@color/white"
-                        />
-
-                    <TextView
-                        android:id="@+id/tv_balance"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="24sp"
-                        android:gravity="center"
-                        android:text="₱ XXXX.XX"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"/>
+                        android:layout_height="match_parent"
+                        android:background="@drawable/button_border_green"
+                        android:backgroundTint="@color/dark_green">
 
                     <LinearLayout
                         android:id="@+id/linear_layout_2"
-                        android:layout_width="match_parent"
-                        android:layout_height="70dp"
-                        android:orientation="horizontal">
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center_vertical">
 
+                        <ImageView
+                            android:src="@drawable/peso_coin"
+                            android:contentDescription="Peso logo"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:layout_marginTop="13dp"
+                            android:layout_marginStart="20dp"
+                            android:text="P"/>
+
+<<<<<<< Updated upstream
                         <androidx.cardview.widget.CardView
                             android:id="@+id/btn_income"
                             android:layout_width="50dp"
@@ -98,14 +93,88 @@
                                 android:layout_height="35dp"
                                 android:layout_gravity="center"
                                 app:tint="#FFFFFF" />
+=======
+                        <LinearLayout
+                            android:id="@+id/linear_layout_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:padding="20dp">
 
-                        </androidx.cardview.widget.CardView>
+                            <TextView
+                                android:id="@+id/current_balance_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:text="Balance"
+                                android:textAllCaps ="true"
+                                android:textColor="@color/white"/>
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" >
-                        </View>
+                            <TextView
+                                android:id="@+id/tv_balance"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="24sp"
+                                android:text="₱ XXXX.XX"
+                                android:textColor="@color/white"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear_layout_4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp">
+>>>>>>> Stashed changes
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:gravity="center">
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/btn_income"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:backgroundTint="@color/light_green"
+                                android:textColor="@color/white"
+                                card_view:cardCornerRadius="10dp"
+                                android:layout_gravity="center">
+
+                                <ImageView
+                                    android:src="@drawable/icon_add_money"
+                                    android:layout_width="35dp"
+                                    android:layout_height="35dp"
+                                    android:layout_gravity="center"
+                                    card_view:tint="#FFFFFF" />
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:text="Income"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"
+                                android:id="@+id/tv_income"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+                            </TextView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:gravity="center">
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/btn_expense"
@@ -113,8 +182,13 @@
                             android:layout_height="50dp"
                             android:textColor="@color/white"
                             android:backgroundTint="@color/light_green"
+<<<<<<< Updated upstream
                             app:cardCornerRadius="10dp"
                             android:layout_margin="15dp"
+=======
+                            card_view:cardCornerRadius="10dp"
+
+>>>>>>> Stashed changes
                             >
 
                             <ImageView
@@ -125,11 +199,22 @@
                                 app:tint="#FFFFFF" />
                         </androidx.cardview.widget.CardView>
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" >
-                        </View>
+                            <TextView
+                                android:text="Expense"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"
+                                android:id="@+id/tv_goal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:gravity="center">
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/btn_goal"
@@ -137,9 +222,15 @@
                             android:layout_height="50dp"
                             android:textColor="@color/white"
                             android:backgroundTint="@color/light_green"
+<<<<<<< Updated upstream
                             android:layout_margin="15dp"
                             app:cardCornerRadius="10dp"
                             >
+=======
+                            card_view:cardCornerRadius="10dp"
+                            android:gravity="center">
+
+>>>>>>> Stashed changes
                             <ImageView
                                 android:src="@drawable/icon_deposit_to_goal"
                                 android:layout_width="35dp"
@@ -147,40 +238,23 @@
                                 android:layout_gravity="center"
                                 app:tint="#FFFFFF" />
                         </androidx.cardview.widget.CardView>
-         <!--               <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" >
-                        </View>-->
-
-                     <!--   <androidx.cardview.widget.CardView
-                            android:id="@+id/btn_view_transactions"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_margin="15dp"
-                            android:backgroundTint="@color/light_green"
-                            android:textColor="@color/white"
-                            card_view:cardCornerRadius="10dp"
-                            >
-                            <ImageView
-                                android:src="@drawable/icon_view_transaction"
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
-                                android:layout_gravity="center"
-                                card_view:tint="#FFFFFF" />
-                        </androidx.cardview.widget.CardView>-->
-
+                            <TextView
+                                android:text="Goal Deposit"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"
+                                android:id="@+id/tv_expense"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"/>
+                        </LinearLayout>
                     </LinearLayout>
 
-
                     <LinearLayout
-                        android:id="@+id/linear_layout_3"
+                        android:id="@+id/linear_layout_6"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        app:layout_constraintTop_toBottomOf="@id/cv_current_balance"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_height="wrap_content"
                         android:orientation="horizontal"
+<<<<<<< Updated upstream
                         >
 
                         <TextView
@@ -276,16 +350,67 @@
                             android:layout_height="1dp"
                             android:layout_weight="0" >
                         </View>
+=======
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:layout_gravity="center">
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/btn_pay_with_maya"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:textColor="@color/white"
+                                android:backgroundTint="@color/light_green"
+                                card_view:cardCornerRadius="10dp"
+                                android:layout_gravity="center">
+
+                                <ImageView
+                                    android:src="@drawable/icon_maya"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:layout_gravity="center"
+                                    card_view:tint="#FFFFFF" />
+
+                            </androidx.cardview.widget.CardView>
+
+                            <TextView
+                                android:text="Pay Maya"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"
+                                android:id="@+id/tv_pay_with_maya"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_gravity="center"
+                            android:layout_weight="1">
+>>>>>>> Stashed changes
 
                         <androidx.cardview.widget.CardView
                             android:id="@+id/btn_view_transactions"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:layout_margin="15dp"
                             android:backgroundTint="@color/light_green"
                             android:textColor="@color/white"
+<<<<<<< Updated upstream
                             app:cardCornerRadius="10dp"
                             >
+=======
+                            card_view:cardCornerRadius="10dp"
+                            android:layout_gravity="center">
+
+>>>>>>> Stashed changes
                             <ImageView
                                 android:src="@drawable/icon_view_transaction"
                                 android:layout_width="35dp"
@@ -294,6 +419,7 @@
                                 app:tint="#FFFFFF" />
                         </androidx.cardview.widget.CardView>
 
+<<<<<<< Updated upstream
 
                     </LinearLayout>
 
@@ -334,8 +460,19 @@
                             />
 
 
+=======
+                            <TextView
+                                android:text="Transactions"
+                                android:textSize="16sp"
+                                android:textColor="@color/black"
+                                android:id="@+id/tv_view_transactions"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                />
+                        </LinearLayout>
+>>>>>>> Stashed changes
                     </LinearLayout>
-
                 </LinearLayout>
             </LinearLayout>
 
@@ -348,8 +485,8 @@
             android:id="@+id/abl_bar_charts"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_margin="20dp"
-            app:layout_constraintTop_toBottomOf="@id/cv_current_balance">
+            app:layout_constraintTop_toBottomOf="@id/cv_current_balance"
+            android:layout_marginTop="20dp">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs_bar_charts"
@@ -387,8 +524,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
             app:layout_constraintTop_toBottomOf="@id/view_pager_bar_charts">
 
             <com.google.android.material.tabs.TabLayout
