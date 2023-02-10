@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".financialAssessmentModuleFinlitExpert.fragment.DetailsFragment">
+    tools:context=".financialAssessmentModuleFinlitExpert.fragment.AssessmentDetailsFragment">
 
 
     <TextView
@@ -98,7 +98,7 @@
                 />
 
             <TextView
-                android:id="@+id/tv_amount"
+                android:id="@+id/tv_date_created"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
@@ -134,7 +134,7 @@
                 />
 
             <TextView
-                android:id="@+id/tv_target_date"
+                android:id="@+id/tv_date_modified"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"

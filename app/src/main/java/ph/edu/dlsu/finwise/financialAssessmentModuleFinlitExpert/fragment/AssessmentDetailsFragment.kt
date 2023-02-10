@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentAssessmentDetailsBinding
+import ph.edu.dlsu.finwise.model.AssessmentDetails
+import java.text.SimpleDateFormat
 
 class AssessmentDetailsFragment : Fragment() {
 
@@ -16,15 +19,16 @@ class AssessmentDetailsFragment : Fragment() {
 
     private var firestore = Firebase.firestore
 
-    //TODO: CHANGE TO ASSESSMENT ID
-    private lateinit var assessmentCategory:String
-    private lateinit var assessmentType:String
+    private lateinit var assessmentID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var bundle = arguments
-        assessmentCategory = bundle?.getString("assessmentCategory").toString()
-        assessmentType = bundle?.getString("assessmentType").toString()
+        arguments?.let{
+            var bundle = arguments
+            assessmentID = bundle?.getString("assessmentID").toString()
+            println("print in fragment " + assessmentID)
+            setFields()
+        }
     }
 
     override fun onCreateView(
@@ -33,7 +37,20 @@ class AssessmentDetailsFragment : Fragment() {
     ): View? {
         binding = FragmentAssessmentDetailsBinding.inflate(inflater, container, false)
         val view = binding.root
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_assessment_details, container, false)
+        return view
+    }
+
+    private fun setFields() {
+        println("print set fields "  + assessmentID)
+        firestore.collection("Assessments").document(assessmentID).get().addOnSuccessListener {
+            var assessment = it.toObject<AssessmentDetails>()
+            binding.tvCategory.text = assessment?.assessmentCategory
+            binding.tvDateCreated.text= SimpleDateFormat("MM/dd/yyyy").format(assessment?.createdOn?.toDate())
+            binding.tvNumberOfTakes.text = assessment?.nTakes.toString()
+
+            firestore.collection("AssessmentQuestions").get().addOnSuccessListener { questions ->
+                binding.tvNumberOfQuestions.text = questions.size().toString()
+            }
+        }
     }
 }

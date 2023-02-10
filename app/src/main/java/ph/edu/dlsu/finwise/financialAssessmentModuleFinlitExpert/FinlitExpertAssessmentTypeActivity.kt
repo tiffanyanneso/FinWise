@@ -1,16 +1,31 @@
 package ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.NavbarFinlitExpert
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertBinding
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertTypeBinding
+import ph.edu.dlsu.finwise.databinding.DialogNewAssessmentBinding
+import java.sql.Time
 
 class FinlitExpertAssessmentTypeActivity : AppCompatActivity () {
 
     private lateinit var binding:ActivityFinancialAssessmentFinlitExpertTypeBinding
+    private var firestore = Firebase.firestore
+
+    private var existing = false
+
+    private lateinit var assessmentCategory:String
+    private lateinit var assessmentType:String
+    private lateinit var assessmentID:String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +33,7 @@ class FinlitExpertAssessmentTypeActivity : AppCompatActivity () {
         setContentView(binding.root)
 
         var bundle = intent.extras!!
-        var assessmentCategory = bundle.getString("assessmentCategory")
+        assessmentCategory = bundle.getString("assessmentCategory").toString()
 
         var specificAssessment = Intent(this, FinlitExpertSpecificAssessmentActivity::class.java)
         var dataBundle = Bundle()
@@ -26,21 +41,68 @@ class FinlitExpertAssessmentTypeActivity : AppCompatActivity () {
 
 
         binding.btnPreliminary.setOnClickListener {
-            dataBundle.putString("assessmentType", binding.tvPreliminary.text.toString())
-            specificAssessment.putExtras(dataBundle)
-            this.startActivity(specificAssessment)
+            assessmentType = binding.tvPreliminary.text.toString()
+            checkExisting(assessmentType)
         }
 
         binding.btnPost.setOnClickListener {
-            dataBundle.putString("assessmentType", binding.tvPost.text.toString())
-            specificAssessment.putExtras(dataBundle)
-            this.startActivity(specificAssessment)
+            assessmentType = binding.tvPost.text.toString()
+            checkExisting(assessmentType)
         }
 
         // Hides actionbar,
         // and initializes the navbar
         supportActionBar?.hide()
         NavbarFinlitExpert(findViewById(R.id.bottom_nav_finlit_expert), this, R.id.nav_finlit_assessment)
-
     }
+
+    //check if the assessment already exists, otherwise open dialog to prompt user to create new assessment
+    private fun checkExisting(assessmentType:String) {
+        firestore.collection("Assessments").whereEqualTo("assessmentCategory", assessmentCategory).
+            whereEqualTo("assessmentType", assessmentType).get().addOnSuccessListener { results ->
+                if (results.size() > 0) {
+                    assessmentID = results.documents[0].id
+                    var specificAssessment = Intent(this, FinlitExpertSpecificAssessmentActivity::class.java)
+                    var dataBundle = Bundle()
+                    dataBundle.putString("assessmentID", assessmentID)
+                    specificAssessment.putExtras(dataBundle)
+                    this.startActivity(specificAssessment)
+                } else
+                    createNewAssessmentDialog()
+            }
+    }
+
+
+    private fun createNewAssessmentDialog() {
+        var dialogBinding= DialogNewAssessmentBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(800, 800)
+
+        dialogBinding.btnYes.setOnClickListener {
+            var assessment = hashMapOf(
+                "assessmentName" to "assessmentName",
+                "assessmentCategory" to assessmentCategory,
+                "assessmentType" to assessmentType,
+                "createdOn" to Timestamp.now(),
+                "createdBy" to "finlitexpertID",
+                "nTakes" to 0
+            )
+            firestore.collection("Assessments").add(assessment).addOnSuccessListener {
+                var editAssessment = Intent(this, FinlitExpertEditAssessmentActivity::class.java)
+                var bundle = Bundle()
+                bundle.putString("assessmentID", it.id)
+                editAssessment.putExtras(bundle)
+                this.startActivity(editAssessment)
+                dialog.dismiss()
+            }
+        }
+
+        dialogBinding.btnNo.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
 }

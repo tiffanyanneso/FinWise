@@ -6,65 +6,32 @@
     android:padding="20dp">
 
     <TextView
-        android:id="@+id/tv_new_category"
+        android:id="@+id/tv_title"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:text="@string/title_add_new_choice"
+        android:text="Notice"
         android:gravity="center"
         android:textStyle="bold"
-        android:textColor="@color/black"
-        />
+        android:textColor="@color/black"/>
 
     <LinearLayout
         android:id="@+id/linear_layout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_new_category"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
         app:layout_constraintBottom_toTopOf="@id/linear_layout2"
         android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/container_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            app:helperTextEnabled="true"
-            app:helperText=""
-            app:helperTextTextColor="@color/red"
-            android:paddingBottom="10dp"
-            android:paddingTop="20dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dialog_et_new_choice"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:lines="1"
-                android:inputType="text"
-                android:textSize="16dp"
-                android:hint="@string/input_choice"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-        <CheckBox
-            android:id="@+id/cb_correct"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Correct Answer"
-            android:textSize="16dp"
-            />
-
-
-
         <TextView
-            android:id="@+id/tv_error"
+            android:id="@+id/tv_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/red"
-            android:text="@string/error_new_choice"
-            android:visibility="gone"/>
+            android:layout_marginTop="10dp"
+            android:text="There is currently no existing assessment for this. Do you want to create a new assessment?"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
 
     </LinearLayout>
 
@@ -78,18 +45,18 @@
         android:orientation="horizontal"
         android:gravity="right"
         android:layout_marginBottom="10dp"
-        android:paddingTop="10dp">
+        android:paddingTop="20dp">
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_cancel"
+            android:id="@+id/btn_no"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/btn_save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/cancel"
+            android:text="No"
             android:textColor="@color/black"
             android:backgroundTint="@color/light_grey"
             android:background="@drawable/button_border_grey"
@@ -97,12 +64,12 @@
             />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_save"
+            android:id="@+id/btn_yes"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_border"
             android:backgroundTint="@color/dark_green"
-            android:text="@string/save"
+            android:text="Yes"
             android:textColor="@color/off_white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

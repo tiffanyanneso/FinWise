@@ -8,22 +8,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemAddNewChoiceBinding
+import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinlitExpertAddNewQuestionsActivity
 
 class NewChoicesAdapter : RecyclerView.Adapter<NewChoicesAdapter.ChoicesViewHolder>{
 
-    private var choicesArrayList = ArrayList<String>()
+    private var choicesArrayList = ArrayList<FinlitExpertAddNewQuestionsActivity.Choice>()
     private var context: Context
 
     private var firestore = Firebase.firestore
 
 
-    constructor(context: Context, choicesArrayList:ArrayList<String>) {
+    constructor(context: Context, choicesArrayList:ArrayList<FinlitExpertAddNewQuestionsActivity.Choice>) {
         this.context = context
         this.choicesArrayList = choicesArrayList
     }
 
     override fun getItemCount(): Int {
-        return choicesArrayList.size
+        //limit the choices to only 4
+        if(choicesArrayList.size > 4)
+            return 4
+        else
+            return choicesArrayList.size
     }
 
     override fun onCreateViewHolder(
@@ -48,8 +53,9 @@ class NewChoicesAdapter : RecyclerView.Adapter<NewChoicesAdapter.ChoicesViewHold
             itemView.setOnClickListener(this)
         }
 
-        fun bindChoice(choice: String){
-            itemBinding.tvChoice.text = choice
+        fun bindChoice(choice: FinlitExpertAddNewQuestionsActivity.Choice){
+            itemBinding.tvChoice.text = choice.choice
+            itemBinding.switchSetChoices.isChecked = true
         }
 
         override fun onClick(p0: View?) {
