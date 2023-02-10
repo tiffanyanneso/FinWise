@@ -9,7 +9,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="725dp"
+        android:layout_height="750dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -24,7 +24,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
-            xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/cv_current_balance"
             android:layout_width="match_parent"
             android:layout_marginStart="20dp"
@@ -35,7 +34,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:padding="20dp"
-            card_view:cardCornerRadius="10dp">
+            app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:id="@+id/linear_layout_1"
@@ -90,7 +89,7 @@
                             android:backgroundTint="@color/light_green"
                             android:textColor="@color/white"
                             android:layout_margin="15dp"
-                            card_view:cardCornerRadius="10dp"
+                            app:cardCornerRadius="10dp"
                             >
 
                             <ImageView
@@ -98,7 +97,7 @@
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
                                 android:layout_gravity="center"
-                                card_view:tint="#FFFFFF" />
+                                app:tint="#FFFFFF" />
 
                         </androidx.cardview.widget.CardView>
 
@@ -114,7 +113,7 @@
                             android:layout_height="50dp"
                             android:textColor="@color/white"
                             android:backgroundTint="@color/light_green"
-                            card_view:cardCornerRadius="10dp"
+                            app:cardCornerRadius="10dp"
                             android:layout_margin="15dp"
                             >
 
@@ -123,7 +122,7 @@
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
                                 android:layout_gravity="center"
-                                card_view:tint="#FFFFFF" />
+                                app:tint="#FFFFFF" />
                         </androidx.cardview.widget.CardView>
 
                         <View
@@ -139,14 +138,14 @@
                             android:textColor="@color/white"
                             android:backgroundTint="@color/light_green"
                             android:layout_margin="15dp"
-                            card_view:cardCornerRadius="10dp"
+                            app:cardCornerRadius="10dp"
                             >
                             <ImageView
                                 android:src="@drawable/icon_deposit_to_goal"
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
                                 android:layout_gravity="center"
-                                card_view:tint="#FFFFFF" />
+                                app:tint="#FFFFFF" />
                         </androidx.cardview.widget.CardView>
          <!--               <View
                             android:layout_width="0dp"
@@ -186,12 +185,12 @@
 
                         <TextView
                             android:text="Add\nMoney"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:textColor="@color/off_white"
                             android:id="@+id/tv_income"
                             android:layout_width="wrap_content"
                             android:layout_height="50dp"
-                            android:layout_marginStart="20dp"
+                            android:layout_marginStart="15dp"
                             android:gravity="center"
                             >
 
@@ -205,7 +204,7 @@
 
                         <TextView
                             android:text="Track\nExpense"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:textColor="@color/off_white"
                             android:id="@+id/tv_goal"
                             android:layout_width="wrap_content"
@@ -221,7 +220,7 @@
 
                         <TextView
                             android:text="Deposit\nTo Goal"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:textColor="@color/off_white"
                             android:id="@+id/tv_expense"
                             android:layout_width="wrap_content"
@@ -249,8 +248,8 @@
                         android:id="@+id/linear_layout_4"
                         android:layout_width="match_parent"
                         android:layout_height="70dp"
+                        android:gravity="center"
                         android:orientation="horizontal">
-
 
 
                         <androidx.cardview.widget.CardView
@@ -260,21 +259,22 @@
                             android:textColor="@color/white"
                             android:backgroundTint="@color/light_green"
                             android:layout_margin="15dp"
-                            card_view:cardCornerRadius="10dp"
+                            app:cardCornerRadius="10dp"
                             >
+
                             <ImageView
-                                android:src="@drawable/icon_maya"
                                 android:layout_width="50dp"
-                                android:layout_height="50dp"
+                                android:layout_height="42dp"
                                 android:layout_gravity="center"
-                                card_view:tint="#FFFFFF" />
+                                android:src="@drawable/icon_maya"
+                                app:tint="#FFFFFF" />
 
                         </androidx.cardview.widget.CardView>
 
                         <View
-                            android:layout_width="0dp"
+                            android:layout_width="70dp"
                             android:layout_height="1dp"
-                            android:layout_weight="1" >
+                            android:layout_weight="0" >
                         </View>
 
                         <androidx.cardview.widget.CardView
@@ -284,33 +284,26 @@
                             android:layout_margin="15dp"
                             android:backgroundTint="@color/light_green"
                             android:textColor="@color/white"
-                            card_view:cardCornerRadius="10dp"
+                            app:cardCornerRadius="10dp"
                             >
                             <ImageView
                                 android:src="@drawable/icon_view_transaction"
                                 android:layout_width="35dp"
                                 android:layout_height="35dp"
                                 android:layout_gravity="center"
-                                card_view:tint="#FFFFFF" />
+                                app:tint="#FFFFFF" />
                         </androidx.cardview.widget.CardView>
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="2.85" >
-                        </View>
+
                     </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/linear_layout_5"
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_height="40dp"
+                        android:gravity="center"
                         android:orientation="horizontal"
                         >
-
-
 
                         <TextView
                             android:text="Pay\nWith Maya"
@@ -319,30 +312,27 @@
                             android:id="@+id/tv_pay_with_maya"
                             android:layout_width="wrap_content"
                             android:layout_height="50dp"
-                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="10dp"
                             android:gravity="center"
                             />
 
                         <View
-                            android:layout_width="0dp"
+                            android:layout_width="70dp"
                             android:layout_height="1dp"
-                            android:layout_weight="0.43" >
+                            android:layout_weight="0" >
                         </View>
 
                         <TextView
                             android:text="View\nTransactions"
-                            android:textSize="14sp"
+                            android:textSize="12sp"
                             android:textColor="@color/off_white"
                             android:id="@+id/tv_view_transactions"
                             android:layout_width="wrap_content"
                             android:layout_height="50dp"
+                            android:layout_marginStart="2dp"
                             android:gravity="center"
                             />
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:layout_weight="1" >
-                        </View>
+
 
                     </LinearLayout>
 
@@ -379,7 +369,7 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager_bar_charts"
             android:layout_width="match_parent"
-            android:layout_height="600dp"
+            android:layout_height="500dp"
             android:layout_marginTop="15dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"

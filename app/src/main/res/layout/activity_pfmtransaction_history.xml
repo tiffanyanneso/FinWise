@@ -27,7 +27,18 @@
             />
     </com.google.android.material.appbar.AppBarLayout>
 
-<!--    <androidx.appcompat.widget.AppCompatSpinner-->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn"
+        android:text="paymaya check"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topbar"
+        app:layout_constraintBottom_toTopOf="@id/tabLayout"/>
+
+
+    <!--    <androidx.appcompat.widget.AppCompatSpinner-->
 <!--        android:id="@+id/spinner_sort"-->
 <!--        app:layout_constraintTop_toBottomOf="@+id/tv_title"-->
 <!--        app:layout_constraintLeft_toLeftOf="parent"-->
@@ -47,7 +58,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topbar"
+        app:layout_constraintTop_toBottomOf="@+id/btn"
         app:tabGravity="fill"
         app:tabSelectedTextColor="@color/dark_green"
         app:tabIndicatorColor="@color/dark_green"/>

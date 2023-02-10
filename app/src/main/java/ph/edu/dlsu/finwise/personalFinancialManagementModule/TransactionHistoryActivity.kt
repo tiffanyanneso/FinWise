@@ -1,27 +1,36 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.AdapterView
+import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.paymaya.sdk.android.common.LogLevel
+import com.paymaya.sdk.android.common.PayMayaEnvironment
+import com.paymaya.sdk.android.common.exceptions.BadRequestException
+import com.paymaya.sdk.android.common.models.AmountDetails
+import com.paymaya.sdk.android.common.models.RedirectUrl
+import com.paymaya.sdk.android.common.models.TotalAmount
+import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMaya
+import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMayaResult
+import com.paymaya.sdk.android.paywithpaymaya.SinglePaymentResult
+import com.paymaya.sdk.android.paywithpaymaya.models.SinglePaymentRequest
 import kotlinx.coroutines.*
+import org.json.JSONObject
 import ph.edu.dlsu.finwise.Navbar
-import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.TransactionHistoryExpenseFragment
 import ph.edu.dlsu.finwise.TransactionHistoryIncomeFragment
 import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPfmtransactionHistoryBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.*
+import java.math.BigDecimal
+
 
 class TransactionHistoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPfmtransactionHistoryBinding
@@ -32,6 +41,38 @@ class TransactionHistoryActivity : AppCompatActivity() {
     private lateinit var type: String
 
 
+    // For Pay With PayMaya API: This is instantiating the Pay With PayMaya API.
+
+    private val payWithPayMayaClient = PayWithPayMaya.newBuilder()
+        .clientPublicKey("client_public_key")
+        .environment(PayMayaEnvironment.SANDBOX)
+        .logLevel(LogLevel.ERROR)
+        .build()
+
+    // For Pay With PayMaya API: Will redirect customers to these urls upon results of payment.
+    // Note: We are not using this but this needs to be here or else the API will have an error.
+    private val redirectUrl = RedirectUrl(
+    success = "http://success.com",
+    failure = "http://failure.com",
+    cancel = "http://cancel.com"
+    )
+
+    // For Pay With PayMaya API: This is where the payment request is built and payment details can be defined.
+    private fun buildSinglePaymentRequest(): SinglePaymentRequest {
+        val amount = BigDecimal("100.00")
+        val requestReferenceNumber = "0"
+        return SinglePaymentRequest(
+            TotalAmount(
+                amount,
+                "PHP",
+                AmountDetails()
+            ),
+            requestReferenceNumber,
+            redirectUrl,
+            null as JSONObject?
+        )
+    }
+
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,14 +80,18 @@ class TransactionHistoryActivity : AppCompatActivity() {
         setContentView(binding.root)
         context = this
 
-        // Hides actionbar,
-        // and initializes the navbar
-        supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+
+        loadBackButton()
+
+        // Initializes the navbar
+        Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
 
        // transactionIDArrayList.clear()
-//        getAllTransactions()
+
+        //        getAllTransactions()
 //        sortTransactions()
+
+
 
         GlobalScope.launch(Dispatchers.IO) {
             withContext(Dispatchers.Main) {
@@ -60,6 +105,59 @@ class TransactionHistoryActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun loadBackButton() {
+       /* binding.topA33333ppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topA33333ppBar.setNavigationOnClickListener {
+            payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
+            *//*val goToPFM = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
+            startActivity(goToPFM)*//*
+        }*/
+        binding.btn.setOnClickListener {
+            payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        payWithPayMayaClient.onActivityResult(requestCode, resultCode, data)?.let {
+            processCheckoutResult(it)
+        }
+    }
+
+    private fun processCheckoutResult(result: PayWithPayMayaResult) {
+        when (result) {
+            is SinglePaymentResult.Success -> {
+                val resultID: String = result.paymentId
+                Toast.makeText(this, "Payment Successful. Payment ID: $resultID", Toast.LENGTH_LONG)
+                    .show()
+                Log.d("PayMaya-Jaj", resultID)
+            }
+
+            is SinglePaymentResult.Cancel -> {
+                val resultID: String? = result.paymentId
+
+                Toast.makeText(this, "Payment Cancelled. Payment ID: $resultID", Toast.LENGTH_LONG)
+                    .show()
+                if (resultID != null) {
+                    Log.d("PayMaya-Jaj", resultID)
+                }
+            }
+
+            is SinglePaymentResult.Failure -> {
+                val resultID: String? = result.paymentId
+                val message =
+                    "Failure, checkoutId: ${resultID}, exception: ${result.exception}"
+                if (result.exception is BadRequestException) {
+                    Log.d("PayMaya-Jaj", (result.exception as BadRequestException).error.toString())
+                }
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+            }
+            else -> {}
+        }
+    }
+
+
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){
 
