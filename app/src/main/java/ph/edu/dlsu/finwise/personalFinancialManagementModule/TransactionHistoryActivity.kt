@@ -29,6 +29,7 @@ import ph.edu.dlsu.finwise.TransactionHistoryIncomeFragment
 import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPfmtransactionHistoryBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.*
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.AsyncTask.HttpHandler
 import java.math.BigDecimal
 
 
@@ -42,9 +43,8 @@ class TransactionHistoryActivity : AppCompatActivity() {
 
 
     // For Pay With PayMaya API: This is instantiating the Pay With PayMaya API.
-
     private val payWithPayMayaClient = PayWithPayMaya.newBuilder()
-        .clientPublicKey("client_public_key")
+        .clientPublicKey("pk-MOfNKu3FmHMVHtjyjG7vhr7vFevRkWxmxYL1Yq6iFk5")
         .environment(PayMayaEnvironment.SANDBOX)
         .logLevel(LogLevel.ERROR)
         .build()
@@ -80,8 +80,27 @@ class TransactionHistoryActivity : AppCompatActivity() {
         setContentView(binding.root)
         context = this
 
+        binding.btn.setOnClickListener {
+            payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
+        }
 
-        loadBackButton()
+        // For Get Payment API: This uses PayMaya's Get Payment API to manually get the details of the transaction using a payment ID.
+        // Note: This calls GetPayment.java to run an AsynchTask in the background.
+        binding.btn2.setOnClickListener {
+            val url =
+                "https://pg-sandbox.paymaya.com/scan/v2/qr/merchants/54212615-7ee5-43a5-a4d8-76f5087ecd8c/payments"
+            val AuthHeader =
+                "Basic c2staHN5czk2b0VPSFVhaTMxb3VCSHdySUhZVGZIZEhKZFZLU1ZTeFpOZU5KZzo="
+            val method = "POST"
+            val post_data =
+                "{ \"totalAmount\": { \"currency\": \"PHP\", \"value\": \"100.00\" }, \"buyer\": { \"firstName\": \"Juan\", \"lastName\": \"Cruz\" }, \"card\": { \"number\": \"5424820002859039\", \"expMonth\": \"05\", \"expYear\": \"2020\", \"cvc\": \"059\" }, \"requestReferenceNumber\": \"5b4a6d60-2165-4bc1-bb0e-e610d1a3f82d\" }"
+
+            val createPayment = HttpHandler { payment_info ->
+                Log.d("PayMaya-Jaj", "" + payment_info)
+                execute_QRPayment()
+            }.execute(url, AuthHeader, method, post_data) as HttpHandler
+        }
+        loadBackButton() 
 
         // Initializes the navbar
         Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
@@ -106,6 +125,22 @@ class TransactionHistoryActivity : AppCompatActivity() {
         }
     }
 
+    private fun execute_QRPayment() {
+        /* Note to self: To fix code, get the payment ID from Create Payment API and replace it in the url below. Then create
+           new if statement in HttpHandler for handling "PUT" method requests.
+        */
+        val url =
+            "https://pg-sandbox.paymaya.com/scan/v2/qr/payments/306ab165-9d54-4226-a0cf-14480a70885c"
+        val authHeader = "Basic c2staHN5czk2b0VPSFVhaTMxb3VCSHdySUhZVGZIZEhKZFZLU1ZTeFpOZU5KZzo="
+        val method = "GET"
+        val executePayment = HttpHandler { payment_info ->
+            Log.d(
+                "PayMaya-Jaj",
+                "" + payment_info
+            )
+        }.execute(url, authHeader, method) as HttpHandler
+    }
+
     private fun loadBackButton() {
        /* binding.topA33333ppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topA33333ppBar.setNavigationOnClickListener {
@@ -113,18 +148,20 @@ class TransactionHistoryActivity : AppCompatActivity() {
             *//*val goToPFM = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
             startActivity(goToPFM)*//*
         }*/
-        binding.btn.setOnClickListener {
-            payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
-        }
+
     }
 
+    // For Pay With PayMaya API: Once A Pay With PayMaya Activity finishes, this function receives the results.
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         payWithPayMayaClient.onActivityResult(requestCode, resultCode, data)?.let {
+            Log.d("testt", "onCreate: $it")
             processCheckoutResult(it)
         }
     }
 
+
+    // For Pay With PayMaya API: This processes the results from onActivityResult() and gets the Payment ID from the transaction.
     private fun processCheckoutResult(result: PayWithPayMayaResult) {
         when (result) {
             is SinglePaymentResult.Success -> {
