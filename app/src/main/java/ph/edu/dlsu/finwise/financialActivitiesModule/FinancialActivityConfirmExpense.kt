@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -53,18 +54,15 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
         binding.btnConfirm.setOnClickListener {
             //TODO: CHANGE WHERE THE BUDGET ITEM ID IS PLACED
            var expense = hashMapOf(
-               "childID" to "",
-               "transactionType" to "Expense",
-               "transactionName" to bundle.getString("expenseName"),
+               "budgetCategoryID" to budgetItemID,
+               "expenseName" to bundle.getString("expenseName"),
                "amount" to bundle.getFloat("amount"),
-               "category" to budgetItemID,
-               "financialActivityID" to budgetActivityID,
                "date" to bundle.getSerializable("date")
            )
 
             //adjustUserBalance()
 
-            firestore.collection("Transactions").add(expense).addOnSuccessListener {
+            firestore.collection("BudgetExpenses").add(expense).addOnSuccessListener {
                 var spending = Intent(this, BudgetExpenseActivity::class.java)
                 sendBundle.putString("budgetActivityID", budgetActivityID)
                 sendBundle.putString("budgetItemID", budgetItemID)

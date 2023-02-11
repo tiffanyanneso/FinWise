@@ -66,9 +66,7 @@ class BudgetExpenseActivity : AppCompatActivity() {
     }
 
     private fun getExpenses() {
-        println("printl "  + budgetItemID)
-
-        firestore.collection("Transactions").whereEqualTo("category", budgetItemID).get().addOnSuccessListener { results ->
+        firestore.collection("BudgetExpenses").whereEqualTo("budgetCategoryID", budgetItemID).get().addOnSuccessListener { results ->
             for (expense in results)
                 expenseTransactionIDArrayList.add(expense.id)
 

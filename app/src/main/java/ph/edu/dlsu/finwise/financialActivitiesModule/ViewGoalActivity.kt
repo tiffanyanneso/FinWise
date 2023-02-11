@@ -142,8 +142,8 @@ class ViewGoalActivity : AppCompatActivity() {
                     binding.tvGoalName.text = goal?.goalName.toString()
                     binding.tvActivityName.text = goal?.financialActivity.toString()
 
-                    var formatSaved = DecimalFormat("#,###.00").format(savedAmount)
-                    var formatTarget = DecimalFormat("#,###.00").format(goal?.targetAmount)
+                    var formatSaved = DecimalFormat("#,##0.00").format(savedAmount)
+                    var formatTarget = DecimalFormat("#,##0.00").format(goal?.targetAmount)
                     binding.tvGoalProgress.text = "₱$formatSaved / " + "₱ $formatTarget"
                     binding.progressBar.progress = (savedAmount/ goal?.targetAmount!! * 100).toInt()
 

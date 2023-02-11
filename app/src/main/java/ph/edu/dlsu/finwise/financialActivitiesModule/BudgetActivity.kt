@@ -18,6 +18,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
+import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
@@ -72,34 +73,21 @@ class BudgetActivity : AppCompatActivity() {
     }
 
     private fun deductExpenses() {
-        firestore.collection("Transactions").whereEqualTo("financialActivityID", budgetActivityID).get().addOnSuccessListener { results ->
-            for (transaction in results) {
-                var transactionObject = transaction.toObject<Transactions>()
-                if (transactionObject.transactionType == "Expense")
-                    balance -= transactionObject.amount!!
-            }
+        if (budgetCategoryIDArrayList.size == 0)
             binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(balance)
-        }.continueWith {  getBudgetItems() }
-    }
-
-    private fun getBalance() {
-        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->
-            for (transaction in results) {
-                var transactionObject = transaction.toObject<Transactions>()
-                if (transactionObject.transactionType == "Deposit")
-                    balance += transactionObject.amount!!
-                else if (transactionObject.transactionType == "Withdrawal" ||transactionObject.transactionType == "Expense" )
-                    balance-= transactionObject.amount!!
+        else {
+            for (budgetCategoryID in budgetCategoryIDArrayList) {
+                firestore.collection("BudgetExpenses").whereEqualTo("budgetCategoryID", budgetCategoryID).get().addOnSuccessListener { budgetExpenses ->
+                    for (expense in budgetExpenses) {
+                        var expenseObject = expense.toObject<BudgetExpense>()
+                        balance -= expenseObject.amount!!
+                    }
+                }.continueWith { binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(balance) }
             }
-        }.continueWith { deductExpenses() }
-    }
-
-    /*private fun activateNextDecisionMakingActivity(){
-        firestore.collection("DecisionMakingActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("priority", nextPriority).get().addOnSuccessListener {
-            var documentID = it.documents[0].id
-            firestore.collection("DecisionMakingActivities").document(documentID).update("status", "In Progress")
         }
-    }*/
+
+
+    }
 
     private fun getBudgetItems() {
         firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).get().addOnSuccessListener { budgetItems ->
@@ -111,8 +99,28 @@ class BudgetActivity : AppCompatActivity() {
             budgetCategoryAdapter = BudgetCategoryAdapter(this, budgetCategoryIDArrayList)
             binding.rvViewCategories.adapter = budgetCategoryAdapter
             binding.rvViewCategories.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-        }
+        }.continueWith { deductExpenses() }
     }
+
+
+    private fun getBalance() {
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->
+            for (transaction in results) {
+                var transactionObject = transaction.toObject<Transactions>()
+                if (transactionObject.transactionType == "Deposit")
+                    balance += transactionObject.amount!!
+                else if (transactionObject.transactionType == "Withdrawal")
+                    balance-= transactionObject.amount!!
+            }
+        }.continueWith { getBudgetItems() }
+    }
+
+    /*private fun activateNextDecisionMakingActivity(){
+        firestore.collection("DecisionMakingActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("priority", nextPriority).get().addOnSuccessListener {
+            var documentID = it.documents[0].id
+            firestore.collection("DecisionMakingActivities").document(documentID).update("status", "In Progress")
+        }
+    }*/
 
     /*private fun getBudgetInfo() {
         //get the amount of needed for the decision making activity

@@ -12,6 +12,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemCategoryBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetExpenseActivity
+import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.BudgetItem
 import java.text.DecimalFormat
 
@@ -59,7 +60,14 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
                 itemBinding.tvBudgetItemId.text = it.id
                 itemBinding.budgetActivityId.text = budgetCategory?.financialActivityID
                 itemBinding.tvBudgetItemName.text = budgetCategory?.budgetItemName
-                itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(budgetCategory?.amount)
+                var categoryAmount = budgetCategory?.amount
+                var spent = 0.00F
+                firestore.collection("BudgetExpenses").whereEqualTo("budgetCategoryID", budgetItemID).get().addOnSuccessListener { results  ->
+                    for (expense in results) {
+                        var expenseObject = expense.toObject<BudgetExpense>()
+                        spent += expenseObject.amount!!.toFloat()
+                    }
+                }.continueWith { itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(spent) + " / ₱ " + DecimalFormat("#,##0.00").format(categoryAmount) }
             }
         }
 

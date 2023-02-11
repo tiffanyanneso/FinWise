@@ -10,6 +10,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemBudgetExpenseBinding
 import ph.edu.dlsu.finwise.model.BudgetCategoryItem
+import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 
@@ -54,10 +55,10 @@ class BudgetExpenseAdapter : RecyclerView.Adapter<BudgetExpenseAdapter.BudgetCat
         }
 
         fun bindItem(expenseTransactionID: String){
-            firestore.collection("Transactions").document(expenseTransactionID).get().addOnSuccessListener {
-                var transaction = it.toObject<Transactions>()
-                itemBinding.tvItem.text = transaction?.transactionName
-                itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(transaction?.amount)
+            firestore.collection("BudgetExpenses").document(expenseTransactionID).get().addOnSuccessListener {
+                var expense = it.toObject<BudgetExpense>()
+                itemBinding.tvItem.text = expense?.expenseName
+                itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(expense?.amount)
             }
         }
 
