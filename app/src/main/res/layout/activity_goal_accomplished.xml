@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ph.edu.dlsu.finwise.financialActivitiesModule.GoalAccomplishedActivity">
+    tools:context="ph.edu.dlsu.finwise.financialActivitiesModule.GoalAccomplishedActivity"
+    android:background="@color/very_light_green">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/topbar"
@@ -36,7 +37,8 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topbar"
         android:padding="20dp"
-        android:background="@drawable/layout_bg_green"
+        android:background="@drawable/button_border_white"
+        android:backgroundTint="@color/white"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp">
@@ -65,36 +67,13 @@
             android:gravity="center"
             android:textColor="@color/black"
             />
-    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_goal_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="@string/goal_details"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginTop="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linear_layout_1"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        />
-
-    <LinearLayout
-        android:id="@+id/linear_layout_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_goal_details"
-        android:padding="20dp"
-        android:background="@drawable/layout_bg_cream"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/div_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"
+            app:dividerColor="@color/light_green"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -206,7 +185,6 @@
                 android:textColor="@color/black"
                 />
         </LinearLayout>
-
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton

@@ -10,8 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".financialActivitiesModule.FinancialActivity"
-        >
+        tools:context=".financialActivitiesModule.FinancialActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/topbar"
@@ -33,57 +32,196 @@
                 />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <LinearLayout
-            android:id="@+id/linear_layout_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/topbar"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:paddingTop="20dp"
-            >
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_new_goal"
-                    android:layout_width="100dp"
-                    android:layout_height="40dp"
-                    android:text="@string/new_goal"
-                    android:textColor="@color/off_white"
-                    android:backgroundTint="@color/dark_green"
-                    android:background="@drawable/button_border"
-                    android:layout_gravity="right"/>
-            </LinearLayout>
-
         <TextView
             android:id="@+id/tv_goal_completion_Rate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
-            android:text="Goal Completion Rate"
+            app:layout_constraintTop_toBottomOf="@+id/topbar"
+            android:text="Completion Rate"
             android:textSize="20dp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp"
-            />
+            android:layout_marginBottom="5dp" />
 
+        <LinearLayout
+            android:id="@+id/linear_layout_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/tv_goal_completion_Rate"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:paddingTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/button_border_white"
+                    android:backgroundTint="@color/light_green"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="10dp"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:id="@+id/short_tern_percetage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="70%"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/short_tern_numbers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="X of X"
+                        android:textSize="16dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
+
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Short Term"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/button_border_white"
+                    android:backgroundTint="@color/light_green"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="10dp"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:id="@+id/medium_tern_percetage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="70%"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/medium_tern_numbers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="X of X"
+                        android:textSize="16dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
+
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medium Term"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/button_border_white"
+                    android:backgroundTint="@color/light_green"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="10dp"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:id="@+id/long_tern_percetage"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="70%"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
+
+                    <TextView
+                        android:id="@+id/long_tern_numbers"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="X of X"
+                        android:textSize="16dp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
+
+                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Long Term"
+                    android:textSize="16dp"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/linear_layout_3"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:paddingTop="20dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_new_goal"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:text="@string/new_goal"
+                android:textColor="@color/off_white"
+                android:backgroundTint="@color/dark_green"
+                android:background="@drawable/button_border"
+                android:layout_gravity="right"/>
+        </LinearLayout>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_goal_completion_Rate"
+            app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
             app:tabGravity="fill"
-            app:tabSelectedTextColor="@color/dark_green"
             app:tabIndicatorColor="@color/dark_green"
-            android:layout_marginTop="20dp"
-            app:tabMode="scrollable"/>
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/dark_green" />
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
