@@ -38,45 +38,62 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topbar"
         android:padding="20dp"
-        android:background="@drawable/border_green_bg_white"
+        android:background="@drawable/button_border_white"
+        android:backgroundTint="@color/white"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp">
 
-        <TextView
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:contentDescription="Peso logo"
+                android:src="@drawable/baseline_star_24"
+                android:text="P"
+                app:tint="@color/yellow" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/goal"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_goal_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Goal Name"
+                    android:textColor="@color/black"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/div_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:text="@string/goal"
-            android:textAllCaps = "true"
-            android:textColor="@color/black"
-            />
-
-        <TextView
-            android:id="@+id/tv_goal_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="24dp"
-            android:text="Goal"
-            android:textColor="@color/black"
-            android:textStyle="bold"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linear_layout_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
-        android:padding="20dp"
-        android:background="@drawable/button_border_white"
-        android:backgroundTint="@color/white"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
-
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
+            android:layout_marginVertical="15dp"
+            app:dividerColor="@color/light_green"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,7 +109,7 @@
                 android:text="@string/activity"
                 android:textSize="16sp"
                 android:textColor="@color/black"
-             />
+                />
 
             <TextView
                 android:id="@+id/tv_activity"
@@ -188,47 +205,7 @@
                 android:textColor="@color/black"
                 />
         </LinearLayout>
-
     </LinearLayout>
-
-<!--    <TextView-->
-<!--        android:id="@+id/title_decision_activities"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textSize="16dp"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/linear_layout_2"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:layout_marginTop="15dp"-->
-<!--        android:text="@string/title_decision_making_activities"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp"/>-->
-
-<!--    <LinearLayout-->
-<!--        android:id="@+id/linear_layout_decision_activities"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:orientation="vertical"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/title_decision_activities"-->
-<!--        android:padding="25dp"-->
-<!--        android:background="@drawable/layout_bg_green"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp">-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/text_decision_activities"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textColor="@color/black"-->
-<!--            app:layout_constraintLeft_toLeftOf="parent"-->
-<!--            app:layout_constraintRight_toRightOf="parent"-->
-<!--            android:textSize="14dp"/>-->
-<!--    </LinearLayout>-->
 
     <LinearLayout
         android:layout_width="match_parent"
