@@ -136,6 +136,8 @@
     <string name="current_balance">Current Balance</string>
     <string name="updated_balance">Updated Balance</string>
 
+    <string name="remaining_budget">Remaining Budget</string>
+
 
     <string name="error_budget_category">Cannot input amount greater than budget</string>
 

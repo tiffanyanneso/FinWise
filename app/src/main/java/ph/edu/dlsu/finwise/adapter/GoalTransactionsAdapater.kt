@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ItemGoalTransactionBinding
 import ph.edu.dlsu.finwise.databinding.ItemTransactionBinding
@@ -15,10 +18,12 @@ import java.text.SimpleDateFormat
 
 class GoalTransactionsAdapater : RecyclerView.Adapter<GoalTransactionsAdapater.GoalViewDepositViewHolder> {
 
-    private var depositTransactions = ArrayList<Transactions>()
+    private var depositTransactions = ArrayList<String>()
     private var context: Context
 
-    constructor(context: Context, depositTransactions:ArrayList<Transactions>) {
+    private var firestore = Firebase.firestore
+
+    constructor(context: Context, depositTransactions:ArrayList<String>) {
         this.context = context
         this.depositTransactions = depositTransactions
     }
@@ -50,20 +55,23 @@ class GoalTransactionsAdapater : RecyclerView.Adapter<GoalTransactionsAdapater.G
             itemView.setOnClickListener(this)
         }
 
-        fun bindGoal(transaction: Transactions){
-            val date =  SimpleDateFormat("MM/dd/yyyy").format(transaction.date?.toDate())
-            itemBinding.tvDate.text = date.toString()
-            itemBinding.tvName.text  = transaction.transactionName
+        fun bindGoal(transactionID: String){
+            firestore.collection("Transactions").document(transactionID).get().addOnSuccessListener {
+                var transaction = it.toObject<Transactions>()
 
-            if (transaction.transactionType == "Deposit") {
-                itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.very_light_green))
-                itemBinding.tvAmount.text = "+ ₱ " + DecimalFormat("#,##0.00").format(transaction.amount)
-            }
-            else if (transaction.transactionType == "Withdrawal") {
-                itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.light_red))
-                itemBinding.tvAmount.text = "- ₱ " + DecimalFormat("#,##0.00").format(transaction.amount)
-            }
+                val date =  SimpleDateFormat("MM/dd/yyyy").format(transaction?.date?.toDate())
+                itemBinding.tvDate.text = date.toString()
+                itemBinding.tvName.text  = transaction?.transactionName
 
+                if (transaction?.transactionType == "Deposit") {
+                    itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.very_light_green))
+                    itemBinding.tvAmount.text = "+ ₱ " + DecimalFormat("#,##0.00").format(transaction.amount)
+                }
+                else if (transaction?.transactionType == "Withdrawal") {
+                    itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.light_red))
+                    itemBinding.tvAmount.text = "- ₱ " + DecimalFormat("#,##0.00").format(transaction.amount)
+                }
+            }
         }
 
         override fun onClick(p0: View?) {

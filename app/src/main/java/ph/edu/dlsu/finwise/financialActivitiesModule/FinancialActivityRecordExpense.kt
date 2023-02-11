@@ -13,6 +13,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialRecordExpenseBinding
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -45,6 +46,7 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         budgetActivityID = bundle.getString("budgetActivityID").toString()
         budgetItemID = bundle.getString("budgetItemID").toString()
+        binding.tvRemainingBudget.text = "You currently have ₱${DecimalFormat("###0.00").format(bundle.getFloat("remainingBudget"))} left in budget"
 
 
         binding.etTransactionDate.setOnClickListener{

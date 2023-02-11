@@ -38,7 +38,7 @@ class SavingActivity : AppCompatActivity() {
 
     private lateinit var lineGraphView: GraphView
 
-    private var transactionsArrayList = ArrayList<Transactions>()
+    private var transactionsArrayList = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,7 +91,7 @@ class SavingActivity : AppCompatActivity() {
     }
 
     private fun getDepositHistory() {
-        firestore.collection("Transactions").whereEqualTo("decisionMakingActivityID", decisionMakingActivityID).get().addOnSuccessListener { transactionsSnapshot ->
+        /*firestore.collection("Transactions").whereEqualTo("decisionMakingActivityID", decisionMakingActivityID).get().addOnSuccessListener { transactionsSnapshot ->
             currentAmount = 0.00F
             for (document in transactionsSnapshot) {
                 var transaction = document.toObject<Transactions>()
@@ -107,7 +107,7 @@ class SavingActivity : AppCompatActivity() {
             binding.rvViewDepositHistory.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
             getSavingProgress()
             initializeLineGraph()
-        }
+        }*/
     }
 
     private fun getSavingProgress() {
@@ -126,7 +126,7 @@ class SavingActivity : AppCompatActivity() {
     private fun initializeLineGraph() {
         // on below line we are initializing
         // our variable with their ids.
-        lineGraphView = findViewById(R.id.line_graph)
+        /*lineGraphView = findViewById(R.id.line_graph)
 
         var dates = ArrayList<Date>()
         var dataPoints = ArrayList<DataPoint>()
@@ -184,6 +184,6 @@ class SavingActivity : AppCompatActivity() {
 
         // on below line we are adding
         // data series to our graph view.
-        lineGraphView.addSeries(series)
+        lineGraphView.addSeries(series)*/
     }
 }

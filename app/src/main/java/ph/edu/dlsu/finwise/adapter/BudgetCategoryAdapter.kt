@@ -67,7 +67,14 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
                         var expenseObject = expense.toObject<BudgetExpense>()
                         spent += expenseObject.amount!!.toFloat()
                     }
-                }.continueWith { itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(spent) + " / ₱ " + DecimalFormat("#,##0.00").format(categoryAmount) }
+                }.continueWith {
+                    var available = categoryAmount?.minus(spent)
+                    itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(available) + " left available"
+                    itemBinding.progressBar.progress = (spent/ categoryAmount!! *100).toInt()}
+            }.continueWith{
+                itemBinding.btnSettings.setOnClickListener{
+
+                }
             }
         }
 

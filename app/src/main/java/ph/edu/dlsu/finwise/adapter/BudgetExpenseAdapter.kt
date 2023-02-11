@@ -13,21 +13,22 @@ import ph.edu.dlsu.finwise.model.BudgetCategoryItem
 import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 
 class BudgetExpenseAdapter : RecyclerView.Adapter<BudgetExpenseAdapter.BudgetCategoryItemViewHolder>{
 
-    private var expenseTransactionIDArrayList = ArrayList<String>()
+    private var expenseArrayList = ArrayList<BudgetExpense>()
     private var context: Context
 
     private var firestore = Firebase.firestore
 
-    constructor(context: Context, expenseTransactionIDArrayList:ArrayList<String>) {
+    constructor(context: Context, expenseArrayList:ArrayList<BudgetExpense>) {
         this.context = context
-        this.expenseTransactionIDArrayList = expenseTransactionIDArrayList
+        this.expenseArrayList = expenseArrayList
     }
 
     override fun getItemCount(): Int {
-        return expenseTransactionIDArrayList.size
+        return expenseArrayList.size
     }
 
     override fun onCreateViewHolder(
@@ -45,7 +46,7 @@ class BudgetExpenseAdapter : RecyclerView.Adapter<BudgetExpenseAdapter.BudgetCat
 
     override fun onBindViewHolder(holder: BudgetExpenseAdapter.BudgetCategoryItemViewHolder,
                                   position: Int) {
-        holder.bindItem(expenseTransactionIDArrayList[position])
+        holder.bindItem(expenseArrayList[position])
     }
 
     inner class BudgetCategoryItemViewHolder(private val itemBinding: ItemBudgetExpenseBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
@@ -54,12 +55,10 @@ class BudgetExpenseAdapter : RecyclerView.Adapter<BudgetExpenseAdapter.BudgetCat
             itemView.setOnClickListener(this)
         }
 
-        fun bindItem(expenseTransactionID: String){
-            firestore.collection("BudgetExpenses").document(expenseTransactionID).get().addOnSuccessListener {
-                var expense = it.toObject<BudgetExpense>()
-                itemBinding.tvItem.text = expense?.expenseName
-                itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(expense?.amount)
-            }
+        fun bindItem(expense: BudgetExpense){
+            itemBinding.tvItem.text = expense?.expenseName
+            itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(expense?.amount)
+            itemBinding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(expense?.date!! .toDate())
         }
 
         override fun onClick(p0: View?) {

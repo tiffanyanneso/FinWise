@@ -11,9 +11,11 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
+import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
 import ph.edu.dlsu.finwise.adapter.GoalDecisionMakingActivitiesAdapter
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
+import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
@@ -22,6 +24,8 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ViewGoalActivity : AppCompatActivity() {
 
@@ -35,11 +39,13 @@ class ViewGoalActivity : AppCompatActivity() {
     private var savedAmount = 0.00F
 
     private lateinit var goalTransactionsAdapter:GoalTransactionsAdapater
-    var transactionsArrayList = ArrayList<Transactions>()
+    var transactionsArrayList = ArrayList<String>()
 
     private lateinit var savingActivityID:String
     private lateinit var budgetingActivityID:String
     private lateinit var spendingActivityID:String
+
+    private var balance = 0.00F
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -119,16 +125,23 @@ class ViewGoalActivity : AppCompatActivity() {
         }.continueWith { getSavedAmount() }
     }
 
+    private class TransactionFilter(var transactionID:String?=null, var date: Date?=null)
+
     private fun getSavedAmount() {
+        var transactionFilterArrayList = ArrayList<TransactionFilter>()
         firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->
             for (transaction in results) {
                 var transactionObject = transaction.toObject<Transactions>()
-                transactionsArrayList.add(transactionObject)
+                transactionFilterArrayList.add(TransactionFilter(transaction.id,transactionObject.date!!.toDate()))
                 if (transactionObject.transactionType == "Deposit")
                     savedAmount += transactionObject.amount!!
                 else if (transactionObject.transactionType == "Withdrawal")
                     savedAmount-= transactionObject.amount!!
             }
+
+            transactionFilterArrayList.sortByDescending { it.date }
+            for (transaction in transactionFilterArrayList)
+                transactionsArrayList.add(transaction.transactionID.toString())
         }.continueWith {setFields() }
     }
 
@@ -162,10 +175,29 @@ class ViewGoalActivity : AppCompatActivity() {
                     if (difference.years!=0)    string += "${difference.years} year"
                     if (difference.months !=0)  string += "${difference.months} month"
                     if (difference.days !=0)    string += "${difference.days} days remaining"
+                    else if (difference.days == 0) string += "0 days remaining"
                     binding.tvRemaining.text = string
+                }
+            }.continueWith {
+                deductExpenses() }
+        }
+    }
+
+    private fun deductExpenses() {
+        var balance = savedAmount
+        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).get().addOnSuccessListener { budgetItems ->
+            if (budgetItems.size() == 0)
+                binding.tvCurrentBalance.text = "₱ " +  DecimalFormat("#,##0.00").format(balance)
+            else {
+                for (item in budgetItems) {
+                    firestore.collection("BudgetExpenses").whereEqualTo("budgetCategoryID", item.id).get().addOnSuccessListener { budgetExpenses ->
+                        for (expense in budgetExpenses) {
+                            var expenseObject = expense.toObject<BudgetExpense>()
+                            balance -= expenseObject.amount!!
+                        }
+                    }.continueWith { binding.tvCurrentBalance.text = "Available balance: ₱ " +  DecimalFormat("#,###.00").format(balance)   }
                 }
             }
         }
     }
-
 }

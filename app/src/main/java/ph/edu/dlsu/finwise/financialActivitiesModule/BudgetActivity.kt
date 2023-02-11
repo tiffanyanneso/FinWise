@@ -72,21 +72,16 @@ class BudgetActivity : AppCompatActivity() {
         }
     }
 
-    private fun deductExpenses() {
-        if (budgetCategoryIDArrayList.size == 0)
-            binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(balance)
-        else {
-            for (budgetCategoryID in budgetCategoryIDArrayList) {
-                firestore.collection("BudgetExpenses").whereEqualTo("budgetCategoryID", budgetCategoryID).get().addOnSuccessListener { budgetExpenses ->
-                    for (expense in budgetExpenses) {
-                        var expenseObject = expense.toObject<BudgetExpense>()
-                        balance -= expenseObject.amount!!
-                    }
-                }.continueWith { binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(balance) }
+    private fun getBalance() {
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->
+            for (transaction in results) {
+                var transactionObject = transaction.toObject<Transactions>()
+                if (transactionObject.transactionType == "Deposit")
+                    balance += transactionObject.amount!!
+                else if (transactionObject.transactionType == "Withdrawal")
+                    balance-= transactionObject.amount!!
             }
-        }
-
-
+        }.continueWith { getBudgetItems() }
     }
 
     private fun getBudgetItems() {
@@ -102,17 +97,21 @@ class BudgetActivity : AppCompatActivity() {
         }.continueWith { deductExpenses() }
     }
 
-
-    private fun getBalance() {
-        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->
-            for (transaction in results) {
-                var transactionObject = transaction.toObject<Transactions>()
-                if (transactionObject.transactionType == "Deposit")
-                    balance += transactionObject.amount!!
-                else if (transactionObject.transactionType == "Withdrawal")
-                    balance-= transactionObject.amount!!
+    private fun deductExpenses() {
+        if (budgetCategoryIDArrayList.size == 0)
+            binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(balance)
+        else {
+            for (budgetCategoryID in budgetCategoryIDArrayList) {
+                firestore.collection("BudgetExpenses").whereEqualTo("budgetCategoryID", budgetCategoryID).get().addOnSuccessListener { budgetExpenses ->
+                    for (expense in budgetExpenses) {
+                        var expenseObject = expense.toObject<BudgetExpense>()
+                        balance -= expenseObject.amount!!
+                    }
+                }.continueWith { binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(balance) }
             }
-        }.continueWith { getBudgetItems() }
+        }
+
+
     }
 
     /*private fun activateNextDecisionMakingActivity(){

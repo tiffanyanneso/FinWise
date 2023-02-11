@@ -42,11 +42,11 @@ class SavingViewTransactionsActivity : AppCompatActivity() {
                 transactionsArrayList.add(transaction)
             }
 
-            goalViewDepositAdapater = GoalTransactionsAdapater(this, transactionsArrayList)
+            /*goalViewDepositAdapater = GoalTransactionsAdapater(this, transactionsArrayList)
             binding.rvViewDepositHistory.adapter = goalViewDepositAdapater
             binding.rvViewDepositHistory.layoutManager = LinearLayoutManager(applicationContext,
                 LinearLayoutManager.VERTICAL,
-                false)
+                false)*/
 
 
         }

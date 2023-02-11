@@ -73,6 +73,15 @@
                 android:layout_gravity="center_horizontal"
                 />
         </LinearLayout>
+
+        <ProgressBar
+            android:layout_below="@+id/linear_layout"
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:scaleY="4"
+            android:max="100"/>
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
