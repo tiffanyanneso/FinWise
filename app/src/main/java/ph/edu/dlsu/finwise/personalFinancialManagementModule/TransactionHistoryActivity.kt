@@ -1,36 +1,20 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.paymaya.sdk.android.common.LogLevel
-import com.paymaya.sdk.android.common.PayMayaEnvironment
-import com.paymaya.sdk.android.common.exceptions.BadRequestException
-import com.paymaya.sdk.android.common.models.AmountDetails
-import com.paymaya.sdk.android.common.models.RedirectUrl
-import com.paymaya.sdk.android.common.models.TotalAmount
-import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMaya
-import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMayaResult
-import com.paymaya.sdk.android.paywithpaymaya.SinglePaymentResult
-import com.paymaya.sdk.android.paywithpaymaya.models.SinglePaymentRequest
 import kotlinx.coroutines.*
-import org.json.JSONObject
 import ph.edu.dlsu.finwise.Navbar
-import ph.edu.dlsu.finwise.TransactionHistoryExpenseFragment
-import ph.edu.dlsu.finwise.TransactionHistoryIncomeFragment
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryExpenseFragment
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryIncomeFragment
 import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPfmtransactionHistoryBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.*
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.AsyncTaskForMaya.HttpHandler
-import java.math.BigDecimal
 
 
 class TransactionHistoryActivity : AppCompatActivity() {

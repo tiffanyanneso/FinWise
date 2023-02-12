@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -37,7 +36,7 @@ class TransactionHistoryExpenseFragment : Fragment() {
     }
 
     private fun loadRecyclerView(transactionIDArrayList: ArrayList<String>) {
-        transactionAdapter = TransactionsAdapter(requireContext().applicationContext, transactionIDArrayList)
+        transactionAdapter = TransactionsAdapter(requireActivity(), transactionIDArrayList)
         binding.rvViewTransactions.adapter = transactionAdapter
         binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireContext().applicationContext,
             LinearLayoutManager.VERTICAL,

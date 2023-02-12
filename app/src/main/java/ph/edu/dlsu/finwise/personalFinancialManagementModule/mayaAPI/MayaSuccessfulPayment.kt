@@ -14,7 +14,7 @@ class MayaSuccessfulPayment :AppCompatActivity() {
         setContentView(binding.root)
 
         //initializes the navbar
-        Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
 
     }
 }

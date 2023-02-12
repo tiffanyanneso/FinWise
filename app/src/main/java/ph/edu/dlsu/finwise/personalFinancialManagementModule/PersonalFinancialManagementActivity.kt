@@ -15,6 +15,7 @@ import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.Expens
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.SavingsFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.BalanceFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.IncomeFragment
+import java.text.DecimalFormat
 
 
 class PersonalFinancialManagementActivity : AppCompatActivity() {
@@ -76,8 +77,10 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
         firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2")
             .get().addOnSuccessListener { document ->
-                val balance = document.documents[0].toObject<ChildWallet>()
-                binding.tvBalance.text = "₱"+balance?.currentBalance
+                val childWallet = document.documents[0].toObject<ChildWallet>()
+                val dec = DecimalFormat("#,###.00")
+                val amount = dec.format(childWallet?.currentBalance)
+                binding.tvBalance.text = "₱$amount"
             }
 
     }

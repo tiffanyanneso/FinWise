@@ -1,56 +1,48 @@
-package ph.edu.dlsu.finwise.personalFinancialManagementModule
+package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.ActivityPfmviewTransactionBinding
+import ph.edu.dlsu.finwise.databinding.FragmentExpenseBinding
+import ph.edu.dlsu.finwise.databinding.FragmentTransactionBinding
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.*
 
-class ViewTransactionActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityPfmviewTransactionBinding
+class TransactionFragment : DialogFragment() {
+    private lateinit var binding: FragmentTransactionBinding
     var bundle = Bundle()
     private var firestore = Firebase.firestore
     lateinit var transaction: Transactions
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityPfmviewTransactionBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        // Hides actionbar,
-        // and initializes the navbar
-        supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_transaction, container, false)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding = FragmentTransactionBinding.bind(view)
         loadTransactionDetails()
-
-        goToBack()
-
+        initializeButton()
     }
-
-    private fun goToBack() {
-        binding.btnDone.setOnClickListener{
-
-            val goBack= Intent(this, PersonalFinancialManagementActivity::class.java)
-            startActivity(goBack)
-        }
-    }
-
 
     private fun loadTransactionDetails() {
-        val bundle: Bundle = intent.extras!!
-        val transactionID = bundle.getString("transactionID")
+        val bundle = arguments
+        val transactionID = bundle?.getString("transactionID")
 
         if (transactionID != null) {
             firestore.collection("Transactions").document(transactionID).get().addOnSuccessListener { document ->
@@ -61,7 +53,7 @@ class ViewTransactionActivity : AppCompatActivity() {
                         initializeText(name, false)
                     else if (transaction.transactionType.toString() == "Maya Expense")
                         initializeText(name, true)
-                     else initializeText(name, false)
+                    else initializeText(name, false)
 
                 }
             }
@@ -88,5 +80,11 @@ class ViewTransactionActivity : AppCompatActivity() {
         binding.tvMerchant.visibility = View.VISIBLE
         binding.tvMerchantLabel.visibility = View.VISIBLE
         binding.tvMerchant.text = transaction.merchant.toString()
+    }
+
+    private fun initializeButton() {
+        binding.btnDone.setOnClickListener {
+            dismiss()
+        }
     }
 }
