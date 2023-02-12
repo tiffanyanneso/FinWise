@@ -123,8 +123,7 @@ class MayaConfirmPayment : AppCompatActivity() {
                 "createdBy" to "",
                 "amount" to amount.toFloat(),
                 "merchant" to merchant,
-                "phoneNumber" to phone,
-                "isMayaPayment" to "true"
+                "phoneNumber" to phone
             )
             adjustUserBalance()
 

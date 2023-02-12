@@ -60,11 +60,12 @@ class TransactionHistoryExpenseFragment : Fragment() {
             for (transactionSnapshot in documents) {
                 //creating the object from list retrieved in db
 
-                var transactionID = transactionSnapshot.id
-                var transaction = transactionSnapshot.toObject<Transactions>()
+                val transactionID = transactionSnapshot.id
+                val transaction = transactionSnapshot.toObject<Transactions>()
 
-                if (transaction.transactionType == "Expense" || transaction.transactionType == "Deposit") {
-                    transactionFilterArrayList.add(TransactionFilter(transactionID, transaction?.date!!.toDate()))
+                if (transaction.transactionType == "Expense" || transaction.transactionType == "Deposit" ||
+                    transaction.transactionType == "Expense (Maya)" ) {
+                    transactionFilterArrayList.add(TransactionFilter(transactionID, transaction.date!!.toDate()))
                 }
             }
             transactionFilterArrayList.sortBy { it.transactionDate }
