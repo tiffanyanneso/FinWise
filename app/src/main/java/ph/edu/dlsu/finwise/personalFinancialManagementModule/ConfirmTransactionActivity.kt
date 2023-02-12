@@ -17,13 +17,12 @@ import kotlin.math.abs
 class ConfirmTransactionActivity : AppCompatActivity() {
     private lateinit var binding : ActivityPfmconfirmTransactionBinding
     private var firestore = Firebase.firestore
-
     var bundle: Bundle? = null
-    var transactionType : String? =null
-    var name : String? =null
-    var category : String? =null
-    var amount : String? =null
-    var date : String? =null
+    lateinit var transactionType : String
+    lateinit var name : String
+    lateinit var category : String
+    lateinit var amount : String
+    lateinit var date : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,12 +48,12 @@ class ConfirmTransactionActivity : AppCompatActivity() {
 
     private fun setText() {
         bundle = intent.extras!!
-        name = bundle!!.getString("transactionName")
-        category = bundle!!.getString("category")
+        name = bundle!!.getString("transactionName").toString()
+        category = bundle!!.getString("category").toString()
         amount = bundle!!.getFloat("amount").toString()
         date = bundle!!.getSerializable("date").toString()
 
-        transactionType = bundle!!.getString("transactionType")
+        transactionType = bundle!!.getString("transactionType").toString()
         if (transactionType == "Income") {
             //binding.tvTitle.text = "Confirm Income"
             binding.tvTransactionType.text = "Income Amount"
@@ -78,7 +77,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
     private fun confirm() {
         binding.btnConfirm.setOnClickListener {
 
-            var transaction = hashMapOf(
+            val transaction = hashMapOf(
                 //TODO: add childID, createdBy
                 "transactionName" to name,
                 "transactionType" to transactionType,
@@ -94,9 +93,9 @@ class ConfirmTransactionActivity : AppCompatActivity() {
                 goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(goToPFM)
             }
-                .addOnFailureListener {
-                    Toast.makeText(this, "Failed to add transaction", Toast.LENGTH_SHORT).show()
-                }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to add transaction", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -109,7 +108,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
                 for (document in documents) {
                     id = document.id
                 }
-                var adjustedBalance = amount?.toDouble()
+                var adjustedBalance = amount.toDouble()
                 if (transactionType == "expense")
                     adjustedBalance = -abs(adjustedBalance!!)
 

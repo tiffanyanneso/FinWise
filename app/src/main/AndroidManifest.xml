@@ -19,7 +19,7 @@
             android:name=".GoalTransactionsActivity"
             android:exported="false" />
         <activity
-            android:name=".MayaPayment"
+            android:name=".personalFinancialManagementModule.mayaAPI.MayaPayment"
             android:exported="false" >
 <!--          <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -27,10 +27,10 @@
         </intent-filter>-->
         </activity>
         <activity
-            android:name=".MayaQRConfirmPayment"
+            android:name=".personalFinancialManagementModule.mayaAPI.MayaConfirmPayment"
             android:exported="false" />
         <activity
-            android:name=".MayaQRSuccessfulPayment"
+            android:name=".MayaSuccessfulPayment"
             android:exported="false" />
 
         <activity

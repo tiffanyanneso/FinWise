@@ -38,33 +38,26 @@ class RecordIncomeActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
 
-        // for the dropdown
-        val items = resources.getStringArray(ph.edu.dlsu.finwise.R.array.pfm_income_category)
-        val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, items)
-        binding.dropdownCategory.setAdapter(adapter)
-
-        binding.etDate.setOnClickListener{
-            showCalendar()
-        }
-
+        initializeDropdown()
+        initializeDatePicker()
         //getGoals()
         goToConfirmation()
         cancel()
     }
 
-    /*private fun getGoals() {
-        //TODO: UPDATE LATER WITH CHILD ID
-        goals.add("None")
-            firestore.collection("FinancialGoals").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
-                for (goal in results) {
-                    val goalObject = goal.toObject<FinancialGoals>()
-                    goals.add(goalObject.goalName.toString())
-                }
-//                val adapter = ArrayAdapter(this, R.layout.simple_list_item_1, goals)
-//                binding.spinnerGoal.adapter = adapter
-            }
+    private fun initializeDropdown() {
+        // for the dropdown
+        val items = resources.getStringArray(ph.edu.dlsu.finwise.R.array.pfm_income_category)
+        val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, items)
+        binding.dropdownCategory.setAdapter(adapter)
+    }
 
-    }*/
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initializeDatePicker() {
+        binding.etDate.setOnClickListener{
+            showCalendar()
+        }
+    }
 
     private fun validateAndSetUserInput(): Boolean {
         var valid = true
@@ -124,9 +117,7 @@ class RecordIncomeActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
-
         }
-
     }
 
     private fun setBundle() {
@@ -166,10 +157,25 @@ class RecordIncomeActivity : AppCompatActivity() {
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
             binding.etDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
             date = SimpleDateFormat("MM/dd/yyyy").parse((mMonth + 1).toString() + "/" +
-                    mDay.toString() + "/" + mYear.toString())
+                    mDay.toString() + "/" + mYear.toString()) as Date
             dialog.dismiss()
         }
         dialog.show()
     }
+
+    /*private fun getGoals() {
+    //TODO: UPDATE LATER WITH CHILD ID
+    goals.add("None")
+        firestore.collection("FinancialGoals").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+            for (goal in results) {
+                val goalObject = goal.toObject<FinancialGoals>()
+                goals.add(goalObject.goalName.toString())
+            }
+//                val adapter = ArrayAdapter(this, R.layout.simple_list_item_1, goals)
+//                binding.spinnerGoal.adapter = adapter
+        }
+
+}*/
+
 
 }

@@ -40,32 +40,39 @@ class RecordExpenseActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
 
-        // for the dropdown
-        val items = resources.getStringArray(ph.edu.dlsu.finwise.R.array.pfm_expense_category)
-        val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, items)
-        binding.dropdownCategory.setAdapter(adapter)
-
-        binding.etDate.setOnClickListener{
-            showCalendar()
-        }
-
+        initizlizeDropdown()
+        initizlizeDatePicker()
        // getGoals()
         goToConfirmation()
         cancel()
     }
 
-   /* private fun getGoals() {
-        //TODO: UPDATE LATER WITH CHILD ID
-        goals.add("None")
-        firestore.collection("FinancialGoals").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
-            for (goal in results) {
-                var goalObject = goal.toObject<FinancialGoals>()
-                goals.add(goalObject.goalName.toString())
-            }
-//            val adapter = ArrayAdapter(this, R.layout.simple_list_item_1, goals)
-//            binding.spinnerGoal.adapter = adapter
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initizlizeDatePicker() {
+        binding.etDate.setOnClickListener{
+            showCalendar()
         }
-    }*/
+    }
+
+    private fun initizlizeDropdown() {
+        // for the dropdown
+        val items = resources.getStringArray(ph.edu.dlsu.finwise.R.array.pfm_expense_category)
+        val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, items)
+        binding.dropdownCategory.setAdapter(adapter)
+    }
+
+    /* private fun getGoals() {
+         //TODO: UPDATE LATER WITH CHILD ID
+         goals.add("None")
+         firestore.collection("FinancialGoals").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+             for (goal in results) {
+                 var goalObject = goal.toObject<FinancialGoals>()
+                 goals.add(goalObject.goalName.toString())
+             }
+ //            val adapter = ArrayAdapter(this, R.layout.simple_list_item_1, goals)
+ //            binding.spinnerGoal.adapter = adapter
+         }
+     }*/
 
     private fun validateAndSetUserInput(): Boolean {
         var valid = true
@@ -163,7 +170,7 @@ class RecordExpenseActivity : AppCompatActivity() {
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
             binding.etDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
             date = SimpleDateFormat("MM/dd/yyyy").parse((mMonth + 1).toString() + "/" +
-                    mDay.toString() + "/" + mYear.toString())
+                    mDay.toString() + "/" + mYear.toString()) as Date
             dialog.dismiss()
         }
         dialog.show()

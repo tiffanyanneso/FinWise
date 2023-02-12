@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MayaQRConfirmPayment"
+    tools:context=".personalFinancialManagementModule.mayaAPI.MayaConfirmPayment"
     android:background="@color/very_light_green">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -90,7 +90,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textStyle="bold"
-                        android:text="@string/name"
+                        android:text="Name of Item"
                         android:textSize="16sp"
                         android:textColor="@color/black"
                         />
@@ -124,7 +124,7 @@
                         />
 
                     <TextView
-                        android:id="@+id/tv_date_set"
+                        android:id="@+id/tv_category"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
@@ -174,6 +174,35 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textStyle="bold"
+                        android:text="Phone Number"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_phone_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:text="Phone Number"
+                        android:gravity="end"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
+                        />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
                         android:text="@string/merchant"
                         android:textSize="16sp"
                         android:textColor="@color/black"
@@ -191,7 +220,7 @@
                         />
                 </LinearLayout>
 
-                <LinearLayout
+                <!--<LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
@@ -216,7 +245,8 @@
                         android:gravity="end"
                         android:textColor="@color/black"
                         />
-                </LinearLayout>
+                </LinearLayout>-->
+
 
             </LinearLayout>
         </LinearLayout>
@@ -243,7 +273,7 @@
             android:textColor="@color/black"
             android:backgroundTint="@color/light_grey"
             android:background="@drawable/button_border_grey"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp"
             android:layout_weight="1"
             />
 

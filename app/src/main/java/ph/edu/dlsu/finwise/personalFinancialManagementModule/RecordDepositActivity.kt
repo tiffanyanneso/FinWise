@@ -43,49 +43,19 @@ class RecordDepositActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
 
-        binding.etDate.setOnClickListener{
-            showCalendar()
-        }
 
+        initializeDatePicker()
         getGoals()
         goToConfirmation()
         cancel()
     }
 
-   /* private fun getGoalProgress() {
-        val sortSpinner = binding.dropdownActivity
-        sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parentView: AdapterView<*>?,
-                selectedItemView: View?,
-                position: Int,
-                id: Long
-            ) {
-                val goalID = goalArrayID[position]
-                //check if may laman sa baba yung goalarrayID
-                Toast.makeText(applicationContext, position,
-                    Toast.LENGTH_LONG).show()
-                firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener { document ->
-                        goal = document.toObject<FinancialGoals>()!!
-                        setProgressBar()
-                    }
-            }
-
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-                // your code here
-            }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initializeDatePicker() {
+        binding.etDate.setOnClickListener{
+            showCalendar()
         }
     }
-
-    private fun setProgressBar() {
-        binding.progressGoal.max = goal.targetAmount!!.toInt()
-        binding.progressGoal.progress = goal.currentAmount!!.toInt()
-        val dec = DecimalFormat("#,###.00")
-        var targetAmount = dec.format(goal.targetAmount)
-        var currentAmount = dec.format(goal.currentAmount)
-        binding.tvBalance.text = "₱$currentAmount / $targetAmount"
-    }*/
-
 
     private fun getGoals() {
         //TODO: UPDATE LATER WITH CHILD ID
@@ -194,4 +164,39 @@ class RecordDepositActivity : AppCompatActivity() {
         }
         dialog.show()
     }
+
+    /* private fun getGoalProgress() {
+     val sortSpinner = binding.dropdownActivity
+     sortSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+         override fun onItemSelected(
+             parentView: AdapterView<*>?,
+             selectedItemView: View?,
+             position: Int,
+             id: Long
+         ) {
+             val goalID = goalArrayID[position]
+             //check if may laman sa baba yung goalarrayID
+             Toast.makeText(applicationContext, position,
+                 Toast.LENGTH_LONG).show()
+             firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener { document ->
+                     goal = document.toObject<FinancialGoals>()!!
+                     setProgressBar()
+                 }
+         }
+
+         override fun onNothingSelected(parentView: AdapterView<*>?) {
+             // your code here
+         }
+     }
+ }
+
+ private fun setProgressBar() {
+     binding.progressGoal.max = goal.targetAmount!!.toInt()
+     binding.progressGoal.progress = goal.currentAmount!!.toInt()
+     val dec = DecimalFormat("#,###.00")
+     var targetAmount = dec.format(goal.targetAmount)
+     var currentAmount = dec.format(goal.currentAmount)
+     binding.tvBalance.text = "₱$currentAmount / $targetAmount"
+ }*/
+
 }

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ph.edu.dlsu.finwise.databinding.ActivityMayaQrSuccessfulPaymentBinding
 
-class MayaQRSuccessfulPayment :AppCompatActivity() {
+class MayaSuccessfulPayment :AppCompatActivity() {
 
     private lateinit var binding: ActivityMayaQrSuccessfulPaymentBinding
 
