@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,46 +13,94 @@
         android:padding="20dp">
 
         <LinearLayout
+            android:id="@+id/linear_layout_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp"
-            android:background="@drawable/button_border_green"
-            android:backgroundTint="@color/light_green"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp">
+            android:background="@drawable/button_border_white"
+            android:backgroundTint="@color/very_light_green">
 
-            <TextView
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:contentDescription="Peso logo"
+                    android:src="@drawable/baseline_star_24"
+                    android:text="P"
+                    app:tint="@color/yellow" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Goal Amount"
+                        android:textAllCaps="true"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_goal_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="XXXXXXXX"
+                        android:textColor="@color/black"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/div_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="@string/goal_amount"
-                android:textAllCaps = "true"
-                android:textColor="@color/black"
-                android:textStyle="bold"
-                />
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
+                android:layout_marginVertical="15dp"
+                app:dividerColor="@color/light_green"/>
 
-            <TextView
-                android:id="@+id/tv_goal_amount"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:text="₱ XXXXX.XX"
-                android:textAllCaps = "true"
-                android:textColor="@color/black"
-                android:textStyle="bold"/>
-        </LinearLayout>
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:text="@string/status"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:background="@drawable/button_border_green"
-            android:backgroundTint="@color/very_light_green"
-            >
-
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@string/status"
+                    android:gravity="end"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -77,34 +126,6 @@
                     android:text="Activity"
                     android:textSize="16sp"
                     android:gravity="end"
-                    android:textColor="@color/black"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="5dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:text="@string/date_set"
-                    android:textSize="16sp"
-                    android:textColor="@color/black"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_date_set"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="@string/date_set"
-                    android:gravity="end"
-                    android:textSize="16sp"
                     android:textColor="@color/black"
                     />
             </LinearLayout>
@@ -148,17 +169,17 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textStyle="bold"
-                    android:text="@string/status"
+                    android:text="@string/date_set"
                     android:textSize="16sp"
                     android:textColor="@color/black"
                     />
 
                 <TextView
-                    android:id="@+id/tv_status"
+                    android:id="@+id/tv_date_set"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="@string/status"
+                    android:text="@string/date_set"
                     android:gravity="end"
                     android:textSize="16sp"
                     android:textColor="@color/black"
@@ -191,7 +212,6 @@
                     android:textColor="@color/black"
                     />
             </LinearLayout>
-
         </LinearLayout>
     </LinearLayout>
 

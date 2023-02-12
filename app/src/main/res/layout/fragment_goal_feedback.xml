@@ -17,7 +17,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp"
-        android:background="@drawable/layout_bg_cream"
+        android:background="@drawable/button_border_white"
+        android:backgroundTint="@color/very_light_green"
         android:layout_marginTop="5dp"
         android:visibility="gone">
 
@@ -54,7 +55,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp"
-            android:background="@drawable/layout_bg_cream"
+            android:background="@drawable/button_border_white"
+            android:backgroundTint="@color/very_light_green"
             android:layout_marginTop="5dp">
 
             <LinearLayout
@@ -85,255 +87,264 @@
             </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/button_border_white"
+            android:backgroundTint="@color/very_light_green"
+            android:layout_marginTop="15dp"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/tv_overall_rating"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:text="X/X"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/tv_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/smart_rating"
+                android:textAllCaps="true"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/specific"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"/>
+
+                <RatingBar
+                    android:id="@+id/ratingBar_specific"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:numStars="5"
+                    android:stepSize="0.5"
+                    android:scaleX="0.5"
+                    android:scaleY="0.5"
+                    android:layout_gravity="right"
+                    android:progressTint="@color/yellow"
+                    android:progressBackgroundTint="@color/light_grey"
+                    />
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_score_specific"-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="x/5"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    />-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="70dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/measureable"
+                    android:textSize="14sp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    />
+
+                <RatingBar
+                    android:id="@+id/ratingBar_measurable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="right"
+                    android:numStars="5"
+                    android:progressBackgroundTint="@color/light_grey"
+                    android:progressTint="@color/yellow"
+                    android:scaleX="0.5"
+                    android:scaleY="0.5"
+                    android:stepSize="0.5" />
+<!--    -->
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_score_measurable"-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="x/5"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    />-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/achievable"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    />
+
+                <RatingBar
+                    android:id="@+id/ratingBar_achievable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="2"
+                    android:numStars="5"
+                    android:stepSize="0.5"
+                    android:scaleX="0.5"
+                    android:scaleY="0.5"
+                    android:layout_gravity="right"
+                    android:progressTint="@color/yellow"
+                    android:progressBackgroundTint="@color/light_grey"
+                    />
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_score_achievable"-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="x/5"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    />-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/relevant"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    />
+
+                <RatingBar
+                    android:id="@+id/ratingBar_relevant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:numStars="5"
+                    android:stepSize="0.5"
+                    android:scaleX="0.5"
+                    android:scaleY="0.5"
+                    android:layout_gravity="right"
+                    android:progressTint="@color/yellow"
+                    android:progressBackgroundTint="@color/light_grey"
+                    />
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_score_relevant"-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="x/5"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    />-->
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/time_bound"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:gravity="center_vertical"
+                    />
+
+                <RatingBar
+                    android:id="@+id/ratingBar_time_bound"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:numStars="5"
+                    android:stepSize="0.5"
+                    android:scaleX="0.5"
+                    android:scaleY="0.5"
+                    android:layout_gravity="right"
+                    android:progressTint="@color/yellow"
+                    android:progressBackgroundTint="@color/light_grey"
+                    />
+
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_score_time_bound"-->
+<!--                    android:layout_width="30dp"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="x/5"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    />-->
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear_layout_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:background="@drawable/button_border_white"
+        android:backgroundTint="@color/very_light_green"
+        android:layout_marginTop="15dp">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:layout_marginTop="20sp"
+            android:textSize="16dp"
             android:textAllCaps = "true"
-            android:text="@string/overall_rating"
+            android:text="@string/comment"
             android:textStyle="bold"
             android:textColor="@color/black"/>
 
         <TextView
-            android:id="@+id/tv_overall_rating"
+            android:id="@+id/tv_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:text="X/X"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:gravity="center"/>
-
-        <TextView
-            android:id="@+id/tv_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/smart_rating"
-            android:textAllCaps="true"
-            android:textColor="@color/black"
             android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/specific"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                />
-
-            <RatingBar
-                android:id="@+id/ratingBar_specific"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:numStars="5"
-                android:stepSize="0.5"
-                android:scaleX="0.5"
-                android:scaleY="0.5"
-                android:layout_gravity="right"
-                android:progressTint="@color/yellow"
-                android:progressBackgroundTint="@color/light_grey"
-                />
-
-            <TextView
-                android:id="@+id/tv_score_specific"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="x/5"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/measureable"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                />
-
-            <RatingBar
-                android:id="@+id/ratingBar_measurable"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="right"
-                android:numStars="5"
-                android:progressBackgroundTint="@color/light_grey"
-                android:progressTint="@color/yellow"
-                android:scaleX="0.5"
-                android:scaleY="0.5"
-                android:stepSize="0.5" />
-
-            <TextView
-                android:id="@+id/tv_score_measurable"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="x/5"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/achievable"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                />
-
-            <RatingBar
-                android:id="@+id/ratingBar_achievable"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:numStars="5"
-                android:stepSize="0.5"
-                android:scaleX="0.5"
-                android:scaleY="0.5"
-                android:layout_gravity="right"
-                android:progressTint="@color/yellow"
-                android:progressBackgroundTint="@color/light_grey"
-                />
-
-            <TextView
-                android:id="@+id/tv_score_achievable"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="x/5"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/relevant"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                />
-
-            <RatingBar
-                android:id="@+id/ratingBar_relevant"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:numStars="5"
-                android:stepSize="0.5"
-                android:scaleX="0.5"
-                android:scaleY="0.5"
-                android:layout_gravity="right"
-                android:progressTint="@color/yellow"
-                android:progressBackgroundTint="@color/light_grey"
-                />
-
-            <TextView
-                android:id="@+id/tv_score_relevant"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="x/5"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/time_bound"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                />
-
-            <RatingBar
-                android:id="@+id/ratingBar_time_bound"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:numStars="5"
-                android:stepSize="0.5"
-                android:scaleX="0.5"
-                android:scaleY="0.5"
-                android:layout_gravity="right"
-                android:progressTint="@color/yellow"
-                android:progressBackgroundTint="@color/light_grey"
-                />
-
-            <TextView
-                android:id="@+id/tv_score_time_bound"
-                android:layout_width="30dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="x/5"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
-                />
-        </LinearLayout>
-
+            android:text="comment"
+            android:textColor="@color/black"/>
     </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="14dp"
-        android:layout_marginTop="16sp"
-        android:textAllCaps = "true"
-        android:text="@string/comment"
-        android:textStyle="bold"
-        android:textColor="@color/black"/>
-
-    <TextView
-        android:id="@+id/tv_comment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:text="comment"
-        android:textColor="@color/black"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_edit_goal"
