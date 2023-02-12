@@ -33,12 +33,11 @@ class ViewTransactionActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
 
-        loadTransactionDetails()
-
-        goToBack()
+        //loadTransactionDetails()
+        //goToBack()
 
     }
-
+/*
     private fun goToBack() {
         binding.btnDone.setOnClickListener{
 
@@ -88,5 +87,5 @@ class ViewTransactionActivity : AppCompatActivity() {
         binding.tvMerchant.visibility = View.VISIBLE
         binding.tvMerchantLabel.visibility = View.VISIBLE
         binding.tvMerchant.text = transaction.merchant.toString()
-    }
+    }*/
 }
