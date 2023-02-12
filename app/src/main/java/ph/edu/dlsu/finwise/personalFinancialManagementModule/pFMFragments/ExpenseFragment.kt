@@ -69,7 +69,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
                 lateinit var id: String
                 for (document in transactionsSnapshot) {
                     var transaction = document.toObject<Transactions>()
-                    if (transaction.transactionType == "Expense")
+                    if (transaction.transactionType == "Expense" || transaction.transactionType == "Expense (Maya")
                         transactionsArrayList.add(transaction)
                 }
 

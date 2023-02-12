@@ -1,7 +1,6 @@
-package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
+package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +8,6 @@ import androidx.fragment.app.DialogFragment
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.FragmentExpenseBinding
 import ph.edu.dlsu.finwise.databinding.FragmentTransactionBinding
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
@@ -30,7 +27,7 @@ class TransactionFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_transaction, container, false)
+        return inflater.inflate(ph.edu.dlsu.finwise.R.layout.fragment_transaction, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,6 +35,13 @@ class TransactionFragment : DialogFragment() {
         binding = FragmentTransactionBinding.bind(view)
         loadTransactionDetails()
         initializeButton()
+        setDialogSize()
+    }
+
+    private fun setDialogSize() {
+        val width = resources.getDimensionPixelSize(ph.edu.dlsu.finwise.R.dimen.popup_width)
+        val height = resources.getDimensionPixelSize(ph.edu.dlsu.finwise.R.dimen.popup_height)
+        dialog!!.window!!.setLayout(width, height)
     }
 
     private fun loadTransactionDetails() {
@@ -49,9 +53,9 @@ class TransactionFragment : DialogFragment() {
                 if (document != null) {
                     transaction = document.toObject<Transactions>()!!
                     val name = transaction.transactionName.toString()
-                    if (transaction.category.toString() == "Goal")
+                    if (transaction.category == "Goal")
                         initializeText(name, false)
-                    else if (transaction.transactionType.toString() == "Maya Expense")
+                    else if (transaction.transactionType == "Expense (Maya)")
                         initializeText(name, true)
                     else initializeText(name, false)
 
@@ -77,6 +81,7 @@ class TransactionFragment : DialogFragment() {
     }
 
     private fun payMayaTransaction() {
+        binding.tvName.text = "example"
         binding.tvMerchant.visibility = View.VISIBLE
         binding.tvMerchantLabel.visibility = View.VISIBLE
         binding.tvMerchant.text = transaction.merchant.toString()

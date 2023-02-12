@@ -15,8 +15,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ItemTransactionBinding
 import ph.edu.dlsu.finwise.model.Transactions
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.TransactionFragment
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionFragment
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
@@ -82,6 +81,9 @@ class TransactionsAdapter: RecyclerView.Adapter<TransactionsAdapter.TransactionV
                 else if (transaction?.transactionType == "Expense" || transaction?.transactionType == "Deposit") {
                     itemBinding.tvAmount.text = "-₱$amount"
                     itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.light_red))
+                } else {
+                    itemBinding.tvAmount.text = "-₱$amount"
+                    itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.purple_200))
                 }
             }
         }
