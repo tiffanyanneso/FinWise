@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".parentFinancialActivitiesModule.ReviewGoalActivity">
+    tools:context=".parentFinancialActivitiesModule.ReviewGoalActivity"
+    android:background="@color/very_light_green">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,26 +43,64 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="@string/goal_details"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    />
-
                 <LinearLayout
-                    android:id="@+id/linear_layout_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
                     android:padding="20dp"
-                    android:background="@drawable/layout_bg_green"
-                    android:layout_marginTop="5dp">
+                    android:background="@drawable/button_border_white"
+                    android:backgroundTint="@color/white">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:contentDescription="Peso logo"
+                            android:src="@drawable/baseline_star_24"
+                            android:text="P"
+                            app:tint="@color/yellow" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/goal"
+                                android:textAllCaps="true"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tv_goal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Goal Name"
+                                android:textColor="@color/black"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/div_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
+                        android:layout_marginVertical="15dp"
+                        app:dividerColor="@color/light_green"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -70,24 +109,23 @@
                         android:layout_marginBottom="5dp">
 
                         <TextView
-                            android:layout_width="60dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textStyle="bold"
-                            android:text="@string/goal"
+                            android:text="@string/amount"
                             android:textSize="16sp"
                             android:textColor="@color/black"
                             />
 
                         <TextView
-                            android:id="@+id/tv_goal"
+                            android:id="@+id/tv_amount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:text="Goal"
-                            android:textSize="16sp"
+                            android:text="Amount"
                             android:gravity="end"
-                            android:maxLines="2"
+                            android:textSize="16sp"
                             android:textColor="@color/black"
                             />
                     </LinearLayout>
@@ -131,33 +169,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textStyle="bold"
-                            android:text="@string/amount"
-                            android:textSize="16sp"
-                            android:textColor="@color/black"
-                            />
-
-                        <TextView
-                            android:id="@+id/tv_amount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="2"
-                            android:text="Amount"
-                            android:gravity="end"
-                            android:textSize="16sp"
-                            android:textColor="@color/black"
-                            />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textStyle="bold"
                             android:text="@string/target_date"
                             android:textSize="16sp"
                             android:textColor="@color/black"
@@ -174,7 +185,43 @@
                             android:textColor="@color/black"
                             />
                     </LinearLayout>
-                </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textStyle="bold"
+                            android:text="For Self"
+                            android:textSize="16sp"
+                            android:textColor="@color/black"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_is_for_child"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:text="For Self"
+                            android:textSize="16sp"
+                            android:gravity="end"
+                            android:textColor="@color/black"
+                            />
+                    </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:background="@drawable/button_border_white"
+                android:backgroundTint="@color/white"
+                android:layout_marginTop="15dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -182,9 +229,27 @@
                     android:textSize="20dp"
                     android:text="@string/review"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="10dp"
-                    />
+                    android:textColor="@color/dark_green"/>
+
+                <TextView
+                    android:id="@+id/tv_overall_rating"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="24dp"
+                    android:text="X/X"
+                    android:textColor="@color/yellow"
+                    android:textStyle="bold"
+                    android:gravity="center" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/div_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
+                    android:layout_marginVertical="15dp"
+                    app:dividerColor="@color/light_green"/>
 
                 <LinearLayout
                     android:id="@+id/linear_layout_review_parent"
@@ -204,8 +269,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/et_contact_number"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:textSize="14dp"
-                        android:layout_marginTop="10dp"
+                        android:textSize="16dp"
                         android:textAllCaps = "true"
                         android:text="@string/smart_rating"
                         android:textStyle="bold"
@@ -356,29 +420,15 @@
                         />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_overall_rating_title"
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/div_3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/et_contact_number"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:textSize="14dp"
-                    android:layout_marginTop="10dp"
-                    android:textAllCaps = "true"
-                    android:text="@string/overall_rating"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
-
-                <TextView
-                    android:id="@+id/tv_overall_rating"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="24dp"
-                    android:text="X/X"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:gravity="center" />
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
+                    android:layout_marginVertical="15dp"
+                    app:dividerColor="@color/light_green"/>
 
                 <TextView
                     android:id="@+id/tv_status"
@@ -387,8 +437,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/et_goal"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:textSize="14dp"
-                    android:layout_marginTop="10dp"
+                    android:textSize="16dp"
                     android:textAllCaps = "true"
                     android:text="@string/status"
                     android:textStyle="bold"
@@ -401,7 +450,7 @@
                     android:ems="10"
                     android:entries="@array/goal_status_list"
                     android:layout_marginTop="5dp"
-                    android:textSize="14dp"/>
+                    android:textSize="16dp"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -410,7 +459,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="10dp"
-                    android:textSize="14dp"
+                    android:textSize="16dp"
                     android:textAllCaps = "true"
                     android:text="@string/comment"
                     android:textStyle="bold"
@@ -423,8 +472,9 @@
                     android:hint="@string/comment"
                     android:ems="10"
                     android:inputType="textMultiLine"
-                    android:textSize="14dp"
+                    android:textSize="16dp"
                     />
+            </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -434,7 +484,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:orientation="horizontal"
                     android:gravity="center"
-                    android:paddingBottom="20dp"
+                    android:paddingBottom="50dp"
                     android:paddingTop="20dp">
 
                     <androidx.appcompat.widget.AppCompatButton
