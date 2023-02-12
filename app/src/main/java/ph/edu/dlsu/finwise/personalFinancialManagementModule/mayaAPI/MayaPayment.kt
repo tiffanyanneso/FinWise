@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityMayaPaymentBinding
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,6 +33,7 @@ class MayaPayment : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
         initializeDropdown()
         goToMayaQRConfirmPayment()
+        goToPersonalFinancialManagement()
     }
     private fun initializeDropdown() {
         // for the dropdown
@@ -54,6 +56,13 @@ class MayaPayment : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+        }
+    }
+
+    private fun goToPersonalFinancialManagement(){
+        binding.btnCancel.setOnClickListener(){
+            val goToPersonalFinancialManagementActivity = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
+            startActivity(goToPersonalFinancialManagementActivity)
         }
     }
 
