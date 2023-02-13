@@ -20,18 +20,21 @@ import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.fragment.Assess
 class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFinancialAssessmentFinlitExpertSpecificAssessmentBinding
+    private lateinit var assessmentID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialAssessmentFinlitExpertSpecificAssessmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        var bundle = intent.extras!!
+         assessmentID = bundle.getString("assessmentID").toString()
+
 
         //setting fragments
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(AssessmentQuestionsFragment(),"Questions")
         adapter.addFragment(AssessmentDetailsFragment(),"Details")
-
+        adapter.addFragment(AssessmentQuestionsFragment(),"Questions")
         sendDataToFragment()
 
         binding.viewPager.adapter = adapter
@@ -47,9 +50,6 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
     }
 
     private fun sendDataToFragment() {
-        var bundle = intent.extras!!
-        var assessmentID = bundle.getString("assessmentID")
-
         var fragmentBundle = Bundle()
         fragmentBundle.putString("assessmentID", assessmentID)
 
@@ -77,8 +77,11 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
 
     private fun goToFinlitExpertEditAssessment() {
        binding.btnEdit.setOnClickListener() {
-            val goToFinlitExpertEditAssessmentActivity = Intent(applicationContext, FinlitExpertEditAssessmentActivity::class.java)
-            startActivity(goToFinlitExpertEditAssessmentActivity)
+           val goToFinlitExpertEditAssessmentActivity = Intent(applicationContext, FinlitExpertEditAssessmentActivity::class.java)
+           var bundle = Bundle()
+           bundle.putString("assessmentID", assessmentID)
+           goToFinlitExpertEditAssessmentActivity.putExtras(bundle)
+           startActivity(goToFinlitExpertEditAssessmentActivity)
         }
     }
 
