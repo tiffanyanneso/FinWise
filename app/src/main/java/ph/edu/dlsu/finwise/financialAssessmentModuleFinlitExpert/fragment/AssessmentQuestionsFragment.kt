@@ -27,24 +27,10 @@ class AssessmentQuestionsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        var bundle = arguments
-        assessmentID = bundle?.getString("assessmentID").toString()
-
-        getQuestions()
-
-    }
-
-    private fun getQuestions() {
-        firestore.collection("AssessmentQuestions").whereEqualTo("assessmentID", assessmentID).get().addOnSuccessListener { questions ->
-            for (question in questions)
-                questionsID.add(question.id)
-
-            questionsAdapter = AssessmentQuestionsAdapter(requireContext().applicationContext, questionsID)
-            binding.rvViewQuestions.adapter = questionsAdapter
-            binding.rvViewQuestions.layoutManager = LinearLayoutManager(requireContext().applicationContext,
-                LinearLayoutManager.VERTICAL,
-                false)
+        arguments?.let {
+            var bundle = arguments
+            assessmentID = bundle?.getString("assessmentID").toString()
+            getQuestions()
         }
     }
 
@@ -55,5 +41,21 @@ class AssessmentQuestionsFragment : Fragment() {
         binding = FragmentAssessmentQuestionsBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
+    }
+
+    private fun getQuestions() {
+        println("print in questions fragment  " + assessmentID)
+        firestore.collection("AssessmentQuestions").whereEqualTo("assessmentID", assessmentID).get().addOnSuccessListener { questions ->
+            for (question in questions)
+                questionsID.add(question.id)
+
+
+            println("print questiosn " + questions.size())
+            questionsAdapter = AssessmentQuestionsAdapter(requireContext().applicationContext, questionsID)
+            binding.rvViewQuestions.adapter = questionsAdapter
+            binding.rvViewQuestions.layoutManager = LinearLayoutManager(requireContext().applicationContext,
+                LinearLayoutManager.VERTICAL,
+                false)
+        }
     }
 }

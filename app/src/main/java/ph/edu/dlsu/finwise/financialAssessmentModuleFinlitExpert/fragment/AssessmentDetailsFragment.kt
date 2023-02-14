@@ -44,10 +44,12 @@ class AssessmentDetailsFragment : Fragment() {
         println("print set fields "  + assessmentID)
         firestore.collection("Assessments").document(assessmentID).get().addOnSuccessListener {
             var assessment = it.toObject<AssessmentDetails>()
+            println("print set fields "  + assessment?.assessmentCategory)
+
             binding.tvCategory.text = assessment?.assessmentCategory
             binding.tvDateCreated.text= SimpleDateFormat("MM/dd/yyyy").format(assessment?.createdOn?.toDate())
             binding.tvNumberOfTakes.text = assessment?.nTakes.toString()
-
+        }.continueWith {
             firestore.collection("AssessmentQuestions").get().addOnSuccessListener { questions ->
                 binding.tvNumberOfQuestions.text = questions.size().toString()
             }

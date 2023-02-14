@@ -50,14 +50,19 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
     }
 
     private fun sendDataToFragment() {
+        val mFragmentManager = supportFragmentManager
         var fragmentBundle = Bundle()
         fragmentBundle.putString("assessmentID", assessmentID)
 
-        val mFragmentManager = supportFragmentManager
         val assessmentDetailsFragmentTransaction = mFragmentManager.beginTransaction()
         var assessmentDetailsFragment = AssessmentDetailsFragment()
         assessmentDetailsFragment.arguments = fragmentBundle
         assessmentDetailsFragmentTransaction.add(binding.viewPager.id, assessmentDetailsFragment).commit()
+
+        var assessmentQuestionsFragmentTransaction = mFragmentManager.beginTransaction()
+        var assessmentQuestionsFragment = AssessmentQuestionsFragment()
+        assessmentQuestionsFragment.arguments = fragmentBundle
+        assessmentQuestionsFragmentTransaction.add(binding.viewPager.id, assessmentQuestionsFragment).commit()
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){
