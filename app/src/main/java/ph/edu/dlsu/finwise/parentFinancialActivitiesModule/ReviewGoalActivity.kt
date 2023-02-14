@@ -3,12 +3,14 @@ package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityReviewGoalBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.SimpleDateFormat
@@ -32,6 +34,11 @@ class ReviewGoalActivity : AppCompatActivity() {
         childID = bundle.getString("childID").toString()
 
         getGoalDetails()
+
+        // for the dropdown
+        val items = resources.getStringArray(R.array.goal_status_list)
+        val adapter = ArrayAdapter(this, R.layout.activity_review_goal, items)
+        binding.dropdownStatus.setAdapter(adapter)
 
         binding.btnSubmit.setOnClickListener {
             submitGoalRating()
@@ -68,7 +75,8 @@ class ReviewGoalActivity : AppCompatActivity() {
         )
 
         firestore.collection("GoalRating").add(rating).addOnSuccessListener {
-            var status = binding.spinnerGoalStatus.selectedItem
+            var status = binding.dropdownStatus.text.toString()
+
             if (status == "Approved")
                 status = "In Progress"
             firestore.collection("FinancialGoals").document(financialGoalID).update("status", status).addOnSuccessListener {

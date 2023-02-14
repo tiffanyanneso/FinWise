@@ -5,7 +5,7 @@
     android:layout_height="100dp"
     card_view:cardCornerRadius="10dp"
     android:layout_marginBottom="10dp"
-    card_view:cardBackgroundColor="@color/light_grey"
+    card_view:cardBackgroundColor="@color/very_light_green"
     >
 
     <TextView
