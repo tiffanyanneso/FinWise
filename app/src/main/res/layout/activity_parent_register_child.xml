@@ -49,7 +49,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginTop="20dp"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:textAllCaps = "true"
                     android:text="@string/profile_picture"
                     android:textStyle="bold"
@@ -102,7 +102,7 @@
                         android:layout_height="match_parent"
                         android:lines="1"
                         android:inputType="text"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:hint="@string/first_name"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -154,7 +154,7 @@
                         android:layout_height="match_parent"
                         android:lines="1"
                         android:inputType="text"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:hint="@string/last_name"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -206,7 +206,7 @@
                         android:layout_height="match_parent"
                         android:lines="1"
                         android:inputType="textEmailAddress"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:hint="@string/email"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -258,7 +258,7 @@
                         android:layout_height="match_parent"
                         android:lines="1"
                         android:inputType="phone"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:hint="@string/contact_number"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -310,7 +310,7 @@
                         android:layout_height="match_parent"
                         android:lines="1"
                         android:inputType="text"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:hint="@string/username"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -322,7 +322,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/et_username"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:layout_marginTop="10dp"
                     android:textAllCaps = "true"
                     android:text="@string/birthday"
@@ -386,7 +386,7 @@
                         android:layout_height="match_parent"
                         android:lines="1"
                         android:inputType="textPassword"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:hint="@string/password"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -437,7 +437,7 @@
                         android:layout_height="match_parent"
                         android:lines="1"
                         android:inputType="textPassword"
-                        android:textSize="16dp"
+                        android:textSize="16sp"
                         android:hint="@string/confirm_password"
                         />
                 </com.google.android.material.textfield.TextInputLayout>

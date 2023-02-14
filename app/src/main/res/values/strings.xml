@@ -135,6 +135,9 @@
     <string name="merchant">Merchant</string>
     <string name="current_balance">Current Balance</string>
     <string name="updated_balance">Updated Balance</string>
+    <string name="price">Price</string>
+    <string name="reset">Reset</string>
+    <string name="done">Done</string>
 
     <string name="remaining_budget">Remaining Budget</string>
 
