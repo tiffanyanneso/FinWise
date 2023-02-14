@@ -39,8 +39,8 @@ class TransactionFragment : DialogFragment() {
     }
 
     private fun setDialogSize() {
-        val width = resources.getDimensionPixelSize(ph.edu.dlsu.finwise.R.dimen.popup_width)
-        val height = resources.getDimensionPixelSize(ph.edu.dlsu.finwise.R.dimen.popup_height)
+        val width = resources.getDimensionPixelSize(ph.edu.dlsu.finwise.R.dimen.transaction_popup_width)
+        val height = resources.getDimensionPixelSize(ph.edu.dlsu.finwise.R.dimen.transaction_popup_height)
         dialog!!.window!!.setLayout(width, height)
     }
 
