@@ -7,10 +7,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialConfirmDepositBinding
+import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,8 +24,6 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
     private lateinit var binding : ActivityFinancialConfirmDepositBinding
     private var firestore = Firebase.firestore
 
-    private lateinit var context: Context
-
     //Time
     val formatter = SimpleDateFormat("MM/dd/yyyy")
     val time = Calendar.getInstance().time
@@ -31,13 +32,13 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
     var amount : String? =null
 
     private lateinit var goalID:String
+    private lateinit var savingActivityID:String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialConfirmDepositBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        context=this
 
         // Hides actionbar,
         // and initializes the navbar
@@ -50,6 +51,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         binding.tvAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
         binding.tvGoal.text= bundle.getString("goalName")
         goalID = bundle.getString("goalID").toString()
+        savingActivityID = bundle.getString("savingActivityID").toString()
 
         binding.btnConfirm.setOnClickListener {
             val transaction = hashMapOf(
@@ -66,14 +68,8 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
             //adjustUserBalance()
 
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
-                val bundle = Bundle()
-                //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-                bundle.putString("goalID", goalID)
-                val savingActivity = Intent(this, ViewGoalActivity::class.java)
-                savingActivity.putExtras(bundle)
-                savingActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(savingActivity)
-                finish()
+                //check if the goal was completed with this deposit, if it is, show accomplished screen
+                checkGoalCompletion()
             }
         }
     }
@@ -95,6 +91,42 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 firestore.collection("ChildWallet").document(id)
                     .update("currentBalance", FieldValue.increment(adjustedBalance))
             }
+    }
+
+    private fun checkGoalCompletion() {
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener {results ->
+            var saved = 0.00F
+            for (transaction in results) {
+                var transactionObject = transaction.toObject<Transactions>()
+                    if (transactionObject.transactionType == "Deposit")
+                        saved += transactionObject.amount!!.toFloat()
+                    else if (transactionObject.transactionType == "Withdrawal")
+                        saved -= transactionObject.amount!!.toFloat()
+            }
+
+            firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
+                var goal = it.toObject<FinancialGoals>()
+                val bundle = Bundle()
+                //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
+                bundle.putString("goalID", goalID)
+                //target amount has already been met, update status of goal and fin activity to completed
+                if (goal?.targetAmount!! <= saved) {
+                    firestore.collection("FinancialGoals").document(goalID).update("status", "Completed")
+                    firestore.collection("FinancialActivities").document(savingActivityID).update("status", "Completed")
+                    val goalAccomplished = Intent(this, GoalAccomplishedActivity::class.java)
+                    goalAccomplished.putExtras(bundle)
+                    goalAccomplished.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    this.startActivity(goalAccomplished)
+                    finish()
+                } else {
+                    val savingActivity = Intent(this, ViewGoalActivity::class.java)
+                    savingActivity.putExtras(bundle)
+                    savingActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    this.startActivity(savingActivity)
+                    finish()
+                }
+            }
+        }
     }
 
 }

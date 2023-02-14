@@ -188,6 +188,22 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_proceed_next_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_finish"
+        android:text="Proceed to Next Activity"
+        android:textColor="@color/off_white"
+        android:backgroundTint="@color/dark_green"
+        android:background="@drawable/button_border"
+        android:layout_marginBottom="60dp"
+        android:layout_marginHorizontal="20dp"
+        />
+
+
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_finish"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -196,7 +212,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="@string/finish"
         android:textColor="@color/off_white"
-        android:backgroundTint="@color/dark_green"
+        android:backgroundTint="@color/dark_grey"
         android:background="@drawable/button_border"
         android:layout_marginBottom="70dp"
         android:layout_marginHorizontal="20dp"

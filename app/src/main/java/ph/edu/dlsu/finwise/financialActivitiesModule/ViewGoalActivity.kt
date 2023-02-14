@@ -158,7 +158,11 @@ class ViewGoalActivity : AppCompatActivity() {
                     var formatSaved = DecimalFormat("#,##0.00").format(savedAmount)
                     var formatTarget = DecimalFormat("#,##0.00").format(goal?.targetAmount)
                     binding.tvGoalProgress.text = "₱$formatSaved / " + "₱ $formatTarget"
-                    binding.progressBar.progress = (savedAmount/ goal?.targetAmount!! * 100).toInt()
+                    var progress = (savedAmount/ goal?.targetAmount!! * 100).toInt()
+                    if (progress< 100)
+                        binding.progressBar.progress = progress
+                    else
+                        binding.progressBar.progress = 100
 
                     goalTransactionsAdapter = GoalTransactionsAdapater(this, transactionsArrayList)
                     binding.rvSavingsDeposit.adapter = goalTransactionsAdapter

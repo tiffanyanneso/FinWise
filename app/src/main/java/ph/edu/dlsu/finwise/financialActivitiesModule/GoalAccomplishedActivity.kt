@@ -7,6 +7,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityGoalAccomplishedBinding
+import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.SimpleDateFormat
 
@@ -15,25 +16,44 @@ class GoalAccomplishedActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGoalAccomplishedBinding
     private var firestore = Firebase.firestore
 
-    private lateinit var  financialGoalID:String
+    private lateinit var  goalID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGoalAccomplishedBinding.inflate(layoutInflater)
         setContentView(binding.root)
         var bundle: Bundle = intent.extras!!
-        financialGoalID = bundle.getString("financialGoalID").toString()
+        goalID = bundle.getString("goalID").toString()
 
         setText()
 
+        var sendBundle = Bundle()
+        sendBundle.putString("goalID", goalID)
+
+        binding.btnProceedNextActivity.setOnClickListener {
+            firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", goalID).get().addOnSuccessListener { results ->
+                var budgetActivityID= ""
+                for (activity in results) {
+                    var activityObject = activity.toObject<FinancialActivities>()
+                    if (activityObject.financialActivityName == "Budgeting")
+                        budgetActivityID = activity.id
+                }
+                sendBundle.putString("budgetActivityID", budgetActivityID)
+                var budgetActivity = Intent(this, BudgetActivity::class.java)
+                budgetActivity.putExtras(sendBundle)
+                this.startActivity(budgetActivity)
+            }
+        }
+
         binding.btnFinish.setOnClickListener {
-            var goalList = Intent(this, FinancialActivity::class.java)
-            this.startActivity(goalList)
+            var viewGoal = Intent(this, ViewGoalActivity::class.java)
+            viewGoal.putExtras(sendBundle)
+            this.startActivity(viewGoal)
         }
     }
 
     private fun setText () {
-        firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
+        firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
             binding.tvGoal.text = financialGoal?.goalName
             binding.tvActivity.text = financialGoal?.financialActivity
