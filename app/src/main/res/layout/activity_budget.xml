@@ -105,7 +105,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="8"
                     android:layout_marginTop="10dp"
-                    tools:listitem="@layout/item_category"/>
+                    tools:listitem="@layout/item_budget_category"/>
 
             </LinearLayout>
         </ScrollView>

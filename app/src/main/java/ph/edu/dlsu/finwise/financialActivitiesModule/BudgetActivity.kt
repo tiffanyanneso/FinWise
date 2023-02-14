@@ -5,9 +5,13 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
+import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
@@ -28,7 +32,7 @@ class BudgetActivity : AppCompatActivity() {
     private lateinit var binding : ActivityBudgetBinding
     private var firestore = Firebase.firestore
     private lateinit var budgetCategoryAdapter: BudgetCategoryAdapter
-    private lateinit var context:Context
+    lateinit var context:Context
 
 
     private lateinit var budgetActivityID:String
@@ -63,13 +67,9 @@ class BudgetActivity : AppCompatActivity() {
 
         getBalance()
 
-        binding.btnNewCategory.setOnClickListener {
-            showNewBudgetItemDialog()
-        }
 
-        binding.btnDoneSettingBudget.setOnClickListener {
-
-        }
+        binding.btnNewCategory.setOnClickListener { showNewBudgetItemDialog() }
+        binding.btnDoneSettingBudget.setOnClickListener {}
     }
 
     private fun getBalance() {
@@ -86,12 +86,18 @@ class BudgetActivity : AppCompatActivity() {
 
     private fun getBudgetItems() {
         firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).get().addOnSuccessListener { budgetItems ->
-            for (item in budgetItems) {
+            for (item in budgetItems)
                 budgetCategoryIDArrayList.add(item.id)
-                //var budgetCategory = item.toObject<BudgetItem>()
-            }
-            //getBudgetInfo()
-            budgetCategoryAdapter = BudgetCategoryAdapter(this, budgetCategoryIDArrayList)
+
+            //set on click listener for menu item
+            budgetCategoryAdapter = BudgetCategoryAdapter(this, budgetCategoryIDArrayList, object:BudgetCategoryAdapter.MenuClick{
+                override fun clickMenuItem(position: Int, menuOption: String, budgetItemID: String) {
+                    if (menuOption == "Edit")
+                        editBudgetItem(budgetItemID)
+                    else
+                        deleteBudgetItem(position, budgetItemID)
+                }
+            })
             binding.rvViewCategories.adapter = budgetCategoryAdapter
             binding.rvViewCategories.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         }.continueWith { deductExpenses() }
@@ -110,42 +116,52 @@ class BudgetActivity : AppCompatActivity() {
                 }.continueWith { binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(balance) }
             }
         }
-
-
     }
 
-    /*private fun activateNextDecisionMakingActivity(){
-        firestore.collection("DecisionMakingActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("priority", nextPriority).get().addOnSuccessListener {
-            var documentID = it.documents[0].id
-            firestore.collection("DecisionMakingActivities").document(documentID).update("status", "In Progress")
+    fun editBudgetItem(budgetItemID:String) {
+        var dialogBinding= DialogNewBudgetCategoryBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(900, 1000)
+
+        firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
+            var budgetItem = it.toObject<BudgetItem>()
+            dialogBinding.dialogEtCategoryName.setText(budgetItem?.budgetItemName.toString())
+            dialogBinding.dialogEtCategoryAmount.setText(budgetItem?.amount!!.toInt().toString())
+
         }
-    }*/
 
-    /*private fun getBudgetInfo() {
-        //get the amount of needed for the decision making activity
-        firestore.collection("DecisionMakingActivities").document(decisionMakingActivityID).get().addOnSuccessListener {
-            var decisionMakingActivity = it.toObject<DecisionMakingActivities>()
-            financialGoalID = decisionMakingActivity?.financialGoalID.toString()
-            nextPriority = decisionMakingActivity?.priority.toString().toInt() + 1
-            totalBudget = decisionMakingActivity?.targetAmount!!
-            binding.tvBudgetAmount.text = "₱ " + DecimalFormat("#,###.00").format(allocated) + " / ₱ "  + DecimalFormat("#,###.00").format(decisionMakingActivity?.targetAmount)
+        dialogBinding.btnSave.setOnClickListener {
+            var itemName = dialogBinding.dialogEtCategoryName.text.toString()
+            var itemAmount = dialogBinding.dialogEtCategoryAmount.text.toString().toFloat()
 
-            //hide done setting budget budget if the activity is already completed
-            if (decisionMakingActivity.status == "Completed") {
-                binding.btnNewCategory.visibility = View.GONE
-                binding.btnDoneSettingBudget.visibility = View.GONE
-            } else {
-                binding.btnNewCategory.visibility = View.VISIBLE
-                binding.btnDoneSettingBudget.visibility = View.VISIBLE
+            firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
+                var budgetItem = it.toObject<BudgetItem>()
+                var nUpdate = budgetItem?.nUpdate!!.toInt() + 1
+
+                firestore.collection("BudgetItems").document(budgetItemID).update("budgetItemName", itemName,
+                    "amount", itemAmount, "nupdate", nUpdate).addOnSuccessListener {
+                    budgetCategoryAdapter.notifyDataSetChanged()
+                    dialog.dismiss()
+                }
             }
-
-            //get the name of financial goal
-            firestore.collection("FinancialGoals").document(decisionMakingActivity?.financialGoalID.toString()).get().addOnSuccessListener {
-                var financialGoal = it.toObject<FinancialGoals>()
-                //binding.tvGoalName.text = financialGoal?.goalName.toString()
-            }
+            //TODO: VALIDATION
         }
-    }*/
+
+        dialogBinding.btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun deleteBudgetItem(position:Int, budgetItemID:String) {
+        budgetCategoryIDArrayList.removeAt(position)
+        budgetCategoryAdapter.notifyDataSetChanged()
+
+        firestore.collection("BudgetItems").document(budgetItemID).delete()
+
+    }
 
     private fun showNewBudgetItemDialog() {
 

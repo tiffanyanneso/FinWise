@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Edit Budget"
+        android:id="@+id/tv_edit_budget"/>
+    <item android:title="Delete Budget Item"
+        android:id="@+id/tv_delete_budget_item"/>
+</menu>
