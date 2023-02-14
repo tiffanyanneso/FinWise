@@ -22,4 +22,9 @@
     <style name="Theme.FinWise.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.FinWise.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CircularDeterminateProgressBar">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/circle</item>
+    </style>
 </resources>
