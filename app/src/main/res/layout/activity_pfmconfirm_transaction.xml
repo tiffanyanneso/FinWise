@@ -29,163 +29,173 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
-        android:id="@+id/linear_layout_1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topbar"
-        android:padding="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/layout_bg_green"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
-
-        <TextView
-            android:id="@+id/tv_transaction_type"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:text="INCOME/EXPENSE Amount"
-            android:textAllCaps = "true"
-            android:textColor="@color/black"
-            />
-
-        <TextView
-            android:id="@+id/tv_amount"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="24dp"
-            android:text="₱ XXXXX.XX"
-            android:textColor="@color/black"
-            android:textStyle="bold"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linear_layout_2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linear_layout_1"
-        android:padding="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/layout_bg_green"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
+        android:padding="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:background="@drawable/border_green_bg_white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp">
 
             <TextView
-                android:layout_width="60dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:text="@string/name"
-                android:textSize="16sp"
+                android:textSize="16dp"
+                android:text="INCOME/EXPENSE"
+                android:textAllCaps = "true"
                 android:textColor="@color/black"
+
                 />
 
             <TextView
-                android:id="@+id/tv_name"
+                android:id="@+id/tv_deposit_amount"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="@string/name"
-                android:layout_width="60dp"
-                android:textSize="16sp"
-                android:gravity="end"
+                android:textSize="20dp"
+                android:text="₱ XXXXX.XX"
+                android:textAllCaps = "true"
                 android:textColor="@color/black"
-                />
+                android:textStyle="bold"/>
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:background="@drawable/button_border_white"
+            android:backgroundTint="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
 
-            <TextView
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:text="@string/category"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                />
 
-            <TextView
-                android:id="@+id/tv_category"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="@string/category"
-                android:textSize="16sp"
-                android:gravity="end"
-                android:textColor="@color/black"
-                />
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:text="@string/name"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_goal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@string/name"
+                    android:textSize="16sp"
+                    android:gravity="end"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:text="@string/category"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@string/category"
+                    android:gravity="end"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:text="Date"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Date"
+                    android:gravity="end"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>
+
+
+
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:text="@string/current_balance"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_current_balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@string/current_balance"
+                    android:textSize="16sp"
+                    android:gravity="end"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>-->
+
+
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:text="Date"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                />
-
-            <TextView
-                android:id="@+id/tv_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="Date"
-                android:gravity="end"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                />
-        </LinearLayout>
-
-        <!--<LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:text="Goal"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                />
-
-            <TextView
-                android:id="@+id/tv_goal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="Goal"
-                android:gravity="end"
-                android:textSize="16sp"
-                android:textColor="@color/black"
-                />
-        </LinearLayout>-->
     </LinearLayout>
 
     <LinearLayout
@@ -210,7 +220,7 @@
             android:textColor="@color/black"
             android:backgroundTint="@color/light_grey"
             android:background="@drawable/button_border_grey"
-            android:layout_marginRight="10dp"
+            android:layout_marginStart="10dp"
             android:layout_weight="1"
             />
 
@@ -219,12 +229,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/confirm"
+            android:text="CONFIRM"
             android:textColor="@color/off_white"
             android:backgroundTint="@color/dark_green"
             android:background="@drawable/button_border"
             android:layout_weight="1"
             />
+
     </LinearLayout>
 
     <!--Bottom navigation bar-->
@@ -240,5 +251,6 @@
         app:labelVisibilityMode="labeled"
         app:itemIconSize="36dp"
         app:itemIconTint="@drawable/selector"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
