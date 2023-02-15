@@ -48,7 +48,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_name"
-                    android:text="Transaction Filter"
+                    android:text="Transaction Sort"
                     android:textAllCaps="true"
                     android:textColor="@color/black"
                     android:textSize="22sp"
