@@ -2,30 +2,18 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Context
 import android.content.Intent
-import android.gesture.Gesture
 import android.os.Bundle
-import android.view.GestureDetector
-import android.view.MotionEvent
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryExpenseFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryIncomeFragment
-import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPfmtransactionHistoryBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.*
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionFragment
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionSortFragment
-import java.lang.Math.abs
 
 
 class TransactionHistoryActivity : AppCompatActivity() {
@@ -66,16 +54,11 @@ class TransactionHistoryActivity : AppCompatActivity() {
 
     private fun initializeSort() {
         binding.ivSort.setOnClickListener {
-            showSortDialog()
+            val goToSort = Intent(applicationContext, TransactionSortActivity::class.java)
+            startActivity(goToSort)
         }
     }
 
-    private fun showSortDialog() {
-        val activity = context as FragmentActivity
-        val fm: FragmentManager = activity.supportFragmentManager
-        val dialogFragment = TransactionSortFragment()
-        dialogFragment.show(fm, "fragment_alert")
-    }
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun initializeIncomeExpense() {
@@ -116,6 +99,12 @@ class TransactionHistoryActivity : AppCompatActivity() {
     }
 
 
+   /* private fun showSortDialog() {
+        val activity = context as FragmentActivity
+        val fm: FragmentManager = activity.supportFragmentManager
+        val dialogFragment = TransactionSortFragment()
+        dialogFragment.show(fm, "fragment_alert")
+    }*/
 
    /* override fun onTouchEvent(event: MotionEvent?): Boolean {
         gestureDetector.onTouchEvent(event)

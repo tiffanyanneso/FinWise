@@ -63,6 +63,7 @@
         android:hint="Select Category"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_marginHorizontal="20dp"
+        android:textSize="16sp"
         app:startIconDrawable="@drawable/baseline_saved_search_24">
 
         <AutoCompleteTextView

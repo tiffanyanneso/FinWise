@@ -1,24 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:context=".personalFinancialManagementModule.pFMFragments.TransactionSortFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".personalFinancialManagementModule.TransactionSortActivity"
+    android:background="@drawable/button_border_white"
+    android:backgroundTint="@color/white" >
 
-
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="20dp"
-        android:background="@drawable/button_border_white"
-        android:backgroundTint="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleCentered="true"
+            app:title="Transaction History"
+            app:navigationIcon="@drawable/baseline_arrow_back_24"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:backgroundTint="@color/dark_green"
+            >
+
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintVertical_bias="0.3"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
+        app:layout_constraintTop_toBottomOf="@+id/topbar">
+
+    <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -34,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -57,7 +82,7 @@
             android:id="@+id/div_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp"
+            android:layout_marginVertical="20dp"
             app:dividerColor="@color/light_green"/>
 
         <LinearLayout
@@ -72,7 +97,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:text="@string/price"
+                android:text="Amount"
+                android:layout_marginStart="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 />
@@ -84,23 +110,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-
-            android:layout_gravity="center">
+            android:gravity="center">
 
             <EditText
                 android:id="@+id/et_min_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
-                android:hint="Min. Amt."
+                android:hint="MIN"
                 android:maxLength="6"
-                android:layout_marginStart="20dp"
                 />
 
             <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/div_2"
                 android:layout_width="20dp"
-                android:layout_height="2dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginVertical="23dp"
                 android:layout_marginStart="20dp"
@@ -111,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
-                android:hint="Max Amt."
+                android:hint="MAX"
                 android:maxLength="6"
                 android:layout_marginLeft="20dp"/>
 
@@ -131,6 +155,7 @@
                 android:layout_weight="1"
                 android:textStyle="bold"
                 android:text="@string/date"
+                android:layout_margin="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 />
@@ -157,7 +182,7 @@
                 android:paddingTop="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_start_datee"
+                    android:id="@+id/et_start_date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:lines="1"
@@ -191,7 +216,7 @@
                 android:paddingTop="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_end_datee"
+                    android:id="@+id/et_end_date"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:lines="1"
@@ -217,6 +242,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
+                android:layout_margin="10dp"
                 android:text="@string/category"
                 android:textSize="16sp"
                 android:textColor="@color/black"
@@ -232,7 +258,7 @@
             android:layout_gravity="center">
 
             <CheckBox
-                android:id="@+id/btn_income"
+                android:id="@+id/cb_income"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -250,7 +276,7 @@
                 app:dividerColor="@color/black" />
 
             <CheckBox
-                android:id="@+id/btn_expense"
+                android:id="@+id/cb_expense"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -301,7 +327,20 @@
                 />
         </LinearLayout>
 
-
     </LinearLayout>
 
-</FrameLayout>
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/bottom_nav"
+        android:background="#FFFFFF"
+        app:labelVisibilityMode="labeled"
+        app:itemIconSize="36dp"
+        app:itemIconTint="@drawable/selector"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

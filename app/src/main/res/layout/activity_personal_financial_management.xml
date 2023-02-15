@@ -27,13 +27,13 @@
             android:id="@+id/cv_current_balance"
             android:layout_width="match_parent"
             android:layout_marginStart="20dp"
-            android:elevation="5dp"
             android:layout_marginEnd="20dp"
+            android:elevation="5dp"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:padding="20dp"
+            android:padding="0dp"
             app:cardCornerRadius="10dp">
 
             <LinearLayout
@@ -301,6 +301,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/abl_bar_charts"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cv_current_balance"
@@ -312,6 +314,7 @@
                 android:layout_height="wrap_content"
                 app:tabBackground="@color/white"
                 app:tabGravity="fill"
+
                 app:tabMode="fixed"
                 app:tabTextColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -324,7 +327,7 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager_bar_charts"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="600dp"
             android:layout_marginTop="15dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
@@ -339,6 +342,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/abl_breakdown"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="20dp"
@@ -362,7 +367,7 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="550dp"
+            android:layout_height="500dp"
             android:layout_marginTop="15dp"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"

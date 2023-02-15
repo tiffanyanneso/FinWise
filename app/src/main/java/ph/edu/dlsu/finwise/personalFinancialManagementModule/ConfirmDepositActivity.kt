@@ -80,7 +80,7 @@ class ConfirmDepositActivity : AppCompatActivity() {
             )
             adjustUserBalance()
             // TODO: Change where transaction is added
-            firestore.collection("Transaction").add(transaction).addOnSuccessListener {
+            firestore.collection("Transactions").add(transaction).addOnSuccessListener {
                 Toast.makeText(this, "Goal added", Toast.LENGTH_SHORT).show()
                 var goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
                 goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

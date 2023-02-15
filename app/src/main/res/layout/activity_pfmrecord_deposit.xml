@@ -36,6 +36,8 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
+        android:textSize="16sp"
+
         app:startIconDrawable="@drawable/baseline_star_24">
 
         <AutoCompleteTextView
@@ -78,7 +80,7 @@
             android:layout_height="match_parent"
             android:lines="1"
             android:inputType="numberDecimal"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:enabled="true"
             android:focusable="false"
             />
@@ -147,7 +149,7 @@
             android:layout_height="match_parent"
             android:lines="1"
             android:inputType="numberDecimal"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:hint="@string/amount"
             />
     </com.google.android.material.textfield.TextInputLayout>

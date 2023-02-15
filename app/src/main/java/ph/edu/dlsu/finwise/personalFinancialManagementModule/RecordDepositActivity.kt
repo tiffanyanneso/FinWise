@@ -159,7 +159,7 @@ class RecordDepositActivity : AppCompatActivity() {
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
             binding.etDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
             date = SimpleDateFormat("MM/dd/yyyy").parse((mMonth + 1).toString() + "/" +
-                                                                        mDay.toString() + "/" + mYear.toString())
+                    mDay.toString() + "/" + mYear.toString()) as Date
             dialog.dismiss()
         }
         dialog.show()
