@@ -43,45 +43,39 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
 
         getQuestion()
         binding.layoutChoice1.setOnClickListener {
+            highlightCorrect()
             binding.btnNext.visibility = View.VISIBLE
-            if (binding.tvIsCorrect1.text == "true") {
+            if (binding.tvIsCorrect1.text == "true")
                 score++
-                highlightCorrect()
-            }
-            else {
+            else
                 binding.layoutChoice1.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
-                highlightCorrect()
-            }
+
         }
         binding.layoutChoice2.setOnClickListener {
+            highlightCorrect()
             binding.btnNext.visibility = View.VISIBLE
-            if (binding.tvIsCorrect2.text == "true") {
+            if (binding.tvIsCorrect2.text == "true")
                 score++
-                highlightCorrect()
-            } else {
+             else
                 binding.layoutChoice2.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
-                highlightCorrect()
-            }
+
         }
         binding.layoutChoice3.setOnClickListener {
+            highlightCorrect()
             binding.btnNext.visibility = View.VISIBLE
-            if (binding.tvIsCorrect3.text == "true") {
+            if (binding.tvIsCorrect3.text == "true")
                 score++
-                highlightCorrect()
-            } else {
+            else
                 binding.layoutChoice3.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
-                highlightCorrect()
-            }
+
         }
         binding.layoutChoice4.setOnClickListener {
+            highlightCorrect()
             binding.btnNext.visibility = View.VISIBLE
-            if (binding.tvIsCorrect4.text == "true") {
+            if (binding.tvIsCorrect4.text == "true")
                 score++
-                highlightCorrect()
-            } else {
+             else
                 binding.layoutChoice4.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
-                highlightCorrect()
-            }
         }
 
         binding.btnNext.setOnClickListener {
@@ -161,7 +155,6 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
     }
 
     private fun highlightCorrect() {
-        println("score " + score)
         if (correctChoice == 1)
             binding.layoutChoice1.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
         else if (correctChoice == 2)

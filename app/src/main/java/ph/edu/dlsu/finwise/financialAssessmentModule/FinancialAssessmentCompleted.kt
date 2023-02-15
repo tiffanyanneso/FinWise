@@ -41,8 +41,6 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
             binding.progressBar.max = nQuestions
             binding.progressBar.progress = score
         }.continueWith {
-            println("print score " + score)
-            println("print assessment attempt " + assessmentAttemptID)
             firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("score", score)
         }
 

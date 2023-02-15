@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -62,6 +64,7 @@ class ViewGoalActivity : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         goalID = bundle.getString("goalID").toString()
 
+        //checkUser()
         setFinancialActivityID()
 
 
@@ -201,6 +204,16 @@ class ViewGoalActivity : AppCompatActivity() {
                         }
                     }.continueWith { binding.tvCurrentBalance.text = "Available balance: ₱ " +  DecimalFormat("#,###.00").format(balance)   }
                 }
+            }
+        }
+    }
+
+    private fun checkUser() {
+        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+            //current user is parent
+            if (it.exists()) {
+                binding.layoutBtnDepositWithdraw.visibility = View.GONE
             }
         }
     }

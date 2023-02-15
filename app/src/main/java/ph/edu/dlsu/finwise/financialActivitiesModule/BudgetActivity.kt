@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -64,7 +65,7 @@ class BudgetActivity : AppCompatActivity() {
         budgetActivityID = bundle.getString("budgetActivityID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
 
-
+        //checkUser()
         getBalance()
 
 
@@ -200,5 +201,16 @@ class BudgetActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun checkUser() {
+        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+            //current user is parent
+            if (it.exists()) {
+                binding.btnNewCategory.visibility = View.GONE
+                binding.btnDoneSettingBudget.visibility = View.GONE
+            }
+        }
     }
 }
