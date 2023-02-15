@@ -13,6 +13,13 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".financialAssessmentModule.FinancialAssessmentCompleted"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ViewGoalDetailsTabbedActivity"
             android:exported="false" />
         <activity
@@ -61,7 +68,7 @@
         </activity>
         <activity
             android:name=".TestFinancialActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".EditProfileActivity"
             android:exported="true" />
@@ -143,30 +150,34 @@
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
-            android:exported="true" >
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ProfileActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertEditAssessmentActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertAddNewQuestionsActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertProfileActivity"
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertSpecificAssessmentActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertAssessmentTypeActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.TransactionHistoryActivity"
             android:exported="true" />
@@ -190,7 +201,7 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.ChildEditGoal"
             android:exported="false" />
@@ -199,12 +210,7 @@
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"
             android:exported="false" />

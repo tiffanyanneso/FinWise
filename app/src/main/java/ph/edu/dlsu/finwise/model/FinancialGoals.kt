@@ -11,10 +11,8 @@ class FinancialGoals(
     var targetDate:Timestamp?=null,
     var goalLength:String?=null,
     var targetAmount:Float?=null,
-    var currentAmount:Float?=null,
     var financialActivity:String?=null,
-    var decisionMakingActivities:ArrayList<DecisionMakingActivities>?=null,
-    var lastUpdated:Timestamp?=null,
     var status:String?=null,
-    var goalIsForSelf:Boolean?=null
+    var goalIsForSelf:Boolean?=null,
+    var dateCompleted:Timestamp?=null
 ){}

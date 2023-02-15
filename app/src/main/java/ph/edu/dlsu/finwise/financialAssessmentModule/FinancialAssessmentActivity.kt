@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.financialAssessmentModule
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
@@ -28,19 +29,32 @@ class FinancialAssessmentActivity : AppCompatActivity() {
             Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_assessment)
 
             binding.btnTakeAssessment.setOnClickListener {
-                firestore.collection("AssessmentQuestions")
-                    .whereEqualTo("assessmentID", assessmentID).get()
-                    .addOnSuccessListener { results ->
-                        for (question in results)
-                            questionIDArrayList.add(question.id)
+                //TODO: UPDATE CURRENT USER
+                var assessmentAttempt = hashMapOf(
+                     "childID" to "currentUser",
+                    "assessmentID" to assessmentID,
+                    "dateTaken" to Timestamp.now(),
+                    "score" to 0,
+                )
+                firestore.collection("AssessmentAttempts").add(assessmentAttempt).addOnSuccessListener {
+                    var assessmentAttemptID = it.id
+                    firestore.collection("AssessmentQuestions")
+                        .whereEqualTo("assessmentID", assessmentID).get()
+                        .addOnSuccessListener { results ->
+                            for (question in results)
+                                questionIDArrayList.add(question.id)
 
-                        var assessmentQuiz = Intent(this, FinancialAssessmentQuiz::class.java)
-                        var bundle = Bundle()
-                        bundle.putString("assessmentID", assessmentID)
-                        bundle.putStringArrayList("questionIDArrayList", questionIDArrayList)
-                        assessmentQuiz.putExtras(bundle)
-                        this.startActivity(assessmentQuiz)
-                    }
+                            var assessmentQuiz = Intent(this, FinancialAssessmentQuiz::class.java)
+                            var bundle = Bundle()
+                            bundle.putInt("score", 0)
+                            bundle.putString("assessmentAttemptID", assessmentAttemptID)
+                            bundle.putString("assessmentID", assessmentID)
+                            bundle.putStringArrayList("questionIDArrayList", questionIDArrayList)
+                            assessmentQuiz.putExtras(bundle)
+                            this.startActivity(assessmentQuiz)
+                        }
+                }
+
             }
         }
 

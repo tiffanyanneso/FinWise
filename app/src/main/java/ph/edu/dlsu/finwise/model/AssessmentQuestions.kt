@@ -7,8 +7,7 @@ class AssessmentQuestions(
     var question:String?=null,
     var answerAccuracy:Float?=null,
     var dateCreated:Timestamp?=null,
-    var dateModified:Timestamp?=null,
     var createdBy:String?=null,
-    var modifiedBy:String?=null,
+    @field:JvmField
     var isUsed:Boolean?=null
 ) {}

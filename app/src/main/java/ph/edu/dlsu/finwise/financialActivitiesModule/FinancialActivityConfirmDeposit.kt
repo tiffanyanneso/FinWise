@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -112,6 +113,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 //target amount has already been met, update status of goal and fin activity to completed
                 if (goal?.targetAmount!! <= saved) {
                     firestore.collection("FinancialGoals").document(goalID).update("status", "Completed")
+                    firestore.collection("FinancialGoals").document(goalID).update("dateCompleted", Timestamp.now())
                     firestore.collection("FinancialActivities").document(savingActivityID).update("status", "Completed")
                     val goalAccomplished = Intent(this, GoalAccomplishedActivity::class.java)
                     goalAccomplished.putExtras(bundle)

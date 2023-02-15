@@ -58,7 +58,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:padding="10dp"
-            android:background="@drawable/layout_bg_green"
+            android:background="@color/cream"
             android:layout_marginTop="10dp">
 
             <TextView
@@ -94,7 +94,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:padding="10dp"
-            android:background="@drawable/layout_bg_green"
+            android:background="@color/cream"
             android:layout_marginTop="10dp">
 
             <TextView
@@ -128,7 +128,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:padding="10dp"
-            android:background="@drawable/layout_bg_green"
+            android:background="@color/cream"
             android:layout_marginTop="10dp">
 
             <TextView
@@ -162,7 +162,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:padding="10dp"
-            android:background="@drawable/layout_bg_green"
+            android:background="@color/cream"
             android:layout_marginTop="10dp">
 
             <TextView
@@ -187,6 +187,14 @@
                 android:textColor="@color/black"
                 android:layout_gravity="center"/>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Next"
+            android:visibility="invisible"/>
 
     </LinearLayout>
 

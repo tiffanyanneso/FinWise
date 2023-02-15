@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentQuizBinding
 import ph.edu.dlsu.finwise.model.AssessmentChoices
 import ph.edu.dlsu.finwise.model.AssessmentQuestions
@@ -20,9 +22,13 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private lateinit var assessmentID:String
+    private lateinit var assessmentAttemptID:String
+    private var score =0
     private lateinit var questionIDArrayList:ArrayList<String>
 
     private lateinit var questionID:String
+
+    var correctChoice = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,38 +37,56 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
 
         var bundle = intent.extras!!
         assessmentID = bundle.getString("assessmentID").toString()
+        assessmentAttemptID = bundle.getString("assessmentAttemptID").toString()
+        score = bundle.getInt("score")
         questionIDArrayList = bundle.getStringArrayList("questionIDArrayList")!!
 
         getQuestion()
         binding.layoutChoice1.setOnClickListener {
-            if (binding.tvIsCorrect1.text == "true")
-                Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show()
-            else
-                Toast.makeText(this, "Incorrect", Toast.LENGTH_SHORT).show()
-            nextQuestion()
+            binding.btnNext.visibility = View.VISIBLE
+            if (binding.tvIsCorrect1.text == "true") {
+                score++
+                highlightCorrect()
+            }
+            else {
+                binding.layoutChoice1.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+                highlightCorrect()
+            }
         }
         binding.layoutChoice2.setOnClickListener {
-            if (binding.tvIsCorrect2.text == "true")
-                Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show()
-            else
-                Toast.makeText(this, "Incorrect", Toast.LENGTH_SHORT).show()
-            nextQuestion()
+            binding.btnNext.visibility = View.VISIBLE
+            if (binding.tvIsCorrect2.text == "true") {
+                score++
+                highlightCorrect()
+            } else {
+                binding.layoutChoice2.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+                highlightCorrect()
+            }
         }
         binding.layoutChoice3.setOnClickListener {
-            if (binding.tvIsCorrect3.text == "true")
-                Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show()
-            else
-                Toast.makeText(this, "Incorrect", Toast.LENGTH_SHORT).show()
-            nextQuestion()
+            binding.btnNext.visibility = View.VISIBLE
+            if (binding.tvIsCorrect3.text == "true") {
+                score++
+                highlightCorrect()
+            } else {
+                binding.layoutChoice3.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+                highlightCorrect()
+            }
         }
         binding.layoutChoice4.setOnClickListener {
-            if (binding.tvIsCorrect4.text == "true")
-            Toast.makeText(this, "Correct", Toast.LENGTH_SHORT).show()
-        else
-            Toast.makeText(this, "Incorrect", Toast.LENGTH_SHORT).show()
-            nextQuestion()
+            binding.btnNext.visibility = View.VISIBLE
+            if (binding.tvIsCorrect4.text == "true") {
+                score++
+                highlightCorrect()
+            } else {
+                binding.layoutChoice4.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+                highlightCorrect()
+            }
         }
 
+        binding.btnNext.setOnClickListener {
+            nextQuestion()
+        }
     }
 
     private fun getQuestion() {
@@ -81,7 +105,8 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
             var index = 1
             for (choice in results ) {
                 var choiceObject = choice.toObject<AssessmentChoices>()
-
+                if (choiceObject.isCorrect == true)
+                    correctChoice = index
                 if (index == 1) {
                     binding.tvChoice1ID.text = choice.id
                     binding.tvChoice1.text = choiceObject.choice
@@ -116,17 +141,40 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
     }
 
     private fun nextQuestion() {
+        var sendBundle = Bundle()
+        sendBundle.putString("assessmentID", assessmentID)
+        sendBundle.putString("assessmentAttemptID", assessmentAttemptID)
+        sendBundle.putStringArrayList("questionIDArrayList", questionIDArrayList)
+        sendBundle.putInt("score", score)
+
         //if there are still questions, go to the next
         if (questionIDArrayList.size > 0) {
             var nextQuestion = Intent(this, FinancialAssessmentQuiz::class.java)
-            var bundle = Bundle()
-            bundle.putString("assessmentID", assessmentID)
-            bundle.putStringArrayList("questionIDArrayList", questionIDArrayList)
-            nextQuestion.putExtras(bundle)
+            nextQuestion.putExtras(sendBundle)
             this.startActivity(nextQuestion)
         }
-        else
-            Toast.makeText(this, "End Assessment", Toast.LENGTH_SHORT).show()
-        //TODO:show results
+        else{
+            var assessmentCompleted = Intent(this, FinancialAssessmentCompleted::class.java)
+            assessmentCompleted.putExtras(sendBundle)
+            this.startActivity(assessmentCompleted)
+        }
     }
+
+    private fun highlightCorrect() {
+        println("score " + score)
+        if (correctChoice == 1)
+            binding.layoutChoice1.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+        else if (correctChoice == 2)
+            binding.layoutChoice2.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+        else if (correctChoice == 3)
+            binding.layoutChoice3.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+        else if (correctChoice == 4)
+            binding.layoutChoice4.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+
+        binding.layoutChoice1.isClickable = false
+        binding.layoutChoice2.isClickable = false
+        binding.layoutChoice3.isClickable = false
+        binding.layoutChoice4.isClickable = false
+    }
+
 }
