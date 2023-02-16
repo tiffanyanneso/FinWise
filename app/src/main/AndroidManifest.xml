@@ -108,10 +108,10 @@
         <activity
             android:name=".parentFinancialActivitiesModule.ReviewGoalActivity"
             android:exported="true" >
-            <intent-filter>
+     <!--       <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".SettingAGoalActivity"
@@ -203,6 +203,9 @@
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
             android:exported="true" />
         <activity
+            android:name=".personalFinancialManagementModule.TransactionSortActivity"
+            android:exported="false"/>
+        <activity
             android:name=".financialActivitiesModule.ChildEditGoal"
             android:exported="false" />
         <activity
@@ -211,7 +214,10 @@
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
             android:exported="true">
-
+                   <intent-filter>
+                            <action android:name="android.intent.action.MAIN" />
+                            <category android:name="android.intent.category.LAUNCHER" />
+                        </intent-filter>
         </activity>
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"
