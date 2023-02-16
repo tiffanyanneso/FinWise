@@ -117,7 +117,7 @@ class MayaConfirmPayment : AppCompatActivity() {
             val transaction = hashMapOf(
                 //TODO: add childID, createdBy
                 "transactionName" to name,
-                "transactionType" to "Maya Expense",
+                "transactionType" to "Expense (Maya)",
                 "category" to category,
                 "date" to bundle!!.getSerializable("date"),
                 "createdBy" to "",
