@@ -29,9 +29,11 @@ class ReviewGoalActivity : AppCompatActivity() {
         binding = ActivityReviewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var bundle = intent.extras!!
-        financialGoalID = bundle.getString("goalID").toString()
-        childID = bundle.getString("childID").toString()
+        //var bundle = intent.extras!!
+        //financialGoalID = bundle.getString("goalID").toString()
+        //childID = bundle.getString("childID").toString()
+
+        financialGoalID = "dvHY1WX75XvdnzIWmM7W"
 
         getGoalDetails()
 
@@ -43,6 +45,12 @@ class ReviewGoalActivity : AppCompatActivity() {
         binding.btnSubmit.setOnClickListener {
             submitGoalRating()
         }
+
+        /*binding.ratingBarSpecific.setOnRatingBarChangeListener { }
+        binding.ratingBarMeasurable.setOnClickListener { updateOverallRating() }
+        binding.ratingBarAchievable.setOnClickListener { updateOverallRating() }
+        binding.ratingBarRelevant.setOnClickListener { updateOverallRating() }
+        binding.ratingBarTimeBound.setOnClickListener { updateOverallRating() }*/
     }
 
     private fun getGoalDetails() {
@@ -53,6 +61,19 @@ class ReviewGoalActivity : AppCompatActivity() {
             binding.tvAmount.text = financialGoal?.targetAmount.toString()
             binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(financialGoal?.targetDate?.toDate())
         }
+    }
+
+    private fun updateOverallRating() {
+        println("print update")
+        var overall = 0.00F
+        var specific = binding.ratingBarSpecific.rating
+        var measurable = binding.ratingBarMeasurable.rating
+        var achievable = binding.ratingBarAchievable.rating
+        var relevant = binding.ratingBarRelevant.rating
+        var timeBound = binding.ratingBarTimeBound.rating
+
+        overall = (specific + measurable + achievable + relevant + timeBound) /5
+        binding.tvOverallRating.text = "$overall / 5"
     }
 
     private fun submitGoalRating() {

@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,18 +11,32 @@ import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
+import ph.edu.dlsu.finwise.databinding.ActivityChildEditGoalBinding
 import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
 
 class ChildEditGoal : AppCompatActivity() {
-    private lateinit var binding : ActivityChildNewGoalBinding
+    private lateinit var binding : ActivityChildEditGoalBinding
     private var firestore = Firebase.firestore
+
+    private lateinit var financialGoalID:String
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityChildNewGoalBinding.inflate(layoutInflater)
+        binding = ActivityChildEditGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        var bundle = intent.extras!!
+        financialGoalID = bundle.getString("financialGoalID").toString()
         getFinancialGoal()
+
+        /*if (currentUserType == "Child") {
+            binding.tvFinancialDecisionMakingActivity.visibility = View.GONE
+            binding.checkBoxes.visibility = View.GONE
+        } else if (currentUserType == "Parent") {
+            binding.tvFinancialDecisionMakingActivity.visibility = View.VISIBLE
+            binding.checkBoxes.visibility = View.VISIBLE
+        }*/
 
         // for the dropdown
         val items = resources.getStringArray(R.array.financial_activity)
@@ -32,18 +47,13 @@ class ChildEditGoal : AppCompatActivity() {
             showCalendar()
         }
 
-        /*if (currentUserType == "Child") {
-            binding.tvFinancialDecisionMakingActivity.visibility = View.GONE
-            binding.checkBoxes.visibility = View.GONE
-        } else if (currentUserType == "Parent") {
-            binding.tvFinancialDecisionMakingActivity.visibility = View.VISIBLE
-            binding.checkBoxes.visibility = View.VISIBLE
-        }*/
+        binding.btnSave.setOnClickListener {
+            updateGoal()
+        }
 
-
-        /*binding.btnSave.setOnClickListener {
-
-        }*/
+        binding.btnDelete.setOnClickListener {
+            deleteGoal()
+        }
 
     }
 
@@ -71,6 +81,16 @@ class ChildEditGoal : AppCompatActivity() {
                 binding.spinnerActivity.setSelection(finActivityIndex)
             }
         }*/
+    }
+
+    private fun updateGoal() {
+        //firestore.collection("FinancialGoals").document(financialGoalID).update()
+    }
+
+    private fun deleteGoal() {
+        firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Deleted")
+        var goalList = Intent(this, FinancialActivity::class.java)
+        this.startActivity(goalList)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

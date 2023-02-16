@@ -36,7 +36,7 @@ class ViewGoalActivity : AppCompatActivity() {
 
     private lateinit var decisionMakingActivitiesAdapater: GoalDecisionMakingActivitiesAdapter
 
-    private lateinit var goalID:String
+    private lateinit var financialGoalID:String
 
     private var savedAmount = 0.00F
 
@@ -62,14 +62,14 @@ class ViewGoalActivity : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         var bundle: Bundle = intent.extras!!
-        goalID = bundle.getString("goalID").toString()
+        financialGoalID = bundle.getString("goalID").toString()
 
         //checkUser()
         setFinancialActivityID()
 
 
         var sendBundle = Bundle()
-        sendBundle.putString("goalID", goalID)
+        sendBundle.putString("financialGoalID", financialGoalID)
 
         binding.btnEditGoal.setOnClickListener {
             var goToEditGoal = Intent(this, ChildEditGoal::class.java)
@@ -115,7 +115,7 @@ class ViewGoalActivity : AppCompatActivity() {
     }
 
     private fun setFinancialActivityID() {
-        firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", goalID).get().addOnSuccessListener { results ->
+        firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
             for (finActivity in results) {
                 var activityObject = finActivity.toObject<FinancialActivities>()
                 if (activityObject.financialActivityName == "Saving")
@@ -150,8 +150,8 @@ class ViewGoalActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setFields() {
-        if (goalID != null) {
-            firestore.collection("FinancialGoals").document(goalID!!).get().addOnSuccessListener { document ->
+        if (financialGoalID != null) {
+            firestore.collection("FinancialGoals").document(financialGoalID!!).get().addOnSuccessListener { document ->
                 if (document != null) {
                     //TODO: compute remaining days
                     var goal = document.toObject(FinancialGoals::class.java)

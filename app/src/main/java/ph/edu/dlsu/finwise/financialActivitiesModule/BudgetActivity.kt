@@ -87,8 +87,11 @@ class BudgetActivity : AppCompatActivity() {
 
     private fun getBudgetItems() {
         firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).get().addOnSuccessListener { budgetItems ->
-            for (item in budgetItems)
-                budgetCategoryIDArrayList.add(item.id)
+            for (item in budgetItems) {
+                var budgetItemObject = item.toObject<BudgetItem>()
+                if (budgetItemObject.status == "Active")
+                    budgetCategoryIDArrayList.add(item.id)
+            }
 
             //set on click listener for menu item
             budgetCategoryAdapter = BudgetCategoryAdapter(this, budgetCategoryIDArrayList, object:BudgetCategoryAdapter.MenuClick{
@@ -160,7 +163,7 @@ class BudgetActivity : AppCompatActivity() {
         budgetCategoryIDArrayList.removeAt(position)
         budgetCategoryAdapter.notifyDataSetChanged()
 
-        firestore.collection("BudgetItems").document(budgetItemID).delete()
+        firestore.collection("BudgetItems").document(budgetItemID).update("status", "Deleted")
 
     }
 

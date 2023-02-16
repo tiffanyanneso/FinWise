@@ -56,16 +56,16 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         transactionType = bundle!!.getString("transactionType").toString()
         if (transactionType == "Income") {
             //binding.tvTitle.text = "Confirm Income"
-            binding.tvTransactionType.text = "Income Amount"
+            //binding.tvTransactionType.text = "Income Amount"
         } else {
             //binding.tvTitle.text = "Confirm Expense"
-            binding.tvTransactionType.text = "Expense Amount"
+            //binding.tvTransactionType.text = "Expense Amount"
         }
         val dec = DecimalFormat("#,###.00")
         var textAmount = dec.format(bundle!!.getFloat("amount"))
-        binding.tvName.text = name
-        binding.tvCategory.text = category
-        binding.tvAmount.text = "₱$textAmount"
+        //binding.tvName.text = name
+        //binding.tvCategory.text = category
+        //binding.tvAmount.text = "₱$textAmount"
         //binding.tvGoal.text = goal
         val formatter = SimpleDateFormat("MM/dd/yyyy")
         val dateSerializable = bundle!!.getSerializable("date")

@@ -55,12 +55,12 @@ class ConfirmDepositActivity : AppCompatActivity() {
         date = bundle.getSerializable("date") as Date
         val dec = DecimalFormat("#,##0.00")
         val textAmount = dec.format(bundle.getFloat("amount"))
-        binding.tvAmount.text = "₱$textAmount"
+        //binding.tvAmount.text = "₱$textAmount"
         binding.tvGoal.text = goal
         val formatter = SimpleDateFormat("MM/dd/yyyy")
         val dateSerializable = bundle.getSerializable("date")
         val dateText = formatter.format(dateSerializable).toString()
-        binding.tvDate.text = dateText
+        //binding.tvDate.text = dateText
 
     }
 
