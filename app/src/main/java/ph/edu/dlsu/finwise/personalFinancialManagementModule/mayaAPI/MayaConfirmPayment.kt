@@ -115,7 +115,6 @@ class MayaConfirmPayment : AppCompatActivity() {
     private fun payMaya(){
         binding.btnConfirm.setOnClickListener{
             //TODO: Paymaya dito lagay
-            adjustUserBalance()
             payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
         }
     }
@@ -138,6 +137,7 @@ class MayaConfirmPayment : AppCompatActivity() {
                 Toast.makeText(this, "Payment Successful. Payment ID: $resultID", Toast.LENGTH_LONG)
                     .show()
                 Log.d("PayMaya-Jaj", resultID)
+                adjustUserBalance()
                 addPayMayaTransaction()
             }
 
@@ -165,7 +165,8 @@ class MayaConfirmPayment : AppCompatActivity() {
     }
 
     private fun addPayMayaTransaction() {
-        var transaction = hashMapOf(
+
+        val transaction = hashMapOf(
             //TODO: add childID, createdBy
             "transactionName" to name,
             "transactionType" to "Expense (Maya)",
@@ -176,7 +177,6 @@ class MayaConfirmPayment : AppCompatActivity() {
             "merchant" to merchant,
             "phoneNumber" to phone
         )
-        
         firestore.collection("Transactions").add(transaction).addOnSuccessListener {
             val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
             goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
