@@ -27,8 +27,9 @@
             <ImageView
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:src="@drawable/transaction"
-                android:layout_gravity="center_vertical"/>
+                android:src="@drawable/baseline_filter_list_24_white"
+                android:layout_gravity="center_vertical"
+                android:tint="@color/dark_green"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -44,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_name"
-                    android:text="Transaction Sort"
+                    android:text="Filter"
                     android:textAllCaps="true"
                     android:textColor="@color/black"
                     android:textSize="22sp"
@@ -74,8 +75,7 @@
                 android:textStyle="bold"
                 android:text="@string/price"
                 android:textSize="16sp"
-                android:textColor="@color/black"
-                />
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
-                android:hint="Min. Amt."
+                android:hint="Min"
                 android:maxLength="6"
                 android:layout_marginStart="20dp"
                 />
@@ -111,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
-                android:hint="Max Amt."
+                android:hint="Max"
                 android:maxLength="6"
                 android:layout_marginLeft="20dp"/>
 
@@ -153,8 +153,7 @@
                 app:helperTextEnabled="true"
                 app:endIconMode="custom"
                 app:startIconDrawable="@drawable/baseline_calendar_today_24"
-                android:hint="Start Date"
-                android:paddingTop="10dp">
+                android:hint="Start Date">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_start_datee"
@@ -188,7 +187,7 @@
                 app:endIconMode="custom"
                 app:startIconDrawable="@drawable/baseline_calendar_today_24"
                 android:hint="End Date"
-                android:paddingTop="10dp">
+                android:paddingTop="5dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_end_datee"
@@ -247,7 +246,7 @@
                 android:layout_height="2dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="25dp"
-                app:dividerColor="@color/black" />
+                app:dividerColor="@color/white" />
 
             <CheckBox
                 android:id="@+id/btn_expense"

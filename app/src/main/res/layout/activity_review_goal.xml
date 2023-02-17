@@ -285,7 +285,7 @@
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:text="@string/specific"
-                            android:textSize="16sp"
+                            android:textSize="14sp"
                             android:textColor="@color/black"
                             android:gravity="center_vertical"
                             />
@@ -314,7 +314,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="@string/measureable"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@color/black"
                         android:gravity="center_vertical"
                         />
@@ -343,7 +343,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="@string/achievable"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@color/black"
                         android:gravity="center_vertical"
                         />
@@ -372,7 +372,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="@string/relevant"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@color/black"
                         android:gravity="center_vertical"
                         />
@@ -401,7 +401,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="@string/time_bound"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@color/black"
                         android:gravity="center_vertical"
                         />
@@ -448,50 +448,23 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_status"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/et_goal"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    android:textSize="16dp"-->
-<!--                    android:textAllCaps = "true"-->
-<!--                    android:text="@string/status"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:textColor="@color/black"/>-->
-
-<!--                <androidx.appcompat.widget.AppCompatSpinner-->
-<!--                    android:id="@+id/spinner_goal_status"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:ems="10"-->
-<!--                    android:entries="@array/goal_status_list"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:textSize="16dp"/>-->
-
-                <TextView
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layout_constraintTop_toBottomOf="@+id/et_password"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginTop="10dp"
-                    android:textSize="16dp"
-                    android:textAllCaps = "true"
-                    android:text="@string/comment"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
+                    style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    app:helperTextEnabled="true"
+                    app:helperText=""
+                    app:helperTextTextColor="@color/red"
+                    app:startIconDrawable="@drawable/baseline_comment_24">
 
-                <EditText
-                    android:id="@+id/et_comment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/comment"
-                    android:ems="10"
-                    android:inputType="textMultiLine"
-                    android:textSize="16dp"
-                    />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_comment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="textMultiLine"
+                        android:textSize="16sp"
+                        android:hint="@string/comment"/>
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
                 <LinearLayout

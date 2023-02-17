@@ -38,8 +38,12 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
                     nQuestions++
             }
             binding.tvScore.text = "Your score is $score out of $nQuestions"
-            binding.progressBar.max = nQuestions
-            binding.progressBar.progress = score
+//            binding.progressBar.max = nQuestions
+
+            // compute for percentage
+            var percentage = (score.toInt() /  nQuestions.toInt()) * 100
+
+            binding.progressBar.progress = percentage
         }.continueWith {
             firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("score", score)
         }
