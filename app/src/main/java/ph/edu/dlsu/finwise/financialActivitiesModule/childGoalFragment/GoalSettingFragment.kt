@@ -1,40 +1,24 @@
-package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment
+package ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
-import ph.edu.dlsu.finwise.databinding.FragmentParentForEditingBinding
-import ph.edu.dlsu.finwise.model.FinancialGoals
-import java.util.*
 
-class ParentForEditingFragment : Fragment() {
+class GoalSettingFragment : Fragment() {
 
-    private lateinit var binding: FragmentParentForEditingBinding
+    /*private lateinit var binding: FragmentForReviewBinding
     private var firestore = Firebase.firestore
     private lateinit var goalAdapter: ChildGoalAdapter
-
-    private lateinit var childID:String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var bundle = arguments
-        childID = bundle?.getString("childID").toString()
-        getForEditingGoals()
+        getForReviewGoals()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentParentForEditingBinding.inflate(inflater, container, false)
+        binding = FragmentForReviewBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
@@ -42,9 +26,10 @@ class ParentForEditingFragment : Fragment() {
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
     }
 
-    private fun getForEditingGoals() {
+
+    private fun getForReviewGoals() {
         var goalIDArrayList = ArrayList<String>()
-        var filter = "For Editing"
+        var filter = "For Review"
         var goalFilterArrayList = ArrayList<GoalFilter>()
 
         //TODO:change to get transactions of current user
@@ -57,12 +42,7 @@ class ParentForEditingFragment : Fragment() {
                 var goalID = goalSnapshot.id
                 var goal = goalSnapshot.toObject<FinancialGoals>()
                 //goalIDArrayList.add(goalID)
-                goalFilterArrayList.add(
-                    GoalFilter(
-                        goalID,
-                        goal?.targetDate!!.toDate()
-                    )
-                )
+                goalFilterArrayList.add(GoalFilter(goalID, goal?.targetDate!!.toDate()))
             }
             goalFilterArrayList.sortBy { it.goalTargetDate }
             for (goalFilter in goalFilterArrayList)
@@ -78,5 +58,5 @@ class ParentForEditingFragment : Fragment() {
             LinearLayoutManager.VERTICAL,
             false)
         goalAdapter.notifyDataSetChanged()
-    }
+    }*/
 }

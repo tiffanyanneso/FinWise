@@ -56,11 +56,12 @@ class ParentGoalActivity : AppCompatActivity() {
         //checkSettings()
 
         // TODO: change the fragments added based on parent approval
-        adapter.addFragment(ParentInProgressFragment(),"In Progress")
-        adapter.addFragment(ParentForReviewFragment(),"For Review")
-        adapter.addFragment(ParentForEditingFragment(),"For Editing")
-        adapter.addFragment(ParentDisapprovedFragment(),"Disapproved")
+        adapter.addFragment(ParentSavingFragment(),"Saving")
+        adapter.addFragment(ParentBudgetingFragment(),"Budgeting")
+        adapter.addFragment(ParentSavingFragment(),"Spending")
+        adapter.addFragment(ParentGoalSettingFragment(),"Goal Setting")
         adapter.addFragment(ParentAchievedFragment(),"Achieved")
+        adapter.addFragment(ParentDisapprovedFragment(),"Disapproved")
         sendDataToFragment()
 
         binding.viewPager.adapter = adapter
@@ -94,17 +95,17 @@ class ParentGoalActivity : AppCompatActivity() {
 
 
         val inProgressFragmentTransaction = mFragmentManager.beginTransaction()
-        var inProgressFragment = ParentInProgressFragment()
+        var inProgressFragment = ParentSavingFragment()
         inProgressFragment.arguments = fragmentBundle
         inProgressFragmentTransaction.add(binding.viewPager.id, inProgressFragment).commit()
 
         val forReviewFragmentTransaction = mFragmentManager.beginTransaction()
-        var forReviewFragment = ParentForReviewFragment()
+        var forReviewFragment = ParentBudgetingFragment()
         forReviewFragment.arguments = fragmentBundle
         forReviewFragmentTransaction.add(binding.viewPager.id, forReviewFragment).commit()
 
         val forEditingFragmentTransaction = mFragmentManager.beginTransaction()
-        var forEditingFragment = ParentForEditingFragment()
+        var forEditingFragment = ParentGoalSettingFragment()
         forEditingFragment.arguments = fragmentBundle
         forEditingFragmentTransaction.add(binding.viewPager.id, forEditingFragment).commit()
 

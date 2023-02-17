@@ -13,7 +13,7 @@ import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityTestFinancialBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
 import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.AchievedFragment
-import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.InProgressFragment
+import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.BudgetingFragment
 
 class TestFinancialActivity : AppCompatActivity() {
 
@@ -35,7 +35,7 @@ class TestFinancialActivity : AppCompatActivity() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
 
         // TODO: change the fragments added based on parent approval
-        adapter.addFragment(InProgressFragment(),"In Progress")
+        adapter.addFragment(BudgetingFragment(),"In Progress")
 //        adapter.addFragment(GoalForReviewFragment(),"For Review")
 //        adapter.addFragment(GoalForEditingFragment(),"For Editing")
 //        adapter.addFragment(GoalDisapprovedFragment(),"Disapproved")

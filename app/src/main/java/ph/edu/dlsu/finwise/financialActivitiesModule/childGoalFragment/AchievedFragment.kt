@@ -13,7 +13,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentAchievedBinding
-import ph.edu.dlsu.finwise.databinding.FragmentInProgressBinding
 
 class AchievedFragment : Fragment() {
 

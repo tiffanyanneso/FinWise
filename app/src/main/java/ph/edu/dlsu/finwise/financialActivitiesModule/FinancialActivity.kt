@@ -8,9 +8,6 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -53,11 +50,12 @@ class FinancialActivity : AppCompatActivity() {
                 //checkSettings()
 
                 // TODO: change the fragments added based on parent approval
-                adapter.addFragment(InProgressFragment(),"In Progress")
-                adapter.addFragment(ForReviewFragment(),"For Review")
-                adapter.addFragment(ForEditingFragment(),"For Editing")
-                adapter.addFragment(DisapprovedFragment(),"Disapproved")
+                adapter.addFragment(SavingFragment(),"Saving")
+                adapter.addFragment(BudgetingFragment(),"Budgeting")
+                adapter.addFragment(SavingFragment(),"Spending")
+                adapter.addFragment(GoalSettingFragment(),"Goal Setting")
                 adapter.addFragment(AchievedFragment(),"Achieved")
+                adapter.addFragment(DisapprovedFragment(),"Disapproved")
 
                 binding.viewPager.adapter = adapter
                 binding.tabLayout.setupWithViewPager(binding.viewPager)
