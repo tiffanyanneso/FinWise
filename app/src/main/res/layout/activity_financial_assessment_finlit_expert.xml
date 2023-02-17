@@ -62,20 +62,20 @@
             app:layout_constraintRight_toRightOf="parent">
 
             <ImageView
-                android:src="@drawable/financial_goal"
+                android:src="@drawable/baseline_star_24"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginStart="30dp"
-                />
+                app:tint="@color/yellow"/>
 
 
             <TextView
                 android:id="@+id/tv_finlit_financial_goals"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Financial Goals"
+                android:text="Goal Setting"
                 android:layout_marginLeft="35dp"
                 android:layout_marginTop="40dp"
                 android:textColor="@color/black"
@@ -83,7 +83,7 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <!--  Saving Linear layout-->
+        <!--  Spending Linear layout-->
         <LinearLayout
             android:id="@+id/btn_finlit_saving"
             android:layout_width="match_parent"
@@ -95,27 +95,25 @@
             app:layout_constraintRight_toRightOf="parent">
 
             <ImageView
-                android:src="@drawable/saving"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp"
                 android:layout_marginStart="30dp"
-                />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/piggy_bank" />
+
             <TextView
                 android:id="@+id/tv_finlit_saving"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Saving"
                 android:layout_marginLeft="35dp"
                 android:layout_marginTop="40dp"
+                android:text="Saving"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
-
-        <!--  Spending Linear layout-->
         <LinearLayout
             android:id="@+id/btn_finlit_spending"
             android:layout_width="match_parent"
@@ -127,7 +125,7 @@
             app:layout_constraintRight_toRightOf="parent">
 
             <ImageView
-                android:src="@drawable/spending"
+                android:src="@drawable/money_expenses"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginBottom="20dp"
@@ -159,7 +157,7 @@
             app:layout_constraintRight_toRightOf="parent">
 
             <ImageView
-                android:src="@drawable/budgeting"
+                android:src="@drawable/budget"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_marginBottom="20dp"

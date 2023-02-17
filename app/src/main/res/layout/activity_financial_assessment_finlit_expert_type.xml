@@ -37,8 +37,6 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
-
-
         <!--  First Category layout-->
         <LinearLayout
             android:id="@+id/btn_preliminary"
@@ -48,60 +46,62 @@
             android:background="@drawable/layout_bg_green"
             android:orientation="horizontal"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintRight_toRightOf="parent"
+            android:padding="20dp">
 
             <ImageView
                 android:src="@drawable/preliminary"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="30dp"
-
-                />
-
+                android:layout_height="80dp"/>
 
             <TextView
-                android:id="@+id/tv_preliminary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+                android:textStyle="bold"
+                android:layout_weight="5"/>
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Preliminary"
-                android:layout_marginLeft="35dp"
-                android:layout_marginTop="40dp"
                 android:textColor="@color/black"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:layout_marginLeft="20dp"/>
         </LinearLayout>
 
-        <!--  Second Category layout-->
+        <!--  Third Category layout-->
         <LinearLayout
-            android:id="@+id/btn_post"
+            android:id="@+id/btn_pre_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:background="@drawable/layout_bg_green"
             android:orientation="horizontal"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintRight_toRightOf="parent"
+            android:padding="20dp">
 
             <ImageView
                 android:src="@drawable/preactivity"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="30dp"
                 />
+
             <TextView
-                android:id="@+id/tv_post"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Pre-Activity"
-                android:layout_marginLeft="35dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginLeft="20dp"
                 android:textColor="@color/black"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
         </LinearLayout>
 
 
@@ -114,28 +114,91 @@
             android:background="@drawable/layout_bg_green"
             android:orientation="horizontal"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintRight_toRightOf="parent"
+            android:padding="20dp">
 
             <ImageView
                 android:src="@drawable/postactivity"
                 android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="30dp"
-                />
+                android:layout_height="80dp" />
 
             <TextView
-                android:id="@+id/tv_finlit_spending"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Post-Activity"
-                android:layout_marginLeft="35dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginLeft="20dp"
                 android:textColor="@color/black"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:layout_gravity="center"/>
         </LinearLayout>
+
+<!--        &lt;!&ndash;  Second Category layout&ndash;&gt;-->
+<!--        <LinearLayout-->
+<!--            android:id="@+id/btn_post_activity"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="15dp"-->
+<!--            android:background="@drawable/layout_bg_green"-->
+<!--            android:orientation="horizontal"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            android:padding="20dp">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="3"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="40sp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:layout_weight="5"/>-->
+
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Preliminary"-->
+<!--&gt;>>>>>> Stashed changes-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="24sp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_gravity="center"/>-->
+<!--        </LinearLayout>-->
+
+        <!-- Forth Category layout-->
+<!--        <LinearLayout-->
+<!--            android:id="@+id/btn_finlit_budgeting"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="15dp"-->
+<!--            android:background="@drawable/layout_bg_green"-->
+<!--            android:orientation="horizontal"-->
+<!--            app:layout_constraintLeft_toLeftOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent">-->
+
+<!--            <ImageView-->
+<!--                android:src="@drawable/budgeting"-->
+<!--                android:layout_width="80dp"-->
+<!--                android:layout_height="80dp"-->
+<!--                android:layout_marginBottom="20dp"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:layout_marginStart="30dp"-->
+<!--                />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv_finlit_budgeting"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Category 4"-->
+<!--                android:layout_marginLeft="35dp"-->
+<!--                android:layout_marginTop="40dp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="24sp"-->
+<!--                android:textStyle="bold" />-->
+<!--        </LinearLayout>-->
     </LinearLayout>
 
 

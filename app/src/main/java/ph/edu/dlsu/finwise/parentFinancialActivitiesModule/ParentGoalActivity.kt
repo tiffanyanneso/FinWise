@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentGoalBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
 import ph.edu.dlsu.finwise.model.ChildUser
@@ -45,12 +46,19 @@ class ParentGoalActivity : AppCompatActivity() {
             this.startActivity(newGoal)
         }
 
-        /*binding.btnSettings.setOnClickListener {
-            var settings = Intent(this, GoalSettingsActivity::class.java)
-            settings.putExtras(sendBundle)
-            settings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            this.startActivity(settings)
-        }*/
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId) {
+                R.id.btn_settings -> {
+                    var settings = Intent(this, GoalSettingsActivity::class.java)
+                    settings.putExtras(sendBundle)
+                    settings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    this.startActivity(settings)
+                    true
+                }
+                else -> false
+            }
+
+        }
 
         val adapter = ViewPagerAdapter(supportFragmentManager)
         //checkSettings()

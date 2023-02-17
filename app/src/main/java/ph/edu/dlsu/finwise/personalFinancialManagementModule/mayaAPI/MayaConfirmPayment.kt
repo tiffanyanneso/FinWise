@@ -39,6 +39,7 @@ class MayaConfirmPayment : AppCompatActivity() {
     lateinit var phone : String
     lateinit var date : String
 
+
     private lateinit var binding: ActivityMayaQrConfirmPaymentBinding
 
     // For Pay With PayMaya API: This is instantiating the Pay With PayMaya API.
@@ -114,22 +115,7 @@ class MayaConfirmPayment : AppCompatActivity() {
     private fun payMaya(){
         binding.btnConfirm.setOnClickListener{
             //TODO: Paymaya dito lagay
-            val transaction = hashMapOf(
-                //TODO: add childID, createdBy
-                "transactionName" to name,
-                "transactionType" to "Maya Expense",
-                "category" to category,
-                "date" to bundle!!.getSerializable("date"),
-                "createdBy" to "",
-                "amount" to amount.toFloat(),
-                "merchant" to merchant,
-                "phoneNumber" to phone
-            )
-            adjustUserBalance()
-
             payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
-
-            // TODO: Change where transaction is added
         }
     }
 
@@ -151,7 +137,8 @@ class MayaConfirmPayment : AppCompatActivity() {
                 Toast.makeText(this, "Payment Successful. Payment ID: $resultID", Toast.LENGTH_LONG)
                     .show()
                 Log.d("PayMaya-Jaj", resultID)
-                goToPFM()
+                adjustUserBalance()
+                addPayMayaTransaction()
             }
 
             is SinglePaymentResult.Cancel -> {
@@ -177,9 +164,30 @@ class MayaConfirmPayment : AppCompatActivity() {
         }
     }
 
+    private fun addPayMayaTransaction() {
+
+        val transaction = hashMapOf(
+            //TODO: add childID, createdBy
+            "transactionName" to name,
+            "transactionType" to "Expense (Maya)",
+            "category" to category,
+            "date" to bundle!!.getSerializable("date"),
+            "createdBy" to "",
+            "amount" to amount.toFloat(),
+            "merchant" to merchant,
+            "phoneNumber" to phone
+        )
+        firestore.collection("Transactions").add(transaction).addOnSuccessListener {
+            val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
+            goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(goToPFM)
+        }
+        goToPFM()
+    }
+
     private fun goToPFM() {
         val goToMayaQRSuccessfulPayment = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
-            startActivity(goToMayaQRSuccessfulPayment)
+        startActivity(goToMayaQRSuccessfulPayment)
     }
 
     private fun adjustUserBalance() {
