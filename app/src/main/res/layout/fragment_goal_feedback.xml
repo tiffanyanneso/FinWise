@@ -102,7 +102,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="30sp"
                 android:text="X/X"
-                android:textColor="@color/black"
+                android:textColor="@color/yellow"
                 android:textStyle="bold"
                 android:gravity="center"/>
 
