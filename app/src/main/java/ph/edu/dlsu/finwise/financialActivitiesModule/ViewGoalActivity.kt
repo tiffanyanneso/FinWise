@@ -66,7 +66,8 @@ class ViewGoalActivity : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         var bundle: Bundle = intent.extras!!
-        financialGoalID = bundle.getString("goalID").toString()
+        financialGoalID = bundle.getString("financialGoalID").toString()
+        println("print "  + financialGoalID)
 
         //checkUser()
         setFinancialActivityID()
