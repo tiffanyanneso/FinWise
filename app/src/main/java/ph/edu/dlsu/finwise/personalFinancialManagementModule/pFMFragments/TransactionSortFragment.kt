@@ -48,7 +48,15 @@ class TransactionSortFragment : DialogFragment() {
         setDialogSize()
         initializeDatePicker(binding.etStartDate, "startDate")
         initializeDatePicker(binding.etEndDate, "endDate")
+        initializeBack()
         sortTransactions()
+
+    }
+
+    private fun initializeBack() {
+        binding.btnCancel.setOnClickListener {
+            dismiss()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -58,13 +66,12 @@ class TransactionSortFragment : DialogFragment() {
             val isAmountSorted: Boolean = setAmountSort()
             val isDateSorted: Boolean = setDateSort()
             val isCategorySorted: Boolean = setCategory()
-
-            if (isAmountSorted || isDateSorted || isCategorySorted) {
+            if ((isAmountSorted || isDateSorted) && isCategorySorted) {
                 val goToSortedTransactions = Intent(context, TransactionHistoryActivity::class.java)
                 goToSortedTransactions.putExtras(bundle!!)
                 startActivity(goToSortedTransactions)
             }
-            
+
             /* TODO:
         *    - Initialize default variables
         * - send if there are applied sort
@@ -111,7 +118,6 @@ class TransactionSortFragment : DialogFragment() {
         var flag = false
 
         if (minAmount!! >= maxAmount!!) {
-            Toast.makeText(context, "minamount>=maxamount", Toast.LENGTH_SHORT).show()
             minAmountInput.error = "Please enter an amount lower than the maximum amount"
             minAmountInput.requestFocus()
         } else {
@@ -160,7 +166,6 @@ class TransactionSortFragment : DialogFragment() {
 
     private fun validateDate(startDateInput: TextInputEditText, endDateInput: TextInputEditText): Boolean {
         var flag = false
-        Toast.makeText(context, "end"+endDate, Toast.LENGTH_SHORT).show()
         if (startDate == null) {
             startDateInput.error = "Please enter a start date lower than the end date"
             startDateInput.requestFocus()
@@ -192,6 +197,7 @@ class TransactionSortFragment : DialogFragment() {
         val cbExpense = binding.btnExpense
         var checkedBoxes = "none"
         var flag = true
+
         if (cbIncome.isChecked && cbExpense.isChecked)
             checkedBoxes = "both"
         else if (cbIncome.isChecked)
@@ -199,12 +205,15 @@ class TransactionSortFragment : DialogFragment() {
         else if (cbExpense.isChecked)
             checkedBoxes = "expense"
 
-        bundle?.putString("category", checkedBoxes)
+        bundle?.putString("checkedBoxes", checkedBoxes)
 
-        if (checkedBoxes == "none")
+        if (checkedBoxes == "none") {
             flag = false
-        Toast.makeText(context, ""+flag, Toast.LENGTH_SHORT).show()
+            binding.tvError.visibility = View.VISIBLE
+        }
 
+
+        Toast.makeText(context, ""+flag, Toast.LENGTH_SHORT).show()
         return flag
     }
 

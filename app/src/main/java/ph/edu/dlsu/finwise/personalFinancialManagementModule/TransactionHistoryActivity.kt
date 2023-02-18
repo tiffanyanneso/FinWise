@@ -12,17 +12,26 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import kotlinx.coroutines.*
 import ph.edu.dlsu.finwise.Navbar
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryExpenseFragment
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryIncomeFragment
 import ph.edu.dlsu.finwise.databinding.ActivityPfmtransactionHistoryBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.*
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryExpenseFragment
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryIncomeFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionSortFragment
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class TransactionHistoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPfmtransactionHistoryBinding
     private lateinit var context: Context
-    var bundle: Bundle? = null
+    var getBundle: Bundle? = null
+    var setBundle: Bundle? = null
+    private var checkedBoxes: String? = null
+    private var minAmount: String? = null
+    private var maxAmount: String? = null
+    private var startDate: String? = null
+    private var endDate: String? = null
+
 
     /*  private lateinit var transactionAdapter: TransactionsAdapter
       private var firestore = Firebase.firestore
@@ -58,14 +67,30 @@ class TransactionHistoryActivity : AppCompatActivity() {
     }
 
     private fun checkIfSort() {
-        bundle = intent.extras
-
+        getBundle = intent.extras
+        setBundle = intent.extras
 
         //TODO: receive data then craete functions to sort
-        if (bundle != null) {
-            val name = bundle!!.getFloat("minAmount").toString()
-            Toast.makeText(this, ""+name, Toast.LENGTH_SHORT).show()
+        if (getBundle != null) {
+            getBundle()
+            setBundle()
         }
+    }
+
+    private fun setBundle() {
+        setBundle!!.putString("minAmount", minAmount)
+        setBundle!!.putString("maxAmount", maxAmount)
+        setBundle!!.putSerializable("startDate", startDate)
+        setBundle!!.putSerializable("endDate", endDate)
+        setBundle!!.putString("checkedBoxes", checkedBoxes)
+    }
+
+    private fun getBundle() {
+        minAmount = getBundle!!.getFloat("minAmount").toString()
+        maxAmount = getBundle!!.getFloat("maxAmount").toString()
+        startDate = getBundle!!.getSerializable("startDate").toString()
+        endDate = getBundle!!.getSerializable("endDate").toString()
+        checkedBoxes = getBundle!!.getString("checkedBoxes").toString()
     }
 
 
@@ -85,8 +110,12 @@ class TransactionHistoryActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 val adapter = ViewPagerAdapter(supportFragmentManager)
 
-                adapter.addFragment(TransactionHistoryIncomeFragment(), "Income")
-                adapter.addFragment(TransactionHistoryExpenseFragment(), "Expense")
+                val incomeFragment = TransactionHistoryIncomeFragment()
+                val expenseFragment = TransactionHistoryExpenseFragment()
+                incomeFragment.arguments = setBundle
+                expenseFragment.arguments = setBundle
+                adapter.addFragment(incomeFragment, "Income")
+                adapter.addFragment(expenseFragment, "Expense")
 
                 binding.viewPager.adapter = adapter
                 binding.tabLayout.setupWithViewPager(binding.viewPager)
