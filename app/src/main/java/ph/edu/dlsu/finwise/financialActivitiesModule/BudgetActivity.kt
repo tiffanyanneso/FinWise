@@ -178,7 +178,7 @@ class BudgetActivity : AppCompatActivity() {
         dialogBinding.btnSave.setOnClickListener {
             var itemName = dialogBinding.dialogEtCategoryName.text.toString()
             var itemAmount = dialogBinding.dialogEtCategoryAmount.text.toString().toFloat()
-            var budgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, Timestamp.now(), 1)
+            var budgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, 0, "Active")
 
             firestore.collection("BudgetItems").add(budgetCategory).addOnSuccessListener {
                 budgetCategoryIDArrayList.add(it.id)

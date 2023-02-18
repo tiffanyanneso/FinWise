@@ -14,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalConfirmationBinding
+import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import java.text.DecimalFormat
@@ -22,6 +23,7 @@ import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.HashMap
 
 
 class GoalConfirmationActivity : AppCompatActivity() {
@@ -54,7 +56,11 @@ class GoalConfirmationActivity : AppCompatActivity() {
         binding.tvGoalName.text = bundle.getString("goalName")
         binding.tvActivity.text = bundle.getString("activity")
         binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
-        binding.tvIsForChild.text = bundle.getBoolean("goalIsForSelf").toString()
+        if (bundle.getBoolean("goalIsForSelf") == true)
+            binding.tvIsForChild.text = "Yes"
+        else
+            binding.tvIsForChild.text = "No"
+
 
         var targetDate = bundle.getSerializable("targetDate")
         var formattedDate = SimpleDateFormat("MM/dd/yyyy").format(targetDate)
@@ -104,13 +110,13 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
                 //add goal to DB
                 firestore.collection("FinancialGoals").add(goal).addOnSuccessListener {
-
+                    createBudgetTemplates(bundle.getString("activity").toString(), it.id)
                     saveFinancialActivities(bundle.getString("activity").toString(), it.id)
 
                         //if (currentUserType == "Child") {
                             var goToStartGoal = Intent(context, StartGoalActivity::class.java)
                             var bundle1: Bundle = intent.extras!!
-                            bundle1.putString("goalID", it.id)
+                            bundle1.putString("financialGoalID", it.id)
                             goToStartGoal.putExtras(bundle1)
                             goToStartGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             context.startActivity(goToStartGoal)
@@ -136,6 +142,27 @@ class GoalConfirmationActivity : AppCompatActivity() {
             goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(goToNewGoal)
         }
+    }
+
+    private fun createBudgetTemplates(activity:String, financialGoalID:String) {
+        if (activity == "Buying Items") {
+            var food = BudgetItem("Food", financialGoalID, 0.00F, 0, "Active")
+            var toys = BudgetItem("Toys", financialGoalID, 0.00F, 0, "Active")
+            var games = BudgetItem("Games", financialGoalID, 0.00F, 0, "Active")
+            var gift = BudgetItem("Gift", financialGoalID, 0.00F, 0, "Active")
+            firestore.collection("BudgetItems").add(food)
+            firestore.collection("BudgetItems").add(toys)
+            firestore.collection("BudgetItems").add(games)
+            firestore.collection("BudgetItems").add(gift)
+        }
+
+        if (activity == "Planning An Event") {
+            var food = BudgetItem("Food", financialGoalID, 0.00F, 0, "Active")
+            var decoration = BudgetItem("Decoration", financialGoalID, 0.00F, 0, "Active")
+            var gift = BudgetItem("Gift", financialGoalID, 0.00F, 0, "Active")
+            firestore.collection("BudgetItems").add(food)
+            firestore.collection("BudgetItems").add(decoration)
+            firestore.collection("BudgetItems").add(gift)}
     }
 
     private fun saveFinancialActivities(financialActivity:String, goalID:String) {

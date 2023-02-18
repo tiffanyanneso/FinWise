@@ -64,7 +64,7 @@ class TransactionSortFragment : DialogFragment() {
                 goToSortedTransactions.putExtras(bundle!!)
                 startActivity(goToSortedTransactions)
             }
-
+            
             /* TODO:
         *    - Initialize default variables
         * - send if there are applied sort
