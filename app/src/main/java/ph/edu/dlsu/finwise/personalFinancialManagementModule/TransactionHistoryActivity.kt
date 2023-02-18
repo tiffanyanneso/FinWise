@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import kotlinx.coroutines.*
@@ -14,6 +15,7 @@ import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.Transa
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryIncomeFragment
 import ph.edu.dlsu.finwise.databinding.ActivityPfmtransactionHistoryBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.*
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionSortFragment
 
 
 class TransactionHistoryActivity : AppCompatActivity() {
@@ -54,8 +56,10 @@ class TransactionHistoryActivity : AppCompatActivity() {
 
     private fun initializeSort() {
         binding.ivSort.setOnClickListener {
-            val goToSort = Intent(applicationContext, TransactionSortActivity::class.java)
-            startActivity(goToSort)
+            val activity = context as FragmentActivity
+            val fm: FragmentManager = activity.supportFragmentManager
+            val dialogFragment = TransactionSortFragment()
+            dialogFragment.show(fm, "fragment_alert")
         }
     }
 
@@ -84,6 +88,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
     }
 
 
+
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){
 
         private val mFrgmentList = ArrayList<Fragment>()
@@ -99,12 +104,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
     }
 
 
-   /* private fun showSortDialog() {
-        val activity = context as FragmentActivity
-        val fm: FragmentManager = activity.supportFragmentManager
-        val dialogFragment = TransactionSortFragment()
-        dialogFragment.show(fm, "fragment_alert")
-    }*/
+
 
    /* override fun onTouchEvent(event: MotionEvent?): Boolean {
         gestureDetector.onTouchEvent(event)

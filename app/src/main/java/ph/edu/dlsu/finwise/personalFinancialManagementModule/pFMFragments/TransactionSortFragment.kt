@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentTransactionSortBinding
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -22,14 +24,9 @@ class TransactionSortFragment : DialogFragment() {
     lateinit var bundle: Bundle
     var minAmount: Float? = null
     var maxAmount: Float? = null
-    var isIncomeCategory = false
-    var isExpenseCategory = false
-    //TODO: check if this is the date format
-    lateinit var startDate: Date
-    lateinit var endDate: Date
+    var startDate: Date? = null
+    var endDate: Date? = null
     var isSortable = false
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,17 +45,27 @@ class TransactionSortFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentTransactionSortBinding.bind(view)
         setDialogSize()
-        initializeDatePicker(binding.etStartDatee, "startDate", R.id.et_date)
-        initializeDatePicker(binding.etEndDatee, "endDate", R.id.et_end_date)
+        initializeDatePicker(binding.etStartDate, "startDate")
+        initializeDatePicker(binding.etEndDate, "endDate")
         sortTransactions()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun sortTransactions() {
         binding.btnDone.setOnClickListener {
-            setAmountSort()
-            setDates()
+            bundle = Bundle()
+            val isAmountSorted: Boolean = setAmountSort()
+            val isDateSorted: Boolean = setDateSort()
+            val isCategorySorted: Boolean = setCategory()
 
+            if (isAmountSorted || isDateSorted || isCategorySorted) {
+                val goToSortedTransactions = Intent(this, TransactionHistoryActivity::class.java)
+                goToSortedTransactions.putExtras(bundle)
+                startActivity(goToSortedTransactions)
+            } else {
+                val goToTransactions = Intent(this, TransactionHistoryActivity::class.java)
+                startActivity(goToTransactions)
+            }
 
             /* TODO:
         *    - Initialize default variables
@@ -87,82 +94,141 @@ class TransactionSortFragment : DialogFragment() {
         }
     }
 
-    private fun setDates() {
-        var flag = false
-        val startDatetInput = binding.etStartDatee
-        val endDateInput = binding.etEndDatee
-        Toast.makeText(context, "start "+startDatetInput + "end " + endDateInput, Toast.LENGTH_SHORT).show()
-        /*if (minAmountInput.text.isNotEmpty() || maxAmountInput.text.isNotEmpty()) {
-            setAmount(minAmountInput, maxAmountInput)
-
-            if (minAmount!! >= maxAmount!!) {
-                minAmountInput.error = "Please enter an amount lower than the maximum amount"
-                minAmountInput.requestFocus()
-                Toast.makeText(context, "min"+minAmount +"max"+maxAmount, Toast.LENGTH_SHORT).show()
-            } else {
-                flag = true
-            }
-        }*/
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun initializeDatePicker(dateBinding: TextInputEditText, date: String, datePickerID: Int, ) {
-        dateBinding.setOnClickListener{
-            Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show()
-            val dialog = Dialog(requireContext())
-
-            dialog.setContentView(R.layout.dialog_calendar)
-            dialog.window!!.setLayout(1000, 1200)
-
-            var calendar = dialog.findViewById<DatePicker>(datePickerID)
-
-            dialog.show()
-            calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
-                //dateBinding.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
-                /*if (date == "startDate")
-                startDate = SimpleDateFormat("MM/dd/yyyy").parse((mMonth + 1).toString() + "/" +
-                        mDay.toString() + "/" + mYear.toString()) as Date
-                else if (date == "endDate")
-                    endDate = SimpleDateFormat("MM/dd/yyyy").parse((mMonth + 1).toString() + "/" +
-                            mDay.toString() + "/" + mYear.toString()) as Date*/
-
-                //dialog.dismiss()
-            }
-        }
-    }
-
-
-
-    private fun setAmountSort() {
+    private fun setAmountSort(): Boolean {
         var flag = false
         val minAmountInput = binding.etMinAmount
         val maxAmountInput = binding.etMaxAmount
 
-
         if (minAmountInput.text.isNotEmpty() || maxAmountInput.text.isNotEmpty()) {
-            setAmount(minAmountInput, maxAmountInput)
-
-            if (minAmount!! >= maxAmount!!) {
-                minAmountInput.error = "Please enter an amount lower than the maximum amount"
-                minAmountInput.requestFocus()
-                Toast.makeText(context, "min"+minAmount +"max"+maxAmount, Toast.LENGTH_SHORT).show()
-            } else {
-                flag = true
-            }
+            flag = setAmount(minAmountInput, maxAmountInput)
+        } else {
+            minAmountInput.error = null
+            maxAmountInput.error = null
         }
-        //return flag
+
+        return flag
     }
 
-    private fun setAmount(minAmountInput: EditText, maxAmountInput: EditText) {
-        if (minAmountInput.text.isNotEmpty())
-            minAmount = minAmountInput.text.toString().toFloat()
-        else if (minAmountInput.text.isEmpty())
-            minAmount = 0.00f
+    private fun validateAmount(minAmountInput: EditText): Boolean {
+        var flag = false
 
-        if (maxAmountInput.text.isNotEmpty())
+        if (minAmount!! >= maxAmount!!) {
+            Toast.makeText(context, "minamount>=maxamount", Toast.LENGTH_SHORT).show()
+            minAmountInput.error = "Please enter an amount lower than the maximum amount"
+            minAmountInput.requestFocus()
+        } else
+            flag = true
+
+        return flag
+    }
+
+    private fun setAmount(minAmountInput: EditText, maxAmountInput: EditText): Boolean {
+        var flag = false
+        var isNotEmpty = false
+
+        if (minAmountInput.text.isNotEmpty() && maxAmountInput.text.isNotEmpty()) {
+            minAmount = minAmountInput.text.toString().toFloat()
             maxAmount = maxAmountInput.text.toString().toFloat()
-        else if (maxAmountInput.text.isEmpty())
-            maxAmount = 0.00f
+            isNotEmpty = true
+        } else if (minAmountInput.text.isEmpty()) {
+            minAmountInput.error = "Please enter an amount lower than the maximum amount"
+            minAmountInput.requestFocus()
+        }
+        else if (maxAmountInput.text.isEmpty()) {
+            maxAmountInput.error = "Please enter an amount higher than the minimum amount"
+            maxAmountInput.requestFocus()
+        }
+
+        if (isNotEmpty) {
+            flag = validateAmount(minAmountInput)
+        }
+
+        return flag
+    }
+
+    private fun setDateSort(): Boolean {
+        var flag = false
+        val startDateInput = binding.etStartDate
+        val endDateInput = binding.etEndDate
+
+        if (startDateInput.text!!.isNotEmpty() || endDateInput.text!!.isNotEmpty()) {
+            flag = validateDate(startDateInput, endDateInput)
+        }
+        return flag
+    }
+
+    private fun validateDate(startDateInput: TextInputEditText, endDateInput: TextInputEditText): Boolean {
+        var flag = false
+        Toast.makeText(context, "end"+endDate, Toast.LENGTH_SHORT).show()
+        if (startDate == null) {
+            startDateInput.error = "Please enter a start date lower than the end date"
+            startDateInput.requestFocus()
+            endDateInput.error = null
+        } else if (endDate == null) {
+            endDateInput.error = "Please enter a end date higher than the start date"
+            endDateInput.requestFocus()
+            startDateInput.error = null
+        } else if ( startDate!! >= endDate) {
+            startDateInput.error = "Please enter a start date lower than the end date"
+            startDateInput.requestFocus()
+            endDateInput.error = null
+        }
+        else {
+            flag = true
+            startDateInput.error = null
+        }
+
+        if (flag) {
+            bundle.putSerializable("startDate", startDate)
+            bundle.putSerializable("endDate", endDate)
+        }
+
+        return flag
+    }
+
+    private fun setCategory(): Boolean {
+        val cbIncome = binding.btnIncome
+        val cbExpense = binding.btnExpense
+        var checkedBoxes = "none"
+        var flag = true
+        if (cbIncome.isChecked && cbExpense.isChecked)
+            checkedBoxes = "both"
+        else if (cbIncome.isChecked)
+            checkedBoxes = "income"
+        else if (cbExpense.isChecked)
+            checkedBoxes = "expense"
+
+        bundle.putString("category", checkedBoxes)
+
+        if (checkedBoxes!= "none")
+            flag = false
+
+        return flag
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initializeDatePicker(dateBinding: TextInputEditText, date: String) {
+        dateBinding.setOnClickListener{
+            val dialog = Dialog(requireContext())
+
+            dialog.setContentView(R.layout.dialog_calendar)
+            dialog.window!!.setLayout(1000, 1300)
+
+            val calendar = dialog.findViewById<DatePicker>(R.id.et_date)
+
+            dialog.show()
+            calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
+                dateBinding.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
+                if (date == "startDate")
+                    startDate = SimpleDateFormat("MM/dd/yyyy").parse((mMonth + 1).toString() + "/" +
+                            mDay.toString() + "/" + mYear.toString()) as Date
+                else if (date == "endDate")
+                    endDate = SimpleDateFormat("MM/dd/yyyy").parse((mMonth + 1).toString() + "/" +
+                            mDay.toString() + "/" + mYear.toString()) as Date
+
+                dialog.dismiss()
+            }
+        }
     }
 
     private fun setDialogSize() {

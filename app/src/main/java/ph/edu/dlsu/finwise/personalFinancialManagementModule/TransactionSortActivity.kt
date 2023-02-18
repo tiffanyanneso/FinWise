@@ -20,7 +20,6 @@ class TransactionSortActivity : AppCompatActivity() {
     var bundle = Bundle()
     var minAmount: Float? = null
     var maxAmount: Float? = null
-    //TODO: check if this is the date format
     var startDate: Date? = null
     var endDate: Date? = null
     var isSortable = false
