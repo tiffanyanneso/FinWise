@@ -58,14 +58,14 @@ class TransactionSortFragment : DialogFragment() {
             val isDateSorted: Boolean = setDateSort()
             val isCategorySorted: Boolean = setCategory()
 
-            if (isAmountSorted || isDateSorted || isCategorySorted) {
-                val goToSortedTransactions = Intent(this, TransactionHistoryActivity::class.java)
-                goToSortedTransactions.putExtras(bundle)
-                startActivity(goToSortedTransactions)
-            } else {
-                val goToTransactions = Intent(this, TransactionHistoryActivity::class.java)
-                startActivity(goToTransactions)
-            }
+//            if (isAmountSorted || isDateSorted || isCategorySorted) {
+//                val goToSortedTransactions = Intent(this, TransactionHistoryActivity::class.java)
+//                goToSortedTransactions.putExtras(bundle)
+//                startActivity(goToSortedTransactions)
+//            } else {
+//                val goToTransactions = Intent(this, TransactionHistoryActivity::class.java)
+//                startActivity(goToTransactions)
+//            }
 
             /* TODO:
         *    - Initialize default variables

@@ -9,6 +9,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityGoalAccomplishedBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
 class GoalAccomplishedActivity : AppCompatActivity() {
@@ -16,22 +17,22 @@ class GoalAccomplishedActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGoalAccomplishedBinding
     private var firestore = Firebase.firestore
 
-    private lateinit var  goalID:String
+    private lateinit var  financialGoalID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGoalAccomplishedBinding.inflate(layoutInflater)
         setContentView(binding.root)
         var bundle: Bundle = intent.extras!!
-        goalID = bundle.getString("goalID").toString()
+        financialGoalID = bundle.getString("financialGoalID").toString()
 
         setText()
 
         var sendBundle = Bundle()
-        sendBundle.putString("goalID", goalID)
+        sendBundle.putString("financialGoalID", financialGoalID)
 
         binding.btnProceedNextActivity.setOnClickListener {
-            firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", goalID).get().addOnSuccessListener { results ->
+            firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
                 var budgetActivityID= ""
                 for (activity in results) {
                     var activityObject = activity.toObject<FinancialActivities>()
@@ -53,11 +54,11 @@ class GoalAccomplishedActivity : AppCompatActivity() {
     }
 
     private fun setText () {
-        firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
+        firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
             binding.tvGoal.text = financialGoal?.goalName
             binding.tvActivity.text = financialGoal?.financialActivity
-            binding.tvAmount.text = "₱ " + financialGoal?.targetAmount.toString()
+            binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(financialGoal?.targetAmount.toString())
 
             // convert timestamp to date string
             val formatter = SimpleDateFormat("MM/dd/yyyy")
