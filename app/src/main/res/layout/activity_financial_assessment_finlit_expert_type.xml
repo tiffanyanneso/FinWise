@@ -64,6 +64,7 @@
                 android:layout_weight="5"/>
 
             <TextView
+                android:id="@+id/tv_preliminary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Preliminary"
@@ -94,6 +95,7 @@
                 />
 
             <TextView
+                android:id="@+id/tv_preactivity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Pre-Activity"
@@ -107,7 +109,7 @@
 
         <!--  Third Category layout-->
         <LinearLayout
-            android:id="@+id/btn_finlit_spending"
+            android:id="@+id/btn_post_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -123,6 +125,7 @@
                 android:layout_height="80dp" />
 
             <TextView
+                android:id="@+id/tv_postactivity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Post-Activity"

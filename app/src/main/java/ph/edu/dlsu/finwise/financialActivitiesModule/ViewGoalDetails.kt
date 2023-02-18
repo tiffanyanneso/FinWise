@@ -16,7 +16,7 @@ class ViewGoalDetails : AppCompatActivity() {
     private lateinit var binding:ActivityViewGoalDetailsBinding
     private var firestore = Firebase.firestore
 
-    private lateinit var goalID:String
+    private lateinit var financialGoalID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,30 +24,32 @@ class ViewGoalDetails : AppCompatActivity() {
         setContentView(binding.root)
 
         var bundle = intent.extras!!
-        goalID = bundle.getString("goalID").toString()
+        financialGoalID = bundle.getString("financialGoalID").toString()
         getGoal()
     }
 
     private fun getGoal() {
-        if (goalID != null) {
-            firestore.collection("FinancialGoals").document(goalID!!).get().addOnSuccessListener { document ->
-                if (document != null) {
-                    //TODO: compute remaining days
-                    var goal = document.toObject(FinancialGoals::class.java)
-                    //binding.tvMyGoals.text = goal?.goalName.toString()
-                    binding.tvGoalAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
-                    binding.tvActivity.text = goal?.financialActivity.toString()
+        firestore.collection("FinancialGoals").document(financialGoalID!!).get().addOnSuccessListener { document ->
+            if (document != null) {
+                //TODO: compute remaining days
+                var goal = document.toObject(FinancialGoals::class.java)
+                //binding.tvMyGoals.text = goal?.goalName.toString()
+                binding.tvGoalAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount?.toFloat())
+                binding.tvActivity.text = goal?.financialActivity.toString()
 
-                    //convert timestamp to string date
-                    val formatter = SimpleDateFormat("MM/dd/yyyy")
-                    val dateCreated = formatter.format(goal?.dateCreated?.toDate())
-                    binding.tvDateSet.text = dateCreated.toString()
+                //convert timestamp to string date
+                val formatter = SimpleDateFormat("MM/dd/yyyy")
+                val dateCreated = formatter.format(goal?.dateCreated?.toDate())
+                binding.tvDateSet.text = dateCreated.toString()
 
-                    val targetDate = formatter.format(goal?.targetDate?.toDate())
-                    binding.tvTargetDate.text = targetDate.toString()
-                    binding.tvStatus.text = goal?.status.toString()
-                    binding.tvIsForChild.text = goal?.goalIsForSelf.toString()
-                }
+                val targetDate = formatter.format(goal?.targetDate?.toDate())
+                binding.tvTargetDate.text = targetDate.toString()
+                binding.tvStatus.text = goal?.status.toString()
+                if (goal?.goalIsForSelf == true)
+                    binding.tvIsForChild.text = "Yes"
+                else
+                    binding.tvIsForChild.text = "No"
+
             }
         }
     }

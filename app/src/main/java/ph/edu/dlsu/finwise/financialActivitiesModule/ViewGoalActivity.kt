@@ -1,5 +1,7 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.app.Dialog
+import android.app.appsearch.AppSearchSchema.BooleanPropertyConfig
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +19,7 @@ import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
 import ph.edu.dlsu.finwise.adapter.GoalDecisionMakingActivitiesAdapter
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
+import ph.edu.dlsu.finwise.databinding.DialogFinishSavingBinding
 import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
@@ -39,6 +42,7 @@ class ViewGoalActivity : AppCompatActivity() {
     private lateinit var financialGoalID:String
 
     private var savedAmount = 0.00F
+    private var targetAmount = 0.00F
 
     private lateinit var goalTransactionsAdapter:GoalTransactionsAdapater
     var transactionsArrayList = ArrayList<String>()
@@ -106,11 +110,24 @@ class ViewGoalActivity : AppCompatActivity() {
         }
 
         binding.layoutActivityName.setOnClickListener {
-            var budgeting  = Intent (this, BudgetActivity::class.java)
-            sendBundle.putString("budgetActivityID", budgetingActivityID)
-            sendBundle.putString("savingActivityID", savingActivityID)
-            budgeting.putExtras(sendBundle)
-            this.startActivity(budgeting)
+            if (savedAmount>=targetAmount) {
+                var budgeting  = Intent (this, BudgetActivity::class.java)
+                sendBundle.putString("budgetActivityID", budgetingActivityID)
+                sendBundle.putString("savingActivityID", savingActivityID)
+                budgeting.putExtras(sendBundle)
+                this.startActivity(budgeting)
+            } else {
+                var dialogBinding= DialogFinishSavingBinding.inflate(getLayoutInflater())
+                var dialog= Dialog(this);
+                dialog.setContentView(dialogBinding.getRoot())
+                dialog.window!!.setLayout(900, 800)
+
+                dialog.show()
+                dialogBinding.btnOk.setOnClickListener{
+                    dialog.dismiss()
+                }
+            }
+
         }
     }
 
@@ -151,12 +168,13 @@ class ViewGoalActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setFields() {
         if (financialGoalID != null) {
-            firestore.collection("FinancialGoals").document(financialGoalID!!).get().addOnSuccessListener { document ->
+            firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener { document ->
                 if (document != null) {
                     //TODO: compute remaining days
                     var goal = document.toObject(FinancialGoals::class.java)
                     binding.tvGoalName.text = goal?.goalName.toString()
                     binding.tvActivityName.text = goal?.financialActivity.toString()
+                    targetAmount = goal?.targetAmount!!.toFloat()
 
                     var formatSaved = DecimalFormat("#,##0.00").format(savedAmount)
                     var formatTarget = DecimalFormat("#,##0.00").format(goal?.targetAmount)
@@ -174,16 +192,10 @@ class ViewGoalActivity : AppCompatActivity() {
                     //compute remaining days
                     val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
                     val from = LocalDate.now()
-                    val date =  SimpleDateFormat("MM/dd/yyyy").format(goal?.targetDate?.toDate())
+                    val date =  SimpleDateFormat("MM/dd/yyyy").format(goal.targetDate?.toDate())
                     val to = LocalDate.parse(date.toString(), dateFormatter)
-
                     var difference = Period.between(from, to)
-                    var string  = ""
-                    if (difference.years!=0)    string += "${difference.years} year"
-                    if (difference.months !=0)  string += "${difference.months} month"
-                    if (difference.days !=0)    string += "${difference.days} days remaining"
-                    else if (difference.days == 0) string += "0 days remaining"
-                    binding.tvRemaining.text = string
+                    binding.tvRemaining.text = difference.days.toString() + " days remaining"
                 }
             }.continueWith {
                 deductExpenses() }

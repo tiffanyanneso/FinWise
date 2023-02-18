@@ -40,11 +40,11 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         var dataBundle: Bundle = intent.extras!!
-        var goalID = dataBundle.getString("goalID").toString()
+        var financialGoalID = dataBundle.getString("financialGoalID").toString()
         var savingActivityID = dataBundle.getString("savingActivityID")
 //        var decisionActivityID = dataBundle.getString("decisionMakingActivityID").toString()
 //
-        firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
+        firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
             binding.tvGoalName.text = financialGoal?.goalName
             //binding.tvProgressAmount.text = "₱ " + dataBundle.getFloat("currentAmount") + " / ₱ " + dataBundle.getFloat("targetAmount")
@@ -59,7 +59,7 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
         binding.btnNext.setOnClickListener {
             var bundle = Bundle()
             bundle.putString("goalName", binding.tvGoalName.text.toString())
-            bundle.putString("goalID",goalID)
+            bundle.putString("financialGoalID",financialGoalID)
             //bundle.putString("decisionMakingActivityID", decisionActivityID)
             bundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
             //bundle.putString("source", "DirectGoalDeposit")

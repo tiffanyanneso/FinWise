@@ -45,8 +45,13 @@ class FinlitExpertAssessmentTypeActivity : AppCompatActivity () {
             checkExisting(assessmentType)
         }
 
-        binding.btnPost.setOnClickListener {
-            assessmentType = binding.tvPost.text.toString()
+        binding.btnPreActivity.setOnClickListener {
+            assessmentType = binding.tvPreactivity.text.toString()
+            checkExisting(assessmentType)
+        }
+
+        binding.btnPostActivity.setOnClickListener {
+            assessmentType = binding.tvPostactivity.text.toString()
             checkExisting(assessmentType)
         }
 

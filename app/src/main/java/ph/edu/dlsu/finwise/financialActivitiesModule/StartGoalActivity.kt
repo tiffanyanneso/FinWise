@@ -2,9 +2,11 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
@@ -13,6 +15,10 @@ import ph.edu.dlsu.finwise.databinding.ActivityStartGoalBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class StartGoalActivity : AppCompatActivity() {
 
@@ -21,6 +27,7 @@ class StartGoalActivity : AppCompatActivity() {
 
     private lateinit var context: Context
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStartGoalBinding.inflate(layoutInflater)
@@ -46,14 +53,12 @@ class StartGoalActivity : AppCompatActivity() {
                     val formatter = SimpleDateFormat("MM/dd/yyyy")
                     val date = formatter.format(goal?.targetDate?.toDate())
                     binding.tvTargetDate.text = date.toString()
+                    computeDays(goal?.targetDate?.toDate()!!)
                 } else {
                     Toast.makeText(this, "No data", Toast.LENGTH_SHORT)
                 }
             }
         }
-
-
-        //computeDays(bundle.getString("targetDate")!!)
 
         binding.btnGetStarted.setOnClickListener {
             var goToViewGoal = Intent(context, ViewGoalActivity::class.java)
@@ -63,7 +68,15 @@ class StartGoalActivity : AppCompatActivity() {
         }
     }
 
-    private fun computeDays(date:String) {
-        //TODO: difference of current date and target date
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun computeDays(date: Date) {
+        val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+        val from = LocalDate.now()
+        val date =  SimpleDateFormat("MM/dd/yyyy").format(date)
+        val to = LocalDate.parse(date.toString(), dateFormatter)
+
+        var difference = Period.between(from, to)
+        binding.tvNDays.text = difference.days.toString() + " days"
+        binding.tvDaysString.text = "You have ${difference.days} days left to\n complete your goal on time!"
     }
 }

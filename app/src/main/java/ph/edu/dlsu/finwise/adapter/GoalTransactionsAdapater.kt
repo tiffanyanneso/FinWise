@@ -36,7 +36,7 @@ class GoalTransactionsAdapater : RecyclerView.Adapter<GoalTransactionsAdapater.G
         parent: ViewGroup,
         viewType: Int
     ): GoalTransactionsAdapater.GoalViewDepositViewHolder {
-        val itemBinding = ItemTransactionBinding
+        val itemBinding = ItemGoalTransactionBinding
             .inflate(
                 LayoutInflater.from(parent.context),
                 parent, false)
@@ -48,7 +48,7 @@ class GoalTransactionsAdapater : RecyclerView.Adapter<GoalTransactionsAdapater.G
         holder.bindGoal(depositTransactions[position])
     }
 
-    inner class GoalViewDepositViewHolder(private val itemBinding: ItemTransactionBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
+    inner class GoalViewDepositViewHolder(private val itemBinding: ItemGoalTransactionBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
         var transactions  = Transactions()
 
         init {
@@ -58,6 +58,7 @@ class GoalTransactionsAdapater : RecyclerView.Adapter<GoalTransactionsAdapater.G
         fun bindGoal(transactionID: String){
             firestore.collection("Transactions").document(transactionID).get().addOnSuccessListener {
                 var transaction = it.toObject<Transactions>()
+                println("print " +  transaction?.transactionType)
 
                 val date =  SimpleDateFormat("MM/dd/yyyy").format(transaction?.date?.toDate())
                 itemBinding.tvDate.text = date.toString()

@@ -21,7 +21,7 @@ class WithdrawActivity : AppCompatActivity() {
     private lateinit var binding:ActivityWithdrawBinding
     private var firestore = Firebase.firestore
 
-    private lateinit var goalID:String
+    private lateinit var financialGoalID:String
     private lateinit var decisionMakingActivityID:String
 
     private lateinit var dataBundle:Bundle
@@ -42,7 +42,7 @@ class WithdrawActivity : AppCompatActivity() {
         binding.btnNext.setOnClickListener {
             var bundle = Bundle()
             bundle.putString("goalName", binding.tvGoalName.text.toString())
-            bundle.putString("goalID",goalID)
+            bundle.putString("financialGoalID",financialGoalID)
             //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
             bundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
             bundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
@@ -73,10 +73,10 @@ class WithdrawActivity : AppCompatActivity() {
     }
 
     private fun setData() {
-        goalID = dataBundle.getString("goalID").toString()
+        financialGoalID = dataBundle.getString("financialGoalID").toString()
         decisionMakingActivityID = dataBundle.getString("decisionMakingActivityID").toString()
 
-        firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
+        firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
             binding.tvGoalName.text = financialGoal?.goalName
             //binding.tvProgressAmount.text = "₱ " + bundle.getFloat("currentAmount") + " / ₱ " + bundle.getFloat("targetAmount")

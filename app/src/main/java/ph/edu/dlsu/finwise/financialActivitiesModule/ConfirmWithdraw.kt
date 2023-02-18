@@ -19,7 +19,7 @@ class ConfirmWithdraw : AppCompatActivity() {
 
     private lateinit var bundle:Bundle
 
-    private lateinit var goalID:String
+    private lateinit var financialGoalID:String
     private lateinit var decisionMakingActivityID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +44,7 @@ class ConfirmWithdraw : AppCompatActivity() {
                 //TODO: ADJUST USER BALANCE (INCREASE WALLET BALANCE)
                 var bundle = Bundle()
                 //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-                bundle.putString("goalID", goalID)
+                bundle.putString("financialGoalID", financialGoalID)
                 var saving = Intent (this, ViewGoalActivity::class.java)
                 saving.putExtras(bundle)
                 saving.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -55,7 +55,7 @@ class ConfirmWithdraw : AppCompatActivity() {
     }
 
     private fun setData() {
-        goalID = bundle.getString("goalID").toString()
+        financialGoalID = bundle.getString("financialGoalID").toString()
         //decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
         binding.tvGoal.text = bundle.getString("goalName")
         binding.tvAmount.text = "₱ " + DecimalFormat("#,###.00").format(bundle.getFloat("amount")).toString()

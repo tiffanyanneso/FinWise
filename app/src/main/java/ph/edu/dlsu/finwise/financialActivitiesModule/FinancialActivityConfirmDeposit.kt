@@ -32,7 +32,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
 
     var amount : String? =null
 
-    private lateinit var goalID:String
+    private lateinit var financialGoalID:String
     private lateinit var savingActivityID:String
 
 
@@ -51,7 +51,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
         binding.tvAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
         binding.tvGoal.text= bundle.getString("goalName")
-        goalID = bundle.getString("goalID").toString()
+        financialGoalID = bundle.getString("financialGoalID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
 
         binding.btnConfirm.setOnClickListener {
@@ -105,15 +105,15 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                         saved -= transactionObject.amount!!.toFloat()
             }
 
-            firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
+            firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
                 var goal = it.toObject<FinancialGoals>()
                 val bundle = Bundle()
                 //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-                bundle.putString("goalID", goalID)
+                bundle.putString("financialGoalID", financialGoalID)
                 //target amount has already been met, update status of goal and fin activity to completed
                 if (goal?.targetAmount!! <= saved) {
-                    firestore.collection("FinancialGoals").document(goalID).update("status", "Completed")
-                    firestore.collection("FinancialGoals").document(goalID).update("dateCompleted", Timestamp.now())
+                    firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Completed")
+                    firestore.collection("FinancialGoals").document(financialGoalID).update("dateCompleted", Timestamp.now())
                     firestore.collection("FinancialActivities").document(savingActivityID).update("status", "Completed")
                     val goalAccomplished = Intent(this, GoalAccomplishedActivity::class.java)
                     goalAccomplished.putExtras(bundle)
