@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -21,15 +22,17 @@ import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.Transa
 class TransactionHistoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPfmtransactionHistoryBinding
     private lateinit var context: Context
-  /*  private lateinit var transactionAdapter: TransactionsAdapter
-    private var firestore = Firebase.firestore
-    private var transactionIDArrayList = ArrayList<String>()
-    private lateinit var type: String
+    var bundle: Bundle? = null
 
-    var x2 = 0.0f
-    var x1 = 0.0f
-    var y2 = 0.0f
-    var y1 = 0.0f*/
+    /*  private lateinit var transactionAdapter: TransactionsAdapter
+      private var firestore = Firebase.firestore
+      private var transactionIDArrayList = ArrayList<String>()
+      private lateinit var type: String
+
+      var x2 = 0.0f
+      var x1 = 0.0f
+      var y2 = 0.0f
+      var y1 = 0.0f*/
 
    /* companion object {
         const val MIN_DISTANCE = 150
@@ -45,12 +48,24 @@ class TransactionHistoryActivity : AppCompatActivity() {
         // Initializes the navbar
         Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
        // gestureDetector = GestureDetector(this, this)
+        checkIfSort()
         initializeIncomeExpense()
         loadBackButton()
         initializeSort()
         /*transactionIDArrayList.clear()
         getAllTransactions()
         sortTransactions()*/
+    }
+
+    private fun checkIfSort() {
+        bundle = intent.extras
+
+
+        //TODO: receive data then craete functions to sort
+        if (bundle != null) {
+            val name = bundle!!.getFloat("minAmount").toString()
+            Toast.makeText(this, ""+name, Toast.LENGTH_SHORT).show()
+        }
     }
 
 

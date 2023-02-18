@@ -15,13 +15,14 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentTransactionSortBinding
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.ConfirmTransactionActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
 import java.text.SimpleDateFormat
 import java.util.Date
 
 class TransactionSortFragment : DialogFragment() {
-    private lateinit var binding: FragmentTransactionSortBinding
-    lateinit var bundle: Bundle
+    private lateinit var binding : FragmentTransactionSortBinding
+    var bundle: Bundle? = null
     var minAmount: Float? = null
     var maxAmount: Float? = null
     var startDate: Date? = null
@@ -59,12 +60,9 @@ class TransactionSortFragment : DialogFragment() {
             val isCategorySorted: Boolean = setCategory()
 
             if (isAmountSorted || isDateSorted || isCategorySorted) {
-                val goToSortedTransactions = Intent(this, TransactionHistoryActivity::class.java)
-                goToSortedTransactions.putExtras(bundle)
+                val goToSortedTransactions = Intent(context, TransactionHistoryActivity::class.java)
+                goToSortedTransactions.putExtras(bundle!!)
                 startActivity(goToSortedTransactions)
-            } else {
-                val goToTransactions = Intent(this, TransactionHistoryActivity::class.java)
-                startActivity(goToTransactions)
             }
 
             /* TODO:
@@ -116,8 +114,11 @@ class TransactionSortFragment : DialogFragment() {
             Toast.makeText(context, "minamount>=maxamount", Toast.LENGTH_SHORT).show()
             minAmountInput.error = "Please enter an amount lower than the maximum amount"
             minAmountInput.requestFocus()
-        } else
+        } else {
             flag = true
+            bundle?.putFloat("minAmount", minAmount!!)
+            bundle?.putFloat("maxAmount", maxAmount!!)
+        }
 
         return flag
     }
@@ -179,8 +180,8 @@ class TransactionSortFragment : DialogFragment() {
         }
 
         if (flag) {
-            bundle.putSerializable("startDate", startDate)
-            bundle.putSerializable("endDate", endDate)
+            bundle?.putSerializable("startDate", startDate)
+            bundle?.putSerializable("endDate", endDate)
         }
 
         return flag
@@ -198,10 +199,11 @@ class TransactionSortFragment : DialogFragment() {
         else if (cbExpense.isChecked)
             checkedBoxes = "expense"
 
-        bundle.putString("category", checkedBoxes)
+        bundle?.putString("category", checkedBoxes)
 
-        if (checkedBoxes!= "none")
+        if (checkedBoxes == "none")
             flag = false
+        Toast.makeText(context, ""+flag, Toast.LENGTH_SHORT).show()
 
         return flag
     }

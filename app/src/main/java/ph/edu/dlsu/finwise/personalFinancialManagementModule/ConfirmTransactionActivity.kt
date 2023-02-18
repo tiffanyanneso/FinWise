@@ -55,11 +55,9 @@ class ConfirmTransactionActivity : AppCompatActivity() {
 
         transactionType = bundle!!.getString("transactionType").toString()
         if (transactionType == "Income") {
-            //binding.tvTitle.text = "Confirm Income"
-            //binding.tvTransactionType.text = "Income Amount"
+            binding.tvTransactionType.text = "Income"
         } else {
-            //binding.tvTitle.text = "Confirm Expense"
-            //binding.tvTransactionType.text = "Expense Amount"
+            binding.tvTransactionType.text = "Expense"
         }
         val dec = DecimalFormat("#,###.00")
         var textAmount = dec.format(bundle!!.getFloat("amount"))
