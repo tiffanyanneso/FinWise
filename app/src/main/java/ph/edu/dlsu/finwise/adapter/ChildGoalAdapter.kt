@@ -91,8 +91,8 @@ class ChildGoalAdapter : RecyclerView.Adapter<ChildGoalAdapter.ChildGoalViewHold
 
         override fun onClick(p0: View?) {
             var bundle = Bundle()
-            var goalID = itemBinding.tvGoalId.text.toString()
-            bundle.putString ("goalID", goalID)
+            var financialGoalID = itemBinding.tvGoalId.text.toString()
+            bundle.putString ("financialGoalID", financialGoalID)
             //bundle.putString ("childID", childID)
             if (goalStatus == "For Review") {
                 var reviewGoal = Intent(context, ParentSettingAGoalActivity::class.java)

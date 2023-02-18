@@ -7,18 +7,26 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityChildEditGoalBinding
 import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
+import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ChildEditGoal : AppCompatActivity() {
     private lateinit var binding : ActivityChildEditGoalBinding
     private var firestore = Firebase.firestore
 
     private lateinit var financialGoalID:String
+    private lateinit var targetDate: Date
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,13 +38,6 @@ class ChildEditGoal : AppCompatActivity() {
         financialGoalID = bundle.getString("financialGoalID").toString()
         getFinancialGoal()
 
-        /*if (currentUserType == "Child") {
-            binding.tvFinancialDecisionMakingActivity.visibility = View.GONE
-            binding.checkBoxes.visibility = View.GONE
-        } else if (currentUserType == "Parent") {
-            binding.tvFinancialDecisionMakingActivity.visibility = View.VISIBLE
-            binding.checkBoxes.visibility = View.VISIBLE
-        }*/
 
         // for the dropdown
         val items = resources.getStringArray(R.array.financial_activity)
@@ -52,43 +53,57 @@ class ChildEditGoal : AppCompatActivity() {
         }
 
         binding.btnDelete.setOnClickListener {
-            deleteGoal()
+            confirmDeleteGoal()
         }
 
     }
 
     private fun getFinancialGoal() {
-        //TODO: update when goal list is done
-        /*val goal:String = id of goal
-        firestore.collection("FinancialGoals").document(goal).get().addOnSuccessListener {
-            var goal = it.toObject<Company>()
-            if (goal?.goalName != null)
-                binding.etGoal.setText(goal?.goalName)
-            if (goal?.amount != null)
-                binding.etAmount.setText(goal?.amount)
-            if (goal?.targetDate != null)
-                //change how to set date
-                binding.etTargetDate.setText(goal?.about)
-
-            if (goal?.financialActivity != null) {
-                var financialActivityArray = getResources().getStringArray(R.array.financial_activity)
-                var finActivityIndex: Int = 0
-
-                for (i in financialActivityArray.indices)
-                    if (financialActivityArray[i].toString() == goal?.financialActivity.toString())
-                        finActivityIndex = i
-
-                binding.spinnerActivity.setSelection(finActivityIndex)
+        firestore.collection("FinancialGoals").document(financialGoalID).get()
+            .addOnSuccessListener {
+                var goalObject = it.toObject<FinancialGoals>()
+                binding.etGoal.setText(goalObject?.goalName.toString())
+                binding.etAmount.setText(goalObject?.targetAmount?.toInt().toString())
+                binding.containerActivity.hint = goalObject?.financialActivity.toString()
+                targetDate = goalObject?.targetDate?.toDate()!!
+                binding.etTargetDate.setText(SimpleDateFormat("MM/dd/yyyy").format(goalObject?.targetDate?.toDate()).toString())
             }
-        }*/
     }
 
     private fun updateGoal() {
-        //firestore.collection("FinancialGoals").document(financialGoalID).update()
+        var targetDate = SimpleDateFormat("MM/dd/yyyy").parse(binding.etTargetDate.text.toString())
+        firestore.collection("FinancialGoals").document(financialGoalID).update("goalName", binding.etGoal.text.toString(),
+            "targetAmount", binding.etAmount.text.toString().toFloat(), "targetDate", targetDate)
+        Toast.makeText(this, "Goal has been updated", Toast.LENGTH_LONG).show()
+        var goalDetails = Intent(this, ViewGoalActivity::class.java)
+        var sendBundle = Bundle()
+        sendBundle.putString("financialGoalID", financialGoalID)
+        goalDetails.putExtras(sendBundle)
+        startActivity(goalDetails)
+        finish()
+    }
+
+    private fun confirmDeleteGoal() {
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Delete Goal?")
+        builder.setMessage("Are you sure you want to delete your goal?\nSavings will be returned to wallet")
+
+        builder.setPositiveButton(android.R.string.yes) { dialog, which -> deleteGoal()}
+
+        builder.setNegativeButton(android.R.string.no) { dialog, which -> dialog.dismiss() }
+
+        builder.show()
     }
 
     private fun deleteGoal() {
+        //mark financial goal as deleted
         firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Deleted")
+        //mark related activities as deleted
+        firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
+            for (activity in results )
+                firestore.collection("FinancialActivities").document(activity.id).update("status", "Deleted")
+        }
         var goalList = Intent(this, FinancialActivity::class.java)
         this.startActivity(goalList)
     }
@@ -101,11 +116,12 @@ class ChildEditGoal : AppCompatActivity() {
         dialog.window!!.setLayout(1000, 1200)
 
         var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
+        dialog.show()
+
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
             binding.etTargetDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
             dialog.dismiss()
         }
-        dialog.show()
     }
 }
