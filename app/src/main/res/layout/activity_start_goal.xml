@@ -23,7 +23,6 @@
             app:titleCentered="true"
             app:title="New Goal"
             app:menu="@menu/top_app_bar"
-            app:navigationIcon="@drawable/baseline_arrow_back_24"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:backgroundTint="@color/dark_green"
             />

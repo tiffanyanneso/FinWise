@@ -1,13 +1,16 @@
 package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityGoalSettingsBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
 import ph.edu.dlsu.finwise.model.GoalSettings
 
 class GoalSettingsActivity : AppCompatActivity() {
@@ -44,6 +47,12 @@ class GoalSettingsActivity : AppCompatActivity() {
             updateSettings()
 //            val message = if (isChecked) "Switch Auto Approve:ON" else "Switch Auto Approve:OFF"
             Toast.makeText(this, "Settings updated", Toast.LENGTH_SHORT).show()
+        }
+
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToGoals = Intent(applicationContext, ParentGoalActivity::class.java)
+            this.startActivity(goToGoals)
         }
     }
 

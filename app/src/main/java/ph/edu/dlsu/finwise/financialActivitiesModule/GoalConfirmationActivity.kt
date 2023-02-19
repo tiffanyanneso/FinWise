@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -17,6 +18,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityGoalConfirmationBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.DecisionMakingActivities
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -136,8 +138,16 @@ class GoalConfirmationActivity : AppCompatActivity() {
             }
         //}
 
-        binding.btnBack.setOnClickListener {
-            var goToNewGoal = Intent(context, FinancialActivity::class.java)
+//        binding.btnBack.setOnClickListener {
+//            var goToNewGoal = Intent(context, FinancialActivity::class.java)
+//            goToNewGoal.putExtras(bundle)
+//            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            context.startActivity(goToNewGoal)
+//        }
+
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToNewGoal = Intent(applicationContext, ChildNewGoal::class.java)
             goToNewGoal.putExtras(bundle)
             goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(goToNewGoal)

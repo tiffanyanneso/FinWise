@@ -67,6 +67,17 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_record_expense"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
+                    android:text="@string/record_expense"
+                    android:textColor="@color/off_white"
+                    android:layout_marginTop="15dp"
+                    android:backgroundTint="@color/dark_green"
+                    android:background="@drawable/button_border"
+                    android:layout_gravity="right"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -74,24 +85,23 @@
                     android:layout_marginTop="10dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="20dp"
-                        android:text="@string/budget_expense"
+                        android:text="Expenses"
                         android:textStyle="bold"
                         android:textColor="@color/black"
-                        android:layout_marginTop="10dp"
-                        android:layout_weight="@integer/material_motion_duration_short_1"
-                        />
+                        android:layout_weight="1" />
 
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btn_record_expense"
-                        android:layout_width="200dp"
-                        android:layout_height="40dp"
-                        android:text="@string/record_expense"
-                        android:textColor="@color/off_white"
-                        android:backgroundTint="@color/dark_green"
-                        android:background="@drawable/button_border"/>
+                    <TextView
+                        android:id="@+id/tv_view_all"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="View All >"
+                        android:textColor="@color/black"
+                        android:textAlignment="textEnd"
+                        android:layout_weight="1"/>
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
