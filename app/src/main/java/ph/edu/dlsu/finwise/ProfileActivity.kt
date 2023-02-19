@@ -22,6 +22,11 @@ class ProfileActivity : AppCompatActivity(){
     private lateinit var binding: ActivityProfileBinding
     private var firestore = Firebase.firestore
     private lateinit var context: Context
+
+    private val tabIcons = intArrayOf(
+        ph.edu.dlsu.finwise.R.drawable.baseline_star_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_auto_awesome_24
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -35,6 +40,7 @@ class ProfileActivity : AppCompatActivity(){
 
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
+        setupTabIcons()
 
         getProfileData()
 
@@ -43,10 +49,20 @@ class ProfileActivity : AppCompatActivity(){
             context.startActivity(gotoEditProfile)
         }
 
+        binding.tvFriends.setOnClickListener {
+            val goToViewFriends = Intent(this, ViewFriendsActivity::class.java)
+            context.startActivity(goToViewFriends)
+        }
+
         // Hides actionbar,
         // and initializes the navbar
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_profile)
+    }
+
+    private fun setupTabIcons() {
+        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
     }
 
     fun getProfileData() {

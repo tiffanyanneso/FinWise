@@ -13,6 +13,15 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".FriendRequestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddFriendsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewFriendsActivity"
+            android:exported="false" />
+        <activity
             android:name=".financialActivitiesModule.ItemExpensesActivity"
             android:exported="false" />
         <activity
@@ -180,8 +189,7 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.TransactionHistoryActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".personalFinancialManagementModule.ConfirmDepositActivity"
             android:exported="false" />
@@ -217,6 +225,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

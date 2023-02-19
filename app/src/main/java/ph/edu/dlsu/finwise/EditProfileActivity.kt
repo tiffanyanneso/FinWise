@@ -24,7 +24,6 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEditProfileBinding
     private var firestore = Firebase.firestore
     private lateinit var context: Context
-
     lateinit var birthday: Date
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -64,9 +63,7 @@ class EditProfileActivity : AppCompatActivity() {
             if (child?.lastName != null && child?.lastName != null)
                 binding.etLastName.setText(child?.lastName.toString() + " " + child?.lastName.toString())
             if (child?.birthday != null && child?.birthday != null) {
-                //TODO set dates
-                //binding.etBirthday.set
-                //setText(child?.lastName.toString() + " " + child?.lastName.toString())
+                binding.etBirthday.setText(child?.birthday.toString())
             }
         }
     }
