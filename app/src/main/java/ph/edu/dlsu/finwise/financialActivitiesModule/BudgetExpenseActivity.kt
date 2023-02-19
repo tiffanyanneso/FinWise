@@ -17,6 +17,7 @@ import ph.edu.dlsu.finwise.adapter.BudgetExpenseAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetExpenseBinding
 import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.BudgetItem
+import ph.edu.dlsu.finwise.model.FinancialActivities
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -37,6 +38,8 @@ class BudgetExpenseActivity : AppCompatActivity() {
     private lateinit var budgetActivityID:String
     private lateinit var budgetItemID:String
 
+    private lateinit var spendingActivityID:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBudgetExpenseBinding.inflate(layoutInflater)
@@ -51,6 +54,13 @@ class BudgetExpenseActivity : AppCompatActivity() {
         budgetActivityID = bundle.getString("budgetActivityID").toString()
         budgetItemID = bundle.getString("budgetItemID").toString()
         bundle.putString("source", "viewGoal")
+        spendingActivityID = bundle.getString("spendingActivityID").toString()
+
+        firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
+            var activity = it.toObject<FinancialActivities>()
+            if (activity?.status == "Completed")
+                binding.btnRecordExpense.visibility = View.GONE
+        }
 
         //checkUser()
         getInfo()

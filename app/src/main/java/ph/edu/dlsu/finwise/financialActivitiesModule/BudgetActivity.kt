@@ -22,9 +22,13 @@ import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetBinding
+import ph.edu.dlsu.finwise.databinding.DialogDoneSettingBudgetBinding
+import ph.edu.dlsu.finwise.databinding.DialogFinishBudgetingBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
+import ph.edu.dlsu.finwise.databinding.DialogProceedNextActivityBinding
 import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.BudgetItem
+import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 
@@ -38,6 +42,8 @@ class BudgetActivity : AppCompatActivity() {
 
     private lateinit var budgetActivityID:String
     private lateinit var savingActivityID:String
+    private lateinit var spendingActivityID:String
+
     private lateinit var financialGoalID:String
     private var budgetCategoryIDArrayList = ArrayList<String>()
 
@@ -48,6 +54,7 @@ class BudgetActivity : AppCompatActivity() {
 
     private var balance = 0.00F
 
+    private var isCompleted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,12 +72,40 @@ class BudgetActivity : AppCompatActivity() {
         budgetActivityID = bundle.getString("budgetActivityID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
 
+        //checks if child has already finished setting budget
+        //if they are done setting budget, any changes would count as an update that would affect their overall score
+        firestore.collection("FinancialActivities").document(budgetActivityID).get().addOnSuccessListener {
+            var financialActivity = it.toObject<FinancialActivities>()
+            if (financialActivity?.status == "Completed") {
+                isCompleted = true
+                binding.btnDoneSettingBudget.visibility = View.GONE
+            }
+        }
         //checkUser()
         getBalance()
 
 
         binding.btnNewCategory.setOnClickListener { showNewBudgetItemDialog() }
-        binding.btnDoneSettingBudget.setOnClickListener {}
+        binding.btnDoneSettingBudget.setOnClickListener {
+            var dialogBinding = DialogDoneSettingBudgetBinding.inflate(getLayoutInflater())
+            var dialog = Dialog(this);
+            dialog.setContentView(dialogBinding.getRoot())
+            dialog.window!!.setLayout(900, 800)
+
+            dialogBinding.btnOk.setOnClickListener {
+                firestore.collection("FinancialActivities").document(budgetActivityID).update("status", "Completed").addOnSuccessListener {
+                    binding.btnDoneSettingBudget.visibility = View.GONE
+                    isCompleted = true
+                    dialog.dismiss()
+                }
+            }
+
+            dialogBinding.btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.show()
+        }
     }
 
     private fun getBalance() {
@@ -100,6 +135,21 @@ class BudgetActivity : AppCompatActivity() {
                         editBudgetItem(budgetItemID)
                     else
                         deleteBudgetItem(position, budgetItemID)
+                }}, object:BudgetCategoryAdapter.ItemClick {
+
+                override fun clickItem(budgetItemID: String, budgetActivityID: String) {
+                    //"done setting budget" already clicked, they can access expense
+                    if (isCompleted) {
+                        var budgetCategory = Intent(context, BudgetExpenseActivity::class.java)
+                        var bundle = Bundle()
+
+                        bundle.putString ("budgetItemID", budgetItemID)
+                        //change to spending
+                        bundle.putString ("spendingActivityID", spendingActivityID)
+                        budgetCategory.putExtras(bundle)
+                        budgetCategory.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        context.startActivity(budgetCategory)
+                    } else { finishBudgeting() }
                 }
             })
             binding.rvViewCategories.adapter = budgetCategoryAdapter
@@ -142,7 +192,9 @@ class BudgetActivity : AppCompatActivity() {
 
             firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
                 var budgetItem = it.toObject<BudgetItem>()
-                var nUpdate = budgetItem?.nUpdate!!.toInt() + 1
+                var nUpdate = budgetItem?.nUpdate!!.toInt()
+                if (isCompleted)
+                    nUpdate += 1
 
                 firestore.collection("BudgetItems").document(budgetItemID).update("budgetItemName", itemName,
                     "amount", itemAmount, "nupdate", nUpdate).addOnSuccessListener {
@@ -178,7 +230,10 @@ class BudgetActivity : AppCompatActivity() {
         dialogBinding.btnSave.setOnClickListener {
             var itemName = dialogBinding.dialogEtCategoryName.text.toString()
             var itemAmount = dialogBinding.dialogEtCategoryAmount.text.toString().toFloat()
-            var budgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, 0, "Active")
+            var nUpdate = 0
+            if (isCompleted) //they made a change after they declared that they're done setting a budget
+                nUpdate = 1
+            var budgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, nUpdate, "Active")
 
             firestore.collection("BudgetItems").add(budgetCategory).addOnSuccessListener {
                 budgetCategoryIDArrayList.add(it.id)
@@ -204,6 +259,19 @@ class BudgetActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun finishBudgeting() {
+        var dialogBinding= DialogFinishBudgetingBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(900, 800)
+        dialog.show()
+
+        dialogBinding.btnOk.setOnClickListener {
+            dialog.dismiss()
+        }
     }
 
     private fun checkUser() {

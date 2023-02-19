@@ -182,6 +182,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
             var budgetingActivity = FinancialActivities(goalID, "Budgeting", "Locked")
             var spendingActivity = FinancialActivities(goalID, "Spending", "Locked")
             firestore.collection("FinancialActivities").add(budgetingActivity)
+            firestore.collection("FinancialActivities").add(budgetingActivity)
             firestore.collection("FinancialActivities").add(spendingActivity)
         }
     }

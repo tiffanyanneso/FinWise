@@ -126,6 +126,7 @@ class ViewGoalActivity : AppCompatActivity() {
                 var budgeting  = Intent (this, BudgetActivity::class.java)
                 sendBundle.putString("budgetActivityID", budgetingActivityID)
                 sendBundle.putString("savingActivityID", savingActivityID)
+                sendBundle.putString("spendingActivityID", spendingActivityID)
                 budgeting.putExtras(sendBundle)
                 this.startActivity(budgeting)
             } else {

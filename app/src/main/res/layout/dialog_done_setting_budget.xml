@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:text="Done Spending?"
+        android:text="Done Setting Budget?"
         android:gravity="center"
         android:textStyle="bold"
         android:textColor="@color/black"/>
@@ -30,7 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textSize="16dp"
-            android:text="Your goal will be marked as finished and you will not be able to add any more items."
+            android:text="Any updates made to the budget after will cause deductions
+             \nAre you sure you're done?"
             android:textColor="@color/black" />
 
     </LinearLayout>

@@ -108,7 +108,7 @@ class SpendingActivity : AppCompatActivity() {
     private fun showConfirmDialog() {
         val dialog = Dialog(this)
 
-        dialog.setContentView(R.layout.dialog_done_spending)
+        dialog.setContentView(R.layout.dialog_done_setting_budget)
         dialog.window!!.setLayout(900, 700)
 
         val btnOk = dialog.findViewById<Button>(R.id.btn_ok)

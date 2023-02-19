@@ -27,13 +27,15 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
     private var budgetCategoryIDArrayList = ArrayList<String>()
     private var context: Context
     private var menuClick:MenuClick
+    private var itemClick:ItemClick
 
     private var firestore = Firebase.firestore
 
-    constructor(context: Context, budgetCategoryIDArrayList:ArrayList<String>,  menuClick:MenuClick) {
+    constructor(context: Context, budgetCategoryIDArrayList:ArrayList<String>,  menuClick:MenuClick, itemClick:ItemClick) {
         this.context = context
         this.budgetCategoryIDArrayList = budgetCategoryIDArrayList
         this.menuClick = menuClick
+        this.itemClick = itemClick
     }
 
     override fun getItemCount(): Int {
@@ -110,18 +112,24 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
         }
 
         override fun onClick(p0: View?) {
-            var budgetCategory = Intent(context, BudgetExpenseActivity::class.java)
-            var bundle = Bundle()
+            itemClick.clickItem(itemBinding.tvBudgetItemId.text.toString(), itemBinding.budgetActivityId.text.toString())
 
-            bundle.putString ("budgetItemID", itemBinding.tvBudgetItemId.text.toString())
-            bundle.putString ("budgetActivityID", itemBinding.budgetActivityId.text.toString())
-            budgetCategory.putExtras(bundle)
-            budgetCategory.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(budgetCategory)
+//            var budgetCategory = Intent(context, BudgetExpenseActivity::class.java)
+//            var bundle = Bundle()
+//
+//            bundle.putString ("budgetItemID", itemBinding.tvBudgetItemId.text.toString())
+//            bundle.putString ("budgetActivityID", itemBinding.budgetActivityId.text.toString())
+//            budgetCategory.putExtras(bundle)
+//            budgetCategory.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            context.startActivity(budgetCategory)
         }
     }
 
     interface MenuClick{
         fun clickMenuItem(position: Int, menuOption:String, budgetItemID:String)
+    }
+
+    interface ItemClick{
+        fun clickItem (budgetItemID:String, budgetActivityID:String)
     }
 }

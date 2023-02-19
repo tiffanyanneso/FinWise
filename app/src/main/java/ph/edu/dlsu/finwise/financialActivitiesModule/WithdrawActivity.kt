@@ -59,7 +59,7 @@ class WithdrawActivity : AppCompatActivity() {
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             var bundle = Bundle()
-            bundle.putString("goalID",goalID)
+            bundle.putString("financialGoalID",financialGoalID)
 
             val goToGoal = Intent(applicationContext, ViewGoalActivity::class.java)
             goToGoal.putExtras(bundle)
