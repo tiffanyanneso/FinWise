@@ -65,20 +65,29 @@ class TransactionHistoryIncomeFragment : Fragment() {
     private fun sortDate(): ArrayList<TransactionFilter> {
         val filteredArray = ArrayList<TransactionFilter>()
         for (t in transactionFilterArrayList) {
+            // Convert dates to same string to be compared
             val sdf = SimpleDateFormat(
                 "EE MMM dd HH:mm:ss z yyyy",
                 Locale.ENGLISH
             )
-            val sDate = startDate?.let { sdf.parse(it) }
-            val eDate = endDate?.let { sdf.parse(it) }
-            val dateConverted = SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy").parse(t.transaction?.date.toString())
+            val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH)
 
-            if (dateConverted!! >= sDate && dateConverted >= eDate)
+            val sDate = startDate?.let { sdf.parse(it) }
+            val startingDate = formatter.format(sDate!!)
+            val eDate = endDate?.let { sdf.parse(it) }
+            val endingDate = formatter.format(eDate!!)
+            val transactionDate = formatter.format(t.transaction?.date?.toDate()!!)
+
+            if (transactionDate in startingDate..endingDate)
                 filteredArray.add(TransactionFilter(t.transactionID, t.transaction))
+
+            /*if (cDate in sDate..eDate)
+                filteredArray.add(TransactionFilter(t.transactionID, t.transaction))*/
         }
         transactionFilterArrayList.clear()
         return filteredArray
     }
+
 
     private fun sortAmount(): ArrayList<TransactionFilter> {
         val filteredArray = ArrayList<TransactionFilter>()
@@ -98,12 +107,17 @@ class TransactionHistoryIncomeFragment : Fragment() {
                 "EE MMM dd HH:mm:ss z yyyy",
                 Locale.ENGLISH
             )
-            val startDateConverted = startDate?.let { sdf.parse(it) }
-            val endDateConverted = endDate?.let { sdf.parse(it) }
-            val dateConverted = sdf.parse(t.transaction?.date.toString())
+            val formatter = SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH)
+
+            val sDate = startDate?.let { sdf.parse(it) }
+            val startingDate = formatter.format(sDate!!)
+            val eDate = endDate?.let { sdf.parse(it) }
+            val endingDate = formatter.format(eDate!!)
+            val transactionDate = formatter.format(t.transaction?.date?.toDate()!!)
+            
             if (t.transaction?.amount!! >= minAmount!!.toFloat() &&
                 t.transaction?.amount!! <= maxAmount!!.toFloat()
-                && dateConverted!! >= startDateConverted && dateConverted >= endDateConverted)
+                && transactionDate in startingDate..endingDate)
                 filteredArray.add(TransactionFilter(t.transactionID, t.transaction))
         }
         transactionFilterArrayList.clear()
