@@ -22,6 +22,11 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFinancialAssessmentFinlitExpertSpecificAssessmentBinding
     private lateinit var assessmentID:String
 
+    private val tabIcons = intArrayOf(
+        ph.edu.dlsu.finwise.R.drawable.baseline_list_24,
+        ph.edu.dlsu.finwise.R.drawable.question_mark
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialAssessmentFinlitExpertSpecificAssessmentBinding.inflate(layoutInflater)
@@ -35,6 +40,7 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
         adapter.addFragment(AssessmentDetailsFragment(),"Details")
         adapter.addFragment(AssessmentQuestionsFragment(),"Questions")
+        setupTabIcons()
         sendDataToFragment()
 
         binding.viewPager.adapter = adapter
@@ -47,6 +53,11 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
         NavbarFinlitExpert(findViewById(R.id.bottom_nav_finlit_expert), this, R.id.nav_finlit_assessment)
 
         goToFinlitExpertEditAssessment()
+    }
+
+    private fun setupTabIcons() {
+        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
     }
 
     private fun sendDataToFragment() {

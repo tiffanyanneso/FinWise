@@ -21,6 +21,11 @@ class GoalTransactionsActivity : AppCompatActivity() {
     private lateinit var financialGoalID:String
     private lateinit var source:String
 
+    private val tabIcons = intArrayOf(
+        ph.edu.dlsu.finwise.R.drawable.baseline_star_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_wallet_24
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityGoalTransactionsBinding.inflate(layoutInflater)
@@ -38,6 +43,7 @@ class GoalTransactionsActivity : AppCompatActivity() {
 
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
+        setupTabIcons()
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
@@ -46,6 +52,11 @@ class GoalTransactionsActivity : AppCompatActivity() {
                 goToGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this.startActivity(goToGoal)
             }
+    }
+
+    private fun setupTabIcons() {
+        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){

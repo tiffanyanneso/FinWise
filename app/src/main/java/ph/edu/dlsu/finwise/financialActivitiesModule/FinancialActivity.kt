@@ -37,6 +37,15 @@ class FinancialActivity : AppCompatActivity() {
 
     private var ongoingGoals = 0
 
+    private val tabIcons = intArrayOf(
+        ph.edu.dlsu.finwise.R.drawable.baseline_star_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_wallet_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_pie_chart_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_shopping_cart_checkout_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_check_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_do_not_disturb_24,
+    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,15 +59,16 @@ class FinancialActivity : AppCompatActivity() {
                 //checkSettings()
 
                 // TODO: change the fragments added based on parent approval
+                adapter.addFragment(GoalSettingFragment(),"Goal Setting")
                 adapter.addFragment(SavingFragment(),"Saving")
                 adapter.addFragment(BudgetingFragment(),"Budgeting")
                 adapter.addFragment(SpendingFragment(),"Spending")
-                adapter.addFragment(GoalSettingFragment(),"Goal Setting")
                 adapter.addFragment(AchievedFragment(),"Achieved")
                 adapter.addFragment(DisapprovedFragment(),"Disapproved")
 
                 binding.viewPager.adapter = adapter
                 binding.tabLayout.setupWithViewPager(binding.viewPager)
+                setupTabIcons()
             }
         }
 
@@ -76,6 +86,15 @@ class FinancialActivity : AppCompatActivity() {
         // and initializes the navbar
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+    }
+
+    private fun setupTabIcons() {
+        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
+        binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[2])
+        binding.tabLayout.getTabAt(3)?.setIcon(tabIcons[3])
+        binding.tabLayout.getTabAt(4)?.setIcon(tabIcons[4])
+        binding.tabLayout.getTabAt(5)?.setIcon(tabIcons[5])
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){

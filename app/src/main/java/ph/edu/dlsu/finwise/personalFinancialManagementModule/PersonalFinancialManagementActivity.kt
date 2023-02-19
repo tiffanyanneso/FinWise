@@ -23,6 +23,16 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPersonalFinancialManagementBinding
     private var firestore = Firebase.firestore
 
+    private val tabIcons1 = intArrayOf(
+        ph.edu.dlsu.finwise.R.drawable.baseline_wallet_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_shopping_cart_checkout_24
+    )
+
+    private val tabIcons2 = intArrayOf(
+        ph.edu.dlsu.finwise.R.drawable.baseline_account_balance_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_wallet_24
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPersonalFinancialManagementBinding.inflate(layoutInflater)
@@ -51,6 +61,11 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         goToPayMaya()
     }
 
+    private fun setupTabIcons1() {
+        binding.tabs.getTabAt(0)?.setIcon(tabIcons1[0])
+        binding.tabs.getTabAt(1)?.setIcon(tabIcons1[1])
+    }
+
     private fun setUpBreakdownTabs() {
         val adapter = PFMAdapter(supportFragmentManager)
         adapter.addFragment(IncomeFragment(), "Income")
@@ -60,6 +75,12 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
         binding.tabs.getTabAt(0)?.text = "Income"
         binding.tabs.getTabAt(1)?.text = "Expense"
+        setupTabIcons1()
+    }
+
+    private fun setupTabIcons2() {
+        binding.tabsBarCharts.getTabAt(0)?.setIcon(tabIcons2[0])
+        binding.tabsBarCharts.getTabAt(1)?.setIcon(tabIcons2[1])
     }
 
     private fun setUpChartTabs() {
@@ -71,6 +92,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
         binding.tabsBarCharts.getTabAt(0)?.text = "Balance"
         binding.tabsBarCharts.getTabAt(1)?.text = "Savings"
+        setupTabIcons2()
     }
 
     private fun loadBalance() {

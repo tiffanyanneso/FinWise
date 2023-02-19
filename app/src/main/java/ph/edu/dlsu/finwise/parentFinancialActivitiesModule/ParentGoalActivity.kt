@@ -27,6 +27,15 @@ class ParentGoalActivity : AppCompatActivity() {
 
     private lateinit var childID:String
 
+    private val tabIcons = intArrayOf(
+        ph.edu.dlsu.finwise.R.drawable.baseline_star_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_wallet_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_pie_chart_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_shopping_cart_checkout_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_check_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_do_not_disturb_24,
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityParentGoalBinding.inflate(layoutInflater)
@@ -65,17 +74,26 @@ class ParentGoalActivity : AppCompatActivity() {
         //checkSettings()
 
         // TODO: change the fragments added based on parent approval
+        adapter.addFragment(ParentGoalSettingFragment(),"Goal Setting")
         adapter.addFragment(ParentSavingFragment(),"Saving")
         adapter.addFragment(ParentBudgetingFragment(),"Budgeting")
         adapter.addFragment(ParentSavingFragment(),"Spending")
-        adapter.addFragment(ParentGoalSettingFragment(),"Goal Setting")
         adapter.addFragment(ParentAchievedFragment(),"Achieved")
         adapter.addFragment(ParentDisapprovedFragment(),"Disapproved")
         sendDataToFragment()
 
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
+        setupTabIcons()
+    }
 
+    private fun setupTabIcons() {
+        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
+        binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[2])
+        binding.tabLayout.getTabAt(3)?.setIcon(tabIcons[3])
+        binding.tabLayout.getTabAt(4)?.setIcon(tabIcons[4])
+        binding.tabLayout.getTabAt(5)?.setIcon(tabIcons[5])
     }
 
     private fun setChildName() {

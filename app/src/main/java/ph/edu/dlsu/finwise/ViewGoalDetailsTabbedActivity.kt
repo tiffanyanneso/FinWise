@@ -12,6 +12,11 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 class ViewGoalDetailsTabbedActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityViewGoalDetailsTabbedBinding
+    private val tabIcons = intArrayOf(
+        ph.edu.dlsu.finwise.R.drawable.baseline_list_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_chat_24,
+    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -37,6 +42,7 @@ class ViewGoalDetailsTabbedActivity : AppCompatActivity() {
 
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
+        setupTabIcons()
 
         binding.topAppBar.setNavigationOnClickListener {
             val goToGoal = Intent(applicationContext, ViewGoalActivity::class.java)
@@ -44,6 +50,11 @@ class ViewGoalDetailsTabbedActivity : AppCompatActivity() {
             goToGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(goToGoal)
         }
+    }
+
+    private fun setupTabIcons() {
+        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){
