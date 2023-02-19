@@ -37,8 +37,8 @@
     <string name="number_of_questions">Number of Questions</string>
     <string name="number_of_takes">Number of Takes</string>
     <string name="question">Question</string>
-    <string name="add_new_questions">+ Add New Questions</string>
-    <string name="add_new_choices">+ Add New Choices</string>
+    <string name="add_new_question">+ Add New Question</string>
+    <string name="add_new_choices">+ Add New Choice</string>
     <string name="area">Area </string>
     <string name="date_created">Date Created</string>
     <string name="date_modified">Date Modified</string>

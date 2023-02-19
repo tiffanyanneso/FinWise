@@ -28,6 +28,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
+        app:layout_constraintBottom_toTopOf="@+id/bottom_nav_finlit_expert"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -110,28 +111,28 @@
                     android:layout_marginTop="10dp"
                     tools:listitem="@layout/item_add_new_choice"/>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_save"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/save"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/dark_green"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/bottom_nav_finlit_expert" />
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_save"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/save"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/dark_green"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/bottom_nav_finlit_expert" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_cancel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/cancel"
-                android:textColor="@color/black"
-                android:backgroundTint="@color/light_grey"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/bottom_nav_finlit_expert"
-                android:layout_marginBottom="50dp" />
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_cancel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cancel"
+                        android:textColor="@color/black"
+                        android:backgroundTint="@color/light_grey"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintBottom_toTopOf="@id/bottom_nav_finlit_expert"
+                        android:layout_marginBottom="50dp" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

@@ -110,6 +110,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 val bundle = Bundle()
                 //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
                 bundle.putString("financialGoalID", financialGoalID)
+                bundle.putString("savingActivityID", savingActivityID)
                 //target amount has already been met, update status of goal and fin activity to completed
                 if (goal?.targetAmount!! <= saved) {
                     firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Completed")

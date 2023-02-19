@@ -20,6 +20,7 @@ import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
 import ph.edu.dlsu.finwise.adapter.GoalDecisionMakingActivitiesAdapter
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
+import ph.edu.dlsu.finwise.databinding.DialogFinishSavingBinding
 import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
@@ -118,11 +119,15 @@ class ViewGoalActivity : AppCompatActivity() {
                 budgeting.putExtras(sendBundle)
                 this.startActivity(budgeting)
             } else {
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("Finish Saving First")
-                builder.setMessage("You have to finish saving for your goal before you can proceed to the next activity\n\nCome back again when you're done saving!")
-                builder.setPositiveButton(android.R.string.yes) { dialog, which -> dialog.dismiss()}
-                builder.show()
+                var dialogBinding= DialogFinishSavingBinding.inflate(getLayoutInflater())
+                var dialog= Dialog(this);
+                dialog.setContentView(dialogBinding.getRoot())
+                dialog.window!!.setLayout(900, 800)
+
+                dialog.show()
+                dialogBinding.btnOk.setOnClickListener{
+                    dialog.dismiss()
+                }
             }
 
         }

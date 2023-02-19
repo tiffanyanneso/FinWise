@@ -4,9 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ItemAddNewChoiceBinding
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinlitExpertAddNewQuestionsActivity
 
@@ -55,7 +57,12 @@ class NewChoicesAdapter : RecyclerView.Adapter<NewChoicesAdapter.ChoicesViewHold
 
         fun bindChoice(choice: FinlitExpertAddNewQuestionsActivity.Choice){
             itemBinding.tvChoice.text = choice.choice
-            itemBinding.switchSetChoices.isChecked = true
+            if(choice.correct == true)
+                itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.very_light_green))
+            else if (choice.correct == false)
+                itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.cream))
+
+            //itemBinding.switchSetChoices.isChecked = choice.correct!!
         }
 
         override fun onClick(p0: View?) {
