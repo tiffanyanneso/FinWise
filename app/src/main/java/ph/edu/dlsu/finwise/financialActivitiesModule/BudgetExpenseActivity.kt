@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -61,7 +62,6 @@ class BudgetExpenseActivity : AppCompatActivity() {
             if (activity?.status == "Completed")
                 binding.btnRecordExpense.visibility = View.GONE
         }
-
         //checkUser()
         getInfo()
 
@@ -79,6 +79,25 @@ class BudgetExpenseActivity : AppCompatActivity() {
             var goToGoalTransactions = Intent(this, GoalTransactionsActivity::class.java)
             goToGoalTransactions.putExtras(bundle)
             this.startActivity(goToGoalTransactions)
+        }
+
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToBudgetActivity = Intent(applicationContext, BudgetActivity::class.java)
+
+//            var bundle = Bundle()
+//            bundle.putString("financialGoalID", binding.tv)
+//            bundle.putString("budgetItemID", budgetItemID)
+//            bundle.putFloat("remainingBudget", remainingBudget)
+
+//            financialGoalID = bundle.getString("financialGoalID").toString() y
+//            budgetActivityID = bundle.getString("budgetActivityID").toString() y
+//            savingActivityID = bundle.getString("savingActivityID").toString()
+
+//            goToBudgetActivity.putExtras(bundle)
+//            goToBudgetActivity.putExtras(bundle)
+//            goToBudgetActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(goToBudgetActivity)
         }
     }
 

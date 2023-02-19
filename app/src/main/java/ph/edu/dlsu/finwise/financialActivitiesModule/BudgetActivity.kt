@@ -38,6 +38,7 @@ class BudgetActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
     private lateinit var budgetCategoryAdapter: BudgetCategoryAdapter
     lateinit var context:Context
+    lateinit var bundle: Bundle
 
 
     private lateinit var budgetActivityID:String
@@ -67,7 +68,7 @@ class BudgetActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
-        var bundle: Bundle = intent.extras!!
+        bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         budgetActivityID = bundle.getString("budgetActivityID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()

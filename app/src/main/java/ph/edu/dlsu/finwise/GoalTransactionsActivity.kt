@@ -34,27 +34,18 @@ class GoalTransactionsActivity : AppCompatActivity() {
         financialGoalID = bundle.getString("source").toString()
 
         adapter.addFragment(GoalDepositFragment(),"Deposit")
-        adapter.addFragment(GoalExpenseFragment(),"Expense")
+        adapter.addFragment(GoalExpenseFragment(),"Withdrawal")
 
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
 
-        // todo get previous page, add setting a budget page
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
-            if (source == "viewGoal") {
                 val goToGoal = Intent(applicationContext, ViewGoalActivity::class.java)
                 goToGoal.putExtras(bundle)
                 goToGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this.startActivity(goToGoal)
             }
-            else if (source == "budgetItem") {
-                val goToBudget = Intent(applicationContext, BudgetExpenseActivity::class.java) 
-                goToBudget.putExtras(bundle)
-                goToBudget.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                this.startActivity(goToBudget)
-            }
-        }
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){

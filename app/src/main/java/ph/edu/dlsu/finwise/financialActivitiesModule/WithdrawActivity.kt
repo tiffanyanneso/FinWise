@@ -60,6 +60,7 @@ class WithdrawActivity : AppCompatActivity() {
         binding.topAppBar.setNavigationOnClickListener {
             var bundle = Bundle()
             bundle.putString("financialGoalID",financialGoalID)
+            bundle.putString("goalID", financialGoalID)
 
             val goToGoal = Intent(applicationContext, ViewGoalActivity::class.java)
             goToGoal.putExtras(bundle)

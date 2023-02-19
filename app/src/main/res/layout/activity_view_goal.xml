@@ -239,7 +239,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="20dp"
-                        android:text="@string/savings_deposit"
+                        android:text="Goal Transactions"
                         android:textStyle="bold"
                         android:textColor="@color/black"
                         android:layout_marginTop="20sp"

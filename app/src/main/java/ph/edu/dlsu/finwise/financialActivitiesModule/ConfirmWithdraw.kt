@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -28,6 +29,9 @@ class ConfirmWithdraw : AppCompatActivity() {
         setContentView(binding.root)
         bundle = intent.extras!!
 
+//        binding.tvGoalId.text = bundle.getString("financialGoalID").toString()
+//        binding.tvSavingActivityId.text = bundle.getString("")
+
         setData()
 
         binding.btnConfirm.setOnClickListener {
@@ -51,6 +55,19 @@ class ConfirmWithdraw : AppCompatActivity() {
                 this.startActivity(saving)
                 finish()
             }
+        }
+
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToWithdraw = Intent(applicationContext, WithdrawActivity::class.java)
+
+            var backBundle = Bundle()
+            backBundle.putString("financialGoalID", bundle.getString("financialGoalID"))
+            backBundle.putString("savingActivityID", bundle.getString("savingActivityID"))
+
+            goToWithdraw.putExtras(backBundle)
+            goToWithdraw.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(goToWithdraw)
         }
     }
 

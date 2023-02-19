@@ -122,6 +122,16 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
 //            budgetCategory.putExtras(bundle)
 //            budgetCategory.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 //            context.startActivity(budgetCategory)
+//            var budgetCategory = Intent(context, BudgetExpenseActivity::class.java)
+//            var bundle = Bundle()
+
+//            bundle.putString ("budgetItemID", itemBinding.tvBudgetItemId.text.toString())
+//            bundle.putString ("budgetActivityID", itemBinding.budgetActivityId.text.toString())
+//            bundle.putString ("financialGoalID", itemBinding.tvGoalId.text.toString())
+//            bundle.putString ("savingActivityID", itemBinding.tvSavingActivityId.text.toString())
+//            budgetCategory.putExtras(bundle)
+//            budgetCategory.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            context.startActivity(budgetCategory)
         }
     }
 

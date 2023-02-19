@@ -13,6 +13,12 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".ItemExpensesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReasonExpensesActivity"
+            android:exported="false" />
+        <activity
             android:name=".financialAssessmentModule.FinancialAssessmentCompleted"
             android:exported="false">
             <meta-data
@@ -107,8 +113,7 @@
             android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.ReviewGoalActivity"
-            android:exported="true" >
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".SettingAGoalActivity"
             android:exported="false" />
@@ -151,16 +156,13 @@
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertEditAssessmentActivity"
             android:exported="false" />
@@ -202,7 +204,7 @@
             android:exported="true" />
         <activity
             android:name=".personalFinancialManagementModule.TransactionSortActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.ChildEditGoal"
             android:exported="false" />
@@ -214,6 +216,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -237,8 +240,7 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="false">
