@@ -40,9 +40,9 @@ class StartGoalActivity : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         var bundle: Bundle = intent.extras!!
-        var goalID = bundle.getString("goalID")
-        if (goalID != null) {
-            firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener { document ->
+        var financialGoalID = bundle.getString("financialGoalID")
+        if (financialGoalID != null) {
+            firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener { document ->
                 if (document != null) {
                     var goal = document.toObject(FinancialGoals::class.java)
                     binding.tvGoalName.text = goal?.goalName.toString()
@@ -62,7 +62,7 @@ class StartGoalActivity : AppCompatActivity() {
 
         binding.btnGetStarted.setOnClickListener {
             var goToViewGoal = Intent(context, ViewGoalActivity::class.java)
-            goToViewGoal.putExtra("goalID", goalID)
+            goToViewGoal.putExtra("financialGoalID", financialGoalID)
             context.startActivity(goToViewGoal)
             finish()
         }

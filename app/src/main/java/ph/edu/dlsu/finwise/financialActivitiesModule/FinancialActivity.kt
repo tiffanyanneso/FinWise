@@ -52,7 +52,7 @@ class FinancialActivity : AppCompatActivity() {
                 // TODO: change the fragments added based on parent approval
                 adapter.addFragment(SavingFragment(),"Saving")
                 adapter.addFragment(BudgetingFragment(),"Budgeting")
-                adapter.addFragment(SavingFragment(),"Spending")
+                adapter.addFragment(SpendingFragment(),"Spending")
                 adapter.addFragment(GoalSettingFragment(),"Goal Setting")
                 adapter.addFragment(AchievedFragment(),"Achieved")
                 adapter.addFragment(DisapprovedFragment(),"Disapproved")
