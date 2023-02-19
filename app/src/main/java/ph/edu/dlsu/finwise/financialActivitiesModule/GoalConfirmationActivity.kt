@@ -41,6 +41,8 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
     private lateinit var currentUserType:String
 
+    private var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
        super.onCreate(savedInstanceState)
@@ -176,12 +178,11 @@ class GoalConfirmationActivity : AppCompatActivity() {
     }
 
     private fun saveFinancialActivities(financialActivity:String, goalID:String) {
-        var savingActivity = FinancialActivities (goalID, "Saving", "In Progress")
+        var savingActivity = FinancialActivities (goalID, currentUser, "Saving", "In Progress")
         firestore.collection("FinancialActivities").add(savingActivity)
         if (financialActivity == "Buying Items" ||financialActivity == "Planning An Event" || financialActivity == "Situational Shopping") {
-            var budgetingActivity = FinancialActivities(goalID, "Budgeting", "Locked")
-            var spendingActivity = FinancialActivities(goalID, "Spending", "Locked")
-            firestore.collection("FinancialActivities").add(budgetingActivity)
+            var budgetingActivity = FinancialActivities(goalID, currentUser, "Budgeting", "Locked")
+            var spendingActivity = FinancialActivities(goalID, currentUser, "Spending", "Locked")
             firestore.collection("FinancialActivities").add(budgetingActivity)
             firestore.collection("FinancialActivities").add(spendingActivity)
         }

@@ -47,16 +47,15 @@ class SavingFragment : Fragment() {
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){ }
 
     private fun getSaving() {
-        //TODO: GET GOALS OF CURRENT USER
+        ///TODO: CHANGE TO FIREBASEAUTH.CURRENTUSER
+        var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         //saving activities that are in progress means that there the goal is also in progress because they are connected
-        firestore.collection("FinancialActivities").whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
-            for (saving in results) {
-                var savingActivity = saving.toObject<FinancialActivities>()
-                savingsArrayList.add(savingActivity)
-
-                goalIDArrayList.add(savingActivity.financialGoalID.toString())
-                loadRecyclerView(goalIDArrayList)
+        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+            for (activity in results) {
+                var activityObject = activity.toObject<FinancialActivities>()
+                goalIDArrayList.add(activityObject?.financialGoalID.toString())
             }
+            loadRecyclerView(goalIDArrayList)
         }
     }
 

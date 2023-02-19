@@ -72,6 +72,7 @@ class BudgetActivity : AppCompatActivity() {
         financialGoalID = bundle.getString("financialGoalID").toString()
         budgetActivityID = bundle.getString("budgetActivityID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
+        spendingActivityID = bundle.getString("spendingActivityID").toString()
 
         //checks if child has already finished setting budget
         //if they are done setting budget, any changes would count as an update that would affect their overall score
@@ -98,6 +99,7 @@ class BudgetActivity : AppCompatActivity() {
                     binding.btnDoneSettingBudget.visibility = View.GONE
                     isCompleted = true
                     dialog.dismiss()
+                    firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "In Progress")
                 }
             }
 
