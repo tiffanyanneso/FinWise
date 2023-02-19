@@ -1,11 +1,13 @@
 package ph.edu.dlsu.finwise
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalDetailsTabbedBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 
 class ViewGoalDetailsTabbedActivity : AppCompatActivity() {
 
@@ -35,6 +37,13 @@ class ViewGoalDetailsTabbedActivity : AppCompatActivity() {
 
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
+
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToGoal = Intent(applicationContext, ViewGoalActivity::class.java)
+            goToGoal.putExtras(bundle)
+            goToGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(goToGoal)
+        }
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){

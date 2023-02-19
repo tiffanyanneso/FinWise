@@ -9,11 +9,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.GoalTransactionsActivity
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
@@ -41,6 +43,7 @@ class ViewGoalActivity : AppCompatActivity() {
     private lateinit var decisionMakingActivitiesAdapater: GoalDecisionMakingActivitiesAdapter
 
     private lateinit var financialGoalID:String
+    private lateinit var source:String
 
     private var savedAmount = 0.00F
     private var targetAmount = 0.00F
@@ -76,11 +79,18 @@ class ViewGoalActivity : AppCompatActivity() {
 
         var sendBundle = Bundle()
         sendBundle.putString("financialGoalID", financialGoalID)
+        sendBundle.putString("source", "viewGoal")
 
         binding.btnEditGoal.setOnClickListener {
             var goToEditGoal = Intent(this, ChildEditGoal::class.java)
             goToEditGoal.putExtras(sendBundle)
             this.startActivity(goToEditGoal)
+        }
+
+        binding.tvViewAll.setOnClickListener {
+            var goToGoalTransactions = Intent(this, GoalTransactionsActivity::class.java)
+            goToGoalTransactions.putExtras(sendBundle)
+            this.startActivity(goToGoalTransactions)
         }
 
         binding.btnWithdraw.setOnClickListener {
@@ -131,8 +141,15 @@ class ViewGoalActivity : AppCompatActivity() {
             }
 
         }
+
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToFinancialActivities = Intent(applicationContext, FinancialActivity::class.java)
+            this.startActivity(goToFinancialActivities)
+        }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setFinancialActivityID() {
         firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
             for (finActivity in results) {
@@ -149,6 +166,7 @@ class ViewGoalActivity : AppCompatActivity() {
 
     private class TransactionFilter(var transactionID:String?=null, var date: Date?=null)
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getSavedAmount() {
         var transactionFilterArrayList = ArrayList<TransactionFilter>()
         firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->

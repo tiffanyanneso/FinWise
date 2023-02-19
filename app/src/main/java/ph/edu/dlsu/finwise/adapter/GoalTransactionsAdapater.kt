@@ -1,10 +1,13 @@
 package ph.edu.dlsu.finwise.adapter
 
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -13,6 +16,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ItemGoalTransactionBinding
 import ph.edu.dlsu.finwise.databinding.ItemTransactionBinding
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionFragment
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
@@ -75,7 +79,16 @@ class GoalTransactionsAdapater : RecyclerView.Adapter<GoalTransactionsAdapater.G
         }
 
         override fun onClick(p0: View?) {
+            val bundle = Bundle()
+            val transactionID = itemBinding.tvTransactionId.text.toString()
 
+            //Show dialog fragment
+            val activity = context as FragmentActivity
+            val fm: FragmentManager = activity.supportFragmentManager
+            val dialogFragment = TransactionFragment()
+            bundle.putString("transactionID", transactionID);
+            dialogFragment.arguments = bundle
+            dialogFragment.show(fm, "fragment_alert")
         }
     }
 }

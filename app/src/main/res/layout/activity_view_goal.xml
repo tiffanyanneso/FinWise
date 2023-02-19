@@ -229,15 +229,33 @@
                         android:src="@drawable/right_arrow" />
                 </LinearLayout>
 
-                <TextView
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:text="@string/savings_deposit"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="20dp" />
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:text="@string/savings_deposit"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="20sp"
+                        android:layout_weight="1"/>
+
+                    <TextView
+                        android:id="@+id/tv_view_all"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="View All >"
+                        android:textColor="@color/black"
+                        android:layout_marginTop="20dp"
+                        android:textAlignment="textEnd"
+                        android:layout_weight="1"/>
+                </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_savings_deposit"

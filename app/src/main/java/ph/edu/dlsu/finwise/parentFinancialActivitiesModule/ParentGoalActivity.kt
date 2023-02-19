@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -16,6 +17,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
 import ph.edu.dlsu.finwise.model.ChildUser
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment.*
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 
 class ParentGoalActivity : AppCompatActivity() {
 
@@ -57,7 +59,6 @@ class ParentGoalActivity : AppCompatActivity() {
                 }
                 else -> false
             }
-
         }
 
         val adapter = ViewPagerAdapter(supportFragmentManager)

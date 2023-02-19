@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -99,6 +100,12 @@ class ChildNewGoal : AppCompatActivity() {
         binding.btnCancel.setOnClickListener {
             val goalList = Intent(this, FinancialActivity::class.java)
             this.startActivity(goalList)
+        }
+
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToFinancialActivity = Intent(applicationContext, FinancialActivity::class.java)
+            this.startActivity(goToFinancialActivity)
         }
     }
 

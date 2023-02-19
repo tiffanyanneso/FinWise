@@ -130,7 +130,6 @@ class RecordDepositActivity : AppCompatActivity() {
         bundle.putFloat("amount", amount.toFloat())
         bundle.putString("goal", goal)
         bundle.putString("source", "PFMDepositToGoal")
-        date = date
         bundle.putSerializable("date", date)
 
         //TODO: reset spinner and date to default value

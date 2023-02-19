@@ -10,6 +10,7 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -54,6 +55,14 @@ class ChildEditGoal : AppCompatActivity() {
 
         binding.btnDelete.setOnClickListener {
             confirmDeleteGoal()
+        }
+
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToGoal = Intent(applicationContext, ViewGoalActivity::class.java)
+            goToGoal.putExtras(bundle)
+            goToGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(goToGoal)
         }
 
     }

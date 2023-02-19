@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.GoalTransactionsActivity
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.BudgetExpenseAdapter
@@ -49,6 +50,7 @@ class BudgetExpenseActivity : AppCompatActivity() {
         bundle = intent.extras!!
         budgetActivityID = bundle.getString("budgetActivityID").toString()
         budgetItemID = bundle.getString("budgetItemID").toString()
+        bundle.putString("source", "viewGoal")
 
         //checkUser()
         getInfo()
@@ -61,6 +63,12 @@ class BudgetExpenseActivity : AppCompatActivity() {
             bundle.putFloat("remainingBudget", remainingBudget)
             recordExpense.putExtras(bundle)
             this.startActivity(recordExpense)
+        }
+
+        binding.tvViewAll.setOnClickListener {
+            var goToGoalTransactions = Intent(this, GoalTransactionsActivity::class.java)
+            goToGoalTransactions.putExtras(bundle)
+            this.startActivity(goToGoalTransactions)
         }
     }
 

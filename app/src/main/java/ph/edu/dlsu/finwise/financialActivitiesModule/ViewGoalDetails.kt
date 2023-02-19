@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.firestore.ktx.firestore
@@ -26,6 +27,13 @@ class ViewGoalDetails : AppCompatActivity() {
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         getGoal()
+
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToGoal = Intent(applicationContext, ViewGoalActivity::class.java)
+            goToGoal.putExtras(bundle)
+            goToGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(goToGoal)
+        }
     }
 
     private fun getGoal() {

@@ -12,7 +12,6 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentTransactionHistoryExpenseBinding
 import ph.edu.dlsu.finwise.model.Transactions
-import java.util.*
 import kotlin.collections.ArrayList
 
 class TransactionHistoryExpenseFragment : Fragment() {
@@ -23,7 +22,7 @@ class TransactionHistoryExpenseFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getExpenseTransactions()
+       // getExpenseTransactions()
     }
 
     override fun onCreateView(
@@ -44,10 +43,10 @@ class TransactionHistoryExpenseFragment : Fragment() {
         transactionAdapter.notifyDataSetChanged()
     }
 
-    class TransactionFilter(var transactionID: String?=null, var transactionDate: Date?=null){
+    /* class TransactionFilter(var transactionID: String?=null, var transactionDate: Transactions =null){
     }
 
-    private fun getExpenseTransactions() {
+   private fun getExpenseTransactions() {
         var expenseIDArrayList = ArrayList<String>()
         var transactionFilterArrayList = ArrayList<TransactionFilter>()
 //
@@ -75,5 +74,5 @@ class TransactionHistoryExpenseFragment : Fragment() {
 
             loadRecyclerView(expenseIDArrayList)
         }
-    }
+    }*/
 }

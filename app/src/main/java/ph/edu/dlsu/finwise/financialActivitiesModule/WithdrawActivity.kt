@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -53,6 +54,17 @@ class WithdrawActivity : AppCompatActivity() {
             confirmWithdraw.putExtras(bundle)
             confirmWithdraw.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(confirmWithdraw)
+        }
+
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            var bundle = Bundle()
+            bundle.putString("goalID",goalID)
+
+            val goToGoal = Intent(applicationContext, ViewGoalActivity::class.java)
+            goToGoal.putExtras(bundle)
+            goToGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(goToGoal)
         }
     }
 
