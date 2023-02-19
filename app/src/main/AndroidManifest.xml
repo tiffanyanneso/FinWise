@@ -13,10 +13,10 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
-            android:name=".ItemExpensesActivity"
+            android:name=".financialActivitiesModule.ItemExpensesActivity"
             android:exported="false" />
         <activity
-            android:name=".ReasonExpensesActivity"
+            android:name=".financialActivitiesModule.ReasonExpensesActivity"
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentCompleted"
@@ -180,7 +180,13 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.TransactionHistoryActivity"
-            android:exported="true" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".personalFinancialManagementModule.ConfirmDepositActivity"
             android:exported="false" />
@@ -214,11 +220,11 @@
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"

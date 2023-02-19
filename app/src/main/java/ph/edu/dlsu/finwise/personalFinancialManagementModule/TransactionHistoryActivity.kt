@@ -3,7 +3,6 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -18,7 +17,6 @@ import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.Transa
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryIncomeFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionSortFragment
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class TransactionHistoryActivity : AppCompatActivity() {
@@ -31,6 +29,10 @@ class TransactionHistoryActivity : AppCompatActivity() {
     private var maxAmount: String? = null
     private var startDate: String? = null
     private var endDate: String? = null
+    private val tabIcons = intArrayOf(
+        ph.edu.dlsu.finwise.R.drawable.baseline_wallet_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_shopping_cart_checkout_24
+    )
 
 
     /*  private lateinit var transactionAdapter: TransactionsAdapter
@@ -119,8 +121,14 @@ class TransactionHistoryActivity : AppCompatActivity() {
 
                 binding.viewPager.adapter = adapter
                 binding.tabLayout.setupWithViewPager(binding.viewPager)
+                setupTabIcons()
             }
         }
+    }
+
+    private fun setupTabIcons() {
+        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
     }
 
     private fun loadBackButton() {
