@@ -9,6 +9,7 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -41,6 +42,7 @@ class RecordIncomeActivity : AppCompatActivity() {
         initializeDropdown()
         initializeDatePicker()
         //getGoals()
+        loadBackButton()
         goToConfirmation()
         cancel()
     }
@@ -52,6 +54,13 @@ class RecordIncomeActivity : AppCompatActivity() {
         binding.dropdownCategory.setAdapter(adapter)
     }
 
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToPFM = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
+            startActivity(goToPFM)
+        }
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeDatePicker() {
         binding.etDate.setOnClickListener{
