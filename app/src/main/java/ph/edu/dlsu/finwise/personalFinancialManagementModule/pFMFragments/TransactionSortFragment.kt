@@ -9,13 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.EditText
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentTransactionSortBinding
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.ConfirmTransactionActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -23,15 +21,10 @@ import java.util.Date
 class TransactionSortFragment : DialogFragment() {
     private lateinit var binding : FragmentTransactionSortBinding
     var bundle: Bundle? = null
-    var minAmount: Float? = null
-    var maxAmount: Float? = null
-    var startDate: Date? = null
-    var endDate: Date? = null
-    var isSortable = false
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var minAmount: Float? = null
+    private var maxAmount: Float? = null
+    private var startDate: Date? = null
+    private var endDate: Date? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -211,9 +204,6 @@ class TransactionSortFragment : DialogFragment() {
             flag = false
             binding.tvError.visibility = View.VISIBLE
         }
-
-
-        Toast.makeText(context, ""+flag, Toast.LENGTH_SHORT).show()
         return flag
     }
 
