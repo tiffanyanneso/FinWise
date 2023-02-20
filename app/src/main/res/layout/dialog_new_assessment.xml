@@ -6,9 +6,19 @@
     android:padding="20dp"
     android:background="@drawable/button_border_white">
 
+    <ImageView
+        android:id="@+id/img"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/baseline_gpp_maybe_24"
+        app:tint="@color/red"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
     <TextView
         android:id="@+id/tv_title"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
@@ -30,7 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="There is currently no existing assessment for this. Do you want to create a new assessment?"
+            android:text="No existing assessment. Create a new assessment?"
+            android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="16dp" />
 

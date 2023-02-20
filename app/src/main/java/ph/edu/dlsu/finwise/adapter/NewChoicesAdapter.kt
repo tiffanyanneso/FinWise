@@ -57,10 +57,14 @@ class NewChoicesAdapter : RecyclerView.Adapter<NewChoicesAdapter.ChoicesViewHold
 
         fun bindChoice(choice: FinlitExpertAddNewQuestionsActivity.Choice){
             itemBinding.tvChoice.text = choice.choice
-            if(choice.correct == true)
+            if(choice.correct == true) {
+                itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.light_green))
+                itemBinding.imgCorrectAnswer.visibility = View.VISIBLE
+            }
+            else if (choice.correct == false) {
                 itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.very_light_green))
-            else if (choice.correct == false)
-                itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.cream))
+                itemBinding.imgCorrectAnswer.visibility = View.GONE
+            }
 
             //itemBinding.switchSetChoices.isChecked = choice.correct!!
         }

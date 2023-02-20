@@ -51,9 +51,7 @@
                 android:textSize="16dp"
                 android:text="@string/deposit_amount"
                 android:textAllCaps = "true"
-                android:textColor="@color/black"
-
-                />
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/tv_amount"

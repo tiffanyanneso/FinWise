@@ -133,7 +133,7 @@ class FinancialActivity : AppCompatActivity() {
 
         dialog.window!!.setLayout(900, 600)
 
-        dialogBinding.tvMessage.text= "You current have $ongoingGoals ongoing goals.\nAre you sure you want to create another new goal?"
+        dialogBinding.tvMessage.text= "You have $ongoingGoals ongoing goals.\nAre you sure you want to start another one?"
 
         dialogBinding.btnOk.setOnClickListener {
             var newGoal = Intent (this, ChildNewGoal::class.java)

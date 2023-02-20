@@ -12,13 +12,21 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/password_reset"
+            android:layout_gravity="center"/>
+
         <TextView
             android:id="@+id/tv_new_category"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:text="What's next?"
+            android:text="Continue?"
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="@color/black"/>
@@ -35,49 +43,42 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textSize="16dp"
-                android:text="Do you want to proceed to the next activity?
-                \nClicking on 'No' will return your savings to your balance"
-                android:textColor="@color/black"/>
+                android:text="Do you want to proceed to budgeting? Clicking 'No' will return goal savings to balance and mark activity as achieved."
+                android:textColor="@color/black"
+                android:textAlignment="center"/>
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linear_layout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_layout"
+        app:layout_constraintTop_toBottomOf="@id/linear_layout"
+        app:layout_constraintStart_toStartOf="parent"
         android:orientation="horizontal"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp">
+        android:gravity="right"
+        android:layout_marginBottom="10dp"
+        android:layout_marginHorizontal="20dp">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_no"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/btn_save"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:text="No"
             android:textColor="@color/black"
             android:backgroundTint="@color/light_grey"
             android:background="@drawable/button_border_grey"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1" />
+            android:layout_marginRight="5dp"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_proceed"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:background="@drawable/button_border"
             android:backgroundTint="@color/dark_green"
-            android:text="Proceed"
+            android:text="Yes"
             android:textColor="@color/off_white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_weight="1"/>
+            android:layout_marginLeft="5dp"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
