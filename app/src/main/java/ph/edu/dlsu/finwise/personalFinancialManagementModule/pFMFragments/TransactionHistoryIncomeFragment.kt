@@ -52,7 +52,7 @@ class TransactionHistoryIncomeFragment : Fragment() {
         if (checkedBoxes == "both" || checkedBoxes == "income") {
             getBundleValues()
             transactionFilterArrayList = checkSort()
-        }
+        } else if (checkedBoxes == "expense") transactionFilterArrayList.clear()
         return transactionFilterArrayList
     }
 

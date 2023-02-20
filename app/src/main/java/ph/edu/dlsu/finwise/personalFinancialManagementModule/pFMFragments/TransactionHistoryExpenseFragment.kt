@@ -87,7 +87,7 @@ class TransactionHistoryExpenseFragment : Fragment() {
         if (checkedBoxes == "both" || checkedBoxes == "expense") {
             getBundleValues()
             transactionFilterArrayList = checkSort()
-        }
+        } else if (checkedBoxes == "income") transactionFilterArrayList.clear()
         return transactionFilterArrayList
     }
 

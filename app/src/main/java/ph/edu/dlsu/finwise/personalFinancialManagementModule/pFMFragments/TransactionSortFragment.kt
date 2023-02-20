@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.EditText
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.textfield.TextInputEditText
@@ -63,32 +64,8 @@ class TransactionSortFragment : DialogFragment() {
                 val goToSortedTransactions = Intent(context, TransactionHistoryActivity::class.java)
                 goToSortedTransactions.putExtras(bundle!!)
                 startActivity(goToSortedTransactions)
-            }
-
-            /* TODO:
-        *    - Initialize default variables
-        * - send if there are applied sort
-        * - Validate fields
-        *   - Amount
-        *       - Validation
-        *           - if there is min or max price, other field must have value
-        *           - if min is lower than maximum
-        *       - Initialize Values
-        *       - Sort - if inside the min and max price
-        *   -Date
-        *       - Initialize Date to be clickable
-        *       - Validation
-        *           - if there is min or max price, other field must have value
-        *           - if the end date is higher than the start date
-        *           - Initialize Values
-        *   - Category
-        *       - Initialize what was clicked, else just apply to all
-        *       - Redirect to which the sort will be applied
-        *       - Show which fragment they will be directed to
-        *   - Buttons
-        *       - Cancel --> dismiss
-        *       - Done --> Apply
-        *    */
+            } else if ((!isAmountSorted && !isDateSorted) && isCategorySorted)
+                Toast.makeText(context, "Please input an amount and/or date", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -200,12 +177,16 @@ class TransactionSortFragment : DialogFragment() {
 
         bundle?.putString("checkedBoxes", checkedBoxes)
 
+
         if (checkedBoxes == "none") {
             flag = false
             binding.tvError.visibility = View.VISIBLE
-        }
+        } else binding.tvError.visibility = View.GONE
+
+
         return flag
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeDatePicker(dateBinding: TextInputEditText, date: String) {

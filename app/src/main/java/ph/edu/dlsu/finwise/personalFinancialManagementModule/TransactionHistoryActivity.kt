@@ -24,7 +24,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
     private lateinit var context: Context
     private var getBundle: Bundle? = null
     private var setBundle: Bundle? = null
-    private var checkedBoxes: String? = null
+    private var checkedBoxes = "default"
     private var minAmount: String? = null
     private var maxAmount: String? = null
     private var startDate: String? = null
@@ -101,13 +101,20 @@ class TransactionHistoryActivity : AppCompatActivity() {
                 binding.viewPager.adapter = adapter
                 binding.tabLayout.setupWithViewPager(binding.viewPager)
                 setupTabIcons()
+                redirectToFilteredTab()
             }
         }
+    }
+
+    private fun redirectToFilteredTab() {
+        if (checkedBoxes == "expense")
+            binding.viewPager.currentItem = 1
     }
 
     private fun setupTabIcons() {
         binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
         binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
+
     }
 
     private fun loadBackButton() {
