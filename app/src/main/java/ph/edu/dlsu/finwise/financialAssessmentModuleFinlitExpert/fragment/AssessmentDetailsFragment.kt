@@ -50,7 +50,7 @@ class AssessmentDetailsFragment : Fragment() {
             binding.tvDateCreated.text= SimpleDateFormat("MM/dd/yyyy").format(assessment?.createdOn?.toDate())
             binding.tvNumberOfTakes.text = assessment?.nTakes.toString()
         }.continueWith {
-            firestore.collection("AssessmentQuestions").get().addOnSuccessListener { questions ->
+            firestore.collection("AssessmentQuestions").whereEqualTo("assessmentID", assessmentID).get().addOnSuccessListener { questions ->
                 binding.tvNumberOfQuestions.text = questions.size().toString()
             }
         }

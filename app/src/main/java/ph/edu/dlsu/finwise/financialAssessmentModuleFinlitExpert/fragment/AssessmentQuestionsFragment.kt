@@ -44,18 +44,13 @@ class AssessmentQuestionsFragment : Fragment() {
     }
 
     private fun getQuestions() {
-        println("print in questions fragment  " + assessmentID)
         firestore.collection("AssessmentQuestions").whereEqualTo("assessmentID", assessmentID).get().addOnSuccessListener { questions ->
             for (question in questions)
                 questionsID.add(question.id)
 
-
-            println("print questiosn " + questions.size())
             questionsAdapter = AssessmentQuestionsAdapter(requireContext().applicationContext, questionsID)
             binding.rvViewQuestions.adapter = questionsAdapter
-            binding.rvViewQuestions.layoutManager = LinearLayoutManager(requireContext().applicationContext,
-                LinearLayoutManager.VERTICAL,
-                false)
+            binding.rvViewQuestions.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
         }
     }
 }

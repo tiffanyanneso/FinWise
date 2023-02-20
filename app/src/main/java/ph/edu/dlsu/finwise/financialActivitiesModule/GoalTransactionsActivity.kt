@@ -46,6 +46,7 @@ class GoalTransactionsActivity : AppCompatActivity() {
             }
     }
 
+    //https://stackoverflow.com/questions/63730459/how-to-pass-data-from-activity-to-fragment-with-tablayout
     private fun initializeFragments() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
 
