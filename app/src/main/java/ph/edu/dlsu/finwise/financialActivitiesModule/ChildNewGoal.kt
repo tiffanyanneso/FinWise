@@ -75,8 +75,6 @@ class ChildNewGoal : AppCompatActivity() {
             var amount = binding.etAmount.text.toString().toFloat()
             var targetDate = binding.etTargetDate.text.toString()
 
-//                SimpleDateFormat("MM-dd-yyyy").parse((binding.etTargetDate.month+1).toString() + "-" +
-//                    binding.etTargetDate.dayOfMonth.toString() + "-" + binding.etTargetDate.year)
             var goalIsForSelf = binding.cbGoalSelf.isChecked
 
             bundle.putString("goalName", goalName)

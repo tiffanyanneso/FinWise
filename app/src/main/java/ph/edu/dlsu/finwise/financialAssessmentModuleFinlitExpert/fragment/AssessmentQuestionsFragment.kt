@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.AssessmentQuestionsAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentAssessmentQuestionsBinding
 
@@ -39,8 +38,7 @@ class AssessmentQuestionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAssessmentQuestionsBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     private fun getQuestions() {
