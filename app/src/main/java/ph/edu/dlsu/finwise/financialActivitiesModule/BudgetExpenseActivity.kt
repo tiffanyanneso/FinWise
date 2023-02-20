@@ -6,12 +6,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.GoalTransactionsActivity
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.BudgetExpenseAdapter
@@ -20,7 +18,6 @@ import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import java.text.DecimalFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class BudgetExpenseActivity : AppCompatActivity() {

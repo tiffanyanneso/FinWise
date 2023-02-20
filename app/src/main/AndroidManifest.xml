@@ -38,7 +38,7 @@
             android:name=".ViewGoalDetailsTabbedActivity"
             android:exported="false" />
         <activity
-            android:name=".GoalTransactionsActivity"
+            android:name=".financialActivitiesModule.GoalTransactionsActivity"
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.mayaAPI.MayaPayment"

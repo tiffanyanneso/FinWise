@@ -1,24 +1,20 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.app.Dialog
-import android.app.appsearch.AppSearchSchema.BooleanPropertyConfig
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.GoalTransactionsActivity
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
 import ph.edu.dlsu.finwise.adapter.GoalDecisionMakingActivitiesAdapter
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
@@ -89,6 +85,7 @@ class ViewGoalActivity : AppCompatActivity() {
 
         binding.tvViewAll.setOnClickListener {
             var goToGoalTransactions = Intent(this, GoalTransactionsActivity::class.java)
+            sendBundle.putString("savingActivityID", savingActivityID)
             goToGoalTransactions.putExtras(sendBundle)
             this.startActivity(goToGoalTransactions)
         }
