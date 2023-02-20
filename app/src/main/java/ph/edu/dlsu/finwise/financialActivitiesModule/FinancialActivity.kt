@@ -77,6 +77,12 @@ class FinancialActivity : AppCompatActivity() {
                 buildDialog()
             else {
                 var goToNewGoal = Intent(this, ChildNewGoal::class.java)
+
+                var bundle = Bundle()
+                bundle.putString("source", "childFinancialActivity")
+                goToNewGoal.putExtras(bundle)
+                goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
                 this.startActivity(goToNewGoal)
             }
 
@@ -137,6 +143,12 @@ class FinancialActivity : AppCompatActivity() {
 
         dialogBinding.btnOk.setOnClickListener {
             var newGoal = Intent (this, ChildNewGoal::class.java)
+
+            var bundle = Bundle()
+            bundle.putString("source", "childFinancialActivity")
+            newGoal.putExtras(bundle)
+            newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
             this.startActivity(newGoal)
             dialog.dismiss()
         }

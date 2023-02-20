@@ -52,6 +52,7 @@ class ParentGoalActivity : AppCompatActivity() {
 
         binding.btnNewGoal.setOnClickListener {
             var newGoal = Intent(this, ChildNewGoal::class.java)
+            sendBundle.putString("source", "parentGoalActivity")
             newGoal.putExtras(sendBundle)
             newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(newGoal)
