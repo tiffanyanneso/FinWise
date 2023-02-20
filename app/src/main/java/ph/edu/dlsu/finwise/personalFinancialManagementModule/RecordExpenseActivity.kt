@@ -9,6 +9,7 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
@@ -43,6 +44,7 @@ class RecordExpenseActivity : AppCompatActivity() {
         initizlizeDropdown()
         initizlizeDatePicker()
        // getGoals()
+        loadBackButton()
         goToConfirmation()
         cancel()
     }
@@ -59,6 +61,14 @@ class RecordExpenseActivity : AppCompatActivity() {
         val items = resources.getStringArray(ph.edu.dlsu.finwise.R.array.pfm_expense_category)
         val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, items)
         binding.dropdownCategory.setAdapter(adapter)
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToPFM = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
+            startActivity(goToPFM)
+        }
     }
 
     /* private fun getGoals() {

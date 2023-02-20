@@ -10,6 +10,7 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -46,6 +47,7 @@ class RecordDepositActivity : AppCompatActivity() {
 
         initializeDatePicker()
         getGoals()
+        loadBackButton()
         goToConfirmation()
         cancel()
     }
@@ -70,6 +72,14 @@ class RecordDepositActivity : AppCompatActivity() {
             binding.dropdownActivity.setAdapter(adapter)
 
             //getGoalProgress()
+        }
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToPFM = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
+            startActivity(goToPFM)
         }
     }
 

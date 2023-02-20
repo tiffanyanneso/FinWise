@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityMayaPaymentBinding
@@ -32,6 +33,7 @@ class MayaPayment : AppCompatActivity() {
         //initializes the navbar
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
         initializeDropdown()
+        loadBackButton()
         goToMayaQRConfirmPayment()
         goToPersonalFinancialManagement()
     }
@@ -40,6 +42,14 @@ class MayaPayment : AppCompatActivity() {
         val items = resources.getStringArray(R.array.pfm_expense_category)
         val adapter = ArrayAdapter (this, R.layout.list_item, items)
         binding.dropdownCategory.setAdapter(adapter)
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToPFM = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
+            startActivity(goToPFM)
+        }
     }
 
     private fun goToMayaQRConfirmPayment(){

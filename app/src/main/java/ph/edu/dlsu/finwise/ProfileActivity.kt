@@ -25,7 +25,7 @@ class ProfileActivity : AppCompatActivity(){
 
     private val tabIcons = intArrayOf(
         ph.edu.dlsu.finwise.R.drawable.baseline_star_24,
-        ph.edu.dlsu.finwise.R.drawable.baseline_auto_awesome_24
+        ph.edu.dlsu.finwise.R.drawable.baseline_gpp_good_24
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
