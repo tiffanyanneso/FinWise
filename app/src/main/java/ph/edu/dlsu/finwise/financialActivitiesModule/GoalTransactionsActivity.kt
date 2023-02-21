@@ -9,6 +9,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalTransactionsBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.goalTransactionsFragments.GoalDepositFragment
+import ph.edu.dlsu.finwise.financialActivitiesModule.goalTransactionsFragments.GoalTransactionsFragment
+import ph.edu.dlsu.finwise.financialActivitiesModule.goalTransactionsFragments.GoalWithdrawalFragment
 
 class GoalTransactionsActivity : AppCompatActivity() {
 
@@ -53,12 +56,16 @@ class GoalTransactionsActivity : AppCompatActivity() {
         var fragmentBundle = Bundle()
         fragmentBundle.putString("savingActivityID", savingActivityID)
 
+        var goalTransactionsFragment = GoalTransactionsFragment()
+        goalTransactionsFragment.arguments = fragmentBundle
+
         var goalDepositsFragment = GoalDepositFragment()
         goalDepositsFragment.arguments = fragmentBundle
 
         var goalWithdrawalFragment = GoalWithdrawalFragment()
         goalWithdrawalFragment.arguments = fragmentBundle
 
+        adapter.addFragment(goalTransactionsFragment,"All Transactions")
         adapter.addFragment(goalDepositsFragment,"Deposit")
         adapter.addFragment(goalWithdrawalFragment,"Withdrawal")
         binding.viewPager.adapter = adapter
@@ -66,8 +73,8 @@ class GoalTransactionsActivity : AppCompatActivity() {
     }
 
     private fun setupTabIcons() {
-        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
-        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[1])
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){

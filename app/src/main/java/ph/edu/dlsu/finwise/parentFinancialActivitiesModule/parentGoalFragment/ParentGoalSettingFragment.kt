@@ -47,6 +47,8 @@ class ParentGoalSettingFragment : Fragment() {
         var goalIDArrayList = ArrayList<String>()
         var filter = "For Editing"
         var goalFilterArrayList = ArrayList<GoalFilter>()
+        goalIDArrayList.clear()
+
 
         //TODO:change to get transactions of current user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid

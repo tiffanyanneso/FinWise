@@ -45,6 +45,7 @@ class SavingFragment : Fragment() {
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){ }
 
     private fun getSaving() {
+        goalIDArrayList.clear()
         ///TODO: CHANGE TO FIREBASEAUTH.CURRENTUSER
         var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         //saving activities that are in progress means that there the goal is also in progress because they are connected

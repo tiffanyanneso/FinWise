@@ -47,6 +47,7 @@ class SpendingFragment : Fragment(){
     }
 
     private fun getSpending() {
+        goalIDArrayList.clear()
         ///TODO: CHANGE TO FIREBASEAUTH.CURRENTUSER
         var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         //saving activities that are in progress means that there the goal is also in progress because they are connected

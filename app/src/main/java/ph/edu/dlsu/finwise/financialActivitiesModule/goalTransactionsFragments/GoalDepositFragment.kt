@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.financialActivitiesModule
+package ph.edu.dlsu.finwise.financialActivitiesModule.goalTransactionsFragments
 
 import android.os.Build
 import android.os.Bundle
@@ -45,15 +45,15 @@ class GoalDepositFragment : Fragment() {
     }
 
     private fun getGoalDeposits() {
+        transactionsIDArrayList.clear()
         var transactionFilterArrayList = ArrayList<TransactionFilter>()
         firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereEqualTo("transactionType", "Deposit").get().addOnSuccessListener { results ->
-            println("print results in deposits " + results.size())
             for (transaction in results) {
                 var transactionObject = transaction.toObject<Transactions>()
                 transactionFilterArrayList.add(TransactionFilter(transaction.id, transactionObject.date!!.toDate()))
             }
 
-            transactionFilterArrayList.sortBy { it.transactionDate }
+            transactionFilterArrayList.sortByDescending { it.transactionDate }
             for (filter in transactionFilterArrayList)
                 transactionsIDArrayList.add(filter.transactionID)
 

@@ -49,6 +49,7 @@ class BudgetingFragment : Fragment() {
 
     private fun getBudgeting() {
         ///TODO: CHANGE TO FIREBASEAUTH.CURRENTUSER
+        goalIDArrayList.clear()
         var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         //saving activities that are in progress means that there the goal is also in progress because they are connected
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->

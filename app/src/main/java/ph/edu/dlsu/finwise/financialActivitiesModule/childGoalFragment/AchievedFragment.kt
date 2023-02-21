@@ -35,7 +35,7 @@ class AchievedFragment : Fragment() {
     private fun getAchievedGoals() {
         var goalIDArrayList = ArrayList<String>()
         var filter = "Completed"
-
+        goalIDArrayList.clear()
         //TODO:change to get transactions of current user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         //firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->

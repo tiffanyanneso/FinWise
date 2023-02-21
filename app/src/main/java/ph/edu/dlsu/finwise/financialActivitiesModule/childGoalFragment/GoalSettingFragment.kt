@@ -44,6 +44,7 @@ class GoalSettingFragment : Fragment() {
     private fun getForReviewGoals() {
         var goalIDArrayList = ArrayList<String>()
         var goalFilterArrayList = ArrayList<GoalFilter>()
+        goalIDArrayList.clear()
 
         var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         //saving activities that are in progress means that there the goal is also in progress because they are connected
