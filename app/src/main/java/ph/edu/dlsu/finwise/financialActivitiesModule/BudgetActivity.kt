@@ -35,6 +35,7 @@ import java.text.DecimalFormat
 class BudgetActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityBudgetBinding
+    private lateinit var dialogBinding:DialogNewBudgetCategoryBinding
     private var firestore = Firebase.firestore
     private lateinit var budgetCategoryAdapter: BudgetCategoryAdapter
     lateinit var context:Context
@@ -224,38 +225,27 @@ class BudgetActivity : AppCompatActivity() {
 
     private fun showNewBudgetItemDialog() {
 
-        var dialogBinding= DialogNewBudgetCategoryBinding.inflate(getLayoutInflater())
+        dialogBinding= DialogNewBudgetCategoryBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
         dialog.window!!.setLayout(900, 1000)
 
         dialogBinding.btnSave.setOnClickListener {
-            var itemName = dialogBinding.dialogEtCategoryName.text.toString()
-            var itemAmount = dialogBinding.dialogEtCategoryAmount.text.toString().toFloat()
-            var nUpdate = 0
-            if (isCompleted) //they made a change after they declared that they're done setting a budget
-                nUpdate = 1
-            var budgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, nUpdate, "Active")
+            if (filledUpAndValid()) {
+                var itemName = dialogBinding.dialogEtCategoryName.text.toString()
+                var itemAmount = dialogBinding.dialogEtCategoryAmount.text.toString().toFloat()
+                var nUpdate = 0
+                if (isCompleted) //they made a change after they declared that they're done setting a budget
+                    nUpdate = 1
+                var budgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, nUpdate, "Active")
 
-            firestore.collection("BudgetItems").add(budgetCategory).addOnSuccessListener {
-                budgetCategoryIDArrayList.add(it.id)
-                budgetCategoryAdapter.notifyDataSetChanged()
-                dialog.dismiss()
-            }
-
-
-            //TODO: VALIDATION
-            /*if (itemAmount.toFloat()+allocated > totalBudget)
-                dialog.findViewById<TextView>(R.id.tv_error).visibility = View.VISIBLE
-            else {
-                firestore.collection("BudgetCategories").add(budgetCategory).addOnSuccessListener {
-                    dialog.findViewById<TextView>(R.id.tv_error).visibility = View.GONE
-                    dialog.dismiss()
+                firestore.collection("BudgetItems").add(budgetCategory).addOnSuccessListener {
                     budgetCategoryIDArrayList.add(it.id)
                     budgetCategoryAdapter.notifyDataSetChanged()
+                    dialog.dismiss()
                 }
-            }*/
+            }
         }
 
         dialogBinding.btnCancel.setOnClickListener {
@@ -275,6 +265,33 @@ class BudgetActivity : AppCompatActivity() {
         dialogBinding.btnOk.setOnClickListener {
             dialog.dismiss()
         }
+    }
+
+    private fun filledUpAndValid() : Boolean {
+        var valid = true
+        if (dialogBinding.dialogEtCategoryName.text.toString().trim().isEmpty()){
+            dialogBinding.containerCategory.helperText = "Input budget name."
+            valid = false
+        } else
+            dialogBinding.containerCategory.helperText = ""
+
+        //check if text is empty
+        if (dialogBinding.dialogEtCategoryAmount.text.toString().trim().isEmpty()){
+            dialogBinding.containerAmount.helperText = "Input budget amount."
+            valid = false
+        } else {
+            //text is not empty
+            dialogBinding.containerAmount.helperText = ""
+            //check if amount is greater than 0
+            //TODO: VALIDATION TO CHECK IF BUDGET AMOUNT IS LESS THAN THEIR AVAIALBLE SAVINGS TO BUDGET
+            if (dialogBinding.dialogEtCategoryAmount.text.toString().toFloat() <=0 ) {
+                dialogBinding.containerAmount.helperText = "Input a valid amount."
+                valid = false
+            } else
+                dialogBinding.containerAmount.helperText = ""
+        }
+
+        return valid
     }
 
     private fun checkUser() {

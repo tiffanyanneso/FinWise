@@ -67,32 +67,34 @@ class ChildNewGoal : AppCompatActivity() {
         }
 
         binding.btnNext.setOnClickListener {
-            var goToGoalConfirmation = Intent(this, GoalConfirmationActivity::class.java)
-            var bundle = Bundle()
+            if(filledUp()) {
+                var goToGoalConfirmation = Intent(this, GoalConfirmationActivity::class.java)
+                var bundle = Bundle()
 
-            var goalName =  binding.etGoal.text.toString()
-            var activity = binding.dropdownActivity.text.toString()
-            var amount = binding.etAmount.text.toString().toFloat()
-            var targetDate = binding.etTargetDate.text.toString()
+                var goalName =  binding.etGoal.text.toString()
+                var activity = binding.dropdownActivity.text.toString()
+                var amount = binding.etAmount.text.toString().toFloat()
+                var targetDate = binding.etTargetDate.text.toString()
 
-            var goalIsForSelf = binding.cbGoalSelf.isChecked
+                var goalIsForSelf = binding.cbGoalSelf.isChecked
 
-            bundle.putString("goalName", goalName)
-            bundle.putString("activity", activity)
-            bundle.putFloat("amount", amount)
-            bundle.putSerializable("targetDate",  SimpleDateFormat("MM/dd/yyyy").parse(targetDate))
-            bundle.putBoolean("goalIsForSelf", goalIsForSelf)
+                bundle.putString("goalName", goalName)
+                bundle.putString("activity", activity)
+                bundle.putFloat("amount", amount)
+                bundle.putSerializable("targetDate",  SimpleDateFormat("MM/dd/yyyy").parse(targetDate))
+                bundle.putBoolean("goalIsForSelf", goalIsForSelf)
 
-//            if(currentUserType == "Parent")
-//                bundle.putString("childID", childID)
+    //            if(currentUserType == "Parent")
+    //                bundle.putString("childID", childID)
 
-            //TODO: reset spinner and date to default value
-            binding.etGoal.text?.clear()
-            binding.etAmount.text?.clear()
+                //TODO: reset spinner and date to default value
+                binding.etGoal.text?.clear()
+                binding.etAmount.text?.clear()
 
-            goToGoalConfirmation.putExtras(bundle)
-            goToGoalConfirmation.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            this.startActivity(goToGoalConfirmation)
+                goToGoalConfirmation.putExtras(bundle)
+                goToGoalConfirmation.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(goToGoalConfirmation)
+            }
         }
 
         binding.btnCancel.setOnClickListener {
@@ -120,6 +122,39 @@ class ChildNewGoal : AppCompatActivity() {
         }
     }
 
+    private fun filledUp() : Boolean {
+        var valid  = true
+
+        if (binding.etGoal.text.toString().trim().isEmpty()) {
+            binding.goalContainer.helperText = "Input goal name."
+            valid = false
+        } else
+            binding.goalContainer.helperText = ""
+
+      //TODO: VALIDATION FOR REASON
+
+        if (binding.etAmount.text.toString().trim().isEmpty()) {
+            binding.amountContainer.helperText = "Input target amount."
+            valid = false
+        } else {
+            //amount field is not empty
+            binding.amountContainer.helperText = ""
+            //check if amount is greater than 0
+            if (binding.etAmount.text.toString().toFloat() <= 0) {
+                binding.amountContainer.helperText = "Input a valid amount."
+                valid = false
+            } else
+                binding.amountContainer.helperText = ""
+        }
+
+        if (binding.etTargetDate.text.toString().trim().isEmpty()) {
+            binding.dateContainer.helperText = "Select target date."
+            valid = false
+        } else
+            binding.dateContainer.helperText = ""
+
+        return valid
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showCalendar() {
         val dialog = Dialog(this)

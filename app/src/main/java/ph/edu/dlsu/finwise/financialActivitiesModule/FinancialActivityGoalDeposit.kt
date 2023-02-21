@@ -35,6 +35,7 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
     private lateinit var savingActivityID:String
 
     private var savedAmount = 0.00F
+    private var walletBalance = 0.00F
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,20 +57,22 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
 
 
         binding.btnNext.setOnClickListener {
-            var sendBundle = Bundle()
-            sendBundle.putString("goalName", binding.tvGoalName.text.toString())
-            sendBundle.putString("financialGoalID",financialGoalID)
-            sendBundle.putFloat("savedAmount", savedAmount)
-            sendBundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
-            //bundle.putString("source", "DirectGoalDeposit")
-            sendBundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
-            sendBundle.putString("savingActivityID", savingActivityID)
+            if (filledUp() && validAmount()) {
+                binding.containerAmount.helperText = ""
+                var sendBundle = Bundle()
+                sendBundle.putString("goalName", binding.tvGoalName.text.toString())
+                sendBundle.putString("financialGoalID",financialGoalID)
+                sendBundle.putFloat("savedAmount", savedAmount)
+                sendBundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
+                //bundle.putString("source", "DirectGoalDeposit")
+                sendBundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
+                sendBundle.putString("savingActivityID", savingActivityID)
 
-
-            var goToDepositConfirmation = Intent(context, FinancialActivityConfirmDeposit::class.java)
-            goToDepositConfirmation.putExtras(sendBundle)
-            goToDepositConfirmation.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(goToDepositConfirmation)
+                var goToDepositConfirmation = Intent(context, FinancialActivityConfirmDeposit::class.java)
+                goToDepositConfirmation.putExtras(sendBundle)
+                goToDepositConfirmation.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(goToDepositConfirmation)
+            }
         }
     }
 
@@ -89,8 +92,46 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
 
         firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2").get().addOnSuccessListener {
             var wallet = it.documents[0].toObject<ChildWallet>()
-            binding.tvBalance.text = "You currently have ₱${DecimalFormat("###0.00").format(wallet?.currentBalance)} in your wallet"
+            walletBalance = wallet?.currentBalance!!
+            binding.tvBalance.text = "You currently have ₱${DecimalFormat("###0.00").format(walletBalance)} in your wallet"
         }
+    }
+
+    private fun validAmount():Boolean {
+        //trying to deposit more than their current balance
+        if (binding.etAmount.text.toString().toFloat() > walletBalance) {
+            binding.containerAmount.helperText = "You cannot deposit more than your current balance"
+            return false
+        }
+        else
+            return true
+
+    }
+
+    private fun filledUp() : Boolean {
+        var valid  = true
+        if (binding.etAmount.text.toString().trim().isEmpty()) {
+            binding.containerAmount.helperText = "Please input an amount."
+            valid = false
+        } else {
+            //amount field is not empty
+            binding.containerAmount.helperText = ""
+            //check if amount is greater than 0
+            if (binding.etAmount.text.toString().toFloat() <= 0) {
+                binding.containerAmount.helperText = "Input a valid amount."
+                valid = false
+            } else
+                binding.containerAmount.helperText = ""
+        }
+
+
+        if (binding.etDate.text.toString().trim().isEmpty()) {
+            binding.dateContainer.helperText = "Select date of transaction."
+            valid = false
+        } else
+            binding.dateContainer.helperText = ""
+
+        return valid
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

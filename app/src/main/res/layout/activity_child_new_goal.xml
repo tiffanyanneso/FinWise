@@ -200,6 +200,8 @@
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
+        app:helperText=""
+        app:helperTextTextColor="@color/red"
         app:endIconMode="custom"
         app:startIconDrawable="@drawable/baseline_calendar_today_24"
         android:hint="Target Date">

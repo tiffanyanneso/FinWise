@@ -44,20 +44,23 @@ class WithdrawActivity : AppCompatActivity() {
         }
 
         binding.btnNext.setOnClickListener {
-            var sendBundle = Bundle()
-            sendBundle.putString("goalName", binding.tvGoalName.text.toString())
-            sendBundle.putString("financialGoalID",financialGoalID)
-            //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-            sendBundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
-            sendBundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
-            sendBundle.putString("savingActivityID", savingActivityID)
-            sendBundle.putFloat("savedAmount", savedAmount)
+            if (filledUp() && validAmount()) {
+                binding.containerAmount.helperText = ""
+                var sendBundle = Bundle()
+                sendBundle.putString("goalName", binding.tvGoalName.text.toString())
+                sendBundle.putString("financialGoalID",financialGoalID)
+                //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
+                sendBundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
+                sendBundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
+                sendBundle.putString("savingActivityID", savingActivityID)
+                sendBundle.putFloat("savedAmount", savedAmount)
 
 
-            var confirmWithdraw = Intent (this, ConfirmWithdraw::class.java)
-            confirmWithdraw.putExtras(sendBundle)
-            confirmWithdraw.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            this.startActivity(confirmWithdraw)
+                var confirmWithdraw = Intent (this, ConfirmWithdraw::class.java)
+                confirmWithdraw.putExtras(sendBundle)
+                confirmWithdraw.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(confirmWithdraw)
+            }
         }
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
@@ -70,6 +73,42 @@ class WithdrawActivity : AppCompatActivity() {
             goToGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(goToGoal)
         }
+    }
+
+    private fun filledUp(): Boolean{
+        var valid  = true
+        if (binding.etAmount.text.toString().trim().isEmpty()) {
+            binding.containerAmount.helperText = "Please input an amount."
+            valid = false
+        } else {
+            //amount field is not empty
+            binding.containerAmount.helperText = ""
+            //check if amount is greater than 0
+            if (binding.etAmount.text.toString().toFloat() <= 0) {
+                binding.containerAmount.helperText = "Input a valid amount."
+                valid = false
+            } else
+                binding.containerAmount.helperText = ""
+        }
+
+        if (binding.etDate.text.toString().trim().isEmpty()) {
+            binding.dateContainer.helperText = "Select date of transaction."
+            valid = false
+        } else
+            binding.dateContainer.helperText = ""
+
+        return valid
+    }
+
+    private fun validAmount():Boolean {
+        //trying to deposit more than their current balance
+        if (binding.etAmount.text.toString().toFloat() > savedAmount) {
+            binding.containerAmount.helperText = "You cannot deposit more than your current balance"
+            return false
+        }
+        else
+            return true
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

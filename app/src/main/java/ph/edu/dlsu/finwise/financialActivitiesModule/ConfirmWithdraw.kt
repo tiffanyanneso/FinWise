@@ -78,10 +78,10 @@ class ConfirmWithdraw : AppCompatActivity() {
         binding.tvGoal.text = bundle.getString("goalName")
         binding.tvAmount.text = "₱ " + DecimalFormat("#,###.00").format(bundle.getFloat("amount"))
         binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
-        binding.tvUpdatedGoalSavings.text = (bundle.getFloat("savedAmount") - bundle.getFloat("amount")).toString()
+        binding.tvUpdatedGoalSavings.text = "₱ " +  DecimalFormat("#,##0.00").format((bundle.getFloat("savedAmount") - bundle.getFloat("amount")))
         firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2").get().addOnSuccessListener {
             var wallet = it.documents[0].toObject<ChildWallet>()
-            binding.tvWalletBalance.text = (wallet?.currentBalance!!.toFloat() + bundle.getFloat("amount")).toString()
+            binding.tvWalletBalance.text = "₱ " +  DecimalFormat("#,##0.00").format((wallet?.currentBalance!!.toFloat() + bundle.getFloat("amount")))
         }
     }
 }
