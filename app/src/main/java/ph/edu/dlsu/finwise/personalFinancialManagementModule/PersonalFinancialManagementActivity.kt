@@ -2,6 +2,7 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -22,6 +23,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPersonalFinancialManagementBinding
     private var firestore = Firebase.firestore
+    lateinit var bundle: Bundle
 
     private val tabIcons1 = intArrayOf(
         ph.edu.dlsu.finwise.R.drawable.baseline_wallet_24,
@@ -86,7 +88,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun setUpChartTabs() {
         val adapter = PFMAdapter(supportFragmentManager)
         adapter.addFragment(BalanceFragment(), "Balance")
-        adapter.addFragment(SavingsFragment(), "Savings")
+        adapter.addFragment(SavingsFragment(), "Goal Savings")
         binding.viewPagerBarCharts.adapter = adapter
         binding.tabsBarCharts.setupWithViewPager(binding.viewPagerBarCharts)
 
@@ -103,6 +105,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 val dec = DecimalFormat("#,###.00")
                 val amount = dec.format(childWallet?.currentBalance)
                 binding.tvBalance.text = "₱$amount"
+
             }
 
     }
@@ -118,6 +121,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun goToPayMaya() {
         binding.btnPayWithMaya.setOnClickListener {
             val goToTransactions = Intent(applicationContext, MayaPayment::class.java)
+            getBalanceBundle()
+            goToTransactions.putExtras(bundle)
             startActivity(goToTransactions)
         }
     }
@@ -125,6 +130,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun goToDepositGoalActivity() {
         binding.btnGoal.setOnClickListener {
             val goToDepositGoalActivity = Intent(applicationContext, RecordDepositActivity::class.java)
+            getBalanceBundle()
+            goToDepositGoalActivity.putExtras(bundle)
             startActivity(goToDepositGoalActivity)
         }
     }
@@ -132,6 +139,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun goToIncomeActivity() {
         binding.btnIncome.setOnClickListener {
             val goToIncomeActivity = Intent(applicationContext, RecordIncomeActivity::class.java)
+            getBalanceBundle()
+            goToIncomeActivity.putExtras(bundle)
             startActivity(goToIncomeActivity)
         }
     }
@@ -139,8 +148,16 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun goToExpenseActivity() {
         binding.btnExpense.setOnClickListener {
             val goToExpenseActivity = Intent(applicationContext, RecordExpenseActivity::class.java)
+            getBalanceBundle()
+            goToExpenseActivity.putExtras(bundle)
             startActivity(goToExpenseActivity)
         }
+    }
+
+    private fun getBalanceBundle() {
+        bundle = Bundle()
+        val balance = binding.tvBalance.text.drop(1)
+        bundle.putFloat("balance", balance.toString().toFloat())
     }
 
     /* private fun initializeBalanceBarGraph() {

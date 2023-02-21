@@ -186,6 +186,37 @@
                     android:textSize="16sp"
                     android:textColor="@color/black" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:text="Updated Wallet Balance"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_wallet_balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Wallet Balance"
+                    android:textSize="16sp"
+                    android:gravity="end"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>
+
+
         </LinearLayout>
     </LinearLayout>
 

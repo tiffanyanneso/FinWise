@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmconfirmDepositBinding
+import ph.edu.dlsu.finwise.model.ChildWallet
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,7 +24,8 @@ class ConfirmDepositActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     var bundle: Bundle? = null
-    var amount : String? =null
+    var amount = 0.00f
+    var balance = 0.00f
     var goal : String? =null
     var date : Date? =null
 
@@ -49,26 +53,46 @@ class ConfirmDepositActivity : AppCompatActivity() {
     }
 
     private fun setText() {
-        val bundle: Bundle = intent.extras!!
-        amount = bundle.getFloat("amount").toString()
-        goal = bundle.getString("goal")
-        date = bundle.getSerializable("date") as Date
-        val dec = DecimalFormat("#,##0.00")
-        val textAmount = dec.format(bundle.getFloat("amount"))
-        //binding.tvAmount.text = "₱$textAmount"
-        binding.tvGoal.text = goal
-        val formatter = SimpleDateFormat("MM/dd/yyyy")
-        val dateSerializable = bundle.getSerializable("date")
-        val dateText = formatter.format(dateSerializable).toString()
-        //binding.tvDate.text = dateText
+        bundle = intent.extras!!
+        balance = bundle!!.getFloat("balance")
+        amount = bundle!!.getFloat("amount")
+        goal = bundle!!.getString("goal")
+        date = bundle!!.getSerializable("date") as Date
 
+        val dec = DecimalFormat("#,##0.00")
+        val textAmount = dec.format(bundle!!.getFloat("amount"))
+        binding.tvAmount.text = "₱$textAmount"
+        binding.tvGoal.text = goal.toString()
+        binding.tvWalletBalance.text = "₱ " +
+                DecimalFormat("#,##0.00")
+                    .format(balance - amount)
+
+        val formatter = SimpleDateFormat("MM/dd/yyyy")
+        val dateSerializable = bundle!!.getSerializable("date")
+        val dateText = formatter.format(dateSerializable).toString()
+        binding.tvDate.text = dateText
+         getGoalAmount()
+    }
+
+
+    private fun getGoalAmount() {
+        firestore.collection("FinancialGoals").whereEqualTo("goalName", goal)
+            .get().addOnSuccessListener { document ->
+                val financialGoal = document.documents[0].toObject<FinancialGoals>()
+                val goalAmount = financialGoal?.targetAmount
+                if (goalAmount != null) {
+                    binding.tvUpdatedGoalAmount.text = "₱ " +
+                            DecimalFormat("#,##0.00")
+                                .format(goalAmount - amount)
+                }
+            }
     }
 
     private fun confirm() {
         binding.btnConfirm.setOnClickListener {
 
-            var goalName = "Deposit to '$goal'"
-            var transaction = hashMapOf(
+            val goalName = "Deposit to '$goal'"
+            val transaction = hashMapOf(
                 //TODO: add childID, createdBy
                 "transactionName" to goalName,
                 "transactionType" to "Deposit",
@@ -82,7 +106,7 @@ class ConfirmDepositActivity : AppCompatActivity() {
             // TODO: Change where transaction is added
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
                 Toast.makeText(this, "Goal added", Toast.LENGTH_SHORT).show()
-                var goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
+                val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
                 goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(goToPFM)
             }

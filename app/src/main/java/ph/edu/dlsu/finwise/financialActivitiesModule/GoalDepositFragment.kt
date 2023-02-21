@@ -39,7 +39,7 @@ class GoalDepositFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentGoalDepositBinding.bind(view)
-        var bundle = arguments
+        val bundle = arguments
         savingActivityID = bundle?.getString("savingActivityID").toString()
         getGoalDeposits()
     }

@@ -55,7 +55,7 @@
             android:name=".personalFinancialManagementModule.mayaAPI.MayaConfirmPayment"
             android:exported="false" />
         <activity
-            android:name=".MayaSuccessfulPayment"
+            android:name=".personalFinancialManagementModule.mayaAPI.MayaSuccessfulPayment"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.ViewGoalDetails"

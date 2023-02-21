@@ -11,24 +11,29 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordExpenseBinding
+import ph.edu.dlsu.finwise.model.ChildWallet
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
 class RecordExpenseActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityPfmrecordExpenseBinding
-    var bundle = Bundle()
+    lateinit var bundle: Bundle
     private var firestore = Firebase.firestore
     private var goals = ArrayList<String>()
 
     lateinit var name: String
     lateinit var amount: String
+    var balance = 0.00f
     lateinit var category: String
     lateinit var goal: String
     lateinit var date: Date
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,6 +124,20 @@ class RecordExpenseActivity : AppCompatActivity() {
         return valid
     }
 
+    private fun validAmount(): Boolean {
+        val bundle2 = intent.extras!!
+        balance = bundle2.getFloat("balance")
+        //trying to deposit more than their current balance
+        if (binding.etAmount.text.toString().toFloat() > balance) {
+            binding.etAmount.error =
+                "You cannot deposit more than your current balance of ₱$balance"
+            binding.etAmount.requestFocus()
+            return false
+        }
+        else
+            return true
+    }
+
 
     private fun cancel() {
         binding.btnCancel.setOnClickListener {
@@ -129,7 +148,7 @@ class RecordExpenseActivity : AppCompatActivity() {
 
     private fun goToConfirmation() {
         binding.btnConfirm.setOnClickListener {
-            if (validateAndSetUserInput()) {
+            if (validateAndSetUserInput() && validAmount()) {
                 setBundle()
                 val goToConfirmTransaction = Intent(this, ConfirmTransactionActivity::class.java)
                 goToConfirmTransaction.putExtras(bundle)
@@ -146,11 +165,12 @@ class RecordExpenseActivity : AppCompatActivity() {
 
     private fun setBundle() {
         //val goal = binding.spinnerGoal.selectedItem.toString()
-
+        bundle = Bundle()
         bundle.putString("transactionType", "Expense")
         bundle.putString("transactionName", name)
         bundle.putString("category", category)
         bundle.putFloat("amount", amount.toFloat())
+        bundle.putFloat("balance", balance)
        // bundle.putString("goal", goal)
         bundle.putSerializable("date", date)
 

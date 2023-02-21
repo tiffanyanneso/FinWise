@@ -16,7 +16,9 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordDepositBinding
+import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -32,6 +34,7 @@ class RecordDepositActivity : AppCompatActivity() {
     lateinit var goal : String
     lateinit var amount: String
     lateinit var date: Date
+    var balance = 0.00f
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,7 +121,7 @@ class RecordDepositActivity : AppCompatActivity() {
 
     private fun goToConfirmation() {
         binding.btnConfirm.setOnClickListener {
-            if (validateAndSetUserInput()) {
+            if (validateAndSetUserInput() && validAmount()) {
                 setBundle()
                 val goToConfirmDeposit = Intent(this, ConfirmDepositActivity::class.java)
                 goToConfirmDeposit.putExtras(bundle)
@@ -133,6 +136,23 @@ class RecordDepositActivity : AppCompatActivity() {
         }
     }
 
+
+
+    private fun validAmount(): Boolean {
+        val bundle2 = intent.extras!!
+        balance = bundle2.getFloat("balance")
+        //trying to deposit more than their current balance
+        if (binding.etAmount.text.toString().toFloat() > balance) {
+            binding.etAmount.error =
+                "You cannot deposit more than your current balance of ₱$balance"
+            binding.etAmount.requestFocus()
+            return false
+        }
+        else
+            return true
+    }
+
+
     private fun setBundle() {
         //getCurrentTime()
 
@@ -141,6 +161,7 @@ class RecordDepositActivity : AppCompatActivity() {
         bundle.putString("goal", goal)
         bundle.putString("source", "PFMDepositToGoal")
         bundle.putSerializable("date", date)
+        bundle.putFloat("balance", balance)
 
         //TODO: reset spinner and date to default value
         /* binding.etName.text.clear()

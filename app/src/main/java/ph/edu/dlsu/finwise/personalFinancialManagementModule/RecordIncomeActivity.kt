@@ -22,9 +22,10 @@ import java.util.*
 class RecordIncomeActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityPfmrecordIncomeBinding
-    var bundle = Bundle()
+    lateinit var bundle: Bundle
     lateinit var name: String
     lateinit var amount: String
+    var balance = 0.00f
     lateinit var category: String
     lateinit var date: Date
 
@@ -104,6 +105,20 @@ class RecordIncomeActivity : AppCompatActivity() {
         return valid
     }
 
+    private fun validAmount(): Boolean {
+        val bundle2 = intent.extras!!
+        balance = bundle2.getFloat("balance")
+        //trying to deposit more than their current balance
+        if (binding.etAmount.text.toString().toFloat() > balance) {
+            binding.etAmount.error =
+                "You cannot deposit more than your current balance of ₱$balance"
+            binding.etAmount.requestFocus()
+            return false
+        }
+        else
+            return true
+    }
+
 
     private fun cancel() {
         binding.btnCancel.setOnClickListener {
@@ -114,7 +129,7 @@ class RecordIncomeActivity : AppCompatActivity() {
 
     private fun goToConfirmation() {
         binding.btnConfirm.setOnClickListener {
-            if (validateAndSetUserInput()) {
+            if (validateAndSetUserInput() ) {
                 setBundle()
                 val goToConfirmTransaction = Intent(this, ConfirmTransactionActivity::class.java)
                 goToConfirmTransaction.putExtras(bundle)
@@ -132,10 +147,11 @@ class RecordIncomeActivity : AppCompatActivity() {
     private fun setBundle() {
         //getCurrentTime()
 //        val goal = binding.spinnerGoal.selectedItem.toString()
-
+        bundle = Bundle()
         bundle.putString("transactionType", "Income")
         bundle.putString("transactionName", name)
         bundle.putString("category", category)
+        bundle.putFloat("balance", balance)
         bundle.putFloat("amount", amount.toFloat())
 //        bundle.putString("goal", goal)
         bundle.putSerializable("date", date)
