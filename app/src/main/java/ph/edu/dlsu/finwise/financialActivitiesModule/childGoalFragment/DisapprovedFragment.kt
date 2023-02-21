@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
+import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentDisapprovedBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.util.*
@@ -19,7 +19,7 @@ class DisapprovedFragment : Fragment() {
 
     private lateinit var binding: FragmentDisapprovedBinding
     private var firestore = Firebase.firestore
-    private lateinit var goalAdapter: ChildGoalAdapter
+    private lateinit var goalAdapter: FinactSavingAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +65,7 @@ class DisapprovedFragment : Fragment() {
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        goalAdapter = ChildGoalAdapter(requireContext().applicationContext, goalIDArrayList)
+        goalAdapter = FinactSavingAdapter(requireContext().applicationContext, goalIDArrayList)
         binding.rvViewGoals.adapter = goalAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
             LinearLayoutManager.VERTICAL,

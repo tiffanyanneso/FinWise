@@ -52,32 +52,16 @@
                     android:maxLines="1"/>
 
                 <TextView
-                    android:id="@+id/tv_progress_amount"
+                    android:id="@+id/tv_target_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_goal"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:text="Progress amount"
+                    android:text="Target amount"
                     android:maxLines="1"/>
             </LinearLayout>
 
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@+id/linear_layout"
-            >
-
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:scaleY="4"
-                android:max="100"/>
-        </LinearLayout>
     </RelativeLayout>
 
 

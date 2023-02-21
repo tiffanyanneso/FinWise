@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
+import ph.edu.dlsu.finwise.adapter.FinactGoalSettingAdapter
+import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentParentGoalSettingBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.util.*
@@ -18,7 +19,7 @@ class ParentGoalSettingFragment : Fragment() {
 
     private lateinit var binding: FragmentParentGoalSettingBinding
     private var firestore = Firebase.firestore
-    private lateinit var goalAdapter: ChildGoalAdapter
+    private lateinit var goalSettingAdapter: FinactGoalSettingAdapter
 
     private lateinit var childID:String
 
@@ -72,11 +73,11 @@ class ParentGoalSettingFragment : Fragment() {
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        goalAdapter = ChildGoalAdapter(requireContext().applicationContext, goalIDArrayList)
-        binding.rvViewGoals.adapter = goalAdapter
+        goalSettingAdapter = FinactGoalSettingAdapter(requireContext().applicationContext, goalIDArrayList)
+        binding.rvViewGoals.adapter = goalSettingAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
             LinearLayoutManager.VERTICAL,
             false)
-        goalAdapter.notifyDataSetChanged()
+        goalSettingAdapter.notifyDataSetChanged()
     }
 }

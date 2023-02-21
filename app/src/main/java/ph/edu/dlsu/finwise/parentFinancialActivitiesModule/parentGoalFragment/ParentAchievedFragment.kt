@@ -8,14 +8,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
+import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentParentAchievedBinding
 
 class ParentAchievedFragment : Fragment() {
 
     private lateinit var binding: FragmentParentAchievedBinding
     private var firestore = Firebase.firestore
-    private lateinit var goalAdapter: ChildGoalAdapter
+    private lateinit var goalAdapter: FinactSavingAdapter
 
     private lateinit var childID:String
 
@@ -55,7 +55,7 @@ class ParentAchievedFragment : Fragment() {
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        goalAdapter = ChildGoalAdapter(requireContext().applicationContext, goalIDArrayList)
+        goalAdapter = FinactSavingAdapter(requireContext().applicationContext, goalIDArrayList)
         binding.rvViewGoals.adapter = goalAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
             LinearLayoutManager.VERTICAL,

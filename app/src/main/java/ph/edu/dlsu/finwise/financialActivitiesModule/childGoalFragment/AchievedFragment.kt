@@ -5,20 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
+import ph.edu.dlsu.finwise.adapter.FinactAchievedAdapter
+import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentAchievedBinding
 
 class AchievedFragment : Fragment() {
 
     private lateinit var binding: FragmentAchievedBinding
     private var firestore = Firebase.firestore
-    private lateinit var goalAdapter: ChildGoalAdapter
+    private lateinit var goalAdapter: FinactAchievedAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +51,7 @@ class AchievedFragment : Fragment() {
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        goalAdapter = ChildGoalAdapter(requireContext().applicationContext, goalIDArrayList)
+        goalAdapter = FinactAchievedAdapter(requireContext().applicationContext, goalIDArrayList)
         binding.rvViewGoals.adapter = goalAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
             LinearLayoutManager.VERTICAL,

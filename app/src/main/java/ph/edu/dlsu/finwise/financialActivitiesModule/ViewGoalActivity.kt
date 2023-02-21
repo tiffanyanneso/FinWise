@@ -15,7 +15,6 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.adapter.GoalDecisionMakingActivitiesAdapter
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.databinding.DialogFinishSavingBinding
@@ -35,8 +34,6 @@ class ViewGoalActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityViewGoalBinding
     private var firestore = Firebase.firestore
-
-    private lateinit var decisionMakingActivitiesAdapater: GoalDecisionMakingActivitiesAdapter
 
     private lateinit var financialGoalID:String
     private lateinit var source:String

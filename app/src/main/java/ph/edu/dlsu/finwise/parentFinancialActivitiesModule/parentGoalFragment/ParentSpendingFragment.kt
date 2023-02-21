@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
+import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
+import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentParentSpendingBinding
-import ph.edu.dlsu.finwise.databinding.FragmentSpendingBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import java.util.*
 import kotlin.collections.ArrayList
@@ -20,7 +20,7 @@ class ParentSpendingFragment : Fragment() {
 
     private lateinit var binding: FragmentParentSpendingBinding
     private var firestore = Firebase.firestore
-    private lateinit var goalAdapter: ChildGoalAdapter
+    private lateinit var spendingAdapter: FinactSpendingAdapter
 
     var goalIDArrayList = ArrayList<String>()
     var budgetingArrayList = ArrayList<FinancialActivities>()
@@ -60,11 +60,11 @@ class ParentSpendingFragment : Fragment() {
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        goalAdapter = ChildGoalAdapter(requireContext().applicationContext, goalIDArrayList)
-        binding.rvViewGoals.adapter = goalAdapter
+        spendingAdapter = FinactSpendingAdapter(requireContext().applicationContext, goalIDArrayList)
+        binding.rvViewGoals.adapter = spendingAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
             LinearLayoutManager.VERTICAL,
             false)
-        goalAdapter.notifyDataSetChanged()
+        spendingAdapter.notifyDataSetChanged()
     }
 }
