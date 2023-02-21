@@ -47,6 +47,7 @@ class ParentBudgetingFragment : Fragment() {
     }
 
     private fun getBudgeting() {
+        goalIDArrayList.clear()
         //saving activities that are in progress means that there the goal is also in progress because they are connected
         firestore.collection("FinancialActivities").whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             for (budgeting in results) {

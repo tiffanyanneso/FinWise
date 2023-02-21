@@ -40,6 +40,8 @@ class ParentAchievedFragment : Fragment() {
         var goalIDArrayList = ArrayList<String>()
         var filter = "Achieved"
 
+        goalIDArrayList.clear()
+
         //TODO:change to get transactions of current user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         //firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->

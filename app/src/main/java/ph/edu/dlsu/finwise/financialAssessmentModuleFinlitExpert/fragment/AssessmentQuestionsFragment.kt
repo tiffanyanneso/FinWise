@@ -42,6 +42,7 @@ class AssessmentQuestionsFragment : Fragment() {
     }
 
     private fun getQuestions() {
+        questionsID.clear()
         firestore.collection("AssessmentQuestions").whereEqualTo("assessmentID", assessmentID).get().addOnSuccessListener { questions ->
             for (question in questions)
                 questionsID.add(question.id)
