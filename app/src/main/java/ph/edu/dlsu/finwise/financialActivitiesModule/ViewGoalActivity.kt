@@ -144,6 +144,7 @@ class ViewGoalActivity : AppCompatActivity() {
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             val goToFinancialActivities = Intent(applicationContext, FinancialActivity::class.java)
+
             this.startActivity(goToFinancialActivities)
         }
     }

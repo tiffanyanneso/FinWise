@@ -15,6 +15,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import java.text.SimpleDateFormat
 
 
@@ -104,8 +105,23 @@ class ChildNewGoal : AppCompatActivity() {
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
-            val goToFinancialActivity = Intent(applicationContext, FinancialActivity::class.java)
-            this.startActivity(goToFinancialActivity)
+            var backBundle = intent.extras!!
+            var source = backBundle.getString("source").toString()
+
+            var navBundle = Bundle()
+            navBundle.putString("childID", childID)
+
+            if (source =="childFinancialActivity") {
+                val goToFinancialActivity = Intent(applicationContext, FinancialActivity::class.java)
+                goToFinancialActivity.putExtras(navBundle)
+                goToFinancialActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(goToFinancialActivity)
+            } else if (source =="parentGoalActivity") {
+                val goToParentGoalActivity = Intent(applicationContext, ParentGoalActivity::class.java)
+                goToParentGoalActivity.putExtras(navBundle)
+                goToParentGoalActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(goToParentGoalActivity)
+            }
         }
     }
 

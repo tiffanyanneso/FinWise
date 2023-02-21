@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="wrap_content"
     card_view:cardCornerRadius="10dp"
     android:foreground="@drawable/border"
     android:layout_marginBottom="10dp"
@@ -27,7 +27,7 @@
             android:id="@+id/linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_number_of_questions_id"
@@ -43,17 +43,18 @@
                 android:text="# Question"
                 android:layout_gravity="center_vertical"
                 android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tv_difficulty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Difficulty"
+                android:layout_gravity="center_vertical"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:layout_weight="1"/>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear_layout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                android:paddingLeft="14dp"/>
 
             <TextView
                 android:id="@+id/tv_correct_percentage_id"
@@ -66,17 +67,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:paddingLeft="14dp"
-                android:paddingTop="25dp"
+                android:paddingLeft="15dp"
                 android:text="Correct %"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
-
-
         </LinearLayout>
-
 
     </RelativeLayout>
 
