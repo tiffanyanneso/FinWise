@@ -13,6 +13,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialConfirmDepositBinding
+import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
@@ -35,6 +36,8 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
     private lateinit var financialGoalID:String
     private lateinit var savingActivityID:String
 
+    private lateinit var bundle:Bundle
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,13 +49,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
-        val bundle: Bundle = intent.extras!!
-        //decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
-        binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
-        binding.tvAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
-        binding.tvGoal.text= bundle.getString("goalName")
-        financialGoalID = bundle.getString("financialGoalID").toString()
-        savingActivityID = bundle.getString("savingActivityID").toString()
+        setFields()
 
         binding.btnConfirm.setOnClickListener {
             val transaction = hashMapOf(
@@ -73,6 +70,23 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 checkGoalCompletion()
             }
         }
+    }
+
+    private fun setFields() {
+        bundle = intent.extras!!
+        //decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
+        binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
+        binding.tvAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
+        binding.tvGoal.text= bundle.getString("goalName")
+        financialGoalID = bundle.getString("financialGoalID").toString()
+        savingActivityID = bundle.getString("savingActivityID").toString()
+
+        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2").get().addOnSuccessListener {
+            var wallet = it.documents[0].toObject<ChildWallet>()
+            binding.tvWalletBalance.text = (wallet?.currentBalance!!.toFloat() - bundle.getFloat("amount")).toString()
+        }
+
+        binding.tvUpdatedGoalSavings.text = (bundle.getFloat("savedAmount") + bundle.getFloat("amount")).toString()
     }
 
     private fun adjustUserBalance() {

@@ -93,7 +93,9 @@ class ViewGoalActivity : AppCompatActivity() {
 //            bundle.putFloat("currentAmount", currentAmount)
 //            bundle.putFloat("targetAmount", targetAmount)
             var goalWithdraw = Intent(this, WithdrawActivity::class.java)
+            sendBundle.putFloat("savedAmount", savedAmount)
             sendBundle.putString("savingActivityID", savingActivityID)
+            sendBundle.putInt("progress", binding.progressBar.progress)
             goalWithdraw.putExtras(sendBundle)
             this.startActivity(goalWithdraw)
         }
@@ -104,7 +106,9 @@ class ViewGoalActivity : AppCompatActivity() {
 //            bundle.putFloat("currentAmount", currentAmount)
 //            bundle.putFloat("targetAmount", targetAmount)
             var goalDeposit = Intent(this, FinancialActivityGoalDeposit::class.java)
+            sendBundle.putFloat("savedAmount", savedAmount)
             sendBundle.putString("savingActivityID", savingActivityID)
+            sendBundle.putInt("progress", binding.progressBar.progress)
             goalDeposit.putExtras(sendBundle)
             this.startActivity(goalDeposit)
         }

@@ -15,6 +15,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivitySpendingBinding
 import ph.edu.dlsu.finwise.databinding.ActivityWithdrawBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
 class WithdrawActivity : AppCompatActivity() {
@@ -23,9 +24,12 @@ class WithdrawActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private lateinit var financialGoalID:String
-    private lateinit var decisionMakingActivityID:String
+    private lateinit var savingActivityID:String
 
-    private lateinit var dataBundle:Bundle
+    private lateinit var bundle:Bundle
+
+    private var savedAmount = 0.00F
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,25 +37,25 @@ class WithdrawActivity : AppCompatActivity() {
         binding = ActivityWithdrawBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        dataBundle = intent.extras!!
-        setData()
+        setFields()
 
         binding.etDate.setOnClickListener {
             showCalendar()
         }
 
         binding.btnNext.setOnClickListener {
-            var bundle = Bundle()
-            bundle.putString("goalName", binding.tvGoalName.text.toString())
-            bundle.putString("financialGoalID",financialGoalID)
+            var sendBundle = Bundle()
+            sendBundle.putString("goalName", binding.tvGoalName.text.toString())
+            sendBundle.putString("financialGoalID",financialGoalID)
             //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-            bundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
-            bundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
-            bundle.putString("savingActivityID", dataBundle.getString("savingActivityID"))
+            sendBundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
+            sendBundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
+            sendBundle.putString("savingActivityID", savingActivityID)
+            sendBundle.putFloat("savedAmount", savedAmount)
 
 
             var confirmWithdraw = Intent (this, ConfirmWithdraw::class.java)
-            confirmWithdraw.putExtras(bundle)
+            confirmWithdraw.putExtras(sendBundle)
             confirmWithdraw.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(confirmWithdraw)
         }
@@ -60,7 +64,6 @@ class WithdrawActivity : AppCompatActivity() {
         binding.topAppBar.setNavigationOnClickListener {
             var bundle = Bundle()
             bundle.putString("financialGoalID",financialGoalID)
-            bundle.putString("goalID", financialGoalID)
 
             val goToGoal = Intent(applicationContext, ViewGoalActivity::class.java)
             goToGoal.putExtras(bundle)
@@ -85,15 +88,20 @@ class WithdrawActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun setData() {
-        financialGoalID = dataBundle.getString("financialGoalID").toString()
-        decisionMakingActivityID = dataBundle.getString("decisionMakingActivityID").toString()
+    private fun setFields() {
+        bundle = intent.extras!!
+        financialGoalID = bundle.getString("financialGoalID").toString()
+        savingActivityID = bundle.getString("savingActivityID").toString()
+        savedAmount = bundle.getFloat("savedAmount")
+        binding.pbProgress.progress = bundle.getInt("progress")
+
 
         firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
             binding.tvGoalName.text = financialGoal?.goalName
-            //binding.tvProgressAmount.text = "₱ " + bundle.getFloat("currentAmount") + " / ₱ " + bundle.getFloat("targetAmount")
-            //binding.pbProgress.progress = bundle.getInt("progress")
+            binding.tvProgressAmount.text = "₱ " + DecimalFormat("###0.00").format(bundle.getFloat("savedAmount")) +
+                    " / ₱ " + DecimalFormat("###0.00").format(financialGoal?.targetAmount)
+            binding.tvSavings.text = "You currently have ₱ ${DecimalFormat("###0.00").format(savedAmount)} in your savings"
         }
     }
 }

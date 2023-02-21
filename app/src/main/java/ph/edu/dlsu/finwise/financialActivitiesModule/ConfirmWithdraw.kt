@@ -6,8 +6,10 @@ import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityConfirmWithdrawBinding
+import ph.edu.dlsu.finwise.model.ChildWallet
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,7 +23,9 @@ class ConfirmWithdraw : AppCompatActivity() {
     private lateinit var bundle:Bundle
 
     private lateinit var financialGoalID:String
-    private lateinit var decisionMakingActivityID:String
+    private lateinit var savingActivityID:String
+
+    private var savedAmount = 0.00F
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +33,7 @@ class ConfirmWithdraw : AppCompatActivity() {
         setContentView(binding.root)
         bundle = intent.extras!!
 
-//        binding.tvGoalId.text = bundle.getString("financialGoalID").toString()
-//        binding.tvSavingActivityId.text = bundle.getString("")
-
-        setData()
+        setFields()
 
         binding.btnConfirm.setOnClickListener {
             var withdrawal = hashMapOf(
@@ -71,11 +72,16 @@ class ConfirmWithdraw : AppCompatActivity() {
         }
     }
 
-    private fun setData() {
+    private fun setFields() {
         financialGoalID = bundle.getString("financialGoalID").toString()
-        //decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
+        savingActivityID = bundle.getString("savingActivityID").toString()
         binding.tvGoal.text = bundle.getString("goalName")
-        binding.tvAmount.text = "₱ " + DecimalFormat("#,###.00").format(bundle.getFloat("amount")).toString()
-        binding.tvDate.text = SimpleDateFormat("MM-dd-yyyy").format(bundle.getSerializable("date"))
+        binding.tvAmount.text = "₱ " + DecimalFormat("#,###.00").format(bundle.getFloat("amount"))
+        binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
+        binding.tvUpdatedGoalSavings.text = (bundle.getFloat("savedAmount") - bundle.getFloat("amount")).toString()
+        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2").get().addOnSuccessListener {
+            var wallet = it.documents[0].toObject<ChildWallet>()
+            binding.tvWalletBalance.text = (wallet?.currentBalance!!.toFloat() + bundle.getFloat("amount")).toString()
+        }
     }
 }
