@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -21,6 +23,7 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Date
 
 class FinancialActivityGoalDeposit : AppCompatActivity() {
 
@@ -142,6 +145,7 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
         dialog.window!!.setLayout(1000, 1200)
 
         var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
+        calendar.maxDate = System.currentTimeMillis()
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
             binding.etDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())

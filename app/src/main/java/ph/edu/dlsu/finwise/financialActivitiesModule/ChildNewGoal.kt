@@ -163,6 +163,7 @@ class ChildNewGoal : AppCompatActivity() {
         dialog.window!!.setLayout(1000, 1200)
 
         var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
+        calendar.minDate = System.currentTimeMillis()
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
             binding.etTargetDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())

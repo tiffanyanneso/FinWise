@@ -83,10 +83,10 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
 
         firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2").get().addOnSuccessListener {
             var wallet = it.documents[0].toObject<ChildWallet>()
-            binding.tvWalletBalance.text = (wallet?.currentBalance!!.toFloat() - bundle.getFloat("amount")).toString()
+            binding.tvWalletBalance.text = "₱ " +  (wallet?.currentBalance!!.toFloat() - bundle.getFloat("amount"))
         }
 
-        binding.tvUpdatedGoalSavings.text = (bundle.getFloat("savedAmount") + bundle.getFloat("amount")).toString()
+        binding.tvUpdatedGoalSavings.text = "₱ " +  (bundle.getFloat("savedAmount") + bundle.getFloat("amount"))
     }
 
     private fun adjustUserBalance() {
