@@ -56,6 +56,7 @@ class AssessmentQuestionsAdapter : RecyclerView.Adapter<AssessmentQuestionsAdapt
             firestore.collection("AssessmentQuestions").document(questionID).get().addOnSuccessListener {
                 var question = it.toObject<AssessmentQuestions>()
                 itemBinding.tvQuestion.text = question?.question
+                itemBinding.tvDifficulty.text = question?.difficulty
             }
         }
 

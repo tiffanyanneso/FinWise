@@ -55,14 +55,6 @@ class ChildNewGoal : AppCompatActivity() {
         }*/
 
 
-        /*if (currentUserType == "Child") {
-            binding.tvFinancialDecisionMakingActivity.visibility = View.GONE
-            binding.checkBoxes.visibility = View.GONE
-        } else if (currentUserType == "Parent") {
-            binding.tvFinancialDecisionMakingActivity.visibility = View.VISIBLE
-            binding.checkBoxes.visibility = View.VISIBLE
-        }*/
-
         binding.etTargetDate.setOnClickListener{
             showCalendar()
         }

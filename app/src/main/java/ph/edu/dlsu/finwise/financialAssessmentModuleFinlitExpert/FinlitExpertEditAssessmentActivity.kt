@@ -47,7 +47,7 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
             for (question in results)
                 questionsIDArrayList.add(question.id)
 
-            editAssessmentQuestionAdapter = EditAssessmentQuestionsAdapter(this, questionsIDArrayList)
+            editAssessmentQuestionAdapter = EditAssessmentQuestionsAdapter(this, questionsIDArrayList, assessmentID)
             binding.rvQuestions.adapter = editAssessmentQuestionAdapter
             binding.rvQuestions.layoutManager = LinearLayoutManager(applicationContext,
                 LinearLayoutManager.VERTICAL,

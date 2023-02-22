@@ -180,6 +180,13 @@
         <item>Achieved</item>
     </string-array>
 
+    <string-array name="assessment_question_difficulty">
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+
+    </string-array>
+
     <string name="title_decision_making_activities">Financial Decision Making Activities</string>
 
 

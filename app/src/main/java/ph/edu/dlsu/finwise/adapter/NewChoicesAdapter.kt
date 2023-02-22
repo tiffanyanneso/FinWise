@@ -18,11 +18,13 @@ class NewChoicesAdapter : RecyclerView.Adapter<NewChoicesAdapter.ChoicesViewHold
     private var context: Context
 
     private var firestore = Firebase.firestore
+    private var editChoice:EditChoice
 
 
-    constructor(context: Context, choicesArrayList:ArrayList<FinlitExpertAddNewQuestionsActivity.Choice>) {
+    constructor(context: Context, choicesArrayList:ArrayList<FinlitExpertAddNewQuestionsActivity.Choice>, editChoice:EditChoice) {
         this.context = context
         this.choicesArrayList = choicesArrayList
+        this.editChoice = editChoice
     }
 
     override fun getItemCount(): Int {
@@ -66,11 +68,18 @@ class NewChoicesAdapter : RecyclerView.Adapter<NewChoicesAdapter.ChoicesViewHold
                 itemBinding.imgCorrectAnswer.visibility = View.GONE
             }
 
+            itemBinding.btnEdit.setOnClickListener {
+                editChoice.editChoice(position, choice.choice.toString(), choice?.correct!!)
+            }
             //itemBinding.switchSetChoices.isChecked = choice.correct!!
         }
 
         override fun onClick(p0: View?) {
 
         }
+    }
+
+    interface EditChoice {
+        fun editChoice(position:Int, choice:String, isCorrect:Boolean)
     }
 }

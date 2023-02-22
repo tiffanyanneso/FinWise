@@ -5,13 +5,21 @@
     android:layout_height="match_parent"
     tools:context=".financialAssessmentModuleFinlitExpert.fragment.AssessmentQuestionsFragment">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_view_questions"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="8"
-        android:layout_marginTop="10dp"
-        tools:listitem="@layout/item_specific_assessment_questions"/>
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_view_questions"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="8"
+            android:layout_marginTop="10dp"
+            tools:listitem="@layout/item_specific_assessment_questions"/>
+
+    </LinearLayout>
+
+
 
 </FrameLayout>

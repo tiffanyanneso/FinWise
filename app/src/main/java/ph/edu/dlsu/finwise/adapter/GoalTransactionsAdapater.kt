@@ -22,18 +22,21 @@ import java.text.SimpleDateFormat
 
 class GoalTransactionsAdapater : RecyclerView.Adapter<GoalTransactionsAdapater.GoalViewDepositViewHolder> {
 
-    private var depositTransactions = ArrayList<String>()
+    private var transactionsArrayList = ArrayList<String>()
     private var context: Context
 
     private var firestore = Firebase.firestore
 
-    constructor(context: Context, depositTransactions:ArrayList<String>) {
+    constructor(context: Context, transactionsArrayList:ArrayList<String>) {
         this.context = context
-        this.depositTransactions = depositTransactions
+        this.transactionsArrayList = transactionsArrayList
     }
 
     override fun getItemCount(): Int {
-        return depositTransactions.size
+        if(transactionsArrayList.size > 4)
+            return 4
+        else
+            return transactionsArrayList.size
     }
 
     override fun onCreateViewHolder(
@@ -49,7 +52,7 @@ class GoalTransactionsAdapater : RecyclerView.Adapter<GoalTransactionsAdapater.G
 
     override fun onBindViewHolder(holder: GoalTransactionsAdapater.GoalViewDepositViewHolder,
                                   position: Int) {
-        holder.bindGoal(depositTransactions[position])
+        holder.bindGoal(transactionsArrayList[position])
     }
 
     inner class GoalViewDepositViewHolder(private val itemBinding: ItemGoalTransactionBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {

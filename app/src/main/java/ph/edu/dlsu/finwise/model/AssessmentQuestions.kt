@@ -5,9 +5,10 @@ import com.google.firebase.Timestamp
 class AssessmentQuestions(
     var assessmentID:String?=null,
     var question:String?=null,
+    var difficulty:String?=null,
     var answerAccuracy:Float?=null,
     var dateCreated:Timestamp?=null,
     var createdBy:String?=null,
     @field:JvmField
-    var isUsed:Boolean?=null
+    var isUsed:Boolean?=null,
 ) {}
