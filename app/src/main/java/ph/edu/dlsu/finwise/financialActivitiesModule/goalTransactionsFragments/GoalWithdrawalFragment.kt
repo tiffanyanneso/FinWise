@@ -12,6 +12,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
+import ph.edu.dlsu.finwise.adapter.GoalTransactionsHistoryAdapater
 import ph.edu.dlsu.finwise.databinding.FragmentGoalDepositBinding
 import ph.edu.dlsu.finwise.databinding.FragmentGoalExpenseBinding
 import ph.edu.dlsu.finwise.model.Transactions
@@ -25,7 +26,7 @@ class GoalWithdrawalFragment : Fragment() {
 
     private lateinit var savingActivityID:String
 
-    private lateinit var goalTransactionsAdapter: GoalTransactionsAdapater
+    private lateinit var goalTransactionsAdapter: GoalTransactionsHistoryAdapater
     private var transactionsIDArrayList = ArrayList<String>()
 
     override fun onCreateView(
@@ -60,7 +61,7 @@ class GoalWithdrawalFragment : Fragment() {
             for (filter in transactionFilterArrayList)
                 transactionsIDArrayList.add(filter.transactionID)
 
-            goalTransactionsAdapter = GoalTransactionsAdapater(requireActivity().applicationContext, transactionsIDArrayList)
+            goalTransactionsAdapter = GoalTransactionsHistoryAdapater(requireActivity().applicationContext, transactionsIDArrayList)
             binding.rvViewTransactions.adapter = goalTransactionsAdapter
             binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
             goalTransactionsAdapter.notifyDataSetChanged()

@@ -20,7 +20,7 @@ import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.Transa
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
-class GoalTransactionsAdapater : RecyclerView.Adapter<GoalTransactionsAdapater.GoalViewDepositViewHolder> {
+class GoalTransactionsHistoryAdapater : RecyclerView.Adapter<GoalTransactionsHistoryAdapater.GoalTransactionsHistoryViewHolder> {
 
     private var transactionsArrayList = ArrayList<String>()
     private var context: Context
@@ -33,29 +33,26 @@ class GoalTransactionsAdapater : RecyclerView.Adapter<GoalTransactionsAdapater.G
     }
 
     override fun getItemCount(): Int {
-        if(transactionsArrayList.size > 5)
-            return 5
-        else
-            return transactionsArrayList.size
+        return transactionsArrayList.size
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): GoalTransactionsAdapater.GoalViewDepositViewHolder {
+    ): GoalTransactionsHistoryAdapater.GoalTransactionsHistoryViewHolder {
         val itemBinding = ItemGoalTransactionBinding
             .inflate(
                 LayoutInflater.from(parent.context),
                 parent, false)
-        return GoalViewDepositViewHolder(itemBinding)
+        return GoalTransactionsHistoryViewHolder(itemBinding)
     }
 
-    override fun onBindViewHolder(holder: GoalTransactionsAdapater.GoalViewDepositViewHolder,
+    override fun onBindViewHolder(holder: GoalTransactionsHistoryAdapater.GoalTransactionsHistoryViewHolder,
                                   position: Int) {
         holder.bindGoal(transactionsArrayList[position])
     }
 
-    inner class GoalViewDepositViewHolder(private val itemBinding: ItemGoalTransactionBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
+    inner class GoalTransactionsHistoryViewHolder(private val itemBinding: ItemGoalTransactionBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
         var transactions  = Transactions()
 
         init {
