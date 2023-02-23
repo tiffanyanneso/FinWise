@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
@@ -14,19 +13,24 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.jjoe64.graphview.GraphView
+import com.jjoe64.graphview.series.DataPoint
+import com.jjoe64.graphview.series.LineGraphSeries
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.FragmentBalanceBarChartBinding
+import ph.edu.dlsu.finwise.databinding.FragmentBalanceChartBinding
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class BalanceFragment : Fragment(R.layout.fragment_balance_bar_chart) {
-    private lateinit var binding: FragmentBalanceBarChartBinding
+class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
+    private lateinit var binding: FragmentBalanceChartBinding
     private var firestore = Firebase.firestore
     private var transactionsArrayList = ArrayList<Transactions>()
+    private lateinit var balanceLineGraphView: GraphView
 
+/*
     // Balance bar chart
     // variable for our bar chart
     private var barChart: BarChart? = null
@@ -41,22 +45,97 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_bar_chart) {
     private var barEntriesExpense = ArrayList<BarEntry>()
 
     // creating a string array for displaying days.
-    private var datesBar = arrayListOf<String>()
+    private var datesBar = arrayListOf<String>()*/
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_balance_bar_chart, container, false)
+        return inflater.inflate(R.layout.fragment_balance_chart, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentBalanceBarChartBinding.bind(view)
-        initializeBalanceBarGraph()
+        binding = FragmentBalanceChartBinding.bind(view)
+        initializeBalanceLineGraph()
         initializeTotals()
     }
+
+    private fun initializeBalanceLineGraph() {
+        // on below line we are initializing
+        // our variable with their ids.
+        firestore.collection("Transactions")
+            .get().addOnSuccessListener { documents ->
+                balanceLineGraphView = view?.findViewById(R.id.balance_chart)!!
+
+                val dates = java.util.ArrayList<Date>()
+                val dataPoints = java.util.ArrayList<DataPoint>()
+
+                for (transactionSnapshot in documents) {
+                    //creating the object from list retrieved in db
+                    val transaction = transactionSnapshot.toObject<Transactions>()
+                    transactionsArrayList.add(transaction)
+                }
+                transactionsArrayList.sortByDescending { it.date }
+
+                //get unique dates in transaction arraylist
+                for (transaction in transactionsArrayList) {
+                    //if array of dates doesn't contain date of the transaction, add the date to the arraylist
+                    if (!dates.contains(transaction.date?.toDate()))
+                        dates.add(transaction.date?.toDate()!!)
+                }
+
+                val sortedDate = dates.sortedBy { it }
+                //get deposit for a specific date
+                var xAxis =0.00
+                for (date in sortedDate) {
+                    var totalAmount = 0.00F
+                    for (transaction in transactionsArrayList) {
+                        //comparing the dates if they are equal
+                        if (date.compareTo(transaction.date?.toDate()) == 0) {
+                            if (transaction.transactionType == "Income")
+                                totalAmount += transaction.amount!!
+                            else
+                                totalAmount -= transaction.amount!!
+                        }
+                    }
+                    dataPoints.add(DataPoint(xAxis, totalAmount.toDouble()))
+                    xAxis++
+                }
+
+                //plot data to
+                // on below line we are adding data to our graph view.
+                val series = LineGraphSeries(dataPoints.toTypedArray())
+
+                // on below line adding animation
+                balanceLineGraphView.animate()
+
+                // on below line we are setting scrollable
+                // for point graph view
+                balanceLineGraphView.viewport.isScrollable = true
+
+                // on below line we are setting scalable.
+                balanceLineGraphView.viewport.isScalable = false
+
+                // on below line we are setting scalable y
+                balanceLineGraphView.viewport.setScalableY(false)
+
+                // on below line we are setting scrollable y
+                balanceLineGraphView.viewport.setScrollableY(true)
+
+                // on below line we are setting color for series.
+                series.color = R.color.teal_200
+
+                // on below line we are adding
+                // data series to our graph view.
+                balanceLineGraphView.addSeries(series)
+            }
+
+
+    }
+
 
     private fun initializeTotals() {
         firestore.collection("Transactions")
@@ -75,7 +154,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_bar_chart) {
             }
     }
 
-    private fun initializeBalanceBarGraph() {
+  /*  private fun initializeBalanceBarGraph() {
         firestore.collection("Transactions")
             .get().addOnSuccessListener { documents ->
                 loadTransactions(documents)
@@ -225,5 +304,5 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_bar_chart) {
          return dates.sortedBy { it }
     }
 
-
+*/
 }

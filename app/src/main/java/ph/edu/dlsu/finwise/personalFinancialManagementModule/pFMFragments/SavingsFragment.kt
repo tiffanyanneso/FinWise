@@ -1,32 +1,30 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.XAxis
+import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.jjoe64.graphview.GraphView
+import com.jjoe64.graphview.series.DataPoint
+import com.jjoe64.graphview.series.LineGraphSeries
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.FragmentSavingsBarChartBinding
+import ph.edu.dlsu.finwise.databinding.FragmentSavingsChartBinding
 import ph.edu.dlsu.finwise.model.Transactions
-import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
-class SavingsFragment : Fragment(R.layout.fragment_savings_bar_chart) {
-    private lateinit var binding: FragmentSavingsBarChartBinding
+class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
+    private lateinit var binding: FragmentSavingsChartBinding
     private var firestore = Firebase.firestore
     private var transactionsArrayList = ArrayList<Transactions>()
+    private lateinit var savingsLineGraphView: GraphView
 
-    // Balance bar chart
+    /*// Balance bar chart
     // variable for our bar chart
     private var barChart: BarChart? = null
 
@@ -40,22 +38,98 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_bar_chart) {
     private var barEntriesExpense = ArrayList<BarEntry>()
 
     // creating a string array for displaying days.
-    private var datesBar = arrayListOf<String>()
+    private var datesBar = arrayListOf<String>()*/
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_savings_bar_chart, container, false)
+        return inflater.inflate(R.layout.fragment_savings_chart, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentSavingsBarChartBinding.bind(view)
-        initializeSavingsBarGraph()
+        binding = FragmentSavingsChartBinding.bind(view)
+        initializeSavingsLineGraph()
         initializeTotals()
     }
+
+       private fun initializeSavingsLineGraph() {
+        // on below line we are initializing
+        // our variable with their ids.
+        firestore.collection("Transactions")
+            .whereEqualTo("category", "Goal")
+            .get().addOnSuccessListener { documents ->
+            savingsLineGraphView = view?.findViewById(R.id.savings_chart)!!
+
+            val dates = ArrayList<Date>()
+            val dataPoints = ArrayList<DataPoint>()
+
+            for (transactionSnapshot in documents) {
+                //creating the object from list retrieved in db
+                val transaction = transactionSnapshot.toObject<Transactions>()
+                transactionsArrayList.add(transaction)
+            }
+            transactionsArrayList.sortByDescending { it.date }
+
+            //get unique dates in transaction arraylist
+            for (transaction in transactionsArrayList) {
+                //if array of dates doesn't contain date of the transaction, add the date to the arraylist
+                if (!dates.contains(transaction.date?.toDate()))
+                    dates.add(transaction.date?.toDate()!!)
+            }
+
+            val sortedDate = dates.sortedBy { it }
+            //get deposit for a specific date
+            var xAxis =0.00
+            for (date in sortedDate) {
+                var depositTotal = 0.00F
+                for (transaction in transactionsArrayList) {
+                    //comparing the dates if they are equal
+                    if (date.compareTo(transaction.date?.toDate()) == 0) {
+                        if (transaction.transactionType == "Deposit")
+                            depositTotal += transaction.amount!!
+                        else
+                            depositTotal -= transaction.amount!!
+                    }
+                }
+                dataPoints.add(DataPoint(xAxis, depositTotal.toDouble()))
+                xAxis++
+            }
+
+            //plot data to
+            // on below line we are adding data to our graph view.
+            val series = LineGraphSeries(dataPoints.toTypedArray())
+
+            // on below line adding animation
+            savingsLineGraphView.animate()
+
+            // on below line we are setting scrollable
+            // for point graph view
+            savingsLineGraphView.viewport.isScrollable = true
+
+            // on below line we are setting scalable.
+            savingsLineGraphView.viewport.isScalable = false
+
+            // on below line we are setting scalable y
+            savingsLineGraphView.viewport.setScalableY(false)
+
+            // on below line we are setting scrollable y
+            savingsLineGraphView.viewport.setScrollableY(true)
+
+            // on below line we are setting color for series.
+            series.color = R.color.teal_200
+
+            // on below line we are adding
+            // data series to our graph view.
+            savingsLineGraphView.addSeries(series)
+        }
+
+
+    }
+
 
     private fun initializeTotals() {
         firestore.collection("Transactions").whereEqualTo("category", "Goal")
@@ -74,7 +148,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_bar_chart) {
             }
     }
 
-    private fun initializeSavingsBarGraph() {
+    /*private fun initializeSavingsBarGraph() {
         firestore.collection("Transactions").whereEqualTo("category", "Goal")
             .get().addOnSuccessListener { documents ->
                 loadTransactions(documents)
@@ -222,7 +296,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_bar_chart) {
                 dates.add(transaction.date?.toDate()!!)
         }
          return dates.sortedBy { it }
-    }
+    }*/
 
 
 }

@@ -167,8 +167,8 @@
                 android:gravity="center"
                 android:layout_margin="10dp"/>
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/bar_chart_savings"
+            <com.jjoe64.graphview.GraphView
+                android:id="@+id/savings_chart"
                 android:layout_width="350dp"
                 android:layout_height="400dp"
                 android:layout_marginTop="5dp"
