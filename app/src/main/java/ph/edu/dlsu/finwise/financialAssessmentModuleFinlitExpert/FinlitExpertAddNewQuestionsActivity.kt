@@ -71,7 +71,9 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
              "dateModified" to Timestamp.now(),
              "createdBy" to "fintlitexpertID",
              "modifiedBy" to "finlitepxertID",
-             "isUsed" to true
+             "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
         )
         firestore.collection("AssessmentQuestions").add(questionObject).addOnSuccessListener {
             var questionID = it.id

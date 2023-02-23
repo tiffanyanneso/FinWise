@@ -18,7 +18,11 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
 
     private lateinit var assessmentID:String
     private lateinit var assessmentAttemptID:String
-    private var score =0
+    //private var score =0
+
+    private var answerHistoryArrayList = ArrayList<FinancialAssessmentQuiz.AnswerHistory>()
+    private var answeredCorrectly = 0
+    private var nQuestions = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,30 +32,46 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         var bundle = intent.extras!!
         assessmentID = bundle.getString("assessmentID").toString()
         assessmentAttemptID = bundle.getString("assessmentAttemptID").toString()
-        score = bundle.getInt("score")
+        answerHistoryArrayList = bundle.getSerializable("answerHistory") as ArrayList<FinancialAssessmentQuiz.AnswerHistory>
+        nQuestions = answerHistoryArrayList.size
+
+        updateAnswerCorrectness()
 
         firestore.collection("AssessmentQuestions").whereEqualTo("assessmentID", assessmentID).get().addOnSuccessListener { results ->
-            var nQuestions = 0
-            for (question in results) {
-                var questionObject = question.toObject<AssessmentQuestions>()
-                if (questionObject.isUsed == true)
-                    nQuestions++
-            }
-            binding.tvScore.text = "Your score is $score out of $nQuestions"
+
+            binding.tvScore.text = "Your score is $answeredCorrectly out of $nQuestions"
 //            binding.progressBar.max = nQuestions
 
             // compute for percentage
-            var percentage = (score.toInt() /  nQuestions.toInt()) * 100
+            var percentage = (answeredCorrectly / nQuestions) * 100
 
             binding.progressBar.progress = percentage
         }.continueWith {
-            firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("score", score)
+            firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("nAnsweredCorrectly", answeredCorrectly)
+            firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("nQuestions", nQuestions)
         }
 
 
         binding.btnFinish.setOnClickListener {
             var assessmentTop  = Intent (this, FinancialAssessmentActivity::class.java)
             this.startActivity(assessmentTop)
+        }
+    }
+
+    private fun updateAnswerCorrectness() {
+        for (answerHistory in answerHistoryArrayList) {
+            firestore.collection("AssessmentQuestions").document(answerHistory.questionID).get().addOnSuccessListener {
+                var assessmentQuestion = it.toObject<AssessmentQuestions>()
+                var updatedNAssessments = assessmentQuestion?.nAssessments!! + 1
+                var updatedNAnsweredCorrectly = assessmentQuestion?.nAnsweredCorrectly
+                if (answerHistory.answeredCorrectly) {
+                    answeredCorrectly++
+                    updatedNAnsweredCorrectly = updatedNAnsweredCorrectly!! + 1
+                }
+
+                firestore.collection("AssessmentQuestions").document(answerHistory.questionID).
+                    update("nAssessments", updatedNAssessments, "nAnsweredCorrectly", updatedNAnsweredCorrectly)
+            }
         }
     }
 }
