@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:titleCentered="true"
-                app:title="My Goals"
+                app:title="My Activities"
                 app:menu="@menu/top_app_bar"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:backgroundTint="@color/dark_green"
