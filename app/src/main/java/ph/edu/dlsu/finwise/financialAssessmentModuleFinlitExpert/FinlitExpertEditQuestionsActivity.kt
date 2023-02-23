@@ -84,7 +84,8 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
         dialog.window!!.setLayout(800, 1000)
 
         dialogBinding.btnSave.setOnClickListener {
-            choicesArrayList.add(FinlitExpertAddNewQuestionsActivity.Choice(dialogBinding.dialogEtNewChoice.text.toString(), dialogBinding.cbCorrect.isChecked))
+            choicesArrayList.add(FinlitExpertAddNewQuestionsActivity.Choice(dialogBinding.dialogEtNewChoice.text.toString(),
+                dialogBinding.cbCorrect.isChecked))
             choicesAdapter.notifyDataSetChanged()
             dialog.dismiss()
         }
@@ -106,9 +107,7 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
 
         dialogBinding.btnSave.setOnClickListener {
             choicesArrayList.set(position, FinlitExpertAddNewQuestionsActivity.Choice(dialogBinding.dialogEtNewChoice.text.toString(),
-                    dialogBinding.cbCorrect.isChecked
-                )
-            )
+                    dialogBinding.cbCorrect.isChecked))
             choicesAdapter.notifyDataSetChanged()
             dialog.dismiss()
         }
@@ -123,7 +122,6 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
         bundle = intent.extras!!
         questionID = bundle.getString("questionID").toString()
         assessmentID = bundle.getString("assessmentID").toString()
-
 
 
         firestore.collection("AssessmentQuestions").document(questionID).get().addOnSuccessListener {

@@ -106,7 +106,7 @@
                         app:startIconDrawable="@drawable/baseline_list_24">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/tv_description"
+                            android:id="@+id/et_description"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:inputType="textMultiLine"
