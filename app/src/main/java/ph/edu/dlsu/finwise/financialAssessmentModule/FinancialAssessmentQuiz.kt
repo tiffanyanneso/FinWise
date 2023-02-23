@@ -3,6 +3,8 @@ package ph.edu.dlsu.finwise.financialAssessmentModule
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -28,6 +30,9 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
 
     private lateinit var questionID:String
 
+    private var answerHistoryArrayList = ArrayList<AnswerHistory>()
+
+    //holds which index is the correct answer is to highlight it
     var correctChoice = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,43 +45,10 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
         assessmentAttemptID = bundle.getString("assessmentAttemptID").toString()
         score = bundle.getInt("score")
         questionIDArrayList = bundle.getStringArrayList("questionIDArrayList")!!
+        answerHistoryArrayList = bundle.getParcelableArrayList("answerHistory")!!
 
         getQuestion()
-        binding.layoutChoice1.setOnClickListener {
-            highlightCorrect()
-            binding.btnNext.visibility = View.VISIBLE
-            if (binding.tvIsCorrect1.text == "true")
-                score++
-            else
-                binding.layoutChoice1.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
-
-        }
-        binding.layoutChoice2.setOnClickListener {
-            highlightCorrect()
-            binding.btnNext.visibility = View.VISIBLE
-            if (binding.tvIsCorrect2.text == "true")
-                score++
-             else
-                binding.layoutChoice2.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
-
-        }
-        binding.layoutChoice3.setOnClickListener {
-            highlightCorrect()
-            binding.btnNext.visibility = View.VISIBLE
-            if (binding.tvIsCorrect3.text == "true")
-                score++
-            else
-                binding.layoutChoice3.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
-
-        }
-        binding.layoutChoice4.setOnClickListener {
-            highlightCorrect()
-            binding.btnNext.visibility = View.VISIBLE
-            if (binding.tvIsCorrect4.text == "true")
-                score++
-             else
-                binding.layoutChoice4.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
-        }
+        initializeLayoutClicks()
 
         binding.btnNext.setOnClickListener {
             nextQuestion()
@@ -105,21 +77,26 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
                     binding.tvChoice1ID.text = choice.id
                     binding.tvChoice1.text = choiceObject.choice
                     binding.tvIsCorrect1.text = choiceObject.isCorrect.toString()
+                    binding.layoutChoice1.setBackgroundColor(ContextCompat.getColor(this, R.color.cream))
                 }
                 else if (index == 2) {
                     binding.tvChoice2ID.text = choice.id
                     binding.tvChoice2.text = choiceObject.choice
                     binding.tvIsCorrect2.text = choiceObject.isCorrect.toString()
+                    binding.layoutChoice2.setBackgroundColor(ContextCompat.getColor(this, R.color.cream))
+
                 }
                 else if (index == 3) {
                     binding.tvChoice3ID.text = choice.id
                     binding.tvChoice3.text = choiceObject.choice
                     binding.tvIsCorrect3.text = choiceObject.isCorrect.toString()
+                    binding.layoutChoice3.setBackgroundColor(ContextCompat.getColor(this, R.color.cream))
                 }
                 else if (index == 4) {
                     binding.tvChoice4ID.text = choice.id
                     binding.tvChoice4.text = choiceObject.choice
                     binding.tvIsCorrect4.text = choiceObject.isCorrect.toString()
+                    binding.layoutChoice4.setBackgroundColor(ContextCompat.getColor(this, R.color.cream))
                 }
                 index++
             }
@@ -140,6 +117,7 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
         sendBundle.putString("assessmentAttemptID", assessmentAttemptID)
         sendBundle.putStringArrayList("questionIDArrayList", questionIDArrayList)
         sendBundle.putInt("score", score)
+        sendBundle.putParcelableArrayList("answerHistory", answerHistoryArrayList)
 
         //if there are still questions, go to the next
         if (questionIDArrayList.size > 0) {
@@ -168,6 +146,84 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
         binding.layoutChoice2.isClickable = false
         binding.layoutChoice3.isClickable = false
         binding.layoutChoice4.isClickable = false
+    }
+
+    private fun initializeLayoutClicks() {
+        binding.layoutChoice1.setOnClickListener {
+            highlightCorrect()
+            binding.btnNext.visibility = View.VISIBLE
+            if (binding.tvIsCorrect1.text == "true") {
+                score++
+                answerHistoryArrayList.add(AnswerHistory(questionID, true))
+            }
+            else {
+                binding.layoutChoice1.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+                answerHistoryArrayList.add(AnswerHistory(questionID, false))
+            }
+        }
+        binding.layoutChoice2.setOnClickListener {
+            highlightCorrect()
+            binding.btnNext.visibility = View.VISIBLE
+            if (binding.tvIsCorrect2.text == "true") {
+                score++
+                answerHistoryArrayList.add(AnswerHistory(questionID, true))
+            }
+            else {
+                binding.layoutChoice2.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+                answerHistoryArrayList.add(AnswerHistory(questionID, false))
+            }
+        }
+        binding.layoutChoice3.setOnClickListener {
+            highlightCorrect()
+            binding.btnNext.visibility = View.VISIBLE
+            if (binding.tvIsCorrect3.text == "true") {
+                score++
+                answerHistoryArrayList.add(AnswerHistory(questionID, true))
+            }
+            else {
+                binding.layoutChoice3.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+                answerHistoryArrayList.add(AnswerHistory(questionID, false))
+            }
+
+        }
+        binding.layoutChoice4.setOnClickListener {
+            highlightCorrect()
+            binding.btnNext.visibility = View.VISIBLE
+            if (binding.tvIsCorrect4.text == "true") {
+                score++
+                answerHistoryArrayList.add(AnswerHistory(questionID, true))
+            }
+            else {
+                binding.layoutChoice4.setBackgroundColor(ContextCompat.getColor(this, R.color.red))
+                answerHistoryArrayList.add(AnswerHistory(questionID, false))
+            }
+        }
+    }
+
+    class AnswerHistory(var questionID:String, var answeredCorrectly:Boolean) : Parcelable {
+        constructor(parcel: Parcel) : this(
+            parcel.readString().toString(),
+            parcel.readByte() != 0.toByte()
+        ) {}
+
+        override fun writeToParcel(parcel: Parcel, flags: Int) {
+            parcel.writeString(questionID)
+            parcel.writeByte(if (answeredCorrectly) 1 else 0)
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
+
+        companion object CREATOR : Parcelable.Creator<AnswerHistory> {
+            override fun createFromParcel(parcel: Parcel): AnswerHistory {
+                return AnswerHistory(parcel)
+            }
+
+            override fun newArray(size: Int): Array<AnswerHistory?> {
+                return arrayOfNulls(size)
+            }
+        }
     }
 
 }

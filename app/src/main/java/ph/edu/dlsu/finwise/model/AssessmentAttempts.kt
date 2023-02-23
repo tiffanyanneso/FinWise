@@ -6,6 +6,9 @@ class AssessmentAttempts (
     var childID:String?=null,
     var assessmentID:String?=null,
     var dateTaken:Timestamp?=null,
-    var score:String?=null,
+    //number of questions in the assessment that was answered correctly
+    var nAnsweredCorrectly:Int?=null,
+    //number of questions that were in the assessment
+    var nQuestions: Int?=null
 ){
 }

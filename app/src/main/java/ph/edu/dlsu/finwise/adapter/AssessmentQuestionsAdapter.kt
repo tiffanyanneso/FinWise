@@ -12,6 +12,7 @@ import ph.edu.dlsu.finwise.databinding.ItemAddNewChoiceBinding
 import ph.edu.dlsu.finwise.databinding.ItemSpecificAssessmentQuestionsBinding
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinlitExpertAddNewQuestionsActivity
 import ph.edu.dlsu.finwise.model.AssessmentQuestions
+import java.text.DecimalFormat
 
 class AssessmentQuestionsAdapter : RecyclerView.Adapter<AssessmentQuestionsAdapter.AssessmentQuestionsViewHolder>{
 
@@ -55,8 +56,13 @@ class AssessmentQuestionsAdapter : RecyclerView.Adapter<AssessmentQuestionsAdapt
         fun bindChoice(questionID: String){
             firestore.collection("AssessmentQuestions").document(questionID).get().addOnSuccessListener {
                 var question = it.toObject<AssessmentQuestions>()
-                itemBinding.tvQuestion.text = question?.question
-                itemBinding.tvDifficulty.text = question?.difficulty
+                itemBinding.tvQuestion.text = "Question: " +  question?.question
+                itemBinding.tvDifficulty.text = "Difficulty: " + question?.difficulty
+                println("print " + question?.nAnsweredCorrectly)
+                println("print " + question?.nAssessments)
+                var answeredCorrectly  = question?.nAnsweredCorrectly?.toFloat()
+                var nAssessment =  question?.nAssessments!!?.toFloat()
+                itemBinding.tvCorrectPercentage.text = "Correct percentage: " + DecimalFormat ("###0.00").format((answeredCorrectly!! / nAssessment!!) * 100) + "%"
             }
         }
 
