@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -13,6 +14,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertBinding
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertTypeBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewAssessmentBinding
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.sql.Time
 
 class FinlitExpertAssessmentTypeActivity : AppCompatActivity () {
@@ -59,6 +61,15 @@ class FinlitExpertAssessmentTypeActivity : AppCompatActivity () {
         // and initializes the navbar
         supportActionBar?.hide()
         NavbarFinlitExpert(findViewById(R.id.bottom_nav_finlit_expert), this, R.id.nav_finlit_assessment)
+        loadBackButton()
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToFinancialAssessmentFinlitExpert = Intent(applicationContext, FinancialAssessmentFinlitExpertActivity::class.java)
+            startActivity(goToFinancialAssessmentFinlitExpert)
+        }
     }
 
     //check if the assessment already exists, otherwise open dialog to prompt user to create new assessment
