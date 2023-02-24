@@ -9,12 +9,15 @@ import com.github.mikephil.charting.data.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.jjoe64.graphview.DefaultLabelFormatter
 import com.jjoe64.graphview.GraphView
+import com.jjoe64.graphview.LabelFormatter
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentSavingsChartBinding
 import ph.edu.dlsu.finwise.model.Transactions
+import java.text.NumberFormat
 import java.util.*
 
 
@@ -118,9 +121,20 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
 
             // on below line we are setting scrollable y
             savingsLineGraphView.viewport.setScrollableY(true)
+                // customize Y-axis label formatter
+                val nf = NumberFormat.getNumberInstance()
+                nf.maximumFractionDigits = 0
+                savingsLineGraphView.gridLabelRenderer.labelFormatter = object : DefaultLabelFormatter(nf, nf) {
+                    override fun formatLabel(value: Double, isValueX: Boolean): String {
+                        return if (!isValueX) "₱$value" else super.formatLabel(value, isValueX)
+                    }
+                }
 
             // on below line we are setting color for series.
             series.color = R.color.teal_200
+
+            series.isDrawDataPoints = true
+            series.dataPointsRadius = 10f
 
             // on below line we are adding
             // data series to our graph view.

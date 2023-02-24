@@ -74,9 +74,9 @@ class ConfirmTransactionActivity : AppCompatActivity() {
                     .format(balance - amount)
         val dec = DecimalFormat("#,###.00")
 
-        //binding.tvName.text = name
-        //binding.tvCategory.text = category
-        //binding.tvAmount.text = "₱$textAmount"
+        binding.tvName.text = name
+        binding.tvCategory.text = category
+        binding.tvAmount.text = "₱$amount"
         //binding.tvGoal.text = goal
         val formatter = SimpleDateFormat("MM/dd/yyyy")
         val dateSerializable = bundle!!.getSerializable("date")

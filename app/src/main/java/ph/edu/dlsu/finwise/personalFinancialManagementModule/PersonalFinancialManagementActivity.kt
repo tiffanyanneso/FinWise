@@ -4,11 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.mayaAPI.MayaPayment
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.PFMAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
@@ -23,16 +25,17 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPersonalFinancialManagementBinding
     private var firestore = Firebase.firestore
-    lateinit var bundle: Bundle
+    private var bundle = Bundle()
+    private var selectedDate = "weekly"
 
     private val tabIcons1 = intArrayOf(
-        ph.edu.dlsu.finwise.R.drawable.baseline_wallet_24,
-        ph.edu.dlsu.finwise.R.drawable.baseline_shopping_cart_checkout_24
+        R.drawable.baseline_wallet_24,
+        R.drawable.baseline_shopping_cart_checkout_24
     )
 
     private val tabIcons2 = intArrayOf(
-        ph.edu.dlsu.finwise.R.drawable.baseline_account_balance_24,
-        ph.edu.dlsu.finwise.R.drawable.baseline_wallet_24
+        R.drawable.baseline_account_balance_24,
+        R.drawable.baseline_wallet_24
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +47,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         // Hides actionbar,
         // and initializes the navbar
         supportActionBar?.hide()
-        Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
 
         setUpBreakdownTabs()
         setUpChartTabs()
@@ -61,6 +64,74 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         goToExpenseActivity()
         goToTransactions()
         goToPayMaya()
+        initializeDateButtons()
+    }
+
+    private fun initializeDateButtons() {
+        initializeWeeklyButton()
+        initializeMonthlyButton()
+        initializeYearlyButton()
+
+    }
+
+    private fun initializeMonthlyButton() {
+        val weeklyButton = binding.btnWeekly
+        val monthlyButton = binding.btnMonthly
+        val yearlyButton = binding.btnYearly
+        //TODO: check if weekly button is still clicked, else remove color
+        monthlyButton.setOnClickListener {
+            weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+            yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            bundle.putString("date", "monthly")
+            setUpChartTabs()
+        }
+    }
+
+    private fun initializeYearlyButton() {
+        val weeklyButton = binding.btnWeekly
+        val monthlyButton = binding.btnMonthly
+        val yearlyButton = binding.btnYearly
+        //TODO: check if weekly button is still clicked, else remove color
+        yearlyButton.setOnClickListener {
+            weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+            bundle.putString("date", "yearly")
+            setUpChartTabs()
+        }
+    }
+
+
+    private fun initializeWeeklyButton() {
+        val weeklyButton = binding.btnWeekly
+        val monthlyButton = binding.btnMonthly
+        val yearlyButton = binding.btnYearly
+        //TODO: check if weekly button is still clicked, else remove color
+        weeklyButton.setOnClickListener {
+            weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+            monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+
+            bundle.putString("date", "weekly")
+            setUpChartTabs()
+        }
+    }
+
+    private fun setUpChartTabs() {
+        val adapter = PFMAdapter(supportFragmentManager)
+        val balanceFragment = BalanceFragment()
+        val savingsFragment = SavingsFragment()
+        balanceFragment.arguments = bundle
+        savingsFragment.arguments = bundle
+        adapter.addFragment(balanceFragment, "Balance")
+        adapter.addFragment(savingsFragment, "Goal Savings")
+        binding.viewPagerBarCharts.adapter = adapter
+        binding.tabsBarCharts.setupWithViewPager(binding.viewPagerBarCharts)
+
+        binding.tabsBarCharts.getTabAt(0)?.text = "Balance"
+        binding.tabsBarCharts.getTabAt(1)?.text = "Goal Savings"
+        setupTabIcons2()
     }
 
     private fun setupTabIcons1() {
@@ -85,18 +156,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         binding.tabsBarCharts.getTabAt(1)?.setIcon(tabIcons2[1])
     }
 
-    private fun setUpChartTabs() {
-        val adapter = PFMAdapter(supportFragmentManager)
-        adapter.addFragment(BalanceFragment(), "Balance")
-        adapter.addFragment(SavingsFragment(), "Goal Savings")
-        binding.viewPagerBarCharts.adapter = adapter
-        binding.tabsBarCharts.setupWithViewPager(binding.viewPagerBarCharts)
-
-        binding.tabsBarCharts.getTabAt(0)?.text = "Balance"
-        binding.tabsBarCharts.getTabAt(1)?.text = "Savings"
-        setupTabIcons2()
-    }
-
     private fun loadBalance() {
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
         firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2")
@@ -109,8 +168,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             }
 
     }
-
-
 
     private fun goToTransactions() {
         binding.btnViewTransactions.setOnClickListener {
@@ -155,7 +212,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     }
 
     private fun getBalanceBundle() {
-        bundle = Bundle()
         val balance = binding.tvBalance.text.drop(1)
         bundle.putFloat("balance", balance.toString().toFloat())
     }

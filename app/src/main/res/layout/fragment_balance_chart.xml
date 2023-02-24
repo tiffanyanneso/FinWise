@@ -149,7 +149,7 @@
                 android:textSize="18sp"
                 android:gravity="center"/>
 
-            <com.jjoe64.graphview.GraphView
+            <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/balance_chart"
                 android:layout_width="350dp"
                 android:layout_height="400dp"
