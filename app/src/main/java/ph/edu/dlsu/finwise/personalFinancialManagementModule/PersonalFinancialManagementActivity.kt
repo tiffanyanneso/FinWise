@@ -27,6 +27,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
     private var bundle = Bundle()
     private var selectedDate = "weekly"
+    var balance = 0.00f
 
     private val tabIcons1 = intArrayOf(
         R.drawable.baseline_wallet_24,
@@ -52,7 +53,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         setUpBreakdownTabs()
         setUpChartTabs()
         loadBalance()
-        initializeButtons()
+        //initializeButtons()
         //initializeBalanceBarGraph()
         //initializeSavingsBarGraph()
         //goToTransactionHistory()
@@ -85,6 +86,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             bundle.putString("date", "monthly")
             setUpChartTabs()
+            setUpBreakdownTabs()
         }
     }
 
@@ -99,6 +101,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
             bundle.putString("date", "yearly")
             setUpChartTabs()
+            setUpBreakdownTabs()
         }
     }
 
@@ -115,6 +118,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
             bundle.putString("date", "weekly")
             setUpChartTabs()
+            setUpBreakdownTabs()
         }
     }
 
@@ -141,8 +145,12 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private fun setUpBreakdownTabs() {
         val adapter = PFMAdapter(supportFragmentManager)
-        adapter.addFragment(IncomeFragment(), "Income")
-        adapter.addFragment(ExpenseFragment(), "Expense")
+        val incomeFragment = IncomeFragment()
+        val expenseFragment = ExpenseFragment()
+        incomeFragment.arguments = bundle
+        expenseFragment.arguments = bundle
+        adapter.addFragment(incomeFragment, "Income")
+        adapter.addFragment(expenseFragment, "Expense")
         binding.viewPager.adapter = adapter
         binding.tabs.setupWithViewPager(binding.viewPager)
 
@@ -162,11 +170,11 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             .get().addOnSuccessListener { document ->
                 val childWallet = document.documents[0].toObject<ChildWallet>()
                 val dec = DecimalFormat("#,###.00")
-                val amount = dec.format(childWallet?.currentBalance)
+                balance = childWallet?.currentBalance!!
+                val amount = dec.format(balance)
                 binding.tvBalance.text = "₱$amount"
-
+                initializeButtons()
             }
-
     }
 
     private fun goToTransactions() {
@@ -212,8 +220,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     }
 
     private fun getBalanceBundle() {
-        val balance = binding.tvBalance.text.drop(1)
-        bundle.putFloat("balance", balance.toString().toFloat())
+        bundle.putFloat("balance", balance)
     }
 
     /* private fun initializeBalanceBarGraph() {

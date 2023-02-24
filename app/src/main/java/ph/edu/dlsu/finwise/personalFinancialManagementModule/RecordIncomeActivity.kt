@@ -105,21 +105,6 @@ class RecordIncomeActivity : AppCompatActivity() {
         return valid
     }
 
-    private fun validAmount(): Boolean {
-        val bundle2 = intent.extras!!
-        balance = bundle2.getFloat("balance")
-        //trying to deposit more than their current balance
-        if (binding.etAmount.text.toString().toFloat() > balance) {
-            binding.etAmount.error =
-                "You cannot deposit more than your current balance of ₱$balance"
-            binding.etAmount.requestFocus()
-            return false
-        }
-        else
-            return true
-    }
-
-
     private fun cancel() {
         binding.btnCancel.setOnClickListener {
             val goBack = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
@@ -147,6 +132,7 @@ class RecordIncomeActivity : AppCompatActivity() {
     private fun setBundle() {
         //getCurrentTime()
 //        val goal = binding.spinnerGoal.selectedItem.toString()
+        getBalance()
         bundle = Bundle()
         bundle.putString("transactionType", "Income")
         bundle.putString("transactionName", name)
@@ -156,11 +142,17 @@ class RecordIncomeActivity : AppCompatActivity() {
 //        bundle.putString("goal", goal)
         bundle.putSerializable("date", date)
 
+
         //TODO: reset spinner and date to default value
         /* binding.etName.text.clear()
          binding.etAmount.text.clear()
          binding.spinnerCategory.clear()
          binding.spinnerGoal.adapter(null)*/
+    }
+
+    private fun getBalance() {
+        val bundle2 = intent.extras!!
+        balance = bundle2.getFloat("balance")
     }
 
     /*private fun getCurrentTime() {

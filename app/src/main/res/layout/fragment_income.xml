@@ -99,7 +99,7 @@
             android:id="@+id/tv_income_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Income Categories"
+            android:text="This Week's Income Categories"
             android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@color/dark_green"

@@ -120,14 +120,17 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
             "weekly" -> {
                 selectedDates = getDaysOfWeek(sortedDate)
                 graphData = addWeeklyData(selectedDates)
+                binding.tvBalanceTitle.text = "This Week's Balance Trend"
             }
             "monthly" -> {
                 val group = groupDates(sortedDate, "month")
                 graphData =  addData(group)
+                binding.tvBalanceTitle.text = "This Month's Balance Trend"
             }
             "yearly" -> {
                 val group = groupDates(sortedDate, "quarter")
                 graphData =  addData(group)
+                binding.tvBalanceTitle.text = "This Year's Balance Trend"
             }
         }
         return graphData

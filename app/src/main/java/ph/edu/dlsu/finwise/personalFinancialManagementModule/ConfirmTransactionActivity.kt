@@ -69,10 +69,17 @@ class ConfirmTransactionActivity : AppCompatActivity() {
                     DecimalFormat("#,##0.00")
                         .format(balance - amount)
         }
-        binding.tvWalletBalance.text = "₱ " +
-                DecimalFormat("#,##0.00")
-                    .format(balance - amount)
-        val dec = DecimalFormat("#,###.00")
+
+        if (transactionType == "Expense") {
+            binding.tvWalletBalance.text = "₱ " +
+                    DecimalFormat("#,##0.00")
+                        .format(balance - amount)
+        } else if (transactionType == "Income") {
+            binding.tvWalletBalance.text = "₱ " +
+                    DecimalFormat("#,##0.00")
+                        .format(balance + amount)
+        }
+
 
         binding.tvName.text = name
         binding.tvCategory.text = category
@@ -96,7 +103,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
                 "category" to category,
                 "date" to bundle!!.getSerializable("date"),
                 "createdBy" to "",
-                "amount" to amount?.toFloat()
+                "amount" to amount
             )
             adjustUserBalance()
             // TODO: Change where transaction is added
