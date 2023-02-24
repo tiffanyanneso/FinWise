@@ -8,6 +8,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentBinding
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentCompletedBinding
+import ph.edu.dlsu.finwise.model.AssessmentDetails
 import ph.edu.dlsu.finwise.model.AssessmentQuestions
 
 class FinancialAssessmentCompleted : AppCompatActivity() {
@@ -37,20 +38,18 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
 
         updateAnswerCorrectness()
 
-        firestore.collection("AssessmentQuestions").whereEqualTo("assessmentID", assessmentID).get().addOnSuccessListener { results ->
-
-            binding.tvScore.text = "Your score is $answeredCorrectly out of $nQuestions"
-//            binding.progressBar.max = nQuestions
-
-            // compute for percentage
-            var percentage = (answeredCorrectly / nQuestions) * 100
-
-            binding.progressBar.progress = percentage
-        }.continueWith {
-            firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("nAnsweredCorrectly", answeredCorrectly)
-            firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("nQuestions", nQuestions)
+        // compute for percentage
+        var percentage = (answeredCorrectly / nQuestions) * 100
+        firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("nAnsweredCorrectly", answeredCorrectly)
+        firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("nQuestions", nQuestions)
+        firestore.collection("Assessments").document(assessmentID).get().addOnSuccessListener {
+            var assessment = it.toObject<AssessmentDetails>()
+            var updatedNTimesAssessmentTaken = assessment?.nTakes!! + 1
+            firestore.collection("Assessments").document(assessmentID).update("nTakes", updatedNTimesAssessmentTaken)
         }
 
+        binding.progressBar.progress = percentage
+        //binding.progressBar.max = nQuestions
 
         binding.btnFinish.setOnClickListener {
             var assessmentTop  = Intent (this, FinancialAssessmentActivity::class.java)
@@ -71,7 +70,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
 
                 firestore.collection("AssessmentQuestions").document(answerHistory.questionID).
                     update("nAssessments", updatedNAssessments, "nAnsweredCorrectly", updatedNAnsweredCorrectly)
-            }
+            }.continueWith { binding.tvScore.text = "Your score is $answeredCorrectly out of $nQuestions" }
         }
     }
 }

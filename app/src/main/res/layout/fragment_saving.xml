@@ -294,7 +294,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
-                        android:text="Goals"
+                        android:text="My Goals"
                         android:textSize="20sp"
                         android:textColor="@color/black"
                         android:gravity="center_vertical"

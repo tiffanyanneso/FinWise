@@ -165,14 +165,12 @@
     </string-array>
 
     <string-array name="goal_status_list">
-        <item>--Status--</item>
         <item>Approved</item>
         <item>For Editing</item>
         <item>Disapproved</item>
     </string-array>
 
     <string-array name="decision_making_activities_list">
-        <item>--Activity--</item>
         <item>In Progress</item>
         <item>For Review</item>
         <item>For Editing</item>

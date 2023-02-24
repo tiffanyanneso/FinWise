@@ -42,12 +42,9 @@ class AssessmentDetailsFragment : Fragment() {
             var assessment = it.toObject<AssessmentDetails>()
 
             binding.tvCategory.text = assessment?.assessmentCategory
-            binding.tvDateCreated.text= SimpleDateFormat("MM/dd/yyyy").format(assessment?.createdOn?.toDate())
+            binding.tvDateCreated.text = SimpleDateFormat("MM/dd/yyyy").format(assessment?.createdOn?.toDate())
             binding.tvNumberOfTakes.text = assessment?.nTakes.toString()
-        }.continueWith {
-            firestore.collection("AssessmentQuestions").whereEqualTo("assessmentID", assessmentID).get().addOnSuccessListener { questions ->
-                binding.tvNumberOfQuestions.text = questions.size().toString()
-            }
+            binding.tvNumberOfQuestions.text = assessment?.nQuestionsInAssessment.toString()
         }
     }
 }

@@ -11,27 +11,30 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemQuestionsBinding
-import ph.edu.dlsu.finwise.databinding.ItemSpecificAssessmentQuestionsBinding
+import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinlitExpertEditAssessmentActivity
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinlitExpertEditQuestionsActivity
 import ph.edu.dlsu.finwise.model.AssessmentQuestions
 
 class EditAssessmentQuestionsAdapter : RecyclerView.Adapter<EditAssessmentQuestionsAdapter.EditAssessmentQuestionsViewHolder>{
 
     private var assessmentID:String
-    private var questionsArrayList = ArrayList<String>()
+    private var questionStatusArrayList = ArrayList<FinlitExpertEditAssessmentActivity.QuestionStatus>()
     private var context: Context
 
     private var firestore = Firebase.firestore
 
+    private var questionStatusSwitch: QuestionStatusSwitch
 
-    constructor(context: Context, questionsArrayList:ArrayList<String>, assessmentID:String) {
+
+    constructor(context: Context, questionStatusArrayList:ArrayList<FinlitExpertEditAssessmentActivity.QuestionStatus>, assessmentID:String, questionStatusSwitch: QuestionStatusSwitch) {
         this.context = context
-        this.questionsArrayList = questionsArrayList
+        this.questionStatusArrayList = questionStatusArrayList
         this.assessmentID = assessmentID
+        this.questionStatusSwitch = questionStatusSwitch
     }
 
     override fun getItemCount(): Int {
-        return questionsArrayList.size
+        return questionStatusArrayList.size
     }
 
     override fun onCreateViewHolder(
@@ -47,7 +50,7 @@ class EditAssessmentQuestionsAdapter : RecyclerView.Adapter<EditAssessmentQuesti
 
     override fun onBindViewHolder(holder: EditAssessmentQuestionsAdapter.EditAssessmentQuestionsViewHolder,
                                   position: Int) {
-        holder.bindQuestion(questionsArrayList[position])
+        holder.bindQuestion(questionStatusArrayList[position])
     }
 
     inner class EditAssessmentQuestionsViewHolder(private val itemBinding: ItemQuestionsBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
@@ -56,7 +59,7 @@ class EditAssessmentQuestionsAdapter : RecyclerView.Adapter<EditAssessmentQuesti
             itemView.setOnClickListener(this)
         }
 
-        fun bindQuestion(questionID: String){
+        fun bindQuestion(questionStatusObject: FinlitExpertEditAssessmentActivity.QuestionStatus){
             itemBinding.btnEdit.setOnClickListener {
                 var bundle = Bundle()
                 var editQuestion = Intent(context, FinlitExpertEditQuestionsActivity::class.java)
@@ -65,17 +68,28 @@ class EditAssessmentQuestionsAdapter : RecyclerView.Adapter<EditAssessmentQuesti
                 editQuestion.putExtras(bundle)
                 context.startActivity(editQuestion)
             }
-            itemBinding.tvQuestionsId.text = questionID
-            firestore.collection("AssessmentQuestions").document(questionID).get().addOnSuccessListener {
+            itemBinding.tvQuestionsId.text = questionStatusObject.questionID
+            itemBinding.tvQuestion.text = questionStatusObject.question
+            itemBinding.tvDifficulty.text = questionStatusObject.difficulty
+            itemBinding.switchQuestionActive.isChecked = questionStatusObject.isActive!!
+            /*firestore.collection("AssessmentQuestions").document(questionID).get().addOnSuccessListener {
                 var question = it.toObject<AssessmentQuestions>()
                 itemBinding.tvQuestion.text  =question?.question
                 itemBinding.tvDifficulty.text = question?.difficulty
                 itemBinding.switchQuestionActive.isChecked = question?.isUsed!!
+            }*/
+
+            itemBinding.switchQuestionActive.setOnClickListener {
+                questionStatusSwitch.clickQuestionStatusSwitch(position, itemBinding.tvQuestionsId.text.toString(), itemBinding.switchQuestionActive.isChecked)
             }
         }
 
         override fun onClick(p0: View?) {
 
         }
+    }
+
+    interface QuestionStatusSwitch {
+        fun clickQuestionStatusSwitch(position:Int, questionID:String, isActive:Boolean)
     }
 }
