@@ -62,7 +62,6 @@ class FinactSavingAdapter : RecyclerView.Adapter<FinactSavingAdapter.ChildGoalVi
 
         fun bindGoal(goalID: String){
             firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener{ document ->
-
                 var goal = document.toObject<FinancialGoals>()
                 itemBinding.tvGoalId.text = document.id
                 goalStatus = goal?.status.toString()
@@ -71,21 +70,8 @@ class FinactSavingAdapter : RecyclerView.Adapter<FinactSavingAdapter.ChildGoalVi
                 // convert timestamp to date
                 val date = SimpleDateFormat("MM/dd/yyyy").format(goal?.targetDate?.toDate())
                 itemBinding.tvTargetDate.text = "Target Date: " + date.toString()
-
-                var savedAmount = 0.00F
-                firestore.collection("Transactions").whereEqualTo("financialGoalID", goalID).get().addOnSuccessListener { results ->
-                    for (transaction in results) {
-                        var transactionObject = transaction.toObject<Transactions>()
-                        if (transactionObject.transactionType == "Deposit")
-                            savedAmount += transactionObject.amount!!
-                        else if (transactionObject.transactionType == "Withdrawal")
-                            savedAmount-= transactionObject.amount!!
-                    }
-                    itemBinding.tvProgressAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(savedAmount) + "/ ₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
-                    itemBinding.progressBar.progress = (savedAmount/ goal?.targetAmount!! * 100).toInt()
-                }
-
-
+                itemBinding.tvProgressAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(goal?.currentSavings) + "/ ₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
+                itemBinding.progressBar.progress = (goal?.currentSavings!! / goal?.targetAmount!! * 100).toInt()
             }
         }
 
@@ -93,7 +79,6 @@ class FinactSavingAdapter : RecyclerView.Adapter<FinactSavingAdapter.ChildGoalVi
             var bundle = Bundle()
             var financialGoalID = itemBinding.tvGoalId.text.toString()
             bundle.putString ("financialGoalID", financialGoalID)
-            //bundle.putString ("childID", childID)
             var viewGoal = Intent(context, ViewGoalActivity::class.java)
             viewGoal.putExtras(bundle)
             viewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

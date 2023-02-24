@@ -64,8 +64,6 @@ class ViewGoalActivity : AppCompatActivity() {
 
         var bundle: Bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
-        println("print "  + financialGoalID)
-
         //checkUser()
         setFinancialActivityID()
 
@@ -161,13 +159,13 @@ class ViewGoalActivity : AppCompatActivity() {
                 if (activityObject.financialActivityName == "Spending")
                     spendingActivityID = finActivity.id
             }
-        }.continueWith { getSavedAmount() }
+        }.continueWith { getTransactions() }
     }
 
     private class TransactionFilter(var transactionID:String?=null, var date: Date?=null)
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getSavedAmount() {
+    private fun getTransactions() {
         var transactionFilterArrayList = ArrayList<TransactionFilter>()
         firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->
             for (transaction in results) {
@@ -196,10 +194,10 @@ class ViewGoalActivity : AppCompatActivity() {
                     binding.tvActivityName.text = goal?.financialActivity.toString()
                     targetAmount = goal?.targetAmount!!.toFloat()
 
-                    var formatSaved = DecimalFormat("#,##0.00").format(savedAmount)
+                    var formatSaved = DecimalFormat("#,##0.00").format(goal?.currentSavings)
                     var formatTarget = DecimalFormat("#,##0.00").format(goal?.targetAmount)
                     binding.tvGoalProgress.text = "₱$formatSaved / " + "₱ $formatTarget"
-                    var progress = (savedAmount/ goal?.targetAmount!! * 100).toInt()
+                    var progress = (goal?.currentSavings!! / goal?.targetAmount!! * 100).toInt()
                     if (progress< 100)
                         binding.progressBar.progress = progress
                     else
@@ -216,9 +214,11 @@ class ViewGoalActivity : AppCompatActivity() {
                     val to = LocalDate.parse(date.toString(), dateFormatter)
                     var difference = Period.between(from, to)
                     binding.tvRemaining.text = difference.days.toString() + " days remaining"
+
+                    binding.tvCurrentBalance.text = "Available balance: ₱ " + DecimalFormat("#,##0.00").format(goal?.currentSavings)
                 }
-            }.continueWith {
-                deductExpenses() }
+            }
+                //deductExpenses() }
         }
     }
 

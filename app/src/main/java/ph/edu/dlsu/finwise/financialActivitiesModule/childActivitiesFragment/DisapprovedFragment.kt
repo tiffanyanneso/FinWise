@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment
+package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,34 +7,44 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.adapter.FinactAchievedAdapter
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
-import ph.edu.dlsu.finwise.databinding.FragmentAchievedBinding
+import ph.edu.dlsu.finwise.databinding.FragmentDisapprovedBinding
+import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.util.*
+import kotlin.collections.ArrayList
 
-class AchievedFragment : Fragment() {
+class DisapprovedFragment : Fragment() {
 
-    private lateinit var binding: FragmentAchievedBinding
+    private lateinit var binding: FragmentDisapprovedBinding
     private var firestore = Firebase.firestore
-    private lateinit var goalAdapter: FinactAchievedAdapter
+    private lateinit var goalAdapter: FinactSavingAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getAchievedGoals()
+        getDisapprovedGoals()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentAchievedBinding.inflate(inflater, container, false)
+        binding = FragmentDisapprovedBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
 
-    private fun getAchievedGoals() {
+    class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
+    }
+
+
+    private fun getDisapprovedGoals() {
         var goalIDArrayList = ArrayList<String>()
-        var filter = "Completed"
+        var filter = "Disapproved"
+        var goalFilterArrayList = ArrayList<GoalFilter>()
+
         goalIDArrayList.clear()
         //TODO:change to get transactions of current user
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
@@ -43,15 +53,20 @@ class AchievedFragment : Fragment() {
         firestore.collection("FinancialGoals").whereEqualTo("status", filter).get().addOnSuccessListener { documents ->
             for (goalSnapshot in documents) {
                 //creating the object from list retrieved in db
-                val goalID = goalSnapshot.id
-                goalIDArrayList.add(goalID)
+                var goalID = goalSnapshot.id
+                var goal = goalSnapshot.toObject<FinancialGoals>()
+                //goalIDArrayList.add(goalID)
+                goalFilterArrayList.add(GoalFilter(goalID, goal?.targetDate!!.toDate()))
             }
+            goalFilterArrayList.sortBy { it.goalTargetDate }
+            for (goalFilter in goalFilterArrayList)
+                goalIDArrayList.add(goalFilter.financialGoalID!!)
             loadRecyclerView(goalIDArrayList)
         }
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        goalAdapter = FinactAchievedAdapter(requireContext().applicationContext, goalIDArrayList)
+        goalAdapter = FinactSavingAdapter(requireContext().applicationContext, goalIDArrayList)
         binding.rvViewGoals.adapter = goalAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
             LinearLayoutManager.VERTICAL,

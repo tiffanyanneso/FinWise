@@ -10,6 +10,7 @@ class FinancialGoals(
     var createdBy:String?=null,
     var targetDate:Timestamp?=null,
     var goalLength:String?=null,
+    var currentSavings:Float?=null,
     var targetAmount:Float?=null,
     var financialActivity:String?=null,
     var status:String?=null,

@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import kotlinx.coroutines.*
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityPfmtransactionHistoryBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.*
+import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.*
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryExpenseFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryIncomeFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionSortFragment

@@ -89,14 +89,14 @@ class FinancialActivityGoalDeposit : AppCompatActivity() {
         firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
             binding.tvGoalName.text = financialGoal?.goalName
-            binding.tvProgressAmount.text = "₱ " + DecimalFormat("###0.00").format(bundle.getFloat("savedAmount")) +
-                    " / ₱ " + DecimalFormat("###0.00").format(financialGoal?.targetAmount)
+            binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(bundle.getFloat("savedAmount")) +
+                    " / ₱ " + DecimalFormat("#,##0.00").format(financialGoal?.targetAmount)
         }
 
         firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2").get().addOnSuccessListener {
             var wallet = it.documents[0].toObject<ChildWallet>()
             walletBalance = wallet?.currentBalance!!
-            binding.tvBalance.text = "You currently have ₱${DecimalFormat("###0.00").format(walletBalance)} in your wallet"
+            binding.tvBalance.text = "You currently have ₱${DecimalFormat("#,##0.00").format(walletBalance)} in your wallet"
         }
     }
 

@@ -12,8 +12,8 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityTestFinancialBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
-import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.AchievedFragment
-import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.BudgetingFragment
+import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.AchievedFragment
+import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.BudgetingFragment
 
 class TestFinancialActivity : AppCompatActivity() {
 

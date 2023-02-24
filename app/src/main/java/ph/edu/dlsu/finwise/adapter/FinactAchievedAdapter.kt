@@ -82,7 +82,7 @@ class FinactAchievedAdapter : RecyclerView.Adapter<FinactAchievedAdapter.FinactA
                         else if (transactionObject.transactionType == "Withdrawal")
                             savedAmount-= transactionObject.amount!!
                     }
-                    itemBinding.tvTargetAmount.text = "₱ " + DecimalFormat("###0.00").format(savedAmount)
+                    itemBinding.tvTargetAmount.text = "₱ " + DecimalFormat("#,##0.00").format(savedAmount)
                 }
 
 

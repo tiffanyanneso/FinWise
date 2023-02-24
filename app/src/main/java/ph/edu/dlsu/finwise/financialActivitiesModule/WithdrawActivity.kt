@@ -55,7 +55,7 @@ class WithdrawActivity : AppCompatActivity() {
                 sendBundle.putFloat("savedAmount", savedAmount)
 
 
-                var confirmWithdraw = Intent (this, ConfirmWithdraw::class.java)
+                var confirmWithdraw = Intent (this, FinancialActivityConfirmWithdraw::class.java)
                 confirmWithdraw.putExtras(sendBundle)
                 confirmWithdraw.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this.startActivity(confirmWithdraw)
@@ -138,9 +138,9 @@ class WithdrawActivity : AppCompatActivity() {
         firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
             binding.tvGoalName.text = financialGoal?.goalName
-            binding.tvProgressAmount.text = "₱ " + DecimalFormat("###0.00").format(bundle.getFloat("savedAmount")) +
-                    " / ₱ " + DecimalFormat("###0.00").format(financialGoal?.targetAmount)
-            binding.tvSavings.text = "You currently have ₱ ${DecimalFormat("###0.00").format(savedAmount)} in your savings"
+            binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(bundle.getFloat("savedAmount")) +
+                    " / ₱ " + DecimalFormat("#,##0.00").format(financialGoal?.targetAmount)
+            binding.tvSavings.text = "You currently have ₱ ${DecimalFormat("#,##0.00").format(savedAmount)} in your savings"
         }
     }
 }

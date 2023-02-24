@@ -105,7 +105,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
                     "targetDate" to bundle.getSerializable("targetDate"),
                     "goalLength" to goalLength,
                     "targetAmount" to bundle.getFloat("amount"),
-                    "currentAmount" to 0,
+                    "currentSavings" to 0,
                     "financialActivity" to bundle.getString("activity"),
                     "lastUpdated" to Timestamp.now(),
                     "status" to goalStatus,

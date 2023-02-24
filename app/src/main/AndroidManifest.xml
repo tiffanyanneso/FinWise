@@ -51,12 +51,6 @@
             android:name=".personalFinancialManagementModule.mayaAPI.MayaPayment"
             android:exported="false">
 
-            <!--
-              <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-            -->
         </activity>
         <activity
             android:name=".personalFinancialManagementModule.mayaAPI.MayaConfirmPayment"
@@ -75,7 +69,7 @@
             android:name=".parentFinancialActivitiesModule.ParentGoalActivity"
             android:exported="true" />
         <activity
-            android:name=".financialActivitiesModule.ConfirmWithdraw"
+            android:name=".financialActivitiesModule.FinancialActivityConfirmWithdraw"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -178,11 +172,6 @@
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertEditAssessmentActivity"
@@ -237,7 +226,12 @@
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
-            android:exported="true"></activity>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"
             android:exported="false" />

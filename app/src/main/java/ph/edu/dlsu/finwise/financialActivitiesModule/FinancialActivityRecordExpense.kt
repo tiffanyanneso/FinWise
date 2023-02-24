@@ -46,7 +46,7 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         budgetActivityID = bundle.getString("budgetActivityID").toString()
         budgetItemID = bundle.getString("budgetItemID").toString()
-        binding.tvRemainingBudget.text = "You currently have ₱${DecimalFormat("###0.00").format(bundle.getFloat("remainingBudget"))} left in budget"
+        binding.tvRemainingBudget.text = "You currently have ₱${DecimalFormat("#,##0.00").format(bundle.getFloat("remainingBudget"))} left in budget"
 
 
         binding.etTransactionDate.setOnClickListener{

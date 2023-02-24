@@ -4,18 +4,17 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityConfirmWithdrawBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.util.*
 
 
-class ConfirmWithdraw : AppCompatActivity() {
+class FinancialActivityConfirmWithdraw : AppCompatActivity() {
 
     private lateinit var binding: ActivityConfirmWithdrawBinding
     private var firestore = Firebase.firestore
@@ -46,15 +45,21 @@ class ConfirmWithdraw : AppCompatActivity() {
                 "financialActivityID" to bundle.getString("savingActivityID")
             )
             firestore.collection("Transactions").add(withdrawal).addOnSuccessListener {
-                //TODO: ADJUST USER BALANCE (INCREASE WALLET BALANCE)
-                var bundle = Bundle()
-                //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-                bundle.putString("financialGoalID", financialGoalID)
-                var saving = Intent (this, ViewGoalActivity::class.java)
-                saving.putExtras(bundle)
-                saving.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                this.startActivity(saving)
-                finish()
+                firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
+                    var goal = it.toObject<FinancialGoals>()
+                    var updatedSavings = goal?.currentSavings!! - bundle.getFloat("amount")
+                    firestore.collection("FinancialGoals").document(financialGoalID).update("currentSavings", updatedSavings).addOnSuccessListener {
+                        //TODO: ADJUST USER BALANCE (INCREASE WALLET BALANCE)
+                        var bundle = Bundle()
+                        //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
+                        bundle.putString("financialGoalID", financialGoalID)
+                        var saving = Intent(this, ViewGoalActivity::class.java)
+                        saving.putExtras(bundle)
+                        saving.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        this.startActivity(saving)
+                        finish()
+                    }
+                }
             }
         }
 

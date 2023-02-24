@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 import ph.edu.dlsu.finwise.*
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.*
+import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.*
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.GoalSettings
 
@@ -53,7 +53,7 @@ class FinancialActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         GlobalScope.launch(Dispatchers.IO) {
-            setGoalCount()
+//            setGoalCount()
             withContext(Dispatchers.Main) {
                 val adapter = ViewPagerAdapter(supportFragmentManager)
                 //checkSettings()
@@ -70,22 +70,6 @@ class FinancialActivity : AppCompatActivity() {
                 binding.tabLayout.setupWithViewPager(binding.viewPager)
                 setupTabIcons()
             }
-        }
-
-        binding.btnNewGoal.setOnClickListener {
-            if (ongoingGoals >= 5)
-                buildDialog()
-            else {
-                var goToNewGoal = Intent(this, ChildNewGoal::class.java)
-
-                var bundle = Bundle()
-                bundle.putString("source", "childFinancialActivity")
-                goToNewGoal.putExtras(bundle)
-                goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-                this.startActivity(goToNewGoal)
-            }
-
         }
 
         // Hides actionbar,
@@ -114,59 +98,6 @@ class FinancialActivity : AppCompatActivity() {
         fun addFragment(fragment: Fragment, title:String){
             mFrgmentList.add(fragment)
             mFrgmentTitleList.add(title)
-        }
-    }
-
-    private fun setGoalCount() {
-        var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
-        //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
-            for (goalSnapshot in results) {
-                var goal = goalSnapshot.toObject<FinancialGoals>()
-                if (goal?.status == "In Progress")
-                    ongoingGoals++
-            }
-        }
-    }
-
-
-    private fun buildDialog() {
-
-        var dialogBinding=DialogNewGoalWarningBinding.inflate(getLayoutInflater())
-        var dialog= Dialog(this);
-        dialog.setContentView(dialogBinding.getRoot())
-        // Initialize dialog
-
-        dialog.window!!.setLayout(900, 600)
-
-        dialogBinding.tvMessage.text= "You have $ongoingGoals ongoing goals.\nAre you sure you want to start another one?"
-
-        dialogBinding.btnOk.setOnClickListener {
-            var newGoal = Intent (this, ChildNewGoal::class.java)
-
-            var bundle = Bundle()
-            bundle.putString("source", "childFinancialActivity")
-            newGoal.putExtras(bundle)
-            newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-            this.startActivity(newGoal)
-            dialog.dismiss()
-        }
-        dialogBinding.btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
-        dialog.show()
-    }
-
-    private fun checkSettings() {
-        var currentChildUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("GoalSettings").whereEqualTo("childID", currentChildUser).get().addOnSuccessListener {
-            var goalSettings = it.documents[0].toObject<GoalSettings>()
-            //hide button
-            if (goalSettings?.setOwnGoal == false)
-                binding.btnNewGoal.visibility = View.GONE
-            else if (goalSettings?.setOwnGoal == true)
-                binding.btnNewGoal.visibility = View.VISIBLE
         }
     }
 }

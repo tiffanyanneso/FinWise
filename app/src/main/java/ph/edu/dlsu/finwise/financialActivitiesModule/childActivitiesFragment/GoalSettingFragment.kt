@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment
+package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,36 +9,29 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
-import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
-import ph.edu.dlsu.finwise.databinding.FragmentSpendingBinding
+import ph.edu.dlsu.finwise.adapter.FinactGoalSettingAdapter
+import ph.edu.dlsu.finwise.databinding.FragmentGoalSettingBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SpendingFragment : Fragment(){
+class GoalSettingFragment : Fragment() {
 
-    private lateinit var binding: FragmentSpendingBinding
+    private lateinit var binding: FragmentGoalSettingBinding
     private var firestore = Firebase.firestore
-    private lateinit var spendingAdapter: FinactSpendingAdapter
-
-    var goalIDArrayList = ArrayList<String>()
-    var budgetingArrayList = ArrayList<FinancialActivities>()
-    var goalFilterArrayList = ArrayList<GoalFilter>()
+    private lateinit var goalSettingAdapter: FinactGoalSettingAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        goalIDArrayList.clear()
-        budgetingArrayList.clear()
-        getSpending()
+        getForReviewGoals()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSpendingBinding.inflate(inflater, container, false)
+        binding = FragmentGoalSettingBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
@@ -46,26 +39,29 @@ class SpendingFragment : Fragment(){
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
     }
 
-    private fun getSpending() {
+
+    private fun getForReviewGoals() {
+        var goalIDArrayList = ArrayList<String>()
+        var goalFilterArrayList = ArrayList<GoalFilter>()
         goalIDArrayList.clear()
-        ///TODO: CHANGE TO FIREBASEAUTH.CURRENTUSER
+
         var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         //saving activities that are in progress means that there the goal is also in progress because they are connected
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
-            for (activity in results) {
-                var activityObject = activity.toObject<FinancialActivities>()
-                goalIDArrayList.add(activityObject?.financialGoalID.toString())
+        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "For Review").get().addOnSuccessListener { results ->
+            for (goalForReview in results) {
+                var goalObject = goalForReview.toObject<FinancialActivities>()
+                goalIDArrayList.add(goalObject?.financialGoalID.toString())
             }
             loadRecyclerView(goalIDArrayList)
         }
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        spendingAdapter = FinactSpendingAdapter(requireContext().applicationContext, goalIDArrayList)
-        binding.rvViewGoals.adapter = spendingAdapter
+        goalSettingAdapter = FinactGoalSettingAdapter(requireContext().applicationContext, goalIDArrayList)
+        binding.rvViewGoals.adapter = goalSettingAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
             LinearLayoutManager.VERTICAL,
             false)
-        spendingAdapter.notifyDataSetChanged()
+        goalSettingAdapter.notifyDataSetChanged()
     }
 }

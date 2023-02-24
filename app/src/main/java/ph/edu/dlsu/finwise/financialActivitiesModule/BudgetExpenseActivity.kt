@@ -102,7 +102,7 @@ class BudgetExpenseActivity : AppCompatActivity() {
         firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
             var budgetItem  = it.toObject<BudgetItem>()
             binding.tvBudgetItemName.text = budgetItem?.budgetItemName
-            //binding.tvCategoryAmount.text = "₱ " + DecimalFormat("###0.00").format(budgetItem?.amount)
+            //binding.tvCategoryAmount.text = "₱ " + DecimalFormat("#,##0.00").format(budgetItem?.amount)
         }.continueWith { getExpenses() }
     }
 
