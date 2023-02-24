@@ -6,6 +6,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
+import ph.edu.dlsu.finwise.profileModule.ProfileActivity
 
 
 class Navbar(bottomNavigationView: BottomNavigationView, appCon: Context, navItem: Int) {

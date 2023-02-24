@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.profileModule
 
 import android.app.Dialog
 import android.content.Context
@@ -13,8 +13,8 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEditProfileBinding
-import ph.edu.dlsu.finwise.databinding.ActivityProfileBinding
 import ph.edu.dlsu.finwise.model.ChildUser
 import java.text.SimpleDateFormat
 import java.util.*
@@ -54,14 +54,14 @@ class EditProfileActivity : AppCompatActivity() {
 
     fun getProfileData() {
         //val currentUser:String = FirebaseAuth.getInstance().currentUser!!.uid
-        val currentUser = "JoCGIUSVMWTQ2IB7Rf41ropAv3S2"
+        val currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
 
         firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener { documentSnapshot ->
             var child = documentSnapshot.toObject<ChildUser>()
             if (child?.firstName != null)
                 binding.etFirstName.setText(child?.firstName.toString())
             if (child?.lastName != null && child?.lastName != null)
-                binding.etLastName.setText(child?.lastName.toString() + " " + child?.lastName.toString())
+                binding.etLastName.setText(child?.lastName.toString())
             if (child?.birthday != null && child?.birthday != null) {
                 binding.etBirthday.setText(child?.birthday.toString())
             }
@@ -96,10 +96,10 @@ class EditProfileActivity : AppCompatActivity() {
     private fun showCalendar() {
         val dialog = Dialog(this)
 
-        dialog.setContentView(ph.edu.dlsu.finwise.R.layout.dialog_calendar)
+        dialog.setContentView(R.layout.dialog_calendar)
         dialog.window!!.setLayout(1000, 1200)
 
-        var calendar = dialog.findViewById<DatePicker>(ph.edu.dlsu.finwise.R.id.et_date)
+        var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
             binding.etBirthday.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())

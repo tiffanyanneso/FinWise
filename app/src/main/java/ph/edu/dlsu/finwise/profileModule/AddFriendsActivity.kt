@@ -1,21 +1,22 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.profileModule
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityAddFriendsBinding
-import ph.edu.dlsu.finwise.databinding.ActivityFriendRequestBinding
 
-class FriendRequestActivity : AppCompatActivity() {
+class AddFriendsActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityFriendRequestBinding
+    private lateinit var binding: ActivityAddFriendsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityFriendRequestBinding.inflate(layoutInflater)
+        binding = ActivityAddFriendsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
+            R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             val goToViewFriends = Intent(applicationContext, ViewFriendsActivity::class.java)
             this.startActivity(goToViewFriends)
