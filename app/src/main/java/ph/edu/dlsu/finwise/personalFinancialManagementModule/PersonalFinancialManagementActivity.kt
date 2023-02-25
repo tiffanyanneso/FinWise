@@ -114,7 +114,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-
             bundle.putString("date", "weekly")
             setUpChartTabs()
             setUpBreakdownTabs()

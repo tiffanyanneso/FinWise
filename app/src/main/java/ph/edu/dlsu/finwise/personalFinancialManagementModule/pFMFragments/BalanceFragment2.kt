@@ -26,7 +26,7 @@ import java.time.ZoneId
 import java.util.*
 
 
-class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
+class BalanceFragment2 : Fragment(R.layout.fragment_balance_chart) {
     private lateinit var binding: FragmentBalanceChartBinding
     private var firestore = Firebase.firestore
     private var transactionsArrayList = ArrayList<Transactions>()
@@ -74,9 +74,12 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     private fun getArgumentsFromPFM() {
         val args = arguments
         val date = args?.getString("date")
+        Toast.makeText(context, ""+date, Toast.LENGTH_SHORT).show()
         if (date != null) {
             selectedDatesSort = date
             transactionsArrayList.clear()
+            Toast.makeText(context, ""+date, Toast.LENGTH_SHORT).show()
+
         }
     }
 
@@ -118,6 +121,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
         when (selectedDatesSort) {
             "weekly" -> {
+                //TODO: nakaset na agad weeks at months
                 selectedDates = getDaysOfWeek(sortedDate)
                 graphData = addWeeklyData(selectedDates)
                 binding.tvBalanceTitle.text = "This Week's Balance Trend"
@@ -171,7 +175,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
     private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
         // Get the current quarter
-        // TODO: double check kung bat hindi kasama april
         val currentQuarter = (Calendar.getInstance().get(Calendar.MONTH) / 3) + 1
 
         // Group the dates by month for the current quarter
@@ -299,6 +302,8 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     }*/
 
     private fun addWeeklyData(selectedDates: List<Date>): MutableList<Entry> {
+        /*TODO: Might have to seperate this function para magroup yung days sa week, weeks
+                sa month, at months sa year*/
         //get deposit for a specific date
         val data = mutableListOf<Entry>()
 
@@ -380,8 +385,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         }
         // configure the X-axis
         xAxis?.labelCount = 4
-        xAxis?.isGranularityEnabled = true
-        xAxis?.axisMinimum = 0f
         xAxis?.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 val index = value.toInt()
