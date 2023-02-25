@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -124,7 +125,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getDataBasedOnDate() {
-
+        resetAmounts()
         when (selectedDatesSort) {
             "weekly" -> {
                 selectedDates = getDaysOfWeek(sortedDate)
@@ -132,41 +133,54 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
                 binding.tvIncomeTitle.text = "This Week's Income Categories"
             }
             "monthly" -> {
-                val group = groupDates(sortedDate, "month")
-                addData(group)
+                /*val group = groupDates(sortedDate, "monthly")
+                addData(group)*/
                 binding.tvIncomeTitle.text = "This Month's Income Categories"
+                val weeks = getWeeksOfCurrentMonth(sortedDate)
+                iterateWeeksOfCurrentMonth(weeks)
+                /*val group = groupDates(sortedDate, "month")
+                iterateDatesByQuarter(group)*/
             }
-            "yearly" -> {
-                val group = groupDates(sortedDate, "quarter")
-                addData(group)
+            "quarterly" -> {
+                /*val group = groupDates(sortedDate, "quarterly")
+                addData(group)*/
+                val group = getMonthsOfQuarter(sortedDate)
+                forEachDateInMonths(group)
                 binding.tvIncomeTitle.text = "This Quarter's Income Categories"
             }
         }
 
     }
 
-    private fun groupDates(dates: List<Date>, range: String): Map<Int, List<Date>> {
-        val calendar = Calendar.getInstance()
-        val groups = mutableMapOf<Int, MutableList<Date>>()
-        for (date in dates) {
-            calendar.time = date
-            var dateRange = calendar.get(Calendar.WEEK_OF_YEAR)
-            if (range == "quarter")
-                dateRange = (calendar.get(Calendar.MONTH) / 3) + 1
+    private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
+        // Get the current quarter
+        val currentQuarter = (Calendar.getInstance().get(Calendar.MONTH) / 3) + 1
 
-            if (!groups.containsKey(dateRange)) {
-                groups[dateRange] = mutableListOf(date)
+        // Group the dates by month for the current quarter
+        val groupedDates = dates.groupBy { date ->
+            val calendar = Calendar.getInstance()
+            calendar.time = date
+
+            // Check if the date falls within the current quarter
+            val quarter = (calendar.get(Calendar.MONTH) / 3) + 1
+            if (quarter == currentQuarter) {
+                // Get the month of the date
+                val month = calendar.get(Calendar.MONTH) + 1
+
+                // Return the month number as the key
+                month
             } else {
-                groups[dateRange]?.add(date)
+                // If the date does not fall within the current quarter, return null
+                null
             }
         }
 
-        return groups
+        return groupedDates.filterKeys { it != null } as Map<Int, List<Date>>
     }
 
-    private fun addData(groups: Map<Int, List<Date>>) {
-        for ((x, dates) in groups) {
-            for (date in dates) {
+    private fun forEachDateInMonths(months: Map<Int, List<Date>>) {
+        for ((month, datesInMonth) in months) {
+            for (date in datesInMonth) {
                 for (transaction in transactionsArrayList) {
                     //comparing the dates if they are equal
                     if (date.compareTo(transaction.date?.toDate()) == 0) {
@@ -182,6 +196,88 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         }
     }
 
+    private fun resetAmounts() {
+        allowance = 0.00f
+        gift = 0.00f
+        reward = 0.00f
+        other = 0.00f
+    }
+
+    private fun getWeeksOfCurrentMonth(dates: List<Date>): Map<Int, List<Date>> {
+        val calendar = Calendar.getInstance()
+
+        // Get the current month and year
+        val currentMonth = calendar.get(Calendar.MONTH)
+        val currentYear = calendar.get(Calendar.YEAR)
+
+        // Filter the dates that belong to the current month and year
+        val filteredDates = dates.filter { date ->
+            calendar.time = date
+            calendar.get(Calendar.MONTH) == currentMonth &&
+                    calendar.get(Calendar.YEAR) == currentYear
+        }
+
+        // Group the filtered dates by week
+        return filteredDates.groupBy { date ->
+            calendar.time = date
+            calendar.get(Calendar.WEEK_OF_MONTH)
+        }
+    }
+
+    private fun iterateWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>) {
+        weeks.forEach { (weekNumber, datesInWeek) ->
+            datesInWeek.forEach { date ->
+                for (transaction in transactionsArrayList) {
+                    //comparing the dates if they are equal
+                    if (date.compareTo(transaction.date?.toDate()) == 0) {
+                        when (transaction.category) {
+                            "Allowance" -> allowance += transaction.amount!!.toFloat()
+                            "Gift" -> gift += transaction.amount!!.toFloat()
+                            "Reward" -> reward += transaction.amount!!.toFloat()
+                            "Other" -> other += transaction.amount!!.toFloat()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+  /*  private fun groupDates(dates: List<Date>, range: String): Map<Int, List<Date>> {
+        val calendar = Calendar.getInstance()
+        val groups = mutableMapOf<Int, MutableList<Date>>()
+        for (date in dates) {
+            calendar.time = date
+            var dateRange = calendar.get(Calendar.WEEK_OF_YEAR)
+            if (range == "quarterly")
+                dateRange = (calendar.get(Calendar.MONTH) / 3) + 1
+
+            if (!groups.containsKey(dateRange)) {
+                groups[dateRange] = mutableListOf(date)
+            } else {
+                groups[dateRange]?.add(date)
+            }
+        }
+
+        return groups
+    }*/
+
+  /*  private fun addData(groups: Map<Int, List<Date>>) {
+        for ((x, dates) in groups) {
+            for (date in dates) {
+                for (transaction in transactionsArrayList) {
+                    //comparing the dates if they are equal
+                    if (date.compareTo(transaction.date?.toDate()) == 0) {
+                        when (transaction.category) {
+                            "Allowance" -> allowance += transaction.amount!!.toFloat()
+                            "Gift" -> gift += transaction.amount!!.toFloat()
+                            "Reward" -> reward += transaction.amount!!.toFloat()
+                            "Other" -> other += transaction.amount!!.toFloat()
+                        }
+                    }
+                }
+            }
+        }
+    }*/
 
 
     private fun calculatePercentages() {

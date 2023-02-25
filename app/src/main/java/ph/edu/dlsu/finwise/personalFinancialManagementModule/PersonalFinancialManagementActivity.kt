@@ -2,7 +2,6 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.firebase.firestore.ktx.firestore
@@ -71,14 +70,14 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun initializeDateButtons() {
         initializeWeeklyButton()
         initializeMonthlyButton()
-        initializeYearlyButton()
+        initializeQuarterlyButton()
 
     }
 
     private fun initializeMonthlyButton() {
         val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
-        val yearlyButton = binding.btnYearly
+        val yearlyButton = binding.btnQuarterly
         //TODO: check if weekly button is still clicked, else remove color
         monthlyButton.setOnClickListener {
             weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
@@ -90,16 +89,16 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         }
     }
 
-    private fun initializeYearlyButton() {
+    private fun initializeQuarterlyButton() {
         val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
-        val yearlyButton = binding.btnYearly
+        val quarterlyButton = binding.btnQuarterly
         //TODO: check if weekly button is still clicked, else remove color
-        yearlyButton.setOnClickListener {
+        quarterlyButton.setOnClickListener {
             weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-            yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
-            bundle.putString("date", "yearly")
+            quarterlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+            bundle.putString("date", "quarterly")
             setUpChartTabs()
             setUpBreakdownTabs()
         }
@@ -109,7 +108,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun initializeWeeklyButton() {
         val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
-        val yearlyButton = binding.btnYearly
+        val yearlyButton = binding.btnQuarterly
         //TODO: check if weekly button is still clicked, else remove color
         weeklyButton.setOnClickListener {
             weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))

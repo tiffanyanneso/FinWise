@@ -336,7 +336,7 @@
                 android:backgroundTint="@color/white"
                 android:textColor="@color/black"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_yearly"
+                android:id="@+id/btn_quarterly"
                 android:text="quarterly"/>
 
         </LinearLayout>
