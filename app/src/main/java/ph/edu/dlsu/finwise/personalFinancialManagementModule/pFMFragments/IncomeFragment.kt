@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,6 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -93,6 +93,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
                 sortedDate = getDatesOfTransactions()
                 getDataBasedOnDate()
                 calculatePercentages()
+                setTopThreeCategories()
                 topIncome()
                 loadPieChartView()
             }
@@ -135,9 +136,10 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
             "monthly" -> {
                 /*val group = groupDates(sortedDate, "monthly")
                 addData(group)*/
-                binding.tvIncomeTitle.text = "This Month's Income Categories"
                 val weeks = getWeeksOfCurrentMonth(sortedDate)
-                iterateWeeksOfCurrentMonth(weeks)
+                computeDataForMonth(weeks)
+                setTopThreeCategories()
+                binding.tvIncomeTitle.text = "This Month's Income Categories"
                 /*val group = groupDates(sortedDate, "month")
                 iterateDatesByQuarter(group)*/
             }
@@ -145,11 +147,35 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
                 /*val group = groupDates(sortedDate, "quarterly")
                 addData(group)*/
                 val group = getMonthsOfQuarter(sortedDate)
-                forEachDateInMonths(group)
+                computeDataForQuarter(group)
+                setTopThreeCategories()
                 binding.tvIncomeTitle.text = "This Quarter's Income Categories"
             }
         }
 
+    }
+
+    private fun setTopThreeCategories() {
+        val totals = mapOf(
+            "Allowance" to allowance,
+            "Gift" to gift,
+            "Reward" to reward,
+            "Other" to other
+        )
+        val top3Categories = totals.entries.sortedByDescending { it.value }.take(3)
+
+        Log.d("tagggog", "key: "+top3Categories[2].key)
+        Log.d("tagggog", "value: "+top3Categories[2].value)
+        val dec = DecimalFormat("#,###.00")
+        val amount = dec.format(allowance)
+        binding.tvIncomeTotal.text = "₱$amount"
+
+        binding.tvTopIncome1.text = top3Categories[0].key
+        binding.tvTopIncomeTotal1.text ="₱"+dec.format(top3Categories[0].value)
+        binding.tvTopIncome2.text = top3Categories[1].key
+        binding.tvTopIncomeTotal2.text = "₱"+dec.format(top3Categories[1].value)
+        binding.tvTopIncome3.text = top3Categories[2].key
+        binding.tvTopIncomeTotal3.text = "₱"+dec.format(top3Categories[2].value)
     }
 
     private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
@@ -178,7 +204,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         return groupedDates.filterKeys { it != null } as Map<Int, List<Date>>
     }
 
-    private fun forEachDateInMonths(months: Map<Int, List<Date>>) {
+    private fun computeDataForQuarter(months: Map<Int, List<Date>>) {
         for ((month, datesInMonth) in months) {
             for (date in datesInMonth) {
                 for (transaction in transactionsArrayList) {
@@ -224,7 +250,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         }
     }
 
-    private fun iterateWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>) {
+    private fun computeDataForMonth(weeks: Map<Int, List<Date>>) {
         weeks.forEach { (weekNumber, datesInWeek) ->
             datesInWeek.forEach { date ->
                 for (transaction in transactionsArrayList) {
@@ -320,24 +346,21 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     }
 
     private fun topIncome() {
+        val dec = DecimalFormat("#,###.00")
         if (allowance >= gift && allowance >= reward && allowance >= other) {
             binding.tvTopIncome.text = "Allowance"
-            val dec = DecimalFormat("#,###.00")
             val amount = dec.format(allowance)
             binding.tvIncomeTotal.text = "₱$amount"
         } else if (gift >= allowance && gift >= reward && gift >= other) {
             binding.tvTopIncome.text = "Gift"
-            val dec = DecimalFormat("#,###.00")
             val amount = dec.format(gift)
             binding.tvIncomeTotal.text = "₱$amount"
         } else if (reward >= allowance && reward >= gift && reward >= other) {
             binding.tvTopIncome.text = "Reward"
-            val dec = DecimalFormat("#,###.00")
             val amount = dec.format(reward)
             binding.tvIncomeTotal.text = "₱$amount"
         } else {
             binding.tvTopIncome.text = "Other"
-            val dec = DecimalFormat("#,###.00")
             val amount = dec.format(other)
             binding.tvIncomeTotal.text = "₱$amount"
         }

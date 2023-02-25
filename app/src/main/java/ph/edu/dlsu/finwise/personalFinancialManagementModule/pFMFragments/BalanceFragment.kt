@@ -371,7 +371,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         yAxis.setDrawLabels(true) // Show X axis labels
         yAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return "₱$value" // Add "₱" symbol to value
+                return String.format("₱%.0f", value)// Add "₱" symbol to value
             }
         }
 
