@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.AddFriendsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityAddFriendsBinding
@@ -38,6 +39,9 @@ class AddFriendsActivity : AppCompatActivity() {
             val goToViewFriends = Intent(applicationContext, ViewFriendsActivity::class.java)
             this.startActivity(goToViewFriends)
         }
+
+        // Initializes the navbar
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_profile)
     }
 
     private fun searchFriends(textInput:String){

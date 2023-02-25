@@ -47,9 +47,8 @@ class ProfileActivity : AppCompatActivity(){
             context.startActivity(goToViewFriends)
         }
 
-        // Hides actionbar,
-        // and initializes the navbar
-        supportActionBar?.hide()
+
+        // Initializes the navbar
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_profile)
     }
 

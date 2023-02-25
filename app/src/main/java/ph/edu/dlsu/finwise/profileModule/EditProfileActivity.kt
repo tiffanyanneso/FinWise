@@ -9,10 +9,12 @@ import android.os.Bundle
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEditProfileBinding
 import ph.edu.dlsu.finwise.model.ChildUser
@@ -49,6 +51,16 @@ class EditProfileActivity : AppCompatActivity() {
             var goToProfile = Intent(this, ProfileActivity::class.java)
             context.startActivity(goToProfile)
         }
+
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
+            R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToProfile = Intent(applicationContext, ProfileActivity::class.java)
+            this.startActivity(goToProfile)
+        }
+
+        // Initializes the navbar
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_profile)
 
     }
 
