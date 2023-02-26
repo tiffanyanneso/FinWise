@@ -13,6 +13,9 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".GoalSavingDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".personalFinancialManagementModule.TrendDetailsActivity"
             android:exported="false" />
         <activity
@@ -33,10 +36,10 @@
         </activity>
         <activity
             android:name=".profileModule.FriendRequestActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".profileModule.AddFriendsActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".profileModule.ViewFriendsActivity"
             android:exported="true">
@@ -67,7 +70,7 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.mayaAPI.MayaPayment"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.mayaAPI.MayaConfirmPayment"
             android:exported="false" />
@@ -179,13 +182,13 @@
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".profileModule.ProfileActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertEditAssessmentActivity"
             android:exported="false" />
@@ -245,7 +248,7 @@
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"
             android:exported="false" />
@@ -266,7 +269,7 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="false">

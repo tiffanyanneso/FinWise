@@ -49,6 +49,7 @@ class TrendDetailsActivity : AppCompatActivity() {
          incomeFragment.arguments = setBundle
          expenseFragment.arguments = setBundle
          adapter.addFragment(incomeFragment, "Income")
+         //TODO: Update expense + ui
          adapter.addFragment(expenseFragment, "Expense")
          binding.viewPager.adapter = adapter
          binding.tabs.setupWithViewPager(binding.viewPager)

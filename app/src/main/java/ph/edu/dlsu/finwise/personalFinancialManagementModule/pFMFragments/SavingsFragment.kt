@@ -1,31 +1,43 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import com.jjoe64.graphview.DefaultLabelFormatter
-import com.jjoe64.graphview.GraphView
-import com.jjoe64.graphview.LabelFormatter
-import com.jjoe64.graphview.series.DataPoint
-import com.jjoe64.graphview.series.LineGraphSeries
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentSavingsChartBinding
 import ph.edu.dlsu.finwise.model.Transactions
-import java.text.NumberFormat
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.GoalSavingDetailsActivity
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
+import java.text.SimpleDateFormat
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.ZoneId
 import java.util.*
 
 
 class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     private lateinit var binding: FragmentSavingsChartBinding
+    private var bundle = Bundle()
     private var firestore = Firebase.firestore
     private var transactionsArrayList = ArrayList<Transactions>()
-    private lateinit var savingsLineGraphView: GraphView
+    private lateinit var sortedDate: List<Date>
+    private lateinit var selectedDates: List<Date>
+    private var weeks: Map<Int, List<Date>>? = null
+    private var months: Map<Int, List<Date>>? = null
+    private var selectedDatesSort = "weekly"
 
     /*// Balance bar chart
     // variable for our bar chart
@@ -52,14 +64,356 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
         return inflater.inflate(R.layout.fragment_savings_chart, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSavingsChartBinding.bind(view)
-        initializeSavingsLineGraph()
-        initializeTotals()
+        getArgumentsFromPFM()
+        initializeBalanceLineGraph()
+        initializeDetails()
     }
 
-       private fun initializeSavingsLineGraph() {
+    private fun getArgumentsFromPFM() {
+        val args = arguments
+        val date = args?.getString("date")
+        if (date != null) {
+            selectedDatesSort = date
+            transactionsArrayList.clear()
+        }
+    }
+
+    private fun initializeDetails() {
+        binding.tvDetails.setOnClickListener{
+            val goToDetails = Intent(context, GoalSavingDetailsActivity::class.java)
+            bundle.putString("date", selectedDatesSort)
+            goToDetails.putExtras(bundle)
+            startActivity(goToDetails)
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initializeBalanceLineGraph() {
+        // on below line we are initializing
+        // our variable with their ids.
+        firestore.collection("Transactions")
+            .get().addOnSuccessListener { documents ->
+                initializeTransactions(documents)
+                sortedDate = getDatesOfTransactions()
+                val data = setData()
+                initializeGraph(data)
+            }
+    }
+
+    private fun initializeTransactions(documents: QuerySnapshot) {
+        for (transactionSnapshot in documents) {
+            //creating the object from list retrieved in db
+            val transaction = transactionSnapshot.toObject<Transactions>()
+            transactionsArrayList.add(transaction)
+        }
+        transactionsArrayList.sortByDescending { it.date }
+    }
+
+    private fun getDatesOfTransactions(): List<Date> {
+    //get unique dates in transaction arraylist
+        val dates = ArrayList<Date>()
+        for (transaction in transactionsArrayList) {
+            //if array of dates doesn't contain date of the transaction, add the date to the arraylist
+            if (!dates.contains(transaction.date?.toDate()))
+                dates.add(transaction.date?.toDate()!!)
+        }
+        return dates.sortedBy { it }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun setData(): MutableList<Entry> {
+        var data = mutableListOf<Entry>()
+
+        when (selectedDatesSort) {
+            "weekly" -> {
+                selectedDates = getDaysOfWeek(sortedDate)
+                data = addWeeklyData(selectedDates)
+                binding.tvBalanceTitle.text = "This Week's Savings Balance Trend"
+            }
+            "monthly" -> {
+                weeks = getWeeksOfCurrentMonth(sortedDate)
+                data = iterateWeeksOfCurrentMonth(weeks!!)
+                binding.tvBalanceTitle.text = "This Month's Savings Balance Trend"
+            }
+            "quarterly" -> {
+                months = getMonthsOfQuarter(sortedDate)
+                data =  forEachDateInMonths(months!!)
+                binding.tvBalanceTitle.text = "This Quarter's Savings Balance Trend"
+            }
+        }
+        return data
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getDaysOfWeek(dates: List<Date>): List<Date> {
+        val startOfWeek = LocalDate.now().with(DayOfWeek.MONDAY)
+        val endOfWeek = LocalDate.now().with(DayOfWeek.SUNDAY)
+        val filteredDates = dates.filter { date ->
+            val localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+            !localDate.isBefore(startOfWeek) && !localDate.isAfter(endOfWeek)
+        }
+        return filteredDates
+    }
+
+    private fun addWeeklyData(selectedDates: List<Date>): MutableList<Entry> {
+        //get deposit for a specific date
+        val data = mutableListOf<Entry>()
+
+        var totalDeposit = 0.00f
+        var totalWithdraw= 0.00f
+        var xAxisPoint =0.00f
+        for (date in selectedDates) {
+            var totalAmount = 0.00F
+            for (transaction in transactionsArrayList) {
+                //comparing the dates if they are equal
+                if (date.compareTo(transaction.date?.toDate()) == 0) {
+                    if (transaction.transactionType == "Deposit"){
+                        totalAmount += transaction.amount!!
+                        totalDeposit += transaction.amount!!
+                    }
+                    else {
+                        totalAmount -= transaction.amount!!
+                        totalWithdraw += transaction.amount!!
+                    }
+                }
+            }
+            data.add(Entry(xAxisPoint, totalAmount))
+            //dataPoints.add(DataPoint(xAxisPoint, totalAmount.toDouble()))
+            xAxisPoint++
+        }
+        setTotals(totalDeposit, totalWithdraw)
+        return data
+    }
+
+    private fun setTotals(totalDeposit: Float, totalWithdraw: Float) {
+        binding.tvDepositTotal.text = "₱$totalDeposit"
+        binding.tvWithdrawalTotal.text = "₱$totalWithdraw"
+    }
+
+    private fun getWeeksOfCurrentMonth(dates: List<Date>): Map<Int, List<Date>> {
+        val calendar = Calendar.getInstance()
+
+        // Get the current month and year
+        val currentMonth = calendar.get(Calendar.MONTH)
+        val currentYear = calendar.get(Calendar.YEAR)
+
+        // Filter the dates that belong to the current month and year
+        val filteredDates = dates.filter { date ->
+            calendar.time = date
+            calendar.get(Calendar.MONTH) == currentMonth &&
+                    calendar.get(Calendar.YEAR) == currentYear
+        }
+
+        // Group the filtered dates by week
+        return filteredDates.groupBy { date ->
+            calendar.time = date
+            calendar.get(Calendar.WEEK_OF_MONTH)
+        }
+    }
+
+    private fun iterateWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>): MutableList<Entry> {
+        val data = mutableListOf<Entry>()
+        var totalIncome = 0.00f
+        var totalExpense= 0.00f
+        var xAxisPoint =0.00f
+
+        weeks.forEach { (weekNumber, datesInWeek) ->
+            var totalAmount = 0.00F
+            datesInWeek.forEach { date ->
+                for (transaction in transactionsArrayList) {
+                    if (date.compareTo(transaction.date?.toDate()) == 0) {
+                        if (transaction.transactionType == "Deposit"){
+                            totalAmount += transaction.amount!!
+                            totalIncome += transaction.amount!!
+                        }
+                        else {
+                            totalAmount -= transaction.amount!!
+                            totalExpense += transaction.amount!!
+                        }
+                    }
+                }
+            }
+            data.add(Entry(xAxisPoint, totalAmount))
+            xAxisPoint++
+        }
+        setTotals(totalIncome, totalExpense)
+        return data
+    }
+
+    private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
+        // Get the current quarter
+        // TODO: double check kung bat hindi kasama april + MAY BUTTON SA TERND TAPO SREDIERECT SA DETAILS LIKE PIE CHART, TOP 3, AT TRANSACTIONS WITHIN GTTHOSE DATES
+        val currentQuarter = (Calendar.getInstance().get(Calendar.MONTH) / 3) + 1
+
+        // Group the dates by month for the current quarter
+        val groupedDates = dates.groupBy { date ->
+            val calendar = Calendar.getInstance()
+            calendar.time = date
+
+            // Check if the date falls within the current quarter
+            val quarter = (calendar.get(Calendar.MONTH) / 3) + 1
+            if (quarter == currentQuarter) {
+                // Get the month of the date
+                val month = calendar.get(Calendar.MONTH) + 1
+
+                // Return the month number as the key
+                month
+            } else {
+                // If the date does not fall within the current quarter, return null
+                null
+            }
+        }
+
+        return groupedDates.filterKeys { it != null } as Map<Int, List<Date>>
+    }
+
+    private fun forEachDateInMonths(months: Map<Int, List<Date>>): MutableList<Entry> {
+        val data = mutableListOf<Entry>()
+        var totalIncome = 0.00f
+        var totalExpense= 0.00f
+        var xAxisPoint =0.00f
+
+        for ((month, datesInMonth) in months) {
+            var totalAmount = 0.00F
+            for (date in datesInMonth) {
+                for (transaction in transactionsArrayList) {
+                    if (date.compareTo(transaction.date?.toDate()) == 0) {
+                        if (transaction.transactionType == "Deposit"){
+                            totalAmount += transaction.amount!!
+                            totalIncome += transaction.amount!!
+                        }
+                        else {
+                            totalAmount -= transaction.amount!!
+                            totalExpense += transaction.amount!!
+                        }
+                    }
+                }
+            }
+            data.add(Entry(xAxisPoint, totalAmount))
+            xAxisPoint++
+        }
+        setTotals(totalIncome, totalExpense)
+        return data
+    }
+
+
+    private fun initializeGraph(data: MutableList<Entry>) {
+        val balanceLineGraphView = view?.findViewById<LineChart>(R.id.savings_chart)!!
+
+        val xAxis = balanceLineGraphView.xAxis
+        xAxis.granularity = 1f // set the X-axis label granularity to 1 unit
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+
+        when (selectedDatesSort) {
+            "weekly" -> updateXAxisWeekly(xAxis)
+            "monthly" -> updateXAxisMonthly(xAxis)
+            "quarterly" -> updateXAxisQuarterly(xAxis)
+        }
+
+
+        val yAxis = balanceLineGraphView.axisLeft
+        yAxis.setDrawLabels(true) // Show X axis labels
+        yAxis.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return String.format("₱%.0f", value)// Add "₱" symbol to value
+            }
+        }
+
+        // Create a dataset from the data
+        val dataSet = LineDataSet(data, "Goal Savings")
+        dataSet.color = R.color.red
+        dataSet.setCircleColor(R.color.teal_200)
+
+        // Set the data on the chart and customize it
+        val lineData = LineData(dataSet)
+        balanceLineGraphView.data = lineData
+        dataSet.valueTextSize = 14f
+
+        // on below line adding animation
+        balanceLineGraphView.animate()
+
+        balanceLineGraphView.setPinchZoom(true)
+        balanceLineGraphView.setScaleEnabled(false)
+
+        balanceLineGraphView.axisRight.isEnabled = false
+
+        balanceLineGraphView.description.isEnabled = false
+
+        // Add a Peso sign in the data points in the graph
+        dataSet.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return "₱$value" // add the ₱ character to the data point values
+            }
+        }
+    }
+
+    private fun updateXAxisWeekly(xAxis: XAxis?) {
+        val dateFormatter = SimpleDateFormat("EEEE")
+
+        xAxis?.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return dateFormatter.format(selectedDates[value.toInt()])
+            }
+        }
+    }
+
+    private fun updateXAxisMonthly(xAxis: XAxis) {
+        val dateMap = weeks // Your date map here
+
+// Create a list of week labels from the date map
+        val weekLabels = mutableListOf<String>()
+        for (weekDates in dateMap!!.values) {
+            val weekNo = weekLabels.size + 1
+            val weekSuffix = if (weekNo % 10 == 1 && weekNo != 11) "st"
+            else if (weekNo % 10 == 2 && weekNo != 12) "nd"
+            else if (weekNo % 10 == 3 && weekNo != 13) "rd"
+            else "th"
+            val weekLabel = "${weekNo}${weekSuffix} Week"
+            weekLabels.add(weekLabel)
+        }
+
+        xAxis.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return if (value.toInt() < weekLabels.size) weekLabels[value.toInt()] else ""
+            }
+        }
+
+
+    }
+
+    private fun updateXAxisQuarterly(xAxis: XAxis?) {
+// quarter
+        // Create an array of month names
+        val monthNames = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+
+// Create a list of x-axis values
+        val xAxisValues = mutableListOf<Float>()
+        var i = 0f
+        for (monthList in months!!.values) {
+            xAxisValues.add(i + (monthList.size - 1f) / 2f)
+            i += monthList.size.toFloat()
+        }
+        // configure the X-axis
+        xAxis?.labelCount = 4
+        xAxis?.isGranularityEnabled = true
+        xAxis?.axisMinimum = 0f
+        xAxis?.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                val index = value.toInt()
+                if (index >= 0 && index < monthNames.size) {
+                    return monthNames[index]
+                }
+                return ""
+            }
+        }
+    }
+
+
+    /*private fun initializeSavingsLineGraph() {
         // on below line we are initializing
         // our variable with their ids.
         firestore.collection("Transactions")
@@ -144,7 +498,6 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
 
     }
 
-
     private fun initializeTotals() {
         firestore.collection("Transactions").whereEqualTo("category", "Goal")
             .get().addOnSuccessListener { documents ->
@@ -160,7 +513,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
                 binding.tvWithdrawalTotal.text = "₱"+totalWithdrawal
 
             }
-    }
+    }*/
 
     /*private fun initializeSavingsBarGraph() {
         firestore.collection("Transactions").whereEqualTo("category", "Goal")

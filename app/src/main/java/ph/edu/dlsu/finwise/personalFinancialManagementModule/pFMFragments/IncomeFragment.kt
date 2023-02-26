@@ -24,6 +24,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentIncomeBinding
 import ph.edu.dlsu.finwise.model.Transactions
+import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -164,12 +165,8 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         )
         val top3Categories = totals.entries.sortedByDescending { it.value }.take(3)
 
-        Log.d("tagggog", "key: "+top3Categories[2].key)
-        Log.d("tagggog", "value: "+top3Categories[2].value)
-        val dec = DecimalFormat("#,###.00")
-        val amount = dec.format(allowance)
-        binding.tvIncomeTotal.text = "₱$amount"
 
+        val dec = DecimalFormat("#,###.00")
         binding.tvTopIncome2.text = top3Categories[1].key
         binding.tvTopIncomeTotal2.text = "₱"+dec.format(top3Categories[1].value)
         binding.tvTopIncome3.text = top3Categories[2].key
@@ -265,44 +262,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
             }
         }
     }
-
-  /*  private fun groupDates(dates: List<Date>, range: String): Map<Int, List<Date>> {
-        val calendar = Calendar.getInstance()
-        val groups = mutableMapOf<Int, MutableList<Date>>()
-        for (date in dates) {
-            calendar.time = date
-            var dateRange = calendar.get(Calendar.WEEK_OF_YEAR)
-            if (range == "quarterly")
-                dateRange = (calendar.get(Calendar.MONTH) / 3) + 1
-
-            if (!groups.containsKey(dateRange)) {
-                groups[dateRange] = mutableListOf(date)
-            } else {
-                groups[dateRange]?.add(date)
-            }
-        }
-
-        return groups
-    }*/
-
-  /*  private fun addData(groups: Map<Int, List<Date>>) {
-        for ((x, dates) in groups) {
-            for (date in dates) {
-                for (transaction in transactionsArrayList) {
-                    //comparing the dates if they are equal
-                    if (date.compareTo(transaction.date?.toDate()) == 0) {
-                        when (transaction.category) {
-                            "Allowance" -> allowance += transaction.amount!!.toFloat()
-                            "Gift" -> gift += transaction.amount!!.toFloat()
-                            "Reward" -> reward += transaction.amount!!.toFloat()
-                            "Other" -> other += transaction.amount!!.toFloat()
-                        }
-                    }
-                }
-            }
-        }
-    }*/
-
 
     private fun calculatePercentages() {
         val total = allowance + gift + reward + other
@@ -462,5 +421,42 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
 
         return entries
     }
+
+    /*  private fun groupDates(dates: List<Date>, range: String): Map<Int, List<Date>> {
+      val calendar = Calendar.getInstance()
+      val groups = mutableMapOf<Int, MutableList<Date>>()
+      for (date in dates) {
+          calendar.time = date
+          var dateRange = calendar.get(Calendar.WEEK_OF_YEAR)
+          if (range == "quarterly")
+              dateRange = (calendar.get(Calendar.MONTH) / 3) + 1
+
+          if (!groups.containsKey(dateRange)) {
+              groups[dateRange] = mutableListOf(date)
+          } else {
+              groups[dateRange]?.add(date)
+          }
+      }
+
+      return groups
+  }*/
+
+    /*  private fun addData(groups: Map<Int, List<Date>>) {
+          for ((x, dates) in groups) {
+              for (date in dates) {
+                  for (transaction in transactionsArrayList) {
+                      //comparing the dates if they are equal
+                      if (date.compareTo(transaction.date?.toDate()) == 0) {
+                          when (transaction.category) {
+                              "Allowance" -> allowance += transaction.amount!!.toFloat()
+                              "Gift" -> gift += transaction.amount!!.toFloat()
+                              "Reward" -> reward += transaction.amount!!.toFloat()
+                              "Other" -> other += transaction.amount!!.toFloat()
+                          }
+                      }
+                  }
+              }
+          }
+      }*/
 
 }

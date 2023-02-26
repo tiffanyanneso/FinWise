@@ -182,8 +182,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         return data
     }
 
-
-
     private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
         // Get the current quarter
         // TODO: double check kung bat hindi kasama april + MAY BUTTON SA TERND TAPO SREDIERECT SA DETAILS LIKE PIE CHART, TOP 3, AT TRANSACTIONS WITHIN GTTHOSE DATES
@@ -240,37 +238,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         return data
     }
 
-
-
-    /*private fun addData(groups: Map<Int, List<Date>>): MutableList<Entry> {
-        val data = mutableListOf<Entry>()
-        var totalIncome = 0.00f
-        var totalExpense= 0.00f
-        var xAxisPoint =0.00f
-
-        for ((x, dates) in groups) {
-            var totalAmount = 0.00F
-            for (date in dates) {
-                for (transaction in transactionsArrayList) {
-                    if (date.compareTo(transaction.date?.toDate()) == 0) {
-                        if (transaction.transactionType == "Income"){
-                            totalAmount += transaction.amount!!
-                            totalIncome += transaction.amount!!
-                        }
-                        else {
-                            totalAmount -= transaction.amount!!
-                            totalExpense += transaction.amount!!
-                        }
-                    }
-                }
-            }
-            data.add(Entry(xAxisPoint, totalAmount))
-            xAxisPoint++
-        }
-        setTotals(totalIncome, totalExpense)
-        return data
-    }*/
-
     private fun getWeeksOfCurrentMonth(dates: List<Date>): Map<Int, List<Date>> {
         val calendar = Calendar.getInstance()
 
@@ -291,27 +258,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
             calendar.get(Calendar.WEEK_OF_MONTH)
         }
     }
-
-
-/*    private fun groupDates(dates: List<Date>, range: String): Map<Int, List<Date>> {
-        val calendar = Calendar.getInstance()
-        val groups = mutableMapOf<Int, MutableList<Date>>()
-        for (date in dates) {
-            calendar.time = date
-            var dateRange = calendar.get(Calendar.WEEK_OF_YEAR)
-            if (range == "quarterly")
-                dateRange = (calendar.get(Calendar.MONTH) / 3) + 1
-
-
-            if (!groups.containsKey(dateRange)) {
-                groups[dateRange] = mutableListOf(date)
-            } else {
-                groups[dateRange]?.add(date)
-            }
-        }
-
-        return groups
-    }*/
 
     private fun addWeeklyData(selectedDates: List<Date>): MutableList<Entry> {
         //get deposit for a specific date
@@ -380,6 +326,29 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         }
     }
 
+    private fun updateXAxisMonthly(xAxis: XAxis) {
+        val dateMap = weeks // Your date map here
+
+// Create a list of week labels from the date map
+        val weekLabels = mutableListOf<String>()
+        for (weekDates in dateMap!!.values) {
+            val weekNo = weekLabels.size + 1
+            val weekSuffix = if (weekNo % 10 == 1 && weekNo != 11) "st"
+            else if (weekNo % 10 == 2 && weekNo != 12) "nd"
+            else if (weekNo % 10 == 3 && weekNo != 13) "rd"
+            else "th"
+            val weekLabel = "${weekNo}${weekSuffix} Week"
+            weekLabels.add(weekLabel)
+        }
+
+        xAxis.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return if (value.toInt() < weekLabels.size) weekLabels[value.toInt()] else ""
+            }
+        }
+
+
+    }
 
     private fun updateXAxisQuarterly(xAxis: XAxis?) {
 // quarter
@@ -458,32 +427,9 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         }
     }
 
-    private fun updateXAxisMonthly(xAxis: XAxis) {
-        val dateMap = weeks // Your date map here
-
-// Create a list of week labels from the date map
-        val weekLabels = mutableListOf<String>()
-        for (weekDates in dateMap!!.values) {
-            val weekNo = weekLabels.size + 1
-            val weekSuffix = if (weekNo % 10 == 1 && weekNo != 11) "st"
-            else if (weekNo % 10 == 2 && weekNo != 12) "nd"
-            else if (weekNo % 10 == 3 && weekNo != 13) "rd"
-            else "th"
-            val weekLabel = "${weekNo}${weekSuffix} Week"
-            weekLabels.add(weekLabel)
-        }
-
-        xAxis.valueFormatter = object : ValueFormatter() {
-            override fun getFormattedValue(value: Float): String {
-                return if (value.toInt() < weekLabels.size) weekLabels[value.toInt()] else ""
-            }
-        }
-
-
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getDaysOfWeek(dates: List<Date>): List<Date> {
+    private fun getDaysOfWeek(dates: List<Date>): List<Date> {
         val startOfWeek = LocalDate.now().with(DayOfWeek.MONDAY)
         val endOfWeek = LocalDate.now().with(DayOfWeek.SUNDAY)
         val filteredDates = dates.filter { date ->
@@ -492,6 +438,56 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         }
         return filteredDates
     }
+
+    /*private fun addData(groups: Map<Int, List<Date>>): MutableList<Entry> {
+        val data = mutableListOf<Entry>()
+        var totalIncome = 0.00f
+        var totalExpense= 0.00f
+        var xAxisPoint =0.00f
+
+        for ((x, dates) in groups) {
+            var totalAmount = 0.00F
+            for (date in dates) {
+                for (transaction in transactionsArrayList) {
+                    if (date.compareTo(transaction.date?.toDate()) == 0) {
+                        if (transaction.transactionType == "Income"){
+                            totalAmount += transaction.amount!!
+                            totalIncome += transaction.amount!!
+                        }
+                        else {
+                            totalAmount -= transaction.amount!!
+                            totalExpense += transaction.amount!!
+                        }
+                    }
+                }
+            }
+            data.add(Entry(xAxisPoint, totalAmount))
+            xAxisPoint++
+        }
+        setTotals(totalIncome, totalExpense)
+        return data
+    }*/
+
+/*    private fun groupDates(dates: List<Date>, range: String): Map<Int, List<Date>> {
+        val calendar = Calendar.getInstance()
+        val groups = mutableMapOf<Int, MutableList<Date>>()
+        for (date in dates) {
+            calendar.time = date
+            var dateRange = calendar.get(Calendar.WEEK_OF_YEAR)
+            if (range == "quarterly")
+                dateRange = (calendar.get(Calendar.MONTH) / 3) + 1
+
+
+            if (!groups.containsKey(dateRange)) {
+                groups[dateRange] = mutableListOf(date)
+            } else {
+                groups[dateRange]?.add(date)
+            }
+        }
+
+        return groups
+    }*/
+
 
     /*  private fun initializeBalanceBarGraph() {
           firestore.collection("Transactions")

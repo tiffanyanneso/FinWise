@@ -168,13 +168,12 @@
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/balance_chart"
-                android:layout_width="370dp"
-                android:layout_height="350dp"
+                android:layout_width="330dp"
+                android:layout_height="430dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_gravity="center"
                 android:background="@color/white"/>
-
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

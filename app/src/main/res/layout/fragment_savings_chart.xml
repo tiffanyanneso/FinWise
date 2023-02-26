@@ -22,6 +22,19 @@
             android:orientation="vertical"
             android:layout_gravity="center">
 
+            <TextView
+                android:id="@+id/tv_balance_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This week's Goal Savings Trend"
+                android:textStyle="bold"
+                android:textColor="@color/dark_green"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"/>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -151,30 +164,30 @@
 
                 </androidx.cardview.widget.CardView>
 
-
-
             </LinearLayout>
 
-
             <TextView
-                android:id="@+id/tv_saving_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Savings Trend (₱)"
+                android:text="DETAILS ➡"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="15dp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="@color/dark_green"
-                android:textSize="18sp"
-                android:gravity="center"
-                android:layout_margin="10dp"/>
+                android:id="@+id/tv_details"
+                android:textColor="@color/teal_200"
+                android:layout_gravity="end"/>
 
-            <com.jjoe64.graphview.GraphView
+            <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/savings_chart"
-                android:layout_width="350dp"
-                android:layout_height="400dp"
+                android:layout_width="330dp"
+                android:layout_height="430dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_gravity="center"
                 android:background="@color/white"/>
+
 
         </LinearLayout>
 
