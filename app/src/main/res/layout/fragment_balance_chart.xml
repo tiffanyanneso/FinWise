@@ -162,14 +162,14 @@
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:id="@+id/tv_details"
-                android:textColor="@color/teal_200"
+                android:textColor="@color/bright_green"
                 android:layout_gravity="end"/>
 
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/balance_chart"
                 android:layout_width="370dp"
-                android:layout_height="430dp"
+                android:layout_height="350dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_gravity="center"

@@ -172,7 +172,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".DashboardActivity"
+            android:name=".childDashboardModule.childDashboardActivity"
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentQuiz"
