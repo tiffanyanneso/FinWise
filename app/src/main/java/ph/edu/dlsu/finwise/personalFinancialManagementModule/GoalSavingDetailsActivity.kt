@@ -120,7 +120,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     }
 
     private fun setText(dateRange: String) {
-        binding.tvTitle.text = "This $dateRange's Goal Savings"
+        binding.tvBalanceTitle.text = "This $dateRange's Goal Savings"
         val dec = DecimalFormat("#,###.00")
         val deposit = dec.format(depositTotalAmount)
         val withdrawal = dec.format(withdrawalTotalAmount)
@@ -376,7 +376,6 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     }*/
 
     private fun loadButtons() {
-        supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
         loadBackButton()
     }

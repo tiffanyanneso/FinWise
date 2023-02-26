@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalDetailsBinding
@@ -23,6 +24,9 @@ class ViewGoalDetails : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityViewGoalDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Initializes the navbar
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()

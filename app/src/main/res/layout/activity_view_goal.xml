@@ -53,7 +53,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_paddingTop="20dp"
+                    android:paddingTop="10dp"
                     android:layout_marginBottom="100dp">
 
                     <TextView

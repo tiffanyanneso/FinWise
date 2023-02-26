@@ -7,6 +7,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalTransactionsBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.goalTransactionsFragments.GoalDepositFragment
@@ -33,7 +34,6 @@ class GoalTransactionsActivity : AppCompatActivity() {
 
         //checkSettings()
 
-
         initializeFragments()
 
 
@@ -47,6 +47,9 @@ class GoalTransactionsActivity : AppCompatActivity() {
                 goToGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this.startActivity(goToGoal)
             }
+
+       // initializes the Navbar
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
     }
 
     //https://stackoverflow.com/questions/63730459/how-to-pass-data-from-activity-to-fragment-with-tablayout
