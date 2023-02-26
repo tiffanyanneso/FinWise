@@ -422,7 +422,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         // Add a Peso sign in the data points in the graph
         dataSet.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return "₱$value" // add the ₱ character to the data point values
+                return String.format("₱%.2f", value) // add the ₱ character to the data point values
             }
         }
     }

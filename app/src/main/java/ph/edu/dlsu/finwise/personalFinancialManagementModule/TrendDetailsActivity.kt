@@ -4,12 +4,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.PFMAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityTrendDetailsBinding
+import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.ExpenseFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.IncomeFragment
+import java.util.*
 
 class TrendDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTrendDetailsBinding
@@ -28,7 +32,6 @@ class TrendDetailsActivity : AppCompatActivity() {
         getAndSetBundleFromBalanceFragment()
         setUpBreakdownTabs()
         loadButtons()
-
     }
 
     private fun getAndSetBundleFromBalanceFragment() {

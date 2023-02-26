@@ -94,7 +94,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             .addOnSuccessListener { transactionsSnapshot ->
                 lateinit var id: String
                 for (document in transactionsSnapshot) {
-                    var transaction = document.toObject<Transactions>()
+                    val transaction = document.toObject<Transactions>()
                     if (transaction.transactionType == "Expense" || transaction.transactionType == "Expense (Maya")
                         transactionsArrayList.add(transaction)
                 }

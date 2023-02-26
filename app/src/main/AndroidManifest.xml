@@ -13,7 +13,7 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
-            android:name=".GoalSavingDetailsActivity"
+            android:name=".personalFinancialManagementModule.GoalSavingDetailsActivity"
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.TrendDetailsActivity"
