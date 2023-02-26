@@ -69,8 +69,8 @@ class FinactSavingAdapter : RecyclerView.Adapter<FinactSavingAdapter.ChildGoalVi
                 itemBinding.tvGoal.text = goal?.goalName
                 // convert timestamp to date
                 val date = SimpleDateFormat("MM/dd/yyyy").format(goal?.targetDate?.toDate())
-                itemBinding.tvTargetDate.text = "Target Date: " + date.toString()
-                itemBinding.tvProgressAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(goal?.currentSavings) + "/ ₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
+                itemBinding.tvTargetDate.text = date.toString()
+                itemBinding.tvProgressAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(goal?.currentSavings) + " of ₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
                 itemBinding.progressBar.progress = (goal?.currentSavings!! / goal?.targetAmount!! * 100).toInt()
             }
         }
