@@ -12,6 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
+
+        <activity
+            android:name=".ViewShoppingListItem"
+            android:exported="false" />
+        <activity
+            android:name=".NewShoppingListItemActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SavingPerformanceActivity"
+            android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentViewAllQuestions"
             android:exported="false">
