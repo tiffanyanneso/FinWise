@@ -170,8 +170,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         val amount = dec.format(allowance)
         binding.tvIncomeTotal.text = "₱$amount"
 
-        binding.tvTopIncome1.text = top3Categories[0].key
-        binding.tvTopIncomeTotal1.text ="₱"+dec.format(top3Categories[0].value)
         binding.tvTopIncome2.text = top3Categories[1].key
         binding.tvTopIncomeTotal2.text = "₱"+dec.format(top3Categories[1].value)
         binding.tvTopIncome3.text = top3Categories[2].key
@@ -438,6 +436,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         data.setValueTypeface(Typeface.DEFAULT_BOLD)
         data.setValueTextColor(Color.WHITE)
         pieChart.data = data
+        pieChart.legend.textSize = 14f
 
         // undo all highlights
         pieChart.highlightValues(null)

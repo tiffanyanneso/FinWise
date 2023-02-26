@@ -25,13 +25,12 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPersonalFinancialManagementBinding
     private var firestore = Firebase.firestore
     private var bundle = Bundle()
-    private var selectedDate = "weekly"
     var balance = 0.00f
 
-    private val tabIcons1 = intArrayOf(
+    /*private val tabIcons1 = intArrayOf(
         R.drawable.baseline_wallet_24,
         R.drawable.baseline_shopping_cart_checkout_24
-    )
+    )*/
 
     private val tabIcons2 = intArrayOf(
         R.drawable.baseline_account_balance_24,
@@ -49,9 +48,9 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
 
-        setUpBreakdownTabs()
         setUpChartTabs()
         loadBalance()
+        //setUpBreakdownTabs()
         //initializeButtons()
         //initializeBalanceBarGraph()
         //initializeSavingsBarGraph()
@@ -85,7 +84,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             bundle.putString("date", "monthly")
             setUpChartTabs()
-            setUpBreakdownTabs()
+            //setUpBreakdownTabs()
         }
     }
 
@@ -100,7 +99,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             quarterlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
             bundle.putString("date", "quarterly")
             setUpChartTabs()
-            setUpBreakdownTabs()
+            //setUpBreakdownTabs()
         }
     }
 
@@ -116,7 +115,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             bundle.putString("date", "weekly")
             setUpChartTabs()
-            setUpBreakdownTabs()
+            //setUpBreakdownTabs()
         }
     }
 
@@ -135,13 +134,17 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         binding.tabsBarCharts.getTabAt(1)?.text = "Goal Savings"
         setupTabIcons2()
     }
-
-    private fun setupTabIcons1() {
-        binding.tabs.getTabAt(0)?.setIcon(tabIcons1[0])
-        binding.tabs.getTabAt(1)?.setIcon(tabIcons1[1])
+    private fun setupTabIcons2() {
+        binding.tabsBarCharts.getTabAt(0)?.setIcon(tabIcons2[0])
+        binding.tabsBarCharts.getTabAt(1)?.setIcon(tabIcons2[1])
     }
 
-    private fun setUpBreakdownTabs() {
+   /* private fun setupTabIcons1() {
+        binding.tabs.getTabAt(0)?.setIcon(tabIcons1[0])
+        binding.tabs.getTabAt(1)?.setIcon(tabIcons1[1])
+    }*/
+
+   /* private fun setUpBreakdownTabs() {
         val adapter = PFMAdapter(supportFragmentManager)
         val incomeFragment = IncomeFragment()
         val expenseFragment = ExpenseFragment()
@@ -155,12 +158,9 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         binding.tabs.getTabAt(0)?.text = "Income"
         binding.tabs.getTabAt(1)?.text = "Expense"
         setupTabIcons1()
-    }
+    }*/
 
-    private fun setupTabIcons2() {
-        binding.tabsBarCharts.getTabAt(0)?.setIcon(tabIcons2[0])
-        binding.tabsBarCharts.getTabAt(1)?.setIcon(tabIcons2[1])
-    }
+
 
     private fun loadBalance() {
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/

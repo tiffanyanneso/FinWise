@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".NewShoppingListItemActivity">
 
-        android:id="@+id/topbar"
+      <!--  android:id="@+id/topbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -24,7 +24,6 @@
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:backgroundTint="@color/dark_green"
             />
-    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/container_expense"
@@ -106,6 +105,6 @@
             android:background="@drawable/button_border"
             android:layout_weight="1"
             />
-    </LinearLayout>
+    </LinearLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

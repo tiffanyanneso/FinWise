@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,6 +20,8 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentBalanceChartBinding
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.RecordIncomeActivity
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -28,6 +31,7 @@ import java.util.*
 
 class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     private lateinit var binding: FragmentBalanceChartBinding
+    private var bundle = Bundle()
     private var firestore = Firebase.firestore
     private var transactionsArrayList = ArrayList<Transactions>()
     private lateinit var sortedDate: List<Date>
@@ -69,7 +73,9 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         binding = FragmentBalanceChartBinding.bind(view)
         getArgumentsFromPFM()
         initializeBalanceLineGraph()
+        initializeDetails()
     }
+
 
     private fun getArgumentsFromPFM() {
         val args = arguments
@@ -77,6 +83,15 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         if (date != null) {
             selectedDatesSort = date
             transactionsArrayList.clear()
+        }
+    }
+
+    private fun initializeDetails() {
+        binding.tvDetails.setOnClickListener{
+            val goToDetails = Intent(context, TrendDetailsActivity::class.java)
+            bundle.putString("date", selectedDatesSort)
+            goToDetails.putExtras(bundle)
+            startActivity(goToDetails)
         }
     }
 
@@ -171,7 +186,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
     private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
         // Get the current quarter
-        // TODO: double check kung bat hindi kasama april
+        // TODO: double check kung bat hindi kasama april + MAY BUTTON SA TERND TAPO SREDIERECT SA DETAILS LIKE PIE CHART, TOP 3, AT TRANSACTIONS WITHIN GTTHOSE DATES
         val currentQuarter = (Calendar.getInstance().get(Calendar.MONTH) / 3) + 1
 
         // Group the dates by month for the current quarter

@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
-
+        <activity
+            android:name=".personalFinancialManagementModule.TrendDetailsActivity"
+            android:exported="false" />
         <activity
             android:name=".ViewShoppingListItem"
             android:exported="false" />
@@ -31,18 +33,16 @@
         </activity>
         <activity
             android:name=".profileModule.FriendRequestActivity"
-            android:exported="true" >
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".profileModule.AddFriendsActivity"
-            android:exported="true" >
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".profileModule.ViewFriendsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -67,9 +67,7 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.mayaAPI.MayaPayment"
-            android:exported="false">
-
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".personalFinancialManagementModule.mayaAPI.MayaConfirmPayment"
             android:exported="false" />
@@ -141,7 +139,7 @@
             android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.ReviewGoalActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".SettingAGoalActivity"
             android:exported="false" />
@@ -181,18 +179,13 @@
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".profileModule.ProfileActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertEditAssessmentActivity"
             android:exported="false" />
@@ -234,11 +227,12 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
-            android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".personalFinancialManagementModule.TransactionSortActivity"
@@ -251,9 +245,7 @@
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"
             android:exported="false" />
@@ -274,8 +266,7 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="false">

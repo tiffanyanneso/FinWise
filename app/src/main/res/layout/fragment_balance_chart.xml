@@ -21,6 +21,19 @@
             android:orientation="vertical"
             android:layout_gravity="center">
 
+            <TextView
+                android:id="@+id/tv_balance_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="This week's Balance Trend"
+                android:textStyle="bold"
+                android:textColor="@color/dark_green"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"/>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -140,20 +153,23 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_balance_title"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="This week's Balance Trend"
+                android:text="DETAILS ➡"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="15dp"
+                android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="@color/dark_green"
-                android:textSize="18sp"
-                android:layout_marginBottom="10dp"
-                android:gravity="center"/>
+                android:id="@+id/tv_details"
+                android:textColor="@color/teal_200"
+                android:layout_gravity="end"/>
+
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/balance_chart"
-                android:layout_width="350dp"
-                android:layout_height="400dp"
+                android:layout_width="370dp"
+                android:layout_height="430dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_gravity="center"

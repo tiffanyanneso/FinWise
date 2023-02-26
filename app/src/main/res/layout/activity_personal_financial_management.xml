@@ -381,7 +381,7 @@
         </androidx.viewpager.widget.ViewPager>
 
 
-        <com.google.android.material.appbar.AppBarLayout
+        <!--<com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/abl_breakdown"
@@ -418,7 +418,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/abl_breakdown">
 
-        </androidx.viewpager.widget.ViewPager>
+        </androidx.viewpager.widget.ViewPager>-->
 
        <!-- <androidx.cardview.widget.CardView
             xmlns:card_view="http://schemas.android.com/apk/res-auto"
