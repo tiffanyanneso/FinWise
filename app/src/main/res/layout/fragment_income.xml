@@ -143,14 +143,12 @@
                     android:background="@color/bright_green"
                     android:padding="20dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:text="2nd"
-                        android:layout_margin="20dp"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"/>
+                    <ImageView
+                        android:src="@drawable/icon_number_two"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_gravity="center"/>
 
                     <LinearLayout
                         android:id="@+id/linear_layout_text3"
@@ -216,15 +214,12 @@
                     android:background="@color/bright_green"
                     android:padding="20dp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:text="3rd"
-                        android:layout_margin="20dp"
-                        android:textColor="@color/white"
-                        android:textStyle="bold"/>
-
+                    <ImageView
+                        android:src="@drawable/icon_number_three"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_gravity="center"/>
                     <LinearLayout
                         android:id="@+id/linear_layout_text4"
                         android:layout_width="match_parent"
