@@ -1,9 +1,8 @@
 package ph.edu.dlsu.finwise.model
 
 import com.google.firebase.Timestamp
-import java.util.*
 
-class GoalReview (
+class GoalRating (
     var parentID:String?=null,
     var childID:String?=null,
     var financialGoalID:String?=null,

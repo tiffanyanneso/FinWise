@@ -82,7 +82,8 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
                         android:max="100"/>
 
                     <TextView
@@ -117,7 +118,8 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
                         android:max="100"/>
 
                     <TextView
@@ -152,7 +154,8 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
                         android:max="100"/>
 
                     <TextView
@@ -203,7 +206,8 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
                         android:max="100"/>
 
                     <TextView
@@ -239,7 +243,8 @@
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
                         android:max="100"/>
 
                     <TextView
@@ -274,7 +279,8 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
                         android:layout_gravity="center"
                         android:max="100"/>
 
@@ -309,7 +315,8 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
                         android:layout_gravity="center"
                         android:max="100"/>
 
@@ -344,7 +351,8 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
                         android:layout_gravity="center"
                         android:max="100"/>
 
@@ -380,7 +388,8 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
                         android:layout_gravity="center"
                         android:max="100"/>
 

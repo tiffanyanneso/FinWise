@@ -38,7 +38,7 @@
                             android:gravity="center"/>
 
                         <RatingBar
-                            android:id="@+id/ratingBar_specific"
+                            android:id="@+id/rating_bar_overall"
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
                             android:numStars="5"
@@ -80,7 +80,8 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"/>
 
                     <TextView
                         android:id="@+id/rating_specific"
@@ -114,7 +115,8 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"/>
 
                     <TextView
                         android:id="@+id/rating_measurable"
@@ -148,7 +150,8 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"/>
 
                     <TextView
                         android:id="@+id/rating_achievable"
@@ -171,21 +174,22 @@
                         android:layout_width="220dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="Realistic"
+                        android:text="Relevant"
                         android:textSize="14sp"
                         android:textColor="@color/black"
                         android:gravity="center_vertical" />
 
                     <ProgressBar
-                        android:id="@+id/progress_bar_realistic"
+                        android:id="@+id/progress_bar_relevant"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"/>
 
                     <TextView
-                        android:id="@+id/rating_realistic"
+                        android:id="@+id/rating_relevant"
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -216,7 +220,8 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"/>
 
                     <TextView
                         android:id="@+id/rating_time"
