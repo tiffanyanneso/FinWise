@@ -13,6 +13,21 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".CompletedEarningActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EarningCompletedFragment"
+            android:exported="false" />
+        <activity
+            android:name=".EarningToDoFragment"
+            android:exported="false" />
+        <activity
+            android:name=".EarningActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NewEarningActivity"
+            android:exported="false" />
+        <activity
             android:name=".personalFinancialManagementModule.GoalSavingDetailsActivity"
             android:exported="false" />
         <activity
@@ -29,8 +44,7 @@
             android:exported="false" />
         <activity
             android:name=".LeaderboardActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentViewAllQuestions"
             android:exported="false">
@@ -83,16 +97,16 @@
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.ViewGoalDetails"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.ParentGoalActivity"
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivityConfirmWithdraw"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.WithdrawActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".TestFinancialActivity"
             android:exported="false" />
@@ -107,13 +121,13 @@
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivityConfirmExpense"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivityRecordExpense"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivityConfirmDeposit"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.ParentLandingPageActivity"
             android:exported="false" />
@@ -252,6 +266,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

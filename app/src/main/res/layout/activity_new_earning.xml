@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".personalFinancialManagementModule.RecordExpenseActivity">
+    tools:context=".NewEarningActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/topbar"
@@ -19,16 +19,15 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:titleCentered="true"
-            app:title="Record Expense"
+            app:title="Add Earning Activity"
             app:menu="@menu/top_app_bar"
             app:navigationIcon="@drawable/baseline_arrow_back_24"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            android:backgroundTint="@color/dark_green"
-            />
+            android:backgroundTint="@color/dark_green" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/container_expense"
+        android:id="@+id/container_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -41,7 +40,7 @@
         app:helperTextTextColor="@color/red"
         android:paddingBottom="10dp"
         android:paddingTop="20dp"
-        app:startIconDrawable="@drawable/baseline_shopping_cart_24">
+        app:startIconDrawable="@drawable/baseline_directions_run_24">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_name"
@@ -50,125 +49,20 @@
             android:lines="1"
             android:inputType="text"
             android:textSize="16sp"
-            android:hint="Expense Name"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/container_category"
-        app:layout_constraintTop_toBottomOf="@+id/container_expense"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Select Category"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_marginHorizontal="20dp"
-        android:textSize="16sp"
-        app:startIconDrawable="@drawable/baseline_saved_search_24">
-
-        <AutoCompleteTextView
-            android:id="@+id/dropdown_category"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-<!--    <androidx.appcompat.widget.AppCompatSpinner-->
-<!--        android:id="@+id/spinner_category"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/container_category"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:ems="10"-->
-<!--        android:entries="@array/pfm_expense_category"-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:textSize="14sp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp"/>-->
-
-<!--    <TextView-->
-<!--        android:visibility="invisible"-->
-<!--        android:id="@+id/tv_error_spinner"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:text="Please select a category of your transaction"-->
-<!--        android:textColor="@color/red"-->
-<!--        android:textSize="12sp"-->
-<!--        android:textStyle="bold"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/spinner_category" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/tv_amount"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:text="@string/amount"-->
-<!--        android:textAllCaps="true"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="14sp"-->
-<!--        android:textStyle="bold"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tv_error_spinner" />-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/et_amount"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tv_amount"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:hint="@string/amount"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="numberDecimal"-->
-<!--        android:textSize="14sp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        />-->
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/amount_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container_category"
-        android:layout_marginHorizontal="20dp"
-        app:helperTextEnabled="true"
-        app:helperText=""
-        app:helperTextTextColor="@color/red"
-        android:paddingVertical="10dp"
-        app:startIconDrawable="@drawable/peso"
-        >
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_amount"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:lines="1"
-            android:digits="0123456789."
-            android:inputType="numberDecimal"
-            android:textSize="16sp"
-            android:hint="@string/amount"
-            />
+            android:hint="Name" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/date_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/amount_container"
+        app:layout_constraintTop_toBottomOf="@+id/container_name"
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:endIconMode="custom"
         app:startIconDrawable="@drawable/baseline_calendar_today_24"
-        android:hint="Date">
+        android:hint="Target Date">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_date"
@@ -178,8 +72,57 @@
             android:inputType="numberDecimal"
             android:textSize="16sp"
             android:enabled="true"
-            android:focusable="false"
-            />
+            android:focusable="false" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/duration_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_container"
+        android:layout_marginHorizontal="20dp"
+        app:helperTextEnabled="true"
+        app:helperText=""
+        app:helperTextTextColor="@color/red"
+        android:paddingVertical="10dp"
+        app:startIconDrawable="@drawable/baseline_numbers_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_duration"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lines="1"
+            android:inputType="number"
+            android:textSize="16sp"
+            android:hint="Duration (Minutes)" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/amount_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/duration_container"
+        android:layout_marginHorizontal="20dp"
+        app:helperTextEnabled="true"
+        app:helperText=""
+        app:helperTextTextColor="@color/red"
+        app:startIconDrawable="@drawable/peso">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_amount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lines="1"
+            android:digits="0123456789."
+            android:inputType="numberDecimal"
+            android:textSize="16sp"
+            android:hint="@string/amount" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
@@ -212,12 +155,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/next"
+            android:text="Add"
             android:textColor="@color/off_white"
             android:backgroundTint="@color/dark_green"
             android:background="@drawable/button_border"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1" />
     </LinearLayout>
 
     <!--Bottom navigation bar-->
