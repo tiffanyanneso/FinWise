@@ -2,16 +2,24 @@ package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color.blue
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.google.firebase.Timestamp
+import com.google.firebase.Timestamp.now
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.databinding.FragmentSavingBinding
@@ -34,14 +42,22 @@ class SavingFragment : Fragment() {
     var goalFilterArrayList = ArrayList<GoalFilter>()
 
     private var ongoingGoals = 0
+    //includes achieved goals in count
+    private var totalGoals = 0
 
+
+    //vars for activity types for pie chart
+    var nBuyingItem = 0
+    var nEvent = 0
+    var nEmergency = 0
+    var nCharity = 0
+    var nSituational =0
+    var nEarning = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         goalIDArrayList.clear()
         savingsArrayList.clear()
-        setGoalCount()
-        getSavingActivities()
     }
 
     override fun onCreateView(
@@ -62,19 +78,14 @@ class SavingFragment : Fragment() {
 
                 this.startActivity(goToNewGoal)
             }
-
         }
         return binding.root
     }
 
-    private fun getTotalSavings() {
-        var savedAmount = 0.00F
-        for (goalID in goalIDArrayList) {
-            firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
-                var goal = it.toObject<FinancialGoals>()
-                savedAmount += goal?.currentSavings!!
-            }.continueWith { binding.tvGoalSavings.text = "₱ " + DecimalFormat("#,##0.00").format(savedAmount) }
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        getGoals()
+        getSavingActivities()
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){ }
@@ -85,15 +96,109 @@ class SavingFragment : Fragment() {
         var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         //saving activities that are in progress means that there the goal is also in progress because they are connected
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+
             for (activity in results) {
                 var activityObject = activity.toObject<FinancialActivities>()
                 goalIDArrayList.add(activityObject?.financialGoalID.toString())
             }
-            binding.tvInProgress.text = goalIDArrayList.size.toString()
-            binding.tvNearingCompletion.text = "X"
-            binding.tvNearingDeadline.text = "X"
             loadRecyclerView(goalIDArrayList)
         }.continueWith { getTotalSavings() }
+    }
+
+    private fun getTotalSavings() {
+        var savedAmount = 0.00F
+        binding.tvGoalSavings.text = "₱ " + DecimalFormat("#,##0.00").format(savedAmount)
+
+        for (goalID in goalIDArrayList) {
+            firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
+                var goal = it.toObject<FinancialGoals>()
+                savedAmount += goal?.currentSavings!!
+            }.continueWith {
+                binding.tvGoalSavings.text = "₱ " + DecimalFormat("#,##0.00").format(savedAmount)
+            }
+        }
+    }
+
+    private fun setGoalCount() {
+        var nearCompletion = 0
+        var nearDeadline = 0
+        binding.tvNearingCompletion.text = nearCompletion.toString()
+        binding.tvNearingDeadline.text = nearDeadline.toString()
+        var currentTime = Timestamp.now().toDate().time
+
+        //set number of ongoing goals
+        binding.tvInProgress.text = ongoingGoals.toString()
+        //set number of goals nearing completion and nearing deadline
+        for (goalID in goalIDArrayList) {
+            firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
+                var goalObject = it.toObject<FinancialGoals>()
+
+                //there is only 20% left before they are able to accomplish their goal, mark goal as near completion
+                var amountRemaining =
+                    ((goalObject?.targetAmount!! - goalObject?.currentSavings!!) / goalObject?.targetAmount!!) * 100
+                if (amountRemaining <= 20)
+                    nearCompletion++
+
+                //there is only 20% left before their target date, mark goal as near deadline
+                //target date in miliseconds
+                var targetDate = goalObject?.targetDate!!.toDate().time
+                var timeRemaining = ((targetDate!! - currentTime!!) / 100)
+                if (timeRemaining <= 20)
+                    nearDeadline++
+
+            }.continueWith {
+                binding.tvNearingCompletion.text = nearCompletion.toString()
+                binding.tvNearingDeadline.text = nearDeadline.toString()
+            }
+        }
+    }
+
+    private fun setReasonPieChart() {
+        var percentageBuying = 0.00F
+        var percentageEvent = 0.00F
+        var percentageEmergency = 0.00F
+        var percentageSituational = 0.00F
+        var percentageDonating = 0.00F
+        var percentageEarning = 0.00F
+
+        if (totalGoals!=0) {
+             percentageBuying = ((nBuyingItem.toFloat() / totalGoals.toFloat()) * 100)
+             percentageEvent = ((nEvent.toFloat() / totalGoals.toFloat()) * 100)
+             percentageEmergency = ((nEmergency.toFloat() / totalGoals.toFloat()) * 100)
+             percentageSituational = ((nSituational.toFloat() / totalGoals.toFloat()) * 100)
+             percentageDonating = ((nCharity.toFloat() / totalGoals.toFloat()) * 100)
+             percentageEarning = ((nEarning.toFloat() / totalGoals.toFloat()) * 100)
+        }
+
+
+
+        val entries = listOf(
+            PieEntry(percentageBuying, "Buying Items"),
+            PieEntry(percentageEvent, "Planning An Event"),
+            PieEntry(percentageEmergency, "Saving For Emergency Funds"),
+            PieEntry(percentageSituational, "Situational Shopping"),
+            PieEntry(percentageDonating, "Donating To Charity"),
+            PieEntry(percentageEarning, "Earning Money"),
+        )
+
+        var dataSet = PieDataSet(entries, "Data")
+
+        val colors: ArrayList<Int> = ArrayList()
+        colors.add(resources.getColor(R.color.purple_200))
+        colors.add(resources.getColor( R.color.yellow))
+        colors.add(resources.getColor(R.color.red))
+        colors.add(resources.getColor( R.color.dark_green))
+        colors.add(resources.getColor( R.color.teal_200))
+        colors.add(resources.getColor( R.color.black))
+
+
+        // setting colors.
+        dataSet.colors = colors
+
+        var data = PieData(dataSet)
+
+        binding.pcReasonCategories.data = data
+        binding.pcReasonCategories.invalidate()
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
@@ -105,15 +210,29 @@ class SavingFragment : Fragment() {
         goalAdapter.notifyDataSetChanged()
     }
 
-    private fun setGoalCount() {
+    private fun getGoals() {
         var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+            totalGoals = results.size()
             for (goalSnapshot in results) {
                 var goal = goalSnapshot.toObject<FinancialGoals>()
-                if (goal?.status == "In Progress")
+                if (goal.status == "In Progress")
                     ongoingGoals++
+
+                when (goal.financialActivity) {
+                    "Buying Items" -> nBuyingItem++
+                    "Planning An Event" -> nEvent++
+                    "Saving For Emergency Funds" -> nEmergency++
+                    "Donating To Charity" -> nCharity++
+                    "Situational Shopping" -> nSituational++
+                    "Earning Money" -> nEarning++
+                }
             }
+
+        }.continueWith {
+            setGoalCount()
+            setReasonPieChart()
         }
     }
 
