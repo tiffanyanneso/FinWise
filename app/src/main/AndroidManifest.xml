@@ -28,6 +28,10 @@
             android:name=".SavingPerformanceActivity"
             android:exported="false" />
         <activity
+            android:name=".LeaderboardActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentViewAllQuestions"
             android:exported="false">
             <meta-data
@@ -79,28 +83,16 @@
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.ViewGoalDetails"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".parentFinancialActivitiesModule.ParentGoalActivity"
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivityConfirmWithdraw"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".financialActivitiesModule.WithdrawActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".TestFinancialActivity"
             android:exported="false" />
@@ -115,25 +107,13 @@
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivityConfirmExpense"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".financialActivitiesModule.FinancialActivityRecordExpense"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".financialActivitiesModule.FinancialActivityConfirmDeposit"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".parentFinancialActivitiesModule.ParentLandingPageActivity"
             android:exported="false" />
@@ -269,7 +249,12 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="false">
