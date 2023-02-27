@@ -13,13 +13,10 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".SpendingTransactionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".CompletedEarningActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EarningCompletedFragment"
-            android:exported="false" />
-        <activity
-            android:name=".EarningToDoFragment"
             android:exported="false" />
         <activity
             android:name=".EarningActivity"
@@ -41,9 +38,7 @@
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.SavingPerformanceActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".LeaderboardActivity"
             android:exported="false" />
@@ -62,8 +57,7 @@
             android:exported="true" />
         <activity
             android:name=".profileModule.ViewFriendsActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".financialActivitiesModule.ItemExpensesActivity"
             android:exported="false" />
@@ -221,8 +215,7 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".personalFinancialManagementModule.TransactionSortActivity"
             android:exported="false" />
@@ -237,6 +230,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

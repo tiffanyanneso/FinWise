@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BudgetExpenseFragment"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_record_expense"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:text="+ Expense"
+        android:textColor="@color/off_white"
+        android:layout_marginTop="20dp"
+        android:backgroundTint="@color/dark_green"
+        android:background="@drawable/button_border"
+        android:layout_gravity="right"/>
+
+        <TextView
+            android:id="@+id/tv_view_all"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="20dp"
+            android:text="View All >"
+            android:textColor="@color/black"
+            android:textAlignment="textEnd" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_view_items"
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_height="0dp"
+        android:layout_weight="8"
+        tools:listitem="@layout/item_budget_expense"/>
+
+</LinearLayout>
