@@ -13,6 +13,9 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".AssessmentActivity"
+            android:exported="false" />
+        <activity
             android:name=".SpendingTransactionsActivity"
             android:exported="false" />
         <activity
@@ -38,7 +41,7 @@
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.SavingPerformanceActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".LeaderboardActivity"
             android:exported="false" />
@@ -57,7 +60,7 @@
             android:exported="true" />
         <activity
             android:name=".profileModule.ViewFriendsActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.ItemExpensesActivity"
             android:exported="false" />
@@ -215,7 +218,7 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".personalFinancialManagementModule.TransactionSortActivity"
             android:exported="false" />
