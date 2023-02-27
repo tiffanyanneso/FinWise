@@ -52,11 +52,11 @@ class BudgetingFragment : Fragment() {
         var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         //saving activities that are in progress means that there the goal is also in progress because they are connected
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+            binding.tvInProgress.text = results.size().toString()
             for (activity in results) {
                 var activityObject = activity.toObject<FinancialActivities>()
                 goalIDArrayList.add(activityObject?.financialGoalID.toString())
             }
-            binding.tvInProgress.text = goalIDArrayList.size.toString()
             loadRecyclerView(goalIDArrayList)
         }
     }

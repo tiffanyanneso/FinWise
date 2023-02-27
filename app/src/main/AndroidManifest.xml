@@ -40,8 +40,10 @@
             android:name=".NewShoppingListItemActivity"
             android:exported="false" />
         <activity
-            android:name=".SavingPerformanceActivity"
-            android:exported="false" />
+            android:name=".financialActivitiesModule.SavingPerformanceActivity"
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".LeaderboardActivity"
             android:exported="false" />
@@ -61,11 +63,6 @@
         <activity
             android:name=".profileModule.ViewFriendsActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".financialActivitiesModule.ItemExpensesActivity"
@@ -225,11 +222,6 @@
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".personalFinancialManagementModule.TransactionSortActivity"
@@ -242,7 +234,12 @@
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
-            android:exported="true" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"
             android:exported="false" />

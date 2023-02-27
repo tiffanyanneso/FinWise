@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SavingPerformanceActivity">
+    tools:context=".financialActivitiesModule.SavingPerformanceActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/topbar"
@@ -82,17 +82,19 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
+                        android:max="100"/>
 
                     <TextView
                         android:id="@+id/percentage_short_term"
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="xx%"
-                        android:textSize="14sp"
                         android:textColor="@color/black"
-                        android:gravity="center"/>
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -116,7 +118,9 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
+                        android:max="100"/>
 
                     <TextView
                         android:id="@+id/percentage_medium_term"
@@ -150,7 +154,9 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
+                        android:max="100"/>
 
                     <TextView
                         android:id="@+id/percentage_long_term"
@@ -200,7 +206,9 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
+                        android:max="100"/>
 
                     <TextView
                         android:id="@+id/percentage_buying_items"
@@ -235,7 +243,9 @@
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
                         android:layout_gravity="center"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
+                        android:max="100"/>
 
                     <TextView
                         android:id="@+id/percentage_planning_event"
@@ -269,8 +279,10 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center"
+                        android:max="100"/>
 
                     <TextView
                         android:id="@+id/percentage_emergency_funds"
@@ -303,8 +315,10 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center"
+                        android:max="100"/>
 
                     <TextView
                         android:id="@+id/percentage_donating"
@@ -337,8 +351,10 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center"
+                        android:max="100"/>
 
                     <TextView
                         android:id="@+id/percentage_situational_shopping"
@@ -372,8 +388,10 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"/>
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center"
+                        android:max="100"/>
 
                     <TextView
                         android:id="@+id/percentage_earning_money"
