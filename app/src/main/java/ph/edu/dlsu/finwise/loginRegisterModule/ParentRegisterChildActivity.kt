@@ -118,13 +118,11 @@ class ParentRegisterChildActivity : AppCompatActivity() {
             "lastUpdated" to time
         )
 
-        firestore.collection("ChildWallet").add(wallet).addOnSuccessListener {
-
-        }
+        firestore.collection("ChildWallet").add(wallet)
     }
 
     private fun createGoalSettings(parentID:String, childID:String) {
-        var settings = GoalSettings(parentID, childID, false, false, false)
+        var settings = GoalSettings(parentID, childID, false, false)
         firestore.collection("GoalSettings").add(settings)
     }
 

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -38,6 +39,8 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
 
     private lateinit var bundle:Bundle
 
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,10 +60,9 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 "transactionType" to "Deposit",
                 "category" to "Goal",
                 "date" to bundle.getSerializable("date"),
-                "createdBy" to "",
+                "createdBy" to currentUser,
                 "amount" to bundle.getFloat("amount"),
                 "financialActivityID" to bundle.getString("savingActivityID")
-                //"decisionMakingActivityID" to decisionMakingActivityID
             )
 
             //adjustUserBalance()

@@ -45,7 +45,6 @@ class SavingFragment : Fragment() {
     //includes achieved goals in count
     private var totalGoals = 0
 
-
     //vars for activity types for pie chart
     var nBuyingItem = 0
     var nEvent = 0
@@ -53,6 +52,9 @@ class SavingFragment : Fragment() {
     var nCharity = 0
     var nSituational =0
     var nEarning = 0
+
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,8 +96,6 @@ class SavingFragment : Fragment() {
 
     private fun getSavingActivities() {
         goalIDArrayList.clear()
-        ///TODO: CHANGE TO FIREBASEAUTH.CURRENTUSER
-        var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         //saving activities that are in progress means that there the goal is also in progress because they are connected
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             binding.tvInProgress.text = results.size().toString()

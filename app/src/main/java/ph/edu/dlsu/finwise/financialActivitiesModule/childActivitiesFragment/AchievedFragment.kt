@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.FinactAchievedAdapter
@@ -16,6 +17,8 @@ class AchievedFragment : Fragment() {
     private lateinit var binding: FragmentAchievedBinding
     private var firestore = Firebase.firestore
     private lateinit var goalAdapter: FinactAchievedAdapter
+
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,18 +36,11 @@ class AchievedFragment : Fragment() {
 
     private fun getAchievedGoals() {
         var goalIDArrayList = ArrayList<String>()
-        var filter = "Completed"
         goalIDArrayList.clear()
-        //TODO:change to get transactions of current user
-        //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        //firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "Completed").get().addOnSuccessListener { documents ->
+            for (goalSnapshot in documents)
+                goalIDArrayList.add(goalSnapshot.id)
 
-        firestore.collection("FinancialGoals").whereEqualTo("status", filter).get().addOnSuccessListener { documents ->
-            for (goalSnapshot in documents) {
-                //creating the object from list retrieved in db
-                val goalID = goalSnapshot.id
-                goalIDArrayList.add(goalID)
-            }
             loadRecyclerView(goalIDArrayList)
         }
     }

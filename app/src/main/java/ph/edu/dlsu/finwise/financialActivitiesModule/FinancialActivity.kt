@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -37,6 +38,12 @@ class FinancialActivity : AppCompatActivity() {
 
     private var ongoingGoals = 0
 
+    private var childID  = FirebaseAuth.getInstance().currentUser!!.uid
+
+    //variables for goal settings, used to check if goal setting fragment should be included
+    private var setOwnGoals = false
+    private var autoApprove = false
+
     private val tabIcons = intArrayOf(
         ph.edu.dlsu.finwise.R.drawable.baseline_star_24,
         ph.edu.dlsu.finwise.R.drawable.baseline_wallet_24,
@@ -52,30 +59,39 @@ class FinancialActivity : AppCompatActivity() {
         binding = ActivityFinancialBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        GlobalScope.launch(Dispatchers.IO) {
-//            setGoalCount()
-            withContext(Dispatchers.Main) {
-                val adapter = ViewPagerAdapter(supportFragmentManager)
-                //checkSettings()
-
-                // TODO: change the fragments added based on parent approval
-                adapter.addFragment(GoalSettingFragment(),"Goal Setting")
-                adapter.addFragment(SavingFragment(),"Saving")
-                adapter.addFragment(BudgetingFragment(),"Budgeting")
-                adapter.addFragment(SpendingFragment(),"Spending")
-                adapter.addFragment(AchievedFragment(),"Achieved")
-                adapter.addFragment(DisapprovedFragment(),"Disapproved")
-
-                binding.viewPager.adapter = adapter
-                binding.tabLayout.setupWithViewPager(binding.viewPager)
-                setupTabIcons()
-            }
-        }
+        checkSettings()
 
         // Hides actionbar,
         // and initializes the navbar
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+    }
+
+    private fun checkSettings() {
+        firestore.collection("GoalSettings").whereEqualTo("childID", childID).get().addOnSuccessListener {
+            var childSettings = it.documents[0].toObject<GoalSettings>()
+            setOwnGoals = childSettings?.setOwnGoal!!
+            autoApprove = childSettings?.autoApproved!!
+        }.continueWith {
+            initializeFragments()
+        }
+    }
+
+    private fun initializeFragments() {
+        val adapter = ViewPagerAdapter(supportFragmentManager)
+
+        if (setOwnGoals && !autoApprove)
+            adapter.addFragment(GoalSettingFragment(),"Goal Setting")
+
+        adapter.addFragment(SavingFragment(),"Saving")
+        adapter.addFragment(BudgetingFragment(),"Budgeting")
+        adapter.addFragment(SpendingFragment(),"Spending")
+        adapter.addFragment(AchievedFragment(),"Achieved")
+        adapter.addFragment(DisapprovedFragment(),"Disapproved")
+
+        binding.viewPager.adapter = adapter
+        binding.tabLayout.setupWithViewPager(binding.viewPager)
+        setupTabIcons()
     }
 
     private fun setupTabIcons() {

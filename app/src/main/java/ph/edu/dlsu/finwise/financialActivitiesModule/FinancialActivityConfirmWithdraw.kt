@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -26,6 +27,9 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
 
     private var savedAmount = 0.00F
 
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityConfirmWithdrawBinding.inflate(layoutInflater)
@@ -36,11 +40,11 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
 
         binding.btnConfirm.setOnClickListener {
             var withdrawal = hashMapOf(
+                "childID" to currentUser,
                 "transactionName" to bundle.getString("goalName").toString() + " Withdrawal",
                 "transactionType" to "Withdrawal",
                 "category" to "Goal",
                 "date" to bundle.getSerializable("date"),
-                "createdBy" to "",
                 "amount" to bundle.getFloat("amount"),
                 "financialActivityID" to bundle.getString("savingActivityID")
             )
