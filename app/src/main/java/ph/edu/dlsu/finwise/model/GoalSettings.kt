@@ -5,6 +5,5 @@ class GoalSettings(
     var childID:String?=null,
     var setOwnGoal:Boolean?=null,
     var autoApproved:Boolean?=null,
-    var unaccomplishedGoal:Boolean?=null
 ) {
 }

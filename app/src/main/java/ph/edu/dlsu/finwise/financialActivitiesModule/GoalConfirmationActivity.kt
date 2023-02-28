@@ -17,6 +17,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalConfirmationBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -38,7 +39,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
     private lateinit var currentUserType:String
 
-    private var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,19 +83,15 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
                 computeDateDifference(formattedDate)
 
-                 var childID:String = " "
-                 var createdBy:String =" "
-//                if (currentUserType == "Parent") {
-//                    var childIDBundle = intent.extras!!
-//                    childID = childIDBundle.getString("childID").toString()
-//                    createdBy = FirebaseAuth.getInstance().currentUser!!.uid
-//                } else if (currentUserType == "Child"){
-//                    childID = FirebaseAuth.getInstance().currentUser!!.uid
-//                    createdBy = FirebaseAuth.getInstance().currentUser!!.uid
-//                }
+                var childID:String = currentUser
+                var createdBy:String = currentUser
+                if (currentUserType == "Parent") {
+                    var childIDBundle = intent.extras!!
+                    childID = childIDBundle.getString("childID").toString()
+                    createdBy = FirebaseAuth.getInstance().currentUser!!.uid
+                }
 
                 var goal = hashMapOf(
-                    //TODO: add childID, createdBy
                     "childID" to childID,
                     "goalName" to bundle.getString("goalName"),
                     "dateCreated" to Timestamp.now(),
@@ -114,7 +111,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
                     createBudgetTemplates(bundle.getString("activity").toString(), it.id)
                     saveFinancialActivities(bundle.getString("activity").toString(), it.id)
 
-                        //if (currentUserType == "Child") {
+                        if (currentUserType == "Child") {
                             var goToStartGoal = Intent(context, StartGoalActivity::class.java)
                             var bundle1: Bundle = intent.extras!!
                             bundle1.putString("financialGoalID", it.id)
@@ -122,14 +119,14 @@ class GoalConfirmationActivity : AppCompatActivity() {
                             goToStartGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             context.startActivity(goToStartGoal)
                             finish()
-//                        } else {
-//                            var parentGoal = Intent(this, ParentGoalActivity::class.java)
-//                            var bundle = Bundle()
-//                            bundle.putString("childID", childID)
-//                            parentGoal.putExtras(bundle)
-//                            startActivity(parentGoal)
-//                            finish()
-//                        }
+                        } else {
+                            var parentGoal = Intent(this, ParentGoalActivity::class.java)
+                            var bundle = Bundle()
+                            bundle.putString("childID", childID)
+                            parentGoal.putExtras(bundle)
+                            startActivity(parentGoal)
+                            finish()
+                        }
 
                     }.addOnFailureListener { e ->
                     Toast.makeText(this, "Failed to add goal", Toast.LENGTH_SHORT).show()
@@ -206,7 +203,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
         if (difference.days <= 14 && difference.months < 1 )
             goalLength = "Short"
-        else if (difference.months < 1)
+        else if (difference.days > 14 && difference.months < 1)
             goalLength = "Medium"
         else
             goalLength = "Long"

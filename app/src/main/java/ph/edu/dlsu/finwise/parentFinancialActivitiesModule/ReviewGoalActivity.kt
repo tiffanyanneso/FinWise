@@ -64,7 +64,6 @@ class ReviewGoalActivity : AppCompatActivity() {
     }
 
     private fun updateOverallRating() {
-        println("print update")
         var overall = 0.00F
         var specific = binding.ratingBarSpecific.rating
         var measurable = binding.ratingBarMeasurable.rating

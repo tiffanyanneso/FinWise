@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 
 
@@ -15,9 +16,8 @@ class NavbarParent (bottomNavigationView: BottomNavigationView, appCon: Context,
         bottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
 
-
                 R.id.nav_parent_goal -> {
-                    val intent = Intent(appCon, ParentLandingPageActivity::class.java)
+                    val intent = Intent(appCon, ParentGoalActivity::class.java)
                     appCon.startActivity(intent)
                 }
 

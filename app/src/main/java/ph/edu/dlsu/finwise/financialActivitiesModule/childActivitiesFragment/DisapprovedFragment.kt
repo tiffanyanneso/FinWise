@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -21,10 +22,10 @@ class DisapprovedFragment : Fragment() {
     private var firestore = Firebase.firestore
     private lateinit var goalAdapter: FinactSavingAdapter
 
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        getDisapprovedGoals()
     }
 
     override fun onCreateView(
@@ -36,21 +37,22 @@ class DisapprovedFragment : Fragment() {
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        getDisapprovedGoals()
+    }
+
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
     }
 
 
     private fun getDisapprovedGoals() {
         var goalIDArrayList = ArrayList<String>()
-        var filter = "Disapproved"
         var goalFilterArrayList = ArrayList<GoalFilter>()
 
         goalIDArrayList.clear()
-        //TODO:change to get transactions of current user
-        //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        //firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->
 
-        firestore.collection("FinancialGoals").whereEqualTo("status", filter).get().addOnSuccessListener { documents ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "Disapproved").get().addOnSuccessListener { documents ->
             for (goalSnapshot in documents) {
                 //creating the object from list retrieved in db
                 var goalID = goalSnapshot.id
