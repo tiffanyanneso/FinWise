@@ -204,7 +204,7 @@
 
                     </LinearLayout>
 
-                    <com.github.mikephil.charting.charts.LineChart
+                    <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/savings_chart"
                         android:layout_width="330dp"
                         android:layout_height="430dp"
