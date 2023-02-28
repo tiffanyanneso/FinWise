@@ -107,29 +107,32 @@ class ParentGoalActivity : AppCompatActivity() {
         var fragmentBundle = Bundle()
         fragmentBundle.putString("childID", childID)
 
-        var inProgressFragment = ParentSavingFragment()
-        inProgressFragment.arguments = fragmentBundle
+        var goalSettingFragment = ParentGoalSettingFragment()
+        goalSettingFragment.arguments = fragmentBundle
 
-        var forReviewFragment = ParentBudgetingFragment()
-        forReviewFragment.arguments = fragmentBundle
+        var savingFragment = ParentSavingFragment()
+        savingFragment.arguments = fragmentBundle
 
-        var forEditingFragment = ParentGoalSettingFragment()
-        forEditingFragment.arguments = fragmentBundle
+        var budgetingFragment = ParentBudgetingFragment()
+        budgetingFragment.arguments = fragmentBundle
 
-        var disapprovedFragment = ParentDisapprovedFragment()
-        disapprovedFragment.arguments = fragmentBundle
+        var spendingFragment = ParentBudgetingFragment()
+        spendingFragment.arguments = fragmentBundle
 
         var achievedFragment = ParentAchievedFragment()
         achievedFragment.arguments = fragmentBundle
 
+        var disapprovedFragment = ParentDisapprovedFragment()
+        disapprovedFragment.arguments = fragmentBundle
+
         val adapter = ViewPagerAdapter(supportFragmentManager)
 
-        adapter.addFragment(ParentGoalSettingFragment(),"Goal Setting")
-        adapter.addFragment(ParentSavingFragment(),"Saving")
-        adapter.addFragment(ParentBudgetingFragment(),"Budgeting")
-        adapter.addFragment(ParentSpendingFragment(),"Spending")
-        adapter.addFragment(ParentAchievedFragment(),"Achieved")
-        adapter.addFragment(ParentDisapprovedFragment(),"Disapproved")
+        adapter.addFragment(goalSettingFragment,"Goal Setting")
+        adapter.addFragment(savingFragment,"Saving")
+        adapter.addFragment(budgetingFragment,"Budgeting")
+        adapter.addFragment(spendingFragment,"Spending")
+        adapter.addFragment(achievedFragment,"Achieved")
+        adapter.addFragment(disapprovedFragment,"Disapproved")
 
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)

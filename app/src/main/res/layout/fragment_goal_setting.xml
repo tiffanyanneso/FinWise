@@ -81,7 +81,8 @@
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
                         android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"/>
+                        android:layout_marginRight="10dp"
+                        android:max="5"/>
 
                     <TextView
                         android:id="@+id/rating_specific"
@@ -116,7 +117,8 @@
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
                         android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"/>
+                        android:layout_marginRight="10dp"
+                        android:max="5"/>
 
                     <TextView
                         android:id="@+id/rating_measurable"
@@ -151,7 +153,8 @@
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
                         android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"/>
+                        android:layout_marginRight="10dp"
+                        android:max="5"/>
 
                     <TextView
                         android:id="@+id/rating_achievable"
@@ -186,7 +189,8 @@
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
                         android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"/>
+                        android:layout_marginRight="10dp"
+                        android:max="5"/>
 
                     <TextView
                         android:id="@+id/rating_relevant"
@@ -221,7 +225,8 @@
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
                         android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"/>
+                        android:layout_marginRight="10dp"
+                        android:max="5"/>
 
                     <TextView
                         android:id="@+id/rating_time"

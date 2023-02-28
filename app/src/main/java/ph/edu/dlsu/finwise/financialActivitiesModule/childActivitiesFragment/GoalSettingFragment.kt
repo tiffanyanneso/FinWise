@@ -15,6 +15,7 @@ import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.GoalRating
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 class GoalSettingFragment : Fragment() {
 
@@ -22,6 +23,8 @@ class GoalSettingFragment : Fragment() {
     private var firestore = Firebase.firestore
     private lateinit var goalSettingAdapter: FinactGoalSettingAdapter
 
+    private var nRatings = 0
+    private var nOverall = 0.00F
     private var nSpecific = 0.00F
     private var nMeasurable = 0.00F
     private var nAchievable = 0.00F
@@ -32,6 +35,13 @@ class GoalSettingFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        nRatings = 0
+        nOverall = 0.00F
+        nSpecific = 0.00F
+        nMeasurable = 0.00F
+        nAchievable = 0.00F
+        nRelevant = 0.00F
+        nTimeBound = 0.00F
     }
 
     override fun onCreateView(
@@ -69,8 +79,10 @@ class GoalSettingFragment : Fragment() {
 
     private fun initializeStars() {
         firestore.collection("GoalRating").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+           nRatings = results.size()
             for (rating in results) {
                 var ratingObject = rating.toObject<GoalRating>()
+                nOverall += ratingObject.overallRating!!
                 nSpecific += ratingObject.specific!!
                 nMeasurable += ratingObject.measurable!!
                 nAchievable +=ratingObject.achievable!!
@@ -78,13 +90,18 @@ class GoalSettingFragment : Fragment() {
                 nTimeBound += ratingObject.timeBound!!
             }
         }.continueWith {
-            //var overall = ((nSpecific/5) + (nMeasurable/5) + (nAchievable/5) + (nRelevant/5) + (nTimeBound/5))/5
-            //binding.tvOverallRating.text = overall.toString()
-            //binding.ratingBarOverall.rating = overall
+            var overall = nOverall/nRatings
+            binding.tvOverallRating.text ="${overall}/5"
+            binding.ratingBarOverall.rating = overall
+            binding.progressBarSpecific.progress = (nSpecific/5).roundToInt()
             binding.ratingSpecific.text = "${(nSpecific/5)}/5"
+            binding.progressBarMeasurable.progress = (nMeasurable/5).roundToInt()
             binding.ratingMeasurable.text = "${(nMeasurable/5)}/5"
+            binding.progressBarAchievable.progress = (nAchievable/5).roundToInt()
             binding.ratingAchievable.text = "${(nAchievable/5)}/5"
+            binding.progressBarRelevant.progress = (nRelevant/5).roundToInt()
             binding.ratingRelevant.text = "${(nRelevant/5)}/5"
+            binding.progressBarTime.progress = (nTimeBound/5).roundToInt()
             binding.ratingTime.text = "${(nTimeBound/5)}/5"
         }
     }
