@@ -150,9 +150,6 @@
             android:name=".financialActivitiesModule.SavingViewTransactionsActivity"
             android:exported="false" />
         <activity
-            android:name=".financialActivitiesModule.SavingActivity"
-            android:exported="false" />
-        <activity
             android:name=".financialActivitiesModule.BudgetActivity"
             android:exported="false" />
         <activity

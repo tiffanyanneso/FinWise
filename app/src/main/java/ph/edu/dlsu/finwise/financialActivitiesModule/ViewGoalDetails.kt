@@ -43,7 +43,6 @@ class ViewGoalDetails : AppCompatActivity() {
     private fun getGoal() {
         firestore.collection("FinancialGoals").document(financialGoalID!!).get().addOnSuccessListener { document ->
             if (document != null) {
-                //TODO: compute remaining days
                 var goal = document.toObject(FinancialGoals::class.java)
                 //binding.tvMyGoals.text = goal?.goalName.toString()
                 binding.tvGoalAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount?.toFloat())

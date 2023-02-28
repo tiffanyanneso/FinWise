@@ -152,14 +152,18 @@ class ViewGoalActivity : AppCompatActivity() {
         firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
             for (finActivity in results) {
                 var activityObject = finActivity.toObject<FinancialActivities>()
-                if (activityObject.financialActivityName == "Saving")
+                if (activityObject.financialActivityName == "Saving") {
                     savingActivityID = finActivity.id
+                    if (activityObject.status == "Completed")
+                        binding.btnEditGoal.visibility = View.GONE
+                }
                 if (activityObject.financialActivityName == "Budgeting")
                     budgetingActivityID = finActivity.id
                 if (activityObject.financialActivityName == "Spending")
                     spendingActivityID = finActivity.id
             }
-        }.continueWith { getTransactions() }
+        }.continueWith {
+            getTransactions() }
     }
 
     private class TransactionFilter(var transactionID:String?=null, var date: Date?=null)
@@ -212,6 +216,7 @@ class ViewGoalActivity : AppCompatActivity() {
                     val from = LocalDate.now()
                     val date =  SimpleDateFormat("MM/dd/yyyy").format(goal.targetDate?.toDate())
                     val to = LocalDate.parse(date.toString(), dateFormatter)
+
                     var difference = Period.between(from, to)
                     binding.tvRemaining.text = difference.days.toString() + " days remaining"
 
@@ -239,6 +244,7 @@ class ViewGoalActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private fun checkUser() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
