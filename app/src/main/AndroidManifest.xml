@@ -96,6 +96,9 @@
             android:name=".parentFinancialActivitiesModule.ParentGoalActivity"
             android:exported="true" />
         <activity
+            android:name=".parentDashboardModule.ParentDashboardActivity"
+            android:exported="false" />
+        <activity
             android:name=".financialActivitiesModule.FinancialActivityConfirmWithdraw"
             android:exported="false" />
         <activity
@@ -110,9 +113,6 @@
         <activity
             android:name=".parentFinancialActivitiesModule.GoalSettingsActivity"
             android:exported="true" />
-        <activity
-            android:name=".ParentSendMoney"
-            android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivityConfirmExpense"
             android:exported="false" />
@@ -234,6 +234,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".parentFinancialManagementModule.ParentFinancialManagementActivity"
+            android:exported="false">
+          <!--           <intent-filter>
+                         <action android:name="android.intent.action.MAIN" />
+
+                         <category android:name="android.intent.category.LAUNCHER" />
+                     </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".parentFinancialManagementModule.ParentSendMoneyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".parentFinancialManagementModule.ParentTransactionHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".parentFinancialManagementModule.ParentTransactionSortActivity"
+            android:exported="false" />
+
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"
             android:exported="false" />
