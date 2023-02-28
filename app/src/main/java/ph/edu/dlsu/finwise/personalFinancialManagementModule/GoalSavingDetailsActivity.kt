@@ -2,15 +2,19 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
-import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.utils.MPPointF
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -26,16 +30,16 @@ import java.util.*
 
 class GoalSavingDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGoalSavingDetailsBinding
-    private var setBundle = Bundle()
-    private var selectedDateRange = "week"
     private var firestore = Firebase.firestore
     private var transactionsArrayList = ArrayList<Transactions>()
     var depositTotalAmount = 0.00f
     var withdrawalTotalAmount = 0.00f
+    var savingsPercentage = 0.00f
+    var withdrawalPercentage = 0.00f
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
     private var selectedDatesSort = "weekly"
-    lateinit var barChart: BarChart
+    lateinit var chart: PieChart
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +63,6 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
         firestore.collection("Transactions").get()
             .addOnSuccessListener { transactionsSnapshot ->
-                lateinit var id: String
                 for (document in transactionsSnapshot) {
                     val transaction = document.toObject<Transactions>()
                     if (transaction.transactionType == "Deposit" ||
@@ -68,16 +71,22 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
                 }
                 sortedDate = getDatesOfTransactions()
                 getDataBasedOnDate()
-                /*calculatePercentages()
-                setTopThreeCategories()
+                calculatePercentages()
+                /*setTopThreeCategories()
                 topExpense()*/
                 loadChart()
             }
     }
 
+    private fun calculatePercentages() {
+        val total = depositTotalAmount + withdrawalTotalAmount
+        savingsPercentage = (depositTotalAmount - withdrawalTotalAmount) / total * 100
+        withdrawalPercentage = withdrawalTotalAmount / total * 100
+    }
+
     private fun getDatesOfTransactions(): List<Date> {
         //get unique dates in transaction arraylist
-        val dates = java.util.ArrayList<Date>()
+        val dates = ArrayList<Date>()
 
         for (transaction in transactionsArrayList) {
             //if array of dates doesn't contain date of the transaction, add the date to the arraylist
@@ -124,15 +133,23 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
         val dec = DecimalFormat("#,###.00")
         val deposit = dec.format(depositTotalAmount)
         val withdrawal = dec.format(withdrawalTotalAmount)
-        binding.tvDepositTotal.text = "₱$deposit"
+        val savingsAmount = depositTotalAmount - withdrawalTotalAmount
+        val savings = dec.format(savingsAmount)
+
+            binding.tvDepositTotal.text = "₱$deposit"
         binding.tvWithdrawalTotal.text = "₱$withdrawal"
+        binding.tvSavingsTotal.text = "₱$savings"
     }
 
-    private fun initializeEntries(): List<BarEntry> {
-        val entries = listOf(
-                BarEntry(1f, depositTotalAmount),
-                BarEntry(2f, withdrawalTotalAmount)
-        )
+    private fun initializeEntries(): List<PieEntry> {
+        val entries: ArrayList<PieEntry> = ArrayList()
+
+        if (depositTotalAmount > 0.00f)
+            entries.add(PieEntry(savingsPercentage, "Savings"))
+
+        if (withdrawalTotalAmount > 0.00f)
+            entries.add(PieEntry(withdrawalPercentage, "Withdrawal"))
+
         return entries
     }
 
@@ -309,44 +326,109 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     }*/
 
     private fun loadChart() {
-        barChart = findViewById(R.id.savings_chart)!!
+        chart = findViewById(R.id.savings_chart)!!
 
-        val yAxis = barChart.axisLeft
+        //  setting user percent value, setting description as enabled, and offset for pie chart
+        val entries = initializeEntries()
+        val dataSet = PieDataSet(entries, "Values")
+        dataSet.colors = listOf(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.parseColor("#FFA500"))
+        dataSet.valueTextSize = 14f
+
+        // on below line we are setting icons.
+        dataSet.setDrawIcons(true)
+
+        // setting slice for pie
+        dataSet.sliceSpace = 3f
+        dataSet.iconsOffset = MPPointF(0f, 40f)
+        dataSet.selectionShift = 5f
+
+        // add a lot of colors to list
+        val colors: ArrayList<Int> = ArrayList()
+        colors.add(resources.getColor(R.color.dark_green))
+        colors.add(resources.getColor( R.color.light_green))
+
+        // setting colors.
+        dataSet.colors = colors
+
+        // setting pie data set
+        val data = PieData(dataSet)
+        data.setValueFormatter(PercentFormatter())
+        data.setValueTextSize(12f)
+        data.setValueTypeface(Typeface.DEFAULT_BOLD)
+        data.setValueTextColor(Color.WHITE)
+        chart.data = data
+        chart.legend.textSize = 14f
+
+        // undo all highlights
+        chart.highlightValues(null)
+
+        dataSet.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return String.format("%.1f%%", value) // add the ₱ character to the data point values
+            }
+        }
+
+        chart.setUsePercentValues(true)
+        chart.description.isEnabled = false
+        chart.setExtraOffsets(5f, 10f, 5f, 5f)
+
+        // disable hole in pie
+        chart.isDrawHoleEnabled = false
+
+        // setting drag for the pie chart
+        chart.dragDecelerationFrictionCoef = 0.95f
+
+        // setting circle color and alpha
+        chart.setTransparentCircleColor(Color.WHITE)
+        chart.setTransparentCircleAlpha(110)
+
+        // setting center text
+        chart.setDrawCenterText(true)
+
+        // setting rotation for our pie chart
+        chart.rotationAngle = 0f
+
+        // enable rotation of the pieChart by touch
+        chart.isRotationEnabled = true
+        chart.isHighlightPerTapEnabled = true
+
+        // setting animation for our pie chart
+        chart.animateY(1400, Easing.EaseInOutQuad)
+
+        // configure legend
+        val legend = chart.legend
+        legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+        legend.orientation = Legend.LegendOrientation.VERTICAL
+        legend.setDrawInside(false)
+        legend.xEntrySpace = 10f
+        legend.yEntrySpace = 0f
+        legend.yOffset = 10f
+        legend.textSize = 12f
+        /* val yAxis = chart.axisLeft
         yAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
                 return String.format("₱%.0f", value)// Add "₱" symbol to value
             }
         }
 
-        barChart.axisRight.isEnabled = false
-
-
-
-        //  setting user percent value, setting description as enabled, and offset for pie chart
-        val entries = initializeEntries()
-        val dataSet = BarDataSet(entries, "Values")
-        dataSet.colors = listOf(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.parseColor("#FFA500"))
-        dataSet.valueTextSize = 14f
-
-        dataSet.valueFormatter = object : ValueFormatter() {
-            override fun getFormattedValue(value: Float): String {
-                return "₱$value" // add the ₱ character to the data point values
-            }
-        }
-
+        chart.axisRight.isEnabled = false
         val data = BarData(dataSet)
-        barChart.data = data
-        barChart.description.isEnabled = false
-        barChart.legend.isEnabled = false
-        barChart.animateY(1000)
+        chart.data = data
+        chart.description.isEnabled = false
+        chart.legend.isEnabled = false
+        chart.animateY(1000)
 
-        val xAxis = barChart.xAxis
+        val xAxis = chart.xAxis
         xAxis.isEnabled = false
         xAxis.setDrawAxisLine(false)
         xAxis.setDrawGridLines(false)
 
-        barChart.setTouchEnabled(false)
-        barChart.isHighlightPerTapEnabled = false
+        chart.setTouchEnabled(false)
+        chart.isHighlightPerTapEnabled = false*/
+
+        // loading chart
+        chart.invalidate()
 
 
     }

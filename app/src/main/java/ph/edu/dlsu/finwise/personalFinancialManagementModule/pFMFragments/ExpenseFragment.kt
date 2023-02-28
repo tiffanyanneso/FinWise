@@ -13,10 +13,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.MPPointF
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -379,6 +381,17 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         // setting animation for our pie chart
         pieChart.animateY(1400, Easing.EaseInOutQuad)
 
+        // configure legend
+        val legend = pieChart.legend
+        legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+        legend.orientation = Legend.LegendOrientation.VERTICAL
+        legend.setDrawInside(false)
+        legend.xEntrySpace = 10f
+        legend.yEntrySpace = 0f
+        legend.yOffset = 10f
+        legend.textSize = 12f
+
         // set legend
         /*var legend = pieChart.legend
         legend.verticalAlignment = Legend.LegendVerticalAlignment.CENTER
@@ -413,6 +426,11 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         // setting colors.
         dataSet.colors = colors
 
+        dataSet.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return String.format("%.1f%%", value) // add the ₱ character to the data point values
+            }
+        }
         // setting pie data set
         val data = PieData(dataSet)
         data.setValueFormatter(PercentFormatter())

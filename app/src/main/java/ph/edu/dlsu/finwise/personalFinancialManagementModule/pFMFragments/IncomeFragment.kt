@@ -13,10 +13,12 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.MPPointF
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -388,6 +390,12 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         // setting colors.
         dataSet.colors = colors
 
+        dataSet.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return String.format("%.1f%%", value) // add the ₱ character to the data point values
+            }
+        }
+
         // setting pie data set
         val data = PieData(dataSet)
         data.setValueFormatter(PercentFormatter())
@@ -399,6 +407,18 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
 
         // undo all highlights
         pieChart.highlightValues(null)
+
+        
+        // configure legend
+        val legend = pieChart.legend
+        legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
+        legend.orientation = Legend.LegendOrientation.VERTICAL
+        legend.setDrawInside(false)
+        legend.xEntrySpace = 10f
+        legend.yEntrySpace = 0f
+        legend.yOffset = 10f
+        legend.textSize = 12f
 
         // loading chart
         pieChart.invalidate()
