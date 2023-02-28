@@ -2,6 +2,7 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.app.Dialog
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.EarningActivity
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
@@ -85,6 +87,13 @@ class ViewGoalActivity : AppCompatActivity() {
             this.startActivity(goToGoalTransactions)
         }
 
+        binding.btnViewTransactions.setOnClickListener {
+            var goToGoalTransactions = Intent(this, GoalTransactionsActivity::class.java)
+            sendBundle.putString("savingActivityID", savingActivityID)
+            goToGoalTransactions.putExtras(sendBundle)
+            this.startActivity(goToGoalTransactions)
+        }
+
         binding.btnWithdraw.setOnClickListener {
 //            bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
 //            bundle.putInt("progress", progress.toInt())
@@ -96,6 +105,16 @@ class ViewGoalActivity : AppCompatActivity() {
             sendBundle.putInt("progress", binding.progressBar.progress)
             goalWithdraw.putExtras(sendBundle)
             this.startActivity(goalWithdraw)
+        }
+
+        binding.btnChores.setOnClickListener {
+            var goToChores = Intent(this, EarningActivity::class.java)
+            this.startActivity(goToChores)
+        }
+
+        binding.tvViewAllEarning.setOnClickListener {
+            var goToChores = Intent(this, EarningActivity::class.java)
+            this.startActivity(goToChores)
         }
 
         binding.btnDeposit.setOnClickListener {
@@ -136,7 +155,6 @@ class ViewGoalActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
             }
-
         }
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
@@ -251,7 +269,23 @@ class ViewGoalActivity : AppCompatActivity() {
         firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
             //current user is parent
             if (it.exists()) {
-                binding.layoutBtnDepositWithdraw.visibility = View.GONE
+//                binding.layoutBtnDepositWithdraw.visibility = View.GONE
+                binding.btnWithdraw.isEnabled = false
+                binding.btnWithdraw.isClickable = false
+                binding.btnWithdraw.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_grey)))
+
+                binding.btnDeposit.isEnabled = false
+                binding.btnDeposit.isClickable = false
+                binding.btnDeposit.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_grey)))
+            }
+            else {
+                binding.btnWithdraw.isEnabled = true
+                binding.btnWithdraw.isClickable = true
+                binding.btnWithdraw.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_green)))
+
+                binding.btnDeposit.isEnabled = true
+                binding.btnDeposit.isClickable = true
+                binding.btnDeposit.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_green)))
             }
         }
     }
