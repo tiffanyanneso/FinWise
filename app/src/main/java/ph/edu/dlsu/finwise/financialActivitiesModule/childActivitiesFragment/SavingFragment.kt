@@ -56,6 +56,8 @@ class SavingFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ongoingGoals = 0
+        totalGoals = 0
         goalIDArrayList.clear()
         savingsArrayList.clear()
     }
@@ -96,7 +98,7 @@ class SavingFragment : Fragment() {
         var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         //saving activities that are in progress means that there the goal is also in progress because they are connected
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
-
+            binding.tvInProgress.text = results.size().toString()
             for (activity in results) {
                 var activityObject = activity.toObject<FinancialActivities>()
                 goalIDArrayList.add(activityObject?.financialGoalID.toString())
@@ -126,8 +128,6 @@ class SavingFragment : Fragment() {
         binding.tvNearingDeadline.text = nearDeadline.toString()
         var currentTime = Timestamp.now().toDate().time
 
-        //set number of ongoing goals
-        binding.tvInProgress.text = ongoingGoals.toString()
         //set number of goals nearing completion and nearing deadline
         for (goalID in goalIDArrayList) {
             firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {

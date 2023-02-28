@@ -149,7 +149,6 @@
 
 
     <string-array name="status_list">
-        <item>--Status--</item>
         <item>In Progress</item>
         <item>For Review</item>
         <item>For Editing</item>
@@ -189,7 +188,6 @@
 
 
     <string-array name="financial_activity">
-        <item>--Select Activity--</item>
         <item>Buying Items</item>
         <item>Planning An Event</item>
         <item>Saving For Emergency Funds</item>
@@ -217,7 +215,6 @@
     </string-array>
 
     <string-array name="pfm_category">
-        <item>--Select Category--</item>
         <item>Allowance</item>
         <item>Gift</item>
         <item>Birthday</item>
