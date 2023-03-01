@@ -7,12 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.*
 import ph.edu.dlsu.finwise.databinding.ActivityProfileBinding
 import ph.edu.dlsu.finwise.model.ChildUser
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.GoalSettingsActivity
 import ph.edu.dlsu.finwise.profileModule.fragments.ProfileBadgesFragment
 import ph.edu.dlsu.finwise.profileModule.fragments.ProfileCurrentGoalsFragment
 
@@ -45,6 +47,19 @@ class ProfileActivity : AppCompatActivity(){
         binding.tvFriends.setOnClickListener {
             val goToViewFriends = Intent(this, ViewFriendsActivity::class.java)
             context.startActivity(goToViewFriends)
+        }
+
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId) {
+                R.id.btn_logout -> {
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent (this, MainActivity::class.java)
+                    startActivity (intent)
+                    finish()
+                    true
+                }
+                else -> false
+            }
         }
 
 

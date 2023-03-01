@@ -21,6 +21,7 @@ class GoalTransactionsActivity : AppCompatActivity() {
     private lateinit var source:String
 
     private val tabIcons = intArrayOf(
+        R.drawable.baseline_receipt_long_24,
         R.drawable.baseline_star_24,
         R.drawable.baseline_wallet_24
     )
@@ -68,7 +69,7 @@ class GoalTransactionsActivity : AppCompatActivity() {
         var goalWithdrawalFragment = GoalWithdrawalFragment()
         goalWithdrawalFragment.arguments = fragmentBundle
 
-        adapter.addFragment(goalTransactionsFragment,"All Transactions")
+        adapter.addFragment(goalTransactionsFragment,"All")
         adapter.addFragment(goalDepositsFragment,"Deposit")
         adapter.addFragment(goalWithdrawalFragment,"Withdrawal")
         binding.viewPager.adapter = adapter
@@ -78,6 +79,7 @@ class GoalTransactionsActivity : AppCompatActivity() {
     private fun setupTabIcons() {
         binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[0])
         binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[1])
+        binding.tabLayout.getTabAt(3)?.setIcon(tabIcons[2])
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){

@@ -28,12 +28,12 @@ class TabbedActivityExample : AppCompatActivity() {
             FragmentData("Blue", "#0000FF")
         )
 
-        val tabLayoutMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
-            tab.text = fragmentDataList[position].title
+//        val tabLayoutMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+//            tab.text = fragmentDataList[position].title
 
-        }
-        binding.viewPager.adapter = MyAdapter(this, fragmentDataList)
-        tabLayoutMediator.attach()
+//        }
+//        binding.viewPager.adapter = MyAdapter(this, fragmentDataList)
+//        tabLayoutMediator.attach()
     }
 
     class MyAdapter(activity: AppCompatActivity, private val fragmentDataList: List<FragmentData>): FragmentStateAdapter(activity) {
