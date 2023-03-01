@@ -19,12 +19,13 @@ class BudgetShoppingListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let{
+        arguments?.let {
             var bundle = arguments
             budgetActivityID = bundle?.getString("budgetActivityID").toString()
             budgetItemID = bundle?.getString("budgetItemID").toString()
             spendingActivityID = bundle?.getString("spendingActivityID").toString()
         }
+    }
 
 
     override fun onCreateView(

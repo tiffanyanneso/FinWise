@@ -14,9 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.GoalTransactionsActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
-import ph.edu.dlsu.finwise.EarningActivity
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
@@ -118,6 +116,7 @@ class ViewGoalActivity : AppCompatActivity() {
             sendBundle.putString("savingActivityID", savingActivityID)
             sendBundle.putString("childID", childID)
             goToChores.putExtras(sendBundle)
+            startActivity(goToChores)
         }
 
         binding.tvViewAllEarning.setOnClickListener {

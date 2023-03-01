@@ -4,15 +4,14 @@ import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -26,6 +25,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.budgetExpenseFragments.Budg
 import ph.edu.dlsu.finwise.financialActivitiesModule.budgetExpenseFragments.BudgetShoppingListFragment
 import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.BudgetItem
+import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.ShoppingList
 import java.text.DecimalFormat
 import kotlin.collections.ArrayList
@@ -148,7 +148,7 @@ class BudgetExpenseActivity : AppCompatActivity() {
 
     private fun getInfo() {
         firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
-            var budgetItem  = it.toObject<BudgetItem>()
+            var budgetItem = it.toObject<BudgetItem>()
             binding.tvBudgetItemName.text = budgetItem?.budgetItemName
             //binding.tvCategoryAmount.text = "₱ " + DecimalFormat("#,##0.00").format(budgetItem?.amount)
         }.continueWith { getAvailableBudget() }
@@ -180,9 +180,11 @@ class BudgetExpenseActivity : AppCompatActivity() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
             //current user is parent
-            if (it.exists()) {
+            if (it.exists())
                 binding.btnRecordExpense.visibility = View.GONE
-            }
+        }
+    }
+
     private fun initializeFragments() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
 

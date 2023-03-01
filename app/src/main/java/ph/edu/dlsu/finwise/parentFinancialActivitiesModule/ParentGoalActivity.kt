@@ -49,15 +49,6 @@ class ParentGoalActivity : AppCompatActivity() {
         var sendBundle = Bundle()
         sendBundle.putString("childID", childID)
 
-
-        binding.btnNewGoal.setOnClickListener {
-            var newGoal = Intent(this, ChildNewGoal::class.java)
-            sendBundle.putString("source", "parentGoalActivity")
-            newGoal.putExtras(sendBundle)
-            newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            this.startActivity(newGoal)
-        }
-
         binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
             when (menuItem.itemId) {
                 R.id.btn_settings -> {
