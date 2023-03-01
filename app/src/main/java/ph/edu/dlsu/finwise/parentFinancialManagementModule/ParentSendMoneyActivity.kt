@@ -8,7 +8,6 @@ import androidx.core.content.res.ResourcesCompat
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentSendMoneyBinding
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 
 class ParentSendMoneyActivity :AppCompatActivity () {
     private lateinit var binding: ActivityParentSendMoneyBinding
