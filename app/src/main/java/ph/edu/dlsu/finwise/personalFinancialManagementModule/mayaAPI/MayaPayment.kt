@@ -47,7 +47,7 @@ class MayaPayment : AppCompatActivity() {
     }
 
     private fun loadBackButton() {
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             val goToPFM = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
             startActivity(goToPFM)
@@ -56,7 +56,8 @@ class MayaPayment : AppCompatActivity() {
 
     private fun goToMayaQRConfirmPayment(){
         binding.btnConfirm.setOnClickListener {
-            if (validateAndSetUserInput() && validAmount()) {
+            Toast.makeText(this, "confirm", Toast.LENGTH_SHORT).show()
+            /*if (validateAndSetUserInput() && validAmount()) {
                 setBundle()
                 val goToMayaQRConfirmPayment = Intent(applicationContext, MayaConfirmPayment::class.java)
                 goToMayaQRConfirmPayment.putExtras(bundle)
@@ -67,7 +68,7 @@ class MayaPayment : AppCompatActivity() {
                     baseContext, "Please fill up the form correctly.",
                     Toast.LENGTH_SHORT
                 ).show()
-            }
+            }*/
         }
     }
 

@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +21,6 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentBalanceChartBinding
 import ph.edu.dlsu.finwise.model.Transactions
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.RecordIncomeActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
@@ -39,6 +39,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     private var weeks: Map<Int, List<Date>>? = null
     private var months: Map<Int, List<Date>>? = null
     private var selectedDatesSort = "weekly"
+    private lateinit var chart: LineChart
 
 
 /*
@@ -101,30 +102,11 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         // our variable with their ids.
         firestore.collection("Transactions")
             .get().addOnSuccessListener { documents ->
-
                 initializeTransactions(documents)
                 sortedDate = getDatesOfTransactions()
-
-                /*TODO: create date spinner parang sa recordIncome for the line graph where it will be
-                   sorted per week, month, quarterly
-                *  Sort per date
-                Gusto ni sir na drill down yung macliclik yung data points sa graph tapos
-                mareredirect either sa list ng transactions sa day na yun or mareredirect sa line
-                graph within those range
-                So kung naka weekly view tapos kinlick yung isa, mareredirect sa transaction history
-                based sa dates na yun OR sa Pie chart para madali mavisualize OR since hindi naman
-                clickable ang dat point, magrereflect na lang sa pie chart din sa baba kaso sa labas
-                dapat yung set Date para madali masend yung dates sa fragments <-- kailangan
-                maset dates sa x axis
-                Pag naka month tapos kinclick yung isang data point, marereirect sa days within those months
-                then pag kinlick yung data point sa month, sa week, tapos sa mismont transaction history
-                ADD na lang ng transaction history  na button tapos automatic din na drdrill sa pie chart
-                */
                 val data = setData()
                 initializeGraph(data)
             }
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -299,12 +281,19 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 //get unique dates in transaction arraylist
         val dates = ArrayList<Date>()
 
-        for (transaction in transactionsArrayList) {
+        /*for (transaction in transactionsArrayList) {
             //if array of dates doesn't contain date of the transaction, add the date to the arraylist
             if (!dates.contains(transaction.date?.toDate()))
                 dates.add(transaction.date?.toDate()!!)
+        }*/
+        val sortedList = transactionsArrayList.sortedBy { it.date }
+        val uniqueList = sortedList.distinctBy { it.date }
+
+        for (obj in uniqueList) {
+            dates.add(obj.date?.toDate()!!)
         }
-        return dates.sortedBy { it }
+
+        return dates
     }
 
     private fun initializeTransactions(documents: QuerySnapshot) {
@@ -318,10 +307,12 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
     private fun updateXAxisWeekly(xAxis: XAxis?) {
         val dateFormatter = SimpleDateFormat("EEEE")
+        val distinctDates = selectedDates.distinct()
+
 
         xAxis?.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return dateFormatter.format(selectedDates[value.toInt()])
+                return dateFormatter.format(distinctDates[value.toInt()])
             }
         }
     }
@@ -378,20 +369,26 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     }
 
     private fun initializeGraph(data: MutableList<Entry>) {
-        val balanceLineGraphView = view?.findViewById<LineChart>(R.id.balance_chart)!!
+        chart = view?.findViewById(R.id.balance_chart)!!
 
-        val xAxis = balanceLineGraphView.xAxis
-        xAxis.granularity = 1f // set the X-axis label granularity to 1 unit
+
+        val xAxis = chart.xAxis
+            xAxis.granularity = 1f // Set a smaller granularity if there are fewer data points
+
         xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-        when (selectedDatesSort) {
-            "weekly" -> updateXAxisWeekly(xAxis)
-            "monthly" -> updateXAxisMonthly(xAxis)
-            "quarterly" -> updateXAxisQuarterly(xAxis)
-        }
+        // TODO: Fix becuase this only applies when dates of the week are empty
+        if (selectedDates.isNotEmpty()) {
+            when (selectedDatesSort) {
+                "weekly" -> updateXAxisWeekly(xAxis)
+                "monthly" -> updateXAxisMonthly(xAxis)
+                "quarterly" -> updateXAxisQuarterly(xAxis)
+            }
+        } else Toast.makeText(context, "No data available", Toast.LENGTH_SHORT).show()
 
 
-        val yAxis = balanceLineGraphView.axisLeft
+
+        val yAxis = chart.axisLeft
         yAxis.setDrawLabels(true) // Show X axis labels
         yAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
@@ -406,18 +403,18 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
         // Set the data on the chart and customize it
         val lineData = LineData(dataSet)
-        balanceLineGraphView.data = lineData
+        chart.data = lineData
         dataSet.valueTextSize = 14f
 
         // on below line adding animation
-        balanceLineGraphView.animate()
+        chart.animate()
 
-        balanceLineGraphView.setPinchZoom(true)
-        balanceLineGraphView.setScaleEnabled(false)
+        chart.setPinchZoom(true)
+        chart.setScaleEnabled(false)
 
-        balanceLineGraphView.axisRight.isEnabled = false
+        chart.axisRight.isEnabled = false
 
-        balanceLineGraphView.description.isEnabled = false
+        chart.description.isEnabled = false
 
         // Add a Peso sign in the data points in the graph
         dataSet.valueFormatter = object : ValueFormatter() {
@@ -428,6 +425,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     }
 
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getDaysOfWeek(dates: List<Date>): List<Date> {
         val startOfWeek = LocalDate.now().with(DayOfWeek.MONDAY)
@@ -436,6 +434,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
             val localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
             !localDate.isBefore(startOfWeek) && !localDate.isAfter(endOfWeek)
         }
+
         return filteredDates
     }
 

@@ -11,7 +11,6 @@ import com.google.firebase.ktx.Firebase
 import com.paymaya.sdk.android.common.LogLevel
 import com.paymaya.sdk.android.common.PayMayaEnvironment
 import com.paymaya.sdk.android.common.exceptions.BadRequestException
-import com.paymaya.sdk.android.common.models.AmountDetails
 import com.paymaya.sdk.android.common.models.RedirectUrl
 import com.paymaya.sdk.android.common.models.TotalAmount
 import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMaya
@@ -49,13 +48,7 @@ class MayaConfirmPayment : AppCompatActivity() {
         .logLevel(LogLevel.ERROR)
         .build()
 
-    // For Pay With PayMaya API: Will redirect customers to these urls upon results of payment.
-    // Note: We are not using this but this needs to be here or else the API will have an error.
-    private val redirectUrl = RedirectUrl(
-        success = "http://success.com",
-        failure = "http://failure.com",
-        cancel = "http://cancel.com"
-    )
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,8 +57,6 @@ class MayaConfirmPayment : AppCompatActivity() {
 
         //initializes the navbar
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
-
-
         setText()
         payMaya()
         cancel()
@@ -102,9 +93,20 @@ class MayaConfirmPayment : AppCompatActivity() {
     }
 
     // For Pay With PayMaya API: This is where the payment request is built and payment details can be defined.
-    private fun buildSinglePaymentRequest(): SinglePaymentRequest {
+    /* private fun buildSinglePaymentRequest(): SinglePaymentRequest {
         val amount = BigDecimal(amount)
         val requestReferenceNumber = "0"
+
+        // For Pay With PayMaya API: Will redirect customers to these urls upon results of payment.
+        // Note: We are not using this but this needs to be here or else the API will have an error.
+        val redirectUrl = RedirectUrl(
+            success = "http://success.com",
+            failure = "http://failure.com",
+            cancel = "http://cancel.com"
+        )
+        val metadata = JSONObject()
+        metadata.put("customerName", "John Doe")
+        metadata.put("customerEmail", "johndoe@example.com")
         return SinglePaymentRequest(
             TotalAmount(
                 amount,
@@ -112,6 +114,26 @@ class MayaConfirmPayment : AppCompatActivity() {
                 AmountDetails()
             ),
             requestReferenceNumber,
+            redirectUrl,
+            metadata
+        )
+        *//*null as JSONObject?*//*
+    }*/
+    private fun buildSinglePaymentRequest(): SinglePaymentRequest {
+        val amount = BigDecimal(amount)
+        val currency = "PHP"
+        val redirectUrl = RedirectUrl(
+            success = "http://success.com",
+            failure = "http://failure.com",
+            cancel = "http://cancel.com"
+        )
+       /* val metadata = JSONObject()
+        metadata.put("customerName", "John Doe")
+        metadata.put("customerEmail", "johndoe@example.com")
+*/
+        return SinglePaymentRequest(
+            TotalAmount(amount, currency),
+            "123456789",
             redirectUrl,
             null as JSONObject?
         )
@@ -128,7 +150,6 @@ class MayaConfirmPayment : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         payWithPayMayaClient.onActivityResult(requestCode, resultCode, data)?.let {
-            Log.d("testt", "onCreate: $it")
             processCheckoutResult(it)
         }
     }
@@ -141,7 +162,7 @@ class MayaConfirmPayment : AppCompatActivity() {
                 val resultID: String = result.paymentId
                 Toast.makeText(this, "Payment Successful. Payment ID: $resultID", Toast.LENGTH_LONG)
                     .show()
-                Log.d("PayMaya-Jaj", resultID)
+                Log.d("PayMayaa", resultID)
                 adjustUserBalance()
                 addPayMayaTransaction()
             }
@@ -152,7 +173,7 @@ class MayaConfirmPayment : AppCompatActivity() {
                 Toast.makeText(this, "Payment Cancelled. Payment ID: $resultID", Toast.LENGTH_LONG)
                     .show()
                 if (resultID != null) {
-                    Log.d("PayMaya-Jaj", resultID)
+                    Log.d("PayMayaa", resultID)
                 }
             }
 
@@ -161,9 +182,11 @@ class MayaConfirmPayment : AppCompatActivity() {
                 val message =
                     "Failure, checkoutId: ${resultID}, exception: ${result.exception}"
                 if (result.exception is BadRequestException) {
-                    Log.d("PayMaya-Jaj", (result.exception as BadRequestException).error.toString())
+                    Log.d("PayMayaa", (result.exception as BadRequestException).error.toString())
                 }
                 Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                Log.d("PayMayaa", message)
+
             }
             else -> {}
         }
@@ -183,11 +206,9 @@ class MayaConfirmPayment : AppCompatActivity() {
             "phoneNumber" to phone
         )
         firestore.collection("Transactions").add(transaction).addOnSuccessListener {
-            val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
-            goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(goToPFM)
+            goToPFM()
         }
-        goToPFM()
+
     }
 
     private fun goToPFM() {
