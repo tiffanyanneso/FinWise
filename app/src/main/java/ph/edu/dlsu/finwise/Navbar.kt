@@ -35,7 +35,7 @@ class Navbar(bottomNavigationView: BottomNavigationView, appCon: Context, navIte
                 }
 
                 R.id.nav_assessment -> {
-                    val intent = Intent(appCon, FinancialAssessmentLandingPage::class.java)
+                    val intent = Intent(appCon, FinancialAssessmentActivity::class.java)
                     appCon.startActivity(intent)
                 }
 

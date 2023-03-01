@@ -125,7 +125,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
             .get().addOnSuccessListener { document ->
                val id = document.documents[0].id
                 var adjustedBalance = amount.toDouble()
-                if (transactionType == "expense")
+                if (transactionType == "Expense")
                     adjustedBalance = -abs(adjustedBalance)
 
                 firestore.collection("ChildWallet").document(id)

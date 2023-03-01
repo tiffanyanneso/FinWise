@@ -106,7 +106,7 @@
                 android:gravity="center_vertical" />
 
             <ProgressBar
-                android:id="@+id/progress_bar_specific"
+                android:id="@+id/progress_bar_goal_setting"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -116,7 +116,7 @@
                 android:max="5"/>
 
             <TextView
-                android:id="@+id/rating_specific"
+                android:id="@+id/rating_goal_setting"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -142,7 +142,7 @@
                 android:gravity="center_vertical" />
 
             <ProgressBar
-                android:id="@+id/progress_bar_measurable"
+                android:id="@+id/progress_bar_saving"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -152,7 +152,7 @@
                 android:max="5"/>
 
             <TextView
-                android:id="@+id/rating_measurable"
+                android:id="@+id/rating_saving"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -178,7 +178,7 @@
                 android:gravity="center_vertical" />
 
             <ProgressBar
-                android:id="@+id/progress_bar_achievable"
+                android:id="@+id/progress_bar_budgeting"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -188,7 +188,7 @@
                 android:max="5"/>
 
             <TextView
-                android:id="@+id/rating_achievable"
+                android:id="@+id/rating_budgeting"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -214,7 +214,7 @@
                 android:gravity="center_vertical" />
 
             <ProgressBar
-                android:id="@+id/progress_bar_relevant"
+                android:id="@+id/progress_bar_spending"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -224,7 +224,7 @@
                 android:max="5"/>
 
             <TextView
-                android:id="@+id/rating_relevant"
+                android:id="@+id/rating_spending"
                 android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
