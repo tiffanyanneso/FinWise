@@ -26,10 +26,13 @@ class ParentBudgetingFragment : Fragment() {
     var budgetingArrayList = ArrayList<FinancialActivities>()
     var goalFilterArrayList = ArrayList<GoalFilter>()
 
-
+    private lateinit var childID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var bundle = arguments
+        childID = bundle?.getString("childID").toString()
+
         goalIDArrayList.clear()
         budgetingArrayList.clear()
         getBudgeting()
@@ -49,7 +52,7 @@ class ParentBudgetingFragment : Fragment() {
 
     private fun getBudgeting() {
         //saving activities that are in progress means that there the goal is also in progress because they are connected
-        firestore.collection("FinancialActivities").whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+        firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             for (budgeting in results) {
                 var budgetingActivity = budgeting.toObject<FinancialActivities>()
                 budgetingArrayList.add(budgetingActivity)

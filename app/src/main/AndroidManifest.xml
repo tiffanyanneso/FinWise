@@ -22,6 +22,47 @@
             android:name=".ViewFriendsActivity"
             android:exported="false" />
         <activity
+            android:name=".parentFinancialActivitiesModule.CompletedEarningActivity"
+            android:exported="false" />
+        <activity
+            android:name=".parentFinancialActivitiesModule.EarningActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".parentFinancialActivitiesModule.NewEarningActivity"
+            android:exported="false" />
+        <activity
+            android:name=".personalFinancialManagementModule.GoalSavingDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".personalFinancialManagementModule.TrendDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ViewShoppingListItem"
+            android:exported="false" />
+        <activity
+            android:name=".financialActivitiesModule.SavingPerformanceActivity"
+            android:exported="true" />
+        <activity
+            android:name=".LeaderboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentViewAllQuestions"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".profileModule.FriendRequestActivity"
+            android:exported="true" />
+        <activity
+            android:name=".profileModule.AddFriendsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".profileModule.ViewFriendsActivity"
+            android:exported="true" />
+        <activity
             android:name=".financialActivitiesModule.ItemExpensesActivity"
             android:exported="false" />
         <activity
@@ -131,7 +172,8 @@
             android:exported="false" />
         <activity
             android:name=".TabbedActivityExample"
-            android:exported="true" />
+            android:exported="true" >
+        </activity>
         <activity
             android:name=".financialActivitiesModule.SpendingActivity"
             android:exported="true" />
@@ -169,6 +211,12 @@
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />
+        <activity>
+            android:name=".profileModule.ProfileActivity"
+            android:exported="true" >
+        </activity>
+
+
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity"
             android:exported="true" />
@@ -250,6 +298,11 @@
         <activity
             android:name=".loginRegisterModule.LoginActivity"
             android:exported="true" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="false">

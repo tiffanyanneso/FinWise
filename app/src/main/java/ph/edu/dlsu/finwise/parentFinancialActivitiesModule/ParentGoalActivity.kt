@@ -45,17 +45,10 @@ class ParentGoalActivity : AppCompatActivity() {
         var bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
         setChildName()
-        setGoalCount()
 
         var sendBundle = Bundle()
         sendBundle.putString("childID", childID)
 
-        binding.btnNewGoal.setOnClickListener {
-            var newGoal = Intent(this, ChildNewGoal::class.java)
-            newGoal.putExtras(sendBundle)
-            newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            this.startActivity(newGoal)
-        }
 
         binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
             when (menuItem.itemId) {
@@ -69,22 +62,6 @@ class ParentGoalActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
-        val adapter = ViewPagerAdapter(supportFragmentManager)
-        //checkSettings()
-
-        // TODO: change the fragments added based on parent approval
-        adapter.addFragment(ParentGoalSettingFragment(),"Goal Setting")
-        adapter.addFragment(ParentSavingFragment(),"Saving")
-        adapter.addFragment(ParentBudgetingFragment(),"Budgeting")
-        adapter.addFragment(ParentSavingFragment(),"Spending")
-        adapter.addFragment(ParentAchievedFragment(),"Achieved")
-        adapter.addFragment(ParentDisapprovedFragment(),"Disapproved")
-        sendDataToFragment()
-
-        binding.viewPager.adapter = adapter
-        binding.tabLayout.setupWithViewPager(binding.viewPager)
-        setupTabIcons()
     }
 
     private fun setupTabIcons() {
@@ -103,48 +80,44 @@ class ParentGoalActivity : AppCompatActivity() {
         }
     }
 
-    private fun setGoalCount() {
-        var ongoing = 0
-        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
-            for (goalSnapshot in results) {
-                var goal = goalSnapshot.toObject<FinancialGoals>()
-                if (goal?.status == "In Progress")
-                    ongoing++
-            }
-            binding.tvGoalsInProgress.text = ongoing.toString()
-        }
-    }
 
-    private fun sendDataToFragment() {
-        val mFragmentManager = supportFragmentManager
+    private fun initializeFragments() {
+
+        val adapter = ViewPagerAdapter(supportFragmentManager)
+        //checkSettings()
+
+        binding.viewPager.adapter = adapter
+        binding.tabLayout.setupWithViewPager(binding.viewPager)
+
         var fragmentBundle = Bundle()
         fragmentBundle.putString("childID", childID)
 
 
-        val inProgressFragmentTransaction = mFragmentManager.beginTransaction()
-        var inProgressFragment = ParentSavingFragment()
-        inProgressFragment.arguments = fragmentBundle
-        inProgressFragmentTransaction.add(binding.viewPager.id, inProgressFragment).commit()
+        var savingFragment = ParentSavingFragment()
+        savingFragment.arguments = fragmentBundle
 
-        val forReviewFragmentTransaction = mFragmentManager.beginTransaction()
-        var forReviewFragment = ParentBudgetingFragment()
-        forReviewFragment.arguments = fragmentBundle
-        forReviewFragmentTransaction.add(binding.viewPager.id, forReviewFragment).commit()
+        var budgetingFragment = ParentBudgetingFragment()
+        budgetingFragment.arguments = fragmentBundle
 
-        val forEditingFragmentTransaction = mFragmentManager.beginTransaction()
-        var forEditingFragment = ParentGoalSettingFragment()
-        forEditingFragment.arguments = fragmentBundle
-        forEditingFragmentTransaction.add(binding.viewPager.id, forEditingFragment).commit()
+        var goalSettingFragment = ParentGoalSettingFragment()
+        goalSettingFragment.arguments = fragmentBundle
 
-        val disapprovedFragmentTransaction = mFragmentManager.beginTransaction()
-        var disapprovedFragment = ParentDisapprovedFragment()
-        disapprovedFragment.arguments = fragmentBundle
-        disapprovedFragmentTransaction.add(binding.viewPager.id, disapprovedFragment).commit()
+        var spendingFragment = ParentSpendingFragment()
+        spendingFragment.arguments = fragmentBundle
 
-        val achievedFragmentTransaction = mFragmentManager.beginTransaction()
         var achievedFragment = ParentAchievedFragment()
         achievedFragment.arguments = fragmentBundle
-        achievedFragmentTransaction.add(binding.viewPager.id, achievedFragment).commit()
+
+        var disapprovedFragment = ParentDisapprovedFragment()
+        disapprovedFragment.arguments = fragmentBundle
+
+        adapter.addFragment(goalSettingFragment,"Goal Setting")
+        adapter.addFragment(savingFragment,"Saving")
+        adapter.addFragment(budgetingFragment,"Budgeting")
+        adapter.addFragment(spendingFragment,"Spending")
+        adapter.addFragment(achievedFragment,"Achieved")
+        adapter.addFragment(disapprovedFragment,"Disapproved")
+        setupTabIcons()
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){

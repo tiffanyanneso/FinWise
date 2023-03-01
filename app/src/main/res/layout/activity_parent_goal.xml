@@ -30,101 +30,6 @@
                 app:titleCentered="true" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <LinearLayout
-            android:id="@+id/linear_layout_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/topbar"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:paddingTop="20dp">
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_new_goal"
-                    android:layout_width="100dp"
-                    android:layout_height="40dp"
-                    android:text="@string/new_goal"
-                    android:textColor="@color/off_white"
-                    android:backgroundTint="@color/dark_green"
-                    android:background="@drawable/button_border"
-                    android:layout_gravity="right"/>
-            </LinearLayout>
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/linear_layout_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linear_layout_1"
-            android:layout_marginHorizontal="20dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/layout_bg_green"
-                android:padding="20dp"
-                android:layout_weight="1"
-                android:layout_marginRight="5dp">
-
-                <TextView
-                    android:id="@+id/tv_goals_in_progress"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="24dp"
-                    android:text="X"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16dp"
-                    android:text="IN\n PROGRESS"
-                    android:textAlignment="center"
-                    android:textAllCaps = "true"
-                    android:textColor="@color/black"
-                    android:layout_gravity="center"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/layout_bg_green"
-                android:padding="20dp"
-                android:layout_weight="1"
-                android:layout_marginLeft="5dp">
-
-                <TextView
-                    android:id="@+id/tv_goals_nearing_completion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="24dp"
-                    android:text="X"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:layout_gravity="center"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="16dp"
-                    android:text="NEARING \n COMPLETION"
-                    android:textAlignment="center"
-                    android:textAllCaps = "true"
-                    android:textColor="@color/black"
-                    android:layout_gravity="center"
-                    />
-            </LinearLayout>
-    </androidx.appcompat.widget.LinearLayoutCompat>
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
@@ -132,7 +37,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linear_layout_2"
+            app:layout_constraintTop_toBottomOf="@+id/topbar"
             app:tabGravity="fill"
             app:tabSelectedTextColor="@color/dark_green"
             app:tabIndicatorColor="@color/dark_green"

@@ -26,9 +26,12 @@ class ParentSpendingFragment : Fragment() {
     var budgetingArrayList = ArrayList<FinancialActivities>()
     var goalFilterArrayList = ArrayList<GoalFilter>()
 
+    private lateinit var childID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var bundle = arguments
+        childID = bundle?.getString("childID").toString()
         goalIDArrayList.clear()
         budgetingArrayList.clear()
         getSpending()
@@ -48,7 +51,8 @@ class ParentSpendingFragment : Fragment() {
 
     private fun getSpending() {
         //saving activities that are in progress means that there the goal is also in progress because they are connected
-        firestore.collection("FinancialActivities").whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+        firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+            println("print " + results.size())
             for (spending in results) {
                 var spendingActivity = spending.toObject<FinancialActivities>()
                 budgetingArrayList.add(spendingActivity)
@@ -60,11 +64,11 @@ class ParentSpendingFragment : Fragment() {
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        goalAdapter = ChildGoalAdapter(requireContext().applicationContext, goalIDArrayList)
-        binding.rvViewGoals.adapter = goalAdapter
-        binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
-            LinearLayoutManager.VERTICAL,
-            false)
+
         goalAdapter.notifyDataSetChanged()
+        spendingAdapter = FinactSpendingAdapter(requireContext().applicationContext, goalIDArrayList)
+        binding.rvViewGoals.adapter = spendingAdapter
+        binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
+        spendingAdapter.notifyDataSetChanged()
     }
 }
