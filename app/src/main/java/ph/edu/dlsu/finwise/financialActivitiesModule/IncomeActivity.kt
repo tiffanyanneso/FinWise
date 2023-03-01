@@ -19,6 +19,8 @@ class IncomeActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private lateinit var earningActivityID:String
+    private lateinit var savingActivityID:String
+    private lateinit var childID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,29 +29,29 @@ class IncomeActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         earningActivityID = bundle.getString("earningActivityID").toString()
+        savingActivityID = bundle.getString("savingActivityID").toString()
+        childID = bundle.getString("childID").toString()
 
-       getInfo()
+        getDetails()
 
         binding.btnCompleted.setOnClickListener {
-            completeEarningActivity()
+            var completedEarning = Intent(this, CompletedEarningActivity::class.java)
+            var bundle = Bundle()
+            bundle.putString("earningActivityID", earningActivityID)
+            bundle.putString("savingActivityID", savingActivityID)
+            bundle.putString("childID", childID)
+            completedEarning.putExtras(bundle)
+            startActivity(completedEarning)
         }
     }
 
-    private fun getInfo() {
+    private fun getDetails() {
         firestore.collection("EarningActivities").document(earningActivityID).get().addOnSuccessListener {
-            var earningActivity = it.toObject<EarningActivity>()
-            binding.tvActivity.text = earningActivity?.activityName
-            binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").parse(earningActivity?.targetDate!!.toDate().toString()).toString()
-            binding.tvDuration.text = earningActivity?.requiredTime.toString() + " minutes"
-            binding.tvAmount.text = DecimalFormat("#,##0.00").format(earningActivity?.amount)
+            var earning = it.toObject<ph.edu.dlsu.finwise.model.EarningActivity>()
+            binding.tvActivity.text = earning?.activityName
+            binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.targetDate!!.toDate()).toString()
+            binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
+            binding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
         }
-    }
-
-    private fun completeEarningActivity() {
-        var completeEarning = Intent(this, CompletedEarningActivity::class.java)
-        var bundle = Bundle()
-        bundle.putString("earningActivityID", earningActivityID)
-        completeEarning.putExtras(bundle)
-        startActivity(completeEarning)
     }
 }

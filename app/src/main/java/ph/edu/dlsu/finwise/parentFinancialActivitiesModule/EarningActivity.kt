@@ -35,9 +35,8 @@ class EarningActivity : AppCompatActivity() {
 
 
         checkUser()
-
-
         initializeFragments()
+
         binding.btnAddEarningActivity.setOnClickListener {
             var newEarning = Intent(this, NewEarningActivity::class.java)
             var sendBundle = Bundle()
@@ -52,6 +51,7 @@ class EarningActivity : AppCompatActivity() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
 
         var fragmentBundle = Bundle()
+        fragmentBundle.putString("childID", childID)
 
         var earningToDoFragment = EarningToDoFragment()
         earningToDoFragment.arguments = fragmentBundle
@@ -61,6 +61,7 @@ class EarningActivity : AppCompatActivity() {
 
         adapter.addFragment(earningToDoFragment,"To-Do")
         adapter.addFragment(earningCompletedFragment,"Completed")
+
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
     }

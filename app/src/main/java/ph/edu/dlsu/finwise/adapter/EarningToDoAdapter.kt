@@ -8,9 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.financialActivitiesModule.IncomeActivity
 import ph.edu.dlsu.finwise.databinding.ItemEarningBinding
+import ph.edu.dlsu.finwise.model.EarningActivity
+import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 
 class EarningToDoAdapter : RecyclerView.Adapter<EarningToDoAdapter.EarningToDoViewHolder> {
 
@@ -53,13 +57,25 @@ class EarningToDoAdapter : RecyclerView.Adapter<EarningToDoAdapter.EarningToDoVi
 
         fun bindItem(earningID: String) {
             itemBinding.tvEarningActivityId.text = earningID
+            firestore.collection("EarningActivities").document(earningID).get().addOnSuccessListener {
+                var earning = it.toObject<EarningActivity>()
+                itemBinding.tvActivity.text = earning?.activityName
+                itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
+                itemBinding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
+                itemBinding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.targetDate!!.toDate()).toString()
+                itemBinding.tvSavingActivityId.text = earning?.savingActivityID
+                itemBinding.tvChildId.text = earning?.childID
+            }
         }
 
         override fun onClick(p0: View?) {
             var income = Intent (context, IncomeActivity::class.java)
             var bundle = Bundle()
             bundle.putString("earningActivityID", itemBinding.tvEarningActivityId.text.toString())
+            bundle.putString("savingActivityID", itemBinding.tvSavingActivityId.text.toString())
+            bundle.putString("childID", itemBinding.tvChildId.text.toString())
             income.putExtras(bundle)
+            income.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(income)
         }
     }

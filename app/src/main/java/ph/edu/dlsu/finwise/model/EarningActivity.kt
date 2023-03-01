@@ -9,6 +9,7 @@ class EarningActivity (
     var amount:Float?=null,
     var childID:String?=null,
     var savingActivityID:String?=null,
-    var status:String?=null
+    var status:String?=null,
+    var dateCompleted: Timestamp?=null
         ) {
 }
