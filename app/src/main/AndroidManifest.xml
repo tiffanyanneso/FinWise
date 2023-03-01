@@ -22,10 +22,15 @@
             android:name=".CompletedEarningActivity"
             android:exported="false" />
         <activity
-            android:name=".EarningActivity"
+            android:name=".parentFinancialActivitiesModule.CompletedEarningActivity"
             android:exported="false" />
         <activity
-            android:name=".NewEarningActivity"
+            android:name=".parentFinancialActivitiesModule.EarningActivity"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".parentFinancialActivitiesModule.NewEarningActivity"
+            android:name=".EarningActivity"
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.GoalSavingDetailsActivity"
@@ -139,7 +144,8 @@
             android:exported="false" />
         <activity
             android:name=".TabbedActivityExample"
-            android:exported="true" />
+            android:exported="true" >
+        </activity>
         <activity
             android:name=".financialActivitiesModule.BudgetExpenseActivity"
             android:exported="false" />
@@ -172,16 +178,14 @@
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
             android:exported="true" />
         <activity
+        <activity>
             android:name=".profileModule.ProfileActivity"
             android:exported="true" >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
-
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
-
-
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity"
             android:exported="true">
@@ -286,12 +290,11 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-            android:exported="false">
-   <!--         <intent-filter>
+            android:exported="true" />
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"

@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EarningToDoFragment"
-    android:padding="20dp">
+    tools:context=".parentFinancialActivitiesModule.earningActivitiesFragments.EarningToDoFragment"
+    android:padding="20dp"
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_view_activities_to_do"

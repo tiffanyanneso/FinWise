@@ -45,10 +45,10 @@ class ParentGoalActivity : AppCompatActivity() {
         var bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
         setChildName()
-        setGoalCount()
 
         var sendBundle = Bundle()
         sendBundle.putString("childID", childID)
+
 
         binding.btnNewGoal.setOnClickListener {
             var newGoal = Intent(this, ChildNewGoal::class.java)
@@ -91,19 +91,11 @@ class ParentGoalActivity : AppCompatActivity() {
         }
     }
 
-    private fun setGoalCount() {
-        var ongoing = 0
-        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
-            for (goalSnapshot in results) {
-                var goal = goalSnapshot.toObject<FinancialGoals>()
-                if (goal?.status == "In Progress")
-                    ongoing++
-            }
-            binding.tvGoalsInProgress.text = ongoing.toString()
-        }
-    }
 
     private fun initializeFragments() {
+
+        val adapter = ViewPagerAdapter(supportFragmentManager)
+
         var fragmentBundle = Bundle()
         fragmentBundle.putString("childID", childID)
 
@@ -116,7 +108,7 @@ class ParentGoalActivity : AppCompatActivity() {
         var budgetingFragment = ParentBudgetingFragment()
         budgetingFragment.arguments = fragmentBundle
 
-        var spendingFragment = ParentBudgetingFragment()
+        var spendingFragment = ParentSpendingFragment()
         spendingFragment.arguments = fragmentBundle
 
         var achievedFragment = ParentAchievedFragment()
@@ -124,8 +116,6 @@ class ParentGoalActivity : AppCompatActivity() {
 
         var disapprovedFragment = ParentDisapprovedFragment()
         disapprovedFragment.arguments = fragmentBundle
-
-        val adapter = ViewPagerAdapter(supportFragmentManager)
 
         adapter.addFragment(goalSettingFragment,"Goal Setting")
         adapter.addFragment(savingFragment,"Saving")
@@ -136,6 +126,7 @@ class ParentGoalActivity : AppCompatActivity() {
 
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
+        
         setupTabIcons()
     }
 

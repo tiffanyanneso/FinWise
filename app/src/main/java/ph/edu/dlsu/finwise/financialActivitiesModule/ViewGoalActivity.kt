@@ -14,6 +14,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.GoalTransactionsActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import ph.edu.dlsu.finwise.EarningActivity
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
@@ -39,6 +41,7 @@ class ViewGoalActivity : AppCompatActivity() {
 
     private lateinit var financialGoalID:String
     private lateinit var source:String
+    private lateinit var childID:String
 
     private var savedAmount = 0.00F
     private var targetAmount = 0.00F
@@ -66,9 +69,11 @@ class ViewGoalActivity : AppCompatActivity() {
 
         var bundle: Bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
-        //checkUser()
-        setFinancialActivityID()
 
+
+        childID = bundle.getString("childID").toString()
+        checkUser()
+        setFinancialActivityID()
 
         var sendBundle = Bundle()
         sendBundle.putString("financialGoalID", financialGoalID)
@@ -107,15 +112,19 @@ class ViewGoalActivity : AppCompatActivity() {
             this.startActivity(goalWithdraw)
         }
 
+
         binding.btnChores.setOnClickListener {
             var goToChores = Intent(this, EarningActivity::class.java)
-            this.startActivity(goToChores)
+            sendBundle.putString("savingActivityID", savingActivityID)
+            sendBundle.putString("childID", childID)
+            goToChores.putExtras(sendBundle)
         }
 
         binding.tvViewAllEarning.setOnClickListener {
             var goToChores = Intent(this, EarningActivity::class.java)
             this.startActivity(goToChores)
         }
+
 
         binding.btnDeposit.setOnClickListener {
 //            bundle.putString("decisionMakingActivityID", decisionMakingActivityID)

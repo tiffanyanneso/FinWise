@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EarningActivity">
+    tools:context=".parentFinancialActivitiesModule.EarningActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/topbar"
@@ -27,7 +27,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_add"
+        android:id="@+id/btn_add_earning_activity"
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:text="+ Add"

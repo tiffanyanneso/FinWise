@@ -38,15 +38,10 @@ class ParentAchievedFragment : Fragment() {
 
     private fun getAchievedGoals() {
         var goalIDArrayList = ArrayList<String>()
-        var filter = "Achieved"
-
         goalIDArrayList.clear()
 
-        //TODO:change to get transactions of current user
-        //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        //firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->
 
-        firestore.collection("FinancialGoals").whereEqualTo("status", filter).get().addOnSuccessListener { documents ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "Achieved").get().addOnSuccessListener { documents ->
             for (goalSnapshot in documents) {
                 //creating the object from list retrieved in db
                 val goalID = goalSnapshot.id
@@ -59,9 +54,7 @@ class ParentAchievedFragment : Fragment() {
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
         goalAdapter = FinactSavingAdapter(requireContext().applicationContext, goalIDArrayList)
         binding.rvViewGoals.adapter = goalAdapter
-        binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
-            LinearLayoutManager.VERTICAL,
-            false)
+        binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
         goalAdapter.notifyDataSetChanged()
     }
 }

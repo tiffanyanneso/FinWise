@@ -1,14 +1,18 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -17,13 +21,12 @@ import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.BudgetExpenseAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetExpenseBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.budgetExpenseFragments.BudgetExpenseFragment
+import ph.edu.dlsu.finwise.databinding.DialogNewShoppingListItemBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.budgetExpenseFragments.BudgetExpenseListFragment
 import ph.edu.dlsu.finwise.financialActivitiesModule.budgetExpenseFragments.BudgetShoppingListFragment
-import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.GoalSettingFragment
-import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.SavingFragment
 import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.BudgetItem
-import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.ShoppingList
 import java.text.DecimalFormat
 import kotlin.collections.ArrayList
 
@@ -58,12 +61,59 @@ class BudgetExpenseActivity : AppCompatActivity() {
         bundle = intent.extras!!
         budgetActivityID = bundle.getString("budgetActivityID").toString()
         budgetItemID = bundle.getString("budgetItemID").toString()
-        bundle.putString("source", "viewGoal")
         spendingActivityID = bundle.getString("spendingActivityID").toString()
-        getInfo()
 
+        firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
+            var activity = it.toObject<FinancialActivities>()
+            if (activity?.status == "Completed")
+                binding.btnRecordExpense.visibility = View.GONE
+        }
+        //checkUser()
+        bundle.putString("source", "viewGoal")
+        getInfo()
+        initializeFragments()
+
+
+
+        binding.tvViewAll.setOnClickListener {
+            var goToGoalTransactions = Intent(this, GoalTransactionsActivity::class.java)
+            goToGoalTransactions.putExtras(bundle)
+            this.startActivity(goToGoalTransactions)
+        }
+        //TODO: these buttons will be moved back to fragments
+        binding.btnRecordExpense.setOnClickListener {
+            var recordExpense = Intent (this, FinancialActivityRecordExpense::class.java)
+            var bundle = Bundle()
+            bundle.putString("budgetActivityID", budgetActivityID)
+            bundle.putString("budgetItemID", budgetItemID)
+            bundle.putFloat("remainingBudget", remainingBudget)
+            recordExpense.putExtras(bundle)
+            startActivity(recordExpense)
+        }
+
+        binding.btnAddShoppingListItem.setOnClickListener {
+            var dialogBinding= DialogNewShoppingListItemBinding.inflate(getLayoutInflater())
+            var dialog= Dialog(this);
+            dialog.setContentView(dialogBinding.getRoot())
+
+            dialog.window!!.setLayout(850, 900)
+
+            dialogBinding.btnSave.setOnClickListener {
+                var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+                var shoppingListItem = ShoppingList(dialogBinding.etShoppingListItemName.text.toString(), budgetItemID, currentUser, false, spendingActivityID)
+                firestore.collection("ShoppingListItem").add(shoppingListItem).addOnSuccessListener {
+                    dialog.dismiss()
+                }
+            }
+
+            dialogBinding.btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
 
         //checkUser()
+
 
 //        binding.btnRecordExpense.setOnClickListener {
 //            var recordExpense = Intent (this, FinancialActivityRecordExpense::class.java)
@@ -125,26 +175,35 @@ class BudgetExpenseActivity : AppCompatActivity() {
         }.continueWith { initializeFragments() }
     }
 
+
+    private fun checkUser() {
+        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+            //current user is parent
+            if (it.exists()) {
+                binding.btnRecordExpense.visibility = View.GONE
+            }
     private fun initializeFragments() {
+        val adapter = ViewPagerAdapter(supportFragmentManager)
+
         var fragmentBundle = Bundle()
         fragmentBundle.putString("budgetActivityID", budgetActivityID)
         fragmentBundle.putString("budgetItemID", budgetItemID)
-        //fragmentBundle.putString("budgetCategoryID", budgetCategoryID)
         fragmentBundle.putString("spendingActivityID", spendingActivityID)
         fragmentBundle.putFloat("remainingBudget", remainingBudget)
-        val adapter = FinancialActivity.ViewPagerAdapter(supportFragmentManager)
 
-        var shoppingListFragment = BudgetShoppingListFragment()
-        shoppingListFragment.arguments = fragmentBundle
+        var budgetShoppingListFragment = BudgetShoppingListFragment()
+        budgetShoppingListFragment.arguments = fragmentBundle
 
-        var budgetExpenseFragment = BudgetExpenseFragment()
+        var budgetExpenseFragment = BudgetExpenseListFragment()
         budgetExpenseFragment.arguments = fragmentBundle
 
-        adapter.addFragment(shoppingListFragment,"Shopping List")
-        adapter.addFragment(budgetExpenseFragment,"Expenses")
 
+        adapter.addFragment(budgetShoppingListFragment,"Shopping List")
+        adapter.addFragment(budgetExpenseFragment,"Expenses")
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
+        adapter.notifyDataSetChanged()
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){
