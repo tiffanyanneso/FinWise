@@ -299,6 +299,12 @@
                     </LinearLayout>
                 </LinearLayout>
 
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/div_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"/>
+
                 <LinearLayout
                     android:id="@+id/linear_layout_1"
                     android:layout_width="match_parent"
