@@ -3,11 +3,13 @@ package ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.NewChoicesAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertAddNewQuestionsBinding
 import ph.edu.dlsu.finwise.databinding.DialogueAddNewChoiceBinding
@@ -34,11 +36,21 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
         var bundle = intent.extras!!
         assessmentID = bundle.getString("assessmentID").toString()
 
-        newChoicesAdapter = NewChoicesAdapter(this, choicesArrayList)
+        newChoicesAdapter = NewChoicesAdapter(this, choicesArrayList, object:NewChoicesAdapter.EditChoice{
+            override fun editChoice(position: Int, choice: String, isCorrect: Boolean) {
+                editChoiceDialog(position, choice, isCorrect)
+            }
+
+        })
         binding.rvViewChoice.adapter = newChoicesAdapter
         binding.rvViewChoice.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+        // for the dropdown
+        val items = resources.getStringArray(R.array.assessment_question_difficulty)
+        val adapter = ArrayAdapter(this, R.layout.list_item, items)
+        binding.dropdownDifficulty.setAdapter(adapter)
 
         binding.btnAddNewChoices.setOnClickListener {
+            //TODO: ADD ALERT IF THERE ARE ALREADY 4 CHOICES
             addNewChoice()
         }
 
@@ -50,21 +62,22 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
 
     private fun saveQuestionAndChoices() {
         //TODO: updatefin lit expert user ID
-        var question = binding.etQuestion.text.toString()
         var questionObject = hashMapOf(
              "assessmentID" to assessmentID,
-             "question" to question,
+             "question" to binding.etQuestion.text.toString(),
+             "difficulty" to binding.dropdownDifficulty.text.toString(),
              "answerAccuracy" to 0.00F,
              "dateCreated" to Timestamp.now(),
              "dateModified" to Timestamp.now(),
              "createdBy" to "fintlitexpertID",
              "modifiedBy" to "finlitepxertID",
-             "isUsed" to true
+             "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
         )
         firestore.collection("AssessmentQuestions").add(questionObject).addOnSuccessListener {
             var questionID = it.id
 
-            //TODO: update how to check if the choice is the correct answer
             for (choiceItem in choicesArrayList)  {
                 var choiceObject = hashMapOf(
                     "questionID" to questionID,
@@ -96,6 +109,27 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
 
         dialogBinding.btnCancel.setOnClickListener {
                 dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun editChoiceDialog(position:Int, choice:String, isCorrect:Boolean) {
+        var dialogBinding= DialogueAddNewChoiceBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+        dialogBinding.dialogEtNewChoice.setText(choice)
+        dialogBinding.cbCorrect.isChecked = isCorrect
+
+        dialog.window!!.setLayout(800, 1000)
+
+        dialogBinding.btnSave.setOnClickListener {
+            choicesArrayList.set(position, Choice(dialogBinding.dialogEtNewChoice.text.toString(), dialogBinding.cbCorrect.isChecked))
+            newChoicesAdapter.notifyDataSetChanged()
+            dialog.dismiss()
+        }
+
+        dialogBinding.btnCancel.setOnClickListener {
+            dialog.dismiss()
         }
         dialog.show()
     }

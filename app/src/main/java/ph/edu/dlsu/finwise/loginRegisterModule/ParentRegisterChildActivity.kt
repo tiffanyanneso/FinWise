@@ -6,6 +6,7 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -36,6 +37,7 @@ class ParentRegisterChildActivity : AppCompatActivity() {
 
         save()
         setCancel()
+        loadBackButton()
     }
 
     private fun save() {
@@ -116,13 +118,11 @@ class ParentRegisterChildActivity : AppCompatActivity() {
             "lastUpdated" to time
         )
 
-        firestore.collection("ChildWallet").add(wallet).addOnSuccessListener {
-
-        }
+        firestore.collection("ChildWallet").add(wallet)
     }
 
     private fun createGoalSettings(parentID:String, childID:String) {
-        var settings = GoalSettings(parentID, childID, false, false, false)
+        var settings = GoalSettings(parentID, childID, false, false)
         firestore.collection("GoalSettings").add(settings)
     }
 
@@ -212,8 +212,16 @@ class ParentRegisterChildActivity : AppCompatActivity() {
 
     private fun setCancel() {
         binding.btnCancel.setOnClickListener {
-            val goToParentRegiser = Intent(this, ParentRegisterActivity::class.java)
-            startActivity(goToParentRegiser)
+            val goToParentLandingPage = Intent(this, ParentLandingPageActivity::class.java)
+            startActivity(goToParentLandingPage)
+        }
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToParentLandingPage = Intent(applicationContext, ParentLandingPageActivity::class.java)
+            startActivity(goToParentLandingPage)
         }
     }
 }

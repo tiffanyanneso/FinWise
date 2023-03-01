@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".financialActivitiesModule.ConfirmWithdraw"
+    tools:context=".financialActivitiesModule.FinancialActivityConfirmWithdraw"
     android:background="@color/very_light_green">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -54,7 +54,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:src="@drawable/baseline_wallet_24"
-            app:tint="@color/yellow"
+            app:tint="@color/light_green"
             android:layout_gravity="center"/>
 
         <LinearLayout
@@ -127,7 +127,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -150,6 +151,64 @@
                 android:textColor="@color/black"
                 />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="Updated Wallet Balance"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                />
+
+            <TextView
+                android:id="@+id/tv_wallet_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Wallet Balance"
+                android:textSize="16sp"
+                android:gravity="end"
+                android:textColor="@color/black"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="Remaining Goal Savings"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                />
+
+            <TextView
+                android:id="@+id/tv_updated_goal_savings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Remaining Savings"
+                android:textSize="16sp"
+                android:gravity="end"
+                android:textColor="@color/black"
+                />
+        </LinearLayout>
+
+
     </LinearLayout>
 
 <!--    <LinearLayout-->
@@ -249,7 +308,6 @@
             android:background="@drawable/button_border_grey"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-
             />
 
         <androidx.appcompat.widget.AppCompatButton

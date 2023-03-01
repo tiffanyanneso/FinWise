@@ -1,29 +1,24 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.app.Dialog
-import android.app.appsearch.AppSearchSchema.BooleanPropertyConfig
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-<<<<<<< Updated upstream
 import ph.edu.dlsu.finwise.GoalTransactionsActivity
-=======
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
->>>>>>> Stashed changes
+import ph.edu.dlsu.finwise.EarningActivity
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
-import ph.edu.dlsu.finwise.adapter.GoalDecisionMakingActivitiesAdapter
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.databinding.DialogFinishSavingBinding
@@ -43,8 +38,6 @@ class ViewGoalActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityViewGoalBinding
     private var firestore = Firebase.firestore
-
-    private lateinit var decisionMakingActivitiesAdapater: GoalDecisionMakingActivitiesAdapter
 
     private lateinit var financialGoalID:String
     private lateinit var source:String
@@ -76,16 +69,11 @@ class ViewGoalActivity : AppCompatActivity() {
 
         var bundle: Bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
-<<<<<<< Updated upstream
-        println("print "  + financialGoalID)
 
-        //checkUser()
-=======
+
         childID = bundle.getString("childID").toString()
         checkUser()
->>>>>>> Stashed changes
         setFinancialActivityID()
-
 
         var sendBundle = Bundle()
         sendBundle.putString("financialGoalID", financialGoalID)
@@ -99,6 +87,14 @@ class ViewGoalActivity : AppCompatActivity() {
 
         binding.tvViewAll.setOnClickListener {
             var goToGoalTransactions = Intent(this, GoalTransactionsActivity::class.java)
+            sendBundle.putString("savingActivityID", savingActivityID)
+            goToGoalTransactions.putExtras(sendBundle)
+            this.startActivity(goToGoalTransactions)
+        }
+
+        binding.btnViewTransactions.setOnClickListener {
+            var goToGoalTransactions = Intent(this, GoalTransactionsActivity::class.java)
+            sendBundle.putString("savingActivityID", savingActivityID)
             goToGoalTransactions.putExtras(sendBundle)
             this.startActivity(goToGoalTransactions)
         }
@@ -109,19 +105,19 @@ class ViewGoalActivity : AppCompatActivity() {
 //            bundle.putFloat("currentAmount", currentAmount)
 //            bundle.putFloat("targetAmount", targetAmount)
             var goalWithdraw = Intent(this, WithdrawActivity::class.java)
+            sendBundle.putFloat("savedAmount", savedAmount)
             sendBundle.putString("savingActivityID", savingActivityID)
+            sendBundle.putInt("progress", binding.progressBar.progress)
             goalWithdraw.putExtras(sendBundle)
             this.startActivity(goalWithdraw)
         }
 
-<<<<<<< Updated upstream
-=======
+
         binding.btnChores.setOnClickListener {
             var goToChores = Intent(this, EarningActivity::class.java)
             sendBundle.putString("savingActivityID", savingActivityID)
             sendBundle.putString("childID", childID)
             goToChores.putExtras(sendBundle)
-            this.startActivity(goToChores)
         }
 
         binding.tvViewAllEarning.setOnClickListener {
@@ -129,14 +125,16 @@ class ViewGoalActivity : AppCompatActivity() {
             this.startActivity(goToChores)
         }
 
->>>>>>> Stashed changes
+
         binding.btnDeposit.setOnClickListener {
 //            bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
 //            bundle.putInt("progress", progress.toInt())
 //            bundle.putFloat("currentAmount", currentAmount)
 //            bundle.putFloat("targetAmount", targetAmount)
             var goalDeposit = Intent(this, FinancialActivityGoalDeposit::class.java)
+            sendBundle.putFloat("savedAmount", savedAmount)
             sendBundle.putString("savingActivityID", savingActivityID)
+            sendBundle.putInt("progress", binding.progressBar.progress)
             goalDeposit.putExtras(sendBundle)
             this.startActivity(goalDeposit)
         }
@@ -166,12 +164,12 @@ class ViewGoalActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
             }
-
         }
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             val goToFinancialActivities = Intent(applicationContext, FinancialActivity::class.java)
+
             this.startActivity(goToFinancialActivities)
         }
     }
@@ -181,20 +179,24 @@ class ViewGoalActivity : AppCompatActivity() {
         firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
             for (finActivity in results) {
                 var activityObject = finActivity.toObject<FinancialActivities>()
-                if (activityObject.financialActivityName == "Saving")
+                if (activityObject.financialActivityName == "Saving") {
                     savingActivityID = finActivity.id
+                    if (activityObject.status == "Completed")
+                        binding.btnEditGoal.visibility = View.GONE
+                }
                 if (activityObject.financialActivityName == "Budgeting")
                     budgetingActivityID = finActivity.id
                 if (activityObject.financialActivityName == "Spending")
                     spendingActivityID = finActivity.id
             }
-        }.continueWith { getSavedAmount() }
+        }.continueWith {
+            getTransactions() }
     }
 
     private class TransactionFilter(var transactionID:String?=null, var date: Date?=null)
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getSavedAmount() {
+    private fun getTransactions() {
         var transactionFilterArrayList = ArrayList<TransactionFilter>()
         firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->
             for (transaction in results) {
@@ -223,10 +225,10 @@ class ViewGoalActivity : AppCompatActivity() {
                     binding.tvActivityName.text = goal?.financialActivity.toString()
                     targetAmount = goal?.targetAmount!!.toFloat()
 
-                    var formatSaved = DecimalFormat("#,##0.00").format(savedAmount)
+                    var formatSaved = DecimalFormat("#,##0.00").format(goal?.currentSavings)
                     var formatTarget = DecimalFormat("#,##0.00").format(goal?.targetAmount)
                     binding.tvGoalProgress.text = "₱$formatSaved / " + "₱ $formatTarget"
-                    var progress = (savedAmount/ goal?.targetAmount!! * 100).toInt()
+                    var progress = (goal?.currentSavings!! / goal?.targetAmount!! * 100).toInt()
                     if (progress< 100)
                         binding.progressBar.progress = progress
                     else
@@ -241,11 +243,14 @@ class ViewGoalActivity : AppCompatActivity() {
                     val from = LocalDate.now()
                     val date =  SimpleDateFormat("MM/dd/yyyy").format(goal.targetDate?.toDate())
                     val to = LocalDate.parse(date.toString(), dateFormatter)
+
                     var difference = Period.between(from, to)
                     binding.tvRemaining.text = difference.days.toString() + " days remaining"
+
+                    binding.tvCurrentBalance.text = "Available balance: ₱ " + DecimalFormat("#,##0.00").format(goal?.currentSavings)
                 }
-            }.continueWith {
-                deductExpenses() }
+            }
+                //deductExpenses() }
         }
     }
 
@@ -267,12 +272,29 @@ class ViewGoalActivity : AppCompatActivity() {
         }
     }
 
+
     private fun checkUser() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
             //current user is parent
             if (it.exists()) {
-                binding.layoutBtnDepositWithdraw.visibility = View.GONE
+//                binding.layoutBtnDepositWithdraw.visibility = View.GONE
+                binding.btnWithdraw.isEnabled = false
+                binding.btnWithdraw.isClickable = false
+                binding.btnWithdraw.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_grey)))
+
+                binding.btnDeposit.isEnabled = false
+                binding.btnDeposit.isClickable = false
+                binding.btnDeposit.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_grey)))
+            }
+            else {
+                binding.btnWithdraw.isEnabled = true
+                binding.btnWithdraw.isClickable = true
+                binding.btnWithdraw.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_green)))
+
+                binding.btnDeposit.isEnabled = true
+                binding.btnDeposit.isClickable = true
+                binding.btnDeposit.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_green)))
             }
         }
     }

@@ -18,11 +18,13 @@ class NewChoicesAdapter : RecyclerView.Adapter<NewChoicesAdapter.ChoicesViewHold
     private var context: Context
 
     private var firestore = Firebase.firestore
+    private var editChoice:EditChoice
 
 
-    constructor(context: Context, choicesArrayList:ArrayList<FinlitExpertAddNewQuestionsActivity.Choice>) {
+    constructor(context: Context, choicesArrayList:ArrayList<FinlitExpertAddNewQuestionsActivity.Choice>, editChoice:EditChoice) {
         this.context = context
         this.choicesArrayList = choicesArrayList
+        this.editChoice = editChoice
     }
 
     override fun getItemCount(): Int {
@@ -57,16 +59,27 @@ class NewChoicesAdapter : RecyclerView.Adapter<NewChoicesAdapter.ChoicesViewHold
 
         fun bindChoice(choice: FinlitExpertAddNewQuestionsActivity.Choice){
             itemBinding.tvChoice.text = choice.choice
-            if(choice.correct == true)
+            if(choice.correct == true) {
+                itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.light_green))
+                itemBinding.imgCorrectAnswer.visibility = View.VISIBLE
+            }
+            else if (choice.correct == false) {
                 itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.very_light_green))
-            else if (choice.correct == false)
-                itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.cream))
+                itemBinding.imgCorrectAnswer.visibility = View.GONE
+            }
 
+            itemBinding.btnEdit.setOnClickListener {
+                editChoice.editChoice(position, choice.choice.toString(), choice?.correct!!)
+            }
             //itemBinding.switchSetChoices.isChecked = choice.correct!!
         }
 
         override fun onClick(p0: View?) {
 
         }
+    }
+
+    interface EditChoice {
+        fun editChoice(position:Int, choice:String, isCorrect:Boolean)
     }
 }

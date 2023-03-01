@@ -9,11 +9,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
+import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentParentSavingBinding
-import ph.edu.dlsu.finwise.databinding.FragmentSavingBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
-import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -21,7 +19,7 @@ class ParentSavingFragment : Fragment() {
 
     private lateinit var binding: FragmentParentSavingBinding
     private var firestore = Firebase.firestore
-    private lateinit var goalAdapter: ChildGoalAdapter
+    private lateinit var savingAdapter: FinactSavingAdapter
 
     var goalIDArrayList = ArrayList<String>()
     var savingsArrayList = ArrayList<FinancialActivities>()
@@ -50,7 +48,6 @@ class ParentSavingFragment : Fragment() {
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){ }
 
     private fun getSaving() {
-
         goalIDArrayList.clear()
         firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             for (saving in results) {
@@ -64,11 +61,11 @@ class ParentSavingFragment : Fragment() {
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        goalAdapter = ChildGoalAdapter(requireContext().applicationContext, goalIDArrayList)
-        binding.rvViewGoals.adapter = goalAdapter
+        savingAdapter = FinactSavingAdapter(requireContext().applicationContext, goalIDArrayList)
+        binding.rvViewGoals.adapter = savingAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
             LinearLayoutManager.VERTICAL,
             false)
-        goalAdapter.notifyDataSetChanged()
+        savingAdapter.notifyDataSetChanged()
     }
 }

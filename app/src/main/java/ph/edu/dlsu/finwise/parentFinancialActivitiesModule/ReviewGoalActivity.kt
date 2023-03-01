@@ -33,24 +33,24 @@ class ReviewGoalActivity : AppCompatActivity() {
         //financialGoalID = bundle.getString("goalID").toString()
         //childID = bundle.getString("childID").toString()
 
-        financialGoalID = "dvHY1WX75XvdnzIWmM7W"
+        financialGoalID = "3zMUAMKrYKy9nvEc3IhJ"
 
         getGoalDetails()
 
         // for the dropdown
         val items = resources.getStringArray(R.array.goal_status_list)
-        val adapter = ArrayAdapter(this, R.layout.activity_review_goal, items)
+        val adapter = ArrayAdapter(this, R.layout.list_item, items)
         binding.dropdownStatus.setAdapter(adapter)
 
         binding.btnSubmit.setOnClickListener {
             submitGoalRating()
         }
 
-        /*binding.ratingBarSpecific.setOnRatingBarChangeListener { }
-        binding.ratingBarMeasurable.setOnClickListener { updateOverallRating() }
-        binding.ratingBarAchievable.setOnClickListener { updateOverallRating() }
-        binding.ratingBarRelevant.setOnClickListener { updateOverallRating() }
-        binding.ratingBarTimeBound.setOnClickListener { updateOverallRating() }*/
+        binding.ratingBarSpecific.setOnRatingBarChangeListener { ratingBar, rating, fromUser -> updateOverallRating() }
+        binding.ratingBarMeasurable.setOnRatingBarChangeListener { ratingBar, rating, fromUser -> updateOverallRating() }
+        binding.ratingBarAchievable.setOnRatingBarChangeListener { ratingBar, rating, fromUser -> updateOverallRating() }
+        binding.ratingBarRelevant.setOnRatingBarChangeListener { ratingBar, rating, fromUser -> updateOverallRating() }
+        binding.ratingBarTimeBound.setOnRatingBarChangeListener { ratingBar, rating, fromUser -> updateOverallRating() }
     }
 
     private fun getGoalDetails() {
@@ -64,7 +64,6 @@ class ReviewGoalActivity : AppCompatActivity() {
     }
 
     private fun updateOverallRating() {
-        println("print update")
         var overall = 0.00F
         var specific = binding.ratingBarSpecific.rating
         var measurable = binding.ratingBarMeasurable.rating
@@ -73,7 +72,7 @@ class ReviewGoalActivity : AppCompatActivity() {
         var timeBound = binding.ratingBarTimeBound.rating
 
         overall = (specific + measurable + achievable + relevant + timeBound) /5
-        binding.tvOverallRating.text = "$overall / 5"
+        binding.tvOverallRating.text = "$overall / 5.0"
     }
 
     private fun submitGoalRating() {

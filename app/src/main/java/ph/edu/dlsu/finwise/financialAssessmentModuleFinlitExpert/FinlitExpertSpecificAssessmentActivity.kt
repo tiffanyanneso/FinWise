@@ -36,16 +36,9 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
          assessmentID = bundle.getString("assessmentID").toString()
 
 
-        //setting fragments
-        val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(AssessmentDetailsFragment(),"Details")
-        adapter.addFragment(AssessmentQuestionsFragment(),"Questions")
-        setupTabIcons()
-        sendDataToFragment()
 
-        binding.viewPager.adapter = adapter
-        binding.tabLayout.setupWithViewPager(binding.viewPager)
-        //end of setting fragments
+        initializeFragments()
+
 
         // Hides actionbar,
         // and initializes the navbar
@@ -60,20 +53,24 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
         binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
     }
 
-    private fun sendDataToFragment() {
-        val mFragmentManager = supportFragmentManager
+    private fun initializeFragments() {
+        val adapter = ViewPagerAdapter(supportFragmentManager)
+
         var fragmentBundle = Bundle()
         fragmentBundle.putString("assessmentID", assessmentID)
 
-        val assessmentDetailsFragmentTransaction = mFragmentManager.beginTransaction()
         var assessmentDetailsFragment = AssessmentDetailsFragment()
         assessmentDetailsFragment.arguments = fragmentBundle
-        assessmentDetailsFragmentTransaction.add(binding.viewPager.id, assessmentDetailsFragment).commit()
 
-        var assessmentQuestionsFragmentTransaction = mFragmentManager.beginTransaction()
         var assessmentQuestionsFragment = AssessmentQuestionsFragment()
         assessmentQuestionsFragment.arguments = fragmentBundle
-        assessmentQuestionsFragmentTransaction.add(binding.viewPager.id, assessmentQuestionsFragment).commit()
+
+        adapter.addFragment(assessmentDetailsFragment,"Details")
+        adapter.addFragment(assessmentQuestionsFragment,"Questions")
+        setupTabIcons()
+
+        binding.viewPager.adapter = adapter
+        binding.tabLayout.setupWithViewPager(binding.viewPager)
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){

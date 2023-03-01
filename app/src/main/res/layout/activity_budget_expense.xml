@@ -29,16 +29,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-<<<<<<< Updated upstream
         android:padding="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/topbar">
-=======
         app:layout_constraintTop_toBottomOf="@+id/topbar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
->>>>>>> Stashed changes
 
         <ScrollView
             android:layout_width="match_parent"
@@ -47,8 +43,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="50dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/tv_budget_item_name"
@@ -58,14 +53,17 @@
                     android:text="Item"
                     android:textStyle="bold"
                     android:layout_marginBottom="10dp"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="20dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="20dp"
-                    android:background="@drawable/layout_bg_green">
+                    android:background="@drawable/layout_bg_green"
+                    android:layout_marginHorizontal="20dp">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -94,9 +92,8 @@
                     </LinearLayout>
                 </LinearLayout>
 
+
                 <androidx.appcompat.widget.AppCompatButton
-<<<<<<< Updated upstream
-=======
                     android:id="@+id/btn_add_shopping_list_item"
                     android:layout_width="100dp"
                     android:layout_height="40dp"
@@ -109,7 +106,6 @@
 
 
                 <androidx.appcompat.widget.AppCompatButton
->>>>>>> Stashed changes
                     android:id="@+id/btn_record_expense"
                     android:layout_width="100dp"
                     android:layout_height="40dp"
@@ -119,7 +115,6 @@
                     android:backgroundTint="@color/dark_green"
                     android:background="@drawable/button_border"
                     android:layout_gravity="right"/>
-<<<<<<< Updated upstream
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -147,31 +142,22 @@
                         android:layout_weight="1"/>
                 </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_view_items"
-=======
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     app:tabGravity="fill"
+                    app:tabSelectedTextColor="@color/dark_green"
                     app:tabIndicatorColor="@color/dark_green"
                     app:tabMode="scrollable"
-                    app:tabSelectedTextColor="@color/dark_green" />
+                    android:layout_marginTop="20dp"/>
 
                 <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/view_pager"
->>>>>>> Stashed changes
+                    android:id="@+id/viewPager"
                     android:layout_width="match_parent"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="50dp"
                     android:layout_height="0dp"
-<<<<<<< Updated upstream
                     android:layout_weight="8"
                     tools:listitem="@layout/item_budget_expense"/>
-=======
-                    />
 
 <!--                <com.google.android.material.tabs.TabLayout-->
 <!--                    android:id="@+id/tabLayout"-->
@@ -188,7 +174,7 @@
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="0dp"-->
 <!--                    android:layout_marginBottom="70dp"/>-->
->>>>>>> Stashed changes
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

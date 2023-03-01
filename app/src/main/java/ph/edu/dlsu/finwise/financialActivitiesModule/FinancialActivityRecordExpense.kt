@@ -46,7 +46,7 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         budgetActivityID = bundle.getString("budgetActivityID").toString()
         budgetItemID = bundle.getString("budgetItemID").toString()
-        binding.tvRemainingBudget.text = "You currently have ₱${DecimalFormat("###0.00").format(bundle.getFloat("remainingBudget"))} left in budget"
+        binding.tvRemainingBudget.text = "You currently have ₱${DecimalFormat("#,##0.00").format(bundle.getFloat("remainingBudget"))} left in budget"
 
 
         binding.etTransactionDate.setOnClickListener{
@@ -82,6 +82,7 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
         dialog.window!!.setLayout(1000, 1200)
 
         var calendar = dialog.findViewById<DatePicker>(ph.edu.dlsu.finwise.R.id.et_date)
+        calendar.maxDate = System.currentTimeMillis()
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
             binding.etTransactionDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())

@@ -19,7 +19,6 @@ import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMayaResult
 import com.paymaya.sdk.android.paywithpaymaya.SinglePaymentResult
 import com.paymaya.sdk.android.paywithpaymaya.models.SinglePaymentRequest
 import org.json.JSONObject
-import ph.edu.dlsu.finwise.MayaSuccessfulPayment
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityMayaQrConfirmPaymentBinding
@@ -36,6 +35,7 @@ class MayaConfirmPayment : AppCompatActivity() {
     lateinit var category : String
     lateinit var amount : String
     lateinit var merchant : String
+    var balance = 0.00f
     lateinit var phone : String
     lateinit var date : String
 
@@ -77,11 +77,12 @@ class MayaConfirmPayment : AppCompatActivity() {
         category = bundle!!.getString("category").toString()
         merchant = bundle!!.getString("merchant").toString()
         amount = bundle!!.getFloat("amount").toString()
+        balance = bundle!!.getFloat("balance")
         phone = bundle!!.getString("phone").toString()
         date = bundle!!.getSerializable("date").toString()
 
         val dec = DecimalFormat("#,###.00")
-        var textAmount = dec.format(bundle!!.getFloat("amount"))
+        val textAmount = dec.format(bundle!!.getFloat("amount"))
 
         binding.tvExpenseAmount.text = "₱$textAmount"
         binding.tvName.text = name
@@ -93,6 +94,10 @@ class MayaConfirmPayment : AppCompatActivity() {
         val dateSerializable = bundle!!.getSerializable("date")
         val dateText = formatter.format(dateSerializable).toString()
         binding.tvDate.text = dateText
+
+        binding.tvWalletBalance.text = "₱ " +
+                DecimalFormat("#,##0.00")
+                    .format(balance - amount.toFloat())
 
     }
 

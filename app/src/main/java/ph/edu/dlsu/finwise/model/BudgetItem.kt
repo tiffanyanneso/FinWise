@@ -9,5 +9,6 @@ class BudgetItem (
     //var date:Timestamp?=null,
     //number of times the budget was updated
     var nUpdate: Int?=null,
-    var status:String?=null) {
+    var status:String?=null,
+    var createdBy:String?=null) {
 }

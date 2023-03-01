@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -13,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialConfirmDepositBinding
+import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
@@ -35,6 +37,10 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
     private lateinit var financialGoalID:String
     private lateinit var savingActivityID:String
 
+    private lateinit var bundle:Bundle
+
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,13 +52,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
-        val bundle: Bundle = intent.extras!!
-        //decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
-        binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
-        binding.tvAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
-        binding.tvGoal.text= bundle.getString("goalName")
-        financialGoalID = bundle.getString("financialGoalID").toString()
-        savingActivityID = bundle.getString("savingActivityID").toString()
+        setFields()
 
         binding.btnConfirm.setOnClickListener {
             val transaction = hashMapOf(
@@ -60,19 +60,41 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 "transactionType" to "Deposit",
                 "category" to "Goal",
                 "date" to bundle.getSerializable("date"),
-                "createdBy" to "",
+                "createdBy" to currentUser,
                 "amount" to bundle.getFloat("amount"),
                 "financialActivityID" to bundle.getString("savingActivityID")
-                //"decisionMakingActivityID" to decisionMakingActivityID
             )
 
             //adjustUserBalance()
 
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
-                //check if the goal was completed with this deposit, if it is, show accomplished screen
-                checkGoalCompletion()
+                firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
+                    var goal = it.toObject<FinancialGoals>()
+                    var updatedSavings = goal?.currentSavings!! + bundle.getFloat("amount")
+                    firestore.collection("FinancialGoals").document(financialGoalID).update("currentSavings", updatedSavings).addOnSuccessListener {
+                        //check if the goal was completed with this deposit, if it is, show accomplished screen
+                        checkGoalCompletion()
+                    }
+                }
             }
         }
+    }
+
+    private fun setFields() {
+        bundle = intent.extras!!
+        //decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
+        binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
+        binding.tvAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
+        binding.tvGoal.text= bundle.getString("goalName")
+        financialGoalID = bundle.getString("financialGoalID").toString()
+        savingActivityID = bundle.getString("savingActivityID").toString()
+
+        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2").get().addOnSuccessListener {
+            var wallet = it.documents[0].toObject<ChildWallet>()
+            binding.tvWalletBalance.text = "₱ " +  (wallet?.currentBalance!!.toFloat() - bundle.getFloat("amount"))
+        }
+
+        binding.tvUpdatedGoalSavings.text = "₱ " +  (bundle.getFloat("savedAmount") + bundle.getFloat("amount"))
     }
 
     private fun adjustUserBalance() {
@@ -95,41 +117,28 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
     }
 
     private fun checkGoalCompletion() {
-        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener {results ->
-            var saved = 0.00F
-            for (transaction in results) {
-                var transactionObject = transaction.toObject<Transactions>()
-                    if (transactionObject.transactionType == "Deposit")
-                        saved += transactionObject.amount!!.toFloat()
-                    else if (transactionObject.transactionType == "Withdrawal")
-                        saved -= transactionObject.amount!!.toFloat()
-            }
-
-            firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
-                var goal = it.toObject<FinancialGoals>()
-                val bundle = Bundle()
-                //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-                bundle.putString("financialGoalID", financialGoalID)
-                bundle.putString("savingActivityID", savingActivityID)
-                //target amount has already been met, update status of goal and fin activity to completed
-                if (goal?.targetAmount!! <= saved) {
-                    firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Completed")
-                    firestore.collection("FinancialGoals").document(financialGoalID).update("dateCompleted", Timestamp.now())
-                    firestore.collection("FinancialActivities").document(savingActivityID).update("status", "Completed")
-                    val goalAccomplished = Intent(this, GoalAccomplishedActivity::class.java)
-                    goalAccomplished.putExtras(bundle)
-                    goalAccomplished.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    this.startActivity(goalAccomplished)
-                    finish()
-                } else {
-                    val savingActivity = Intent(this, ViewGoalActivity::class.java)
-                    savingActivity.putExtras(bundle)
-                    savingActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    this.startActivity(savingActivity)
-                    finish()
-                }
+        val bundle = Bundle()
+        bundle.putString("financialGoalID", financialGoalID)
+        bundle.putString("savingActivityID", savingActivityID)
+        firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
+            var goal = it.toObject<FinancialGoals>()
+            //target amount has already been met, update status of goal and fin activity to completed
+            if (goal?.targetAmount!! <= goal?.currentSavings!!) {
+                firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Completed")
+                firestore.collection("FinancialGoals").document(financialGoalID).update("dateCompleted", Timestamp.now())
+                firestore.collection("FinancialActivities").document(savingActivityID).update("status", "Completed")
+                val goalAccomplished = Intent(this, GoalAccomplishedActivity::class.java)
+                goalAccomplished.putExtras(bundle)
+                goalAccomplished.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(goalAccomplished)
+                finish()
+            } else {
+                val savingActivity = Intent(this, ViewGoalActivity::class.java)
+                savingActivity.putExtras(bundle)
+                savingActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(savingActivity)
+                finish()
             }
         }
     }
-
 }

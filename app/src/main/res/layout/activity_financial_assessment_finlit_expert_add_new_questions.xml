@@ -69,7 +69,8 @@
                     app:helperText=""
                     app:helperTextTextColor="@color/red"
                     android:paddingTop="5dp"
-                    android:layout_marginTop="50dp">
+                    android:layout_marginTop="50dp"
+                    app:startIconDrawable="@drawable/question_mark">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_question"
@@ -79,6 +80,24 @@
                         android:inputType="text"
                         android:textSize="16dp"
                         android:hint="Question" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/container_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Difficulty"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    android:paddingBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    app:startIconDrawable="@drawable/baseline_category_24">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/dropdown_difficulty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="none" />
+
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView

@@ -1,16 +1,17 @@
 package ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.fragment
 
+import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.AssessmentQuestionsAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentAssessmentQuestionsBinding
+import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinancialAssessmentViewAllQuestions
 
 
 class AssessmentQuestionsFragment : Fragment() {
@@ -39,23 +40,25 @@ class AssessmentQuestionsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAssessmentQuestionsBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        binding.btnViewAll.setOnClickListener {
+            var viewAllQuestions = Intent(requireContext().applicationContext, FinancialAssessmentViewAllQuestions::class.java)
+            var sendBundle = Bundle()
+            sendBundle.putString("assessmentID", assessmentID)
+            viewAllQuestions.putExtras(sendBundle)
+            startActivity(viewAllQuestions)
+        }
+        return binding.root
     }
 
     private fun getQuestions() {
-        println("print in questions fragment  " + assessmentID)
-        firestore.collection("AssessmentQuestions").whereEqualTo("assessmentID", assessmentID).get().addOnSuccessListener { questions ->
+        questionsID.clear()
+        firestore.collection("AssessmentQuestions").whereEqualTo("assessmentID", assessmentID).whereEqualTo("isUsed", true).get().addOnSuccessListener { questions ->
             for (question in questions)
                 questionsID.add(question.id)
 
-
-            println("print questiosn " + questions.size())
             questionsAdapter = AssessmentQuestionsAdapter(requireContext().applicationContext, questionsID)
             binding.rvViewQuestions.adapter = questionsAdapter
-            binding.rvViewQuestions.layoutManager = LinearLayoutManager(requireContext().applicationContext,
-                LinearLayoutManager.VERTICAL,
-                false)
+            binding.rvViewQuestions.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
         }
     }
 }

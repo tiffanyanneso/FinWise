@@ -1,7 +1,9 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.personalFinancialManagementModule.mayaAPI
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityMayaQrSuccessfulPaymentBinding
 
 class MayaSuccessfulPayment :AppCompatActivity() {

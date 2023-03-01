@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.widget.Toast
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmconfirmTransactionBinding
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import kotlin.math.abs
@@ -20,8 +22,9 @@ class ConfirmTransactionActivity : AppCompatActivity() {
     var bundle: Bundle? = null
     lateinit var transactionType : String
     lateinit var name : String
+    var balance = 0.00f
+    var amount = 0.00f
     lateinit var category : String
-    lateinit var amount : String
     lateinit var date : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,25 +53,43 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         bundle = intent.extras!!
         name = bundle!!.getString("transactionName").toString()
         category = bundle!!.getString("category").toString()
-        amount = bundle!!.getFloat("amount").toString()
+        amount = bundle!!.getFloat("amount")
+        balance = bundle!!.getFloat("balance")
         date = bundle!!.getSerializable("date").toString()
 
         transactionType = bundle!!.getString("transactionType").toString()
         if (transactionType == "Income") {
             binding.tvTransactionType.text = "Income"
+            binding.tvWalletBalance.text = "₱ " +
+                    DecimalFormat("#,##0.00")
+                        .format(balance + amount)
         } else {
             binding.tvTransactionType.text = "Expense"
+            binding.tvWalletBalance.text = "₱ " +
+                    DecimalFormat("#,##0.00")
+                        .format(balance - amount)
         }
-        val dec = DecimalFormat("#,###.00")
-        var textAmount = dec.format(bundle!!.getFloat("amount"))
-        //binding.tvName.text = name
-        //binding.tvCategory.text = category
-        //binding.tvAmount.text = "₱$textAmount"
+
+        if (transactionType == "Expense") {
+            binding.tvWalletBalance.text = "₱ " +
+                    DecimalFormat("#,##0.00")
+                        .format(balance - amount)
+        } else if (transactionType == "Income") {
+            binding.tvWalletBalance.text = "₱ " +
+                    DecimalFormat("#,##0.00")
+                        .format(balance + amount)
+        }
+
+
+        binding.tvName.text = name
+        binding.tvCategory.text = category
+        binding.tvAmount.text = "₱$amount"
         //binding.tvGoal.text = goal
         val formatter = SimpleDateFormat("MM/dd/yyyy")
         val dateSerializable = bundle!!.getSerializable("date")
         val dateText = formatter.format(dateSerializable).toString()
         binding.tvDate.text = dateText
+
 
     }
 
@@ -82,7 +103,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
                 "category" to category,
                 "date" to bundle!!.getSerializable("date"),
                 "createdBy" to "",
-                "amount" to amount?.toFloat()
+                "amount" to amount
             )
             adjustUserBalance()
             // TODO: Change where transaction is added
@@ -101,17 +122,14 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         //TODO: Change user based on who is logged in
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
         firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2")
-            .get().addOnSuccessListener { documents ->
-                lateinit var id: String
-                for (document in documents) {
-                    id = document.id
-                }
+            .get().addOnSuccessListener { document ->
+               val id = document.documents[0].id
                 var adjustedBalance = amount.toDouble()
-                if (transactionType == "expense")
-                    adjustedBalance = -abs(adjustedBalance!!)
+                if (transactionType == "Expense")
+                    adjustedBalance = -abs(adjustedBalance)
 
                 firestore.collection("ChildWallet").document(id)
-                    .update("currentBalance", FieldValue.increment(adjustedBalance!!))
+                    .update("currentBalance", FieldValue.increment(adjustedBalance))
             }
         }
 

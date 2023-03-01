@@ -9,6 +9,7 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -21,9 +22,10 @@ import java.util.*
 class RecordIncomeActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityPfmrecordIncomeBinding
-    var bundle = Bundle()
+    lateinit var bundle: Bundle
     lateinit var name: String
     lateinit var amount: String
+    var balance = 0.00f
     lateinit var category: String
     lateinit var date: Date
 
@@ -41,6 +43,7 @@ class RecordIncomeActivity : AppCompatActivity() {
         initializeDropdown()
         initializeDatePicker()
         //getGoals()
+        loadBackButton()
         goToConfirmation()
         cancel()
     }
@@ -52,6 +55,13 @@ class RecordIncomeActivity : AppCompatActivity() {
         binding.dropdownCategory.setAdapter(adapter)
     }
 
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToPFM = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
+            startActivity(goToPFM)
+        }
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeDatePicker() {
         binding.etDate.setOnClickListener{
@@ -95,7 +105,6 @@ class RecordIncomeActivity : AppCompatActivity() {
         return valid
     }
 
-
     private fun cancel() {
         binding.btnCancel.setOnClickListener {
             val goBack = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
@@ -105,7 +114,7 @@ class RecordIncomeActivity : AppCompatActivity() {
 
     private fun goToConfirmation() {
         binding.btnConfirm.setOnClickListener {
-            if (validateAndSetUserInput()) {
+            if (validateAndSetUserInput() ) {
                 setBundle()
                 val goToConfirmTransaction = Intent(this, ConfirmTransactionActivity::class.java)
                 goToConfirmTransaction.putExtras(bundle)
@@ -123,19 +132,27 @@ class RecordIncomeActivity : AppCompatActivity() {
     private fun setBundle() {
         //getCurrentTime()
 //        val goal = binding.spinnerGoal.selectedItem.toString()
-
+        getBalance()
+        bundle = Bundle()
         bundle.putString("transactionType", "Income")
         bundle.putString("transactionName", name)
         bundle.putString("category", category)
+        bundle.putFloat("balance", balance)
         bundle.putFloat("amount", amount.toFloat())
 //        bundle.putString("goal", goal)
         bundle.putSerializable("date", date)
+
 
         //TODO: reset spinner and date to default value
         /* binding.etName.text.clear()
          binding.etAmount.text.clear()
          binding.spinnerCategory.clear()
          binding.spinnerGoal.adapter(null)*/
+    }
+
+    private fun getBalance() {
+        val bundle2 = intent.extras!!
+        balance = bundle2.getFloat("balance")
     }
 
     /*private fun getCurrentTime() {
@@ -153,6 +170,8 @@ class RecordIncomeActivity : AppCompatActivity() {
         dialog.window!!.setLayout(1000, 1200)
 
         var calendar = dialog.findViewById<DatePicker>(ph.edu.dlsu.finwise.R.id.et_date)
+        calendar.maxDate = System.currentTimeMillis()
+
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
             binding.etDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())

@@ -1,5 +1,4 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule.budgetExpenseFragments
-
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,6 +12,7 @@ class BudgetShoppingListFragment : Fragment() {
 
     private lateinit var binding:FragmentBudgetShoppingListBinding
     private lateinit var budgetActivityID:String
+
     private lateinit var budgetItemID:String
     private lateinit var spendingActivityID:String
 
@@ -25,7 +25,7 @@ class BudgetShoppingListFragment : Fragment() {
             budgetItemID = bundle?.getString("budgetItemID").toString()
             spendingActivityID = bundle?.getString("spendingActivityID").toString()
         }
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -13,13 +13,13 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
-            android:name=".FriendRequestActivity"
+            android:name=".AssessmentActivity"
             android:exported="false" />
         <activity
-            android:name=".AddFriendsActivity"
+            android:name=".SpendingTransactionsActivity"
             android:exported="false" />
         <activity
-            android:name=".ViewFriendsActivity"
+            android:name=".CompletedEarningActivity"
             android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.CompletedEarningActivity"
@@ -30,6 +30,7 @@
         </activity>
         <activity
             android:name=".parentFinancialActivitiesModule.NewEarningActivity"
+            android:name=".EarningActivity"
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.GoalSavingDetailsActivity"
@@ -39,6 +40,9 @@
             android:exported="false" />
         <activity
             android:name=".ViewShoppingListItem"
+            android:exported="false" />
+        <activity
+            android:name=".NewShoppingListItemActivity"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.SavingPerformanceActivity"
@@ -79,82 +83,50 @@
             android:name=".ViewGoalDetailsTabbedActivity"
             android:exported="false" />
         <activity
-            android:name=".GoalTransactionsActivity"
+            android:name=".financialActivitiesModule.GoalTransactionsActivity"
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.mayaAPI.MayaPayment"
-            android:exported="false">
-
-            <!--
-              <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-            -->
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.mayaAPI.MayaConfirmPayment"
             android:exported="false" />
         <activity
-            android:name=".MayaSuccessfulPayment"
+            android:name=".personalFinancialManagementModule.mayaAPI.MayaSuccessfulPayment"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.ViewGoalDetails"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.ParentGoalActivity"
             android:exported="true" />
         <activity
-            android:name=".financialActivitiesModule.ConfirmWithdraw"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:name=".parentDashboardModule.ParentDashboardActivity"
+            android:exported="false" />
+        <activity
+            android:name=".financialActivitiesModule.FinancialActivityConfirmWithdraw"
+            android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.WithdrawActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".TestFinancialActivity"
             android:exported="false" />
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".profileModule.EditProfileActivity"
             android:exported="true" />
         <activity
             android:name=".parentFinancialActivitiesModule.GoalSettingsActivity"
             android:exported="true" />
         <activity
-            android:name=".ParentSendMoney"
+            android:name=".financialActivitiesModule.FinancialActivityConfirmExpense"
             android:exported="false" />
         <activity
-            android:name=".financialActivitiesModule.FinancialActivityConfirmExpense"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".financialActivitiesModule.FinancialActivityRecordExpense"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivityConfirmDeposit"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.ParentLandingPageActivity"
             android:exported="false" />
@@ -175,9 +147,6 @@
             android:exported="true" >
         </activity>
         <activity
-            android:name=".financialActivitiesModule.SpendingActivity"
-            android:exported="true" />
-        <activity
             android:name=".financialActivitiesModule.BudgetExpenseActivity"
             android:exported="false" />
         <activity
@@ -185,9 +154,6 @@
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.SavingViewTransactionsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".financialActivitiesModule.SavingActivity"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.BudgetActivity"
@@ -200,31 +166,43 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".DashboardActivity"
+            android:name=".childDashboardModule.childDashboardActivity"
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentQuiz"
             android:exported="false" />
         <activity
+            android:name=".financialAssessmentModule.FinancialAssessmentLandingPage"
+            android:exported="false" />
+        <activity
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
             android:exported="true" />
         <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
         <activity>
             android:name=".profileModule.ProfileActivity"
             android:exported="true" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
-
-
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity"
-            android:exported="true" />
+            android:exported="true">
+<!--        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>-->
+        </activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertEditAssessmentActivity"
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertAddNewQuestionsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertEditQuestionsActivity"
             android:exported="true" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertProfileActivity"
@@ -271,12 +249,27 @@
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
+
+        <activity
+            android:name=".parentFinancialManagementModule.ParentFinancialManagementActivity"
+            android:exported="false">
+          <!--           <intent-filter>
+                         <action android:name="android.intent.action.MAIN" />
+
+                         <category android:name="android.intent.category.LAUNCHER" />
+                     </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".parentFinancialManagementModule.ParentSendMoneyActivity"
+            android:exported="false" />
+        <activity
+            android:name=".parentFinancialManagementModule.ParentTransactionHistoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".parentFinancialManagementModule.ParentTransactionSortActivity"
+            android:exported="false" />
+
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"
             android:exported="false" />

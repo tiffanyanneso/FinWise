@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalDetailsBinding
@@ -24,6 +25,9 @@ class ViewGoalDetails : AppCompatActivity() {
         binding = ActivityViewGoalDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Initializes the navbar
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         getGoal()
@@ -39,7 +43,6 @@ class ViewGoalDetails : AppCompatActivity() {
     private fun getGoal() {
         firestore.collection("FinancialGoals").document(financialGoalID!!).get().addOnSuccessListener { document ->
             if (document != null) {
-                //TODO: compute remaining days
                 var goal = document.toObject(FinancialGoals::class.java)
                 //binding.tvMyGoals.text = goal?.goalName.toString()
                 binding.tvGoalAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount?.toFloat())

@@ -110,6 +110,12 @@
     <string name="add_child">+ Add Child</string>
     <string name="name">Name</string>
     <string name="budget_set">Budget Set</string>
+    <string name="rank">Rank</string>
+    <string name="overall_performance">Overall Performance</string>
+    <string name="friends_ranking">Friends Ranking</string>
+    <string name="goal_setting">Goal Setting</string>
+    <string name="child_name">Child Name</string>
+    <string name="note">Note</string>
 
 
     <string name="savings_deposit">Savings Deposit</string>
@@ -149,7 +155,6 @@
 
 
     <string-array name="status_list">
-        <item>--Status--</item>
         <item>In Progress</item>
         <item>For Review</item>
         <item>For Editing</item>
@@ -165,14 +170,12 @@
     </string-array>
 
     <string-array name="goal_status_list">
-        <item>--Status--</item>
         <item>Approved</item>
         <item>For Editing</item>
         <item>Disapproved</item>
     </string-array>
 
     <string-array name="decision_making_activities_list">
-        <item>--Activity--</item>
         <item>In Progress</item>
         <item>For Review</item>
         <item>For Editing</item>
@@ -180,11 +183,17 @@
         <item>Achieved</item>
     </string-array>
 
+    <string-array name="assessment_question_difficulty">
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+
+    </string-array>
+
     <string name="title_decision_making_activities">Financial Decision Making Activities</string>
 
 
     <string-array name="financial_activity">
-        <item>--Select Activity--</item>
         <item>Buying Items</item>
         <item>Planning An Event</item>
         <item>Saving For Emergency Funds</item>
@@ -212,7 +221,6 @@
     </string-array>
 
     <string-array name="pfm_category">
-        <item>--Select Category--</item>
         <item>Allowance</item>
         <item>Gift</item>
         <item>Birthday</item>

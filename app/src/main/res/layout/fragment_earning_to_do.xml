@@ -5,8 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".parentFinancialActivitiesModule.earningActivitiesFragments.EarningToDoFragment"
     android:padding="20dp"
-    >
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_view_activities_to_do"

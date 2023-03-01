@@ -50,6 +50,14 @@ class ParentGoalActivity : AppCompatActivity() {
         sendBundle.putString("childID", childID)
 
 
+        binding.btnNewGoal.setOnClickListener {
+            var newGoal = Intent(this, ChildNewGoal::class.java)
+            sendBundle.putString("source", "parentGoalActivity")
+            newGoal.putExtras(sendBundle)
+            newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(newGoal)
+        }
+
         binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
             when (menuItem.itemId) {
                 R.id.btn_settings -> {
@@ -62,6 +70,9 @@ class ParentGoalActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        //checkSettings()
+        initializeFragments()
     }
 
     private fun setupTabIcons() {
@@ -84,23 +95,18 @@ class ParentGoalActivity : AppCompatActivity() {
     private fun initializeFragments() {
 
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        //checkSettings()
-
-        binding.viewPager.adapter = adapter
-        binding.tabLayout.setupWithViewPager(binding.viewPager)
 
         var fragmentBundle = Bundle()
         fragmentBundle.putString("childID", childID)
 
+        var goalSettingFragment = ParentGoalSettingFragment()
+        goalSettingFragment.arguments = fragmentBundle
 
         var savingFragment = ParentSavingFragment()
         savingFragment.arguments = fragmentBundle
 
         var budgetingFragment = ParentBudgetingFragment()
         budgetingFragment.arguments = fragmentBundle
-
-        var goalSettingFragment = ParentGoalSettingFragment()
-        goalSettingFragment.arguments = fragmentBundle
 
         var spendingFragment = ParentSpendingFragment()
         spendingFragment.arguments = fragmentBundle
@@ -117,6 +123,10 @@ class ParentGoalActivity : AppCompatActivity() {
         adapter.addFragment(spendingFragment,"Spending")
         adapter.addFragment(achievedFragment,"Achieved")
         adapter.addFragment(disapprovedFragment,"Disapproved")
+
+        binding.viewPager.adapter = adapter
+        binding.tabLayout.setupWithViewPager(binding.viewPager)
+        
         setupTabIcons()
     }
 

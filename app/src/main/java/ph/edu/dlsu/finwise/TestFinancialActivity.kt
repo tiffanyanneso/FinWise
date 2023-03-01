@@ -9,17 +9,17 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
+import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityTestFinancialBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
-import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.AchievedFragment
-import ph.edu.dlsu.finwise.financialActivitiesModule.childGoalFragment.BudgetingFragment
+import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.AchievedFragment
+import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.BudgetingFragment
 
 class TestFinancialActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTestFinancialBinding
     private lateinit var context: Context
-    private lateinit var goalAdapter: ChildGoalAdapter
+    private lateinit var goalAdapter: FinactSavingAdapter
     private var goalIDArrayList = ArrayList<String>()
     private lateinit var status: String
 

@@ -9,18 +9,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
-import ph.edu.dlsu.finwise.databinding.FragmentBudgetingBinding
+import ph.edu.dlsu.finwise.adapter.FinactBudgetingAdapter
+import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentParentBudgetingBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
-import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.util.*
 
 class ParentBudgetingFragment : Fragment() {
 
     private lateinit var binding: FragmentParentBudgetingBinding
     private var firestore = Firebase.firestore
-    private lateinit var goalAdapter: ChildGoalAdapter
+    private lateinit var budgetingAdapter: FinactBudgetingAdapter
 
     var goalIDArrayList = ArrayList<String>()
     var budgetingArrayList = ArrayList<FinancialActivities>()
@@ -51,6 +50,7 @@ class ParentBudgetingFragment : Fragment() {
     }
 
     private fun getBudgeting() {
+        goalIDArrayList.clear()
         //saving activities that are in progress means that there the goal is also in progress because they are connected
         firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             for (budgeting in results) {
@@ -64,11 +64,11 @@ class ParentBudgetingFragment : Fragment() {
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        goalAdapter = ChildGoalAdapter(requireContext().applicationContext, goalIDArrayList)
-        binding.rvViewGoals.adapter = goalAdapter
+        budgetingAdapter = FinactBudgetingAdapter(requireContext().applicationContext, goalIDArrayList)
+        binding.rvViewGoals.adapter = budgetingAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
             LinearLayoutManager.VERTICAL,
             false)
-        goalAdapter.notifyDataSetChanged()
+        budgetingAdapter.notifyDataSetChanged()
     }
 }

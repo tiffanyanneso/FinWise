@@ -1,11 +1,11 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +29,14 @@ class TransactionHistoryIncomeFragment : Fragment() {
     private var startDate: String? = null
     private var endDate: String? = null
     private val incomeIDArrayList = ArrayList<String>()
-    var transactionFilterArrayList = ArrayList<TransactionFilter>()
+    private var transactionFilterArrayList = ArrayList<TransactionFilter>()
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return inflater.inflate(R.layout.fragment_transaction_history_income, container, false)
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,7 +52,7 @@ class TransactionHistoryIncomeFragment : Fragment() {
         if (checkedBoxes == "both" || checkedBoxes == "income") {
             getBundleValues()
             transactionFilterArrayList = checkSort()
-        }
+        } else if (checkedBoxes == "expense") transactionFilterArrayList.clear()
         return transactionFilterArrayList
     }
 
@@ -81,8 +88,6 @@ class TransactionHistoryIncomeFragment : Fragment() {
             if (transactionDate in startingDate..endingDate)
                 filteredArray.add(TransactionFilter(t.transactionID, t.transaction))
 
-            /*if (cDate in sDate..eDate)
-                filteredArray.add(TransactionFilter(t.transactionID, t.transaction))*/
         }
         transactionFilterArrayList.clear()
         return filteredArray
@@ -114,7 +119,7 @@ class TransactionHistoryIncomeFragment : Fragment() {
             val eDate = endDate?.let { sdf.parse(it) }
             val endingDate = formatter.format(eDate!!)
             val transactionDate = formatter.format(t.transaction?.date?.toDate()!!)
-            
+
             if (t.transaction?.amount!! >= minAmount!!.toFloat() &&
                 t.transaction?.amount!! <= maxAmount!!.toFloat()
                 && transactionDate in startingDate..endingDate)
@@ -131,30 +136,6 @@ class TransactionHistoryIncomeFragment : Fragment() {
         maxAmount = arguments?.getString("maxAmount").toString()
         startDate= arguments?.getSerializable("startDate").toString()
         endDate = arguments?.getSerializable("endDate").toString()
-        /*val sdf = SimpleDateFormat(
-            "EE MMM dd HH:mm:ss z yyyy",
-            Locale.ENGLISH
-        )
-        val startDateConverted = startDate?.let { sdf.parse(it) }
-        val print = SimpleDateFormat("MM/dd/yyyy").format(startDateConverted)
-        Toast.makeText(context, ""+print, Toast.LENGTH_SHORT).show()*/
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_transaction_history_income, container, false)
-    }
-
-    private fun loadRecyclerView(transactionIDArrayList: ArrayList<String>) {
-        transactionAdapter = TransactionsAdapter(requireActivity(), transactionIDArrayList)
-        binding.rvViewTransactions.adapter = transactionAdapter
-        binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireContext().applicationContext,
-            LinearLayoutManager.VERTICAL,
-            false)
-        transactionAdapter.notifyDataSetChanged()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -190,6 +171,15 @@ class TransactionHistoryIncomeFragment : Fragment() {
         }
     }
 
-    class TransactionFilter(var transactionID: String?=null, var transaction: Transactions?=null){
+    class TransactionFilter(var transactionID: String?=null, var transaction: Transactions?=null)
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun loadRecyclerView(transactionIDArrayList: ArrayList<String>) {
+        transactionAdapter = TransactionsAdapter(requireActivity(), transactionIDArrayList)
+        binding.rvViewTransactions.adapter = transactionAdapter
+        binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireContext().applicationContext,
+            LinearLayoutManager.VERTICAL,
+            false)
+        transactionAdapter.notifyDataSetChanged()
     }
 }

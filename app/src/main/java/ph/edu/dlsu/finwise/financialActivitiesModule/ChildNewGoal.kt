@@ -15,6 +15,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import java.text.SimpleDateFormat
 
 
@@ -54,47 +55,39 @@ class ChildNewGoal : AppCompatActivity() {
         }*/
 
 
-        /*if (currentUserType == "Child") {
-            binding.tvFinancialDecisionMakingActivity.visibility = View.GONE
-            binding.checkBoxes.visibility = View.GONE
-        } else if (currentUserType == "Parent") {
-            binding.tvFinancialDecisionMakingActivity.visibility = View.VISIBLE
-            binding.checkBoxes.visibility = View.VISIBLE
-        }*/
-
         binding.etTargetDate.setOnClickListener{
             showCalendar()
         }
 
         binding.btnNext.setOnClickListener {
-            var goToGoalConfirmation = Intent(this, GoalConfirmationActivity::class.java)
-            var bundle = Bundle()
+            if(filledUp()) {
+                var goToGoalConfirmation = Intent(this, GoalConfirmationActivity::class.java)
+                var bundle = Bundle()
 
-            var goalName =  binding.etGoal.text.toString()
-            var activity = binding.dropdownActivity.text.toString()
-            var amount = binding.etAmount.text.toString().toFloat()
-            var targetDate = binding.etTargetDate.text.toString()
+                var goalName =  binding.etGoal.text.toString()
+                var activity = binding.dropdownActivity.text.toString()
+                var amount = binding.etAmount.text.toString().toFloat()
+                var targetDate = binding.etTargetDate.text.toString()
 
-//                SimpleDateFormat("MM-dd-yyyy").parse((binding.etTargetDate.month+1).toString() + "-" +
-//                    binding.etTargetDate.dayOfMonth.toString() + "-" + binding.etTargetDate.year)
-            var goalIsForSelf = binding.cbGoalSelf.isChecked
+                var goalIsForSelf = binding.cbGoalSelf.isChecked
 
-            bundle.putString("goalName", goalName)
-            bundle.putString("activity", activity)
-            bundle.putFloat("amount", amount)
-            bundle.putSerializable("targetDate",  SimpleDateFormat("MM/dd/yyyy").parse(targetDate))
-            bundle.putBoolean("goalIsForSelf", goalIsForSelf)
+                bundle.putString("goalName", goalName)
+                bundle.putString("activity", activity)
+                bundle.putFloat("amount", amount)
+                bundle.putSerializable("targetDate",  SimpleDateFormat("MM/dd/yyyy").parse(targetDate))
+                bundle.putBoolean("goalIsForSelf", goalIsForSelf)
 
-//            if(currentUserType == "Parent")
-//                bundle.putString("childID", childID)
+    //            if(currentUserType == "Parent")
+    //                bundle.putString("childID", childID)
 
-            //TODO: reset spinner and date to default value
-            binding.etGoal.text?.clear()
-            binding.etAmount.text?.clear()
+                //TODO: reset spinner and date to default value
+                binding.etGoal.text?.clear()
+                binding.etAmount.text?.clear()
 
-            goToGoalConfirmation.putExtras(bundle)
-            goToGoalConfirmation.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            this.startActivity(goToGoalConfirmation)
+                goToGoalConfirmation.putExtras(bundle)
+                goToGoalConfirmation.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(goToGoalConfirmation)
+            }
         }
 
         binding.btnCancel.setOnClickListener {
@@ -104,8 +97,23 @@ class ChildNewGoal : AppCompatActivity() {
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
-            val goToFinancialActivity = Intent(applicationContext, FinancialActivity::class.java)
-            this.startActivity(goToFinancialActivity)
+            var backBundle = intent.extras!!
+            var source = backBundle.getString("source").toString()
+
+            var navBundle = Bundle()
+            navBundle.putString("childID", childID)
+
+            if (source =="childFinancialActivity") {
+                val goToFinancialActivity = Intent(applicationContext, FinancialActivity::class.java)
+                goToFinancialActivity.putExtras(navBundle)
+                goToFinancialActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(goToFinancialActivity)
+            } else if (source =="parentGoalActivity") {
+                val goToParentGoalActivity = Intent(applicationContext, ParentGoalActivity::class.java)
+                goToParentGoalActivity.putExtras(navBundle)
+                goToParentGoalActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(goToParentGoalActivity)
+            }
         }
     }
 
@@ -122,6 +130,39 @@ class ChildNewGoal : AppCompatActivity() {
         }
     }
 
+    private fun filledUp() : Boolean {
+        var valid  = true
+
+        if (binding.etGoal.text.toString().trim().isEmpty()) {
+            binding.goalContainer.helperText = "Input goal name."
+            valid = false
+        } else
+            binding.goalContainer.helperText = ""
+
+      //TODO: VALIDATION FOR REASON
+
+        if (binding.etAmount.text.toString().trim().isEmpty()) {
+            binding.amountContainer.helperText = "Input target amount."
+            valid = false
+        } else {
+            //amount field is not empty
+            binding.amountContainer.helperText = ""
+            //check if amount is greater than 0
+            if (binding.etAmount.text.toString().toFloat() <= 0) {
+                binding.amountContainer.helperText = "Input a valid amount."
+                valid = false
+            } else
+                binding.amountContainer.helperText = ""
+        }
+
+        if (binding.etTargetDate.text.toString().trim().isEmpty()) {
+            binding.dateContainer.helperText = "Select target date."
+            valid = false
+        } else
+            binding.dateContainer.helperText = ""
+
+        return valid
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showCalendar() {
         val dialog = Dialog(this)
@@ -130,6 +171,7 @@ class ChildNewGoal : AppCompatActivity() {
         dialog.window!!.setLayout(1000, 1200)
 
         var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
+        calendar.minDate = System.currentTimeMillis()
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
             binding.etTargetDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())

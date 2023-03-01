@@ -14,9 +14,11 @@ class FinancialAssessmentActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityFinancialAssessmentBinding
 
-    private var assessmentID = "coyxafYM9TJ82aklopMX"
+    private var assessmentID = "yRwmBYlXxSkETeaSYN4f"
 
     private var questionIDArrayList = ArrayList<String>()
+    private var answerHistoryArrayList = ArrayList<FinancialAssessmentQuiz.AnswerHistory>()
+
 
     private var firestore = Firebase.firestore
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,8 +35,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
                 var assessmentAttempt = hashMapOf(
                      "childID" to "currentUser",
                     "assessmentID" to assessmentID,
-                    "dateTaken" to Timestamp.now(),
-                    "score" to 0,
+                    "dateTaken" to Timestamp.now()
                 )
                 firestore.collection("AssessmentAttempts").add(assessmentAttempt).addOnSuccessListener {
                     var assessmentAttemptID = it.id
@@ -46,10 +47,11 @@ class FinancialAssessmentActivity : AppCompatActivity() {
 
                             var assessmentQuiz = Intent(this, FinancialAssessmentQuiz::class.java)
                             var bundle = Bundle()
-                            bundle.putInt("score", 0)
+                            //bundle.putInt("score", 0)
                             bundle.putString("assessmentAttemptID", assessmentAttemptID)
                             bundle.putString("assessmentID", assessmentID)
                             bundle.putStringArrayList("questionIDArrayList", questionIDArrayList)
+                            bundle.putSerializable("answerHistory", answerHistoryArrayList)
                             assessmentQuiz.putExtras(bundle)
                             this.startActivity(assessmentQuiz)
                         }

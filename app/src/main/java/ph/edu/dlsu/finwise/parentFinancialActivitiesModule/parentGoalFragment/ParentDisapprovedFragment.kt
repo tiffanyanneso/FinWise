@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.adapter.ChildGoalAdapter
+import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentDisapprovedBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.util.*
@@ -18,7 +18,7 @@ class ParentDisapprovedFragment : Fragment() {
 
     private lateinit var binding: FragmentDisapprovedBinding
     private var firestore = Firebase.firestore
-    private lateinit var goalAdapter: ChildGoalAdapter
+    private lateinit var goalAdapter: FinactSavingAdapter
 
     private lateinit var childID:String
 
@@ -45,18 +45,10 @@ class ParentDisapprovedFragment : Fragment() {
     private fun getDisapprovedGoals() {
         var goalIDArrayList = ArrayList<String>()
         var goalFilterArrayList = ArrayList<GoalFilter>()
-<<<<<<< Updated upstream
-
-        //TODO:change to get transactions of current user
-        //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        //firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get().addOnSuccessListener{ documents ->
-
-        firestore.collection("FinancialGoals").whereEqualTo("status", filter).get().addOnSuccessListener { documents ->
-=======
         goalIDArrayList.clear()
 
+
         firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "Disapproved").get().addOnSuccessListener { documents ->
->>>>>>> Stashed changes
             for (goalSnapshot in documents) {
                 //creating the object from list retrieved in db
                 var goalID = goalSnapshot.id
@@ -72,7 +64,7 @@ class ParentDisapprovedFragment : Fragment() {
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        goalAdapter = ChildGoalAdapter(requireContext().applicationContext, goalIDArrayList)
+        goalAdapter = FinactSavingAdapter(requireContext().applicationContext, goalIDArrayList)
         binding.rvViewGoals.adapter = goalAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
             LinearLayoutManager.VERTICAL,

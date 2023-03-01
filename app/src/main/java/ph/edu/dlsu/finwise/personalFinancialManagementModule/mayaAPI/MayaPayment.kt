@@ -5,11 +5,12 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.ActivityMayaPaymentBinding
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.text.SimpleDateFormat
+import ph.edu.dlsu.finwise.databinding.ActivityMayaPaymentBinding
 import java.util.*
 
 
@@ -23,6 +24,8 @@ class MayaPayment : AppCompatActivity() {
     lateinit var merchant: String
     lateinit var phone: String
     lateinit var date: Date
+    var balance = 0.00f
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +35,7 @@ class MayaPayment : AppCompatActivity() {
         //initializes the navbar
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
         initializeDropdown()
+        loadBackButton()
         goToMayaQRConfirmPayment()
         goToPersonalFinancialManagement()
     }
@@ -42,9 +46,17 @@ class MayaPayment : AppCompatActivity() {
         binding.dropdownCategory.setAdapter(adapter)
     }
 
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            val goToPFM = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
+            startActivity(goToPFM)
+        }
+    }
+
     private fun goToMayaQRConfirmPayment(){
         binding.btnConfirm.setOnClickListener {
-            if (validateAndSetUserInput()) {
+            if (validateAndSetUserInput() && validAmount()) {
                 setBundle()
                 val goToMayaQRConfirmPayment = Intent(applicationContext, MayaConfirmPayment::class.java)
                 goToMayaQRConfirmPayment.putExtras(bundle)
@@ -57,6 +69,20 @@ class MayaPayment : AppCompatActivity() {
                 ).show()
             }
         }
+    }
+
+    private fun validAmount(): Boolean {
+        val bundle2 = intent.extras!!
+        balance = bundle2.getFloat("balance")
+        //trying to deposit more than their current balance
+        if (binding.etAmount.text.toString().toFloat() > balance) {
+            binding.etAmount.error =
+                "You cannot deposit more than your current balance of ₱$balance"
+            binding.etAmount.requestFocus()
+            return false
+        }
+        else
+            return true
     }
 
     private fun goToPersonalFinancialManagement(){
@@ -74,6 +100,7 @@ class MayaPayment : AppCompatActivity() {
         bundle.putFloat("amount", amount.toFloat())
         bundle.putString("phone", phone)
         bundle.putString("merchant", merchant)
+        bundle.putFloat("balance", balance)
 //        bundle.putString("goal", goal)
         bundle.putSerializable("date", date)
 
@@ -114,11 +141,12 @@ class MayaPayment : AppCompatActivity() {
         } else amount = binding.etAmount.text.toString().trim()
 
 
-        if (binding.etPhone.text.toString().trim().isEmpty()) {
-            binding.etPhone.error = "Please enter the Phone Number."
+        if (binding.etPhone.text.toString().trim().isEmpty() || binding.etPhone.text?.length!! < 11) {
+            binding.etPhone.error = "Please enter the right 11 digit Phone Number."
             binding.etPhone.requestFocus()
             valid = false
         } else phone = binding.etPhone.text.toString().trim()
+
 
         val time = Calendar.getInstance()
         date = SimpleDateFormat("MM/dd/yyyy").parse((time.get(Calendar.MONTH) + 1).toString() + "/" +
