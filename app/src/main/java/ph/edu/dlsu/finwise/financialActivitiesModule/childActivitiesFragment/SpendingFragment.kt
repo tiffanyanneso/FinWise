@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentSpendingBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
@@ -33,6 +34,18 @@ class SpendingFragment : Fragment(){
         goalIDArrayList.clear()
         budgetingArrayList.clear()
         getSpending()
+
+        binding.progressBar.progress = 75
+        binding.textPerformance.text = "75%"
+        binding.textStatus.text = "Good"
+        binding.textPerformance.setTextColor(getResources().getColor(R.color.dark_green))
+        binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
+
+        binding.progressBarOverspending.progress = 10
+        binding.textOverspending.text = "80%"
+        binding.textOverpsneidngStatus.text = "Bad"
+        binding.textOverspending.setTextColor(getResources().getColor(R.color.red))
+        binding.textOverpsneidngStatus.setTextColor(getResources().getColor(R.color.red))
     }
 
     override fun onCreateView(
