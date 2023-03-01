@@ -34,7 +34,19 @@ class SpendingFragment : Fragment(){
         goalIDArrayList.clear()
         budgetingArrayList.clear()
         getSpending()
+    }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSpendingBinding.inflate(inflater, container, false)
+        val view = binding.root
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.progressBar.progress = 75
         binding.textPerformance.text = "75%"
         binding.textStatus.text = "Good"
@@ -46,15 +58,6 @@ class SpendingFragment : Fragment(){
         binding.textOverpsneidngStatus.text = "Bad"
         binding.textOverspending.setTextColor(getResources().getColor(R.color.red))
         binding.textOverpsneidngStatus.setTextColor(getResources().getColor(R.color.red))
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentSpendingBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){

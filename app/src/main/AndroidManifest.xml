@@ -22,9 +22,6 @@
             android:name=".SpendingTransactionsActivity"
             android:exported="false" />
         <activity
-            android:name=".CompletedEarningActivity"
-            android:exported="false" />
-        <activity
             android:name=".parentFinancialActivitiesModule.CompletedEarningActivity"
             android:exported="false" />
         <activity

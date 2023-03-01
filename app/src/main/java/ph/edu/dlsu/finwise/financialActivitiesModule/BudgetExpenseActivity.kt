@@ -65,8 +65,8 @@ class BudgetExpenseActivity : AppCompatActivity() {
 
         firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
             var activity = it.toObject<FinancialActivities>()
-            if (activity?.status == "Completed")
-                binding.btnRecordExpense.visibility = View.GONE
+            //if (activity?.status == "Completed")
+                //binding.btnRecordExpense.visibility = View.GONE
         }
         //checkUser()
         bundle.putString("source", "viewGoal")
@@ -74,62 +74,9 @@ class BudgetExpenseActivity : AppCompatActivity() {
         initializeFragments()
 
 
-
-        binding.tvViewAll.setOnClickListener {
-            var goToGoalTransactions = Intent(this, GoalTransactionsActivity::class.java)
-            goToGoalTransactions.putExtras(bundle)
-            this.startActivity(goToGoalTransactions)
-        }
-        //TODO: these buttons will be moved back to fragments
-        binding.btnRecordExpense.setOnClickListener {
-            var recordExpense = Intent (this, FinancialActivityRecordExpense::class.java)
-            var bundle = Bundle()
-            bundle.putString("budgetActivityID", budgetActivityID)
-            bundle.putString("budgetItemID", budgetItemID)
-            bundle.putFloat("remainingBudget", remainingBudget)
-            recordExpense.putExtras(bundle)
-            startActivity(recordExpense)
-        }
-
-        binding.btnAddShoppingListItem.setOnClickListener {
-            var dialogBinding= DialogNewShoppingListItemBinding.inflate(getLayoutInflater())
-            var dialog= Dialog(this);
-            dialog.setContentView(dialogBinding.getRoot())
-
-            dialog.window!!.setLayout(850, 900)
-
-            dialogBinding.btnSave.setOnClickListener {
-                var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-                var shoppingListItem = ShoppingList(dialogBinding.etShoppingListItemName.text.toString(), budgetItemID, currentUser, false, spendingActivityID)
-                firestore.collection("ShoppingListItem").add(shoppingListItem).addOnSuccessListener {
-                    dialog.dismiss()
-                }
-            }
-
-            dialogBinding.btnCancel.setOnClickListener {
-                dialog.dismiss()
-            }
-            dialog.show()
-        }
-
         //checkUser()
 
 
-//        binding.btnRecordExpense.setOnClickListener {
-//            var recordExpense = Intent (this, FinancialActivityRecordExpense::class.java)
-//            var bundle = Bundle()
-//            bundle.putString("budgetActivityID", budgetActivityID)
-//            bundle.putString("budgetItemID", budgetItemID)
-//            bundle.putFloat("remainingBudget", remainingBudget)
-//            recordExpense.putExtras(bundle)
-//            this.startActivity(recordExpense)
-//        }
-//
-//        binding.tvViewAll.setOnClickListener {
-//            var goToGoalTransactions = Intent(this, GoalTransactionsActivity::class.java)
-//            goToGoalTransactions.putExtras(bundle)
-//            this.startActivity(goToGoalTransactions)
-//        }
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
@@ -180,8 +127,8 @@ class BudgetExpenseActivity : AppCompatActivity() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
             //current user is parent
-            if (it.exists())
-                binding.btnRecordExpense.visibility = View.GONE
+//            if (it.exists())
+//                binding.btnRecordExpense.visibility = View.GONE
         }
     }
 
