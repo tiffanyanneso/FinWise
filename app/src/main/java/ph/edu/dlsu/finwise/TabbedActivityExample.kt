@@ -28,6 +28,10 @@ class TabbedActivityExample : AppCompatActivity() {
             FragmentData("Blue", "#0000FF")
         )
 
+        binding.progressBar.progress = 50
+        binding.textPerformance.text = "50%"
+        binding.textStatus.text = "Low"
+
 //        val tabLayoutMediator = TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
 //            tab.text = fragmentDataList[position].title
 
