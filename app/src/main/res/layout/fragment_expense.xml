@@ -6,6 +6,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".personalFinancialManagementModule.pFMFragments.ExpenseFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_expense_pie_chart"
         android:layout_width="match_parent"
@@ -26,8 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="This Week's Expense Categories"
-                android:textSize="18sp"
-                android:layout_marginTop="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/dark_green"
                 android:layout_gravity="center_horizontal"/>
@@ -45,12 +58,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Top 3 Expense Categories"
-                android:textSize="15sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginTop="5dp"
                 android:textColor="@color/dark_green"
                 android:layout_gravity="center_horizontal"/>
-
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -58,36 +70,20 @@
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp"
                 app:cardBackgroundColor="@color/dark_green"
-                android:layout_margin="20dp"
-                android:layout_gravity="center_horizontal">
+                android:layout_gravity="center_horizontal"
+                android:layout_marginVertical="10dp">
 
                 <LinearLayout
                     android:id="@+id/linear_layout_2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
                     android:padding="20dp">
 
                     <ImageView
-                        android:src="@drawable/baseline_shopping_cart_checkout_24"
+                        android:src="@drawable/one"
                         android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="15dp"
-                        app:tint="@color/light_green" />
-
-                    <LinearLayout
-                        android:id="@+id/linear_layout_text2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="10dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="12sp"
-                            android:text="Top Expense Category"
-                            android:textColor="@color/white" />
+                        android:layout_height="60dp"/>
 
                         <TextView
                             android:id="@+id/tv_top_expense"
@@ -96,27 +92,23 @@
                             android:textSize="15sp"
                             android:text="None"
                             android:textColor="@color/white"
-                            android:textStyle="bold"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:layout_marginStart="10dp">
+                            android:textStyle="bold"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="15dp"
+                            android:layout_gravity="center"/>
 
                         <TextView
                             android:id="@+id/tv_expense_total"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="20sp"
-                            android:text="₱"
+                            android:textSize="16sp"
+                            android:text="₱ XXXX.XX"
                             android:textColor="@color/white"
                             android:textStyle="bold"
-                            android:layout_marginTop="15dp"/>
-                    </LinearLayout>
-
-
+                            android:layout_weight="1"
+                            android:textAlignment="textEnd"
+                            android:layout_gravity="center"
+                            tools:ignore="RtlCompat" />
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
@@ -127,70 +119,48 @@
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp"
                 app:cardBackgroundColor="@color/white"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:layout_gravity="center_horizontal">
 
                 <LinearLayout
                     android:id="@+id/linear_layout_3"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:background="@color/bright_green"
+                    android:background="@color/light_green"
                     android:padding="20dp">
 
                     <ImageView
-                        android:src="@drawable/icon_number_two"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginStart="15dp"
+                        android:src="@drawable/two"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:layout_gravity="center"/>
-
-
-                    <LinearLayout
-                        android:id="@+id/linear_layout_text3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="20dp">
 
                         <TextView
                             android:id="@+id/tv_top_expense_2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
+                            android:textSize="16sp"
                             android:text="None"
                             android:textColor="@color/white"
-                            android:textStyle="bold"/>
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:layout_marginStart="10dp">
+                            android:textStyle="bold"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="15dp"/>
 
                         <TextView
                             android:id="@+id/tv_top_expense_total_2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity=""
-                            android:text="₱"
+                            android:text="₱ XXXX.XXX"
                             android:textColor="@color/white"
-                            android:textSize="20sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
-                            android:layout_marginTop="15dp"/>
-                    </LinearLayout>
-
-
+                            android:layout_gravity="center"
+                            android:textAlignment="textEnd"
+                            android:layout_weight="1"
+                            tools:ignore="RtlCompat" />
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -199,75 +169,52 @@
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp"
                 app:cardBackgroundColor="@color/white"
-                android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="20dp"
                 android:layout_gravity="center_horizontal">
 
                 <LinearLayout
                     android:id="@+id/linear_layout_4"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/light_green"
                     android:orientation="horizontal"
-                    android:background="@color/bright_green"
                     android:padding="20dp">
 
                     <ImageView
-                        android:src="@drawable/icon_number_three"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginStart="15dp"
-                        android:layout_gravity="center"/>
-
-
-                    <LinearLayout
-                        android:id="@+id/linear_layout_text4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="20dp">
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/three" />
 
                         <TextView
                             android:id="@+id/tv_top_expense_3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="15sp"
                             android:text="None"
                             android:textColor="@color/white"
-                            android:textStyle="bold"/>
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:layout_marginStart="10dp">
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="15dp"
+                            android:layout_gravity="center"/>
 
                         <TextView
                             android:id="@+id/tv_top_expense_total_3"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity=""
-                            android:text="₱"
+                            android:text="₱ XXXXX.XXX"
                             android:textColor="@color/white"
-                            android:textSize="20sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
-                            android:layout_marginTop="15dp"/>
-                    </LinearLayout>
-
-
+                            android:layout_weight="1"
+                            android:textAlignment="textEnd"
+                            android:layout_gravity="center"
+                            tools:ignore="RtlCompat" />
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
-
-
         </LinearLayout>
-
     </androidx.cardview.widget.CardView>
-
+    </LinearLayout>
+    </ScrollView>
+    </LinearLayout>
 </FrameLayout>

@@ -25,12 +25,11 @@
                 android:id="@+id/tv_balance_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="This week's Balance Trend"
+                android:text="This Week's Balance Trend"
                 android:textStyle="bold"
                 android:textColor="@color/dark_green"
-                android:textSize="18sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
                 android:gravity="center"/>
 
 
@@ -39,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="10dp">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -64,7 +63,7 @@
                             android:layout_height="30dp"
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"
-                            app:tint="@color/very_light_green"
+                            app:tint="@color/white"
                             android:layout_marginRight="10dp"
                             android:layout_marginVertical="5dp"/>
 
@@ -77,7 +76,7 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textSize="12sp"
+                                android:textSize="14sp"
                                 android:text="Total Income"
                                 android:textColor="@color/white"/>
 
@@ -85,13 +84,11 @@
                                 android:id="@+id/tv_income_total"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textSize="15sp"
+                                android:textSize="16sp"
                                 android:text="₱XX,XXX.XX"
                                 android:textColor="@color/white"
                                 android:textStyle="bold"/>
                         </LinearLayout>
-
-
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -103,7 +100,6 @@
                     app:cardElevation="5dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginStart="10dp"
-                    android:layout_marginBottom="20dp"
                     app:cardBackgroundColor="@color/red"
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1">
@@ -124,7 +120,7 @@
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"
                             android:src="@drawable/baseline_shopping_cart_checkout_24"
-                            app:tint="@color/very_light_green" />
+                            app:tint="@color/white" />
 
                         <LinearLayout
                             android:id="@+id/linear_layout_text1"
@@ -137,7 +133,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Total Expense"
                                 android:textColor="@color/white"
-                                android:textSize="12sp" />
+                                android:textSize="14sp" />
 
                             <TextView
                                 android:id="@+id/tv_expense_total"
@@ -145,7 +141,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="₱XX,XXX.XX"
                                 android:textColor="@color/white"
-                                android:textSize="15sp"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
@@ -155,7 +151,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DETAILS ➡"
+                android:text="View More >"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="15dp"
