@@ -27,6 +27,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.GoalSettings
+import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -69,25 +70,25 @@ class SavingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSavingBinding.inflate(inflater, container, false)
-        binding.btnNewGoal.setOnClickListener {
-            if (ongoingGoals >= 5)
-                buildDialog()
-            else {
-                var goToNewGoal = Intent(requireContext().applicationContext, ChildNewGoal::class.java)
-
-                var bundle = Bundle()
-                bundle.putString("source", "childFinancialActivity")
-                goToNewGoal.putExtras(bundle)
-                goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
-                this.startActivity(goToNewGoal)
-            }
-        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.btnNewGoal.setOnClickListener {
+            if (ongoingGoals >= 5)
+                buildDialog()
+            else {
+                var goToNewGoal = Intent(requireContext().applicationContext, ChildNewGoal::class.java)
+                var bundle = Bundle()
+                bundle.putString("source", "childFinancialActivity")
+                goToNewGoal.putExtras(bundle)
+                goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(goToNewGoal)
+            }
+        }
+
         getGoals()
         getSavingActivities()
     }
@@ -111,13 +112,16 @@ class SavingFragment : Fragment() {
         var savedAmount = 0.00F
         binding.tvGoalSavings.text = "₱ " + DecimalFormat("#,##0.00").format(savedAmount)
 
-        for (goalID in goalIDArrayList) {
-            firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
-                var goal = it.toObject<FinancialGoals>()
-                savedAmount += goal?.currentSavings!!
-            }.continueWith {
-                binding.tvGoalSavings.text = "₱ " + DecimalFormat("#,##0.00").format(savedAmount)
-            }
+        firestore.collection("Transactions").whereEqualTo("createdBy", currentUser).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
+            for (transaction in results) {
+               var transactionObject = transaction.toObject<Transactions>()
+               if (transactionObject?.transactionType == "Deposit")
+                   savedAmount += transactionObject?.amount!!
+               else if (transactionObject.transactionType == "Withdrawal")
+                   savedAmount -= transactionObject?.amount!!
+           }
+        }.continueWith {
+            binding.tvGoalSavings.text = "₱ " + DecimalFormat("#,##0.00").format(savedAmount)
         }
     }
 

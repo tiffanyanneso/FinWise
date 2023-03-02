@@ -51,7 +51,7 @@ class ViewGoalActivity : AppCompatActivity() {
     private lateinit var budgetingActivityID:String
     private lateinit var spendingActivityID:String
 
-    private var balance = 0.00F
+    private var savings = 0.00F
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -197,13 +197,15 @@ class ViewGoalActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getTransactions() {
         var transactionFilterArrayList = ArrayList<TransactionFilter>()
+        //TODO: INCLUDE IN QUERY SPENDING ACTIVITY ID
         firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->
             for (transaction in results) {
                 var transactionObject = transaction.toObject<Transactions>()
                 transactionFilterArrayList.add(TransactionFilter(transaction.id,transactionObject.date!!.toDate()))
-                if (transactionObject.transactionType == "Deposit")
+
+                if (transactionObject.transactionType == "Deposit" || transactionObject.transactionType == "Income")
                     savedAmount += transactionObject.amount!!
-                else if (transactionObject.transactionType == "Withdrawal")
+                else if (transactionObject.transactionType == "Withdrawal" || transactionObject.transactionType == "Expense")
                     savedAmount-= transactionObject.amount!!
             }
 
@@ -246,7 +248,7 @@ class ViewGoalActivity : AppCompatActivity() {
                     var difference = Period.between(from, to)
                     binding.tvRemaining.text = difference.days.toString() + " days remaining"
 
-                    binding.tvCurrentBalance.text = "Available balance: ₱ " + DecimalFormat("#,##0.00").format(goal?.currentSavings)
+                    binding.tvCurrentBalance.text = "Available balance: ₱ " + DecimalFormat("#,##0.00").format(savedAmount)
                 }
             }
                 //deductExpenses() }

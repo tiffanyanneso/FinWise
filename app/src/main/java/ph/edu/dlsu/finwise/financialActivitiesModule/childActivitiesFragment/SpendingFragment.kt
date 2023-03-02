@@ -72,7 +72,7 @@ class SpendingFragment : Fragment(){
                 goalIDArrayList.add(activityObject?.financialGoalID.toString())
             }
             loadRecyclerView(goalIDArrayList)
-        }
+        }.continueWith { binding.tvInProgress.text = goalIDArrayList.size.toString() }
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {

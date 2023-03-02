@@ -49,12 +49,8 @@ class ViewGoalDetails : AppCompatActivity() {
                 binding.tvActivity.text = goal?.financialActivity.toString()
 
                 //convert timestamp to string date
-                val formatter = SimpleDateFormat("MM/dd/yyyy")
-                val dateCreated = formatter.format(goal?.dateCreated?.toDate())
-                binding.tvDateSet.text = dateCreated.toString()
-
-                val targetDate = formatter.format(goal?.targetDate?.toDate())
-                binding.tvTargetDate.text = targetDate.toString()
+                binding.tvDateSet.text = SimpleDateFormat("MM/dd/yyyy").format(goal?.dateCreated?.toDate()).toString()
+                binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(goal?.targetDate?.toDate()).toString()
                 binding.tvStatus.text = goal?.status.toString()
                 if (goal?.goalIsForSelf == true)
                     binding.tvIsForChild.text = "Yes"

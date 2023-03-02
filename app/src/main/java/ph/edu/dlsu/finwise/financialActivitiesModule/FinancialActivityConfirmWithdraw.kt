@@ -40,11 +40,11 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
 
         binding.btnConfirm.setOnClickListener {
             var withdrawal = hashMapOf(
-                "childID" to currentUser,
                 "transactionName" to bundle.getString("goalName").toString() + " Withdrawal",
                 "transactionType" to "Withdrawal",
                 "category" to "Goal",
                 "date" to bundle.getSerializable("date"),
+                "createdBy" to currentUser,
                 "amount" to bundle.getFloat("amount"),
                 "financialActivityID" to bundle.getString("savingActivityID")
             )
