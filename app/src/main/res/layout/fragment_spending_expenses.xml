@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="8"
-        tools:listitem="@layout/item_budget_expense"
+        tools:listitem="@layout/item_spending_expense"
         android:scrollbars="vertical"/>
 
 </FrameLayout>

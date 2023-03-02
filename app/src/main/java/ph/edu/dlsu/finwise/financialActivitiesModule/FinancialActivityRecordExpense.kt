@@ -23,10 +23,10 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
     private lateinit var binding: ActivityFinancialRecordExpenseBinding
     private var firestore = Firebase.firestore
 
-    private lateinit var context:Context
-
-    private lateinit var budgetActivityID:String
+    private lateinit var savingActivityID:String
+    private lateinit var spendingActivityID:String
     private lateinit var budgetItemID:String
+    private var shoppingListItemID:String?=null
 
     private var expenseCategories = ArrayList<String>()
 
@@ -35,7 +35,6 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialRecordExpenseBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        context=  this
 
         // Hides actionbar,
         // and initializes the navbar
@@ -44,9 +43,13 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
 
 
         var bundle: Bundle = intent.extras!!
-        budgetActivityID = bundle.getString("budgetActivityID").toString()
+        savingActivityID = bundle.getString("savingActivityID").toString()
+        spendingActivityID = bundle.getString("spendingActivityID").toString()
         budgetItemID = bundle.getString("budgetItemID").toString()
-        binding.tvRemainingBudget.text = "You currently have ₱${DecimalFormat("#,##0.00").format(bundle.getFloat("remainingBudget"))} left in budget"
+        if (bundle.containsKey("shoppingListItem"))
+            shoppingListItemID = bundle.getString("shoppingListItem")
+        //TODO: ADD HOW MUCH THEY HAVE LEFT IN THEIR SAVINGS
+        binding.tvRemainingBudget.text = "You currently have ₱${DecimalFormat("#,##0.00").format(bundle.getFloat("remainingBudget"))} left in budget AND___ LEFT IN SAVINGS"
 
 
         binding.etTransactionDate.setOnClickListener{
@@ -54,23 +57,23 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
         }
 
         binding.btnNext.setOnClickListener {
-            var bundle = Bundle()
-            bundle.putString("expenseName", binding.etExpenseName.text.toString())
-            bundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
-            bundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etTransactionDate.text.toString()))
-            bundle.putString("budgetActivityID", budgetActivityID)
-            bundle.putString("budgetItemID", budgetItemID)
+            var sendBundle = Bundle()
+            sendBundle.putString("expenseName", binding.etExpenseName.text.toString())
+            sendBundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
+            sendBundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etTransactionDate.text.toString()))
+            sendBundle.putString("savingActivityID", savingActivityID)
+            sendBundle.putString("spendingActivityID", spendingActivityID)
+            println("print budgetItemID " + budgetItemID)
+            sendBundle.putString("budgetItemID", budgetItemID)
+            if (bundle.containsKey("shoppingListItem"))
+                sendBundle.putString("shoppingListItemID", shoppingListItemID)
             var confirmSpending = Intent(this, FinancialActivityConfirmExpense::class.java)
-            confirmSpending.putExtras(bundle)
-            context.startActivity(confirmSpending)
+            confirmSpending.putExtras(sendBundle)
+            this.startActivity(confirmSpending)
         }
 
         binding.btnCancel.setOnClickListener {
-            var budgetExpense = Intent(this, BudgetExpenseActivity::class.java)
-            var bundle = Bundle()
-            bundle.putString("budgetActivityID", budgetActivityID)
-            bundle.putString("budgetItemID", budgetItemID)
-            context.startActivity(budgetExpense)
+           //TODO: CANCEL BUTTON
         }
     }
 

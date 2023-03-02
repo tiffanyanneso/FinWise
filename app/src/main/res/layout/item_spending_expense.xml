@@ -4,9 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="70dp"
     card_view:cardCornerRadius="10dp"
-    android:foreground="@drawable/border"
     android:layout_marginBottom="10dp"
-    android:backgroundTint="@color/very_light_green">
+    android:backgroundTint="@color/light_red">
 
     <TextView
         android:id="@+id/tv_goal_id"

@@ -5,15 +5,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
-import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -25,7 +18,6 @@ import ph.edu.dlsu.finwise.databinding.ActivityBudgetBinding
 import ph.edu.dlsu.finwise.databinding.DialogDoneSettingBudgetBinding
 import ph.edu.dlsu.finwise.databinding.DialogFinishBudgetingBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
-import ph.edu.dlsu.finwise.databinding.DialogProceedNextActivityBinding
 import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
@@ -46,7 +38,6 @@ class BudgetActivity : AppCompatActivity() {
     private lateinit var savingActivityID:String
     private lateinit var spendingActivityID:String
 
-    private lateinit var financialGoalID:String
     private var budgetCategoryIDArrayList = ArrayList<String>()
 
     private var allocated = 0.00F
@@ -70,9 +61,8 @@ class BudgetActivity : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         bundle = intent.extras!!
-        financialGoalID = bundle.getString("financialGoalID").toString()
-        budgetActivityID = bundle.getString("budgetActivityID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
+        budgetActivityID = bundle.getString("budgetActivityID").toString()
         spendingActivityID = bundle.getString("spendingActivityID").toString()
 
         //checks if child has already finished setting budget
@@ -144,15 +134,16 @@ class BudgetActivity : AppCompatActivity() {
                 override fun clickItem(budgetItemID: String, budgetActivityID: String) {
                     //"done setting budget" already clicked, they can access expense
                     if (isCompleted) {
-                        var budgetCategory = Intent(context, BudgetExpenseActivity::class.java)
+                        var budgetExpense = Intent(context, SpendingActivity::class.java)
                         var bundle = Bundle()
 
+                        bundle.putString("budgetActivityID", budgetActivityID)
+                        bundle.putString("savingActivityID", savingActivityID)
                         bundle.putString ("budgetItemID", budgetItemID)
-                        //change to spending
                         bundle.putString ("spendingActivityID", spendingActivityID)
-                        budgetCategory.putExtras(bundle)
-                        budgetCategory.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        context.startActivity(budgetCategory)
+                        budgetExpense.putExtras(bundle)
+                        budgetExpense.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        context.startActivity(budgetExpense)
                     } else { finishBudgeting() }
                 }
             })

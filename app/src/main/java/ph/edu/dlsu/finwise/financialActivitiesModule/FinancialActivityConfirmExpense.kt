@@ -3,7 +3,6 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
@@ -24,10 +23,6 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private lateinit var bundle:Bundle
-
-    val time = Calendar.getInstance().time
-    val formatter = SimpleDateFormat("MM/dd/yyyy")
-    val current = formatter.format(time)
 
     var amount : String? =null
 
@@ -55,23 +50,45 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
         sendBundle.putString("budgetItemID", budgetItemID)
 
         binding.btnConfirm.setOnClickListener {
-            //TODO: CHANGE WHERE THE BUDGET ITEM ID IS PLACED
+            //withdraw money from savings to wallet
+            var withdrawal = hashMapOf(
+                "childID" to currentUser,
+                "transactionType" to "Withdrawal",
+                "transactionName" to bundle.getString("expenseName"),
+                "amount" to bundle.getFloat("amount"),
+                "category" to bundle.getString("budgetItemID"),
+                "financialActivityID" to bundle.getString("savingActivityID"),
+                "date" to bundle.getSerializable("date")
+            )
+
+            firestore.collection("Transactions").add(withdrawal)
+
+
+            //from wallet balance, record expense
            var expense = hashMapOf(
-               "budgetCategoryID" to budgetItemID,
-               "expenseName" to bundle.getString("expenseName"),
+               "childID" to currentUser,
+               "transactionType" to "Expense",
+               "transactionName" to bundle.getString("expenseName"),
                "amount" to bundle.getFloat("amount"),
+               "category" to bundle.getString("budgetItemID"),
+               "financialActivityID" to bundle.getString("spendingActivityID"),
                "date" to bundle.getSerializable("date")
            )
 
-            //adjustUserBalance()
-
-            firestore.collection("BudgetExpenses").add(expense).addOnSuccessListener {
-                var spending = Intent(this, BudgetExpenseActivity::class.java)
+            firestore.collection("Transactions").add(expense).addOnSuccessListener {
+                var spending = Intent(this, SpendingActivity::class.java)
                 sendBundle.putString("budgetActivityID", budgetActivityID)
                 sendBundle.putString("budgetItemID", budgetItemID)
                 spending.putExtras(sendBundle)
                 this.startActivity(spending)
                 finish()
+            }.continueWith {
+                adjustUserBalance()
+            }
+
+            //check if bundle contains shoppingListItemID, meaning that the expense was from a shopping list and need to update the status
+            if (bundle.containsKey("shoppingListItemID")) {
+                firestore.collection("ShoppingListItems").document(bundle.getString("shoppingListItemID").toString()).update("status", "Purchased")
             }
         }
 
@@ -81,6 +98,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
     private fun setFields() {
         budgetActivityID = bundle.getString("budgetActivityID").toString()
         budgetItemID = bundle.getString("budgetItemID").toString()
+
         amount = bundle.getFloat("amount").toString()
         binding.tvAmount.text = "₱ " + DecimalFormat("#,###.00").format(bundle.getFloat("amount"))
         binding.tvName.text = bundle.getString("expenseName")
@@ -94,20 +112,15 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
     }
 
     private fun adjustUserBalance() {
-        //TODO: Change user based on who is logged in
-        /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2")
-            .get().addOnSuccessListener { documents ->
-                lateinit var id: String
-                for (document in documents) {
-                    id = document.id
-                }
-                var adjustedBalance = amount?.toDouble()
-                    adjustedBalance = -abs(adjustedBalance!!)
-
-                firestore.collection("ChildWallet").document(id)
-                    .update("currentBalance", FieldValue.increment(adjustedBalance))
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener { documents -> lateinit var id: String
+            for (document in documents) {
+                id = document.id
             }
+            var adjustedBalance = amount?.toDouble()
+                adjustedBalance = -abs(adjustedBalance!!)
+
+            firestore.collection("ChildWallet").document(id).update("currentBalance", FieldValue.increment(adjustedBalance))
+        }
     }
 
 }

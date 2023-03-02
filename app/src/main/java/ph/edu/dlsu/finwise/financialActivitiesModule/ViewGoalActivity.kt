@@ -41,6 +41,11 @@ class ViewGoalActivity : AppCompatActivity() {
     private lateinit var source:String
     private lateinit var childID:String
 
+    //the money the child currently has, this value is affected by spending (expense) transactions
+    private var currentBalance = 0.00F
+    //the money that the child has already saved for the goal, this value will only be changed by manual withdrawals
+    //e.g. the child withdrew money from their goal
+    //but not affected by withdrawals for expenses
     private var savedAmount = 0.00F
     private var targetAmount = 0.00F
 
@@ -204,15 +209,17 @@ class ViewGoalActivity : AppCompatActivity() {
                 transactionFilterArrayList.add(TransactionFilter(transaction.id,transactionObject.date!!.toDate()))
 
                 if (transactionObject.transactionType == "Deposit" || transactionObject.transactionType == "Income")
-                    savedAmount += transactionObject.amount!!
+                    currentBalance += transactionObject.amount!!
                 else if (transactionObject.transactionType == "Withdrawal" || transactionObject.transactionType == "Expense")
-                    savedAmount-= transactionObject.amount!!
+                    currentBalance-= transactionObject.amount!!
             }
 
             transactionFilterArrayList.sortByDescending { it.date }
             for (transaction in transactionFilterArrayList)
                 transactionsArrayList.add(transaction.transactionID.toString())
-        }.continueWith {setFields() }
+        }.continueWith {
+            binding.tvCurrentBalance.text = "Available balance: ₱ " + DecimalFormat("#,##0.00").format(currentBalance)
+            setFields() }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -224,6 +231,7 @@ class ViewGoalActivity : AppCompatActivity() {
                     var goal = document.toObject(FinancialGoals::class.java)
                     binding.tvGoalName.text = goal?.goalName.toString()
                     binding.tvActivityName.text = goal?.financialActivity.toString()
+                    savedAmount = goal?.currentSavings!!.toFloat()
                     targetAmount = goal?.targetAmount!!.toFloat()
 
                     var formatSaved = DecimalFormat("#,##0.00").format(goal?.currentSavings)
@@ -247,8 +255,6 @@ class ViewGoalActivity : AppCompatActivity() {
 
                     var difference = Period.between(from, to)
                     binding.tvRemaining.text = difference.days.toString() + " days remaining"
-
-                    binding.tvCurrentBalance.text = "Available balance: ₱ " + DecimalFormat("#,##0.00").format(savedAmount)
                 }
             }
                 //deductExpenses() }

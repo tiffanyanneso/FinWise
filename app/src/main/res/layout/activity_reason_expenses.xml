@@ -52,7 +52,7 @@
         android:layout_marginHorizontal="20dp"
         android:layout_height="match_parent"
         android:layout_weight="8"
-        tools:listitem="@layout/item_budget_expense"
+        tools:listitem="@layout/item_spending_expense"
         android:layout_marginBottom="40dp"/>
     </LinearLayout>
     </ScrollView>

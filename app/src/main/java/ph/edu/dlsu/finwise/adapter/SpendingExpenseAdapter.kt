@@ -7,19 +7,20 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.databinding.ItemBudgetExpenseBinding
+import ph.edu.dlsu.finwise.databinding.ItemSpendingExpenseBinding
 import ph.edu.dlsu.finwise.model.BudgetExpense
+import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
-class BudgetExpenseAdapter : RecyclerView.Adapter<BudgetExpenseAdapter.BudgetCategoryItemViewHolder>{
+class SpendingExpenseAdapter : RecyclerView.Adapter<SpendingExpenseAdapter.BudgetCategoryItemViewHolder>{
 
-    private var expenseArrayList = ArrayList<BudgetExpense>()
+    private var expenseArrayList = ArrayList<Transactions>()
     private var context: Context
 
     private var firestore = Firebase.firestore
 
-    constructor(context: Context, expenseArrayList:ArrayList<BudgetExpense>) {
+    constructor(context: Context, expenseArrayList:ArrayList<Transactions>) {
         this.context = context
         this.expenseArrayList = expenseArrayList
     }
@@ -31,8 +32,8 @@ class BudgetExpenseAdapter : RecyclerView.Adapter<BudgetExpenseAdapter.BudgetCat
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): BudgetExpenseAdapter.BudgetCategoryItemViewHolder {
-        val itemBinding = ItemBudgetExpenseBinding
+    ): SpendingExpenseAdapter.BudgetCategoryItemViewHolder {
+        val itemBinding = ItemSpendingExpenseBinding
             .inflate(
                 LayoutInflater.from(parent.context),
                 parent, false)
@@ -41,21 +42,21 @@ class BudgetExpenseAdapter : RecyclerView.Adapter<BudgetExpenseAdapter.BudgetCat
 
 
 
-    override fun onBindViewHolder(holder: BudgetExpenseAdapter.BudgetCategoryItemViewHolder,
+    override fun onBindViewHolder(holder: SpendingExpenseAdapter.BudgetCategoryItemViewHolder,
                                   position: Int) {
         holder.bindItem(expenseArrayList[position])
     }
 
-    inner class BudgetCategoryItemViewHolder(private val itemBinding: ItemBudgetExpenseBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
+    inner class BudgetCategoryItemViewHolder(private val itemBinding: ItemSpendingExpenseBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
 
         init {
             itemView.setOnClickListener(this)
         }
 
-        fun bindItem(expense: BudgetExpense){
-            itemBinding.tvItem.text = expense?.expenseName
-            itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(expense?.amount)
-            itemBinding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(expense?.date!! .toDate())
+        fun bindItem(transaction: Transactions){
+            itemBinding.tvItem.text = transaction?.transactionName
+            itemBinding.tvAmount.text = "- ₱ " + DecimalFormat("#,##0.00").format(transaction?.amount)
+            itemBinding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(transaction?.date!!.toDate())
         }
 
         override fun onClick(p0: View?) {

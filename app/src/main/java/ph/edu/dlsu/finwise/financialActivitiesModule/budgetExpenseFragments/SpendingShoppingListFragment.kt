@@ -13,17 +13,20 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.ShoppingListAdapter
 import ph.edu.dlsu.finwise.databinding.DialogNewShoppingListItemBinding
-import ph.edu.dlsu.finwise.databinding.FragmentBudgetShoppingListBinding
+import ph.edu.dlsu.finwise.databinding.DialogShoppingListRecordExpenseBinding
+import ph.edu.dlsu.finwise.databinding.FragmentSpendingShoppingListBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivityRecordExpense
 import ph.edu.dlsu.finwise.model.ShoppingList
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class BudgetShoppingListFragment : Fragment() {
+class SpendingShoppingListFragment : Fragment() {
 
-    private lateinit var binding:FragmentBudgetShoppingListBinding
+    private lateinit var binding: FragmentSpendingShoppingListBinding
     private lateinit var budgetActivityID:String
 
+    private lateinit var savingActivityID:String
     private lateinit var budgetItemID:String
     private lateinit var spendingActivityID:String
 
@@ -37,6 +40,7 @@ class BudgetShoppingListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             var bundle = arguments
+            savingActivityID = bundle?.getString("savingActivityID").toString()
             budgetActivityID = bundle?.getString("budgetActivityID").toString()
             budgetItemID = bundle?.getString("budgetItemID").toString()
             spendingActivityID = bundle?.getString("spendingActivityID").toString()
@@ -48,7 +52,7 @@ class BudgetShoppingListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentBudgetShoppingListBinding.inflate(inflater, container, false)
+        binding = FragmentSpendingShoppingListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -64,12 +68,11 @@ class BudgetShoppingListFragment : Fragment() {
 
     private fun getShoppingListItems() {
         shoppingListArrayList.clear()
-        firestore.collection("ShoppingListItems").whereEqualTo("spendingActivityID", spendingActivityID).whereIn("status", Arrays.asList("In List", "Purchased")).get().addOnSuccessListener { results ->
+        firestore.collection("ShoppingListItems").whereEqualTo("budgetCategory", budgetItemID).whereIn("status", Arrays.asList("In List", "Purchased")).get().addOnSuccessListener { results ->
             for (item in results)
                 shoppingListArrayList.add(item.id)
         }.continueWith {
-            println("print " +shoppingListArrayList.size)
-            shoppingListAdapter = ShoppingListAdapter(requireActivity().applicationContext, shoppingListArrayList, object:ShoppingListAdapter.ShoppingListSetting{
+            shoppingListAdapter = ShoppingListAdapter(requireActivity().applicationContext, shoppingListArrayList, savingActivityID, object:ShoppingListAdapter.ShoppingListSetting{
                 override fun editShoppingListItem(shoppingListItemID: String) {
                     funEditShoppingListItem(shoppingListItemID)
                 }
@@ -78,6 +81,30 @@ class BudgetShoppingListFragment : Fragment() {
                     funDeleteShoppingListItem(position, shoppingListItemID)
                 }
 
+            }, object:ShoppingListAdapter.CheckShoppingList{
+                override fun checkShoppingListItem(shoppingListItemID:String) {
+                        var dialogBinding= DialogShoppingListRecordExpenseBinding.inflate(layoutInflater)
+                        var dialog= Dialog(view!!.context);
+                        dialog.setContentView(dialogBinding.root)
+                        dialog.window!!.setLayout(900, 600)
+
+                        dialogBinding.btnYes.setOnClickListener {
+                            var recordExpense = Intent(context, FinancialActivityRecordExpense::class.java)
+                            var bundle = Bundle()
+                            bundle.putString("budgetItemID", budgetItemID)
+                            bundle.putString("savingActivityID", savingActivityID)
+                            bundle.putString("shoppingListItem", shoppingListItemID)
+                            bundle.putString("spendingActivityID", spendingActivityID)
+                            recordExpense.putExtras(bundle)
+                            recordExpense.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(recordExpense)
+                        }
+
+                        dialogBinding.btnNo.setOnClickListener {
+                            dialog.dismiss()
+                        }
+                        dialog.show()
+                }
             })
             binding.rvViewItems.adapter = shoppingListAdapter
             binding.rvViewItems.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
