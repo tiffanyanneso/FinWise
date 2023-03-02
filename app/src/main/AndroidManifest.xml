@@ -118,6 +118,9 @@
             android:name=".parentFinancialActivitiesModule.GoalSettingsActivity"
             android:exported="true" />
         <activity
+            android:name=".parentFinancialManagementModule.ParentMayaConfirmPayment"
+            android:exported="true" />
+        <activity
             android:name=".financialActivitiesModule.FinancialActivityConfirmExpense"
             android:exported="false" />
         <activity
@@ -255,7 +258,7 @@
         <activity
             android:name=".parentFinancialManagementModule.ParentFinancialManagementActivity"
             android:exported="false">
-          <!--           <intent-filter>
+                     <!--<intent-filter>
                          <action android:name="android.intent.action.MAIN" />
 
                          <category android:name="android.intent.category.LAUNCHER" />
