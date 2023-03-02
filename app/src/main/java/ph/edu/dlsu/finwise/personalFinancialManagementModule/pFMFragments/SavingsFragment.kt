@@ -21,6 +21,8 @@ import ph.edu.dlsu.finwise.databinding.FragmentSavingsChartBinding
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.GoalSavingDetailsActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
+import java.lang.Math.round
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -190,8 +192,19 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     }
 
     private fun setTotals(totalDeposit: Float, totalWithdraw: Float) {
-        binding.tvDepositTotal.text = "₱$totalDeposit"
-        binding.tvWithdrawalTotal.text = "₱$totalWithdraw"
+        val dec = DecimalFormat("#,###.00")
+        val depositText = dec.format(totalDeposit)
+        val withdrawalText = dec.format(totalWithdraw)
+        var savings = if (totalDeposit != 0.0f) {
+            (totalDeposit - totalWithdraw) / totalDeposit * 100
+        } else {
+            0.0F // set savings rate to 0 if income is 0
+        }
+        savings = round(savings / 10.0f) * 10.0f
+
+        binding.tvDepositTotal.text = "₱$depositText"
+        binding.tvWithdrawalTotal.text = "₱$withdrawalText"
+        binding.tvRate.text = "$savings%"
     }
 
     private fun getWeeksOfCurrentMonth(dates: List<Date>): Map<Int, List<Date>> {

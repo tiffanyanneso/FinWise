@@ -22,6 +22,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentBalanceChartBinding
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -273,8 +274,15 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     }
 
     private fun setTotals(totalIncome: Float, totalExpense: Float) {
-        binding.tvIncomeTotal.text = "₱$totalIncome"
-        binding.tvExpenseTotal.text = "₱$totalExpense"
+        val dec = DecimalFormat("#,###.00")
+        val incomeText = dec.format(totalIncome)
+        val expenseText = dec.format(totalExpense)
+        val netIncome = totalIncome - totalExpense
+        val netIncomeText = dec.format(netIncome)
+
+        binding.tvIncomeTotal.text = "₱$incomeText"
+        binding.tvExpenseTotal.text = "₱$expenseText"
+        binding.tvDifference.text = "₱$netIncomeText"
     }
 
     private fun getDatesOfTransactions(): List<Date> {
