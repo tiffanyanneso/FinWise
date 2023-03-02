@@ -203,15 +203,17 @@ class ViewGoalActivity : AppCompatActivity() {
     private fun getTransactions() {
         var transactionFilterArrayList = ArrayList<TransactionFilter>()
         //TODO: INCLUDE IN QUERY SPENDING ACTIVITY ID
-        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
             for (transaction in results) {
                 var transactionObject = transaction.toObject<Transactions>()
                 transactionFilterArrayList.add(TransactionFilter(transaction.id,transactionObject.date!!.toDate()))
 
-                if (transactionObject.transactionType == "Deposit" || transactionObject.transactionType == "Income")
+                if (transactionObject.transactionType == "Deposit")
                     currentBalance += transactionObject.amount!!
-                else if (transactionObject.transactionType == "Withdrawal" || transactionObject.transactionType == "Expense")
-                    currentBalance-= transactionObject.amount!!
+
+                else if (transactionObject.transactionType == "Withdrawal")
+                    currentBalance -= transactionObject.amount!!
+
             }
 
             transactionFilterArrayList.sortByDescending { it.date }

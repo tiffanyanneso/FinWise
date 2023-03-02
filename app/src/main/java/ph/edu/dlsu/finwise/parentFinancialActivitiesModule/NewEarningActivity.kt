@@ -49,6 +49,7 @@ class NewEarningActivity : AppCompatActivity() {
             firestore.collection("EarningActivities").add(earningActivity).addOnSuccessListener {
                 var earning = Intent(this, EarningActivity::class.java)
                 var sendBundle = Bundle()
+                sendBundle.putString("childID", childID)
                 sendBundle.putString("savingActivityID", savingActivityID)
                 earning.putExtras(sendBundle)
                 startActivity(earning)

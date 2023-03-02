@@ -9,9 +9,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemEarningCompletedBinding
-import ph.edu.dlsu.finwise.databinding.ItemShoppingListBinding
-import ph.edu.dlsu.finwise.model.EarningActivity
-import ph.edu.dlsu.finwise.model.ShoppingList
+import ph.edu.dlsu.finwise.model.EarningActivityModel
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
@@ -56,7 +54,7 @@ class EarningCompletedAdapter : RecyclerView.Adapter<EarningCompletedAdapter.Ear
 
         fun bindItem(earningID: String){
             firestore.collection("EarningActivities").document(earningID).get().addOnSuccessListener {
-                var earning = it.toObject<EarningActivity>()
+                var earning = it.toObject<EarningActivityModel>()
                 itemBinding.tvActivity.text = earning?.activityName
                 itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
                 itemBinding.tvDuration.text = earning?.requiredTime.toString() + " minutes"

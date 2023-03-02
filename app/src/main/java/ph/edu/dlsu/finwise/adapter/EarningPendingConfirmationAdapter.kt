@@ -10,73 +10,72 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.financialActivitiesModule.IncomeActivity
-import ph.edu.dlsu.finwise.databinding.ItemEarningBinding
+import ph.edu.dlsu.finwise.databinding.ItemEarningPendingConfirmationBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningSendMoneyActivity
 import java.text.DecimalFormat
-import java.text.SimpleDateFormat
 
-class EarningToDoAdapter : RecyclerView.Adapter<EarningToDoAdapter.EarningToDoViewHolder> {
+class EarningPendingConfirmationAdapter : RecyclerView.Adapter<EarningPendingConfirmationAdapter.EarningCompletedViewHolder>{
 
-    private var earningToDoArrayList = ArrayList<String>()
+    private var earningPendingArrayList = ArrayList<String>()
     private var context: Context
 
     private var firestore = Firebase.firestore
 
 
-    constructor(context: Context, earningToDoArrayList: ArrayList<String>) {
+    constructor(context: Context, earningPendingArrayList:ArrayList<String>) {
         this.context = context
-        this.earningToDoArrayList = earningToDoArrayList
+        this.earningPendingArrayList = earningPendingArrayList
     }
 
     override fun getItemCount(): Int {
-        return earningToDoArrayList.size
+        return earningPendingArrayList.size
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): EarningToDoAdapter.EarningToDoViewHolder {
-        val itemBinding = ItemEarningBinding
+    ): EarningPendingConfirmationAdapter.EarningCompletedViewHolder {
+        val itemBinding = ItemEarningPendingConfirmationBinding
             .inflate(
                 LayoutInflater.from(parent.context),
-                parent, false
-            )
-        return EarningToDoViewHolder(itemBinding)
+                parent, false)
+        return EarningCompletedViewHolder(itemBinding)
     }
 
-    override fun onBindViewHolder(holder: EarningToDoAdapter.EarningToDoViewHolder, position: Int) {
-        holder.bindItem(earningToDoArrayList[position])
+    override fun onBindViewHolder(holder: EarningPendingConfirmationAdapter.EarningCompletedViewHolder,
+                                  position: Int) {
+        holder.bindItem(earningPendingArrayList[position])
     }
 
-    inner class EarningToDoViewHolder(private val itemBinding: ItemEarningBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
+    inner class EarningCompletedViewHolder(private val itemBinding: ItemEarningPendingConfirmationBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
 
         init {
             itemView.setOnClickListener(this)
         }
 
-        fun bindItem(earningID: String) {
-            itemBinding.tvEarningActivityId.text = earningID
+        fun bindItem(earningID: String){
             firestore.collection("EarningActivities").document(earningID).get().addOnSuccessListener {
                 var earning = it.toObject<EarningActivityModel>()
                 itemBinding.tvActivity.text = earning?.activityName
                 itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
                 itemBinding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
-                itemBinding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.targetDate!!.toDate()).toString()
+                itemBinding.tvEarningActivityId.text = earningID
                 itemBinding.tvSavingActivityId.text = earning?.savingActivityID
                 itemBinding.tvChildId.text = earning?.childID
+                //itemBinding.tvFinishDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.dateCompleted!!.toDate())
             }
         }
 
         override fun onClick(p0: View?) {
-            var income = Intent (context, IncomeActivity::class.java)
+            var confirm = Intent (context, EarningSendMoneyActivity::class.java)
             var bundle = Bundle()
             bundle.putString("earningActivityID", itemBinding.tvEarningActivityId.text.toString())
             bundle.putString("savingActivityID", itemBinding.tvSavingActivityId.text.toString())
             bundle.putString("childID", itemBinding.tvChildId.text.toString())
-            income.putExtras(bundle)
-            income.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            context.startActivity(income)
+            confirm.putExtras(bundle)
+            confirm.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            context.startActivity(confirm)
         }
     }
 }

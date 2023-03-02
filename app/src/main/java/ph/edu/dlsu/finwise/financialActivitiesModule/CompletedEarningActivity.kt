@@ -1,17 +1,18 @@
-package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
+package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityCompletedEarningBinding
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
+import java.text.DecimalFormat
 
 class CompletedEarningActivity : AppCompatActivity() {
 
-    private lateinit var binding:ActivityCompletedEarningBinding
+    private lateinit var binding: ActivityCompletedEarningBinding
 
     private var firestore = Firebase.firestore
 
@@ -28,17 +29,15 @@ class CompletedEarningActivity : AppCompatActivity() {
         var childID = bundle.getString("childID").toString()
 
 
-        println("print"  + earningActivityID)
 
         firestore.collection("EarningActivities").document(earningActivityID).get().addOnSuccessListener {
-            var earning = it.toObject<ph.edu.dlsu.finwise.model.EarningActivity>()
+            var earning = it.toObject<ph.edu.dlsu.finwise.model.EarningActivityModel>()
             binding.tvName.text = earning?.activityName
-            binding.tvAmountEarned.text = earning?.amount.toString()
-            //TODO: UPDATED GOAL SAVINGS AMOUNT
+            binding.tvAmountEarned.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
         }
 
-        firestore.collection("EarningActivities").document(earningActivityID).update("status", "Completed")
-        firestore.collection("EarningActivities").document(earningActivityID).update("dateCompleted", Timestamp.now())
+        firestore.collection("EarningActivities").document(earningActivityID).update("status", "Pending")
+       // firestore.collection("EarningActivities").document(earningActivityID).update("dateCompleted", Timestamp.now())
 
 
         binding.btnFinish.setOnClickListener {

@@ -13,6 +13,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEarningBinding
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningCompletedFragment
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningPendingConfirmationFragment
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningToDoFragment
 
 class EarningActivity : AppCompatActivity() {
@@ -23,6 +24,8 @@ class EarningActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private lateinit var childID:String
+
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,14 +59,29 @@ class EarningActivity : AppCompatActivity() {
         var earningToDoFragment = EarningToDoFragment()
         earningToDoFragment.arguments = fragmentBundle
 
+        var earningPendingFragment = EarningPendingConfirmationFragment()
+        earningPendingFragment.arguments = fragmentBundle
+
         var earningCompletedFragment = EarningCompletedFragment()
         earningCompletedFragment.arguments = fragmentBundle
 
-        adapter.addFragment(earningToDoFragment,"To-Do")
-        adapter.addFragment(earningCompletedFragment,"Completed")
 
-        binding.viewPager.adapter = adapter
-        binding.tabLayout.setupWithViewPager(binding.viewPager)
+        firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
+            println("print "  + it.exists())
+            //current user is a child
+            if (it.exists()) {
+                adapter.addFragment(earningToDoFragment,"To-Do")
+                adapter.addFragment(earningPendingFragment,"Pending")
+                adapter.addFragment(earningCompletedFragment,"Completed")
+            } else {
+                adapter.addFragment(earningPendingFragment,"Pending")
+                adapter.addFragment(earningToDoFragment,"To-Do")
+                adapter.addFragment(earningCompletedFragment,"Completed")
+            }
+        }.continueWith {
+            binding.viewPager.adapter = adapter
+            binding.tabLayout.setupWithViewPager(binding.viewPager)
+        }
     }
 
     private fun checkUser() {

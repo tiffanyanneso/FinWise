@@ -2,7 +2,7 @@ package ph.edu.dlsu.finwise.model
 
 import com.google.firebase.Timestamp
 
-class EarningActivity (
+class EarningActivityModel (
     var activityName:String?=null,
     var targetDate:Timestamp?=null,
     var requiredTime:Int?=null,

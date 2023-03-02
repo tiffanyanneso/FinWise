@@ -50,7 +50,7 @@ class GoalTransactionsFragment : Fragment() {
         transactionsIDArrayList.clear()
         var transactionFilterArrayList = ArrayList<TransactionFilter>()
 
-        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
             for (transaction in results) {
                 var transactionObject = transaction.toObject<Transactions>()
                 transactionFilterArrayList.add(TransactionFilter(transaction.id, transactionObject.date!!.toDate()))
