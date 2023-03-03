@@ -21,75 +21,83 @@
             android:orientation="vertical"
             android:layout_gravity="center">
 
-            <TextView
-                android:id="@+id/tv_balance_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="This Week's Balance Trend"
-                android:textStyle="bold"
-                android:textColor="@color/dark_green"
-                android:textSize="20sp"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:layout_marginBottom="10dp"/>
-
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp"
-                app:cardBackgroundColor="@color/teal_700"
+                android:layout_marginTop="15dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="1">
 
                 <LinearLayout
                     android:id="@+id/linear_layout_5"
                     android:layout_width="match_parent"
-                    android:layout_height="130dp"
-                    android:orientation="horizontal"
-
-                    android:paddingVertical="20dp">
+                    android:layout_height="200dp"
+                    android:background="@drawable/gradient_pfm_card"
+                    android:orientation="vertical">
 
                     <ImageView
                         android:src="@drawable/icon_net_income"
                         android:contentDescription="Profit"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:layout_marginTop="20dp"
                         android:layout_gravity="center"
-                        android:layout_marginStart="90dp"
                         app:tint="@color/white"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="27dp"
+                        android:layout_marginBottom="5dp"
                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:text="CASH FLOW"
+                        android:textColor="@color/white"/>
 
                     <LinearLayout
                         android:id="@+id/linear_layout_text5"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:gravity="center"
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="300dp"
                             android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:text="Net Income"
+                            android:id="@+id/tv_summary"
+                            android:gravity="center"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="5dp"
+                            android:text="You've earned ₱X,XXX.XX more than you spent"
                             android:textColor="@color/white"/>
 
-                        <TextView
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="110dp"
+                            android:layout_height="50dp"
+                            android:id="@+id/btn_details"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:text="View More"
+                            android:textSize="12sp"
+                            android:background="@drawable/rounded_button"
+                            android:backgroundTint="@color/light_green"
+                            android:textColor="@color/white"/>
+
+                        <!--<TextView
                             android:id="@+id/tv_difference"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
                             android:text="₱XX,XXX.XX"
                             android:textColor="@color/white"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"/>-->
                     </LinearLayout>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
-
-
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -98,7 +106,7 @@
                 android:gravity="center"
                 android:layout_marginTop="10dp">
 
-                <androidx.cardview.widget.CardView
+                <!--<androidx.crdview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="10dp"
@@ -203,21 +211,20 @@
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </androidx.cardview.widget.CardView>-->
             </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_balance_title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="View More >"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="15dp"
-                android:textSize="14sp"
+                android:text="This Week's Balance Trend"
                 android:textStyle="bold"
-                android:id="@+id/tv_details"
-                android:textColor="@color/bright_green"
-                android:layout_gravity="end"/>
+                android:textColor="@color/dark_green"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:layout_marginBottom="10dp"/>
 
 
             <com.github.mikephil.charting.charts.LineChart

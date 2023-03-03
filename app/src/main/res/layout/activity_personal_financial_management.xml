@@ -103,6 +103,8 @@
                                     android:textSize="24sp"
                                     android:textStyle="bold" />
                             </LinearLayout>
+
+
                         </LinearLayout>
                     </LinearLayout>
 
@@ -296,10 +298,101 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:id="@+id/cv_score"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cv_current_balance"
+            android:layout_margin="20dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/gradient_pfm_detail_card2"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:src="@drawable/icon_net_income"
+                    android:contentDescription="Profit"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center"
+                    app:tint="@color/white"
+                    android:layout_marginBottom="5dp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:text="Financial Health Score"
+                    android:textColor="@color/white"/>
+
+                <LinearLayout
+                    android:id="@+id/linear_layout_text5"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="300dp"
+                        android:layout_height="300dp"
+                        android:id="@+id/tv_score"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:layout_marginTop="5dp"
+                        android:text="F (Fail) 😔 \n You are spending much more than you earn and this could lead to serious financial trouble. It's important to talk to a parent to find ways to improve your financial situation"
+                        android:textColor="@color/white"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="130dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/btn_explanation"
+                        android:gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:text="View Explanation"
+                        android:textSize="12sp"
+                        android:background="@drawable/rounded_button"
+                        android:backgroundTint="@color/light_green"
+                        android:textColor="@color/white"/>
+
+                    <!--<TextView
+                        android:id="@+id/tv_difference"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="₱XX,XXX.XX"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"/>-->
+                </LinearLayout>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- <ph.edu.dlsu.finwise.personalFinancialManagementModule.HalfCircleProgressBar
+             android:id="@+id/progressBar"
+             android:layout_width="200dp"
+             app:layout_constraintLeft_toLeftOf="parent"
+             app:layout_constraintRight_toRightOf="parent"
+             app:layout_constraintTop_toBottomOf="@id/cv_current_balance"
+             android:layout_height="200dp"/>-->
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/cv_current_balance"
+            app:layout_constraintTop_toBottomOf="@id/cv_score"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/ll_sort_dates"

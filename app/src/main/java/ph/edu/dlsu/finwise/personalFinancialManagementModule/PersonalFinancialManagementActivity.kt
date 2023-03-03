@@ -1,9 +1,13 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -13,11 +17,13 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.PFMAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.ExpenseFragment
+import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.SavingsFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.BalanceFragment
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.IncomeFragment
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.ExplanationFragment
 import java.text.DecimalFormat
+import java.util.ArrayList
+
 
 
 class PersonalFinancialManagementActivity : AppCompatActivity() {
@@ -25,7 +31,11 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPersonalFinancialManagementBinding
     private var firestore = Firebase.firestore
     private var bundle = Bundle()
+    private lateinit var context: Context
+
     var balance = 0.00f
+    var income = 0.00f
+    var expense = 0.00f
 
     /*private val tabIcons1 = intArrayOf(
         R.drawable.baseline_wallet_24,
@@ -41,7 +51,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPersonalFinancialManagementBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        context = this
 
         // Hides actionbar,
         // and initializes the navbar
@@ -50,11 +60,71 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
         setUpChartTabs()
         loadBalance()
+        loadFinancialHealth()
         //setUpBreakdownTabs()
         //initializeButtons()
         //initializeBalanceBarGraph()
         //initializeSavingsBarGraph()
         //goToTransactionHistory()
+    }
+
+    private fun loadFinancialHealth() {
+        //TODO: change to currentUser
+        firestore.collection("Transactions")
+            .get().addOnSuccessListener { documents ->
+                val transactionsArrayList = initializeTransactions(documents)
+                getIncomeAndExpense(transactionsArrayList)
+                computeIncomeExpenseRatio()
+                loadExplanation()
+            }
+
+    }
+
+    private fun loadExplanation() {
+        binding.btnExplanation.setOnClickListener {
+            val activity = context as FragmentActivity
+            val fm: FragmentManager = activity.supportFragmentManager
+            val dialogFragment = ExplanationFragment()
+            dialogFragment.show(fm, "fragment_alert")
+        }
+    }
+
+    private fun computeIncomeExpenseRatio() {
+        val ratio = (income / expense * 100).toInt() // convert to percentage and round down to nearest integer
+
+        val grade = if (ratio >= 200) {
+            "A (Excellent) 😄\n Your income is more than enough to cover your expenses and save some money for the future"
+        } else if (ratio >= 150 && ratio < 200) {
+            "B (Good) ☺\n You are doing a good job managing your income and expenses, but there is still room for improvement"
+        } else if (ratio >= 100 && ratio < 150) {
+            "C (Fair) 😐\n You are spending most of your income on expenses and not saving much. It's important to start finding ways to save more money"
+        } else if (ratio >= 50 && ratio < 100) {
+            "D (Poor) 😕\n You are spending more than you earn and this could lead to financial trouble. It's important to start finding ways to increase your income and reduce your expenses"
+        } else {
+            "F (Fail) 😔\n You are spending much more than you earn and this could lead to serious financial trouble. It's important to talk to your parent to find ways to improve your financial situation"
+        }
+
+        binding.tvScore.text = grade
+
+    }
+
+    private fun getIncomeAndExpense(transactionsArrayList: ArrayList<Transactions>) {
+        for (transaction in transactionsArrayList) {
+            if (transaction.transactionType == "Income")
+                income += transaction.amount!!
+            else if (transaction.transactionType == "Income")
+                expense += transaction.amount!!
+        }
+    }
+
+    private fun initializeTransactions(documents: QuerySnapshot): ArrayList<Transactions> {
+        val transactionsArrayList = ArrayList<Transactions>()
+        for (transactionSnapshot in documents) {
+            //creating the object from list retrieved in db
+            val transaction = transactionSnapshot.toObject<Transactions>()
+            transactionsArrayList.add(transaction)
+        }
+        return transactionsArrayList
     }
 
     private fun initializeButtons() {

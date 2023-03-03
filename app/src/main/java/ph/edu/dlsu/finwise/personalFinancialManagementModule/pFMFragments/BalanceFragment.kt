@@ -89,7 +89,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     }
 
     private fun initializeDetails() {
-        binding.tvDetails.setOnClickListener{
+        binding.btnDetails.setOnClickListener{
             val goToDetails = Intent(context, TrendDetailsActivity::class.java)
             bundle.putString("date", selectedDatesSort)
             goToDetails.putExtras(bundle)
@@ -275,14 +275,20 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
     private fun setTotals(totalIncome: Float, totalExpense: Float) {
         val dec = DecimalFormat("#,###.00")
-        val incomeText = dec.format(totalIncome)
-        val expenseText = dec.format(totalExpense)
+        /*val incomeText = dec.format(totalIncome)
+        val expenseText = dec.format(totalExpense)*/
         val netIncome = totalIncome - totalExpense
-        val netIncomeText = dec.format(netIncome)
+        var netIncomeText = dec.format(netIncome)
 
-        binding.tvIncomeTotal.text = "₱$incomeText"
-        binding.tvExpenseTotal.text = "₱$expenseText"
-        binding.tvDifference.text = "₱$netIncomeText"
+        /*binding.tvIncomeTotal.text = "₱$incomeText"
+        binding.tvExpenseTotal.text = "₱$expenseText"*/
+        if (netIncome > 0)
+            binding.tvSummary.text = "You've earned ₱$netIncomeText more than you spent 😄"
+        else {
+            netIncomeText = kotlin.math.abs(netIncome).toString()
+            binding.tvSummary.text = "You've spent ₱$netIncomeText more than you earned 😞"
+        }
+
     }
 
     private fun getDatesOfTransactions(): List<Date> {

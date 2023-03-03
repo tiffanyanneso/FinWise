@@ -39,11 +39,99 @@
                 android:id="@+id/tv_expense_breakdown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="This Week's Expense Categories"
+                android:text="This Week's Expense"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/dark_green"
                 android:layout_gravity="center_horizontal"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp"
+                android:layout_gravity="center_horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gradient_pfm_detail_card2"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:src="@drawable/icon_net_income"
+                        android:contentDescription="Profit"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_gravity="center"
+                        app:tint="@color/white"
+                        android:layout_marginBottom="5dp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:text="EXPENSE"
+                        android:textColor="@color/white"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_summary"
+                            android:gravity="center"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="5dp"
+                            android:text="You've earned ₱X,XXX.XX more than you spent"
+                            android:textColor="@color/white"/>
+
+                        <TextView
+                            android:layout_width="300dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tv_tips"
+                            android:gravity="center"
+                            android:textSize="12sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="5dp"
+                            android:text="You've earned ₱X,XXX.XX more than you spent"
+                            android:textColor="@color/cream"/>
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="180dp"
+                            android:layout_height="50dp"
+                            android:id="@+id/btn_transaction_history"
+                            android:gravity="center"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginBottom="15dp"
+                            android:text="Transaction History"
+                            android:textSize="12sp"
+                            android:background="@drawable/rounded_button"
+                            android:backgroundTint="@color/dark_green"
+                            android:textColor="@color/white"/>
+
+                        <!--<TextView
+                            android:id="@+id/tv_difference"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="₱XX,XXX.XX"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"/>-->
+                    </LinearLayout>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pc_expense"

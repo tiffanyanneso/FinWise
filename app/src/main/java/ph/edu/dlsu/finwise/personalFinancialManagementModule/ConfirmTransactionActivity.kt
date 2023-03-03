@@ -95,7 +95,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
 
     private fun confirm() {
         binding.btnConfirm.setOnClickListener {
-
+            //TODO: add the createdBy
             val transaction = hashMapOf(
                 //TODO: add childID, createdBy
                 "transactionName" to name,

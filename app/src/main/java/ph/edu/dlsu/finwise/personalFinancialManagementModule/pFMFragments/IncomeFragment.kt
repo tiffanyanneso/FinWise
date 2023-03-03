@@ -1,10 +1,10 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,8 +25,9 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentIncomeBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.Transactions
-import java.math.BigDecimal
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
 import java.text.DecimalFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -43,10 +44,12 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     var rewardPercentage = 0.00f
     var otherPercentage = 0.00f
     var allowance = 0.00f
+    var total = 0.00f
     var gift = 0.00f
     var reward = 0.00f
     var other = 0.00f
     private var selectedDatesSort = "weekly"
+    lateinit var topIncomeCategory: String
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
 
@@ -70,6 +73,15 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         binding = FragmentIncomeBinding.bind(view)
         getArgumentsFromPFM()
         loadPieChart()
+        loadFinancialActivitiesButton()
+    }
+
+    private fun loadFinancialActivitiesButton() {
+        //TODO: double chekc kung tama link
+        binding.btnFinancialActivities.setOnClickListener {
+            val goToFinancialActivitiy = Intent(context, FinancialActivity::class.java)
+            startActivity(goToFinancialActivitiy)
+        }
     }
 
     private fun getArgumentsFromPFM() {
@@ -98,6 +110,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
                 calculatePercentages()
                 setTopThreeCategories()
                 topIncome()
+                setSummary()
                 loadPieChartView()
             }
     }
@@ -134,7 +147,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
             "weekly" -> {
                 selectedDates = getDaysOfWeek(sortedDate)
                 addWeeklyData(selectedDates)
-                binding.tvIncomeTitle.text = "This Week's Income Categories"
+                binding.tvIncomeTitle.text = "This Week's Income"
             }
             "monthly" -> {
                 /*val group = groupDates(sortedDate, "monthly")
@@ -142,7 +155,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
                 val weeks = getWeeksOfCurrentMonth(sortedDate)
                 computeDataForMonth(weeks)
                 setTopThreeCategories()
-                binding.tvIncomeTitle.text = "This Month's Income Categories"
+                binding.tvIncomeTitle.text = "This Month's Income"
                 /*val group = groupDates(sortedDate, "month")
                 iterateDatesByQuarter(group)*/
             }
@@ -152,10 +165,25 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
                 val group = getMonthsOfQuarter(sortedDate)
                 computeDataForQuarter(group)
                 setTopThreeCategories()
-                binding.tvIncomeTitle.text = "This Quarter's Income Categories"
+                topIncome()
+                setSummary()
+                binding.tvIncomeTitle.text = "This Quarter's Income"
             }
         }
 
+    }
+
+    private fun setSummary() {
+        val dec = DecimalFormat("#,###.00")
+        val totalText = dec.format(total)
+        var dateRange = "week"
+        when (selectedDatesSort) {
+            "monthly" -> dateRange = "month"
+            "yearly" -> dateRange = "quarter"
+        }
+
+        binding.tvSummary.text = "You've earned ₱$totalText for this $dateRange!"
+        binding.tvTips.text = "Go to the \"Financial Activities\" to develop your Financial Literacy using your money"
     }
 
     private fun setTopThreeCategories() {
@@ -266,11 +294,13 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     }
 
     private fun calculatePercentages() {
-        val total = allowance + gift + reward + other
+        total = allowance + gift + reward + other
         allowancePercentage = allowance / total * 100
         giftPercentage = gift / total * 100
         rewardPercentage = reward / total * 100
         otherPercentage = other / total * 100
+
+
     }
 
     private fun addWeeklyData(selectedDates: List<Date>) {
@@ -307,19 +337,23 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     private fun topIncome() {
         val dec = DecimalFormat("#,###.00")
         if (allowance >= gift && allowance >= reward && allowance >= other) {
-            binding.tvTopIncome.text = "Allowance"
+            topIncomeCategory = "Allowance"
+            binding.tvTopIncome.text = topIncomeCategory
             val amount = dec.format(allowance)
             binding.tvIncomeTotal.text = "₱$amount"
         } else if (gift >= allowance && gift >= reward && gift >= other) {
-            binding.tvTopIncome.text = "Gift"
+            topIncomeCategory = "Gift"
+            binding.tvTopIncome.text = topIncomeCategory
             val amount = dec.format(gift)
             binding.tvIncomeTotal.text = "₱$amount"
         } else if (reward >= allowance && reward >= gift && reward >= other) {
-            binding.tvTopIncome.text = "Reward"
+            topIncomeCategory = "Reward"
+            binding.tvTopIncome.text = topIncomeCategory
             val amount = dec.format(reward)
             binding.tvIncomeTotal.text = "₱$amount"
         } else {
-            binding.tvTopIncome.text = "Other"
+            topIncomeCategory = "Other"
+            binding.tvTopIncome.text = topIncomeCategory
             val amount = dec.format(other)
             binding.tvIncomeTotal.text = "₱$amount"
         }
