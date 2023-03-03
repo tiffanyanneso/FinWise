@@ -23,6 +23,8 @@ import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class BudgetActivity : AppCompatActivity() {
 
@@ -33,21 +35,17 @@ class BudgetActivity : AppCompatActivity() {
     lateinit var context:Context
     lateinit var bundle: Bundle
 
-
     private lateinit var budgetActivityID:String
     private lateinit var savingActivityID:String
     private lateinit var spendingActivityID:String
 
     private var budgetCategoryIDArrayList = ArrayList<String>()
 
-    private var allocated = 0.00F
-    private var totalBudget = 0.00F
-
-    private var nextPriority = 0
-
     private var balance = 0.00F
 
     private var isCompleted = false
+
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,7 +101,7 @@ class BudgetActivity : AppCompatActivity() {
     }
 
     private fun getBalance() {
-        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { results ->
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
             for (transaction in results) {
                 var transactionObject = transaction.toObject<Transactions>()
                 if (transactionObject.transactionType == "Deposit")
@@ -111,7 +109,9 @@ class BudgetActivity : AppCompatActivity() {
                 else if (transactionObject.transactionType == "Withdrawal")
                     balance-= transactionObject.amount!!
             }
-        }.continueWith { getBudgetItems() }
+        }.continueWith {
+            binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(balance)
+            getBudgetItems() }
     }
 
     private fun getBudgetItems() {
@@ -123,49 +123,41 @@ class BudgetActivity : AppCompatActivity() {
             }
 
             //set on click listener for menu item
-            budgetCategoryAdapter = BudgetCategoryAdapter(this, budgetCategoryIDArrayList, object:BudgetCategoryAdapter.MenuClick{
-                override fun clickMenuItem(position: Int, menuOption: String, budgetItemID: String) {
-                    if (menuOption == "Edit")
-                        editBudgetItem(budgetItemID)
-                    else
-                        deleteBudgetItem(position, budgetItemID)
-                }}, object:BudgetCategoryAdapter.ItemClick {
+            budgetCategoryAdapter = BudgetCategoryAdapter(
+                this,
+                budgetCategoryIDArrayList,
+                object : BudgetCategoryAdapter.MenuClick {
+                    override fun clickMenuItem(position: Int, menuOption: String, budgetItemID: String) {
+                        if (menuOption == "Edit")
+                            editBudgetItem(budgetItemID)
+                        else
+                            deleteBudgetItem(position, budgetItemID)
+                    }},
+                    object : BudgetCategoryAdapter.ItemClick {
+                        override fun clickItem(budgetItemID: String, budgetActivityID: String) {
+                            //"done setting budget" already clicked, they can access expense
+                            if (isCompleted) {
+                                var budgetExpense = Intent(context, SpendingActivity::class.java)
+                                var bundle = Bundle()
 
-                override fun clickItem(budgetItemID: String, budgetActivityID: String) {
-                    //"done setting budget" already clicked, they can access expense
-                    if (isCompleted) {
-                        var budgetExpense = Intent(context, SpendingActivity::class.java)
-                        var bundle = Bundle()
-
-                        bundle.putString("budgetActivityID", budgetActivityID)
-                        bundle.putString("savingActivityID", savingActivityID)
-                        bundle.putString ("budgetItemID", budgetItemID)
-                        bundle.putString ("spendingActivityID", spendingActivityID)
-                        budgetExpense.putExtras(bundle)
-                        budgetExpense.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        context.startActivity(budgetExpense)
-                    } else { finishBudgeting() }
-                }
-            })
+                                bundle.putString("budgetActivityID", budgetActivityID)
+                                bundle.putString("savingActivityID", savingActivityID)
+                                bundle.putString("budgetItemID", budgetItemID)
+                                bundle.putString("spendingActivityID", spendingActivityID)
+                                budgetExpense.putExtras(bundle)
+                                budgetExpense.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                context.startActivity(budgetExpense)
+                            } else {
+                                finishBudgeting()
+                            }
+                        }
+                })
             binding.rvViewCategories.adapter = budgetCategoryAdapter
-            binding.rvViewCategories.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-        }.continueWith { deductExpenses() }
-    }
-
-    private fun deductExpenses() {
-        if (budgetCategoryIDArrayList.size == 0)
-            binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(balance)
-        else {
-            for (budgetCategoryID in budgetCategoryIDArrayList) {
-                firestore.collection("BudgetExpenses").whereEqualTo("budgetCategoryID", budgetCategoryID).get().addOnSuccessListener { budgetExpenses ->
-                    for (expense in budgetExpenses) {
-                        var expenseObject = expense.toObject<BudgetExpense>()
-                        balance -= expenseObject.amount!!
-                    }
-                }.continueWith { binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(balance) }
-            }
+            binding.rvViewCategories.layoutManager =
+                LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         }
     }
+
 
     fun editBudgetItem(budgetItemID:String) {
         var dialogBinding= DialogNewBudgetCategoryBinding.inflate(getLayoutInflater())
@@ -229,7 +221,7 @@ class BudgetActivity : AppCompatActivity() {
                 var nUpdate = 0
                 if (isCompleted) //they made a change after they declared that they're done setting a budget
                     nUpdate = 1
-                var budgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, nUpdate, "Active")
+                var budgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, nUpdate, "Active", currentUser)
 
                 firestore.collection("BudgetItems").add(budgetCategory).addOnSuccessListener {
                     budgetCategoryIDArrayList.add(it.id)

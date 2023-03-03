@@ -188,10 +188,10 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1.5"/>
 
                     <TextView
-                        android:id="@+id/rating_accuracy"
+                        android:id="@+id/tv_accuracy_percent"
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -217,16 +217,16 @@
                         android:layout_gravity="center"/>
 
                     <ProgressBar
-                        android:id="@+id/progress_bar_specific"
+                        android:id="@+id/progress_bar_parental_involvement"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
-                        android:layout_weight="1"
+                        android:layout_weight="1.5"
                         android:scaleY="4"
                         android:layout_gravity="center"/>
 
                     <TextView
-                        android:id="@+id/rating_specific"
+                        android:id="@+id/tv_parental_involvement_percent"
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
