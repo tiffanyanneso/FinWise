@@ -185,8 +185,16 @@ class ViewGoalActivity : AppCompatActivity() {
                 var activityObject = finActivity.toObject<FinancialActivities>()
                 if (activityObject.financialActivityName == "Saving") {
                     savingActivityID = finActivity.id
-                    if (activityObject.status == "Completed")
-                        binding.btnEditGoal.visibility = View.GONE
+                    if (activityObject.status == "Completed") {
+//                        binding.btnEditGoal.visibility = View.GONE
+                        binding.btnEditGoal.isEnabled = false
+                        binding.btnEditGoal.isClickable = false
+                        binding.btnEditGoal.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_grey)))
+                    } else {
+                        binding.btnEditGoal.isEnabled = true
+                        binding.btnEditGoal.isClickable = true
+                        binding.btnEditGoal.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_green)))
+                    }
                 }
                 if (activityObject.financialActivityName == "Budgeting")
                     budgetingActivityID = finActivity.id
