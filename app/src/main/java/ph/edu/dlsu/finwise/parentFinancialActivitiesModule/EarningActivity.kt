@@ -27,6 +27,12 @@ class EarningActivity : AppCompatActivity() {
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
+    private val tabIcons = intArrayOf(
+        ph.edu.dlsu.finwise.R.drawable.baseline_directions_run_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_access_alarm_24,
+        ph.edu.dlsu.finwise.R.drawable.baseline_check_circle_24
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEarningBinding.inflate(layoutInflater)
@@ -70,18 +76,32 @@ class EarningActivity : AppCompatActivity() {
             println("print "  + it.exists())
             //current user is a child
             if (it.exists()) {
-                adapter.addFragment(earningToDoFragment,"To-Do")
+                adapter.addFragment(earningToDoFragment,"To Do")
                 adapter.addFragment(earningPendingFragment,"Pending")
                 adapter.addFragment(earningCompletedFragment,"Completed")
+                setupTabIconsChild()
             } else {
                 adapter.addFragment(earningPendingFragment,"Pending")
-                adapter.addFragment(earningToDoFragment,"To-Do")
+                adapter.addFragment(earningToDoFragment,"To Do")
                 adapter.addFragment(earningCompletedFragment,"Completed")
+                setupTabIconsParent()
             }
         }.continueWith {
             binding.viewPager.adapter = adapter
             binding.tabLayout.setupWithViewPager(binding.viewPager)
         }
+    }
+
+    private fun setupTabIconsChild() {
+        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
+        binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[2])
+    }
+
+    private fun setupTabIconsParent() {
+        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[1])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[2])
     }
 
     private fun checkUser() {
