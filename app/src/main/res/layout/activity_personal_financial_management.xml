@@ -9,7 +9,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="760dp"
+        android:layout_height="735dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -313,18 +313,17 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@drawable/gradient_pfm_detail_card2"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:src="@drawable/icon_net_income"
+                    android:src="@drawable/icon_financial_health"
                     android:contentDescription="Profit"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="20dp"
                     android:layout_gravity="center"
-                    app:tint="@color/white"
                     android:layout_marginBottom="5dp"
                     />
 
@@ -344,8 +343,8 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="300dp"
-                        android:layout_height="300dp"
+                        android:layout_width="325dp"
+                        android:layout_height="200dp"
                         android:id="@+id/tv_score"
                         android:gravity="center"
                         android:textSize="16sp"
@@ -359,7 +358,6 @@
                         android:layout_height="50dp"
                         android:id="@+id/btn_explanation"
                         android:gravity="center"
-                        android:layout_marginTop="5dp"
                         android:text="View Explanation"
                         android:textSize="12sp"
                         android:background="@drawable/rounded_button"

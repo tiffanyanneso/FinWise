@@ -178,12 +178,12 @@
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentLandingPage"
-            android:exported="true" >
-            <intent-filter>
+            android:exported="false" >
+    <!--        <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+        </intent-filter>-->
         </activity>
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
@@ -243,6 +243,12 @@
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
             android:exported="true" >
+            <intent-filter>
+                   <action android:name="android.intent.action.MAIN" />
+
+                   <category android:name="android.intent.category.LAUNCHER" />
+               </intent-filter>
+
         </activity>
 
         <activity
