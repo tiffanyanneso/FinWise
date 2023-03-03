@@ -178,7 +178,13 @@
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentLandingPage"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
             android:exported="true" />
@@ -292,11 +298,11 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-            android:exported="true" >
-            <intent-filter>
+            android:exported="false" >
+       <!--     <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
         <activity
             android:name=".MainActivity"
