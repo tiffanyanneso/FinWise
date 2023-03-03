@@ -144,7 +144,7 @@
                                 android:layout_marginHorizontal="2.5dp">
 
                                 <TextView
-                                    android:id="@+id/tv_nearing_completion"
+                                    android:id="@+id/tv_average_updates"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="X"
@@ -188,7 +188,8 @@
                         android:layout_height="30dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                         android:scaleY="4"
-                        android:layout_weight="1.5"/>
+                        android:layout_weight="1.5"
+                        android:max="100"/>
 
                     <TextView
                         android:id="@+id/tv_accuracy_percent"
@@ -223,7 +224,8 @@
                         android:layout_height="30dp"
                         android:layout_weight="1.5"
                         android:scaleY="4"
-                        android:layout_gravity="center"/>
+                        android:layout_gravity="center"
+                        android:max="100"/>
 
                     <TextView
                         android:id="@+id/tv_parental_involvement_percent"

@@ -18,8 +18,10 @@ import ph.edu.dlsu.finwise.adapter.FinactBudgetingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentBudgetingBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 class BudgetingFragment : Fragment() {
 
@@ -43,6 +45,9 @@ class BudgetingFragment : Fragment() {
     //number of budget items in total
     private var budgetItemCount = 0
 
+    var nUpdates = 0.00F
+    var nItems = 0.00F
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         goalIDArrayList.clear()
@@ -59,9 +64,7 @@ class BudgetingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        GlobalScope.launch(Dispatchers.IO) {
-            getBudgeting()
-        }
+        getBudgeting()
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
@@ -99,11 +102,25 @@ class BudgetingFragment : Fragment() {
                                 nParent++
 
                         }.continueWith {
-                            binding.tvParentalInvolvementPercent.text = ((nParent.toFloat()/budgetItemCount.toFloat())*100).toString() + "%"
+                            binding.tvParentalInvolvementPercent.text = DecimalFormat("##.##").format((nParent.toFloat()/budgetItemCount.toFloat())*100)+ "%"
+                            binding.progressBarParentalInvolvement.progress = ((nParent.toFloat()/budgetItemCount.toFloat())*100).roundToInt()
                         }
                     }
                 }
+                getAverageUpdates(activity.id)
             }
+        }
+    }
+
+    private fun getAverageUpdates(budgetingActivityID:String){
+        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).get().addOnSuccessListener { budgetItems ->
+            for (budgetItem in budgetItems){
+                var budgetItemObject = budgetItem.toObject<BudgetItem>()
+                nItems++
+                if (budgetItemObject.status == "Edited")
+                    nUpdates++
+            }
+            binding.tvAverageUpdates.text = (nUpdates/nItems.roundToInt()).toString()
         }
     }
 

@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -129,7 +130,7 @@ class BudgetActivity : AppCompatActivity() {
                 object : BudgetCategoryAdapter.MenuClick {
                     override fun clickMenuItem(position: Int, menuOption: String, budgetItemID: String) {
                         if (menuOption == "Edit")
-                            editBudgetItem(budgetItemID)
+                            editBudgetItem(position, budgetItemID)
                         else
                             deleteBudgetItem(position, budgetItemID)
                     }},
@@ -159,7 +160,9 @@ class BudgetActivity : AppCompatActivity() {
     }
 
 
-    fun editBudgetItem(budgetItemID:String) {
+    fun editBudgetItem(position:Int, budgetItemID:String) {
+        lateinit var budgetItemName:String
+        var amount = 0
         var dialogBinding= DialogNewBudgetCategoryBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
@@ -168,27 +171,37 @@ class BudgetActivity : AppCompatActivity() {
 
         firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
             var budgetItem = it.toObject<BudgetItem>()
+            budgetItemName  = budgetItem?.budgetItemName.toString()
+            amount = budgetItem?.amount!!.toInt()
             dialogBinding.dialogEtCategoryName.setText(budgetItem?.budgetItemName.toString())
             dialogBinding.dialogEtCategoryAmount.setText(budgetItem?.amount!!.toInt().toString())
-
         }
 
         dialogBinding.btnSave.setOnClickListener {
             var itemName = dialogBinding.dialogEtCategoryName.text.toString()
             var itemAmount = dialogBinding.dialogEtCategoryAmount.text.toString().toFloat()
 
-            firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
-                var budgetItem = it.toObject<BudgetItem>()
-                var nUpdate = budgetItem?.nUpdate!!.toInt()
-                if (isCompleted)
-                    nUpdate += 1
+            //check that at least one of the fields were changed
+            if (dialogBinding.dialogEtCategoryName.text.toString() != budgetItemName || dialogBinding.dialogEtCategoryAmount.text.toString().toInt() != amount) {
 
-                firestore.collection("BudgetItems").document(budgetItemID).update("budgetItemName", itemName,
-                    "amount", itemAmount, "nupdate", nUpdate).addOnSuccessListener {
-                    budgetCategoryAdapter.notifyDataSetChanged()
-                    dialog.dismiss()
+                //budgeting is already completed
+                if (isCompleted) {
+                    firestore.collection("BudgetItems").document(budgetItemID).update("status", "Edited").addOnSuccessListener {
+                        var budgetItem = BudgetItem(itemName, budgetActivityID, itemAmount, "Active", currentUser)
+                        budgetCategoryIDArrayList.removeAt(position)
+
+                        firestore.collection("BudgetItems").add(budgetItem).addOnSuccessListener { newBudgetItem ->
+                            budgetCategoryIDArrayList.add(position, newBudgetItem.id)
+                            budgetCategoryAdapter.notifyDataSetChanged()
+                            dialog.dismiss()
+                        }
+                    }
+                    //budgeting is not yet done, so just update directly
+                } else {
+                    firestore.collection("BudgetItems").document(budgetItemID).update("budgetItemName", itemName, "amount", itemAmount)
                 }
             }
+
             //TODO: VALIDATION
         }
 
@@ -202,8 +215,11 @@ class BudgetActivity : AppCompatActivity() {
         budgetCategoryIDArrayList.removeAt(position)
         budgetCategoryAdapter.notifyDataSetChanged()
 
-        firestore.collection("BudgetItems").document(budgetItemID).update("status", "Deleted")
-
+        //deleting budget item after declaring that done setting budget counts as an edit
+        if (isCompleted)
+            firestore.collection("BudgetItems").document(budgetItemID).update("status", "Edited")
+        else
+            firestore.collection("BudgetItems").document(budgetItemID).update("status", "Deleted")
     }
 
     private fun showNewBudgetItemDialog() {
@@ -218,13 +234,16 @@ class BudgetActivity : AppCompatActivity() {
             if (filledUpAndValid()) {
                 var itemName = dialogBinding.dialogEtCategoryName.text.toString()
                 var itemAmount = dialogBinding.dialogEtCategoryAmount.text.toString().toFloat()
-                var nUpdate = 0
-                if (isCompleted) //they made a change after they declared that they're done setting a budget
-                    nUpdate = 1
-                var budgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, nUpdate, "Active", currentUser)
+                //they made a change after they declared that they're done setting a budget
 
-                firestore.collection("BudgetItems").add(budgetCategory).addOnSuccessListener {
-                    budgetCategoryIDArrayList.add(it.id)
+                var budgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, "Active", currentUser)
+                firestore.collection("BudgetItems").add(budgetCategory).addOnSuccessListener { budgetItem ->
+                    //if the kid is done budgeting, add the edited version so that it will be counted as an edited item later
+                    if (isCompleted) {
+                        var editedBudgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, "Edited",currentUser)
+                        firestore.collection("BudgetItems").add(editedBudgetCategory)
+                    }
+                    budgetCategoryIDArrayList.add(budgetItem.id)
                     budgetCategoryAdapter.notifyDataSetChanged()
                     dialog.dismiss()
                 }
