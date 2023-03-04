@@ -15,6 +15,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityParentRegisterChildBinding
 import ph.edu.dlsu.finwise.model.GoalSettings
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ParentRegisterChildActivity : AppCompatActivity() {
@@ -55,7 +56,7 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                             "firstName" to firstName,
                             "lastName" to lastName,
                             "username" to username,
-                            "birthday" to birthday,
+                            "birthday" to SimpleDateFormat("MM/dd/yyyy").parse(birthday),
                             "parentID" to parentuserID)
 
                         println("current/child user   " + FirebaseAuth.getInstance().currentUser!!.uid.toString())

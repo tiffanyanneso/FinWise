@@ -2,8 +2,10 @@ package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -14,10 +16,15 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentGoalBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
+import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.GoalSettingFragment
 import ph.edu.dlsu.finwise.model.ChildUser
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment.*
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 class ParentGoalActivity : AppCompatActivity() {
 
@@ -26,6 +33,9 @@ class ParentGoalActivity : AppCompatActivity() {
     private lateinit var context: Context
 
     private lateinit var childID:String
+
+    private var setOwnGoals = false
+    private var autoApprove = false
 
     private val tabIcons = intArrayOf(
         ph.edu.dlsu.finwise.R.drawable.baseline_star_24,
@@ -44,7 +54,8 @@ class ParentGoalActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
-        setChildName()
+        checkAge()
+
 
         var sendBundle = Bundle()
         sendBundle.putString("childID", childID)
@@ -61,27 +72,29 @@ class ParentGoalActivity : AppCompatActivity() {
                 else -> false
             }
         }
-
-        //checkSettings()
-        initializeFragments()
     }
 
-    private fun setupTabIcons() {
-        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
-        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
-        binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[2])
-        binding.tabLayout.getTabAt(3)?.setIcon(tabIcons[3])
-        binding.tabLayout.getTabAt(4)?.setIcon(tabIcons[4])
-        binding.tabLayout.getTabAt(5)?.setIcon(tabIcons[5])
-    }
-
-    private fun setChildName() {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun checkAge() {
         firestore.collection("ChildUser").document(childID).get().addOnSuccessListener {
             var child = it.toObject<ChildUser>()
-            //binding.tvChildName.text = child?.firstName + "'s Goals"
-        }
-    }
+            //compute age
+            val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            var difference = Period.between(to, from)
 
+            var age = difference.years
+            if (age == 10 || age == 1)
+                setOwnGoals = true
+            if (age == 12) {
+                setOwnGoals = true
+                autoApprove = true
+            }
+
+        }.continueWith { initializeFragments() }
+    }
 
     private fun initializeFragments() {
 
@@ -108,7 +121,9 @@ class ParentGoalActivity : AppCompatActivity() {
         var disapprovedFragment = ParentDisapprovedFragment()
         disapprovedFragment.arguments = fragmentBundle
 
-        adapter.addFragment(goalSettingFragment,"Goal Setting")
+        if (setOwnGoals && !autoApprove)
+            adapter.addFragment(GoalSettingFragment(),"Goal Setting")
+
         adapter.addFragment(savingFragment,"Saving")
         adapter.addFragment(budgetingFragment,"Budgeting")
         adapter.addFragment(spendingFragment,"Spending")
@@ -119,6 +134,15 @@ class ParentGoalActivity : AppCompatActivity() {
         binding.tabLayout.setupWithViewPager(binding.viewPager)
         
         setupTabIcons()
+    }
+
+    private fun setupTabIcons() {
+        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
+        binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[2])
+        binding.tabLayout.getTabAt(3)?.setIcon(tabIcons[3])
+        binding.tabLayout.getTabAt(4)?.setIcon(tabIcons[4])
+        binding.tabLayout.getTabAt(5)?.setIcon(tabIcons[5])
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){

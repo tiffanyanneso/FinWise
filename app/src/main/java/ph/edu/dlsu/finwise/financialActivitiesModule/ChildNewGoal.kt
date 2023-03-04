@@ -11,12 +11,18 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
+import ph.edu.dlsu.finwise.model.ChildUser
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 
 class ChildNewGoal : AppCompatActivity() {
@@ -27,23 +33,20 @@ class ChildNewGoal : AppCompatActivity() {
     private lateinit var currentUserType:String
     private lateinit var childID:String
 
+    private var maxAmount = 0.00F
+    private var age = 0
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChildNewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //getCurrentUserType()
-
-
         // Hides actionbar,
         // and initializes the navbar
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
-        // for the dropdown
-        val items = resources.getStringArray(R.array.financial_activity)
-        val adapter = ArrayAdapter(this, R.layout.list_item, items)
-        binding.dropdownActivity.setAdapter(adapter)
+        getCurrentUserType()
 
         //TODO: how to bring back values to edit text fields
         /*var bundle: Bundle = intent.extras!!
@@ -77,8 +80,8 @@ class ChildNewGoal : AppCompatActivity() {
                 bundle.putSerializable("targetDate",  SimpleDateFormat("MM/dd/yyyy").parse(targetDate))
                 bundle.putBoolean("goalIsForSelf", goalIsForSelf)
 
-    //            if(currentUserType == "Parent")
-    //                bundle.putString("childID", childID)
+                if(currentUserType == "Parent")
+                    bundle.putString("childID", childID)
 
                 //TODO: reset spinner and date to default value
                 binding.etGoal.text?.clear()
@@ -125,9 +128,56 @@ class ChildNewGoal : AppCompatActivity() {
                 var childIDBundle = intent.extras!!
                 childID = childIDBundle.getString("childID").toString()
             }
-            else
-                currentUserType ="Child"
+            else {
+                currentUserType = "Child"
+                childID = currentUser
+            }
+        }.continueWith {
+            initializeDropDownForReasons()
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initializeDropDownForReasons() {
+        var dropdownContent = ArrayList<String>()
+
+        firestore.collection("ChildUser").document(childID).get().addOnSuccessListener {
+            var child = it.toObject<ChildUser>()
+
+            //compute age
+            val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            var difference = Period.between(to, from)
+
+            var age = difference.years
+            if (age == 9) {
+                maxAmount = 3000F
+                binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#0.00").format(maxAmount)}"
+            }
+            dropdownContent.add("Buying Items")
+
+            if (age == 10 || age == 11 || age == 12) {
+                maxAmount = 5000F
+                binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#0.00").format(maxAmount)}"
+
+                dropdownContent.add("Situational Shopping")
+                dropdownContent.add("Donating To Charity")
+
+                if (age == 12) {
+                    maxAmount = 10000F
+                    binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#0.00").format(maxAmount)}"
+
+                    dropdownContent.add("Planning An Event")
+                    dropdownContent.add("Saving For Emergency Funds")
+                }
+            }
+        }
+
+        // for the dropdown
+        val adapter = ArrayAdapter(this, R.layout.list_item, dropdownContent)
+        binding.dropdownActivity.setAdapter(adapter)
     }
 
     private fun filledUp() : Boolean {
@@ -151,8 +201,16 @@ class ChildNewGoal : AppCompatActivity() {
             if (binding.etAmount.text.toString().toFloat() <= 0) {
                 binding.amountContainer.helperText = "Input a valid amount."
                 valid = false
-            } else
+            } else {
                 binding.amountContainer.helperText = ""
+                //check if the amount is within max amount
+                if (binding.etAmount.text.toString().toFloat() > maxAmount) {
+                    binding.amountContainer.helperText = "Amount is greater than maximum allowed "
+                    valid = false
+                }
+                else
+                    binding.amountContainer.helperText = ""
+            }
         }
 
         if (binding.etTargetDate.text.toString().trim().isEmpty()) {

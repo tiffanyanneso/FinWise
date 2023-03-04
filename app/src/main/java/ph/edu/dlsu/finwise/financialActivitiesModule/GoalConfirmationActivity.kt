@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -11,11 +12,13 @@ import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalConfirmationBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
+import ph.edu.dlsu.finwise.model.ChildUser
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import java.text.DecimalFormat
@@ -33,13 +36,14 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
     private lateinit var context: Context
 
-    private var goalStatus=""
-
     private lateinit var goalLength:String
 
     private lateinit var currentUserType:String
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
+    //will be changed depending on who set the goal or what age the kid is
+    private var goalStatus: String = "For Review"
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +51,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
         binding = ActivityGoalConfirmationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context= this
-        //getCurrentUserType()
+        getCurrentUserType()
 
         // Hides actionbar,
         // and initializes the navbar
@@ -62,6 +66,8 @@ class GoalConfirmationActivity : AppCompatActivity() {
             binding.tvIsForChild.text = "Yes"
         else
             binding.tvIsForChild.text = "No"
+        checkAge()
+
 
 
         var targetDate = bundle.getSerializable("targetDate")
@@ -69,70 +75,59 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
         binding.tvTargetDate.text = formattedDate
 
-
         binding.btnConfirm.setOnClickListener{
-            //check settings of current user
-            /*var currentChildUser = FirebaseAuth.getInstance().currentUser!!.uid
-            firestore.collection("GoalSettings").whereEqualTo("childID", currentChildUser).get().addOnSuccessListener {
-                var goalSettings = it.documents[0].toObject<GoalSettings>()
-                //goal has to be reviewed by parent
-                if (goalSettings?.autoApproved == false)
-                    goalStatus = "For Review"
-                else if (goalSettings?.autoApproved == true)*/
-                    goalStatus = "In Progress"
 
-                computeDateDifference(formattedDate)
+            computeDateDifference(formattedDate)
 
-                var childID:String = currentUser
-                var createdBy:String = currentUser
-                if (currentUserType == "Parent") {
-                    var childIDBundle = intent.extras!!
-                    childID = childIDBundle.getString("childID").toString()
-                    createdBy = FirebaseAuth.getInstance().currentUser!!.uid
-                }
-
-                var goal = hashMapOf(
-                    "childID" to childID,
-                    "goalName" to bundle.getString("goalName"),
-                    "dateCreated" to Timestamp.now(),
-                    "createdBy" to createdBy,
-                    "targetDate" to bundle.getSerializable("targetDate"),
-                    "goalLength" to goalLength,
-                    "targetAmount" to bundle.getFloat("amount"),
-                    "currentSavings" to 0,
-                    "financialActivity" to bundle.getString("activity"),
-                    "lastUpdated" to Timestamp.now(),
-                    "status" to goalStatus,
-                    "goalIsForSelf" to bundle.getBoolean("goalIsForSelf")
-                )
-
-                //add goal to DB
-                firestore.collection("FinancialGoals").add(goal).addOnSuccessListener {
-                    createBudgetTemplates(bundle.getString("activity").toString(), it.id)
-                    saveFinancialActivities(bundle.getString("activity").toString(), it.id)
-
-                        if (currentUserType == "Child") {
-                            var goToStartGoal = Intent(context, StartGoalActivity::class.java)
-                            var bundle1: Bundle = intent.extras!!
-                            bundle1.putString("financialGoalID", it.id)
-                            goToStartGoal.putExtras(bundle1)
-                            goToStartGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            context.startActivity(goToStartGoal)
-                            finish()
-                        } else {
-                            var parentGoal = Intent(this, ParentGoalActivity::class.java)
-                            var bundle = Bundle()
-                            bundle.putString("childID", childID)
-                            parentGoal.putExtras(bundle)
-                            startActivity(parentGoal)
-                            finish()
-                        }
-
-                    }.addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to add goal", Toast.LENGTH_SHORT).show()
-                }
+            var childID:String = currentUser
+            var createdBy:String = currentUser
+            if (currentUserType == "Parent") {
+                var childIDBundle = intent.extras!!
+                childID = childIDBundle.getString("childID").toString()
+                createdBy = FirebaseAuth.getInstance().currentUser!!.uid
             }
-        //}
+
+            var goal = hashMapOf(
+                "childID" to childID,
+                "goalName" to bundle.getString("goalName"),
+                "dateCreated" to Timestamp.now(),
+                "createdBy" to createdBy,
+                "targetDate" to bundle.getSerializable("targetDate"),
+                "goalLength" to goalLength,
+                "targetAmount" to bundle.getFloat("amount"),
+                "currentSavings" to 0,
+                "financialActivity" to bundle.getString("activity"),
+                "lastUpdated" to Timestamp.now(),
+                "status" to goalStatus,
+                "goalIsForSelf" to bundle.getBoolean("goalIsForSelf")
+            )
+
+            //add goal to DB
+            firestore.collection("FinancialGoals").add(goal).addOnSuccessListener {
+                createBudgetTemplates(bundle.getString("activity").toString(), it.id)
+                saveFinancialActivities(bundle.getString("activity").toString(), it.id)
+
+                    if (currentUserType == "Child") {
+                        var goToStartGoal = Intent(context, StartGoalActivity::class.java)
+                        var bundle1: Bundle = intent.extras!!
+                        bundle1.putString("financialGoalID", it.id)
+                        goToStartGoal.putExtras(bundle1)
+                        goToStartGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        context.startActivity(goToStartGoal)
+                        finish()
+                    } else {
+                        var parentGoal = Intent(this, ParentGoalActivity::class.java)
+                        var bundle = Bundle()
+                        bundle.putString("childID", childID)
+                        parentGoal.putExtras(bundle)
+                        startActivity(parentGoal)
+                        finish()
+                    }
+
+                }.addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to add goal", Toast.LENGTH_SHORT).show()
+            }
+        }
 
 //        binding.btnBack.setOnClickListener {
 //            var goToNewGoal = Intent(context, FinancialActivity::class.java)
@@ -181,6 +176,24 @@ class GoalConfirmationActivity : AppCompatActivity() {
             firestore.collection("FinancialActivities").add(spendingActivity)
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun checkAge() {
+        firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
+            var child = it.toObject<ChildUser>()
+            //compute age
+            val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            var difference = Period.between(to, from)
+
+            var age = difference.years
+            if (age == 9 || age == 12)
+                goalStatus = "In Progress"
+        }
+    }
+
 
     private fun getCurrentUserType() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid

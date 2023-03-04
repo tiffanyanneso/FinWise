@@ -44,7 +44,7 @@ class EarningCompletedFragment : Fragment() {
 
     private fun getCompletedEarning() {
         var earningCompleteArrayList = ArrayList<String>()
-        firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
+        firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("source", "Financial Activity").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             for (earning in results)
                 earningCompleteArrayList.add(earning.id)
 

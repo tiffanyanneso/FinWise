@@ -28,35 +28,58 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/container_name"
+        app:layout_constraintTop_toBottomOf="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Chore"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_marginHorizontal="20dp"
+        android:paddingTop="20dp"
+        app:startIconDrawable="@drawable/baseline_directions_run_24"
+        app:helperTextEnabled="true"
+        app:helperText=""
+        app:helperTextTextColor="@color/red">
+
+        <AutoCompleteTextView
+            android:id="@+id/dropdown_chore"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/duration_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topbar"
+        app:layout_constraintTop_toBottomOf="@+id/container_name"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:helperText=""
         app:helperTextTextColor="@color/red"
-        android:paddingBottom="10dp"
-        android:paddingTop="20dp"
-        app:startIconDrawable="@drawable/baseline_directions_run_24">
+        app:startIconDrawable="@drawable/baseline_numbers_24"
+        android:clickable="false"
+        android:enabled="false"
+        >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_name"
+            android:id="@+id/et_duration"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:lines="1"
-            android:inputType="text"
+            android:inputType="number"
             android:textSize="16sp"
-            android:hint="Name" />
+            android:hint="Duration (Minutes)" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/date_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/container_name"
+        app:layout_constraintTop_toBottomOf="@+id/duration_container"
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
@@ -75,30 +98,6 @@
             android:focusable="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/duration_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_container"
-        android:layout_marginHorizontal="20dp"
-        app:helperTextEnabled="true"
-        app:helperText=""
-        app:helperTextTextColor="@color/red"
-        android:paddingVertical="10dp"
-        app:startIconDrawable="@drawable/baseline_numbers_24">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_duration"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:lines="1"
-            android:inputType="number"
-            android:textSize="16sp"
-            android:hint="Duration (Minutes)" />
-    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/amount_container"
@@ -107,7 +106,7 @@
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/duration_container"
+        app:layout_constraintTop_toBottomOf="@+id/date_container"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:helperText=""
@@ -124,6 +123,18 @@
             android:textSize="16sp"
             android:hint="@string/amount" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_max_amount"
+        app:layout_constraintTop_toBottomOf="@+id/amount_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:paddingTop="5dp"
+        android:layout_marginHorizontal="20dp"
+        android:textSize="16dp"
+        android:text="The max amount that can be given is ₱XX.XX"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -292,6 +293,9 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun goToEarningActivity() {
         binding.btnEarning.setOnClickListener {
             val goToEarningActivity = Intent(applicationContext, EarningMenuActivity::class.java)
+            var bundle = Bundle()
+            bundle.putString("childID", FirebaseAuth.getInstance().currentUser!!.uid)
+            goToEarningActivity.putExtras(bundle)
             startActivity(goToEarningActivity)
         }
     }

@@ -1,5 +1,7 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 
+import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +13,9 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.FinactGoalSettingAdapter
+import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.databinding.FragmentGoalSettingBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.GoalRating
 import java.util.*
@@ -33,6 +37,8 @@ class GoalSettingFragment : Fragment() {
     private var nTimeBound = 0.00F
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
+    private var ongoingGoals = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +63,20 @@ class GoalSettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getForReviewGoals()
+        getOnGoingGoals()
         initializeStars()
+        binding.btnNewGoal.setOnClickListener {
+            if (ongoingGoals >= 5)
+                buildDialog()
+            else {
+                var goToNewGoal = Intent(requireContext().applicationContext, ChildNewGoal::class.java)
+                var bundle = Bundle()
+                bundle.putString("source", "childFinancialActivity")
+                goToNewGoal.putExtras(bundle)
+                goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(goToNewGoal)
+            }
+        }
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
@@ -68,13 +87,18 @@ class GoalSettingFragment : Fragment() {
         var goalIDArrayList = ArrayList<String>()
         var goalFilterArrayList = ArrayList<GoalFilter>()
         goalIDArrayList.clear()
-        //saving activities that are in progress means that there the goal is also in progress because they are connected
         firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "For Review").get().addOnSuccessListener { results ->
             for (goalForReview in results) {
                 var goalObject = goalForReview.toObject<FinancialActivities>()
                 goalIDArrayList.add(goalObject?.financialGoalID.toString())
             }
             loadRecyclerView(goalIDArrayList)
+        }
+    }
+
+    private fun getOnGoingGoals() {
+        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+           ongoingGoals = results.size()
         }
     }
 
@@ -114,5 +138,33 @@ class GoalSettingFragment : Fragment() {
             LinearLayoutManager.VERTICAL,
             false)
         goalSettingAdapter.notifyDataSetChanged()
+    }
+
+    private fun buildDialog() {
+
+        var dialogBinding= DialogNewGoalWarningBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(requireContext().applicationContext);
+        dialog.setContentView(dialogBinding.getRoot())
+        // Initialize dialog
+
+        dialog.window!!.setLayout(900, 600)
+
+        dialogBinding.tvMessage.text= "You have $ongoingGoals ongoing goals.\nAre you sure you want to start another one?"
+
+        dialogBinding.btnOk.setOnClickListener {
+            var newGoal = Intent (requireContext().applicationContext, ChildNewGoal::class.java)
+
+            var bundle = Bundle()
+            bundle.putString("source", "childFinancialActivity")
+            newGoal.putExtras(bundle)
+            newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+            this.startActivity(newGoal)
+            dialog.dismiss()
+        }
+        dialogBinding.btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 }

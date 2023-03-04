@@ -32,6 +32,7 @@ class GoalSettingsActivity : AppCompatActivity() {
         parentID = FirebaseAuth.getInstance().currentUser!!.uid
         childID = bundle.getString("childID").toString()
 
+
         loadSettings()
 
         var switchSetOwnGoal = binding.switchSetOwnGoal

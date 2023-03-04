@@ -3,11 +3,13 @@ package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color.blue
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
@@ -24,11 +26,12 @@ import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.databinding.FragmentSavingBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
-import ph.edu.dlsu.finwise.model.FinancialActivities
-import ph.edu.dlsu.finwise.model.FinancialGoals
-import ph.edu.dlsu.finwise.model.GoalSettings
-import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -89,7 +92,7 @@ class SavingFragment : Fragment() {
                 this.startActivity(goToNewGoal)
             }
         }
-
+        checkAge()
         getGoals()
         getSavingActivities()
     }
@@ -270,15 +273,24 @@ class SavingFragment : Fragment() {
         dialog.show()
     }
 
-    private fun checkSettings() {
-        var currentChildUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("GoalSettings").whereEqualTo("childID", currentChildUser).get().addOnSuccessListener {
-            var goalSettings = it.documents[0].toObject<GoalSettings>()
-            //hide button
-            if (goalSettings?.setOwnGoal == false)
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun checkAge() {
+        firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
+            var child = it.toObject<ChildUser>()
+            //compute age
+            val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            var difference = Period.between(to, from)
+
+            var age = difference.years
+            if (age == 9)
                 binding.btnNewGoal.visibility = View.GONE
-            else if (goalSettings?.setOwnGoal == true)
+            else
                 binding.btnNewGoal.visibility = View.VISIBLE
+
         }
     }
+
 }

@@ -2,9 +2,11 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.app.Dialog
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -21,26 +23,23 @@ import ph.edu.dlsu.finwise.*
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.*
+import ph.edu.dlsu.finwise.model.ChildUser
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.GoalSettings
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 class FinancialActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFinancialBinding
-//    private lateinit var goalAdapter: ChildGoalAdapter
-//    private var goalIDArrayList = ArrayList<String>()
-//    private lateinit var status: String
     private var firestore = Firebase.firestore
 
-    private var shortTermRate = 0.00F
-    private var mediumTermRate = 0.00F
-    private var longTermRate = 0.00F
-
-    private var ongoingGoals = 0
 
     private var childID  = FirebaseAuth.getInstance().currentUser!!.uid
 
-    //variables for goal settings, used to check if goal setting fragment should be included
+    //used to check if goal setting fragment should be included
     private var setOwnGoals = false
     private var autoApprove = false
 
@@ -59,7 +58,7 @@ class FinancialActivity : AppCompatActivity() {
         binding = ActivityFinancialBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        checkSettings()
+        checkAge()
 
         // Hides actionbar,
         // and initializes the navbar
@@ -67,15 +66,28 @@ class FinancialActivity : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
     }
 
-    private fun checkSettings() {
-        firestore.collection("GoalSettings").whereEqualTo("childID", childID).get().addOnSuccessListener {
-            var childSettings = it.documents[0].toObject<GoalSettings>()
-            setOwnGoals = childSettings?.setOwnGoal!!
-            autoApprove = childSettings?.autoApproved!!
-        }.continueWith {
-            initializeFragments()
-        }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun checkAge() {
+        firestore.collection("ChildUser").document(childID).get().addOnSuccessListener {
+            var child = it.toObject<ChildUser>()
+            //compute age
+            val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            var difference = Period.between(to, from)
+
+            var age = difference.years
+            if (age == 10 || age == 1)
+                setOwnGoals = true
+            if (age == 12) {
+                setOwnGoals = true
+                autoApprove = true
+            }
+
+        }.continueWith { initializeFragments() }
     }
+
 
     private fun initializeFragments() {
         val adapter = ViewPagerAdapter(supportFragmentManager)

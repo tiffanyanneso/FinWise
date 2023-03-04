@@ -10,7 +10,6 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.FinactGoalSettingAdapter
-import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentParentGoalSettingBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.util.*
@@ -28,7 +27,6 @@ class ParentGoalSettingFragment : Fragment() {
         super.onCreate(savedInstanceState)
         var bundle = arguments
         childID = bundle?.getString("childID").toString()
-        getForEditingGoals()
     }
 
     override fun onCreateView(
@@ -36,14 +34,18 @@ class ParentGoalSettingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentParentGoalSettingBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        getForReviewGoals()
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
     }
 
-    private fun getForEditingGoals() {
+    private fun getForReviewGoals() {
         var goalIDArrayList = ArrayList<String>()
         var goalFilterArrayList = ArrayList<GoalFilter>()
         goalIDArrayList.clear()
@@ -51,7 +53,7 @@ class ParentGoalSettingFragment : Fragment() {
 
         goalIDArrayList.clear()
 
-        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "For Editing").get().addOnSuccessListener { documents ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "For Review").get().addOnSuccessListener { documents ->
             for (goalSnapshot in documents) {
                 //creating the object from list retrieved in db
                 var goalID = goalSnapshot.id

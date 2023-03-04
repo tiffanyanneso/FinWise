@@ -161,6 +161,15 @@
             android:textSize="16dp"
             android:hint="@string/amount"
             />
+        <TextView
+            android:id="@+id/tv_max_amount"
+            app:layout_constraintTop_toBottomOf="@+id/amount_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:paddingTop="5dp"
+            android:textSize="16dp"
+            android:text="The max amount that can be given is ₱XX.XX"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

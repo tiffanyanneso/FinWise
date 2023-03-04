@@ -24,7 +24,7 @@ class ProfileActivity : AppCompatActivity(){
     private var firestore = Firebase.firestore
     private lateinit var context: Context
 
-    private var childID = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
+    private var childID = FirebaseAuth.getInstance().currentUser!!.uid
 
     private val tabIcons = intArrayOf(
         R.drawable.baseline_star_24,
