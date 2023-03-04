@@ -64,6 +64,8 @@ class BudgetingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.titleOverallBudegtingPerformance.text = "Overall Budgeting\nPerformance"
+        binding.tvPerformancePercentage.text = "0.00%"
         getBudgeting()
     }
 
@@ -102,7 +104,7 @@ class BudgetingFragment : Fragment() {
                                 nParent++
 
                         }.continueWith {
-                            binding.tvParentalInvolvementPercent.text = DecimalFormat("##.##").format((nParent.toFloat()/budgetItemCount.toFloat())*100)+ "%"
+                            binding.tvParentalInvolvementPercent.text = DecimalFormat("##0.##").format((nParent.toFloat()/budgetItemCount.toFloat())*100)+ "%"
                             binding.progressBarParentalInvolvement.progress = ((nParent.toFloat()/budgetItemCount.toFloat())*100).roundToInt()
                         }
                     }
@@ -120,7 +122,7 @@ class BudgetingFragment : Fragment() {
                 if (budgetItemObject.status == "Edited")
                     nUpdates++
             }
-            binding.tvAverageUpdates.text = (nUpdates/nItems.roundToInt()).toString()
+            binding.tvAverageUpdates.text = DecimalFormat("##0.##").format((nUpdates/nItems.roundToInt()))
         }
     }
 

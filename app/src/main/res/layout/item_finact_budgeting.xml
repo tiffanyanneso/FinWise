@@ -8,10 +8,24 @@
     card_view:cardBackgroundColor="@color/very_light_green">
 
     <TextView
-        android:id="@+id/tv_goal_id"
+        android:id="@+id/tv_saving_activity_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_budgeting_activity_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_spending_activity_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+
 
     <RelativeLayout
         android:layout_width="match_parent"

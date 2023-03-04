@@ -15,6 +15,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
+import ph.edu.dlsu.finwise.adapter.SpendingExpenseAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetBinding
 import ph.edu.dlsu.finwise.databinding.DialogDoneSettingBudgetBinding
 import ph.edu.dlsu.finwise.databinding.DialogFinishBudgetingBinding
@@ -33,6 +34,7 @@ class BudgetActivity : AppCompatActivity() {
     private lateinit var dialogBinding:DialogNewBudgetCategoryBinding
     private var firestore = Firebase.firestore
     private lateinit var budgetCategoryAdapter: BudgetCategoryAdapter
+    private lateinit var expenseAdapter:SpendingExpenseAdapter
     lateinit var context:Context
     lateinit var bundle: Bundle
 
@@ -75,6 +77,7 @@ class BudgetActivity : AppCompatActivity() {
         }
         //checkUser()
         getBalance()
+        getExpenses()
 
 
         binding.btnNewCategory.setOnClickListener { showNewBudgetItemDialog() }
@@ -156,6 +159,19 @@ class BudgetActivity : AppCompatActivity() {
             binding.rvViewCategories.adapter = budgetCategoryAdapter
             binding.rvViewCategories.layoutManager =
                 LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+        }
+    }
+
+    private fun getExpenses() {
+        var expenses = ArrayList<Transactions>()
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { results ->
+            for (transaction in results)
+                expenses.add(transaction.toObject())
+
+            expenseAdapter = SpendingExpenseAdapter(this, expenses)
+            binding.rvExpenses.adapter = expenseAdapter
+            binding.rvExpenses.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+            expenseAdapter.notifyDataSetChanged()
         }
     }
 

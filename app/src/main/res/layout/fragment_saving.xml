@@ -54,7 +54,7 @@
                             app:layout_constraintTop_toTopOf="@+id/progress_bar">
 
                             <TextView
-                                android:id="@+id/text_performance"
+                                android:id="@+id/tv_performance_percentage"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -62,7 +62,7 @@
                                 android:textAlignment="center"/>
 
                             <TextView
-                                android:id="@+id/text_status"
+                                android:id="@+id/tv_performance_status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -73,6 +73,7 @@
                         </LinearLayout>
 
                         <TextView
+                            android:id="@+id/title_overall_saving_performance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:layout_constraintTop_toBottomOf="@+id/progress_bar"

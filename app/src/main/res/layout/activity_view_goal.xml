@@ -210,7 +210,7 @@
                         android:gravity="center">
 
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/layout_goal_details"
+                            android:id="@+id/btn_goal_details"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:textColor="@color/white"

@@ -13,27 +13,39 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentSpendingBinding
+import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.Transactions
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.sign
 
 class SpendingFragment : Fragment(){
+
+    class BudgetItemAmount(var budgetItemID:String, var amount:Float)
 
     private lateinit var binding: FragmentSpendingBinding
     private var firestore = Firebase.firestore
     private lateinit var spendingAdapter: FinactSpendingAdapter
 
-    var goalIDArrayList = ArrayList<String>()
-    var budgetingArrayList = ArrayList<FinancialActivities>()
+    var spendingActivityIDArrayList = ArrayList<String>()
+    var budgetItemsIDArrayList = ArrayList<BudgetItemAmount>()
     var goalFilterArrayList = ArrayList<GoalFilter>()
+
+    private var overSpending = 0.00F
+    private var nBudgetItems = 0.00F
+
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        goalIDArrayList.clear()
-        budgetingArrayList.clear()
+        spendingActivityIDArrayList.clear()
+        budgetItemsIDArrayList.clear()
         getSpending()
+        //need to get the budgeting activities to be able to get the budget items
+        getBudgeting()
     }
 
     override fun onCreateView(
@@ -47,32 +59,80 @@ class SpendingFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.progressBar.progress = 75
-        binding.textPerformance.text = "75%"
-        binding.textStatus.text = "Good"
-        binding.textPerformance.setTextColor(getResources().getColor(R.color.dark_green))
-        binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
+        binding.progressBar.progress = 0
+        binding.textPerformance.text = "0.00%"
+//        binding.textStatus.text = "Good"
+//        binding.textPerformance.setTextColor(getResources().getColor(R.color.dark_green))
+//        binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
 
-        binding.progressBarOverspending.progress = 10
-        binding.textOverspending.text = "80%"
-        binding.textOverpsneidngStatus.text = "Bad"
-        binding.textOverspending.setTextColor(getResources().getColor(R.color.red))
-        binding.textOverpsneidngStatus.setTextColor(getResources().getColor(R.color.red))
+        binding.progressBarOverspending.progress = 0
+        binding.tvOverspendingPercentage.text = "0.00%"
+//        binding.tvOverspendingStatus.text = "Bad"
+//        binding.tvOverspendingPercentage.setTextColor(getResources().getColor(R.color.red))
+//        binding.tvOverspendingStatus.setTextColor(getResources().getColor(R.color.red))
+
+        binding.titleOverspendingFrequency.text = "Overspending\nFrequency"
+        binding.titleOverallSpendingPerformance.text = "Overall Spending\nPerformance"
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
     }
 
     private fun getSpending() {
-        goalIDArrayList.clear()
+        spendingActivityIDArrayList.clear()
         //saving activities that are in progress means that there the goal is also in progress because they are connected
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             for (activity in results) {
                 var activityObject = activity.toObject<FinancialActivities>()
-                goalIDArrayList.add(activityObject?.financialGoalID.toString())
+                spendingActivityIDArrayList.add(activityObject?.financialGoalID.toString())
             }
-            loadRecyclerView(goalIDArrayList)
-        }.continueWith { binding.tvInProgress.text = goalIDArrayList.size.toString() }
+            loadRecyclerView(spendingActivityIDArrayList)
+        }.continueWith { binding.tvInProgress.text = spendingActivityIDArrayList.size.toString() }
+    }
+
+    private fun getBudgeting() {
+        var budgetingActivityIDArrayList = ArrayList<String>()
+        //get only completed budgeting activities because they should complete budgeting first before they are able to spend
+        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
+            for (activity in results)
+                budgetingActivityIDArrayList.add(activity.id)
+            println("print number of budgeting activity " + budgetingActivityIDArrayList.size)
+
+            for (budgetingID in budgetingActivityIDArrayList) {
+                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
+                    nBudgetItems += results.size()
+                    for (budgetItem in results) {
+
+                        var budgetItemObject = budgetItem.toObject<BudgetItem>()
+                        checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
+//                        budgetItemsIDArrayList.add(BudgetItemAmount(budgetItem.id, budgetItemObject.amount!!))
+//                        println("print add item in budgetItems array list")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checkOverSpending(budgetItemID:String, budgetItemAmount:Float){
+        firestore.collection("Transactions").whereEqualTo("category", budgetItemID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { spendingTransactions ->
+            var amountSpent = 0.00F
+            for (expense in spendingTransactions) {
+                var expenseObject = expense.toObject<Transactions>()
+                amountSpent+= expenseObject.amount!!
+            }
+            //they spent more than their allocated budget
+            if (amountSpent > budgetItemAmount)
+                overSpending++
+
+        }.continueWith {
+            var overspendingPercentage = (overSpending/nBudgetItems)*100
+            binding.progressBarOverspending.progress = overspendingPercentage.toInt()
+            binding.tvOverspendingPercentage.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
+
+//            if (overSpending )
+//            binding.tvOverspendingPercentage.setTextColor(getResources().getColor(R.color.red))
+//            binding.tvOverspendingStatus.setTextColor(getResources().getColor(R.color.red))
+        }
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {

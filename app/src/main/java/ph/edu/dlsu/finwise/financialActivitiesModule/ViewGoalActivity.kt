@@ -104,10 +104,6 @@ class ViewGoalActivity : AppCompatActivity() {
         }
 
         binding.btnWithdraw.setOnClickListener {
-//            bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-//            bundle.putInt("progress", progress.toInt())
-//            bundle.putFloat("currentAmount", currentAmount)
-//            bundle.putFloat("targetAmount", targetAmount)
             var goalWithdraw = Intent(this, WithdrawActivity::class.java)
             sendBundle.putFloat("savedAmount", savedAmount)
             sendBundle.putString("savingActivityID", savingActivityID)
@@ -125,17 +121,9 @@ class ViewGoalActivity : AppCompatActivity() {
             startActivity(goToEarningMenu)
         }
 
-//        binding.tvViewAllEarning.setOnClickListener {
-//            var goToChores = Intent(this, EarningActivity::class.java)
-//            this.startActivity(goToChores)
-//        }
 
 
         binding.btnDeposit.setOnClickListener {
-//            bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-//            bundle.putInt("progress", progress.toInt())
-//            bundle.putFloat("currentAmount", currentAmount)
-//            bundle.putFloat("targetAmount", targetAmount)
             var goalDeposit = Intent(this, FinancialActivityGoalDeposit::class.java)
             sendBundle.putFloat("savedAmount", savedAmount)
             sendBundle.putString("savingActivityID", savingActivityID)
@@ -144,7 +132,7 @@ class ViewGoalActivity : AppCompatActivity() {
             this.startActivity(goalDeposit)
         }
 
-        binding.layoutGoalDetails.setOnClickListener {
+        binding.btnGoalDetails.setOnClickListener {
             var goalDetails = Intent(this, ViewGoalDetails::class.java)
             goalDetails.putExtras(sendBundle)
             this.startActivity(goalDetails)
