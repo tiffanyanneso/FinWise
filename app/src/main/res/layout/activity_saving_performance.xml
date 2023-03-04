@@ -377,10 +377,10 @@
                         android:layout_width="220dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="Earning Money at Home"
-                        android:textSize="14sp"
+                        android:gravity="center_vertical"
+                        android:text="Earning"
                         android:textColor="@color/black"
-                        android:gravity="center_vertical" />
+                        android:textSize="14sp" />
 
                     <ProgressBar
                         android:id="@+id/progress_bar_earning_money"

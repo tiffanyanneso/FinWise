@@ -114,7 +114,7 @@
         app:helperTextEnabled="true"
         app:helperText=""
         app:helperTextTextColor="@color/red"
-        android:paddingVertical="10dp"
+        android:layout_marginBottom="10dp"
         app:startIconDrawable="@drawable/phone_number"
         >
 

@@ -10,6 +10,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -61,7 +71,7 @@
                     app:layout_constraintTop_toTopOf="@+id/progress_bar"
                     app:layout_constraintVertical_bias="0.75"
                     tools:text="Poor"
-                    android:textSize="17dp"/>
+                    android:textSize="16dp"/>
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -86,7 +96,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
             >
 
                 <ImageView
@@ -104,11 +114,9 @@
                 android:layout_weight="1"
                 android:text="@string/friends_ranking"
                 android:textColor="@color/black"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:layout_gravity="center"
-
                 android:textStyle="bold"
-
                 android:paddingLeft="10dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -125,7 +133,8 @@
             android:layout_marginBottom="50dp"
             android:layout_weight="8"
             tools:listitem="@layout/item_leaderboard_ranking" />
-
+    </LinearLayout>
+    </ScrollView>
     </LinearLayout>
 </FrameLayout>
 

@@ -8,139 +8,139 @@
     android:orientation="vertical"
     android:paddingTop="0dp"
     android:paddingBottom="0dp"
-    android:background="@color/light_green">
+    android:background="@color/light_green"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:padding="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp"
+        android:layout_gravity="center"
         android:background="@drawable/layout_bg"
-        >
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24dp"
-            android:text="@string/login"
             android:gravity="center"
+            android:text="@string/login"
             android:textColor="@color/black"
-            android:textStyle="bold"/>
+            android:textSize="24dp"
+            android:textStyle="bold" />
 
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:textSize="14dp"-->
-<!--            android:textAllCaps = "true"-->
-<!--            android:text="@string/username"-->
-<!--            android:textStyle="bold"-->
-<!--            android:textColor="@color/black"/>-->
+        <!--        <TextView-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            android:textSize="14dp"-->
+        <!--            android:textAllCaps = "true"-->
+        <!--            android:text="@string/username"-->
+        <!--            android:textStyle="bold"-->
+        <!--            android:textColor="@color/black"/>-->
 
-<!--        <EditText-->
-<!--            android:id="@+id/et_email"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="@string/username"-->
-<!--            android:ems="10"-->
-<!--            android:inputType="text"-->
-<!--            android:textSize="14dp"-->
-<!--            />-->
+        <!--        <EditText-->
+        <!--            android:id="@+id/et_email"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:hint="@string/username"-->
+        <!--            android:ems="10"-->
+        <!--            android:inputType="text"-->
+        <!--            android:textSize="14dp"-->
+        <!--            />-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email_container"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            app:helperTextEnabled="true"
-            app:helperText=""
-            app:helperTextTextColor="@color/red"
-            android:paddingBottom="10dp"
             android:paddingTop="20dp"
-            >
+            android:paddingBottom="10dp"
+            app:helperText=""
+            app:helperTextEnabled="true"
+            app:helperTextTextColor="@color/red">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:lines="1"
-                android:inputType="textEmailAddress"
-                android:textSize="16dp"
                 android:hint="@string/email"
-                />
+                android:inputType="textEmailAddress"
+                android:lines="1"
+                android:textSize="16dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:textSize="14dp"-->
-<!--            android:textAllCaps = "true"-->
-<!--            android:text="@string/password"-->
-<!--            android:textStyle="bold"-->
-<!--            android:textColor="@color/black"/>-->
+        <!--        <TextView-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            android:textSize="14dp"-->
+        <!--            android:textAllCaps = "true"-->
+        <!--            android:text="@string/password"-->
+        <!--            android:textStyle="bold"-->
+        <!--            android:textColor="@color/black"/>-->
 
-<!--        <EditText-->
-<!--            android:id="@+id/et_password"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:hint="@string/password"-->
-<!--            android:ems="10"-->
-<!--            android:inputType="textPassword"-->
-<!--            android:textSize="14dp"-->
-<!--            />-->
+        <!--        <EditText-->
+        <!--            android:id="@+id/et_password"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:hint="@string/password"-->
+        <!--            android:ems="10"-->
+        <!--            android:inputType="textPassword"-->
+        <!--            android:textSize="14dp"-->
+        <!--            />-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password_container"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            app:helperTextEnabled="true"
-            app:helperText=""
-            app:helperTextTextColor="@color/red"
             android:paddingBottom="10dp"
+            app:helperText=""
+            app:helperTextEnabled="true"
+            app:helperTextTextColor="@color/red"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:lines="1"
-                android:inputType="text"
-                android:textSize="16dp"
                 android:hint="@string/password"
-                />
+                android:inputType="text"
+                android:lines="1"
+                android:textSize="16dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/login"
             android:layout_marginTop="10dp"
-            android:textColor="@color/off_white"
-            android:backgroundTint="@color/dark_green"
             android:background="@drawable/button_border"
-            />
+            android:backgroundTint="@color/dark_green"
+            android:text="@string/login"
+            android:textColor="@color/off_white" />
 
         <TextView
             android:id="@+id/txt_forgot_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="12dp"
             android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="@string/forgot_password"
-            android:textColor="@color/dark_green"/>
+            android:textColor="@color/dark_green"
+            android:textSize="12dp" />
 
         <TextView
             android:id="@+id/txt_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14dp"
+            android:layout_marginTop="10dp"
             android:gravity="center"
             android:text="@string/no_account_register"
             android:textColor="@color/black"
-            android:layout_marginTop="10dp"/>
+            android:textSize="14dp" />
     </LinearLayout>
 </LinearLayout>

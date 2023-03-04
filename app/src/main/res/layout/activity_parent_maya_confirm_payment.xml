@@ -73,7 +73,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16dp"
-                        android:text="Amount to be Send"
+                        android:text="Amount to be sent"
                         android:textAllCaps = "true"
                         android:textColor="@color/black" />
 
@@ -216,7 +216,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

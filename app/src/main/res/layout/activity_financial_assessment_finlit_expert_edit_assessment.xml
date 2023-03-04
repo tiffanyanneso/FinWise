@@ -52,18 +52,9 @@
                     app:layout_constraintTop_toTopOf="parent"
                     android:textSize="24sp"
                     android:text="Assessment Name"
-                    android:gravity="center"
                     android:textStyle="bold"
-                    android:textColor="@color/black"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Details"
                     android:textColor="@color/black"
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="5dp"/>
+                    android:layout_marginBottom="10dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -73,6 +64,15 @@
                     android:background="@drawable/button_border_white"
                     android:backgroundTint="@color/very_light_green">
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Details"
+                        android:textColor="@color/black"
+                        android:textSize="20dp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="10dp"/>
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/container_question"
                         android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                         app:helperTextEnabled="true"
                         app:helperText=""
                         app:helperTextTextColor="@color/red"
-                        android:paddingBottom="10dp"
+                        android:paddingBottom="5dp"
                         app:startIconDrawable="@drawable/baseline_numbers_24">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -91,7 +91,10 @@
                             android:lines="1"
                             android:inputType="number"
                             android:textSize="16dp"
-                            android:hint="Number of Questions"/>
+                            android:hint="Number of Questions"
+                            android:background="@drawable/border_grey_bg_white"
+                            android:backgroundTint="@color/white"
+                            />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -111,14 +114,16 @@
                             android:layout_height="match_parent"
                             android:inputType="textMultiLine"
                             android:textSize="16dp"
-                            android:hint="Description"/>
+                            android:hint="Description"
+                            android:background="@drawable/border_grey_bg_white"
+                            android:backgroundTint="@color/white"/>
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="20dp"
                     android:text="Questions"
                     android:textColor="@color/black"
                     android:textSize="20dp"
@@ -128,7 +133,7 @@
                     android:id="@+id/btn_add_new_questions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/button_border"
                     android:backgroundTint="@color/dark_green"
                     android:text="@string/add_new_question"

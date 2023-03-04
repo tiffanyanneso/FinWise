@@ -397,14 +397,13 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="100dp"
+                            android:layout_width="110dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:text="@string/measureable"
-                            android:textSize="16sp"
-                            android:textColor="@color/black"
                             android:gravity="center_vertical"
-                            />
+                            android:text="@string/measureable"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
 
                         <RatingBar
                             android:id="@+id/ratingBar_measurable"
@@ -425,7 +424,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="100dp"
+                            android:layout_width="90dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:gravity="center_vertical"

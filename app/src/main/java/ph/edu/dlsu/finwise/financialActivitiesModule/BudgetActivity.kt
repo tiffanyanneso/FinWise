@@ -73,6 +73,7 @@ class BudgetActivity : AppCompatActivity() {
             if (financialActivity?.status == "Completed") {
                 isCompleted = true
                 binding.btnDoneSettingBudget.visibility = View.GONE
+                binding.linearLayoutText.visibility = View.GONE
             }
         }
         //checkUser()
@@ -90,6 +91,7 @@ class BudgetActivity : AppCompatActivity() {
             dialogBinding.btnOk.setOnClickListener {
                 firestore.collection("FinancialActivities").document(budgetActivityID).update("status", "Completed").addOnSuccessListener {
                     binding.btnDoneSettingBudget.visibility = View.GONE
+                    binding.linearLayoutText.visibility = View.GONE
                     isCompleted = true
                     dialog.dismiss()
                     firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "In Progress")
@@ -319,6 +321,7 @@ class BudgetActivity : AppCompatActivity() {
             if (it.exists()) {
                 binding.btnNewCategory.visibility = View.GONE
                 binding.btnDoneSettingBudget.visibility = View.GONE
+                binding.linearLayoutText.visibility = View.GONE
             }
         }
     }

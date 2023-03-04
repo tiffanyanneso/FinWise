@@ -114,38 +114,7 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/btn_finlit_spending"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/layout_bg_green"
-            android:orientation="horizontal"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
-
-            <ImageView
-                android:src="@drawable/money_expenses"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="30dp"
-                />
-
-            <TextView
-                android:id="@+id/tv_finlit_spending"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Spending"
-                android:layout_marginLeft="35dp"
-                android:layout_marginTop="40dp"
-                android:textColor="@color/black"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-       <!-- Budgeting Linear layout-->
+        <!-- Budgeting Linear layout-->
         <LinearLayout
             android:id="@+id/btn_finlit_budgeting"
             android:layout_width="match_parent"
@@ -170,6 +139,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Budgeting"
+                android:layout_marginLeft="35dp"
+                android:layout_marginTop="40dp"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_finlit_spending"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/layout_bg_green"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <ImageView
+                android:src="@drawable/money_expenses"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="30dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_finlit_spending"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Spending"
                 android:layout_marginLeft="35dp"
                 android:layout_marginTop="40dp"
                 android:textColor="@color/black"

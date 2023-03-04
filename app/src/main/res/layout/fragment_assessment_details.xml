@@ -11,6 +11,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -303,7 +313,8 @@
             android:layout_weight="8"
             android:layout_marginTop="10dp"
             android:layout_marginHorizontal="20dp"
-            tools:listitem="@layout/item_questions"/>
+            tools:listitem="@layout/item_questions"
+            android:layout_marginBottom="20dp"/>
 
     <!--    <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_view_goals"
@@ -313,5 +324,7 @@
             android:padding="10dp"
 
             tools:listitem="@layout/item_questions_low_correct_answers"/>-->
+    </LinearLayout>
+    </ScrollView>
     </LinearLayout>
 </FrameLayout>

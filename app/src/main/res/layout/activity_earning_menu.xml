@@ -41,9 +41,10 @@
         android:layout_marginHorizontal="20dp">
 
         <ImageView
-            android:src="@drawable/preliminary"
+            android:src="@drawable/baseline_house_24"
             android:layout_width="80dp"
-            android:layout_height="80dp"/>
+            android:layout_height="80dp"
+            app:tint="@color/white" />
 
         <TextView
             android:layout_width="match_parent"
@@ -82,7 +83,7 @@
         android:layout_marginHorizontal="20dp">
 
         <ImageView
-            android:src="@drawable/preliminary"
+            android:src="@drawable/baseline_sell_24"
             android:layout_width="80dp"
             android:layout_height="80dp"/>
 

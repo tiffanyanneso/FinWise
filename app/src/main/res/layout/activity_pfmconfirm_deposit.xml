@@ -157,7 +157,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -196,10 +195,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textStyle="bold"
-                    android:text="Target Amount Left"
+                    android:text="Amount Left to Save"
                     android:textSize="16sp"
-                    android:textColor="@color/black"
-                    />
+                    android:textColor="@color/black"/>
 
                 <TextView
                     android:id="@+id/tv_updated_goal_amount"

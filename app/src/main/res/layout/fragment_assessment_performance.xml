@@ -75,19 +75,19 @@
                 android:layout_gravity="center"/>
         </LinearLayout>
 
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:layout_margin="15dp"
-            android:background="@android:color/black"/>
-
+<!--        <com.google.android.material.divider.MaterialDivider-->
+<!--            android:id="@+id/div_2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginHorizontal="20dp"-->
+<!--            android:layout_marginTop="15dp"-->
+<!--            app:dividerColor="@color/light_grey"/>-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="15dp">
+        android:layout_margin="20dp">
 
 
         <LinearLayout

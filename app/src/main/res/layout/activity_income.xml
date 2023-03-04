@@ -23,23 +23,9 @@
             android:backgroundTint="@color/dark_green"
             app:menu="@menu/top_app_bar"
             app:navigationIcon="@drawable/baseline_arrow_back_24"
-            app:title="Earning Activity"
+            app:title="Home Rewards"
             app:titleCentered="true" />
     </com.google.android.material.appbar.AppBarLayout>
-
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textSize="24sp"
-        android:text="Confirm"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/black"/>
 
     <LinearLayout
         android:id="@+id/linear_layout_1"
@@ -48,7 +34,7 @@
         android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:layout_constraintTop_toBottomOf="@id/topbar"
         android:padding="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/button_border_white"
@@ -65,7 +51,7 @@
             <ImageView
                 android:layout_width="70dp"
                 android:layout_height="70dp"
-                android:src="@drawable/baseline_directions_run_24"
+                android:src="@drawable/baseline_house_24"
                 app:tint="@color/light_green"
                 android:layout_gravity="center"/>
 
@@ -82,7 +68,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Activity"
+                    android:text="Chore"
                     android:textAllCaps="true"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
@@ -146,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:text="Target Date"
+                android:text="Finish Date"
                 android:textSize="16sp"
                 android:textColor="@color/black" />
 
