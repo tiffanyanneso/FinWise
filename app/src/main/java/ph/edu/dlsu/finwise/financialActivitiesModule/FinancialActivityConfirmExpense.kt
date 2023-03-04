@@ -52,7 +52,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
         binding.btnConfirm.setOnClickListener {
             //withdraw money from savings to wallet
             var withdrawal = hashMapOf(
-                "childID" to currentUser,
+                "createdBy" to currentUser,
                 "transactionType" to "Withdrawal",
                 "transactionName" to bundle.getString("expenseName"),
                 "amount" to bundle.getFloat("amount"),
@@ -66,7 +66,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
 
             //from wallet balance, record expense
            var expense = hashMapOf(
-               "childID" to currentUser,
+               "createdBy" to currentUser,
                "transactionType" to "Expense",
                "transactionName" to bundle.getString("expenseName"),
                "amount" to bundle.getFloat("amount"),

@@ -263,8 +263,13 @@ class ViewGoalActivity : AppCompatActivity() {
                     val date =  SimpleDateFormat("MM/dd/yyyy").format(goal.targetDate?.toDate())
                     val to = LocalDate.parse(date.toString(), dateFormatter)
 
-                    var difference = Period.between(from, to)
-                    binding.tvRemaining.text = difference.days.toString() + " days remaining"
+
+                    if (goal?.status != "Completed") {
+                        var difference = Period.between(from, to)
+                        binding.tvRemaining.text = difference.days.toString() + " days remaining"
+                    } else
+                        binding.tvRemaining.visibility = View.GONE
+
                 }
             }
                 //deductExpenses() }

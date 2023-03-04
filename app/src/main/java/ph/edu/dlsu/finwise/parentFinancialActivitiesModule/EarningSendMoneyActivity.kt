@@ -58,7 +58,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
 
     private fun makeTransactions() {
         var income = hashMapOf(
-            "childID" to childID,
+            "createdBy" to childID,
             "transactionName" to binding.tvName.text.toString(),
             "transactionType" to "Income",
             "category" to "Rewards",
@@ -67,7 +67,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             "amount" to amount)
         firestore.collection("Transactions").add(income).addOnSuccessListener {
             var deposit = hashMapOf(
-                "childID" to childID,
+                "createdBy" to childID,
                 "transactionName" to binding.tvName.text.toString(),
                 "transactionType" to "Deposit",
                 "category" to "Goal",
