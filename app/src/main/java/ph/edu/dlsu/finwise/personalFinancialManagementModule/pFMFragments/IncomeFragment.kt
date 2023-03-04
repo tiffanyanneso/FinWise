@@ -27,7 +27,9 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentIncomeBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.Transactions
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
+import ph.edu.dlsu.finwise.parentFinancialManagementModule.ParentFinancialManagementActivity
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
 import java.text.DecimalFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -49,9 +51,11 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     var reward = 0.00f
     var other = 0.00f
     private var selectedDatesSort = "weekly"
+    private var user = "child"
     lateinit var topIncomeCategory: String
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
+
 
 
 
@@ -73,20 +77,18 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         binding = FragmentIncomeBinding.bind(view)
         getArgumentsFromPFM()
         loadPieChart()
-        loadFinancialActivitiesButton()
     }
 
-    private fun loadFinancialActivitiesButton() {
-        //TODO: double chekc kung tama link
-        binding.btnFinancialActivities.setOnClickListener {
-            val goToFinancialActivitiy = Intent(context, FinancialActivity::class.java)
-            startActivity(goToFinancialActivitiy)
-        }
-    }
 
     private fun getArgumentsFromPFM() {
         val args = arguments
         val date = args?.getString("date")
+        val currUser = args?.getString("user")
+
+        if (currUser != null) {
+            user = currUser
+        }
+
         if (date != null) {
             Toast.makeText(context, ""+date, Toast.LENGTH_SHORT).show()
             selectedDatesSort = date
@@ -182,9 +184,54 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
             "yearly" -> dateRange = "quarter"
         }
 
-        binding.tvSummary.text = "You've earned ₱$totalText for this $dateRange!"
-        binding.tvTips.text = "Go to the \"Financial Activities\" to develop your Financial Literacy using your money"
+        if (user == "child" && total > 0) {
+            binding.tvSummary.text = "You've earned ₱$totalText for this $dateRange! "
+            binding.tvTips.text = "Go to the \"Financial Activities\" to develop your Financial Literacy using your money"
+            loadChildFinancialActivitiesButton()
+        } else if (user == "child" && total < 0) {
+            binding.tvSummary.text = "You've earned ₱$totalText for this $dateRange"
+            binding.tvTips.text = "Consider reviewing your previous transactions and see which you could lessen"
+            loadTransactionHistory()
+        } else if (user == "parent" && total > 0) {
+            binding.tvSummary.text = "Your child earned ₱$totalText for this $dateRange!"
+            binding.tvTips.text = "Go to the \"Financial Activities\" to develop your child's Financial Literacy using their money"
+            loadParentFinancialActivitiesButton()
+        } else if (user == "parent" && total < 0) {
+            binding.tvSummary.text = "You've child earned ₱$totalText for this $dateRange"
+            binding.tvTips.text = "Consider reviewing your child's previous transactions and see which they could lessen"
+            loadTransactionHistory()
+        }
+
     }
+
+    private fun loadTransactionHistory() {
+        binding.btnAction.setOnClickListener {
+            val goToTransactionHistory = Intent(context, TransactionHistoryActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("user", user)
+            bundle.putString("checkedBoxes", "expense")
+            goToTransactionHistory.putExtras(bundle)
+            startActivity(goToTransactionHistory)
+        }
+    }
+
+
+    private fun loadParentFinancialActivitiesButton() {
+        //TODO: double chekc kung tama link
+        binding.btnAction.setOnClickListener {
+            val goToFinancialActivity = Intent(context, ParentLandingPageActivity::class.java)
+            startActivity(goToFinancialActivity)
+        }
+    }
+
+    private fun loadChildFinancialActivitiesButton() {
+        //TODO: double chekc kung tama link
+        binding.btnAction.setOnClickListener {
+            val goToFinancialActivity = Intent(context, FinancialActivity::class.java)
+            startActivity(goToFinancialActivity)
+        }
+    }
+
 
     private fun setTopThreeCategories() {
         val totals = mapOf(

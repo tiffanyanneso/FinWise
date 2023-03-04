@@ -254,7 +254,7 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:layout_marginTop="5dp"
-                            android:text="You've earned ₱X,XXX.XX more than you spent"
+                            android:text="Loading data 🔃 \n Thank you for your patience ☺"
                             android:textColor="@color/white"/>
 
                         <androidx.appcompat.widget.AppCompatButton
@@ -292,6 +292,17 @@
                 android:textSize="20sp"
                 android:layout_marginTop="20dp"
                 android:gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="(Click the empty space below to see the graph) "
+                android:textStyle="bold"
+                android:textColor="@color/light_green"
+                android:textSize="16sp"
+                android:layout_margin="5dp"
+                android:gravity="center"
+                />
 
 
             <com.github.mikephil.charting.charts.LineChart

@@ -9,12 +9,13 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="760dp"
+        android:layout_height="match_parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav_parent"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="60dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -188,10 +189,92 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cv_score"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="5dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cv_current_balance"
+                android:layout_margin="20dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/gradient_pfm_detail_card2"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:src="@drawable/icon_financial_health"
+                        android:contentDescription="Profit"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="5dp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="12sp"
+                        android:text="Financial Health Score"
+                        android:textColor="@color/off_white"/>
+
+                    <LinearLayout
+                        android:id="@+id/linear_layout_text5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="325dp"
+                            android:layout_height="150dp"
+                            android:id="@+id/tv_score"
+                            android:gravity="center"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:layout_margin="15dp"
+                            android:text="Loading data 🔃 \n For the meantime, you could look at the functions above to send or track your child's money. \n You could also check the navigation bar for more cool features! \n Thank you for waiting ☺"
+                            android:textColor="@color/white"/>
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="130dp"
+                            android:layout_height="50dp"
+                            android:id="@+id/btn_explanation"
+                            android:gravity="center"
+                            android:text="View Explanation"
+                            android:textSize="12sp"
+                            android:background="@drawable/rounded_button"
+                            android:backgroundTint="@color/light_green"
+                            android:textColor="@color/white"/>
+
+                        <TextView
+                            android:id="@+id/tv_difference"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:gravity="center"
+                            android:layout_margin="20dp"
+                            android:text="Scroll down to see more 👇"
+                            android:textColor="@color/off_white"
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/cv_current_balance"
+                app:layout_constraintTop_toBottomOf="@id/cv_score"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:id="@+id/ll_sort_dates"
@@ -262,7 +345,7 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/view_pager_bar_charts"
                 android:layout_width="match_parent"
-                android:layout_height="700dp"
+                android:layout_height="800dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"

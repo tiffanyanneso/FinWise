@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +27,6 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentExpenseBinding
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.time.DayOfWeek
@@ -41,6 +39,7 @@ import kotlin.collections.ArrayList
 class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     lateinit var pieChart: PieChart
     private lateinit var binding: FragmentExpenseBinding
+    private var bundle = Bundle()
     private var firestore = Firebase.firestore
     private var transactionsArrayList = ArrayList<Transactions>()
     var clothesPercentage = 0.00f
@@ -57,14 +56,10 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     var other = 0.00f
     var total = 0.00f
     private var selectedDatesSort = "weekly"
+    private var user = "child"
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
 
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,8 +79,11 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     }
 
     private fun loadTransactionHistory() {
-        binding.btnTransactionHistory.setOnClickListener {
+        binding.btnAction.setOnClickListener {
             val goToTransactionHistory = Intent(context, TransactionHistoryActivity::class.java)
+            bundle.putString("user", user)
+            bundle.putString("checkedBoxes", "expense")
+            goToTransactionHistory.putExtras(bundle)
             startActivity(goToTransactionHistory)
         }
     }
@@ -93,6 +91,14 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     private fun getArgumentsFromPFM() {
         val args = arguments
         val date = args?.getString("date")
+
+        val currUser = args?.getString("user")
+
+        if (currUser != null) {
+            user = currUser
+        }
+
+
         if (date != null) {
             Toast.makeText(context, ""+date, Toast.LENGTH_SHORT).show()
             selectedDatesSort = date
@@ -130,9 +136,23 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             "yearly" -> dateRange = "quarter"
         }
 
-
-        binding.tvSummary.text = "You've spent ₱$totalText for this $dateRange!"
+        binding.tvSummary.text = "You've spent ₱$totalText for this $dateRange! 💸"
         binding.tvTips.text = "Consider reviewing your Top Expenses below or your previous transactions and see which you could lessen"
+        /*if (user == "child" && total < 500) {
+            binding.tvSummary.text = "You've spent ₱$totalText for this $dateRange!"
+            binding.tvTips.text = "Consider reviewing your Top Expenses below or your previous transactions and see which you could lessen"
+        } else if (user == "child" && total > 500) {
+            binding.tvSummary.text = "You've earned ₱$totalText for this $dateRange"
+            binding.tvTips.text = "Consider reviewing your previous transactions and see which you could lessen"
+        } else if (user == "parent" && total > 500) {
+            binding.tvSummary.text = "Your child spent ₱$totalText for this $dateRange!"
+            binding.tvTips.text = "Consider reviewing your child's Top Expenses below or their previous transactions and see which they could lessen"
+        } else if (user == "parent" && total < 500) {
+            binding.tvSummary.text = "You've child earned ₱$totalText for this $dateRange"
+            binding.tvTips.text = "Consider reviewing your child's previous transactions and see which they could lessen"
+        }*/
+
+
     }
 
     private fun getDatesOfTransactions(): List<Date> {

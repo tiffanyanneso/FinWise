@@ -1,24 +1,23 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.PFMAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityTrendDetailsBinding
-import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.ExpenseFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.IncomeFragment
-import java.util.*
 
 class TrendDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityTrendDetailsBinding
     private var setBundle = Bundle()
     private var selectedDateRange = "week"
+    private var user = "child"
 
     private val tabIcons1 = intArrayOf(
         R.drawable.baseline_wallet_24,
@@ -37,7 +36,10 @@ class TrendDetailsActivity : AppCompatActivity() {
     private fun getAndSetBundleFromBalanceFragment() {
         val getBundle = intent.extras
         selectedDateRange = getBundle?.getString("date").toString()
+        user = getBundle?.getString("user").toString()
+        Toast.makeText(this, ""+user, Toast.LENGTH_SHORT).show()
         setBundle.putString("date", selectedDateRange)
+        setBundle.putString("user", user)
     }
 
     private fun setupTabIcons1() {
@@ -64,15 +66,31 @@ class TrendDetailsActivity : AppCompatActivity() {
 
     private fun loadButtons() {
         supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+        setNavigationBar()
         loadBackButton()
+    }
+
+    private fun setNavigationBar() {
+        val bottomNavigationViewChild = binding.bottomNav
+        val bottomNavigationViewParent = binding.bottomNavParent
+
+        if (user == "child") {
+            bottomNavigationViewChild.visibility = View.VISIBLE
+            bottomNavigationViewParent.visibility = View.GONE
+            Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+        } else {
+            bottomNavigationViewChild.visibility = View.GONE
+            bottomNavigationViewParent.visibility = View.VISIBLE
+            NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
+        }
     }
 
     private fun loadBackButton() {
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
-            val goToPFM = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
-            startActivity(goToPFM)
+            onBackPressed()
+            /*val goToPFM = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
+            startActivity(goToPFM)*/
         }
     }
 
