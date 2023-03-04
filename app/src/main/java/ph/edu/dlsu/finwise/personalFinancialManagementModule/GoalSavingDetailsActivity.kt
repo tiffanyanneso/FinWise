@@ -21,6 +21,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalSavingDetailsBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import java.time.DayOfWeek
@@ -36,6 +37,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     var withdrawalTotalAmount = 0.00f
     var savingsPercentage = 0.00f
     var withdrawalPercentage = 0.00f
+    var total = 0.00f
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
     private var selectedDatesSort = "weekly"
@@ -49,6 +51,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
         getBundle()
         loadButtons()
         loadPieChart()
+        loadFinancialActivitiesButton()
     }
 
     private fun getBundle() {
@@ -78,8 +81,16 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
             }
     }
 
+    private fun loadFinancialActivitiesButton() {
+        //TODO: double chekc kung tama link
+        binding.btnFinancialActivities.setOnClickListener {
+            val goToFinancialActivitiy = Intent(this, FinancialActivity::class.java)
+            startActivity(goToFinancialActivitiy)
+        }
+    }
+
     private fun calculatePercentages() {
-        val total = depositTotalAmount + withdrawalTotalAmount
+        total = depositTotalAmount + withdrawalTotalAmount
         savingsPercentage = (depositTotalAmount - withdrawalTotalAmount) / total * 100
         withdrawalPercentage = withdrawalTotalAmount / total * 100
     }
@@ -136,9 +147,27 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
         val savingsAmount = depositTotalAmount - withdrawalTotalAmount
         val savings = dec.format(savingsAmount)
 
-            binding.tvDepositTotal.text = "₱$deposit"
+        binding.tvDepositTotal.text = "₱$deposit"
         binding.tvWithdrawalTotal.text = "₱$withdrawal"
-        binding.tvSavingsTotal.text = "₱$savings"
+        setSummary(savingsAmount, savings)
+    }
+
+    private fun setSummary(savingsAmount: Float, savings: String?) {
+        var dateRange = "week"
+        when (selectedDatesSort) {
+            "monthly" -> dateRange = "month"
+            "yearly" -> dateRange = "quarter"
+        }
+
+        if (savingsAmount > 0) {
+            binding.tvSummary.text = "You've saved ₱$savings for this $dateRange!"
+            binding.tvTips.text = "Go to the \"Financial Activities\" to use your money that you saved to develop your Financial Literacy"
+        } /*TODO: check if negeatives lahat
+        else {
+            binding.tvSummary.text = "You've saved ₱$savings for this $dateRange!"
+            binding.tvTips.text = "Go to the \"Financial Activities\" to use your money that you saved to develop your Financial Literacy"
+        }*/
+
     }
 
     private fun initializeEntries(): List<PieEntry> {
@@ -458,6 +487,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     }*/
 
     private fun loadButtons() {
+
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
         loadBackButton()
     }

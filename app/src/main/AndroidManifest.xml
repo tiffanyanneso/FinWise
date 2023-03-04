@@ -178,12 +178,17 @@
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentLandingPage"
-            android:exported="true" >
-            <intent-filter>
+            android:exported="false" >
+    <!--        <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+        </intent-filter>-->
+<!--            <intent-filter>-->
+<!--            <action android:name="android.intent.action.MAIN" />-->
+
+<!--            <category android:name="android.intent.category.LAUNCHER" />-->
+<!--        </intent-filter>-->
         </activity>
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
@@ -243,6 +248,12 @@
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
             android:exported="true" >
+            <intent-filter>
+                   <action android:name="android.intent.action.MAIN" />
+
+                   <category android:name="android.intent.category.LAUNCHER" />
+               </intent-filter>
+
         </activity>
 
         <activity
@@ -306,10 +317,14 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
+            android:exported="true">
+<!--            <meta-data-->
+<!--                android:name="android.app.lib_name"-->
+<!--                android:value="" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
         </activity>
     </application>
 

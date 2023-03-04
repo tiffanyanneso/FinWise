@@ -85,7 +85,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     }
 
     private fun initializeDetails() {
-        binding.tvDetails.setOnClickListener{
+        binding.btnDetails.setOnClickListener{
             val goToDetails = Intent(context, GoalSavingDetailsActivity::class.java)
             bundle.putString("date", selectedDatesSort)
             goToDetails.putExtras(bundle)
@@ -95,6 +95,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeBalanceLineGraph() {
+        //TODO: change to currentUser
         // on below line we are initializing
         // our variable with their ids.
         firestore.collection("Transactions")
@@ -193,8 +194,8 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
 
     private fun setTotals(totalDeposit: Float, totalWithdraw: Float) {
         val dec = DecimalFormat("#,###.00")
-        val depositText = dec.format(totalDeposit)
-        val withdrawalText = dec.format(totalWithdraw)
+        /*val depositText = dec.format(totalDeposit)
+        val withdrawalText = dec.format(totalWithdraw)*/
         var savings = if (totalDeposit != 0.0f) {
             (totalDeposit - totalWithdraw) / totalDeposit * 100
         } else {
@@ -202,9 +203,12 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
         }
         savings = round(savings / 10.0f) * 10.0f
 
-        binding.tvDepositTotal.text = "₱$depositText"
+        if (savings > 0)
+            binding.tvSummary.text = "You are saving $savings% of your total deposits to your goals 😄"
+        else binding.tvSummary.text = "You are saving $savings% of your total deposits to your goals 😔"
+        /*binding.tvDepositTotal.text = "₱$depositText"
         binding.tvWithdrawalTotal.text = "₱$withdrawalText"
-        binding.tvRate.text = "$savings%"
+        binding.tvRate.text = "$savings%"*/
     }
 
     private fun getWeeksOfCurrentMonth(dates: List<Date>): Map<Int, List<Date>> {

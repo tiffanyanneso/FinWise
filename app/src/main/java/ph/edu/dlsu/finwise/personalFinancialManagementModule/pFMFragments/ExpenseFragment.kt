@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
@@ -26,6 +27,8 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentExpenseBinding
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.time.DayOfWeek
@@ -52,6 +55,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     var toysAndGames = 0.00f
     var transportation = 0.00f
     var other = 0.00f
+    var total = 0.00f
     private var selectedDatesSort = "weekly"
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
@@ -75,7 +79,15 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentExpenseBinding.bind(view)
         getArgumentsFromPFM()
+        loadTransactionHistory()
         loadPieChart()
+    }
+
+    private fun loadTransactionHistory() {
+        binding.btnTransactionHistory.setOnClickListener {
+            val goToTransactionHistory = Intent(context, TransactionHistoryActivity::class.java)
+            startActivity(goToTransactionHistory)
+        }
     }
 
     private fun getArgumentsFromPFM() {
@@ -94,7 +106,6 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
         firestore.collection("Transactions").get()
             .addOnSuccessListener { transactionsSnapshot ->
-                lateinit var id: String
                 for (document in transactionsSnapshot) {
                     val transaction = document.toObject<Transactions>()
                     if (transaction.transactionType == "Expense" || transaction.transactionType == "Expense (Maya")
@@ -105,8 +116,23 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
                 calculatePercentages()
                 setTopThreeCategories()
                 topExpense()
+                setSummary()
                 loadPieChartView()
             }
+    }
+
+    private fun setSummary() {
+        val dec = DecimalFormat("#,###.00")
+        val totalText = dec.format(total)
+        var dateRange = "week"
+        when (selectedDatesSort) {
+            "monthly" -> dateRange = "month"
+            "yearly" -> dateRange = "quarter"
+        }
+
+
+        binding.tvSummary.text = "You've spent ₱$totalText for this $dateRange!"
+        binding.tvTips.text = "Consider reviewing your Top Expenses below or your previous transactions and see which you could lessen"
     }
 
     private fun getDatesOfTransactions(): List<Date> {
@@ -128,7 +154,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             "weekly" -> {
                 selectedDates = getDaysOfWeek(sortedDate)
                 addWeeklyData(selectedDates)
-                binding.tvExpenseBreakdown.text = "This Week's Income Categories"
+                binding.tvExpenseBreakdown.text = "This Week's Expense"
             }
             "monthly" -> {
                 /*val group = groupDates(sortedDate, "monthly")
@@ -136,7 +162,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
                 val weeks = getWeeksOfCurrentMonth(sortedDate)
                 computeDataForMonth(weeks)
                 setTopThreeCategories()
-                binding.tvExpenseBreakdown.text = "This Month's Income Categories"
+                binding.tvExpenseBreakdown.text = "This Month's Expense"
                 /*val group = groupDates(sortedDate, "month")
                 iterateDatesByQuarter(group)*/
             }
@@ -146,7 +172,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
                 val group = getMonthsOfQuarter(sortedDate)
                 computeDataForQuarter(group)
                 setTopThreeCategories()
-                binding.tvExpenseBreakdown.text = "This Quarter's Income Categories"
+                binding.tvExpenseBreakdown.text = "This Quarter's Expense"
             }
         }
 
@@ -282,7 +308,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
 
 
     private fun calculatePercentages() {
-        val total = clothes + food + gift + toysAndGames + transportation + other
+        total = clothes + food + gift + toysAndGames + transportation + other
 
         clothesPercentage = clothes / total * 100
         foodPercentage = food / total * 100
