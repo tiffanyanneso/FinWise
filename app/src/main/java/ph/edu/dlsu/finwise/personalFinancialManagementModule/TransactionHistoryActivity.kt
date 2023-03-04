@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -11,6 +12,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import kotlinx.coroutines.*
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmtransactionHistoryBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.*
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryExpenseFragment
@@ -41,16 +44,34 @@ class TransactionHistoryActivity : AppCompatActivity() {
         context = this
 
         // Initializes the navbar
-        Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
         checkIfSort()
         initializeIncomeExpense()
         loadBackButton()
         initializeSort()
     }
 
+    private fun setNavigationBar() {
+        val bottomNavigationViewChild = binding.bottomNav
+        val bottomNavigationViewParent = binding.bottomNavParent
+        val user = getBundle!!.getString("user").toString()
+
+
+        if (user == "child") {
+            bottomNavigationViewChild.visibility = View.VISIBLE
+            bottomNavigationViewParent.visibility = View.GONE
+            Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+        } else if (user == "parent") {
+            bottomNavigationViewChild.visibility = View.GONE
+            bottomNavigationViewParent.visibility = View.VISIBLE
+            NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
+        }
+    }
+
     private fun checkIfSort() {
         getBundle = intent.extras
-        setBundle = intent.extras
+        setBundle = Bundle()
+        setNavigationBar()
+
 
         if (getBundle != null) {
             getBundle()
@@ -120,8 +141,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
     private fun loadBackButton() {
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
-            val goToPFM = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
-            startActivity(goToPFM)
+            onBackPressed()
         }
     }
 

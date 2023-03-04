@@ -79,7 +79,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 computeIncomeExpenseRatio()
                 loadExplanation()
             }
-
     }
 
     private fun loadExplanation() {
@@ -143,7 +142,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         initializeWeeklyButton()
         initializeMonthlyButton()
         initializeQuarterlyButton()
-
     }
 
     private fun initializeMonthlyButton() {
@@ -175,7 +173,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             //setUpBreakdownTabs()
         }
     }
-
 
     private fun initializeWeeklyButton() {
         val weeklyButton = binding.btnWeekly

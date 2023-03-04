@@ -13,7 +13,6 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityCompletedEarningBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
 import ph.edu.dlsu.finwise.model.FinancialActivities
-import ph.edu.dlsu.finwise.model.FinancialGoals
 
 class EarningSendMoneyActivity : AppCompatActivity() {
 

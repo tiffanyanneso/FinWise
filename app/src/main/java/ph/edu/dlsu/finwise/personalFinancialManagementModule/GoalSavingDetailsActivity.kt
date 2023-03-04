@@ -23,6 +23,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalSavingDetailsBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import java.text.DecimalFormat
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -41,6 +42,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
     private var selectedDatesSort = "weekly"
+    private var user = "child"
     lateinit var chart: PieChart
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -51,12 +53,14 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
         getBundle()
         loadButtons()
         loadPieChart()
-        loadFinancialActivitiesButton()
     }
+
+
 
     private fun getBundle() {
         val getBundle = intent.extras
         selectedDatesSort = getBundle?.getString("date").toString()
+        user = getBundle?.getString("user").toString()
         transactionsArrayList.clear()
     }
 
@@ -81,13 +85,6 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
             }
     }
 
-    private fun loadFinancialActivitiesButton() {
-        //TODO: double chekc kung tama link
-        binding.btnFinancialActivities.setOnClickListener {
-            val goToFinancialActivitiy = Intent(this, FinancialActivity::class.java)
-            startActivity(goToFinancialActivitiy)
-        }
-    }
 
     private fun calculatePercentages() {
         total = depositTotalAmount + withdrawalTotalAmount
@@ -159,16 +156,55 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
             "yearly" -> dateRange = "quarter"
         }
 
-        if (savingsAmount > 0) {
+        if (user == "child") {
             binding.tvSummary.text = "You've saved ₱$savings for this $dateRange!"
-            binding.tvTips.text = "Go to the \"Financial Activities\" to use your money that you saved to develop your Financial Literacy"
-        } /*TODO: check if negeatives lahat
+            binding.tvTips.text = "Go to the \"Financial Activities\" to develop your Financial Literacy using your money. Scroll down for more details"
+            loadChildFinancialActivitiesButton()
+        } else if (user == "parent") {
+            binding.tvSummary.text = "Your child saved ₱$savings for this $dateRange!"
+            binding.tvTips.text = "Go to the \"Financial Activities\" to develop your child's Financial Literacy using their money. Scroll down for more details"
+            loadParentFinancialActivitiesButton()
+        }
+
+        /*if (user == "child" && total < 500) {
+            binding.tvSummary.text = "You've spent ₱$totalText for this $dateRange!"
+            binding.tvTips.text = "Consider reviewing your Top Expenses below or your previous transactions and see which you could lessen"
+        } else if (user == "child" && total > 500) {
+            binding.tvSummary.text = "You've earned ₱$totalText for this $dateRange"
+            binding.tvTips.text = "Consider reviewing your previous transactions and see which you could lessen"
+        } else if (user == "parent" && total > 500) {
+            binding.tvSummary.text = "Your child spent ₱$totalText for this $dateRange!"
+            binding.tvTips.text = "Consider reviewing your child's Top Expenses below or their previous transactions and see which they could lessen"
+        } else if (user == "parent" && total < 500) {
+            binding.tvSummary.text = "You've child earned ₱$totalText for this $dateRange"
+            binding.tvTips.text = "Consider reviewing your child's previous transactions and see which they could lessen"
+        }*/
+
+        /*if (savingsAmount > 0) {*/
+        /*} TODO: check if negeatives lahat
         else {
             binding.tvSummary.text = "You've saved ₱$savings for this $dateRange!"
             binding.tvTips.text = "Go to the \"Financial Activities\" to use your money that you saved to develop your Financial Literacy"
         }*/
 
     }
+
+    private fun loadChildFinancialActivitiesButton() {
+        //TODO: double chekc kung tama link
+        binding.btnAction.setOnClickListener {
+            val goToFinancialActivitiy = Intent(this, FinancialActivity::class.java)
+            startActivity(goToFinancialActivitiy)
+        }
+    }
+
+    private fun loadParentFinancialActivitiesButton() {
+        //TODO: double chekc kung tama link
+        binding.btnAction.setOnClickListener {
+            val goToFinancialActivity = Intent(this, ParentLandingPageActivity::class.java)
+            startActivity(goToFinancialActivity)
+        }
+    }
+
 
     private fun initializeEntries(): List<PieEntry> {
         val entries: ArrayList<PieEntry> = ArrayList()

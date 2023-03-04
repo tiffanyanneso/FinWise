@@ -40,6 +40,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     private var weeks: Map<Int, List<Date>>? = null
     private var months: Map<Int, List<Date>>? = null
     private var selectedDatesSort = "weekly"
+    private var user = "child"
     private lateinit var chart: LineChart
 
 
@@ -82,6 +83,13 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     private fun getArgumentsFromPFM() {
         val args = arguments
         val date = args?.getString("date")
+        val currUser = args?.getString("user")
+
+        if (currUser != null) {
+            user = currUser
+        }
+
+
         if (date != null) {
             selectedDatesSort = date
             transactionsArrayList.clear()
@@ -92,6 +100,8 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         binding.btnDetails.setOnClickListener{
             val goToDetails = Intent(context, TrendDetailsActivity::class.java)
             bundle.putString("date", selectedDatesSort)
+            bundle.putString("user", user)
+            Toast.makeText(context, ""+user, Toast.LENGTH_SHORT).show()
             goToDetails.putExtras(bundle)
             startActivity(goToDetails)
         }
@@ -282,11 +292,16 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
         /*binding.tvIncomeTotal.text = "₱$incomeText"
         binding.tvExpenseTotal.text = "₱$expenseText"*/
-        if (netIncome > 0)
+        if (netIncome > 0 && user == "child")
             binding.tvSummary.text = "You've earned ₱$netIncomeText more than you spent 😄"
-        else {
+        else if (netIncome > 0 && user == "parent") {
+            binding.tvSummary.text = "Your child earned ₱$netIncomeText more than they spent 😄"
+        } else if (netIncome < 0 && user == "child") {
             netIncomeText = kotlin.math.abs(netIncome).toString()
             binding.tvSummary.text = "You've spent ₱$netIncomeText more than you earned 😞"
+        } else if (netIncome < 0 && user == "parent") {
+            netIncomeText = kotlin.math.abs(netIncome).toString()
+            binding.tvSummary.text = "Your child spent ₱$netIncomeText more than they earned 😞"
         }
 
     }

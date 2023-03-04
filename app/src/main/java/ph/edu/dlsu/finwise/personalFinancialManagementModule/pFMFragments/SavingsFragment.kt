@@ -40,6 +40,8 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     private var weeks: Map<Int, List<Date>>? = null
     private var months: Map<Int, List<Date>>? = null
     private var selectedDatesSort = "weekly"
+    private var user = "child"
+
 
     /*// Balance bar chart
     // variable for our bar chart
@@ -78,6 +80,12 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     private fun getArgumentsFromPFM() {
         val args = arguments
         val date = args?.getString("date")
+        val currUser = args?.getString("user")
+
+        if (currUser != null) {
+            user = currUser
+        }
+
         if (date != null) {
             selectedDatesSort = date
             transactionsArrayList.clear()
@@ -88,6 +96,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
         binding.btnDetails.setOnClickListener{
             val goToDetails = Intent(context, GoalSavingDetailsActivity::class.java)
             bundle.putString("date", selectedDatesSort)
+            bundle.putString("user", user)
             goToDetails.putExtras(bundle)
             startActivity(goToDetails)
         }
@@ -206,6 +215,16 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
         if (savings > 0)
             binding.tvSummary.text = "You are saving $savings% of your total deposits to your goals 😄"
         else binding.tvSummary.text = "You are saving $savings% of your total deposits to your goals 😔"
+
+        if (savings > 0 && user == "child")
+            binding.tvSummary.text = "You are saving $savings% of your total deposits to your goals 😄"
+        else if (savings > 0 && user == "parent") {
+            binding.tvSummary.text = "Your child is saving $savings% of their total deposits to your goals 😄"
+        } else if (savings < 0 && user == "child") {
+            binding.tvSummary.text = "You are saving $savings% of your total deposits to your goals 😔"
+        } else if (savings < 0 && user == "parent") {
+            binding.tvSummary.text = "Your child is saving $savings% of their total deposits to your goals 😔"
+        }
         /*binding.tvDepositTotal.text = "₱$depositText"
         binding.tvWithdrawalTotal.text = "₱$withdrawalText"
         binding.tvRate.text = "$savings%"*/
