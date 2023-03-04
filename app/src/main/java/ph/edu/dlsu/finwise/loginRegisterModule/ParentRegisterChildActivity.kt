@@ -1,10 +1,14 @@
 package ph.edu.dlsu.finwise.loginRegisterModule
 
+import android.app.Dialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.widget.DatePicker
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.FirebaseNetworkException
@@ -12,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityParentRegisterChildBinding
 import ph.edu.dlsu.finwise.model.GoalSettings
@@ -31,6 +36,7 @@ class ParentRegisterChildActivity : AppCompatActivity() {
     lateinit var username : String
     lateinit var birthday : String
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityParentRegisterChildBinding.inflate(layoutInflater)
@@ -39,6 +45,10 @@ class ParentRegisterChildActivity : AppCompatActivity() {
         save()
         setCancel()
         loadBackButton()
+
+        binding.etBirthday.setOnClickListener{
+            showCalendar()
+        }
     }
 
     private fun save() {
@@ -162,8 +172,16 @@ class ParentRegisterChildActivity : AppCompatActivity() {
             valid = false
         } else contactNumber = binding.etContactNumber.text.toString().trim()
 
-        birthday =(binding.etBirthday.month + 1).toString() + "/" +
-                (binding.etBirthday.dayOfMonth).toString() + "/" + (binding.etBirthday.year).toString()
+//        birthday =(binding.etBirthday.month + 1).toString() + "/" +
+//                (binding.etBirthday.dayOfMonth).toString() + "/" + (binding.etBirthday.year).toString()
+
+        if (binding.etBirthday.text.toString().trim().isEmpty()) {
+            binding.dateContainer.helperText = "Select target date."
+            valid = false
+        } else {
+            binding.dateContainer.helperText = ""
+            birthday = binding.etBirthday.text.toString()
+        }
 
         if (binding.etUsername.text.toString().trim().isEmpty()) {
             binding.etUsername.error = "Please enter your contact number."
@@ -224,5 +242,22 @@ class ParentRegisterChildActivity : AppCompatActivity() {
             val goToParentLandingPage = Intent(applicationContext, ParentLandingPageActivity::class.java)
             startActivity(goToParentLandingPage)
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun showCalendar() {
+        val dialog = Dialog(this)
+
+        dialog.setContentView(R.layout.dialog_calendar)
+        dialog.window!!.setLayout(1000, 1200)
+
+        var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
+        calendar.minDate = System.currentTimeMillis()
+
+        calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
+            binding.etBirthday.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 }

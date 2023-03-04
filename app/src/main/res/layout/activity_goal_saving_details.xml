@@ -34,25 +34,25 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topbar"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="60dp"
         android:layout_marginBottom="70dp">
 
         <LinearLayout
-            android:layout_width="380dp"
+            android:layout_width="match_parent"
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            android:padding="20dp">
 
             <androidx.cardview.widget.CardView
-                xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/cv_savings"
                 android:layout_width="match_parent"
                 app:cardElevation="5dp"
                 android:layout_height="wrap_content"
-                card_view:cardBackgroundColor="@color/white"
-                card_view:cardCornerRadius="10dp">
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="10dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -73,7 +73,7 @@
                         android:gravity="center"/>
 
                     <androidx.cardview.widget.CardView
-                        android:layout_width="350dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="10dp"
                         app:cardElevation="5dp"
@@ -84,17 +84,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/gradient_pfm_detail_card"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="20dp">
 
                             <ImageView
-                                android:src="@drawable/icon_colored_income"
-                                android:contentDescription="Profit"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:layout_marginTop="20dp"
                                 android:layout_gravity="center"
                                 android:layout_marginBottom="5dp"
-                                />
+                                android:contentDescription="Profit"
+                                android:src="@drawable/icon_colored_income" />
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -112,7 +111,7 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:layout_width="300dp"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:id="@+id/tv_summary"
                                     android:gravity="center"
@@ -134,17 +133,15 @@
                                     android:text=""
                                     android:textColor="@color/cream"/>
 
-
                                 <androidx.appcompat.widget.AppCompatButton
                                     android:layout_width="180dp"
-                                    android:layout_height="50dp"
+                                    android:layout_height="wrap_content"
                                     android:id="@+id/btn_action"
                                     android:gravity="center"
                                     android:layout_marginTop="15dp"
-                                    android:layout_marginBottom="15dp"
                                     android:text="Financial Activities"
                                     android:textSize="12sp"
-                                    android:background="@drawable/rounded_button"
+                                    android:background="@drawable/button_border_white"
                                     android:backgroundTint="@color/dark_green"
                                     android:textColor="@color/white"/>
 
@@ -181,7 +178,7 @@
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="10dp"
                             app:cardElevation="5dp"
-                            card_view:cardBackgroundColor="@color/dark_green"
+                            app:cardBackgroundColor="@color/dark_green"
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="1">
 
@@ -241,7 +238,7 @@
                             android:layout_marginTop="10dp"
                             android:layout_marginStart="10dp"
                             android:layout_marginBottom="20dp"
-                            card_view:cardBackgroundColor="@color/light_green"
+                            app:cardBackgroundColor="@color/light_green"
                             android:layout_gravity="center_horizontal"
                             android:layout_weight="1">
 

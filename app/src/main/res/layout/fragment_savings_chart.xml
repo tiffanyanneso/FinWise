@@ -235,7 +235,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textSize="12sp"
+                        android:textSize="16sp"
                         android:text="Savings"
                         android:textColor="@color/white"/>
 
@@ -259,13 +259,13 @@
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:layout_width="110dp"
-                            android:layout_height="50dp"
+                            android:layout_height="wrap_content"
                             android:id="@+id/btn_details"
                             android:gravity="center"
                             android:layout_marginTop="10dp"
                             android:text="View More"
                             android:textSize="12sp"
-                            android:background="@drawable/rounded_button"
+                            android:background="@drawable/button_border_white"
                             android:backgroundTint="@color/dark_green"
                             android:textColor="@color/white"/>
 

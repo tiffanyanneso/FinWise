@@ -6,6 +6,16 @@
     tools:context=".SpendingExpensesFragment"
     android:padding="20dp">
 
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_view_expenses"
         android:layout_width="match_parent"
@@ -13,5 +23,7 @@
         android:layout_weight="8"
         tools:listitem="@layout/item_spending_expense"
         android:scrollbars="vertical"/>
+    </LinearLayout>
+    </ScrollView>
 
 </FrameLayout>
