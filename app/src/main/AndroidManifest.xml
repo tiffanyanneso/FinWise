@@ -13,6 +13,21 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".EarningSendMoneyActivityPFM"
+            android:exported="false" />
+        <activity
+            android:name=".RecordEarningSaleConfirmationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".RecordEarningSaleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EarningSellingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EarningMenuActivity"
+            android:exported="false" />
+        <activity
             android:name=".financialActivitiesModule.IncomeActivity"
             android:exported="false" />
         <activity
@@ -26,11 +41,10 @@
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.CompletedEarningActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.EarningActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".parentFinancialActivitiesModule.NewEarningActivity"
             android:exported="false" />
@@ -149,8 +163,7 @@
             android:exported="false" />
         <activity
             android:name=".TabbedActivityExample"
-            android:exported="true" >
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.SpendingActivity"
             android:exported="false" />
@@ -178,33 +191,39 @@
             android:exported="false" />
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentLandingPage"
-            android:exported="false" >
-    <!--        <intent-filter>
+            android:exported="false">
+
+            <!--
+                <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>-->
-<!--            <intent-filter>-->
-<!--            <action android:name="android.intent.action.MAIN" />-->
+        </intent-filter>
+            -->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
 
-<!--            <category android:name="android.intent.category.LAUNCHER" />-->
-<!--        </intent-filter>-->
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
             android:exported="true" />
         <activity
             android:name=".profileModule.ProfileActivity"
-            android:exported="true" >
-        </activity>
+            android:exported="true" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity"
             android:exported="true">
-<!--        <intent-filter>
+
+            <!--
+            <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>-->
+        </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertEditAssessmentActivity"
@@ -247,15 +266,13 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
-                   <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN" />
 
-                   <category android:name="android.intent.category.LAUNCHER" />
-               </intent-filter>
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
         <activity
             android:name=".personalFinancialManagementModule.TransactionSortActivity"
             android:exported="false" />
@@ -267,17 +284,18 @@
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"
-            android:exported="true">
-        </activity>
-
+            android:exported="true" />
         <activity
             android:name=".parentFinancialManagementModule.ParentFinancialManagementActivity"
             android:exported="false">
-                     <!--<intent-filter>
+
+            <!--
+                     <intent-filter>
                          <action android:name="android.intent.action.MAIN" />
 
                          <category android:name="android.intent.category.LAUNCHER" />
-                     </intent-filter>-->
+                     </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".parentFinancialManagementModule.ParentSendMoneyActivity"
@@ -288,7 +306,6 @@
         <activity
             android:name=".parentFinancialManagementModule.ParentTransactionSortActivity"
             android:exported="false" />
-
         <activity
             android:name=".financialActivitiesModule.ViewGoalActivity"
             android:exported="false" />
@@ -309,22 +326,28 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-            android:exported="false" >
-       <!--     <intent-filter>
+            android:exported="false">
+
+            <!--
+                <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
-<!--            <meta-data-->
-<!--                android:name="android.app.lib_name"-->
-<!--                android:value="" />-->
+
+            <!-- <meta-data -->
+            <!-- android:name="android.app.lib_name" -->
+            <!-- android:value="" /> -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
     </application>
 

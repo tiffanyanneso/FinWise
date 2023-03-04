@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EarningMenuActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleCentered="true"
+            app:title="Earning"
+            app:menu="@menu/top_app_bar"
+            app:navigationIcon="@drawable/baseline_arrow_back_24"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:backgroundTint="@color/dark_green"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+    <!--  First Category layout-->
+    <LinearLayout
+        android:id="@+id/btn_home_rewards"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/layout_bg_green"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topbar"
+        android:padding="20dp"
+        android:layout_marginHorizontal="20dp">
+
+        <ImageView
+            android:src="@drawable/preliminary"
+            android:layout_width="80dp"
+            android:layout_height="80dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:layout_weight="5"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Home Rewards"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"/>
+    </LinearLayout>
+
+
+    <!--  First Category layout-->
+    <LinearLayout
+        android:id="@+id/btn_selling"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/layout_bg_green"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_home_rewards"
+        android:padding="20dp"
+        android:layout_marginHorizontal="20dp">
+
+        <ImageView
+            android:src="@drawable/preliminary"
+            android:layout_width="80dp"
+            android:layout_height="80dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:layout_weight="5"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Selling"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"/>
+    </LinearLayout>
+
+    <!--Bottom navigation bar-->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/bottom_nav"
+        android:background="#FFFFFF"
+        app:labelVisibilityMode="labeled"
+        app:itemIconSize="36dp"
+        app:itemIconTint="@drawable/selector"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

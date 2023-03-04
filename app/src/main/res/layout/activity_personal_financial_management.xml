@@ -628,9 +628,5 @@
     app:itemIconSize="36dp"
     app:itemIconTint="@drawable/selector"/>
 
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
 

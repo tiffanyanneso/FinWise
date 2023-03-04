@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.EarningMenuActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
@@ -117,17 +118,17 @@ class ViewGoalActivity : AppCompatActivity() {
 
 
         binding.btnChores.setOnClickListener {
-            var goToChores = Intent(this, EarningActivity::class.java)
+            var goToEarningMenu = Intent(this, EarningMenuActivity::class.java)
             sendBundle.putString("savingActivityID", savingActivityID)
             sendBundle.putString("childID", childID)
-            goToChores.putExtras(sendBundle)
-            startActivity(goToChores)
+            goToEarningMenu.putExtras(sendBundle)
+            startActivity(goToEarningMenu)
         }
 
-        binding.tvViewAllEarning.setOnClickListener {
-            var goToChores = Intent(this, EarningActivity::class.java)
-            this.startActivity(goToChores)
-        }
+//        binding.tvViewAllEarning.setOnClickListener {
+//            var goToChores = Intent(this, EarningActivity::class.java)
+//            this.startActivity(goToChores)
+//        }
 
 
         binding.btnDeposit.setOnClickListener {

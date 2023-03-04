@@ -11,6 +11,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.EarningMenuActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.mayaAPI.MayaPayment
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
@@ -133,6 +134,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         goToExpenseActivity()
         goToTransactions()
         goToPayMaya()
+        goToEarningActivity()
         initializeDateButtons()
     }
 
@@ -284,6 +286,13 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             getBalanceBundle()
             goToExpenseActivity.putExtras(bundle)
             startActivity(goToExpenseActivity)
+        }
+    }
+
+    private fun goToEarningActivity() {
+        binding.btnEarning.setOnClickListener {
+            val goToEarningActivity = Intent(applicationContext, EarningMenuActivity::class.java)
+            startActivity(goToEarningActivity)
         }
     }
 
