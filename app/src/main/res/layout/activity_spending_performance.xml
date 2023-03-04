@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".financialActivitiesModule.SpendingPerformanceActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:titleCentered="true"
+            app:title="Spending Performance"
+            app:menu="@menu/top_app_bar"
+            app:navigationIcon="@drawable/baseline_arrow_back_24"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:backgroundTint="@color/dark_green" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/topbar"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:padding="20dp">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="50dp"
+                android:layout_marginBottom="50dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="Performance by __"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"/>
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pc_1"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:layout_marginTop="5sp">
+
+                    <TextView
+                        android:layout_width="220dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="1"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:scaleY="4"
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
+                        android:max="100"/>
+
+                    <TextView
+                        android:id="@+id/percentage_1"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="xx%"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="220dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="2"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:scaleY="4"
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
+                        android:max="100"/>
+
+                    <TextView
+                        android:id="@+id/percentage_2"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="xx%"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="220dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="3"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="center_vertical" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                        android:scaleY="4"
+                        android:layout_weight="1.25"
+                        android:layout_marginRight="10dp"
+                        android:max="100"/>
+
+                    <TextView
+                        android:id="@+id/percentage_3"
+                        android:layout_width="150dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="xx%"
+                        android:textSize="14sp"
+                        android:textColor="@color/black"
+                        android:gravity="center"/>
+                </LinearLayout>
+
+
+
+
+
+
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+    <!--Bottom navigation bar-->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/bottom_nav"
+        android:background="#FFFFFF"
+        app:labelVisibilityMode="labeled"
+        app:itemIconSize="36dp"
+        app:itemIconTint="@drawable/selector"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
