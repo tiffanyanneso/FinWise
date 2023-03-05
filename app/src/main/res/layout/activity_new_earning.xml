@@ -175,13 +175,13 @@
 
     <!--Bottom navigation bar-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_nav"
+        android:id="@+id/bottom_nav_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:menu="@menu/bottom_nav"
+        app:menu="@menu/bottom_nav_parent"
         android:background="#FFFFFF"
         app:labelVisibilityMode="labeled"
         app:itemIconSize="36dp"

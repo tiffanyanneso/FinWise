@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentGoalBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
@@ -55,6 +56,9 @@ class ParentGoalActivity : AppCompatActivity() {
         var bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
         checkAge()
+
+        // Initializes the navbar
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
 
 
         var sendBundle = Bundle()

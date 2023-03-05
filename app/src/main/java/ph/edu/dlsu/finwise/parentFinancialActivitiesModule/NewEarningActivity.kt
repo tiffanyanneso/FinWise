@@ -9,10 +9,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityNewEarningBinding
 import ph.edu.dlsu.finwise.model.ChildUser
@@ -45,6 +47,11 @@ class NewEarningActivity : AppCompatActivity() {
         childID = bundle.getString("childID").toString()
 
         initializeDropDownForChores()
+        loadBackButton()
+        cancel()
+
+        // Initializes the navbar
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
 
         binding.etDate.setOnClickListener{
             showCalendar()
@@ -159,5 +166,19 @@ class NewEarningActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun cancel() {
+        binding.btnCancel.setOnClickListener {
+            val goBack = Intent(applicationContext, EarningActivity::class.java)
+            startActivity(goBack)
+        }
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 }

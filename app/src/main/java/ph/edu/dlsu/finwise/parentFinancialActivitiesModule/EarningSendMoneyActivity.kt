@@ -6,12 +6,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityCompletedEarningBinding
 import ph.edu.dlsu.finwise.databinding.ActivityEarningSendMoneyBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
@@ -44,7 +47,10 @@ class EarningSendMoneyActivity : AppCompatActivity() {
         savingActivityID = bundle.getString("savingActivityID").toString()
         childID = bundle.getString("childID").toString()
         checkUser()
+       loadBackButton()
 
+        // Initializes the navbar
+        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
 
         firestore.collection("EarningActivities").document(earningActivityID).get().addOnSuccessListener {
             var earning = it.toObject<EarningActivityModel>()
@@ -104,6 +110,13 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             //user is a child
             if (it.exists())
                 binding.btnSendMoney.visibility = View.GONE
+        }
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
         }
     }
 
