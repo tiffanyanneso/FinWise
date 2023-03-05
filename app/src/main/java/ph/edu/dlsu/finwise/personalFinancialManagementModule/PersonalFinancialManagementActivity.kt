@@ -2,6 +2,8 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -93,19 +95,28 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private fun computeIncomeExpenseRatio() {
         val ratio = (income / expense * 100).toInt() // convert to percentage and round down to nearest integer
+        val imageView = binding.ivScore
+        val grade: String
+        val bitmap: Bitmap
 
-        val grade = if (ratio >= 200) {
-            "A (Excellent) 😄\n Your income is more than enough to cover your expenses and save some money for the future"
+        if (ratio >= 200) {
+            grade = "Excellent 😄\n Your income is more than enough to cover your expenses and save some money for the future"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (ratio >= 150 && ratio < 200) {
-            "B (Good) ☺\n You are doing a good job managing your income and expenses, but there is still room for improvement"
+            grade = "Great ☺\n You are doing a good job managing your income and expenses, but there is still room for improvement"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (ratio >= 100 && ratio < 150) {
-            "C (Fair) 😐\n You are spending most of your income on expenses and not saving much. It's important to start finding ways to save more money"
+            grade = "Good 🙂\n You are spending most of your income on expenses and not saving much. It's important to start finding ways to save more money"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
         } else if (ratio >= 50 && ratio < 100) {
-            "D (Poor) 😕\n You are spending more than you earn and this could lead to financial trouble. It's important to start finding ways to increase your income and reduce your expenses"
+            grade = "Average 😐\n You are spending more than you earn and this could lead to financial trouble. It's important to start finding ways to increase your income and reduce your expenses"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else {
-            "F (Fail) 😔\n You are spending much more than you earn and this could lead to serious financial trouble. It's important to talk to your parent to find ways to improve your financial situation"
+            grade = "Bad 😔\n You are spending much more than you earn and this could lead to serious financial trouble. It's important to talk to your parent to find ways to improve your financial situation"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
         }
 
+        imageView.setImageBitmap(bitmap)
         binding.tvScore.text = grade
 
     }
@@ -249,6 +260,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun goToTransactions() {
         binding.btnViewTransactions.setOnClickListener {
             val goToTransactions = Intent(applicationContext, TransactionHistoryActivity::class.java)
+            bundle.putString("user", "child")
+            goToTransactions.putExtras(bundle)
             startActivity(goToTransactions)
         }
     }

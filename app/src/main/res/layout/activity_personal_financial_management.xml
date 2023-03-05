@@ -387,8 +387,19 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textSize="12sp"
-                    android:text="Financial Health Score"
+                    android:text="Personal Finance Score"
                     android:textColor="@color/off_white"/>
+
+                <ImageView
+                    android:src="@drawable/loading"
+                    android:contentDescription="Profit"
+                    android:id="@+id/iv_score"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center"
+                    />
+
 
                 <LinearLayout
                     android:id="@+id/linear_layout_text5"
@@ -460,6 +471,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_weekly"
                 app:cornerRadius="5dp"
+                android:textSize="12sp"
                 android:backgroundTint="@color/light_green"
                 android:textColor="@color/black"
                 android:layout_margin="5dp"
@@ -470,6 +482,7 @@
                 android:layout_weight="1"
                 android:layout_margin="5dp"
                 app:cornerRadius="5dp"
+                android:textSize="12sp"
                 android:backgroundTint="@color/white"
                 android:textColor="@color/black"
                 android:layout_height="wrap_content"
@@ -481,6 +494,7 @@
                 android:layout_weight="1"
                 android:layout_margin="5dp"
                 app:cornerRadius="5dp"
+                android:textSize="12sp"
                 android:backgroundTint="@color/white"
                 android:textColor="@color/black"
                 android:layout_height="wrap_content"

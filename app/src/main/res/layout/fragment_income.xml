@@ -75,6 +75,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textSize="12sp"
+                        android:layout_marginBottom="10dp"
                         android:text="INCOME"
                         android:textColor="@color/white"/>
 

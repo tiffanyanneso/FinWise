@@ -243,7 +243,7 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:textSize="12sp"
-                        android:text="Financial Health Score"
+                        android:text="Personal Finance Score"
                         android:textColor="@color/off_white"/>
 
                     <LinearLayout
@@ -253,6 +253,17 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                         android:gravity="center"
                         android:orientation="vertical">
 
+                        <ImageView
+                            android:src="@drawable/loading"
+                            android:contentDescription="Profit"
+                            android:id="@+id/iv_score"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_marginTop="20dp"
+                            android:layout_gravity="center"
+                            />
+
+
                         <TextView
                             android:layout_width="325dp"
                             android:layout_height="150dp"
@@ -261,7 +272,7 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:layout_margin="15dp"
-                            android:text="Loading data 🔃 \n For the meantime, you could look at the functions above to send or track your child's money. \n You could also check the navigation bar for more cool features! \n Thank you for waiting ☺"
+                            android:text="Loading data 🔃 \n For the meantime, you could look at the functions above to send or track your child's money. \n You could also check the navigation bar for more cool features!"
                             android:textColor="@color/white"/>
 
                         <androidx.appcompat.widget.AppCompatButton

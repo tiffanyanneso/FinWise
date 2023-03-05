@@ -2,6 +2,8 @@ package ph.edu.dlsu.finwise.parentFinancialManagementModule
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -162,21 +164,29 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
 
     private fun computeIncomeExpenseRatio() {
         val ratio = (income / expense * 100).toInt() // convert to percentage and round down to nearest integer
+        val imageView = binding.ivScore
+        val grade: String
+        val bitmap: Bitmap
 
-        val grade = if (ratio >= 200) {
-            "\uD83D\uDCB0 A (Excellent) \n Your child is doing great! They have a good handle on their finances and are spending less than they earn. They are able to save some money for the future and avoid getting into debt."
+        if (ratio >= 200) {
+            grade = "Excellent \uD83D\uDCB0 \n Your child is doing great! They have a good handle on their finances and are spending less than they earn."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (ratio >= 150 && ratio < 200) {
-            "\uD83D\uDC4D B (Good) \n Your child is doing pretty well, but there is room for improvement. They are spending close to what they earn but could benefit from finding ways to increase their income or reduce their expenses so they can save more money."
+             grade = "Great \uD83D\uDC4D \n Your child is doing pretty well, but there is room for improvement. They are spending close to what they earn but could benefit from finding ways to increase their income or reduce their expenses so they can save more money."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (ratio >= 100 && ratio < 150) {
-            "\uD83D\uDE10 (Fair) \n Your child is spending more than they earn and may be struggling to save money. It's important to help them find ways to cut back on expenses and increase their income, so they can achieve a healthier financial situation."
+             grade = "Good \uD83D\uDE42 \n Your child is spending more than they earn and may be struggling to save money. It's important to help them find ways to cut back on expenses and increase their income, so they can achieve a healthier financial situation."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
         } else if (ratio >= 50 && ratio < 100) {
-            "\uD83D\uDC4E (Poor) \n Your child is spending significantly more than they earn and may be in danger of accumulating debt. It's important to take action to help them reduce their expenses and increase their income as soon as possible."
+             grade = "Average \uD83D\uDE10 \n Your child is spending significantly more than they earn and may be in danger of accumulating debt. It's important to take action to help them reduce their expenses and increase their income as soon as possible."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else {
-            "\uD83D\uDCB8 (Fail) \n Your child is spending far more than they earn and is likely accumulating debt. It's crucial to take immediate action to help them get their finances in order, including reducing expenses and finding ways to increase income."
+             grade = "Bad \uD83D\uDCB8 \n Your child is spending far more than they earn and is likely accumulating debt. It's crucial to take immediate action to help them get their finances in order, including reducing expenses and finding ways to increase income."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
         }
 
+        imageView.setImageBitmap(bitmap)
         binding.tvScore.text = grade
-
     }
 
     private fun loadExplanation() {
