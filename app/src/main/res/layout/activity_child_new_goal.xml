@@ -52,7 +52,7 @@
             android:lines="1"
             android:inputType="text"
             android:textSize="16dp"
-            android:hint="@string/goal"
+            android:hint="Goal"
             />
     </com.google.android.material.textfield.TextInputLayout>
 

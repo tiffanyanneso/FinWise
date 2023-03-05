@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,6 +13,8 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityReviewGoalBinding
+import ph.edu.dlsu.finwise.databinding.DialogSmartGoalCriteriaParentBinding
+import ph.edu.dlsu.finwise.databinding.DialogSmartGoalInfoBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.SimpleDateFormat
 
@@ -49,6 +52,10 @@ class ReviewGoalActivity : AppCompatActivity() {
         binding.ratingBarAchievable.setOnRatingBarChangeListener { ratingBar, rating, fromUser -> updateOverallRating() }
         binding.ratingBarRelevant.setOnRatingBarChangeListener { ratingBar, rating, fromUser -> updateOverallRating() }
         binding.ratingBarTimeBound.setOnRatingBarChangeListener { ratingBar, rating, fromUser -> updateOverallRating() }
+
+            binding.imgInfo.setOnClickListener{
+                showGoalDialog()
+            }
     }
 
     private fun getGoalDetails() {
@@ -125,5 +132,20 @@ class ReviewGoalActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    private fun showGoalDialog() {
+
+        var dialogBinding= DialogSmartGoalCriteriaParentBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(900, 1000)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

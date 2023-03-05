@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -17,6 +18,8 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalConfirmationBinding
+import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
+import ph.edu.dlsu.finwise.databinding.DialogSmartGoalInfoBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.ChildUser
 import ph.edu.dlsu.finwise.model.FinancialActivities
@@ -136,6 +139,10 @@ class GoalConfirmationActivity : AppCompatActivity() {
 //            context.startActivity(goToNewGoal)
 //        }
 
+        binding.btnSMARTGoal.setOnClickListener{
+            showGoalDialog()
+        }
+
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             val goToNewGoal = Intent(applicationContext, ChildNewGoal::class.java)
@@ -222,5 +229,20 @@ class GoalConfirmationActivity : AppCompatActivity() {
             goalLength = "Medium"
         else
             goalLength = "Long"
+    }
+
+    private fun showGoalDialog() {
+
+        var dialogBinding= DialogSmartGoalInfoBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(900, 1000)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }
