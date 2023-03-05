@@ -83,6 +83,7 @@ class FinancialActivity : AppCompatActivity() {
             if (age == 12) {
                 setOwnGoals = true
                 autoApprove = true
+                updateForReviewGoalStatus()
             }
 
         }.continueWith { initializeFragments() }
@@ -104,6 +105,19 @@ class FinancialActivity : AppCompatActivity() {
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
         setupTabIcons()
+    }
+
+    private fun updateForReviewGoalStatus() {
+        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "For Review").get().addOnSuccessListener { results ->
+            for (goal in results) {
+                firestore.collection("FinancialGoals").document(goal.id).update("status", "In Progress").continueWith {
+                    firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", goal.id).whereEqualTo("financialActivityName", "Saving").get().addOnSuccessListener { financialActivity ->
+                        var savingID = financialActivity.documents[0].id
+                        firestore.collection("FinancialActivities").document(savingID).update("status", "In Progress")
+                    }
+                }
+            }
+        }
     }
 
     private fun setupTabIcons() {
