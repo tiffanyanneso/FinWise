@@ -80,6 +80,15 @@ class BudgetActivity : AppCompatActivity() {
         getBalance()
         getExpenses()
 
+        binding.btnTransactions.setOnClickListener{
+            var goToTransactions = Intent(this, ReasonExpensesActivity::class.java)
+            // TODO Add bundle (?)
+            this.startActivity(goToTransactions)
+        }
+
+        binding.btnWithdraw.setOnClickListener {
+            // TODO Connect to withdraw activity
+        }
 
         binding.btnNewCategory.setOnClickListener { showNewBudgetItemDialog() }
         binding.btnDoneSettingBudget.setOnClickListener {

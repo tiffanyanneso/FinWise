@@ -123,106 +123,74 @@
                     android:id="@+id/linear_layout_4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginTop="15dp">
 
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:orientation="vertical"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:gravity="center">-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:gravity="center">
 
-<!--                        <androidx.cardview.widget.CardView-->
-<!--                            android:id="@+id/btn_withdraw"-->
-<!--                            android:layout_width="50dp"-->
-<!--                            android:layout_height="50dp"-->
-<!--                            android:backgroundTint="@color/light_green"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            app:cardCornerRadius="10dp"-->
-<!--                            android:layout_gravity="center">-->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/btn_transactions"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:backgroundTint="@color/light_green"
+                            android:textColor="@color/white"
+                            app:cardCornerRadius="10dp"
+                            android:layout_gravity="center">
 
-<!--                            <ImageView-->
-<!--                                android:src="@drawable/baseline_wallet_24"-->
-<!--                                android:layout_width="35dp"-->
-<!--                                android:layout_height="35dp"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                app:tint="@color/white"/>-->
-<!--                        </androidx.cardview.widget.CardView>-->
+                            <ImageView
+                                android:src="@drawable/baseline_receipt_long_24"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_gravity="center"
+                                app:tint="@color/white"/>
+                        </androidx.cardview.widget.CardView>
 
-<!--                        <TextView-->
-<!--                            android:text="Expenses"-->
-<!--                            android:textSize="16sp"-->
-<!--                            android:textColor="@color/black"-->
-<!--                            android:id="@+id/tv_income"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:gravity="center">-->
-<!--                        </TextView>-->
+                        <TextView
+                            android:text="Transactions"
+                            android:textSize="16sp"
+                            android:textColor="@color/black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center">
+                        </TextView>
 
-<!--                    </LinearLayout>-->
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:orientation="vertical"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:gravity="center">-->
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:gravity="center">
 
-<!--                        <androidx.cardview.widget.CardView-->
-<!--                            android:id="@+id/btn_deposit"-->
-<!--                            android:layout_width="50dp"-->
-<!--                            android:layout_height="50dp"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:backgroundTint="@color/light_green"-->
-<!--                            app:cardCornerRadius="10dp"-->
-<!--                            android:gravity="center">-->
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/btn_withdraw"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:textColor="@color/white"
+                            android:backgroundTint="@color/light_green"
+                            app:cardCornerRadius="10dp"
+                            android:gravity="center">
 
-<!--                            <ImageView-->
-<!--                                android:src="@drawable/baseline_star_24"-->
-<!--                                android:layout_width="35dp"-->
-<!--                                android:layout_height="35dp"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                app:tint="#FFFFFF" />-->
-<!--                        </androidx.cardview.widget.CardView>-->
-<!--                        <TextView-->
-<!--                            android:text="Deposit"-->
-<!--                            android:textSize="16sp"-->
-<!--                            android:textColor="@color/black"-->
-<!--                            android:id="@+id/tv_expense"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:gravity="center"/>-->
-<!--                    </LinearLayout>-->
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:orientation="vertical"-->
-<!--                        android:layout_weight="1"-->
-<!--                        android:gravity="center">-->
-
-<!--                        <androidx.cardview.widget.CardView-->
-<!--                            android:id="@+id/layout_goal_details"-->
-<!--                            android:layout_width="50dp"-->
-<!--                            android:layout_height="50dp"-->
-<!--                            android:textColor="@color/white"-->
-<!--                            android:backgroundTint="@color/light_green"-->
-<!--                            app:cardCornerRadius="10dp"-->
-<!--                            android:gravity="center">-->
-
-<!--                            <ImageView-->
-<!--                                android:src="@drawable/info_light"-->
-<!--                                android:layout_width="35dp"-->
-<!--                                android:layout_height="35dp"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                app:tint="@color/white"/>-->
-<!--                        </androidx.cardview.widget.CardView>-->
-<!--                        <TextView-->
-<!--                            android:text="Details"-->
-<!--                            android:textSize="16sp"-->
-<!--                            android:textColor="@color/black"-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:gravity="center"/>-->
-<!--                    </LinearLayout>-->
+                            <ImageView
+                                android:src="@drawable/baseline_wallet_24"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_gravity="center"
+                                app:tint="#FFFFFF" />
+                        </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:text="Withdraw"
+                            android:textSize="16sp"
+                            android:textColor="@color/black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"/>
+                    </LinearLayout>
                 </LinearLayout>
                 <Button
                     android:id="@+id/btn_done_setting_budget"
@@ -231,7 +199,7 @@
                     android:text="@string/done_setting_budget"
                     android:backgroundTint="@color/dark_green"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginVertical="15dp"
+                    android:layout_marginVertical="10dp"
                     />
                 </LinearLayout>
 
