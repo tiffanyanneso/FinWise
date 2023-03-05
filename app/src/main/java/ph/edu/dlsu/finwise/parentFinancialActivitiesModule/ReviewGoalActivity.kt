@@ -29,11 +29,9 @@ class ReviewGoalActivity : AppCompatActivity() {
         binding = ActivityReviewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //var bundle = intent.extras!!
-        //financialGoalID = bundle.getString("goalID").toString()
-        //childID = bundle.getString("childID").toString()
-
-        financialGoalID = "3zMUAMKrYKy9nvEc3IhJ"
+        var bundle = intent.extras!!
+        financialGoalID = bundle.getString("financialGoalID").toString()
+        childID = bundle.getString("childID").toString()
 
         getGoalDetails()
 
@@ -60,6 +58,10 @@ class ReviewGoalActivity : AppCompatActivity() {
             binding.tvActivity.text = financialGoal?.financialActivity
             binding.tvAmount.text = financialGoal?.targetAmount.toString()
             binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(financialGoal?.targetDate?.toDate())
+            if (financialGoal?.goalIsForSelf ==  true)
+                binding.tvIsForChild.text = "Yes"
+            else
+                binding.tvIsForChild.text = "No"
         }
     }
 
@@ -80,6 +82,15 @@ class ReviewGoalActivity : AppCompatActivity() {
         if (binding.etComment.text.toString() != "")
             comment = binding.etComment.text.toString()
 
+        var overall = 0.00F
+        var specific = binding.ratingBarSpecific.rating
+        var measurable = binding.ratingBarMeasurable.rating
+        var achievable = binding.ratingBarAchievable.rating
+        var relevant = binding.ratingBarRelevant.rating
+        var timeBound = binding.ratingBarTimeBound.rating
+
+        overall = (specific + measurable + achievable + relevant + timeBound) /5
+
         var rating = hashMapOf(
             "parentID" to FirebaseAuth.getInstance().currentUser!!.uid,
             "childID" to childID,
@@ -90,22 +101,27 @@ class ReviewGoalActivity : AppCompatActivity() {
             "relevant" to binding.ratingBarRelevant.rating ,
             "timeBound" to binding.ratingBarTimeBound.rating,
             "comment" to comment,
-            "overallRating" to binding.tvOverallRating.text.toString(),
+            "overallRating" to overall,
             "lastUpdated" to Timestamp.now()
         )
 
         firestore.collection("GoalRating").add(rating).addOnSuccessListener {
             var status = binding.dropdownStatus.text.toString()
 
-            if (status == "Approved")
+            if (status == "Approved") {
                 status = "In Progress"
-            firestore.collection("FinancialGoals").document(financialGoalID).update("status", status).addOnSuccessListener {
-                Toast.makeText(this, "Rating saved", Toast.LENGTH_SHORT).show()
-                var viewGoal = Intent (this, ParentGoalActivity::class.java)
-                var bundle = Bundle()
-                bundle.putString("childID", childID)
-                viewGoal.putExtras(bundle)
-                this.startActivity(viewGoal)
+                firestore.collection("FinancialGoals").document(financialGoalID).update("status", status).addOnSuccessListener {
+                    firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("financialActivityName", "Saving").get().addOnSuccessListener { result ->
+                        var finactID = result.documents[0].id
+                        firestore.collection("FinancialActivities").document(finactID).update("status", status)
+                    }
+                    Toast.makeText(this, "Rating saved", Toast.LENGTH_SHORT).show()
+                    var viewGoal = Intent(this, ParentGoalActivity::class.java)
+                    var bundle = Bundle()
+                    bundle.putString("childID", childID)
+                    viewGoal.putExtras(bundle)
+                    this.startActivity(viewGoal)
+                }
             }
 
         }

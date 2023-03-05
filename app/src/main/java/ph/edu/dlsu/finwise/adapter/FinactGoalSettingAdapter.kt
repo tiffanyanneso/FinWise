@@ -63,7 +63,6 @@ class FinactGoalSettingAdapter : RecyclerView.Adapter<FinactGoalSettingAdapter.F
 
         fun bindGoal(goalID: String){
             firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener{ document ->
-
                 var goal = document.toObject<FinancialGoals>()
                 itemBinding.tvGoalId.text = document.id
                 goalStatus = goal?.status.toString()
@@ -72,6 +71,7 @@ class FinactGoalSettingAdapter : RecyclerView.Adapter<FinactGoalSettingAdapter.F
                 // convert timestamp to date
                 val date = SimpleDateFormat("MM/dd/yyyy").format(goal?.targetDate?.toDate())
                 itemBinding.tvTargetDate.text = date.toString()
+                itemBinding.tvTargetAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
             }
         }
 
@@ -79,18 +79,11 @@ class FinactGoalSettingAdapter : RecyclerView.Adapter<FinactGoalSettingAdapter.F
             var bundle = Bundle()
             var financialGoalID = itemBinding.tvGoalId.text.toString()
             bundle.putString ("financialGoalID", financialGoalID)
-            //bundle.putString ("childID", childID)
-            if (goalStatus == "For Review") {
-                var reviewGoal = Intent(context, ParentSettingAGoalActivity::class.java)
-                reviewGoal.putExtras(bundle)
-                reviewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(reviewGoal)
-            } else {
-                var viewGoal = Intent(context, ViewGoalActivity::class.java)
-                viewGoal.putExtras(bundle)
-                viewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(viewGoal)
-            }
+            bundle.putString ("childID", childID)
+            var reviewGoal = Intent(context, ParentSettingAGoalActivity::class.java)
+            reviewGoal.putExtras(bundle)
+            reviewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(reviewGoal)
 
         }
     }
