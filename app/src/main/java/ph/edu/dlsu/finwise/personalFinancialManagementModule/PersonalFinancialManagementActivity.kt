@@ -12,7 +12,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.EarningMenuActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.mayaAPI.MayaPayment
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
@@ -20,6 +20,7 @@ import ph.edu.dlsu.finwise.adapter.PFMAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.parentFinancialManagementModule.EarningMenuActivityPFM
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.SavingsFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.BalanceFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.ExplanationFragment
@@ -289,7 +290,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private fun goToEarningActivity() {
         binding.btnEarning.setOnClickListener {
-            val goToEarningActivity = Intent(applicationContext, EarningMenuActivity::class.java)
+            val goToEarningActivity = Intent(applicationContext, EarningMenuActivityPFM::class.java)
             var bundle = Bundle()
             bundle.putString("childID", FirebaseAuth.getInstance().currentUser!!.uid)
             goToEarningActivity.putExtras(bundle)

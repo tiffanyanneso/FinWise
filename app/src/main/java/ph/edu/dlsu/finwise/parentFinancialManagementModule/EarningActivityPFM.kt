@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
+package ph.edu.dlsu.finwise.parentFinancialManagementModule
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -10,13 +10,13 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEarningBinding
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningCompletedFragment
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningPendingConfirmationFragment
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningToDoFragment
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.*
+import ph.edu.dlsu.finwise.parentFinancialManagementModule.earningActivitiesPFMFragments.EarningCompletedPFMFragment
+import ph.edu.dlsu.finwise.parentFinancialManagementModule.earningActivitiesPFMFragments.EarningPendingConfirmationPFMFragment
+import ph.edu.dlsu.finwise.parentFinancialManagementModule.earningActivitiesPFMFragments.EarningToDoPFMFragment
 
-class EarningActivity : AppCompatActivity() {
+class EarningActivityPFM : AppCompatActivity() {
     private lateinit var binding:ActivityEarningBinding
 
     private lateinit var savingActivityID:String
@@ -39,7 +39,6 @@ class EarningActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         var bundle = intent.extras!!
-        savingActivityID = bundle.getString("savingActivityID").toString()
         childID = bundle.getString("childID").toString()
 
 
@@ -47,9 +46,8 @@ class EarningActivity : AppCompatActivity() {
         initializeFragments()
 
         binding.btnAddEarningActivity.setOnClickListener {
-            var newEarning = Intent(this, NewEarningActivity::class.java)
+            var newEarning = Intent(this, NewEarningActivityPFM::class.java)
             var sendBundle = Bundle()
-            sendBundle.putString("savingActivityID", savingActivityID)
             sendBundle.putString("childID", childID)
             newEarning.putExtras(sendBundle)
             startActivity(newEarning)
@@ -62,17 +60,18 @@ class EarningActivity : AppCompatActivity() {
         var fragmentBundle = Bundle()
         fragmentBundle.putString("childID", childID)
 
-        var earningToDoFragment = EarningToDoFragment()
+        var earningToDoFragment = EarningToDoPFMFragment()
         earningToDoFragment.arguments = fragmentBundle
 
-        var earningPendingFragment = EarningPendingConfirmationFragment()
+        var earningPendingFragment = EarningPendingConfirmationPFMFragment()
         earningPendingFragment.arguments = fragmentBundle
 
-        var earningCompletedFragment = EarningCompletedFragment()
+        var earningCompletedFragment = EarningCompletedPFMFragment()
         earningCompletedFragment.arguments = fragmentBundle
 
 
         firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
+            println("print "  + it.exists())
             //current user is a child
             if (it.exists()) {
                 adapter.addFragment(earningToDoFragment,"To Do")

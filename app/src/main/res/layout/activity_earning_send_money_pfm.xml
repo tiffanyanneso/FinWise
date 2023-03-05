@@ -88,7 +88,7 @@
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/tv_activity"
+                    android:id="@+id/tv_activity_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Activity Name"
@@ -203,11 +203,37 @@
                 android:textColor="@color/black"/>
 
             <TextView
-                android:id="@+id/tv_amount"
+                android:id="@+id/tv_amount_earned"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="Amount"
+                android:gravity="end"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="Status"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Status"
                 android:gravity="end"
                 android:textSize="16sp"
                 android:textColor="@color/black"/>

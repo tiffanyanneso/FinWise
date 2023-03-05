@@ -12,9 +12,32 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
+
         <activity
-            android:name=".parentFinancialActivitiesModule.EarningSendMoneyActivityPFM"
+            android:name=".parentFinancialManagementModule.EarningSellingActivityPFM"
             android:exported="false" />
+        <activity
+            android:name=".parentFinancialManagementModule.EarningMenuActivityPFM"
+            android:exported="false" />
+        <activity
+            android:name=".parentFinancialManagementModule.EarningSendMoneyActivityPFM"
+            android:exported="false" />
+        <activity
+            android:name=".personalFinancialManagementModule.CompletedEarningActivityPFM"
+            android:exported="false" />
+        <activity
+            android:name=".personalFinancialManagementModule.IncomeActivityPFM"
+            android:exported="false" />
+        <activity
+            android:name=".parentFinancialManagementModule.EarningActivityPFM"
+            android:exported="true" />
+        <activity
+            android:name=".parentFinancialManagementModule.NewEarningActivityPFM"
+            android:exported="false" />
+        <activity
+            android:name=".personalFinancialManagementModule.GoalSavingDetailsActivity"
+            android:exported="false" />
+
         <activity
             android:name=".RecordEarningSaleConfirmationActivity"
             android:exported="false" />
@@ -22,10 +45,10 @@
             android:name=".RecordEarningSaleActivity"
             android:exported="false" />
         <activity
-            android:name=".EarningSellingActivity"
+            android:name=".parentFinancialActivitiesModule.EarningSellingActivity"
             android:exported="false" />
         <activity
-            android:name=".EarningMenuActivity"
+            android:name=".parentFinancialActivitiesModule.EarningMenuActivity"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.IncomeActivity"
