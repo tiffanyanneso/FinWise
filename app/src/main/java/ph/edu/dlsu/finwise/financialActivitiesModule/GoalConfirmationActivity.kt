@@ -168,6 +168,8 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
     private fun saveFinancialActivities(financialActivity:String, goalID:String) {
         var savingActivity = FinancialActivities (goalID, currentUser, "Saving", "In Progress")
+        if (goalStatus == "For Review")
+             savingActivity = FinancialActivities (goalID, currentUser, "Saving", "Locked")
         firestore.collection("FinancialActivities").add(savingActivity)
         if (financialActivity == "Buying Items" ||financialActivity == "Planning An Event" || financialActivity == "Situational Shopping") {
             var budgetingActivity = FinancialActivities(goalID, currentUser, "Budgeting", "Locked")

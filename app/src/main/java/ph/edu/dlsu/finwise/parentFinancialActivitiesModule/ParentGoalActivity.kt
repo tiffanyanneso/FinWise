@@ -122,7 +122,7 @@ class ParentGoalActivity : AppCompatActivity() {
         disapprovedFragment.arguments = fragmentBundle
 
         if (setOwnGoals && !autoApprove)
-            adapter.addFragment(GoalSettingFragment(),"Goal Setting")
+            adapter.addFragment(goalSettingFragment,"Goal Setting")
 
         adapter.addFragment(savingFragment,"Saving")
         adapter.addFragment(budgetingFragment,"Budgeting")

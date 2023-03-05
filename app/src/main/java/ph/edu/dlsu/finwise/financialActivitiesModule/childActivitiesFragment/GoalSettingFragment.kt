@@ -89,8 +89,7 @@ class GoalSettingFragment : Fragment() {
         goalIDArrayList.clear()
         firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "For Review").get().addOnSuccessListener { results ->
             for (goalForReview in results) {
-                var goalObject = goalForReview.toObject<FinancialActivities>()
-                goalIDArrayList.add(goalObject?.financialGoalID.toString())
+                goalIDArrayList.add(goalForReview.id)
             }
             loadRecyclerView(goalIDArrayList)
         }
@@ -118,16 +117,16 @@ class GoalSettingFragment : Fragment() {
             var overall = nOverall/nRatings
             binding.tvOverallRating.text ="${overall}/5"
             binding.ratingBarOverall.rating = overall
-            binding.progressBarSpecific.progress = (nSpecific/5).roundToInt()
-            binding.ratingSpecific.text = "${(nSpecific/5)}/5"
-            binding.progressBarMeasurable.progress = (nMeasurable/5).roundToInt()
-            binding.ratingMeasurable.text = "${(nMeasurable/5)}/5"
-            binding.progressBarAchievable.progress = (nAchievable/5).roundToInt()
-            binding.ratingAchievable.text = "${(nAchievable/5)}/5"
-            binding.progressBarRelevant.progress = (nRelevant/5).roundToInt()
-            binding.ratingRelevant.text = "${(nRelevant/5)}/5"
-            binding.progressBarTime.progress = (nTimeBound/5).roundToInt()
-            binding.ratingTime.text = "${(nTimeBound/5)}/5"
+            binding.progressBarSpecific.progress = (nSpecific/nRatings).roundToInt()
+            binding.ratingSpecific.text = "${(nSpecific/nRatings)}/5"
+            binding.progressBarMeasurable.progress = (nMeasurable/nRatings).roundToInt()
+            binding.ratingMeasurable.text = "${(nMeasurable/nRatings)}/5"
+            binding.progressBarAchievable.progress = (nAchievable/nRatings).roundToInt()
+            binding.ratingAchievable.text = "${(nAchievable/nRatings)}/5"
+            binding.progressBarRelevant.progress = (nRelevant/nRatings).roundToInt()
+            binding.ratingRelevant.text = "${(nRelevant/nRatings)}/5"
+            binding.progressBarTime.progress = (nTimeBound/nRatings).roundToInt()
+            binding.ratingTime.text = "${(nTimeBound/nRatings)}/5"
         }
     }
 
