@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -53,7 +54,7 @@ class SpendingExpenseListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        checkUser()
         loadExpense()
         firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
             var activity = it.toObject<FinancialActivities>()
@@ -67,7 +68,7 @@ class SpendingExpenseListFragment : Fragment() {
 
     private fun loadExpense () {
         var expensesArrayList = ArrayList<Transactions>()
-        firestore.collection("Transactions").whereEqualTo("category", budgetItemID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { results ->
+        firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { results ->
             for (transaction in results) {
                 var transactionObject = transaction.toObject<Transactions>()
                 expensesArrayList.add(transactionObject)
@@ -84,10 +85,19 @@ class SpendingExpenseListFragment : Fragment() {
         var recordExpense = Intent (requireContext().applicationContext, FinancialActivityRecordExpense::class.java)
         var bundle = Bundle()
         bundle.putString("savingActivityID", savingActivityID)
-        bundle.putString("budgetActivityID", budgetActivityID)
+        bundle.putString("spendingActivityID", spendingActivityID)
         bundle.putString("budgetItemID", budgetItemID)
         bundle.putFloat("remainingBudget", remainingBudget)
         recordExpense.putExtras(bundle)
         this.startActivity(recordExpense)
+    }
+
+    private fun checkUser() {
+        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+            //current user is parent
+            if (it.exists())
+                binding.btnRecordExpense.visibility = View.GONE
+        }
     }
 }

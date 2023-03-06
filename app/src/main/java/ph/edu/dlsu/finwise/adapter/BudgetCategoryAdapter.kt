@@ -97,7 +97,7 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
 
                 var categoryAmount = budgetCategory?.amount
                 var spent = 0.00F
-                firestore.collection("Transactions").whereEqualTo("budgetCategoryID", budgetItemID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { results  ->
+                firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { results  ->
                     for (expense in results) {
                         var expenseObject = expense.toObject<BudgetExpense>()
                         spent += expenseObject.amount!!.toFloat()

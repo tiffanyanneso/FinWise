@@ -62,10 +62,6 @@ class SpendingActivity : AppCompatActivity() {
         initializeFragments()
 
 
-        //checkUser()
-
-
-
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             val goToBudgetActivity = Intent(applicationContext, BudgetActivity::class.java)
@@ -97,8 +93,7 @@ class SpendingActivity : AppCompatActivity() {
             remainingBudget = categoryAmount!!
             binding.tvCategoryAmount.text = "₱ " + DecimalFormat("###0.00").format(categoryAmount).toString()
 
-            firestore.collection("BudgetExpenses").whereEqualTo("budgetCategoryID", budgetItemID)
-                .get().addOnSuccessListener { results ->
+            firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).get().addOnSuccessListener { results ->
                 for (expense in results) {
                     var expenseObject = expense.toObject<BudgetExpense>()
                     spent += expenseObject.amount!!.toFloat()
@@ -108,16 +103,6 @@ class SpendingActivity : AppCompatActivity() {
                     binding.tvCategoryAmount.text = "₱ " + DecimalFormat("###0.00").format(remainingBudget).toString()
             }
         }.continueWith { initializeFragments() }
-    }
-
-
-    private fun checkUser() {
-        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
-            //current user is parent
-//            if (it.exists())
-//                binding.btnRecordExpense.visibility = View.GONE
-        }
     }
 
     private fun initializeFragments() {

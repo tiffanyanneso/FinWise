@@ -63,7 +63,6 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
             sendBundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etTransactionDate.text.toString()))
             sendBundle.putString("savingActivityID", savingActivityID)
             sendBundle.putString("spendingActivityID", spendingActivityID)
-            println("print budgetItemID " + budgetItemID)
             sendBundle.putString("budgetItemID", budgetItemID)
             if (bundle.containsKey("shoppingListItem"))
                 sendBundle.putString("shoppingListItemID", shoppingListItemID)

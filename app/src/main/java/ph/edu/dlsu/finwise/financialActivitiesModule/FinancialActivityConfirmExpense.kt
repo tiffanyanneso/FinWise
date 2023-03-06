@@ -63,32 +63,37 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
 
             firestore.collection("Transactions").add(withdrawal)
 
+            firestore.collection("BudgetItems").document(bundle.getString("budgetItemID").toString()).get().addOnSuccessListener {
+                var budgetItem = it.toObject<BudgetItem>()
+                var categoryName = budgetItem?.budgetItemName.toString()
 
-            //from wallet balance, record expense
-           var expense = hashMapOf(
-               "createdBy" to currentUser,
-               "transactionType" to "Expense",
-               "transactionName" to bundle.getString("expenseName"),
-               "amount" to bundle.getFloat("amount"),
-               "category" to bundle.getString("budgetItemID"),
-               "financialActivityID" to bundle.getString("spendingActivityID"),
-               "date" to bundle.getSerializable("date")
-           )
+                //from wallet balance, record expense
+                var expense = hashMapOf(
+                    "createdBy" to currentUser,
+                    "transactionType" to "Expense",
+                    "transactionName" to bundle.getString("expenseName"),
+                    "amount" to bundle.getFloat("amount"),
+                    "category" to categoryName,
+                    "budgetItemID" to bundle.getString("budgetItemID"),
+                    "financialActivityID" to bundle.getString("spendingActivityID"),
+                    "date" to bundle.getSerializable("date")
+                )
 
-            firestore.collection("Transactions").add(expense).addOnSuccessListener {
-                var spending = Intent(this, SpendingActivity::class.java)
-                sendBundle.putString("budgetActivityID", budgetActivityID)
-                sendBundle.putString("budgetItemID", budgetItemID)
-                spending.putExtras(sendBundle)
-                this.startActivity(spending)
-                finish()
-            }.continueWith {
-                adjustUserBalance()
-            }
+                firestore.collection("Transactions").add(expense).addOnSuccessListener {
+                    var spending = Intent(this, SpendingActivity::class.java)
+                    sendBundle.putString("budgetActivityID", budgetActivityID)
+                    sendBundle.putString("budgetItemID", budgetItemID)
+                    spending.putExtras(sendBundle)
+                    this.startActivity(spending)
+                    finish()
+                }.continueWith {
+                    adjustUserBalance()
+                }
 
-            //check if bundle contains shoppingListItemID, meaning that the expense was from a shopping list and need to update the status
-            if (bundle.containsKey("shoppingListItemID")) {
-                firestore.collection("ShoppingListItems").document(bundle.getString("shoppingListItemID").toString()).update("status", "Purchased")
+                //check if bundle contains shoppingListItemID, meaning that the expense was from a shopping list and need to update the status
+                if (bundle.containsKey("shoppingListItemID")) {
+                    firestore.collection("ShoppingListItems").document(bundle.getString("shoppingListItemID").toString()).update("status", "Purchased")
+                }
             }
         }
 
