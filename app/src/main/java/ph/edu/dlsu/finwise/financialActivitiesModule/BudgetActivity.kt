@@ -234,7 +234,12 @@ class BudgetActivity : AppCompatActivity() {
                 //budgeting is already completed
                 if (isCompleted) {
                     firestore.collection("BudgetItems").document(budgetItemID).update("status", "Edited").addOnSuccessListener {
-                        var budgetItem = BudgetItem(itemName, budgetActivityID, itemAmount, "Active", currentUser)
+                        lateinit var budgetItem : BudgetItem
+                        if (itemName!= "Others")
+                            budgetItem = BudgetItem(itemName, null, budgetActivityID, itemAmount, "Active", currentUser)
+                        else
+                            budgetItem = BudgetItem(itemName, dialogBinding.dialogEtOtherCategoryName.text.toString(), budgetActivityID, itemAmount, "Active", currentUser)
+
                         budgetCategoryIDArrayList.removeAt(position)
 
                         firestore.collection("BudgetItems").add(budgetItem).addOnSuccessListener { newBudgetItem ->
@@ -306,11 +311,20 @@ class BudgetActivity : AppCompatActivity() {
                         var itemAmount = dialogBinding.dialogEtCategoryAmount.text.toString().toFloat()
                         //they made a change after they declared that they're done setting a budget
 
-                        var budgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, "Active", currentUser)
-                        firestore.collection("BudgetItems").add(budgetCategory).addOnSuccessListener { budgetItem ->
+                        lateinit var budgetItem : BudgetItem
+                        if (itemName!= "Others")
+                            budgetItem = BudgetItem(itemName, null, budgetActivityID, itemAmount, "Active", currentUser)
+                        else
+                            budgetItem = BudgetItem(itemName, dialogBinding.dialogEtOtherCategoryName.text.toString(), budgetActivityID, itemAmount, "Active", currentUser)
+
+                        firestore.collection("BudgetItems").add(budgetItem).addOnSuccessListener { budgetItem ->
                             //if the kid is done budgeting, add the edited version so that it will be counted as an edited item later
                             if (isCompleted) {
-                                var editedBudgetCategory = BudgetItem(itemName, budgetActivityID, itemAmount, "Edited",currentUser)
+                                var editedBudgetCategory:BudgetItem
+                                if (itemName!= "Others")
+                                    editedBudgetCategory = BudgetItem(itemName, null, budgetActivityID, itemAmount, "Edited ", currentUser)
+                                else
+                                    editedBudgetCategory = BudgetItem(itemName, dialogBinding.dialogEtOtherCategoryName.text.toString(), budgetActivityID, itemAmount, "Active", currentUser)
                                 firestore.collection("BudgetItems").add(editedBudgetCategory)
                             }
                             budgetCategoryIDArrayList.add(budgetItem.id)

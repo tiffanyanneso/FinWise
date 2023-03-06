@@ -154,23 +154,35 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
     private fun createBudgetTemplates(activity:String, financialGoalID:String) {
         if (activity == "Buying Items") {
-            var food = BudgetItem("Food", financialGoalID, 0.00F, "Active")
-            var toys = BudgetItem("Toys", financialGoalID, 0.00F,  "Active")
-            var games = BudgetItem("Games", financialGoalID, 0.00F,  "Active")
-            var gift = BudgetItem("Gift", financialGoalID, 0.00F,"Active")
+            var food = BudgetItem("Food & Drinks", null, financialGoalID, 0.00F, "Active")
+            var toys = BudgetItem("Toys & Games",null, financialGoalID, 0.00F,  "Active")
+            var gift = BudgetItem("Gift",null, financialGoalID, 0.00F,  "Active")
             firestore.collection("BudgetItems").add(food)
             firestore.collection("BudgetItems").add(toys)
-            firestore.collection("BudgetItems").add(games)
             firestore.collection("BudgetItems").add(gift)
         }
 
         if (activity == "Planning An Event") {
-            var food = BudgetItem("Food", financialGoalID, 0.00F, "Active")
-            var decoration = BudgetItem("Decoration", financialGoalID, 0.00F,  "Active")
-            var gift = BudgetItem("Gift", financialGoalID, 0.00F,  "Active")
+            var food = BudgetItem("Food & Drinks",null, financialGoalID, 0.00F, "Active")
+            var decoration = BudgetItem("Decorations", null,financialGoalID, 0.00F,  "Active")
+            var gift = BudgetItem("Gift", null,financialGoalID, 0.00F,  "Active")
+            var rental = BudgetItem("Rental", null,financialGoalID, 0.00F,  "Active")
+            var transportation = BudgetItem("Transportation", null,financialGoalID, 0.00F,  "Active")
+            var partyFavors = BudgetItem("Party Favors", null,financialGoalID, 0.00F,  "Active")
             firestore.collection("BudgetItems").add(food)
             firestore.collection("BudgetItems").add(decoration)
-            firestore.collection("BudgetItems").add(gift)}
+            firestore.collection("BudgetItems").add(gift)
+            firestore.collection("BudgetItems").add(rental)
+            firestore.collection("BudgetItems").add(transportation)
+            firestore.collection("BudgetItems").add(partyFavors)
+        }
+
+        if (activity == "Situational Shopping") {
+            var food = BudgetItem("Food & Drinks", null, financialGoalID, 0.00F, "Active")
+            var clothes = BudgetItem("Clothing",null, financialGoalID, 0.00F,  "Active")
+            firestore.collection("BudgetItems").add(food)
+            firestore.collection("BudgetItems").add(clothes)
+        }
     }
 
     private fun saveFinancialActivities(financialActivity:String, goalID:String) {

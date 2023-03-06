@@ -4,6 +4,7 @@ import com.google.firebase.Timestamp
 
 class BudgetItem (
     var budgetItemName:String?=null,
+    var budgetItemNameOther:String?=null,
     var financialActivityID: String?=null,
     var amount:Float?=null,
     //var date:Timestamp?=null,

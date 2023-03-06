@@ -213,6 +213,7 @@
     <string-array name="pfm_expense_category">
         <item>Clothing</item>
         <item>Food &amp; Drinks</item>
+        <item>Toys &amp; Games</item>
         <item>Gift</item>
         <item>Entertainment</item>
         <item>Transportation</item>

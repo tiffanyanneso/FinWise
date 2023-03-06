@@ -89,7 +89,11 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
                 var budgetCategory = it.toObject<BudgetItem>()
                 itemBinding.tvBudgetItemId.text = it.id
                 itemBinding.budgetActivityId.text = budgetCategory?.financialActivityID
-                itemBinding.tvBudgetItemName.text = budgetCategory?.budgetItemName
+
+                if (budgetCategory?.budgetItemName != "Others")
+                    itemBinding.tvBudgetItemName.text = budgetCategory?.budgetItemName
+                else
+                    itemBinding.tvBudgetItemName.text = budgetCategory?.budgetItemNameOther
 
                 var categoryAmount = budgetCategory?.amount
                 var spent = 0.00F
