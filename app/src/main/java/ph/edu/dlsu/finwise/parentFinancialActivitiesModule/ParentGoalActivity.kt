@@ -64,18 +64,18 @@ class ParentGoalActivity : AppCompatActivity() {
         var sendBundle = Bundle()
         sendBundle.putString("childID", childID)
 
-        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
-            when (menuItem.itemId) {
-                R.id.btn_settings -> {
-                    var settings = Intent(this, GoalSettingsActivity::class.java)
-                    settings.putExtras(sendBundle)
-                    settings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    this.startActivity(settings)
-                    true
-                }
-                else -> false
-            }
-        }
+//        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+//            when (menuItem.itemId) {
+//                R.id.btn_settings -> {
+//                    var settings = Intent(this, GoalSettingsActivity::class.java)
+//                    settings.putExtras(sendBundle)
+//                    settings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                    this.startActivity(settings)
+//                    true
+//                }
+//                else -> false
+//            }
+//        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

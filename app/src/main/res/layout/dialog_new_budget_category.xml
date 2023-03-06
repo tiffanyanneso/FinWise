@@ -28,6 +28,27 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/container_category"
+            app:layout_constraintTop_toBottomOf="@+id/goal_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Category"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:paddingBottom="10dp"
+            android:paddingTop="20dp"
+            app:helperTextEnabled="true"
+            app:helperText=""
+            app:helperTextTextColor="@color/red">
+
+            <AutoCompleteTextView
+                android:id="@+id/dialog_dropdown_category_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/container_other_category_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -35,16 +56,17 @@
             app:helperText=""
             app:helperTextTextColor="@color/red"
             android:paddingBottom="10dp"
-            android:paddingTop="20dp">
+            android:paddingTop="10dp"
+            android:visibility="gone">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dialog_et_category_name"
+                android:id="@+id/dialog_et_other_category_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:lines="1"
                 android:inputType="text"
                 android:textSize="16dp"
-                android:hint="@string/category"
+                android:hint="Category Name"
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,6 +90,13 @@
                 android:hint="@string/amount"
                 />
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_remaining_balance"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="You have ₱ XXXXX.XX remaining left to budget"
+            android:textColor="@color/black"/>
 
         <TextView
             android:id="@+id/tv_error"

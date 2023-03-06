@@ -211,12 +211,17 @@
     </string-array>
 
     <string-array name="pfm_expense_category">
-        <item>Clothes</item>
-        <item>Food</item>
+        <item>Clothing</item>
+        <item>Food &amp; Drinks</item>
         <item>Gift</item>
-        <item>Toys &amp; Games</item>
+        <item>Entertainment</item>
         <item>Transportation</item>
-        <item>Other</item>
+        <item>Personal Care</item>
+        <item>Decorations</item>
+        <item>Rental</item>
+        <item>Party Favors</item>
+        <item>Miscellaneous</item>
+        <item>Others</item>
     </string-array>
 
     <string name="title_activity_tabbed">TabbedActivity</string>
