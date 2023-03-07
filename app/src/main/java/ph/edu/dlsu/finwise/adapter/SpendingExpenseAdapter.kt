@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemSpendingExpenseBinding
-import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat

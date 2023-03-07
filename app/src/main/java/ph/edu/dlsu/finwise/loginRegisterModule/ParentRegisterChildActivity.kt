@@ -19,7 +19,6 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityParentRegisterChildBinding
-import ph.edu.dlsu.finwise.model.GoalSettings
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -76,7 +75,6 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                         firestore.collection("ChildUser").document(childID).set(user).addOnSuccessListener { childUser ->
                             clearForm()
                             createChildWallet(childID)
-                            createGoalSettings(parentuserID, childID)
                             Toast.makeText(this, "Child register successful", Toast.LENGTH_SHORT).show()
                             //TODO: change current user back to parent
                             println("current/parent user   " + FirebaseAuth.getInstance().currentUser!!.uid.toString())
@@ -130,11 +128,6 @@ class ParentRegisterChildActivity : AppCompatActivity() {
         )
 
         firestore.collection("ChildWallet").add(wallet)
-    }
-
-    private fun createGoalSettings(parentID:String, childID:String) {
-        var settings = GoalSettings(parentID, childID, false, false)
-        firestore.collection("GoalSettings").add(settings)
     }
 
     private fun validateAndSetUserInput(): Boolean {

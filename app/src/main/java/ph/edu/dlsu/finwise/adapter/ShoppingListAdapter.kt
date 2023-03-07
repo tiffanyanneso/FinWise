@@ -1,9 +1,6 @@
 package ph.edu.dlsu.finwise.adapter
 
-import android.app.Dialog
 import android.content.Context
-import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -14,13 +11,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.DialogNewShoppingListItemBinding
-import ph.edu.dlsu.finwise.databinding.DialogShoppingListRecordExpenseBinding
-import ph.edu.dlsu.finwise.databinding.ItemAddFriendBinding
 import ph.edu.dlsu.finwise.databinding.ItemShoppingListBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivityRecordExpense
-import ph.edu.dlsu.finwise.model.ChildUser
-import ph.edu.dlsu.finwise.model.ShoppingList
+import ph.edu.dlsu.finwise.model.ShoppingListItem
 
 class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder>{
 
@@ -70,7 +62,7 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingLis
 
         fun bindItem(shoppingListItemID: String){
            firestore.collection("ShoppingListItems").document(shoppingListItemID).get().addOnSuccessListener {
-               var shoppingListItem = it.toObject<ShoppingList>()
+               var shoppingListItem = it.toObject<ShoppingListItem>()
                itemBinding.tvShoppingListItemId.text = shoppingListItemID
                itemBinding.tvShoppingListItemName.text = shoppingListItem?.itemName
                itemBinding.tvSpendingActivityId.text = shoppingListItem?.spendingActivityID

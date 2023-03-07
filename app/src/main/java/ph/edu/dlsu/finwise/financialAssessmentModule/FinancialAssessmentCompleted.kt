@@ -6,10 +6,9 @@ import android.os.Bundle
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentBinding
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentCompletedBinding
-import ph.edu.dlsu.finwise.model.AssessmentDetails
-import ph.edu.dlsu.finwise.model.AssessmentQuestions
+import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
+import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
 
 class FinancialAssessmentCompleted : AppCompatActivity() {
 
@@ -43,7 +42,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("nAnsweredCorrectly", answeredCorrectly)
         firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("nQuestions", nQuestions)
         firestore.collection("Assessments").document(assessmentID).get().addOnSuccessListener {
-            var assessment = it.toObject<AssessmentDetails>()
+            var assessment = it.toObject<FinancialAssessmentDetails>()
             var updatedNTimesAssessmentTaken = assessment?.nTakes!! + 1
             firestore.collection("Assessments").document(assessmentID).update("nTakes", updatedNTimesAssessmentTaken)
         }
@@ -60,7 +59,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
     private fun updateAnswerCorrectness() {
         for (answerHistory in answerHistoryArrayList) {
             firestore.collection("AssessmentQuestions").document(answerHistory.questionID).get().addOnSuccessListener {
-                var assessmentQuestion = it.toObject<AssessmentQuestions>()
+                var assessmentQuestion = it.toObject<FinancialAssessmentQuestions>()
                 var updatedNAssessments = assessmentQuestion?.nAssessments!! + 1
                 var updatedNAnsweredCorrectly = assessmentQuestion?.nAnsweredCorrectly
                 if (answerHistory.answeredCorrectly) {

@@ -7,18 +7,16 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.FragmentManager
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.adapter.SpendingExpenseAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetExpenseBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.budgetExpenseFragments.SpendingExpenseListFragment
 import ph.edu.dlsu.finwise.financialActivitiesModule.budgetExpenseFragments.SpendingShoppingListFragment
-import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.BudgetItem
+import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import kotlin.collections.ArrayList
 
@@ -95,7 +93,7 @@ class SpendingActivity : AppCompatActivity() {
 
             firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).get().addOnSuccessListener { results ->
                 for (expense in results) {
-                    var expenseObject = expense.toObject<BudgetExpense>()
+                    var expenseObject = expense.toObject<Transactions>()
                     spent += expenseObject.amount!!.toFloat()
                 }
             }.continueWith {

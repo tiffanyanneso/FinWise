@@ -16,7 +16,7 @@ import ph.edu.dlsu.finwise.databinding.DialogNewShoppingListItemBinding
 import ph.edu.dlsu.finwise.databinding.DialogShoppingListRecordExpenseBinding
 import ph.edu.dlsu.finwise.databinding.FragmentSpendingShoppingListBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivityRecordExpense
-import ph.edu.dlsu.finwise.model.ShoppingList
+import ph.edu.dlsu.finwise.model.ShoppingListItem
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -120,7 +120,7 @@ class SpendingShoppingListFragment : Fragment() {
 
         dialogBinding.btnSave.setOnClickListener {
             var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-            var shoppingListItem = ShoppingList(dialogBinding.etShoppingListItemName.text.toString(), budgetItemID, currentUser, "In List", spendingActivityID)
+            var shoppingListItem = ShoppingListItem(dialogBinding.etShoppingListItemName.text.toString(), budgetItemID, currentUser, "In List", spendingActivityID)
             firestore.collection("ShoppingListItems").add(shoppingListItem).addOnSuccessListener { newItem ->
                 dialog.dismiss()
                 shoppingListArrayList.add(newItem.id)
@@ -141,7 +141,7 @@ class SpendingShoppingListFragment : Fragment() {
         dialog.window!!.setLayout(850, 900)
 
         firestore.collection("ShoppingListItems").document(shoppingListItemID).get().addOnSuccessListener {
-            var shoppingListItem = it.toObject<ShoppingList>()
+            var shoppingListItem = it.toObject<ShoppingListItem>()
             dialogBinding.etShoppingListItemName.setText(shoppingListItem?.itemName)
         }
 

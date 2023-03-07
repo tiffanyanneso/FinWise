@@ -15,8 +15,8 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.NewChoicesAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertEditQuestionsBinding
 import ph.edu.dlsu.finwise.databinding.DialogueAddNewChoiceBinding
-import ph.edu.dlsu.finwise.model.AssessmentChoices
-import ph.edu.dlsu.finwise.model.AssessmentQuestions
+import ph.edu.dlsu.finwise.model.FinancialAssessmentChoices
+import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
 
 class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
 
@@ -125,7 +125,7 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
 
 
         firestore.collection("AssessmentQuestions").document(questionID).get().addOnSuccessListener {
-            var question = it.toObject<AssessmentQuestions>()
+            var question = it.toObject<FinancialAssessmentQuestions>()
             binding.etQuestion.setText(question?.question)
             binding.dropdownDifficulty.setText(question?.difficulty)
 
@@ -138,7 +138,7 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
         firestore.collection("AssessmentChoices").whereEqualTo("questionID", questionID).get().addOnSuccessListener { results ->
             for (choice in results) {
                 choicesIDArrayList.add(choice.id)
-                var choiceObject = choice.toObject<AssessmentChoices>()
+                var choiceObject = choice.toObject<FinancialAssessmentChoices>()
                 choicesArrayList.add(FinlitExpertAddNewQuestionsActivity.Choice(choiceObject?.choice, choiceObject?.isCorrect))
             }
             choicesAdapter = NewChoicesAdapter(this, choicesArrayList, object:NewChoicesAdapter.EditChoice{

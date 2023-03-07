@@ -2,13 +2,12 @@ package ph.edu.dlsu.finwise
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.LeaderboardRankingAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityLeaderboardBinding
-import ph.edu.dlsu.finwise.model.AssessmentAttempts
+import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.Friends
 
 class LeaderboardActivity : AppCompatActivity() {
@@ -56,7 +55,7 @@ class LeaderboardActivity : AppCompatActivity() {
             var totalQuestions = 0
             firestore.collection("AssessmentAttempts").whereEqualTo("childID", friendUserID).get().addOnSuccessListener { results ->
                 for (assessmentAttempt in results) {
-                    var assessmentAttemptObject = assessmentAttempt.toObject<AssessmentAttempts>()
+                    var assessmentAttemptObject = assessmentAttempt.toObject<FinancialAssessmentAttempts>()
                     totalCorrect += assessmentAttemptObject?.nAnsweredCorrectly!!
                     totalQuestions += assessmentAttemptObject?.nQuestions!!
                 }

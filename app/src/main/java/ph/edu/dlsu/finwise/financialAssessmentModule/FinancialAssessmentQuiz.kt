@@ -6,16 +6,14 @@ import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import android.view.View
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentQuizBinding
-import ph.edu.dlsu.finwise.model.AssessmentChoices
-import ph.edu.dlsu.finwise.model.AssessmentQuestions
+import ph.edu.dlsu.finwise.model.FinancialAssessmentChoices
+import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
 import kotlin.random.Random
 
 class FinancialAssessmentQuiz : AppCompatActivity() {
@@ -60,7 +58,7 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
 
         firestore.collection("AssessmentQuestions").document(questionIDArrayList[questionIndex]).get().addOnSuccessListener {
             questionID = it.id
-            var question = it.toObject<AssessmentQuestions>()
+            var question = it.toObject<FinancialAssessmentQuestions>()
             binding.tvQuestion.text = question?.question
             questionIDArrayList.removeAt(questionIndex)
         }.continueWith { getChoices() }
@@ -70,7 +68,7 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
         firestore.collection("AssessmentChoices").whereEqualTo("questionID", questionID).get().addOnSuccessListener { results ->
             var index = 1
             for (choice in results ) {
-                var choiceObject = choice.toObject<AssessmentChoices>()
+                var choiceObject = choice.toObject<FinancialAssessmentChoices>()
                 if (choiceObject.isCorrect == true)
                     correctChoice = index
                 if (index == 1) {

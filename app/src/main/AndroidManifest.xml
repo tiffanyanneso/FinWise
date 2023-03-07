@@ -152,9 +152,6 @@
             android:name=".profileModule.EditProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".parentFinancialActivitiesModule.GoalSettingsActivity"
-            android:exported="true" />
-        <activity
             android:name=".parentFinancialManagementModule.ParentMayaConfirmPayment"
             android:exported="true" />
         <activity

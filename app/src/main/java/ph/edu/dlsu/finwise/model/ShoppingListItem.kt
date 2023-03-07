@@ -1,6 +1,6 @@
 package ph.edu.dlsu.finwise.model
 
-class ShoppingList(
+class ShoppingListItem(
     var itemName:String?=null,
     var budgetCategory:String?=null,
     var createdBy:String?=null,

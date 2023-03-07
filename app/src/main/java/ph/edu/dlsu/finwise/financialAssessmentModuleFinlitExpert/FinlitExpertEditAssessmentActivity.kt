@@ -9,7 +9,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.EditAssessmentQuestionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertEditAssessmentBinding
-import ph.edu.dlsu.finwise.model.AssessmentQuestions
+import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
 
 
 class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
@@ -56,7 +56,7 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
     private fun loadQuestions() {
         firestore.collection("AssessmentQuestions").whereEqualTo("assessmentID", assessmentID).get().addOnSuccessListener {results ->
             for (question in results) {
-                var questionObject = question.toObject<AssessmentQuestions>()
+                var questionObject = question.toObject<FinancialAssessmentQuestions>()
                 questionsIDArrayList.add(question.id)
                 questionStatusArrayList.add(QuestionStatus(question.id,
                     questionObject?.question.toString(), questionObject?.difficulty.toString(), questionObject.isUsed!!))

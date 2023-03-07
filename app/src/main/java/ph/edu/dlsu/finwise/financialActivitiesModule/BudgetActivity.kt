@@ -22,7 +22,6 @@ import ph.edu.dlsu.finwise.databinding.DialogAdjustBudgetBinding
 import ph.edu.dlsu.finwise.databinding.DialogDoneSettingBudgetBinding
 import ph.edu.dlsu.finwise.databinding.DialogFinishBudgetingBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
-import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.Transactions

@@ -8,10 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.databinding.ItemAddNewChoiceBinding
 import ph.edu.dlsu.finwise.databinding.ItemSpecificAssessmentQuestionsBinding
-import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinlitExpertAddNewQuestionsActivity
-import ph.edu.dlsu.finwise.model.AssessmentQuestions
+import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
 import java.text.DecimalFormat
 
 class AssessmentQuestionsAdapter : RecyclerView.Adapter<AssessmentQuestionsAdapter.AssessmentQuestionsViewHolder>{
@@ -55,7 +53,7 @@ class AssessmentQuestionsAdapter : RecyclerView.Adapter<AssessmentQuestionsAdapt
 
         fun bindChoice(questionID: String){
             firestore.collection("AssessmentQuestions").document(questionID).get().addOnSuccessListener {
-                var question = it.toObject<AssessmentQuestions>()
+                var question = it.toObject<FinancialAssessmentQuestions>()
                 itemBinding.tvQuestion.text = "Question: " +  question?.question
                 itemBinding.tvDifficulty.text = "Difficulty: " + question?.difficulty
                 println("print " + question?.nAnsweredCorrectly)

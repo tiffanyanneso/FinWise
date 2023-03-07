@@ -8,12 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemQuestionsBinding
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinlitExpertEditAssessmentActivity
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinlitExpertEditQuestionsActivity
-import ph.edu.dlsu.finwise.model.AssessmentQuestions
 
 class EditAssessmentQuestionsAdapter : RecyclerView.Adapter<EditAssessmentQuestionsAdapter.EditAssessmentQuestionsViewHolder>{
 

@@ -1,6 +1,6 @@
 package ph.edu.dlsu.finwise.model
 
-class AssessmentChoices (
+class FinancialAssessmentChoices (
     var questionID:String?=null,
     var choice:String?=null,
     @field:JvmField

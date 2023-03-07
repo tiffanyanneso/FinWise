@@ -20,7 +20,6 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.databinding.DialogFinishSavingBinding
-import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
@@ -258,25 +257,6 @@ class ViewGoalActivity : AppCompatActivity() {
                     } else
                         binding.tvRemaining.visibility = View.GONE
 
-                }
-            }
-                //deductExpenses() }
-        }
-    }
-
-    private fun deductExpenses() {
-        var balance = savedAmount
-        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).get().addOnSuccessListener { budgetItems ->
-            if (budgetItems.size() == 0)
-                binding.tvCurrentBalance.text = "₱ " +  DecimalFormat("#,##0.00").format(balance)
-            else {
-                for (item in budgetItems) {
-                    firestore.collection("BudgetExpenses").whereEqualTo("budgetCategoryID", item.id).get().addOnSuccessListener { budgetExpenses ->
-                        for (expense in budgetExpenses) {
-                            var expenseObject = expense.toObject<BudgetExpense>()
-                            balance -= expenseObject.amount!!
-                        }
-                    }.continueWith { binding.tvCurrentBalance.text = "Available balance: ₱ " +  DecimalFormat("#,###.00").format(balance)   }
                 }
             }
         }

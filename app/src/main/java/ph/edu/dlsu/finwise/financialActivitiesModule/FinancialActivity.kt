@@ -1,11 +1,8 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
-import android.app.Dialog
-import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -13,19 +10,11 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ph.edu.dlsu.finwise.*
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialBinding
-import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.*
 import ph.edu.dlsu.finwise.model.ChildUser
-import ph.edu.dlsu.finwise.model.FinancialGoals
-import ph.edu.dlsu.finwise.model.GoalSettings
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period

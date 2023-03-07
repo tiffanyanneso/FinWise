@@ -9,7 +9,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.FragmentAssessmentDetailsBinding
-import ph.edu.dlsu.finwise.model.AssessmentDetails
+import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
 import java.text.SimpleDateFormat
 
 class AssessmentDetailsFragment : Fragment() {
@@ -39,7 +39,7 @@ class AssessmentDetailsFragment : Fragment() {
 
     private fun setFields() {
         firestore.collection("Assessments").document(assessmentID).get().addOnSuccessListener {
-            var assessment = it.toObject<AssessmentDetails>()
+            var assessment = it.toObject<FinancialAssessmentDetails>()
 
             binding.tvCategory.text = assessment?.assessmentCategory
             binding.tvDateCreated.text = SimpleDateFormat("MM/dd/yyyy").format(assessment?.createdOn?.toDate())

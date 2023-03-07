@@ -2,7 +2,7 @@ package ph.edu.dlsu.finwise.model
 
 import com.google.firebase.Timestamp
 
-class AssessmentQuestions(
+class FinancialAssessmentQuestions(
     var assessmentID:String?=null,
     var question:String?=null,
     var difficulty:String?=null,

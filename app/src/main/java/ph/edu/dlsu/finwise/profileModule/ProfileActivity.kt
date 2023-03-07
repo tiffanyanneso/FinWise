@@ -14,7 +14,6 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.*
 import ph.edu.dlsu.finwise.databinding.ActivityProfileBinding
 import ph.edu.dlsu.finwise.model.ChildUser
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.GoalSettingsActivity
 import ph.edu.dlsu.finwise.profileModule.fragments.ProfileBadgesFragment
 import ph.edu.dlsu.finwise.profileModule.fragments.ProfileCurrentGoalsFragment
 

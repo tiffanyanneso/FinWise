@@ -13,8 +13,8 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ItemBudgetCategoryBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetActivity
-import ph.edu.dlsu.finwise.model.BudgetExpense
 import ph.edu.dlsu.finwise.model.BudgetItem
+import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 
 class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetCategoryViewHolder>{
@@ -99,7 +99,7 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
                 var spent = 0.00F
                 firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { results  ->
                     for (expense in results) {
-                        var expenseObject = expense.toObject<BudgetExpense>()
+                        var expenseObject = expense.toObject<Transactions>()
                         spent += expenseObject.amount!!.toFloat()
                     }
                 }.continueWith {
