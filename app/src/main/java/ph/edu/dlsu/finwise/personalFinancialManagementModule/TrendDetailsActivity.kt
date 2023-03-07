@@ -18,6 +18,7 @@ class TrendDetailsActivity : AppCompatActivity() {
     private var setBundle = Bundle()
     private var selectedDateRange = "week"
     private var user = "child"
+    private var childID = "child"
 
     private val tabIcons1 = intArrayOf(
         R.drawable.baseline_wallet_24,
@@ -37,9 +38,10 @@ class TrendDetailsActivity : AppCompatActivity() {
         val getBundle = intent.extras
         selectedDateRange = getBundle?.getString("date").toString()
         user = getBundle?.getString("user").toString()
-        Toast.makeText(this, ""+user, Toast.LENGTH_SHORT).show()
+        childID = getBundle?.getString("childID").toString()
         setBundle.putString("date", selectedDateRange)
         setBundle.putString("user", user)
+        setBundle.putString("childID", childID)
     }
 
     private fun setupTabIcons1() {

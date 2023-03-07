@@ -14,7 +14,6 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.mayaAPI.MayaPayment
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
@@ -37,6 +36,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
     private var bundle = Bundle()
     private lateinit var context: Context
+    private var childID  = FirebaseAuth.getInstance().currentUser!!.uid
 
     var balance = 0.00f
     var income = 0.00f
@@ -63,9 +63,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
 
-        setUpChartTabs()
-        loadBalance()
-        loadFinancialHealth()
+        initializeFragments()
         //setUpBreakdownTabs()
         //initializeButtons()
         //initializeBalanceBarGraph()
@@ -73,9 +71,14 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         //goToTransactionHistory()
     }
 
+    private fun initializeFragments() {
+        setUpChartTabs()
+        loadBalance()
+        loadFinancialHealth()
+    }
+
     private fun loadFinancialHealth() {
-        //TODO: change to currentUser
-        firestore.collection("Transactions")
+        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
             .get().addOnSuccessListener { documents ->
                 val transactionsArrayList = initializeTransactions(documents)
                 getIncomeAndExpense(transactionsArrayList)
@@ -102,18 +105,21 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         if (ratio >= 200) {
             grade = "Excellent 😄\n Your income is more than enough to cover your expenses and save some money for the future"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
-        } else if (ratio >= 150 && ratio < 200) {
+        } else if (ratio in 150..199) {
             grade = "Great ☺\n You are doing a good job managing your income and expenses, but there is still room for improvement"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
-        } else if (ratio >= 100 && ratio < 150) {
+        } else if (ratio in 100..149) {
             grade = "Good 🙂\n You are spending most of your income on expenses and not saving much. It's important to start finding ways to save more money"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
-        } else if (ratio >= 50 && ratio < 100) {
+        } else if (ratio in 50..99) {
             grade = "Average 😐\n You are spending more than you earn and this could lead to financial trouble. It's important to start finding ways to increase your income and reduce your expenses"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
-        } else {
+        } else if (ratio in 1..49) {
             grade = "Bad 😔\n You are spending much more than you earn and this could lead to serious financial trouble. It's important to talk to your parent to find ways to improve your financial situation"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        } else {
+            grade = "Bad 😔\n You are have 0 balance. Explore the app by clicking on the buttons."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         }
 
         imageView.setImageBitmap(bitmap)
@@ -160,7 +166,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
         val yearlyButton = binding.btnQuarterly
-        //TODO: check if weekly button is still clicked, else remove color
         monthlyButton.setOnClickListener {
             weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
@@ -175,7 +180,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
         val quarterlyButton = binding.btnQuarterly
-        //TODO: check if weekly button is still clicked, else remove color
         quarterlyButton.setOnClickListener {
             weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
@@ -190,7 +194,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
         val yearlyButton = binding.btnQuarterly
-        //TODO: check if weekly button is still clicked, else remove color
         weeklyButton.setOnClickListener {
             weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
@@ -246,12 +249,14 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private fun loadBalance() {
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2")
+        firestore.collection("ChildWallet").whereEqualTo("childID", childID)
             .get().addOnSuccessListener { document ->
                 val childWallet = document.documents[0].toObject<ChildWallet>()
                 val dec = DecimalFormat("#,###.00")
                 balance = childWallet?.currentBalance!!
-                val amount = dec.format(balance)
+                var amount = dec.format(balance)
+                if (balance < 0)
+                    amount = "0"
                 binding.tvBalance.text = "₱$amount"
                 initializeButtons()
             }
@@ -268,7 +273,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun goToPayMaya() {
         binding.btnPayWithMaya.setOnClickListener {
             val goToTransactions = Intent(applicationContext, MayaPayment::class.java)
-            getBalanceBundle()
+            getBundles()
             goToTransactions.putExtras(bundle)
             startActivity(goToTransactions)
         }
@@ -277,7 +282,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun goToDepositGoalActivity() {
         binding.btnGoal.setOnClickListener {
             val goToDepositGoalActivity = Intent(applicationContext, RecordDepositActivity::class.java)
-            getBalanceBundle()
+            getBundles()
             goToDepositGoalActivity.putExtras(bundle)
             startActivity(goToDepositGoalActivity)
         }
@@ -286,7 +291,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun goToIncomeActivity() {
         binding.btnIncome.setOnClickListener {
             val goToIncomeActivity = Intent(applicationContext, RecordIncomeActivity::class.java)
-            getBalanceBundle()
+            getBundles()
             goToIncomeActivity.putExtras(bundle)
             startActivity(goToIncomeActivity)
         }
@@ -295,7 +300,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun goToExpenseActivity() {
         binding.btnExpense.setOnClickListener {
             val goToExpenseActivity = Intent(applicationContext, RecordExpenseActivity::class.java)
-            getBalanceBundle()
+            getBundles()
             goToExpenseActivity.putExtras(bundle)
             startActivity(goToExpenseActivity)
         }
@@ -304,15 +309,16 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun goToEarningActivity() {
         binding.btnEarning.setOnClickListener {
             val goToEarningActivity = Intent(applicationContext, EarningMenuActivityPFM::class.java)
-            var bundle = Bundle()
+            val bundle = Bundle()
             bundle.putString("childID", FirebaseAuth.getInstance().currentUser!!.uid)
             goToEarningActivity.putExtras(bundle)
             startActivity(goToEarningActivity)
         }
     }
 
-    private fun getBalanceBundle() {
+    private fun getBundles() {
         bundle.putFloat("balance", balance)
+        bundle.putString("childID", childID)
     }
 
     /* private fun initializeBalanceBarGraph() {

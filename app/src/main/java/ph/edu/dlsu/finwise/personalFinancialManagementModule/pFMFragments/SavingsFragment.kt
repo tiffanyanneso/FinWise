@@ -11,7 +11,9 @@ import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -34,6 +36,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     private lateinit var binding: FragmentSavingsChartBinding
     private var bundle = Bundle()
     private var firestore = Firebase.firestore
+    private var childID  = FirebaseAuth.getInstance().currentUser!!.uid
     private var transactionsArrayList = ArrayList<Transactions>()
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
@@ -41,6 +44,8 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     private var months: Map<Int, List<Date>>? = null
     private var selectedDatesSort = "weekly"
     private var user = "child"
+    var graphData = mutableListOf<Entry>()
+
 
 
     /*// Balance bar chart
@@ -97,6 +102,8 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
             val goToDetails = Intent(context, GoalSavingDetailsActivity::class.java)
             bundle.putString("date", selectedDatesSort)
             bundle.putString("user", user)
+            val childID  = FirebaseAuth.getInstance().currentUser!!.uid
+            bundle.putString("childID", childID)
             goToDetails.putExtras(bundle)
             startActivity(goToDetails)
         }
@@ -107,12 +114,12 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
         //TODO: change to currentUser
         // on below line we are initializing
         // our variable with their ids.
-        firestore.collection("Transactions")
+        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
             .get().addOnSuccessListener { documents ->
                 initializeTransactions(documents)
                 sortedDate = getDatesOfTransactions()
-                val data = setData()
-                initializeGraph(data)
+                setData()
+                initializeGraph()
             }
     }
 
@@ -137,27 +144,26 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun setData(): MutableList<Entry> {
-        var data = mutableListOf<Entry>()
+    private fun setData() {
+
 
         when (selectedDatesSort) {
             "weekly" -> {
                 selectedDates = getDaysOfWeek(sortedDate)
-                data = addWeeklyData(selectedDates)
+                graphData = addWeeklyData(selectedDates)
                 binding.tvBalanceTitle.text = "This Week's Savings Balance Trend"
             }
             "monthly" -> {
                 weeks = getWeeksOfCurrentMonth(sortedDate)
-                data = iterateWeeksOfCurrentMonth(weeks!!)
+                graphData = iterateWeeksOfCurrentMonth(weeks!!)
                 binding.tvBalanceTitle.text = "This Month's Savings Balance Trend"
             }
             "quarterly" -> {
                 months = getMonthsOfQuarter(sortedDate)
-                data =  forEachDateInMonths(months!!)
+                graphData =  forEachDateInMonths(months!!)
                 binding.tvBalanceTitle.text = "This Quarter's Savings Balance Trend"
             }
         }
-        return data
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -337,7 +343,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     }
 
 
-    private fun initializeGraph(data: MutableList<Entry>) {
+    private fun initializeGraph() {
         val balanceLineGraphView = view?.findViewById<LineChart>(R.id.savings_chart)!!
 
         val xAxis = balanceLineGraphView.xAxis
@@ -360,7 +366,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
         }
 
         // Create a dataset from the data
-        val dataSet = LineDataSet(data, "Goal Savings")
+        val dataSet = LineDataSet(graphData, "Goal Savings")
         dataSet.color = R.color.red
         dataSet.setCircleColor(R.color.teal_200)
 
@@ -389,13 +395,15 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
 
     private fun updateXAxisWeekly(xAxis: XAxis?) {
         val dateFormatter = SimpleDateFormat("EEEE")
+        val dates = selectedDates.distinct()
 
-        xAxis?.valueFormatter = object : ValueFormatter() {
-            override fun getFormattedValue(value: Float): String {
-                return dateFormatter.format(selectedDates[value.toInt()])
-            }
+        if (dates.size < graphData.size) {
+            // There are fewer dates than xAxis entries, reduce the number of xAxis entries
+            graphData = graphData.take(dates.size) as MutableList<Entry>
         }
+        xAxis?.valueFormatter = IndexAxisValueFormatter(dates.map { dateFormatter.format(it) }.toTypedArray())
     }
+
 
     private fun updateXAxisMonthly(xAxis: XAxis) {
         val dateMap = weeks // Your date map here

@@ -3,7 +3,6 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +10,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -34,6 +36,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     private lateinit var binding: FragmentBalanceChartBinding
     private var bundle = Bundle()
     private var firestore = Firebase.firestore
+    private var childID  = FirebaseAuth.getInstance().currentUser!!.uid
     private var transactionsArrayList = ArrayList<Transactions>()
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
@@ -42,6 +45,8 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     private var selectedDatesSort = "weekly"
     private var user = "child"
     private lateinit var chart: LineChart
+    var graphData = mutableListOf<Entry>()
+
 
 
 /*
@@ -77,6 +82,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         getArgumentsFromPFM()
         initializeBalanceLineGraph()
         initializeDetails()
+
     }
 
 
@@ -101,7 +107,9 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
             val goToDetails = Intent(context, TrendDetailsActivity::class.java)
             bundle.putString("date", selectedDatesSort)
             bundle.putString("user", user)
-            Toast.makeText(context, ""+user, Toast.LENGTH_SHORT).show()
+            val childID  = FirebaseAuth.getInstance().currentUser!!.uid
+            bundle.putString("childID", childID)
+
             goToDetails.putExtras(bundle)
             startActivity(goToDetails)
         }
@@ -111,18 +119,17 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     private fun initializeBalanceLineGraph() {
         // on below line we are initializing
         // our variable with their ids.
-        firestore.collection("Transactions")
+        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
             .get().addOnSuccessListener { documents ->
                 initializeTransactions(documents)
                 sortedDate = getDatesOfTransactions()
-                val data = setData()
-                initializeGraph(data)
+                setData()
+                initializeGraph()
             }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setData(): MutableList<Entry> {
-        var graphData = mutableListOf<Entry>()
 
         when (selectedDatesSort) {
             "weekly" -> {
@@ -336,14 +343,33 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
     private fun updateXAxisWeekly(xAxis: XAxis?) {
         val dateFormatter = SimpleDateFormat("EEEE")
-        val distinctDates = selectedDates.distinct()
+        val dates = selectedDates.distinct()
 
-
-        xAxis?.valueFormatter = object : ValueFormatter() {
-            override fun getFormattedValue(value: Float): String {
-                return dateFormatter.format(distinctDates[value.toInt()])
-            }
+        if (dates.size < graphData.size) {
+            // There are fewer dates than xAxis entries, reduce the number of xAxis entries
+            graphData = graphData.take(dates.size) as MutableList<Entry>
         }
+        xAxis?.valueFormatter = IndexAxisValueFormatter(dates.map { dateFormatter.format(it) }.toTypedArray())
+
+        /*xAxis?.valueFormatter = object : ValueFormatter() {
+            override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+                return if (value.toInt() < dates.size) {
+                    dateFormatter.format(dates[value.toInt()])
+                } else {
+                    ""
+                }
+            }
+        }*/
+
+        /*xAxis?.valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return if (value.toInt() < dates.size) {
+                    dateFormatter.format(dates[value.toInt()])
+                } else {
+                    ""
+                }
+            }
+        }*/
     }
 
     private fun updateXAxisMonthly(xAxis: XAxis) {
@@ -397,7 +423,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         }
     }
 
-    private fun initializeGraph(data: MutableList<Entry>) {
+    private fun initializeGraph() {
         chart = view?.findViewById(R.id.balance_chart)!!
 
 
@@ -426,14 +452,15 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         }
 
         // Create a dataset from the data
-        val dataSet = LineDataSet(data, "Balance")
+        val dataSet = LineDataSet(graphData, "Balance")
         dataSet.color = R.color.red
         dataSet.setCircleColor(R.color.teal_200)
+        dataSet.valueTextSize = 14f
 
-        // Set the data on the chart and customize it
+
+        //Set the data on the chart and customize it
         val lineData = LineData(dataSet)
         chart.data = lineData
-        dataSet.valueTextSize = 14f
 
         // on below line adding animation
         chart.animate()
@@ -452,8 +479,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
             }
         }
     }
-
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getDaysOfWeek(dates: List<Date>): List<Date> {

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -193,6 +194,7 @@ class MayaConfirmPayment : AppCompatActivity() {
     }
 
     private fun addPayMayaTransaction() {
+        val childID  = FirebaseAuth.getInstance().currentUser!!.uid
 
         val transaction = hashMapOf(
             //TODO: add childID, createdBy
@@ -200,7 +202,7 @@ class MayaConfirmPayment : AppCompatActivity() {
             "transactionType" to "Expense (Maya)",
             "category" to category,
             "date" to bundle!!.getSerializable("date"),
-            "createdBy" to "",
+            "createdBy" to childID,
             "amount" to amount.toFloat(),
             "merchant" to merchant,
             "phoneNumber" to phone

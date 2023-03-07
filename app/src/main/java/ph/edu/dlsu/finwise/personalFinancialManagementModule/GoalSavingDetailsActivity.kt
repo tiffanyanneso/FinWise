@@ -45,6 +45,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     private lateinit var selectedDates: List<Date>
     private var selectedDatesSort = "weekly"
     private var user = "child"
+    private var childID = "child"
     lateinit var chart: PieChart
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -63,6 +64,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
         val getBundle = intent.extras
         selectedDatesSort = getBundle?.getString("date").toString()
         user = getBundle?.getString("user").toString()
+        childID = getBundle?.getString("childID").toString()
         transactionsArrayList.clear()
     }
 
@@ -70,8 +72,8 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     private fun loadPieChart() {
         //TODO: Update data based on user
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        firestore.collection("Transactions").get()
-            .addOnSuccessListener { transactionsSnapshot ->
+        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
+            .get().addOnSuccessListener { transactionsSnapshot ->
                 for (document in transactionsSnapshot) {
                     val transaction = document.toObject<Transactions>()
                     if (transaction.transactionType == "Deposit" ||
