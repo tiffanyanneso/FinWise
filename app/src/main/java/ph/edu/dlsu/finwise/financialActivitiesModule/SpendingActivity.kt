@@ -13,8 +13,8 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetExpenseBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.budgetExpenseFragments.SpendingExpenseListFragment
-import ph.edu.dlsu.finwise.financialActivitiesModule.budgetExpenseFragments.SpendingShoppingListFragment
+import ph.edu.dlsu.finwise.financialActivitiesModule.spendingExpenseFragments.SpendingExpenseListFragment
+import ph.edu.dlsu.finwise.financialActivitiesModule.spendingExpenseFragments.SpendingShoppingListFragment
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat

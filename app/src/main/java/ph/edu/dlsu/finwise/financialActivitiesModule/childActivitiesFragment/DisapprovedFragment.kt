@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.adapter.FinactDisapprovedAdapter
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentDisapprovedBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
@@ -20,7 +21,7 @@ class DisapprovedFragment : Fragment() {
 
     private lateinit var binding: FragmentDisapprovedBinding
     private var firestore = Firebase.firestore
-    private lateinit var goalAdapter: FinactSavingAdapter
+    private lateinit var goalAdapter: FinactDisapprovedAdapter
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -68,7 +69,7 @@ class DisapprovedFragment : Fragment() {
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        goalAdapter = FinactSavingAdapter(requireContext().applicationContext, goalIDArrayList)
+        goalAdapter = FinactDisapprovedAdapter(requireContext().applicationContext, goalIDArrayList)
         binding.rvViewGoals.adapter = goalAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
             LinearLayoutManager.VERTICAL,

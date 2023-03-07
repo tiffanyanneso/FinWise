@@ -114,21 +114,26 @@ class ReviewGoalActivity : AppCompatActivity() {
 
         firestore.collection("GoalRating").add(rating).addOnSuccessListener {
             var status = binding.dropdownStatus.text.toString()
-
-            if (status == "Approved") {
+            if (status == "Approved")
                 status = "In Progress"
-                firestore.collection("FinancialGoals").document(financialGoalID).update("status", status).addOnSuccessListener {
-                    firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("financialActivityName", "Saving").get().addOnSuccessListener { result ->
-                        var finactID = result.documents[0].id
-                        firestore.collection("FinancialActivities").document(finactID).update("status", status)
-                    }
-                    Toast.makeText(this, "Rating saved", Toast.LENGTH_SHORT).show()
-                    var viewGoal = Intent(this, ParentGoalActivity::class.java)
-                    var bundle = Bundle()
-                    bundle.putString("childID", childID)
-                    viewGoal.putExtras(bundle)
-                    this.startActivity(viewGoal)
+
+            var activityStatus = "In Progress"
+            if (status == "For Editing" || status == "Disapproved")
+                activityStatus = "Locked"
+
+
+
+            firestore.collection("FinancialGoals").document(financialGoalID).update("status", status).addOnSuccessListener {
+                firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("financialActivityName", "Saving").get().addOnSuccessListener { result ->
+                    var finactID = result.documents[0].id
+                    firestore.collection("FinancialActivities").document(finactID).update("status", activityStatus)
                 }
+                Toast.makeText(this, "Rating saved", Toast.LENGTH_SHORT).show()
+                var viewGoal = Intent(this, ParentGoalActivity::class.java)
+                var bundle = Bundle()
+                bundle.putString("childID", childID)
+                viewGoal.putExtras(bundle)
+                this.startActivity(viewGoal)
             }
 
         }

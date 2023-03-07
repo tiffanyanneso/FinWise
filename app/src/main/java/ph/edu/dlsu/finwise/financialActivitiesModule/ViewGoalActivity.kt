@@ -71,14 +71,13 @@ class ViewGoalActivity : AppCompatActivity() {
 
         var bundle: Bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
-
-
         childID = bundle.getString("childID").toString()
         checkUser()
         setFinancialActivityID()
 
         var sendBundle = Bundle()
         sendBundle.putString("financialGoalID", financialGoalID)
+        sendBundle.putString("childID", childID)
         sendBundle.putString("source", "viewGoal")
 
         binding.btnEditGoal.setOnClickListener {
@@ -131,7 +130,7 @@ class ViewGoalActivity : AppCompatActivity() {
         }
 
         binding.btnGoalDetails.setOnClickListener {
-            var goalDetails = Intent(this, ViewGoalDetails::class.java)
+            var goalDetails = Intent(this, ViewGoalDetailsTabbedActivity::class.java)
             goalDetails.putExtras(sendBundle)
             this.startActivity(goalDetails)
         }

@@ -23,7 +23,7 @@ class ProfileActivity : AppCompatActivity(){
     private var firestore = Firebase.firestore
     private lateinit var context: Context
 
-    private var childID = FirebaseAuth.getInstance().currentUser!!.uid
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private val tabIcons = intArrayOf(
         R.drawable.baseline_star_24,
@@ -70,7 +70,7 @@ class ProfileActivity : AppCompatActivity(){
         val adapter = ViewPagerAdapter(supportFragmentManager)
 
         var fragmentBundle = Bundle()
-        fragmentBundle.putString("childID", childID)
+        fragmentBundle.putString("childID", currentUser)
 
         var profileCurrentGoalsFragment = ProfileCurrentGoalsFragment()
         profileCurrentGoalsFragment.arguments = fragmentBundle
@@ -93,8 +93,6 @@ class ProfileActivity : AppCompatActivity(){
     }
 
     fun getProfileData() {
-        //val currentUser:String = FirebaseAuth.getInstance().currentUser!!.uid
-        val currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
 
         firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener { documentSnapshot ->
             var child = documentSnapshot.toObject<ChildUser>()

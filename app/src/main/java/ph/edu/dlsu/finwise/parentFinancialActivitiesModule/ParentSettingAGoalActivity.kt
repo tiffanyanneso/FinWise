@@ -73,6 +73,7 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
                 binding.tvIsForChild.text = "Yes"
             else
                 binding.tvIsForChild.text = "No"
+            binding.tvStatus.text = goal?.status
 
         }
     }

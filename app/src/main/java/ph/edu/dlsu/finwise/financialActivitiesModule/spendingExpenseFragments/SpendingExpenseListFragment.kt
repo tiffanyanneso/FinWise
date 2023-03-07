@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.financialActivitiesModule.budgetExpenseFragments
+package ph.edu.dlsu.finwise.financialActivitiesModule.spendingExpenseFragments
 
 import android.content.Intent
 import android.os.Bundle

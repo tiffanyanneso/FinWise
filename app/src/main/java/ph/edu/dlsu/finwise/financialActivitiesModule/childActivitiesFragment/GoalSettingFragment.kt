@@ -87,7 +87,7 @@ class GoalSettingFragment : Fragment() {
         var goalIDArrayList = ArrayList<String>()
         var goalFilterArrayList = ArrayList<GoalFilter>()
         goalIDArrayList.clear()
-        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "For Review").get().addOnSuccessListener { results ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereIn("status", listOf("For Review", "For Editing")).get().addOnSuccessListener { results ->
             for (goalForReview in results) {
                 goalIDArrayList.add(goalForReview.id)
             }

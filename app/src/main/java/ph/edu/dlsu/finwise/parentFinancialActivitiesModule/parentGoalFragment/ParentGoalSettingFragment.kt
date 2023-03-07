@@ -53,7 +53,7 @@ class ParentGoalSettingFragment : Fragment() {
 
         goalIDArrayList.clear()
 
-        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "For Review").get().addOnSuccessListener { documents ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereIn("status", listOf("For Review", "For Editing")).get().addOnSuccessListener { documents ->
             for (goalSnapshot in documents) {
                 //creating the object from list retrieved in db
                 var goalID = goalSnapshot.id

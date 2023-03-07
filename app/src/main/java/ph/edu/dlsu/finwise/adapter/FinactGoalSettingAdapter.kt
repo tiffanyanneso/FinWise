@@ -14,6 +14,7 @@ import ph.edu.dlsu.finwise.databinding.ItemFinactGoalSettingBinding
 import ph.edu.dlsu.finwise.databinding.ItemFinactSavingBinding
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentSettingAGoalActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalDetailsTabbedActivity
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
@@ -65,7 +66,7 @@ class FinactGoalSettingAdapter : RecyclerView.Adapter<FinactGoalSettingAdapter.F
             firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener{ document ->
                 var goal = document.toObject<FinancialGoals>()
                 itemBinding.tvGoalId.text = document.id
-                goalStatus = goal?.status.toString()
+                itemBinding.tvGoalStatus.text = goal?.status.toString()
                 childID = goal?.childID.toString()
                 itemBinding.tvGoal.text = goal?.goalName
                 // convert timestamp to date
@@ -80,10 +81,19 @@ class FinactGoalSettingAdapter : RecyclerView.Adapter<FinactGoalSettingAdapter.F
             var financialGoalID = itemBinding.tvGoalId.text.toString()
             bundle.putString ("financialGoalID", financialGoalID)
             bundle.putString ("childID", childID)
-            var reviewGoal = Intent(context, ParentSettingAGoalActivity::class.java)
-            reviewGoal.putExtras(bundle)
-            reviewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            context.startActivity(reviewGoal)
+
+            var status = itemBinding.tvGoalStatus.text.toString()
+            if (status == "For Review") {
+                var reviewGoal = Intent(context, ParentSettingAGoalActivity::class.java)
+                reviewGoal.putExtras(bundle)
+                reviewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(reviewGoal)
+            } else if (status == "For Editing") {
+                var reviewGoal = Intent(context, ViewGoalDetailsTabbedActivity::class.java)
+                reviewGoal.putExtras(bundle)
+                reviewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(reviewGoal)
+            }
 
         }
     }
