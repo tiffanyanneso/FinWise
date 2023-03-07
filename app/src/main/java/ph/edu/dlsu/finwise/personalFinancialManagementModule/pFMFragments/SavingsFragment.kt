@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.charts.LineChart
@@ -36,7 +37,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     private lateinit var binding: FragmentSavingsChartBinding
     private var bundle = Bundle()
     private var firestore = Firebase.firestore
-    private var childID  = FirebaseAuth.getInstance().currentUser!!.uid
+    private var childID = FirebaseAuth.getInstance().currentUser!!.uid
     private var transactionsArrayList = ArrayList<Transactions>()
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
@@ -87,6 +88,13 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
         val date = args?.getString("date")
         val currUser = args?.getString("user")
 
+        val child = args?.getString("childID")
+
+        if (child != null) {
+            childID = child
+        }
+
+
         if (currUser != null) {
             user = currUser
         }
@@ -102,7 +110,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
             val goToDetails = Intent(context, GoalSavingDetailsActivity::class.java)
             bundle.putString("date", selectedDatesSort)
             bundle.putString("user", user)
-            val childID  = FirebaseAuth.getInstance().currentUser!!.uid
+
             bundle.putString("childID", childID)
             goToDetails.putExtras(bundle)
             startActivity(goToDetails)
@@ -111,9 +119,6 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeBalanceLineGraph() {
-        //TODO: change to currentUser
-        // on below line we are initializing
-        // our variable with their ids.
         firestore.collection("Transactions").whereEqualTo("createdBy", childID)
             .get().addOnSuccessListener { documents ->
                 initializeTransactions(documents)
@@ -208,7 +213,6 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     }
 
     private fun setTotals(totalDeposit: Float, totalWithdraw: Float) {
-        val dec = DecimalFormat("#,###.00")
         /*val depositText = dec.format(totalDeposit)
         val withdrawalText = dec.format(totalWithdraw)*/
         var savings = if (totalDeposit != 0.0f) {
@@ -217,10 +221,6 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
             0.0F // set savings rate to 0 if income is 0
         }
         savings = round(savings / 10.0f) * 10.0f
-
-        if (savings > 0)
-            binding.tvSummary.text = "You are saving $savings% of your total deposits to your goals 😄"
-        else binding.tvSummary.text = "You are saving $savings% of your total deposits to your goals 😔"
 
         if (savings > 0 && user == "child")
             binding.tvSummary.text = "You are saving $savings% of your total deposits to your goals 😄"
