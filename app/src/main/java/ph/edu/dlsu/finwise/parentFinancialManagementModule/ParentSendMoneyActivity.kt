@@ -31,7 +31,6 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     lateinit var note: String
     lateinit var phone: String
     lateinit var date: Date
-    var balance = 0.00f
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -53,9 +52,9 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun goToMayaQRConfirmPayment(){
         binding.btnConfirm.setOnClickListener {
-            if (validateAndSetUserInput() && validAmount()) {
+            if (validateAndSetUserInput()) {
                 setBundle()
-                //TODO: change class
+
                 val goToMayaConfirmPayment = Intent(applicationContext, ParentMayaConfirmPayment::class.java)
                 goToMayaConfirmPayment.putExtras(bundle)
                 goToMayaConfirmPayment.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -76,7 +75,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         bundle.putFloat("amount", amount.toFloat())
         bundle.putString("phone", phone)
         bundle.putString("note", note)
-        bundle.putFloat("balance", balance)
+        //bundle.putFloat("balance", balance)
 //        bundle.putString("goal", goal)
         bundle.putSerializable("date", date)
 
@@ -88,7 +87,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     }
 
 
-    private fun validAmount(): Boolean {
+    /*private fun validAmount(): Boolean {
         val bundle2 = intent.extras!!
         balance = bundle2.getFloat("balance")
         Toast.makeText(this, "balance"+balance, Toast.LENGTH_SHORT).show()
@@ -102,7 +101,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         }
         else
             return true
-    }
+    }*/
 
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -25,6 +25,7 @@ class TransactionHistoryIncomeFragment : Fragment() {
     private lateinit var binding: FragmentTransactionHistoryIncomeBinding
     private var firestore = Firebase.firestore
     private lateinit var transactionAdapter: TransactionsAdapter
+    private var childID  = FirebaseAuth.getInstance().currentUser!!.uid
     private var checkedBoxes: String? = null
     private var minAmount: String? = null
     private var maxAmount: String? = null
@@ -144,7 +145,7 @@ class TransactionHistoryIncomeFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getIncomeTransactions() {
-        val childID  = FirebaseAuth.getInstance().currentUser!!.uid
+        getChildID()
         firestore.collection("Transactions").whereEqualTo("createdBy", childID)
             .get().addOnSuccessListener { documents ->
             for (transactionSnapshot in documents) {
@@ -169,6 +170,11 @@ class TransactionHistoryIncomeFragment : Fragment() {
 
             loadRecyclerView(incomeIDArrayList)
         }
+    }
+
+    private fun getChildID() {
+        childID = arguments?.getString("childID").toString()
+        Toast.makeText(context, "xs "+ childID, Toast.LENGTH_SHORT).show()
     }
 
     class TransactionFilter(var transactionID: String?=null, var transaction: Transactions?=null)

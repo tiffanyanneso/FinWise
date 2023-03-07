@@ -11,12 +11,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordExpenseBinding
-import ph.edu.dlsu.finwise.model.ChildWallet
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -46,7 +43,7 @@ class RecordExpenseActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
 
-        initizlizeDropdown()
+        initializeDropdown()
         initizlizeDatePicker()
        // getGoals()
         loadBackButton()
@@ -61,7 +58,7 @@ class RecordExpenseActivity : AppCompatActivity() {
         }
     }
 
-    private fun initizlizeDropdown() {
+    private fun initializeDropdown() {
         // for the dropdown
         val items = resources.getStringArray(ph.edu.dlsu.finwise.R.array.pfm_expense_category)
         val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, items)

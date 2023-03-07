@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -16,6 +17,7 @@ import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.MPPointF
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -45,7 +47,8 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     private lateinit var selectedDates: List<Date>
     private var selectedDatesSort = "weekly"
     private var user = "child"
-    private var childID = "child"
+    private var childID = FirebaseAuth.getInstance().currentUser!!.uid
+
     lateinit var chart: PieChart
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -64,7 +67,9 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
         val getBundle = intent.extras
         selectedDatesSort = getBundle?.getString("date").toString()
         user = getBundle?.getString("user").toString()
-        childID = getBundle?.getString("childID").toString()
+        if (user == "parent")
+            childID = getBundle?.getString("childID").toString()
+
         transactionsArrayList.clear()
     }
 
@@ -72,6 +77,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     private fun loadPieChart() {
         //TODO: Update data based on user
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
+
         firestore.collection("Transactions").whereEqualTo("createdBy", childID)
             .get().addOnSuccessListener { transactionsSnapshot ->
                 for (document in transactionsSnapshot) {
@@ -196,8 +202,8 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     private fun loadChildFinancialActivitiesButton() {
         //TODO: double chekc kung tama link
         binding.btnAction.setOnClickListener {
-            val goToFinancialActivitiy = Intent(this, FinancialActivity::class.java)
-            startActivity(goToFinancialActivitiy)
+            val goToFinancialActivity = Intent(this, FinancialActivity::class.java)
+            startActivity(goToFinancialActivity)
         }
     }
 
@@ -552,8 +558,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     private fun loadBackButton() {
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
-            val goToPFM = Intent(applicationContext, PersonalFinancialManagementActivity::class.java)
-            startActivity(goToPFM)
+            onBackPressed()
         }
     }
 

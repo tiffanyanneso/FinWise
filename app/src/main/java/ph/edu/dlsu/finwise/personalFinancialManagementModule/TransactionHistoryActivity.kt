@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
@@ -28,13 +30,16 @@ class TransactionHistoryActivity : AppCompatActivity() {
     private var getBundle: Bundle? = null
     private var setBundle: Bundle? = null
     private var checkedBoxes = "default"
+    lateinit var isExpense: String
+    private var childID = FirebaseAuth.getInstance().currentUser!!.uid
+    private lateinit var user: String
     private var minAmount: String? = null
     private var maxAmount: String? = null
     private var startDate: String? = null
     private var endDate: String? = null
     private val tabIcons = intArrayOf(
-        ph.edu.dlsu.finwise.R.drawable.baseline_wallet_24,
-        ph.edu.dlsu.finwise.R.drawable.baseline_shopping_cart_checkout_24
+        R.drawable.baseline_wallet_24,
+        R.drawable.baseline_shopping_cart_checkout_24
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,8 +58,6 @@ class TransactionHistoryActivity : AppCompatActivity() {
     private fun setNavigationBar() {
         val bottomNavigationViewChild = binding.bottomNav
         val bottomNavigationViewParent = binding.bottomNavParent
-        val user = getBundle!!.getString("user").toString()
-
 
         if (user == "child") {
             bottomNavigationViewChild.visibility = View.VISIBLE
@@ -70,12 +73,11 @@ class TransactionHistoryActivity : AppCompatActivity() {
     private fun checkIfSort() {
         getBundle = intent.extras
         setBundle = Bundle()
-        setNavigationBar()
-
 
         if (getBundle != null) {
             getBundle()
             setBundle()
+            setNavigationBar()
         }
     }
 
@@ -85,6 +87,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
         setBundle!!.putSerializable("startDate", startDate)
         setBundle!!.putSerializable("endDate", endDate)
         setBundle!!.putString("checkedBoxes", checkedBoxes)
+        setBundle!!.putString("childID", childID)
     }
 
     private fun getBundle() {
@@ -93,6 +96,12 @@ class TransactionHistoryActivity : AppCompatActivity() {
         startDate = getBundle!!.getSerializable("startDate").toString()
         endDate = getBundle!!.getSerializable("endDate").toString()
         checkedBoxes = getBundle!!.getString("checkedBoxes").toString()
+        isExpense = getBundle!!.getString("isExpense").toString()
+        user = getBundle!!.getString("user").toString()
+        if (user == "parent") {
+            childID = getBundle?.getString("childID").toString()
+            Toast.makeText(this, "cc "+childID , Toast.LENGTH_SHORT).show()
+        }
     }
 
 
@@ -128,7 +137,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
     }
 
     private fun redirectToFilteredTab() {
-        if (checkedBoxes == "expense")
+        if (isExpense == "yes")
             binding.viewPager.currentItem = 1
     }
 

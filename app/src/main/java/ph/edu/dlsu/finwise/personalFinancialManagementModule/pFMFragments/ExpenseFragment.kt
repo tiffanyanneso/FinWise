@@ -43,25 +43,36 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     private var bundle = Bundle()
     private var firestore = Firebase.firestore
     private var transactionsArrayList = ArrayList<Transactions>()
-    var clothesPercentage = 0.00f
-    var foodPercentage = 0.00f
-    var giftPercentage = 0.00f
-    var toysAndGamesPercentage = 0.00f
-    var transportationPercentage = 0.00f
-    var otherPercentage = 0.00f
-    var clothes = 0.00f
-    var food = 0.00f
-    var gift = 0.00f
-    var toysAndGames = 0.00f
-    var transportation = 0.00f
-    var other = 0.00f
-    var total = 0.00f
+    private var clothesPercentage = 0.00f
+    private var foodPercentage = 0.00f
+    private var giftPercentage = 0.00f
+    private var toysAndGamesPercentage = 0.00f
+    private var transportationPercentage = 0.00f
+    private var entertainmentPercentage = 0.00f
+    private var personalCarePercentage = 0.00f
+    private var decorationsPercentage = 0.00f
+    private var rentPercentage = 0.00f
+    private var partyFavorsPercentage = 0.00f
+    private var miscellaneousPercentage = 0.00f
+    private var otherPercentage = 0.00f
+    private var clothes = 0.00f
+    private var food = 0.00f
+    private var gift = 0.00f
+    private var toysAndGames = 0.00f
+    private var transportation = 0.00f
+    private var entertainment = 0.00f
+    private var personalCare = 0.00f
+    private var decorations = 0.00f
+    private var rent = 0.00f
+    private var partyFavors = 0.00f
+    private var miscellaneous = 0.00f
+    private var other = 0.00f
+    private var total = 0.00f
     private var selectedDatesSort = "weekly"
     private var user = "child"
-    private var childID = "child"
+    private lateinit var childID: String
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
-
 
 
     override fun onCreateView(
@@ -85,7 +96,9 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         binding.btnAction.setOnClickListener {
             val goToTransactionHistory = Intent(context, TransactionHistoryActivity::class.java)
             bundle.putString("user", user)
-            bundle.putString("checkedBoxes", "expense")
+            if (user == "parent")
+                bundle.putString("childID", childID)
+            bundle.putString("isExpense", "yes")
             goToTransactionHistory.putExtras(bundle)
             startActivity(goToTransactionHistory)
         }
@@ -107,7 +120,6 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
 
 
         if (date != null) {
-            Toast.makeText(context, ""+date, Toast.LENGTH_SHORT).show()
             selectedDatesSort = date
             transactionsArrayList.clear()
         }
@@ -117,6 +129,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     private fun loadPieChart() {
         //TODO: Update data based on user
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
+        Toast.makeText(context, "" + childID, Toast.LENGTH_SHORT).show()
         firestore.collection("Transactions").whereEqualTo("createdBy", childID)
             .get().addOnSuccessListener { transactionsSnapshot ->
                 for (document in transactionsSnapshot) {
@@ -143,9 +156,17 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             "yearly" -> dateRange = "quarter"
         }
 
-        binding.tvSummary.text = "You've spent ₱$totalText for this $dateRange! 💸"
-        binding.tvTips.text = "Consider reviewing your Top Expenses below or your previous transactions and see which you could lessen"
-        if (user == "child" && total < 500) {
+        if (user == "child") {
+            binding.tvSummary.text = "You've earned ₱$totalText for this $dateRange"
+            binding.tvTips.text =
+                "Consider reviewing your Top Expenses below or your previous transactions and see which you could lessen"
+        } else if (user == "parent") {
+            binding.tvSummary.text = "Your child spent ₱$totalText for this $dateRange!"
+            binding.tvTips.text =
+                "Consider reviewing your child's Top Expenses below or their previous transactions and see which they could lessen"
+        }
+
+        /*if (user == "child" && total < 500) {
             binding.tvSummary.text = "You've spent ₱$totalText for this $dateRange!"
             binding.tvTips.text = "Consider reviewing your Top Expenses below or your previous transactions and see which you could lessen"
         } else if (user == "child" && total > 500) {
@@ -157,9 +178,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         } else if (user == "parent" && total < 500) {
             binding.tvSummary.text = "You've child earned ₱$totalText for this $dateRange"
             binding.tvTips.text = "Consider reviewing your child's previous transactions and see which they could lessen"
-        }
-
-
+        }*/
     }
 
     private fun getDatesOfTransactions(): List<Date> {
@@ -239,6 +258,12 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
                         "Gift" -> gift += transaction.amount!!.toFloat()
                         "Toys & Games" -> toysAndGames += transaction.amount!!.toFloat()
                         "Transportation" -> transportation += transaction.amount!!.toFloat()
+                        "Entertainment" -> entertainment += transaction.amount!!.toFloat()
+                        "Personal Care" -> personalCare += transaction.amount!!.toFloat()
+                        "Decorations" -> decorations += transaction.amount!!.toFloat()
+                        "Rent" -> rent += transaction.amount!!.toFloat()
+                        "Party Favors" -> partyFavors += transaction.amount!!.toFloat()
+                        "Miscellaneous" -> miscellaneous += transaction.amount!!.toFloat()
                         "Other" -> other += transaction.amount!!.toFloat()
                     }
                 }
@@ -279,6 +304,12 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
                             "Gift" -> gift += transaction.amount!!.toFloat()
                             "Toys & Games" -> toysAndGames += transaction.amount!!.toFloat()
                             "Transportation" -> transportation += transaction.amount!!.toFloat()
+                            "Entertainment" -> entertainment += transaction.amount!!.toFloat()
+                            "Personal Care" -> personalCare += transaction.amount!!.toFloat()
+                            "Decorations" -> decorations += transaction.amount!!.toFloat()
+                            "Rent" -> rent += transaction.amount!!.toFloat()
+                            "Party Favors" -> partyFavors += transaction.amount!!.toFloat()
+                            "Miscellaneous" -> miscellaneous += transaction.amount!!.toFloat()
                             "Other" -> other += transaction.amount!!.toFloat()
                         }
                     }
@@ -325,6 +356,12 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
                             "Gift" -> gift += transaction.amount!!.toFloat()
                             "Toys & Games" -> toysAndGames += transaction.amount!!.toFloat()
                             "Transportation" -> transportation += transaction.amount!!.toFloat()
+                            "Entertainment" -> entertainment += transaction.amount!!.toFloat()
+                            "Personal Care" -> personalCare += transaction.amount!!.toFloat()
+                            "Decorations" -> decorations += transaction.amount!!.toFloat()
+                            "Rent" -> rent += transaction.amount!!.toFloat()
+                            "Party Favors" -> partyFavors += transaction.amount!!.toFloat()
+                            "Miscellaneous" -> miscellaneous += transaction.amount!!.toFloat()
                             "Other" -> other += transaction.amount!!.toFloat()
                         }
                     }
@@ -335,13 +372,20 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
 
 
     private fun calculatePercentages() {
-        total = clothes + food + gift + toysAndGames + transportation + other
+        total = clothes + food + gift + toysAndGames + transportation + entertainment +
+                personalCare + decorations + rent + partyFavors + miscellaneous + other
 
         clothesPercentage = clothes / total * 100
         foodPercentage = food / total * 100
         giftPercentage = gift / total * 100
         toysAndGamesPercentage = toysAndGames / total * 100
         transportationPercentage = transportation / total * 100
+        entertainmentPercentage = entertainment / total * 100
+        personalCarePercentage = personalCare / total * 100
+        decorationsPercentage = decorations / total * 100
+        rentPercentage = rent / total * 100
+        partyFavorsPercentage = partyFavors / total * 100
+        miscellaneousPercentage = miscellaneous / total * 100
         otherPercentage = other / total * 100
     }
 
@@ -352,8 +396,15 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             "Gift" to gift,
             "Toys & Games" to toysAndGames,
             "Transportation" to transportation,
+            "Entertainment" to entertainment,
+            "Personal Care" to personalCare,
+            "Decorations" to decorations,
+            "Rent" to rent,
+            "Party Favors" to partyFavors,
+            "Miscellaneous" to miscellaneous,
             "Other" to other
         )
+
         val top3Categories = totals.entries.sortedByDescending { it.value }.take(3)
         val dec = DecimalFormat("#,###.00")
 
@@ -366,41 +417,29 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
 
 
     private fun topExpense() {
-        if (clothes >= food && clothes >= gift && clothes >= toysAndGames
-            && clothes >= transportation && clothes >= other) {
-            binding.tvTopExpense.text = "Clothes"
-            val dec = DecimalFormat("#,###.00")
-            val amount = dec.format(clothes)
-            binding.tvExpenseTotal.text = "₱$amount"
-        } else if (food >= clothes && food >= gift && food >= toysAndGames &&
-            food >= transportation && food >= other) {
-            binding.tvTopExpense.text = "Food"
-            val dec = DecimalFormat("#,###.00")
-            val amount = dec.format(food)
-            binding.tvExpenseTotal.text = "₱$amount"
-        } else if (gift >= clothes && gift >= food && gift >= toysAndGames &&
-            gift >= transportation && gift >= other) {
-            binding.tvTopExpense.text = "Gift"
-            val dec = DecimalFormat("#,###.00")
-            val amount = dec.format(gift)
-            binding.tvTopExpense.text = "₱$amount"
-        } else if (toysAndGames >= clothes && toysAndGames >= gift && toysAndGames >= food &&
-            toysAndGames >= transportation && toysAndGames >= other) {
-            binding.tvTopExpense.text = "Toys & Games"
-            val dec = DecimalFormat("#,###.00")
-            val amount = dec.format(toysAndGames)
-            binding.tvExpenseTotal.text = "₱$amount"
-        } else if (transportation >= clothes && transportation >= gift && transportation >= toysAndGames
-            && transportation >= food && transportation >= other) {
-            binding.tvTopExpense.text = "Transportation"
-            val dec = DecimalFormat("#,###.00")
-            val amount = dec.format(transportation)
-            binding.tvExpenseTotal.text = "₱$amount"
-        } else {
-            binding.tvTopExpense.text = "Other"
-            val dec = DecimalFormat("#,###.00")
-            val amount = dec.format(other)
-            binding.tvExpenseTotal.text = "₱$amount"
+        val highest =
+            maxOf(
+                clothes, food, gift, toysAndGames, transportation, entertainment, personalCare,
+                decorations, rent, partyFavors, miscellaneous, other
+            )
+
+        val dec = DecimalFormat("#,###.00")
+        val amount = dec.format(highest)
+        binding.tvExpenseTotal.text = "₱$amount"
+
+        when (highest) {
+            clothes -> binding.tvTopExpense.text = "Clothes"
+            food -> binding.tvTopExpense.text = "Food"
+            gift -> binding.tvTopExpense.text = "Food"
+            toysAndGames -> binding.tvTopExpense.text = "Toys & Games"
+            transportation -> binding.tvTopExpense.text = "Transportation"
+            entertainment -> binding.tvTopExpense.text = "Entertainment"
+            personalCare -> binding.tvTopExpense.text = "Personal Care"
+            decorations -> binding.tvTopExpense.text = "Decorations"
+            rent -> binding.tvTopExpense.text = "Rent"
+            partyFavors -> binding.tvTopExpense.text = "Party Favors"
+            miscellaneous -> binding.tvTopExpense.text = "Miscellaneous"
+            other -> binding.tvTopExpense.text = "Other"
         }
     }
 
@@ -508,14 +547,32 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         if (foodPercentage > 0.00f)
             entries.add(PieEntry(foodPercentage, "Food"))
 
-        if (toysAndGamesPercentage > 0.00f)
-            entries.add(PieEntry(toysAndGamesPercentage, "Gift"))
+        if (giftPercentage > 0.00f)
+            entries.add(PieEntry(giftPercentage, "Gift"))
 
-        if (transportationPercentage > 0.00f)
-            entries.add(PieEntry(transportationPercentage, "Toys & Games"))
+        if (toysAndGamesPercentage > 0.00f)
+            entries.add(PieEntry(toysAndGamesPercentage, "Toys & Games"))
 
         if (transportationPercentage > 0.00f)
             entries.add(PieEntry(transportationPercentage, "Transportation"))
+
+        if (entertainmentPercentage > 0.00f)
+            entries.add(PieEntry(entertainmentPercentage, "Entertainment"))
+
+        if (personalCarePercentage > 0.00f)
+            entries.add(PieEntry(personalCarePercentage, "Personal Care"))
+
+        if (decorationsPercentage > 0.00f)
+            entries.add(PieEntry(decorationsPercentage, "Decoration"))
+
+        if (rentPercentage > 0.00f)
+            entries.add(PieEntry(rentPercentage, "Rent"))
+
+        if (partyFavorsPercentage > 0.00f)
+            entries.add(PieEntry(partyFavorsPercentage, "Party Favors"))
+
+        if (miscellaneousPercentage > 0.00f)
+            entries.add(PieEntry(miscellaneousPercentage, "Miscellaneous"))
 
         if (otherPercentage > 0.00f)
             entries.add(PieEntry(otherPercentage, "Other"))

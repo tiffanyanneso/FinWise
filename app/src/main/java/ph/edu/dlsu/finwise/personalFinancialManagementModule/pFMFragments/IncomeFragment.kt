@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.MPPointF
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -52,7 +53,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     var other = 0.00f
     private var selectedDatesSort = "weekly"
     private var user = "child"
-    private var childID = "child"
+    private lateinit var childID: String
     lateinit var topIncomeCategory: String
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
@@ -95,7 +96,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         }
 
         if (date != null) {
-            Toast.makeText(context, ""+date, Toast.LENGTH_SHORT).show()
             selectedDatesSort = date
             transactionsArrayList.clear()
         }
@@ -214,7 +214,9 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
             val goToTransactionHistory = Intent(context, TransactionHistoryActivity::class.java)
             val bundle = Bundle()
             bundle.putString("user", user)
-            bundle.putString("checkedBoxes", "expense")
+            if (user == "parent")
+                bundle.putString("childID", childID)
+            bundle.putString("isExpense", "yes")
             goToTransactionHistory.putExtras(bundle)
             startActivity(goToTransactionHistory)
         }
