@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.auth.FirebaseAuth
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
@@ -18,7 +19,8 @@ class TrendDetailsActivity : AppCompatActivity() {
     private var setBundle = Bundle()
     private var selectedDateRange = "week"
     private var user = "child"
-    private var childID = "child"
+    private lateinit var childID: String
+
 
     private val tabIcons1 = intArrayOf(
         R.drawable.baseline_wallet_24,
@@ -39,6 +41,7 @@ class TrendDetailsActivity : AppCompatActivity() {
         selectedDateRange = getBundle?.getString("date").toString()
         user = getBundle?.getString("user").toString()
         childID = getBundle?.getString("childID").toString()
+
         setBundle.putString("date", selectedDateRange)
         setBundle.putString("user", user)
         setBundle.putString("childID", childID)
@@ -56,7 +59,6 @@ class TrendDetailsActivity : AppCompatActivity() {
          incomeFragment.arguments = setBundle
          expenseFragment.arguments = setBundle
          adapter.addFragment(incomeFragment, "Income")
-         //TODO: Update expense + ui
          adapter.addFragment(expenseFragment, "Expense")
          binding.viewPager.adapter = adapter
          binding.tabs.setupWithViewPager(binding.viewPager)

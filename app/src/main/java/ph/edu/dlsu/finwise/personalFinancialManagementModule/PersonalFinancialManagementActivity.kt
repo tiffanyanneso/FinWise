@@ -245,8 +245,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         setupTabIcons1()
     }*/
 
-
-
     private fun loadBalance() {
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
         firestore.collection("ChildWallet").whereEqualTo("childID", childID)

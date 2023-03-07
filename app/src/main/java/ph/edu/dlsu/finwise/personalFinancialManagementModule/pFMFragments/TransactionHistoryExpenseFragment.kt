@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -33,6 +34,8 @@ class TransactionHistoryExpenseFragment : Fragment() {
     private var endDate: String? = null
     private val expenseIDArrayList = ArrayList<String>()
     private var transactionFilterArrayList = ArrayList<TransactionFilter>()
+    private var childID  = FirebaseAuth.getInstance().currentUser!!.uid
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +52,7 @@ class TransactionHistoryExpenseFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getExpenseTransactions() {
-        val childID  = FirebaseAuth.getInstance().currentUser!!.uid
+        getChildID()
         firestore.collection("Transactions").whereEqualTo("createdBy", childID)
             .get().addOnSuccessListener { documents ->
             for (transactionSnapshot in documents) {
@@ -75,6 +78,11 @@ class TransactionHistoryExpenseFragment : Fragment() {
 
             loadRecyclerView(expenseIDArrayList)
         }
+    }
+
+    private fun getChildID() {
+        childID = arguments?.getString("childID").toString()
+        Toast.makeText(context, "xs "+ childID, Toast.LENGTH_SHORT).show()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

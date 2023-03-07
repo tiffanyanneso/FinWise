@@ -90,6 +90,11 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         val args = arguments
         val date = args?.getString("date")
         val currUser = args?.getString("user")
+        val child = args?.getString("childID")
+
+        if (child != null) {
+            childID = child
+        }
 
         if (currUser != null) {
             user = currUser
@@ -107,9 +112,10 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
             val goToDetails = Intent(context, TrendDetailsActivity::class.java)
             bundle.putString("date", selectedDatesSort)
             bundle.putString("user", user)
-            val childID  = FirebaseAuth.getInstance().currentUser!!.uid
-            bundle.putString("childID", childID)
+            if (user == "child")
+                childID  = FirebaseAuth.getInstance().currentUser!!.uid
 
+            bundle.putString("childID", childID)
             goToDetails.putExtras(bundle)
             startActivity(goToDetails)
         }

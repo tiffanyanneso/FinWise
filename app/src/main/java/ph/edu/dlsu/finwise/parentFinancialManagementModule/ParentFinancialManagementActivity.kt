@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -34,9 +35,11 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
     private var bundle = Bundle()
     private lateinit var context: Context
-    var balance = 0.00f
-    var income = 0.00f
-    var expense = 0.00f
+    private var balance = 0.00f
+    private var income = 0.00f
+    private var expense = 0.00f
+    private lateinit var childID: String
+
     private val tabIcons2 = intArrayOf(
         R.drawable.baseline_account_balance_24,
         R.drawable.baseline_wallet_24
@@ -50,12 +53,26 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         context = this
         //Initializes the navbar
         NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
-        setUpChartTabs()
         loadBalance()
-        loadFinancialHealth()
-        goToParentTransactions()
-        initializeDateButtons()
     }
+
+    private fun initializeFragments() {
+        setUpChartTabs()
+        goToSendMoney()
+        loadFinancialHealth()
+        initializeDateButtons()
+        goToParentTransactions()
+    }
+    private fun goToParentTransactions() {
+        binding.btnViewTransactions.setOnClickListener {
+            val goToTransactions = Intent(applicationContext, TransactionHistoryActivity::class.java)
+            bundle.putString("user", "parent")
+            bundle.putString("childID", childID)
+            goToTransactions.putExtras(bundle)
+            startActivity(goToTransactions)
+        }
+    }
+
 
     private fun initializeDateButtons() {
         initializeWeeklyButton()
@@ -67,7 +84,6 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
         val yearlyButton = binding.btnQuarterly
-        //TODO: check if weekly button is still clicked, else remove color
         monthlyButton.setOnClickListener {
             weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
@@ -82,7 +98,6 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
         val quarterlyButton = binding.btnQuarterly
-        //TODO: check if weekly button is still clicked, else remove color
         quarterlyButton.setOnClickListener {
             weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
@@ -97,7 +112,6 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
         val yearlyButton = binding.btnQuarterly
-        //TODO: check if weekly button is still clicked, else remove color
         weeklyButton.setOnClickListener {
             weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
@@ -114,6 +128,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         val balanceFragment = BalanceFragment()
         val savingsFragment = SavingsFragment()
         bundle.putString("user", "parent")
+        bundle.putString("childID", childID)
         balanceFragment.arguments = bundle
         savingsFragment.arguments = bundle
         adapter.addFragment(balanceFragment, "Balance")
@@ -200,40 +215,32 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
 
 
     private fun loadBalance() {
-        /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        /*firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2")
+        val parentID = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("ChildUser").whereEqualTo("parentID", parentID)
+            .get().addOnSuccessListener { document ->
+                childID = document.documents[0].id
+                loadBalanceView()
+                initializeFragments()
+            }
+    }
+
+    private fun loadBalanceView() {
+        firestore.collection("ChildWallet").whereEqualTo("childID", childID)
             .get().addOnSuccessListener { document ->
                 val childWallet = document.documents[0].toObject<ChildWallet>()
                 val dec = DecimalFormat("#,###.00")
                 balance = childWallet?.currentBalance!!
                 val amount = dec.format(balance)
-                binding.tvBalance.text = "₱$amount"
-                initializeButtons()
-            }*/
-        val dec = DecimalFormat("#,###.00")
-        //TODO: change to real wallet?
-        balance = 150.00f
-        val amount = dec.format(balance)
-        binding.tvCurrentBalanceOfChild.text = "₱$amount"
-        goToSendMoney()
+                binding.tvCurrentBalanceOfChild.text = "₱$amount"
+            }
     }
 
-
-
-    private fun goToParentTransactions() {
-        binding.btnViewTransactions.setOnClickListener {
-            val goToTransactions = Intent(applicationContext, TransactionHistoryActivity::class.java)
-            bundle.putString("user", "parent")
-            goToTransactions.putExtras(bundle)
-            startActivity(goToTransactions)
-        }
-    }
 
     private fun goToSendMoney() {
         binding.btnSendMoney.setOnClickListener {
             val goToSendMoney = Intent(applicationContext, ParentSendMoneyActivity::class.java)
-            Toast.makeText(this, "balance"+balance, Toast.LENGTH_SHORT).show()
-            bundle.putFloat("balance", balance)
+            /*Toast.makeText(this, "balance"+balance, Toast.LENGTH_SHORT).show()
+            bundle.putFloat("balance", balance)*/
             goToSendMoney.putExtras(bundle)
             startActivity(goToSendMoney)
         }
