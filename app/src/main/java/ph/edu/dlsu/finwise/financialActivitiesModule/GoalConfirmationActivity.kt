@@ -249,7 +249,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(900, 1000)
+        dialog.window!!.setLayout(1000, 2000)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()

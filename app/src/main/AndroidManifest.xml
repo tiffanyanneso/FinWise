@@ -26,6 +26,9 @@
         <activity
             android:name=".parentFinancialManagementModule.EarningSellingPFMActivity"
             android:exported="false" />
+            <activity
+                android:name=".GoalSettingPerformanceActivity"
+                android:exported="false" />
         <activity
             android:name=".parentFinancialManagementModule.EarningMenuActivityPFM"
             android:exported="false" />
