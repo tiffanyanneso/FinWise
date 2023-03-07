@@ -12,8 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
-
-
+        <activity
+            android:name=".SavingNearingCompletionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SavingNearingDeadlineActivity"
+            android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.UpdateGoalActivity"
             android:exported="false" />
@@ -26,9 +30,9 @@
         <activity
             android:name=".parentFinancialManagementModule.EarningSellingPFMActivity"
             android:exported="false" />
-            <activity
-                android:name=".GoalSettingPerformanceActivity"
-                android:exported="false" />
+        <activity
+            android:name=".GoalSettingPerformanceActivity"
+            android:exported="false" />
         <activity
             android:name=".parentFinancialManagementModule.EarningMenuActivityPFM"
             android:exported="false" />
@@ -50,7 +54,6 @@
         <activity
             android:name=".personalFinancialManagementModule.GoalSavingDetailsActivity"
             android:exported="false" />
-
         <activity
             android:name=".financialActivitiesModule.RecordEarningSaleConfirmationActivity"
             android:exported="false" />
@@ -178,16 +181,16 @@
             android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.ParentLandingPageActivity"
-            android:exported="false" >
+            android:exported="false">
 
-<!--        <intent-filter>
+            <!--
+<intent-filter>
     <action android:name="android.intent.action.MAIN" />
 
     <category android:name="android.intent.category.LAUNCHER" />
-</intent-filter>-->
+</intent-filter>
+            -->
         </activity>
-
-
         <activity
             android:name=".parentFinancialActivitiesModule.ParentSettingAGoalActivity"
             android:exported="false" />
@@ -300,14 +303,19 @@
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
             android:exported="true">
-            <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
-  <!--      <activity
+        <!--
+      <activity
             android:name=".personalFinancialManagementModule.TransactionSortActivity"
-            android:exported="false" />-->
+            android:exported="false" />
+        -->
         <activity
             android:name=".financialActivitiesModule.ChildEditGoal"
             android:exported="false" />
@@ -320,10 +328,13 @@
         <activity
             android:name=".parentFinancialManagementModule.ParentFinancialManagementActivity"
             android:exported="false">
-           <!-- <intent-filter>
+
+            <!--
+<intent-filter>
     <action android:name="android.intent.action.MAIN" />
     <category android:name="android.intent.category.LAUNCHER" />
-</intent-filter>-->
+</intent-filter>
+            -->
 
         </activity>
         <activity
@@ -350,8 +361,9 @@
         <activity
             android:name=".loginRegisterModule.LoginActivity"
             android:exported="true">
-               <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -361,7 +373,8 @@
 
             <!-- <meta-data -->
             <!-- android:name="android.app.lib_name" -->
-            <!-- android:value="" />
+            <!--
+            android:value="" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
