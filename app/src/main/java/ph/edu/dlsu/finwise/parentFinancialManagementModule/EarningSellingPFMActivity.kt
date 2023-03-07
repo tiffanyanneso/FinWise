@@ -1,21 +1,22 @@
-package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
+package ph.edu.dlsu.finwise.parentFinancialManagementModule
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.NavbarParent
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.financialActivitiesModule.RecordEarningSaleActivity
 import ph.edu.dlsu.finwise.adapter.EarningSalesAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityEarningSellingBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.RecordEarningSaleActivity
 import ph.edu.dlsu.finwise.model.SellingItems
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.RecordEarningSaleActivityPFM
 
-class EarningSellingActivity : AppCompatActivity() {
+class EarningSellingPFMActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityEarningSellingBinding
 
     private lateinit var childID:String
@@ -31,35 +32,28 @@ class EarningSellingActivity : AppCompatActivity() {
         binding = ActivityEarningSellingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-//        // Hides actionbar,
-//        // and initializes the navbar
+        // Hides actionbar,
+        // and initializes the navbar
 //        supportActionBar?.hide()
 //        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         var bundle = intent.extras!!
-        childID = bundle.getString("childID").toString()
-        savingActivityID = bundle.getString("savingActivityID").toString()
+        var childID = bundle.getString("childID").toString()
 
         getSales()
 
         binding.btnNewSale.setOnClickListener {
-            var newSale = Intent(this, RecordEarningSaleActivity::class.java)
+            var newSale = Intent(this, RecordEarningSaleActivityPFM::class.java)
             var sendBundle = Bundle()
             sendBundle.putString("childID", childID)
-            sendBundle.putString("savingActivityID", savingActivityID)
             newSale.putExtras(sendBundle)
             startActivity(newSale)
         }
-
-        // Initializes the navbar
-        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
-        loadBackButton()
     }
 
     private fun getSales() {
         salesArrayList.clear()
-        firestore.collection("SellingItems").whereEqualTo("savingActivityID", savingActivityID).whereEqualTo("source", "Financial Activity").get().addOnSuccessListener { results ->
+        firestore.collection("SellingItems").whereEqualTo("source", "PFM").get().addOnSuccessListener { results ->
             for (sale in results)
                 salesArrayList.add(sale.toObject<SellingItems>())
 
@@ -67,13 +61,6 @@ class EarningSellingActivity : AppCompatActivity() {
             binding.rvViewTransactions.adapter = salesAdapter
             binding.rvViewTransactions.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
             salesAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun loadBackButton() {
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
-        binding.topAppBar.setNavigationOnClickListener {
-            onBackPressed()
         }
     }
 }

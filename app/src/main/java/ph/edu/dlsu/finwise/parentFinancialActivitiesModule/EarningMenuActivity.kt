@@ -27,9 +27,7 @@ class EarningMenuActivity : AppCompatActivity() {
 
         var sendBundle = Bundle()
         sendBundle.putString("childID", childID)
-
-        if (bundle.containsKey("savingActivityID"))
-            sendBundle.putString("savingActivityID", savingActivityID)
+        sendBundle.putString("savingActivityID", savingActivityID)
         binding.btnHomeRewards.setOnClickListener {
             var goToHomeRewardsActivity = Intent(this, EarningActivity::class.java)
             goToHomeRewardsActivity.putExtras(sendBundle)

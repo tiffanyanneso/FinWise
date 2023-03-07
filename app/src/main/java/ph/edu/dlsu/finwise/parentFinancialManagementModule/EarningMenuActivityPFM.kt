@@ -29,7 +29,7 @@ class EarningMenuActivityPFM : AppCompatActivity() {
         }
 
         binding.btnSelling.setOnClickListener {
-            var goToSellingActivity = Intent(this, EarningSellingActivityPFM::class.java)
+            var goToSellingActivity = Intent(this, EarningSellingPFMActivity::class.java)
             goToSellingActivity.putExtras(sendBundle)
             startActivity(goToSellingActivity)
         }
