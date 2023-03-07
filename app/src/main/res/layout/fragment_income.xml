@@ -94,7 +94,7 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:layout_marginTop="5dp"
-                            android:text="Loading data 🔃 \n Thank you for your patience ☺"
+                            android:text="Loading your data 🔃 \n Thank you for your patience ☺"
                             android:textColor="@color/white"/>
 
                         <TextView

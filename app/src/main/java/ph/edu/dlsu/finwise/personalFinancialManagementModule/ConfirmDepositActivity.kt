@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -43,6 +45,13 @@ class ConfirmDepositActivity : AppCompatActivity() {
         setText()
         confirm()
         cancel()
+        loadBackButton()
+    }
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun cancel() {
@@ -90,6 +99,7 @@ class ConfirmDepositActivity : AppCompatActivity() {
 
     private fun confirm() {
         binding.btnConfirm.setOnClickListener {
+            val childID  = FirebaseAuth.getInstance().currentUser!!.uid
 
             val goalName = "Deposit to '$goal'"
             val transaction = hashMapOf(
@@ -98,8 +108,8 @@ class ConfirmDepositActivity : AppCompatActivity() {
                 "transactionType" to "Deposit",
                 "date" to date ,
                 "category" to "Goal",
-                "createdBy" to "",
-                "amount" to amount?.toFloat(),
+                "createdBy" to childID,
+                "amount" to amount,
                 "goal" to goal,
             )
             adjustUserBalance()

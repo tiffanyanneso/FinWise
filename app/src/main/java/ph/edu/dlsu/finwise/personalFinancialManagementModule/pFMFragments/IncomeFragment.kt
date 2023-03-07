@@ -52,6 +52,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     var other = 0.00f
     private var selectedDatesSort = "weekly"
     private var user = "child"
+    private var childID = "child"
     lateinit var topIncomeCategory: String
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
@@ -84,6 +85,10 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         val args = arguments
         val date = args?.getString("date")
         val currUser = args?.getString("user")
+        val id = args?.getString("childID")
+        if (id != null) {
+            childID = id
+        }
 
         if (currUser != null) {
             user = currUser
@@ -100,8 +105,8 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     private fun loadPieChart() {
         //TODO: Update data based on user
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        firestore.collection("Transactions").get()
-            .addOnSuccessListener { transactionsSnapshot ->
+        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
+            .get().addOnSuccessListener { transactionsSnapshot ->
                 for (document in transactionsSnapshot) {
                     val transaction = document.toObject<Transactions>()
                     if (transaction.transactionType == "Income")
@@ -132,7 +137,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
 
     private fun getDatesOfTransactions(): List<Date> {
         //get unique dates in transaction arraylist
-        val dates = java.util.ArrayList<Date>()
+        val dates = ArrayList<Date>()
 
         for (transaction in transactionsArrayList) {
             //if array of dates doesn't contain date of the transaction, add the date to the arraylist

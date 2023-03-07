@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -48,13 +49,9 @@ class TransactionHistoryExpenseFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getExpenseTransactions() {
-//
-//        //TODO:change to get transactions of current user
-//        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-//        firestore.collection("Transactions").whereEqualTo("companyID", currentUser).get()
-//            .addOnSuccessListener { documents ->
-
-        firestore.collection("Transactions").get().addOnSuccessListener { documents ->
+        val childID  = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
+            .get().addOnSuccessListener { documents ->
             for (transactionSnapshot in documents) {
                 //creating the object from list retrieved in db
                 val transactionID = transactionSnapshot.id

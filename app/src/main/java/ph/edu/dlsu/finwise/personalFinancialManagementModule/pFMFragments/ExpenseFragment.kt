@@ -20,6 +20,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.MPPointF
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -57,8 +58,10 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     var total = 0.00f
     private var selectedDatesSort = "weekly"
     private var user = "child"
+    private var childID = "child"
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
+
 
 
     override fun onCreateView(
@@ -93,6 +96,10 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         val date = args?.getString("date")
 
         val currUser = args?.getString("user")
+        val id = args?.getString("childID")
+        if (id != null) {
+            childID = id
+        }
 
         if (currUser != null) {
             user = currUser
@@ -110,8 +117,8 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     private fun loadPieChart() {
         //TODO: Update data based on user
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        firestore.collection("Transactions").get()
-            .addOnSuccessListener { transactionsSnapshot ->
+        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
+            .get().addOnSuccessListener { transactionsSnapshot ->
                 for (document in transactionsSnapshot) {
                     val transaction = document.toObject<Transactions>()
                     if (transaction.transactionType == "Expense" || transaction.transactionType == "Expense (Maya")
