@@ -154,13 +154,6 @@ class ViewGoalActivity : AppCompatActivity() {
                 }
             }
         }
-
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
-        binding.topAppBar.setNavigationOnClickListener {
-            val goToFinancialActivities = Intent(applicationContext, FinancialActivity::class.java)
-
-            this.startActivity(goToFinancialActivities)
-        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -261,6 +254,7 @@ class ViewGoalActivity : AppCompatActivity() {
     }
     private fun loadButtons(){
         setNavigationBar()
+        loadBackButton()
     }
 
     private fun setNavigationBar() {
@@ -271,10 +265,17 @@ class ViewGoalActivity : AppCompatActivity() {
             bottomNavigationViewChild.visibility = View.VISIBLE
             bottomNavigationViewParent.visibility = View.GONE
             Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
-        } else if (user != "child") {
+        } else {
             bottomNavigationViewChild.visibility = View.GONE
             bottomNavigationViewParent.visibility = View.VISIBLE
             NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+        }
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
         }
     }
 

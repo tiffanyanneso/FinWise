@@ -5,8 +5,12 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityRecordEarningSaleBinding
 import java.text.SimpleDateFormat
@@ -15,10 +19,14 @@ class RecordEarningSaleActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityRecordEarningSaleBinding
 
+    private var user = "child"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRecordEarningSaleBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        loadButtons()
 
         var bundle = intent.extras!!
         var childID = bundle.getString("childID").toString()
@@ -57,4 +65,33 @@ class RecordEarningSaleActivity : AppCompatActivity() {
         }
         dialog.show()
     }
+
+    private fun loadButtons() {
+        setNavigationBar()
+        loadBackButton()
+    }
+
+    private fun setNavigationBar() {
+        val bottomNavigationViewChild = binding.bottomNav
+        val bottomNavigationViewParent = binding.bottomNavParent
+
+        if (user == "child") {
+            bottomNavigationViewChild.visibility = View.VISIBLE
+            bottomNavigationViewParent.visibility = View.GONE
+            Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+        }
+        else {
+            bottomNavigationViewChild.visibility = View.GONE
+            bottomNavigationViewParent.visibility = View.VISIBLE
+            NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+        }
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+    }
+
 }
