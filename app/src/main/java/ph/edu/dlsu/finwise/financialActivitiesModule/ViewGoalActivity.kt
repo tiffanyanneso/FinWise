@@ -16,6 +16,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
@@ -39,6 +40,8 @@ class ViewGoalActivity : AppCompatActivity() {
     private lateinit var financialGoalID:String
     private lateinit var source:String
     private lateinit var childID:String
+
+    private var user = "child"
 
     //the money the child currently has, this value is affected by spending (expense) transactions
     private var currentBalance = 0.00F
@@ -64,16 +67,12 @@ class ViewGoalActivity : AppCompatActivity() {
         binding = ActivityViewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Hides actionbar,
-        // and initializes the navbar
-        supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
-
         var bundle: Bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         childID = bundle.getString("childID").toString()
         checkUser()
         setFinancialActivityID()
+        loadButtons()
 
         var sendBundle = Bundle()
         sendBundle.putString("financialGoalID", financialGoalID)
@@ -260,7 +259,24 @@ class ViewGoalActivity : AppCompatActivity() {
             }
         }
     }
+    private fun loadButtons(){
+        setNavigationBar()
+    }
 
+    private fun setNavigationBar() {
+        val bottomNavigationViewChild = binding.bottomNav
+        val bottomNavigationViewParent = binding.bottomNavParent
+
+        if (user == "child") {
+            bottomNavigationViewChild.visibility = View.VISIBLE
+            bottomNavigationViewParent.visibility = View.GONE
+            Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+        } else if (user != "child") {
+            bottomNavigationViewChild.visibility = View.GONE
+            bottomNavigationViewParent.visibility = View.VISIBLE
+            NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+        }
+    }
 
     private fun checkUser() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid

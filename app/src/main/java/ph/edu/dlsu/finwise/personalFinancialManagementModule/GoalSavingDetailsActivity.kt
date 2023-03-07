@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -19,6 +20,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalSavingDetailsBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
@@ -524,8 +526,23 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
 
     private fun loadButtons() {
 
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
         loadBackButton()
+        setNavigationBar()
+    }
+
+    private fun setNavigationBar() {
+        val bottomNavigationViewChild = binding.bottomNav
+        val bottomNavigationViewParent = binding.bottomNavParent
+
+        if (user == "child") {
+            bottomNavigationViewChild.visibility = View.VISIBLE
+            bottomNavigationViewParent.visibility = View.GONE
+            Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+        } else {
+            bottomNavigationViewChild.visibility = View.GONE
+            bottomNavigationViewParent.visibility = View.VISIBLE
+            NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
+        }
     }
 
 

@@ -55,7 +55,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             />
 
-        <!--Bottom navigation bar-->
+
+
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav_parent"
             android:layout_width="match_parent"
@@ -68,5 +70,7 @@
             app:labelVisibilityMode="labeled"
             app:itemIconSize="36dp"
             app:itemIconTint="@drawable/selector"/>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.drawerlayout.widget.DrawerLayout>

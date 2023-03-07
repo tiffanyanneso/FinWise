@@ -14,6 +14,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityCompletedEarningBinding
 import ph.edu.dlsu.finwise.databinding.ActivityEarningSendMoneyBinding
@@ -50,7 +51,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
        loadBackButton()
 
         // Initializes the navbar
-        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
 
         firestore.collection("EarningActivities").document(earningActivityID).get().addOnSuccessListener {
             var earning = it.toObject<EarningActivityModel>()

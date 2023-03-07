@@ -28,6 +28,8 @@ class EarningActivity : AppCompatActivity() {
 
     private lateinit var childID:String
 
+    private var user = "child"
+
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private val tabIcons = intArrayOf(
@@ -48,10 +50,8 @@ class EarningActivity : AppCompatActivity() {
 
         checkUser()
         initializeFragments()
-        loadBackButton()
+        loadButtons()
 
-        // Initializes the navbar
-        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
 
         binding.btnAddEarningActivity.setOnClickListener {
             var newEarning = Intent(this, NewEarningActivity::class.java)
@@ -63,6 +63,25 @@ class EarningActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadButtons(){
+        setNavigationBar()
+        loadBackButton()
+    }
+
+    private fun setNavigationBar() {
+        val bottomNavigationViewChild = binding.bottomNav
+        val bottomNavigationViewParent = binding.bottomNavParent
+
+        if (user == "child") {
+            bottomNavigationViewChild.visibility = View.VISIBLE
+            bottomNavigationViewParent.visibility = View.GONE
+            Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+        } else {
+            bottomNavigationViewChild.visibility = View.GONE
+            bottomNavigationViewParent.visibility = View.VISIBLE
+            NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+        }
+    }
     private fun initializeFragments() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
 

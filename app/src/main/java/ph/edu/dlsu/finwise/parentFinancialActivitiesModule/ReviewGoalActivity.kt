@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityReviewGoalBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartGoalCriteriaParentBinding
@@ -37,6 +38,7 @@ class ReviewGoalActivity : AppCompatActivity() {
         childID = bundle.getString("childID").toString()
 
         getGoalDetails()
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
 
         // for the dropdown
         val items = resources.getStringArray(R.array.goal_status_list)

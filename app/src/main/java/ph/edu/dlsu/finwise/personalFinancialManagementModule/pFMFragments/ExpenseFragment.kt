@@ -138,7 +138,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
 
         binding.tvSummary.text = "You've spent ₱$totalText for this $dateRange! 💸"
         binding.tvTips.text = "Consider reviewing your Top Expenses below or your previous transactions and see which you could lessen"
-        /*if (user == "child" && total < 500) {
+        if (user == "child" && total < 500) {
             binding.tvSummary.text = "You've spent ₱$totalText for this $dateRange!"
             binding.tvTips.text = "Consider reviewing your Top Expenses below or your previous transactions and see which you could lessen"
         } else if (user == "child" && total > 500) {
@@ -150,7 +150,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         } else if (user == "parent" && total < 500) {
             binding.tvSummary.text = "You've child earned ₱$totalText for this $dateRange"
             binding.tvTips.text = "Consider reviewing your child's previous transactions and see which they could lessen"
-        }*/
+        }
 
 
     }

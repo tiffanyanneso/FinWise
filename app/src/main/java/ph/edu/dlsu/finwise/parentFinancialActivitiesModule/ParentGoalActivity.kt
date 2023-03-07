@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentGoalBinding
@@ -53,12 +55,12 @@ class ParentGoalActivity : AppCompatActivity() {
         setContentView(binding.root)
         context = this
 
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+
         var bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
         checkAge()
 
-        // Initializes the navbar
-        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
 
 
         var sendBundle = Bundle()
