@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.paymaya.sdk.android.common.LogLevel
 import com.paymaya.sdk.android.common.PayMayaEnvironment
@@ -22,22 +25,25 @@ import org.json.JSONObject
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentMayaConfirmPaymentBinding
+import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import kotlin.math.abs
 
 class ParentMayaConfirmPayment : AppCompatActivity() {
     private lateinit var binding: ActivityParentMayaConfirmPaymentBinding
     private lateinit var context: Context
     private var firestore = Firebase.firestore
     var bundle: Bundle? = null
+    val parentID = FirebaseAuth.getInstance().currentUser!!.uid
     lateinit var name : String
     lateinit var phone : String
     lateinit var amount : String
     var note = "None"
-    var balance = 0.00f
     lateinit var date : String
+    lateinit var childID : String
 
     // For Pay With PayMaya API: This is instantiating the Pay With PayMaya API.
     private val payWithPayMayaClient = PayWithPayMaya.newBuilder()
@@ -133,8 +139,6 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
     }
 
     private fun addPayMayaTransaction() {
-        val parentID = "fQ0iFXzaAVPqoNv4amcNK8qM5Vz1"
-
         val transaction = hashMapOf(
             //TODO: add childID, createdBy
             "childName" to name,
@@ -146,13 +150,28 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
             "phoneNumber" to phone,
             "note" to note
         )
-
+        adjustUserBalance()
         //TODO: fix transaction
         firestore.collection("Transactions").add(transaction).addOnSuccessListener {
+
             goToPFM()
         }
 
     }
+
+    private fun adjustUserBalance() {
+        //TODO: Change user based on who is logged in
+        /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
+        firestore.collection("ChildWallet").whereEqualTo("childID", childID)
+            .get().addOnSuccessListener { document ->
+                val id = document.documents[0].id
+                var adjustedBalance = amount.toDouble()
+
+                firestore.collection("ChildWallet").document(id)
+                    .update("currentBalance", FieldValue.increment(adjustedBalance))
+            }
+    }
+
 
     private fun goToPFM() {
         val goToSuccessPayment = Intent(applicationContext, ParentFinancialManagementActivity::class.java)
@@ -175,9 +194,20 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
         val dateText = formatter.format(dateSerializable).toString()
         binding.tvDate.text = dateText
 
-        binding.tvWalletBalance.text = "₱ " +
-                DecimalFormat("#,##0.00")
-                    .format(balance - amount.toFloat())
+        getBalanceChild()
+
+
+    }
+
+    private fun getBalanceChild() {
+        firestore.collection("ChildWallet").whereEqualTo("childID", childID)
+            .get().addOnSuccessListener { document ->
+                val childWallet = document.documents[0].toObject<ChildWallet>()
+                val balance = childWallet?.currentBalance!!
+                binding.tvWalletBalance.text = "₱ " +
+                        DecimalFormat("#,##0.00")
+                            .format(balance + amount.toFloat())
+            }
 
     }
 
@@ -191,11 +221,10 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
         name = bundle!!.getString("name").toString()
         phone = bundle!!.getString("merchant").toString()
         amount = bundle!!.getFloat("amount").toString()
-        balance = bundle!!.getFloat("balance")
+        /*balance = bundle!!.getFloat("balance")*/
         phone = bundle!!.getString("phone").toString()
+        childID = bundle!!.getString("childID").toString()
         date = bundle!!.getSerializable("date").toString()
-
-
     }
 
 }

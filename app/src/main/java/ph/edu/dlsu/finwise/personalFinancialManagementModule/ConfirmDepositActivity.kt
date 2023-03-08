@@ -30,6 +30,8 @@ class ConfirmDepositActivity : AppCompatActivity() {
     var balance = 0.00f
     var goal : String? =null
     var date : Date? =null
+    private var childID  = FirebaseAuth.getInstance().currentUser!!.uid
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,7 +131,7 @@ class ConfirmDepositActivity : AppCompatActivity() {
     private fun adjustUserBalance() {
         //TODO: Change user based on who is logged in
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2")
+        firestore.collection("ChildWallet").whereEqualTo("childID", childID)
             .get().addOnSuccessListener { documents ->
                 lateinit var id: String
                 for (document in documents) {

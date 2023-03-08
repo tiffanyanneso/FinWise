@@ -28,6 +28,8 @@ class ConfirmTransactionActivity : AppCompatActivity() {
     var amount = 0.00f
     lateinit var category : String
     lateinit var date : String
+    val childID  = FirebaseAuth.getInstance().currentUser!!.uid
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,7 +107,6 @@ class ConfirmTransactionActivity : AppCompatActivity() {
 
     private fun confirm() {
         binding.btnConfirm.setOnClickListener {
-            val childID  = FirebaseAuth.getInstance().currentUser!!.uid
             //TODO: add the createdBy
             val transaction = hashMapOf(
                 //TODO: add childID, createdBy
@@ -132,7 +133,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
     private fun adjustUserBalance() {
         //TODO: Change user based on who is logged in
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2")
+        firestore.collection("ChildWallet").whereEqualTo("childID", childID)
             .get().addOnSuccessListener { document ->
                val id = document.documents[0].id
                 var adjustedBalance = amount.toDouble()

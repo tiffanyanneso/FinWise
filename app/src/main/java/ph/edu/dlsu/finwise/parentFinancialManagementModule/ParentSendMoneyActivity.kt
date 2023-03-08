@@ -26,7 +26,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     private var firestore = Firebase.firestore
     private var bundle = Bundle()
     private lateinit var name: String
-    private lateinit var childrenID: String
+    private lateinit var childID: String
     private lateinit var amount: String
     private lateinit var note: String
     private lateinit var phone: String
@@ -77,6 +77,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         bundle.putFloat("amount", amount.toFloat())
         bundle.putString("phone", phone)
         bundle.putString("note", note)
+        bundle.putString("childID", childID)
         //bundle.putFloat("balance", balance)
 //        bundle.putString("goal", goal)
         bundle.putSerializable("date", date)
@@ -143,8 +144,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
 
     private fun getChildID() {
         val index = childrenArray.indexOf(name)
-        childrenID = childrenIDArray[index]
-        Toast.makeText(this, ""+childrenID, Toast.LENGTH_SHORT).show()
+        childID = childrenIDArray[index]
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -53,7 +54,7 @@ class ViewFriendsActivity : AppCompatActivity() {
     }
 
     private fun getFriends() {
-        var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
+        val currentUser  = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("Friends").whereEqualTo("senderID", currentUser).whereEqualTo("status", "Accepted").get().addOnSuccessListener { results ->
             for (friend in results) {
                 var request = friend.toObject<Friends>()

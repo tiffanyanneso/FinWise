@@ -8,6 +8,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -64,8 +65,10 @@ class AddFriendsActivity : AppCompatActivity() {
     }
 
     private fun sendFriendRequest(receiverUserID:String) {
-        var friendRequest = hashMapOf(
-            "senderID" to "eWZNOIb9qEf8kVNdvdRzKt4AYrA2",
+        val childID  = FirebaseAuth.getInstance().currentUser!!.uid
+
+        val friendRequest = hashMapOf(
+            "senderID" to childID,
             "receiverID" to receiverUserID,
             "status" to "Pending"
         )
