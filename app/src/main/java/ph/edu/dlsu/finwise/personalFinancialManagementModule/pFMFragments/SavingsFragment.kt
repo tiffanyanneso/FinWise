@@ -78,6 +78,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentSavingsChartBinding.bind(view)
+
         getArgumentsFromPFM()
         initializeBalanceLineGraph()
         initializeDetails()

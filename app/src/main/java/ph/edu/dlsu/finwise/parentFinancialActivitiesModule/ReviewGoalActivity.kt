@@ -147,7 +147,7 @@ class ReviewGoalActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 2000)
+        dialog.window!!.setLayout(1000, 1700)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()

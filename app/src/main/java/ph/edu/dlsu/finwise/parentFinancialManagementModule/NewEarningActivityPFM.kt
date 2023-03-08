@@ -39,7 +39,7 @@ class NewEarningActivityPFM : AppCompatActivity() {
         binding = ActivityNewEarningBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var bundle = intent.extras!!
+        val bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
 
         initializeDropDownForChores()

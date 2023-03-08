@@ -4,12 +4,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEarningBinding
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.*
 import ph.edu.dlsu.finwise.parentFinancialManagementModule.earningActivitiesPFMFragments.EarningCompletedPFMFragment
@@ -24,6 +28,7 @@ class EarningActivityPFM : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private lateinit var childID:String
+    private lateinit var user:String
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -38,8 +43,10 @@ class EarningActivityPFM : AppCompatActivity() {
         binding = ActivityEarningBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var bundle = intent.extras!!
+        val bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
+        user = bundle.getString("user").toString()
+        Toast.makeText(this, ""+childID, Toast.LENGTH_SHORT).show()
 
 
         checkUser()
@@ -53,6 +60,7 @@ class EarningActivityPFM : AppCompatActivity() {
             startActivity(newEarning)
         }
     }
+
 
     private fun initializeFragments() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
@@ -106,8 +114,18 @@ class EarningActivityPFM : AppCompatActivity() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
             //current user is a child
-            if (it.exists())
+            val bottomNavigationViewChild = binding.bottomNav
+            val bottomNavigationViewParent = binding.bottomNavParent
+            if (it.exists()) {
                 binding.btnAddEarningActivity.visibility = View.GONE
+                bottomNavigationViewChild.visibility = View.VISIBLE
+                bottomNavigationViewParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+            } else {
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
+            }
         }
     }
 

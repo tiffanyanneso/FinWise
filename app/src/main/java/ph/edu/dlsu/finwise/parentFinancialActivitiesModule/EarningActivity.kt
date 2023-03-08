@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -41,10 +42,10 @@ class EarningActivity : AppCompatActivity() {
         binding = ActivityEarningBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var bundle = intent.extras!!
+        val bundle = intent.extras!!
         savingActivityID = bundle.getString("savingActivityID").toString()
         childID = bundle.getString("childID").toString()
-
+        user = bundle.getString("user").toString()
 
         checkUser()
         initializeFragments()
@@ -64,26 +65,7 @@ class EarningActivity : AppCompatActivity() {
     private fun loadButtons(){
         loadBackButton()
     }
-
-    private fun setNavigationBar() {
-
-        var navUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(navUser).get().addOnSuccessListener {
-
-            val bottomNavigationViewChild = binding.bottomNav
-            val bottomNavigationViewParent = binding.bottomNavParent
-
-            if (it.exists()) {
-                bottomNavigationViewChild.visibility = View.GONE
-                bottomNavigationViewParent.visibility = View.VISIBLE
-                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
-            } else  {
-                bottomNavigationViewChild.visibility = View.VISIBLE
-                bottomNavigationViewParent.visibility = View.GONE
-                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
-            }
-        }
-    }
+    
     private fun initializeFragments() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
 
@@ -132,11 +114,22 @@ class EarningActivity : AppCompatActivity() {
     }
 
     private fun checkUser() {
-        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
             //current user is a child
-            if (it.exists())
+            val bottomNavigationViewChild = binding.bottomNav
+            val bottomNavigationViewParent = binding.bottomNavParent
+            if (it.exists()) {
                 binding.btnAddEarningActivity.visibility = View.GONE
+                bottomNavigationViewChild.visibility = View.VISIBLE
+                bottomNavigationViewParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+            } else {
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
+            }
+
         }
     }
 

@@ -65,6 +65,7 @@ class EarningSalesAdapter : RecyclerView.Adapter<EarningSalesAdapter.EarningSale
         }
 
         override fun onClick(p0: View?) {
+
         }
 
     }

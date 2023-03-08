@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -38,8 +39,9 @@ class IncomeActivity : AppCompatActivity() {
         getDetails()
 
         binding.btnCompleted.setOnClickListener {
-            var completedEarning = Intent(this, CompletedEarningActivity::class.java)
-            var bundle = Bundle()
+            val completedEarning = Intent(this, CompletedEarningActivity::class.java)
+            firestore.collection("EarningActivities").document(earningActivityID).update("dateCompleted", Timestamp.now())
+            val bundle = Bundle()
             bundle.putString("earningActivityID", earningActivityID)
             bundle.putString("savingActivityID", savingActivityID)
             bundle.putString("childID", childID)
@@ -50,7 +52,7 @@ class IncomeActivity : AppCompatActivity() {
 
     private fun getDetails() {
         firestore.collection("EarningActivities").document(earningActivityID).get().addOnSuccessListener {
-            var earning = it.toObject<ph.edu.dlsu.finwise.model.EarningActivityModel>()
+            val earning = it.toObject<ph.edu.dlsu.finwise.model.EarningActivityModel>()
             binding.tvActivity.text = earning?.activityName
             binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.targetDate!!.toDate()).toString()
             binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
