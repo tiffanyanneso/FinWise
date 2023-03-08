@@ -55,13 +55,13 @@
 
                             <ImageView
                                 android:src="@drawable/excellent"
-                                android:id="@+id/iv_score"
+                                android:id="@+id/img_face"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center"/>
 
                             <TextView
-                                android:id="@+id/tv_performance_percentage"
+                                android:id="@+id/tv_overall_rating"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -133,239 +133,224 @@
                             android:layout_weight="1" />
                     </LinearLayout>
             </LinearLayout>
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        android:layout_marginBottom="10dp">
+<!--                <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:orientation="vertical"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:layout_marginBottom="10dp">-->
 
-                        <TextView
-                            android:id="@+id/tv_overall_rating"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="24dp"
-                            android:text="X.X"
-                            android:textStyle="bold"
-                            android:textColor="@color/teal_700"
-                            android:gravity="center"/>
+<!--                        <TextView-->
+<!--                            android:id="@+id/tv_overall_rating"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:textSize="24dp"-->
+<!--                            android:text="X.X"-->
+<!--                            android:textStyle="bold"-->
+<!--                            android:textColor="@color/teal_700"-->
+<!--                            android:gravity="center"/>-->
 
-                        <RatingBar
-                            android:id="@+id/rating_bar_overall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:numStars="5"
-                            android:stepSize="0.5"
-                            android:scaleX="0.5"
-                            android:scaleY="0.5"
-                            android:layout_gravity="center"
-                            android:progressTint="@color/yellow"
-                            android:progressBackgroundTint="@color/light_grey" />
+<!--                        <RatingBar-->
+<!--                            android:id="@+id/rating_bar_overall"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="40dp"-->
+<!--                            android:numStars="5"-->
+<!--                            android:stepSize="0.5"-->
+<!--                            android:scaleX="0.5"-->
+<!--                            android:scaleY="0.5"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:progressTint="@color/yellow"-->
+<!--                            android:progressBackgroundTint="@color/light_grey" />-->
 
-                        <TextView
-                            android:id="@+id/tv_number_ratings"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:text="X Ratings"
-                            android:textColor="@color/black"
-                            android:gravity="center"/>
+<!--                        <TextView-->
+<!--                            android:id="@+id/tv_number_ratings"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:textSize="16sp"-->
+<!--                            android:text="X Ratings"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:gravity="center"/>-->
+<!--                    </LinearLayout>-->
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:text="Overall Goal\nSetting Performance"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"
-                            android:gravity="center"/>
-                    </LinearLayout>
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:layout_weight="1">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
+<!--                    <TextView-->
+<!--                        android:layout_width="220dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="@string/specific"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:gravity="center_vertical" />-->
 
-                    <TextView
-                        android:layout_width="220dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="@string/specific"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical" />
+<!--                    <ProgressBar-->
+<!--                        android:id="@+id/progress_bar_specific"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--                        android:scaleY="4"-->
+<!--                        android:layout_weight="1.25"-->
+<!--                        android:layout_marginRight="10dp"-->
+<!--                        android:max="5"/>-->
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar_specific"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:max="5"/>
+<!--                    <TextView-->
+<!--                        android:id="@+id/rating_specific"-->
+<!--                        android:layout_width="150dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="x/5"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:gravity="center"/>-->
+<!--                </LinearLayout>-->
 
-                    <TextView
-                        android:id="@+id/rating_specific"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="x/5"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
-                </LinearLayout>
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:layout_weight="1">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
+<!--                    <TextView-->
+<!--                        android:layout_width="220dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="@string/measureable"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:gravity="center_vertical" />-->
 
-                    <TextView
-                        android:layout_width="220dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="@string/measureable"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical" />
+<!--                    <ProgressBar-->
+<!--                        android:id="@+id/progress_bar_measurable"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--                        android:scaleY="4"-->
+<!--                        android:layout_weight="1.25"-->
+<!--                        android:layout_marginRight="10dp"-->
+<!--                        android:max="5"/>-->
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar_measurable"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:max="5"/>
+<!--                    <TextView-->
+<!--                        android:id="@+id/rating_measurable"-->
+<!--                        android:layout_width="150dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="x/5"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:gravity="center"/>-->
+<!--                </LinearLayout>-->
 
-                    <TextView
-                        android:id="@+id/rating_measurable"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="x/5"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
-                </LinearLayout>
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:layout_weight="1">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
+<!--                    <TextView-->
+<!--                        android:layout_width="220dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="@string/achievable"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:gravity="center_vertical" />-->
 
-                    <TextView
-                        android:layout_width="220dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="@string/achievable"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical" />
+<!--                    <ProgressBar-->
+<!--                        android:id="@+id/progress_bar_achievable"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--                        android:scaleY="4"-->
+<!--                        android:layout_weight="1.25"-->
+<!--                        android:layout_marginRight="10dp"-->
+<!--                        android:max="5"/>-->
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar_achievable"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:max="5"/>
+<!--                    <TextView-->
+<!--                        android:id="@+id/rating_achievable"-->
+<!--                        android:layout_width="150dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="x/5"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:gravity="center"/>-->
+<!--                </LinearLayout>-->
 
-                    <TextView
-                        android:id="@+id/rating_achievable"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="x/5"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
-                </LinearLayout>
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:layout_weight="1">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
+<!--                    <TextView-->
+<!--                        android:layout_width="220dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="Relevant"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:gravity="center_vertical" />-->
 
-                    <TextView
-                        android:layout_width="220dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Relevant"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical" />
+<!--                    <ProgressBar-->
+<!--                        android:id="@+id/progress_bar_relevant"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--                        android:scaleY="4"-->
+<!--                        android:layout_weight="1.25"-->
+<!--                        android:layout_marginRight="10dp"-->
+<!--                        android:max="5"/>-->
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar_relevant"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:max="5"/>
+<!--                    <TextView-->
+<!--                        android:id="@+id/rating_relevant"-->
+<!--                        android:layout_width="150dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="x/5"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:gravity="center"/>-->
+<!--                </LinearLayout>-->
 
-                    <TextView
-                        android:id="@+id/rating_relevant"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="x/5"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
-                </LinearLayout>
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:layout_weight="1">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
+<!--                    <TextView-->
+<!--                        android:layout_width="220dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="@string/time_bound"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:gravity="center_vertical" />-->
 
-                    <TextView
-                        android:layout_width="220dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="@string/time_bound"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical" />
+<!--                    <ProgressBar-->
+<!--                        android:id="@+id/progress_bar_time"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--                        android:scaleY="4"-->
+<!--                        android:layout_weight="1.25"-->
+<!--                        android:layout_marginRight="10dp"-->
+<!--                        android:max="5"/>-->
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar_time"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:max="5"/>
-
-                    <TextView
-                        android:id="@+id/rating_time"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="x/5"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
-                </LinearLayout>
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:id="@+id/div_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="20dp"/>
+<!--                    <TextView-->
+<!--                        android:id="@+id/rating_time"-->
+<!--                        android:layout_width="150dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="x/5"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:gravity="center"/>-->
+<!--                </LinearLayout>-->
 
                 <LinearLayout
                     android:id="@+id/linear_layout_1"
