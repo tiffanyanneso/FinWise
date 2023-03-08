@@ -21,11 +21,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.databinding.FragmentSavingBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
+import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
 import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -79,7 +81,7 @@ class SavingFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //binding.titleOverallSavingPerformance.text = "Overall Saving\nPerformance"
+        binding.title.text = "Overall Saving Performance"
         binding.tvPerformancePercentage.text = "0.00%"
         binding.btnNewGoal.setOnClickListener {
             if (ongoingGoals >= 5)
@@ -93,6 +95,17 @@ class SavingFragment : Fragment() {
                 this.startActivity(goToNewGoal)
             }
         }
+
+        binding.btnSeeMore.setOnClickListener {
+            var goToPerformance = Intent(requireContext().applicationContext, SavingPerformanceActivity::class.java)
+            this.startActivity(goToPerformance)
+        }
+
+        binding.btnSeeMore2.setOnClickListener {
+            var goToPerformance = Intent(requireContext().applicationContext, SavingPerformanceActivity::class.java)
+            this.startActivity(goToPerformance)
+        }
+
         checkAge()
         getGoals()
         getSavingActivities()
@@ -206,8 +219,8 @@ class SavingFragment : Fragment() {
 
         var data = PieData(dataSet)
 
-        binding.pcReasonCategories.data = data
-        binding.pcReasonCategories.invalidate()
+//        binding.pcReasonCategories.data = data
+//        binding.pcReasonCategories.invalidate()
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
