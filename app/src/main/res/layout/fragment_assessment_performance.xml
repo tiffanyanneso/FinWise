@@ -3,88 +3,106 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".financialAssessmentModule.fragment.AssessmentPerformanceFragment">
+    tools:context=".financialAssessmentModule.fragment.AssessmentPerformanceFragment"
+    android:background="@color/very_light_green">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="50dp"
+                android:layout_marginBottom="50dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="10dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="15dp"
+            android:padding="20dp"
+            android:layout_margin="20dp"
             android:background="@drawable/button_border_white"
-            android:backgroundTint="@color/light_green">
+            android:backgroundTint="@color/teal">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="Overall Assessment Performance" />
 
-                <ProgressBar
-                    android:id="@+id/progress_bar"
-                    style="@style/CircularDeterminateProgressBar"
-                    android:layout_width="160dp"
-                    android:layout_height="160dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0"
-                    tools:progress="35" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
-                    app:layout_constraintEnd_toEndOf="@+id/progress_bar"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="@+id/progress_bar"
-                    app:layout_constraintTop_toTopOf="@+id/progress_bar"
-                    app:layout_constraintVertical_bias="0.5">
+                    android:background="@drawable/button_border_white"
+                    android:backgroundTint="@color/white"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:src="@drawable/good"
+                        android:id="@+id/iv_score"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"/>
 
                     <TextView
                         android:id="@+id/text_view_progress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
-                        app:layout_constraintEnd_toEndOf="@+id/progress_bar"
-                        app:layout_constraintStart_toStartOf="@+id/progress_bar"
-                        app:layout_constraintTop_toTopOf="@+id/progress_bar"
-                        tools:text="35%" />
+                        tools:text="12%"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:textAlignment="center"/>
 
                     <TextView
                         android:id="@+id/text_view_performance_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
-                        app:layout_constraintEnd_toEndOf="@+id/progress_bar"
-                        app:layout_constraintHorizontal_bias="0.50"
-                        app:layout_constraintStart_toStartOf="@+id/progress_bar"
-                        app:layout_constraintTop_toTopOf="@+id/progress_bar"
-                        app:layout_constraintVertical_bias="0.75"
-                        tools:text="Poor"
-                        android:textSize="17dp"/>
+                        android:textSize="16sp"
+                        android:text="Good"
+                        android:textColor="@color/light_green"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="@string/overall_performance"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:paddingBottom="5dp"
-                android:layout_gravity="center"/>
+                <TextView
+                    android:id="@+id/tv_performance_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="Good job! With a bit more dedication and effort, you’ll surely up your performance!"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"/>
+            </LinearLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_see_more"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="Review"
+                android:textColor="@color/off_white"
+                android:backgroundTint="@color/dark_green"
+                android:background="@drawable/button_border"
+                android:layout_marginTop="10dp"/>
         </LinearLayout>
 
 <!--        <com.google.android.material.divider.MaterialDivider-->
@@ -99,159 +117,387 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="20dp">
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/button_border_white"
+        android:backgroundTint="@color/white"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="220dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Performance by Concept"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:gravity="center_vertical" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_border_white"
+            android:backgroundTint="@color/light_green"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-            <TextView
-                android:layout_width="220dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/goal_setting"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar_goal_setting"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:scaleY="4"
-                android:layout_weight="1.25"
-                android:layout_marginRight="10dp"
-                android:max="5"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/rating_goal_setting"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="xx%"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:gravity="center"/>
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/award" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">>
+
+                    <TextView
+                        android:id="@+id/tv_top_performing_concept"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="@string/goal_setting"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="TOP PERFORMING"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="2"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_top_performing_percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="100%"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+            android:orientation="vertical"
+            android:background="@drawable/button_border_white"
+            android:backgroundTint="@color/very_light_green"
+            android:padding="20dp"
+            android:layout_marginTop="10dp">
 
-            <TextView
-                android:layout_width="220dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/saving"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar_saving"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:scaleY="4"
-                android:layout_weight="1.25"
-                android:layout_marginRight="10dp"
-                android:max="5"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/rating_saving"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="xx%"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="2"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tv_concept_2nd"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:gravity="center_vertical"
+                        android:text="@string/goal_setting"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:layout_marginLeft="15dp"/>
+
+                    <TextView
+                        android:id="@+id/tv_concept2_percentage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="100%"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+            </LinearLayout>
+
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+            android:orientation="vertical"
+            android:background="@drawable/button_border_white"
+            android:backgroundTint="@color/very_light_green"
+            android:padding="20dp"
+            android:layout_marginTop="10dp">
 
-            <TextView
-                android:layout_width="220dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/budgeting"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar_budgeting"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:scaleY="4"
-                android:layout_weight="1.25"
-                android:layout_marginRight="10dp"
-                android:max="5"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/rating_budgeting"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="xx%"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="3"
+                    android:textColor="@color/black"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tv_concept_3rd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center_vertical"
+                    android:text="@string/goal_setting"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="15dp"/>
+
+                <TextView
+                    android:id="@+id/tv_concept3_percentage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="100%"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+            android:orientation="vertical"
+            android:background="@drawable/button_border_white"
+            android:backgroundTint="@color/light_red"
+            android:padding="20dp"
+            android:layout_marginTop="10dp">
 
-            <TextView
-                android:layout_width="220dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/spending"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical" />
-
-            <ProgressBar
-                android:id="@+id/progress_bar_spending"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:scaleY="4"
-                android:layout_weight="1.25"
-                android:layout_marginRight="10dp"
-                android:max="5"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/rating_spending"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="xx%"
-                android:textSize="14sp"
-                android:textColor="@color/black"
-                android:gravity="center"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="4"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_concept_4th"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:gravity="center_vertical"
+                    android:text="@string/goal_setting"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="15dp"/>
+
+                <TextView
+                    android:id="@+id/tv_concept4_percentage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:text="100%"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_review_concept"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="Review"
+                android:textColor="@color/off_white"
+                android:backgroundTint="@color/dark_green"
+                android:background="@drawable/button_border"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"/>
         </LinearLayout>
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_weight="1">-->
 
+<!--            <TextView-->
+<!--                android:layout_width="220dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="@string/goal_setting"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:gravity="center_vertical" />-->
 
+<!--            <ProgressBar-->
+<!--                android:id="@+id/progress_bar_goal_setting"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="30dp"-->
+<!--                style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--                android:scaleY="4"-->
+<!--                android:layout_weight="1.25"-->
+<!--                android:layout_marginRight="10dp"-->
+<!--                android:max="5"/>-->
 
+<!--            <TextView-->
+<!--                android:id="@+id/rating_goal_setting"-->
+<!--                android:layout_width="150dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="xx%"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:gravity="center"/>-->
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_weight="1">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="220dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="@string/saving"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:gravity="center_vertical" />-->
+
+<!--            <ProgressBar-->
+<!--                android:id="@+id/progress_bar_saving"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="30dp"-->
+<!--                style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--                android:scaleY="4"-->
+<!--                android:layout_weight="1.25"-->
+<!--                android:layout_marginRight="10dp"-->
+<!--                android:max="5"/>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/rating_saving"-->
+<!--                android:layout_width="150dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="xx%"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:gravity="center"/>-->
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_weight="1">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="220dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="@string/budgeting"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:gravity="center_vertical" />-->
+
+<!--            <ProgressBar-->
+<!--                android:id="@+id/progress_bar_budgeting"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="30dp"-->
+<!--                style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--                android:scaleY="4"-->
+<!--                android:layout_weight="1.25"-->
+<!--                android:layout_marginRight="10dp"-->
+<!--                android:max="5"/>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/rating_budgeting"-->
+<!--                android:layout_width="150dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="xx%"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:gravity="center"/>-->
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_weight="1">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="220dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="@string/spending"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:gravity="center_vertical" />-->
+
+<!--            <ProgressBar-->
+<!--                android:id="@+id/progress_bar_spending"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="30dp"-->
+<!--                style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--                android:scaleY="4"-->
+<!--                android:layout_weight="1.25"-->
+<!--                android:layout_marginRight="10dp"-->
+<!--                android:max="5"/>-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/rating_spending"-->
+<!--                android:layout_width="150dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="xx%"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:gravity="center"/>-->
+<!--        </LinearLayout>-->
     </LinearLayout>
-
-
-
-
+    </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 </FrameLayout>
