@@ -25,6 +25,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
     private var nTimeBound = 0.00F
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+    data class Rating(var name: String? = null, var score: Int = 0)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +34,14 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initializeRating()
+    }
+    private fun RatingObject(name: String, score: Int): Rating {
+        val rating = Rating()
+
+        rating.name = name
+        rating.score = score
+
+        return rating
     }
     private fun initializeRating() {
         firestore.collection("GoalRating").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
@@ -77,6 +86,48 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "Uh oh! You need to work on your goal setting.  Click review to learn how!"
             }
+
+            val ratingArray = ArrayList<Rating>()
+
+            ratingArray.add(RatingObject("Specific", (nSpecific/nRatings).roundToInt()))
+            ratingArray.add(RatingObject("Measurable", (nMeasurable/nRatings).roundToInt()))
+            ratingArray.add(RatingObject("Achievable", (nAchievable/nRatings).roundToInt()))
+            ratingArray.add(RatingObject("Relevant", (nRelevant/nRatings).roundToInt()))
+            ratingArray.add(RatingObject("Time Bound", (nTimeBound/nRatings).roundToInt()))
+
+            ratingArray.sortByDescending{it.score}
+
+            for (i in ratingArray.indices) {
+                var num = i + 1
+
+                if (num == 1) {
+                    binding.tvTopPerformingSMART.text = ratingArray[i].name
+                    binding.tvTopPerformingRating.text = ratingArray[i].score.toString() + "/5"
+                } else if (num == 2) {
+                    binding.tvSMART2nd.text = ratingArray[i].name
+                    binding.tvConcept2Rating.text = ratingArray[i].score.toString() + "/5"
+                } else if (num == 3) {
+                    binding.tvSMART3rd.text = ratingArray[i].name
+                    binding.tvSMART3Rating.text = ratingArray[i].score.toString() + "/5"
+                } else if (num == 4) {
+                    binding.tvSMART4th.text = ratingArray[i].name
+                    binding.tvSMART4Rating.text = ratingArray[i].score.toString() + "/5"
+                } else if (num == 5) {
+                    binding.tvSMART5th.text = ratingArray[i].name
+                    binding.tvSMART5Rating.text = ratingArray[i].score.toString() + "/5"
+                }
+            }
+
+//            binding.progressBarSpecific.progress = (nSpecific/nRatings).roundToInt()
+//            binding.ratingSpecific.text = "${(nSpecific/nRatings)}/5"
+//            binding.progressBarMeasurable.progress = (nMeasurable/nRatings).roundToInt()
+//            binding.ratingMeasurable.text = "${(nMeasurable/nRatings)}/5"
+//            binding.progressBarAchievable.progress = (nAchievable/nRatings).roundToInt()
+//            binding.ratingAchievable.text = "${(nAchievable/nRatings)}/5"
+//            binding.progressBarRelevant.progress = (nRelevant/nRatings).roundToInt()
+//            binding.ratingRelevant.text = "${(nRelevant/nRatings)}/5"
+//            binding.progressBarTime.progress = (nTimeBound/nRatings).roundToInt()
+//            binding.ratingTime.text = "${(nTimeBound/nRatings)}/5"
         }
     }
 }
