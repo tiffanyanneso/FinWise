@@ -10,6 +10,7 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -66,7 +67,8 @@ class EditProfileActivity : AppCompatActivity() {
 
     fun getProfileData() {
         //val currentUser:String = FirebaseAuth.getInstance().currentUser!!.uid
-        val currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
+        val currentUser  = FirebaseAuth.getInstance().currentUser!!.uid
+
 
         firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener { documentSnapshot ->
             var child = documentSnapshot.toObject<ChildUser>()

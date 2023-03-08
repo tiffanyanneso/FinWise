@@ -221,7 +221,9 @@ class MayaConfirmPayment : AppCompatActivity() {
     private fun adjustUserBalance() {
         //TODO: Change user based on who is logged in
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2")
+        val currentUser  = FirebaseAuth.getInstance().currentUser!!.uid
+
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser)
             .get().addOnSuccessListener { document ->
                 var adjustedBalance = amount.toDouble()
                     adjustedBalance = -abs(adjustedBalance)

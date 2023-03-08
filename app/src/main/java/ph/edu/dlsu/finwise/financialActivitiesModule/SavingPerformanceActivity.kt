@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -43,7 +44,8 @@ class SavingPerformanceActivity : AppCompatActivity() {
     }
 
     private fun getGoals() {
-        var childID = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
+        val childID  = FirebaseAuth.getInstance().currentUser!!.uid
+
         firestore.collection("FinancialGoals").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
             totalGoals = results.size()
             for (goal in results) {
