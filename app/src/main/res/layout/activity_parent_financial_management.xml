@@ -175,6 +175,41 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:layout_weight="1"
+                                android:layout_gravity="center">
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/btn_earning"
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:textColor="@color/white"
+                                    android:backgroundTint="@color/light_green"
+                                    android:layout_gravity="center"
+                                    app:cardCornerRadius="10dp">
+
+                                    <ImageView
+                                        android:src="@drawable/baseline_directions_run_24"
+                                        android:layout_width="35dp"
+                                        android:layout_height="35dp"
+                                        android:layout_gravity="center"
+                                        app:tint="@color/white" />
+
+                                </androidx.cardview.widget.CardView>
+
+                                <TextView
+                                    android:text="Earning"
+                                    android:textSize="16sp"
+                                    android:textColor="@color/black"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"/>
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_weight="1"
                                 android:gravity="center">
 
                                 <androidx.cardview.widget.CardView

@@ -21,6 +21,7 @@ import ph.edu.dlsu.finwise.adapter.PFMAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityParentFinancialManagementBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.BalanceFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.ExplanationFragment
@@ -62,7 +63,20 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         loadFinancialHealth()
         initializeDateButtons()
         goToParentTransactions()
+        goToEarningActivity()
     }
+
+    private fun goToEarningActivity() {
+        binding.btnEarning.setOnClickListener {
+            var goToEarningActivity = Intent(this, EarningActivityPFM::class.java)
+            bundle.putString("childID", childID)
+            bundle.putString("user", "parent")
+            goToEarningActivity.putExtras(bundle)
+            startActivity(goToEarningActivity)
+        }
+    }
+
+
     private fun goToParentTransactions() {
         binding.btnViewTransactions.setOnClickListener {
             val goToTransactions = Intent(applicationContext, TransactionHistoryActivity::class.java)

@@ -308,7 +308,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         binding.btnEarning.setOnClickListener {
             val goToEarningActivity = Intent(applicationContext, EarningMenuActivityPFM::class.java)
             val bundle = Bundle()
-            bundle.putString("childID", FirebaseAuth.getInstance().currentUser!!.uid)
+            bundle.putString("childID", childID)
+            bundle.putString("user", "child")
             goToEarningActivity.putExtras(bundle)
             startActivity(goToEarningActivity)
         }

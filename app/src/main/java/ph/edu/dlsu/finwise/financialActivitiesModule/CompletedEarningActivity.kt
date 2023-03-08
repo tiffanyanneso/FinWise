@@ -31,7 +31,7 @@ class CompletedEarningActivity : AppCompatActivity() {
 
 
         firestore.collection("EarningActivities").document(earningActivityID).get().addOnSuccessListener {
-            var earning = it.toObject<ph.edu.dlsu.finwise.model.EarningActivityModel>()
+            val earning = it.toObject<ph.edu.dlsu.finwise.model.EarningActivityModel>()
             binding.tvName.text = earning?.activityName
             binding.tvAmountEarned.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
         }

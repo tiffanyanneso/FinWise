@@ -40,7 +40,7 @@ class RecordEarningSaleConfirmationActivityPFM : AppCompatActivity() {
         setFields()
 
         binding.btnConfirm.setOnClickListener {
-            var sellingItem = hashMapOf(
+            val sellingItem = hashMapOf(
                 "itemName" to bundle.getString("saleName"),
                 "amount" to bundle.getFloat("saleAmount"),
                 "date" to bundle.getSerializable("saleDate"),
@@ -49,7 +49,7 @@ class RecordEarningSaleConfirmationActivityPFM : AppCompatActivity() {
             )
             firestore.collection("SellingItems").add(sellingItem)
 
-            var incomeTransaction = hashMapOf(
+            val incomeTransaction = hashMapOf(
                 "childID" to childID,
                 "transactionType" to "Income",
                 "transactionName" to bundle.getString("saleName") + " Sale",
@@ -61,8 +61,8 @@ class RecordEarningSaleConfirmationActivityPFM : AppCompatActivity() {
 
             firestore.collection("Transactions").add(incomeTransaction).addOnSuccessListener {
                 adjustUserBalance()
-                var sellingActivity = Intent(this, EarningSellingPFMActivity::class.java)
-                var sendBundle = Bundle()
+                val sellingActivity = Intent(this, EarningSellingPFMActivity::class.java)
+                val sendBundle = Bundle()
                 sendBundle.putString("childID", childID)
                 sellingActivity.putExtras(sendBundle)
                 startActivity(sellingActivity)
@@ -88,10 +88,10 @@ class RecordEarningSaleConfirmationActivityPFM : AppCompatActivity() {
 
     private fun adjustUserBalance() {
         firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener { result ->
-                var walletID = result.documents[0].id
+                val walletID = result.documents[0].id
 
-                var adjustedBalance = bundle.getFloat("saleAmount")?.toDouble()
-                adjustedBalance = abs(adjustedBalance!!)
+                var adjustedBalance = bundle.getFloat("saleAmount").toDouble()
+                adjustedBalance = abs(adjustedBalance)
 
                 firestore.collection("ChildWallet").document(walletID).update("currentBalance", FieldValue.increment(adjustedBalance))
             }

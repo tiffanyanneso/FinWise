@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.parentFinancialManagementModule
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -37,8 +38,8 @@ class EarningSellingPFMActivity : AppCompatActivity() {
 //        supportActionBar?.hide()
 //        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
-        var bundle = intent.extras!!
-        var childID = bundle.getString("childID").toString()
+        val bundle = intent.extras!!
+        val childID = bundle.getString("childID").toString()
 
         getSales()
 
@@ -48,6 +49,13 @@ class EarningSellingPFMActivity : AppCompatActivity() {
             sendBundle.putString("childID", childID)
             newSale.putExtras(sendBundle)
             startActivity(newSale)
+        }
+        loadBackButton()
+    }
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
         }
     }
 

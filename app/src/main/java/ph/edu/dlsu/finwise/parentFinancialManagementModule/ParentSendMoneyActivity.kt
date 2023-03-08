@@ -45,10 +45,16 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         // Initializes the navbar
         Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
         initializeDropdown()
-        loadBackButton()
         goToMayaQRConfirmPayment()
         cancel()
+        loadBackButton()
+    }
 
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -179,12 +185,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     }
 
 
-    private fun loadBackButton() {
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
-        binding.topAppBar.setNavigationOnClickListener {
-            onBackPressed()
-        }
-    }
+
 
     private fun cancel() {
         binding.btnCancel.setOnClickListener {
