@@ -10,7 +10,7 @@
     <item android:title=""
         android:icon="@drawable/baseline_dashboard_24"
         android:id="@+id/nav_parent_dashboard"/>
-<!--    <item android:title=""
-        android:icon="@drawable/baseline_profile_24"
-        android:id="@+id/nav_parent_profile"/>-->
+    <item android:title=""
+        android:icon="@drawable/baseline_assessment_24"
+        android:id="@+id/nav_parent_assessment"/>
 </menu>

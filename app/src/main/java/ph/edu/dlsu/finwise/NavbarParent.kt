@@ -3,6 +3,8 @@ package ph.edu.dlsu.finwise
 import android.content.Context
 import android.content.Intent
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import ph.edu.dlsu.finwise.databinding.ActivityParentAssessmentLandingPageBinding
+import ph.edu.dlsu.finwise.parentAssessmentModule.parentAssessmentLandingPage
 import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
@@ -36,11 +38,10 @@ class NavbarParent (bottomNavigationView: BottomNavigationView, appCon: Context,
                     appCon.startActivity(intent)
                 }
 
-/*
-                R.id.nav_parent_profile -> {
-                    val intent = Intent(appCon, ProfileActivity::class.java)
+                R.id.nav_parent_assessment-> {
+                    val intent = Intent(appCon, parentAssessmentLandingPage::class.java)
                     appCon.startActivity(intent)
-                }*/
+                }
             }
             true
         }
