@@ -9,6 +9,9 @@ import android.view.View
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
@@ -18,8 +21,7 @@ import java.text.SimpleDateFormat
 class RecordEarningSaleActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityRecordEarningSaleBinding
-
-    private var user = "child"
+    private var firestore = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,8 @@ class RecordEarningSaleActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         loadButtons()
+
+        setNavigationBar()
 
         var bundle = intent.extras!!
         var childID = bundle.getString("childID").toString()
@@ -67,23 +71,26 @@ class RecordEarningSaleActivity : AppCompatActivity() {
     }
 
     private fun loadButtons() {
-        setNavigationBar()
         loadBackButton()
     }
 
     private fun setNavigationBar() {
-        val bottomNavigationViewChild = binding.bottomNav
-        val bottomNavigationViewParent = binding.bottomNavParent
 
-        if (user == "child") {
-            bottomNavigationViewChild.visibility = View.VISIBLE
-            bottomNavigationViewParent.visibility = View.GONE
-            Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
-        }
-        else {
-            bottomNavigationViewChild.visibility = View.GONE
-            bottomNavigationViewParent.visibility = View.VISIBLE
-            NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+        var navUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("ParentUser").document(navUser).get().addOnSuccessListener {
+
+            val bottomNavigationViewChild = binding.bottomNav
+            val bottomNavigationViewParent = binding.bottomNavParent
+
+            if (it.exists()) {
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+            } else  {
+                bottomNavigationViewChild.visibility = View.VISIBLE
+                bottomNavigationViewParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+            }
         }
     }
 

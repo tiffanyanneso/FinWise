@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -30,8 +31,6 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
 
     private lateinit var bundle:Bundle
 
-    private var user = "child"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRecordEarningSaleConfirmationBinding.inflate(layoutInflater)
@@ -40,6 +39,7 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
         bundle = intent.extras!!
         setFields()
         loadButtons()
+        setNavigationBar()
 
         binding.btnConfirm.setOnClickListener {
             var sellingItem = hashMapOf(
@@ -103,26 +103,28 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
     }
 
     private fun loadButtons() {
-        setNavigationBar()
         loadBackButton()
     }
 
     private fun setNavigationBar() {
-        val bottomNavigationViewChild = binding.bottomNav
-        val bottomNavigationViewParent = binding.bottomNavParent
 
-        if (user == "child") {
-            bottomNavigationViewChild.visibility = View.VISIBLE
-            bottomNavigationViewParent.visibility = View.GONE
-            Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+        var navUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("ParentUser").document(navUser).get().addOnSuccessListener {
 
-        } else {
-            bottomNavigationViewChild.visibility = View.GONE
-            bottomNavigationViewParent.visibility = View.VISIBLE
-            NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+            val bottomNavigationViewChild = binding.bottomNav
+            val bottomNavigationViewParent = binding.bottomNavParent
+
+            if (it.exists()) {
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+            } else  {
+                bottomNavigationViewChild.visibility = View.VISIBLE
+                bottomNavigationViewParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+            }
         }
     }
-
     private fun loadBackButton() {
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
