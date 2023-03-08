@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
@@ -26,7 +27,6 @@ import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentMayaConfirmPaymentBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -62,6 +62,7 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
         setText()
         payMaya()
+        loadBackButton()
         cancel()
     }
 
@@ -225,6 +226,20 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
         phone = bundle!!.getString("phone").toString()
         childID = bundle!!.getString("childID").toString()
         date = bundle!!.getSerializable("date").toString()
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+    }
+
+    private fun cancel() {
+        binding.btnCancel.setOnClickListener {
+            val goBack = Intent(applicationContext, ParentFinancialManagementActivity::class.java)
+            startActivity(goBack)
+        }
     }
 
 }
