@@ -357,7 +357,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:text=" You’ve done a great job at setting <type> goals by <phrase>!"
+                            android:text=" You’ve done a great job at setting \type\ goals by \phrase\!"
                             android:textColor="@color/black"
                             android:textAlignment="center"
                             android:layout_gravity="center"/>
@@ -408,7 +408,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:text="Pay better attention to <1>, <2>, and <3>. Need a refresher?"
+                        android:text="Pay better attention to \1\, \2\, and \3\. Need a refresher?"
                         android:textColor="@color/black"
                         android:textAlignment="center"
                         android:layout_gravity="center"/>

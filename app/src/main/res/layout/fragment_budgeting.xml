@@ -33,7 +33,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="Overall Budgeting Performance"
+                        tools:text="Overall Budgeting \n Performance"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="@color/white"
@@ -122,7 +122,7 @@
                             android:layout_weight="1" />
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btn_see_more"
+                            android:id="@+id/btn_see_more2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="See More"

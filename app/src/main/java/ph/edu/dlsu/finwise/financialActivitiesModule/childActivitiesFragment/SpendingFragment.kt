@@ -59,8 +59,8 @@ class SpendingFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.progressBar.progress = 0
-        binding.textPerformance.text = "0.00%"
+     /*   binding.progressBarOverspending.progress = 0
+        binding.textPerformance.text = "0.00%"*/
 //        binding.textStatus.text = "Good"
 //        binding.textPerformance.setTextColor(getResources().getColor(R.color.dark_green))
 //        binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
@@ -72,7 +72,7 @@ class SpendingFragment : Fragment(){
 //        binding.tvOverspendingStatus.setTextColor(getResources().getColor(R.color.red))
 
         binding.titleOverspendingFrequency.text = "Overspending\nFrequency"
-        binding.titleOverallSpendingPerformance.text = "Overall Spending\nPerformance"
+      //  binding.titleOverallSpendingPerformance.text = "Overall Spending\nPerformance"
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){

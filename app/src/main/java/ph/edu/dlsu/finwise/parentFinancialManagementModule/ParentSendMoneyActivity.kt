@@ -16,7 +16,6 @@ import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentSendMoneyBinding
 import ph.edu.dlsu.finwise.model.ChildUser
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.mayaAPI.MayaConfirmPayment
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -26,11 +25,14 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     private lateinit var context: Context
     private var firestore = Firebase.firestore
     private var bundle = Bundle()
-    lateinit var name: String
-    lateinit var amount: String
-    lateinit var note: String
-    lateinit var phone: String
-    lateinit var date: Date
+    private lateinit var name: String
+    private lateinit var childrenID: String
+    private lateinit var amount: String
+    private lateinit var note: String
+    private lateinit var phone: String
+    private lateinit var date: Date
+    private var childrenArray = ArrayList<String>()
+    private var childrenIDArray = ArrayList<String>()
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -117,6 +119,8 @@ class ParentSendMoneyActivity :AppCompatActivity () {
             name = binding.etChildName.text.toString().trim()
         }
 
+        getChildID()
+
         note = binding.etNote.text.toString().trim()
 
         if (binding.etAmount.text.toString().trim().isEmpty()) {
@@ -137,6 +141,12 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         return valid
     }
 
+    private fun getChildID() {
+        val index = childrenArray.indexOf(name)
+        childrenID = childrenIDArray[index]
+        Toast.makeText(this, ""+childrenID, Toast.LENGTH_SHORT).show()
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getCurrentTime() {
         val dateFormat = SimpleDateFormat("MM/dd/yyyy")
@@ -151,15 +161,13 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         val parentID = "HeiVgm55YmgBq2DjjRh1OT9bFnP2"
         firestore.collection("ChildUser").whereEqualTo("parentID", parentID).get()
             .addOnSuccessListener {documents ->
-                val children = ArrayList<String>()
-                val childrenID = ArrayList<String>()
                 for (d in documents) {
                     val child = d.toObject<ChildUser>()
-                    children.add(child.firstName+" "+child.lastName)
-                    childrenID.add(d.id)
+                    childrenArray.add(child.firstName+" "+child.lastName)
+                    childrenIDArray.add(d.id)
                 }
 
-                val adapter = ArrayAdapter (this, R.layout.list_item, children)
+                val adapter = ArrayAdapter (this, R.layout.list_item, childrenArray)
                 binding.etChildName.setAdapter(adapter)
             }
 
@@ -180,8 +188,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
 
     private fun cancel() {
         binding.btnCancel.setOnClickListener {
-            val goBack = Intent(applicationContext, ParentFinancialManagementActivity::class.java)
-            startActivity(goBack)
+            onBackPressed()
         }
     }
 }
