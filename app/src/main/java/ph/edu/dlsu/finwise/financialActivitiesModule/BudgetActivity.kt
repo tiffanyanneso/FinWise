@@ -68,6 +68,12 @@ class BudgetActivity : AppCompatActivity() {
         budgetActivityID = bundle.getString("budgetActivityID").toString()
         spendingActivityID = bundle.getString("spendingActivityID").toString()
 
+        checkUser()
+        getBudgetItems()
+        getExpenses()
+        getBalance()
+
+
         //checks if child has already finished setting budget
         //if they are done setting budget, any changes would count as an update that would affect their overall score
         firestore.collection("FinancialActivities").document(budgetActivityID).get().addOnSuccessListener {
@@ -77,16 +83,19 @@ class BudgetActivity : AppCompatActivity() {
                 binding.btnWithdraw.isClickable = false
                 binding.btnWithdraw.isEnabled = false
                 binding.btnDoneSettingBudget.visibility = View.GONE
-                binding.linearLayoutText.visibility = View.GONE
+                //binding.linearLayoutText.visibility = View.GONE
+                binding.tvAvailable.text = "Savings available to spend"
             }
+            else
+                binding.tvAvailable.text = "Savings available to budget"
         }
-        checkUser()
-        getBalance()
-        getExpenses()
+
 
         binding.btnTransactions.setOnClickListener{
             var goToTransactions = Intent(this, ReasonExpensesActivity::class.java)
-            // TODO Add bundle (?)
+            var sendBundle = Bundle()
+            sendBundle.putString("budgetActivityID", budgetActivityID)
+            goToTransactions.putExtras(sendBundle)
             this.startActivity(goToTransactions)
         }
 
@@ -104,7 +113,7 @@ class BudgetActivity : AppCompatActivity() {
             dialogBinding.btnOk.setOnClickListener {
                 firestore.collection("FinancialActivities").document(budgetActivityID).update("status", "Completed").addOnSuccessListener {
                     binding.btnDoneSettingBudget.visibility = View.GONE
-                    binding.linearLayoutText.visibility = View.GONE
+                    //binding.linearLayoutText.visibility = View.GONE
                     isCompleted = true
                     dialog.dismiss()
                     firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "In Progress")
@@ -130,7 +139,21 @@ class BudgetActivity : AppCompatActivity() {
             }
         }.continueWith {
             binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(balance)
-            getBudgetItems() }
+            if (!isCompleted)
+                getAvailableToBudget()
+        }
+    }
+
+    private fun getAvailableToBudget () {
+        availableToBudget = balance
+        println("print avilable to budget" + availableToBudget)
+        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).get().addOnSuccessListener { results ->
+            for (item in results) {
+                var budgetItem = item.toObject<BudgetItem>()
+                availableToBudget -= budgetItem.amount!!
+            }
+            binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(availableToBudget)
+        }
     }
 
     private fun getBudgetItems() {

@@ -69,7 +69,7 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
-            val goToWithdraw = Intent(applicationContext, WithdrawActivity::class.java)
+            val goToWithdraw = Intent(applicationContext, SavingsWithdrawActivity::class.java)
 
             var backBundle = Bundle()
             backBundle.putString("financialGoalID", bundle.getString("financialGoalID"))

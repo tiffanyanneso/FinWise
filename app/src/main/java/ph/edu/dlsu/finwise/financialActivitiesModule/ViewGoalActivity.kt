@@ -100,7 +100,7 @@ class ViewGoalActivity : AppCompatActivity() {
         }
 
         binding.btnWithdraw.setOnClickListener {
-            var goalWithdraw = Intent(this, WithdrawActivity::class.java)
+            var goalWithdraw = Intent(this, SavingsWithdrawActivity::class.java)
             sendBundle.putFloat("savedAmount", savedAmount)
             sendBundle.putString("savingActivityID", savingActivityID)
             sendBundle.putInt("progress", binding.progressBar.progress)
@@ -120,7 +120,7 @@ class ViewGoalActivity : AppCompatActivity() {
 
 
         binding.btnDeposit.setOnClickListener {
-            var goalDeposit = Intent(this, FinancialActivityGoalDeposit::class.java)
+            var goalDeposit = Intent(this, SavingsDepositActivity::class.java)
             sendBundle.putFloat("savedAmount", savedAmount)
             sendBundle.putString("savingActivityID", savingActivityID)
             sendBundle.putInt("progress", binding.progressBar.progress)

@@ -159,7 +159,7 @@
             android:name=".financialActivitiesModule.FinancialActivityConfirmWithdraw"
             android:exported="false" />
         <activity
-            android:name=".financialActivitiesModule.WithdrawActivity"
+            android:name=".financialActivitiesModule.SavingsWithdrawActivity"
             android:exported="false" />
         <activity
             android:name=".TestFinancialActivity"
@@ -219,7 +219,7 @@
             android:name=".financialActivitiesModule.BudgetActivity"
             android:exported="false" />
         <activity
-            android:name=".financialActivitiesModule.FinancialActivityGoalDeposit"
+            android:name=".financialActivitiesModule.SavingsDepositActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
