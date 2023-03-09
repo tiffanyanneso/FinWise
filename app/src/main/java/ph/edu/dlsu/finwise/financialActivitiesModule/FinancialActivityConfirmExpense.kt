@@ -92,6 +92,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
 
                 //check if bundle contains shoppingListItemID, meaning that the expense was from a shopping list and need to update the status
                 if (bundle.containsKey("shoppingListItemID")) {
+                    firestore.collection("ShoppingListItems").document(bundle.getString("shoppingListItemID").toString()).update("itemName", bundle.getString("expenseName"))
                     firestore.collection("ShoppingListItems").document(bundle.getString("shoppingListItemID").toString()).update("status", "Purchased")
                 }
             }

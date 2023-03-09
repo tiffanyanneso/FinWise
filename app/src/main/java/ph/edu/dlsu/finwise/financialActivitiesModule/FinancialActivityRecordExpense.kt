@@ -10,9 +10,11 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialRecordExpenseBinding
+import ph.edu.dlsu.finwise.model.ShoppingListItem
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,8 +48,12 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
         savingActivityID = bundle.getString("savingActivityID").toString()
         spendingActivityID = bundle.getString("spendingActivityID").toString()
         budgetItemID = bundle.getString("budgetItemID").toString()
-        if (bundle.containsKey("shoppingListItem"))
+        if (bundle.containsKey("shoppingListItem")) {
             shoppingListItemID = bundle.getString("shoppingListItem")
+            firestore.collection("ShoppingListItems").document(shoppingListItemID.toString()).get().addOnSuccessListener {
+                binding.etExpenseName.setText(it.toObject<ShoppingListItem>()!!.itemName)
+            }
+        }
         //TODO: ADD HOW MUCH THEY HAVE LEFT IN THEIR SAVINGS
         binding.tvRemainingBudget.text = "You currently have ₱${DecimalFormat("#,##0.00").format(bundle.getFloat("remainingBudget"))} left in budget AND___ LEFT IN SAVINGS"
 
