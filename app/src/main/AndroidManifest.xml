@@ -180,6 +180,9 @@
             android:name=".financialActivitiesModule.FinancialActivityConfirmDeposit"
             android:exported="false" />
         <activity
+            android:name=".parentAssessmentModule.parentAssessmentLandingPage"
+            android:exported="false" />
+        <activity
             android:name=".parentFinancialActivitiesModule.ParentLandingPageActivity"
             android:exported="false">
 

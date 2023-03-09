@@ -3,9 +3,12 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalDetailsBinding
@@ -25,8 +28,7 @@ class ViewGoalDetails : AppCompatActivity() {
         binding = ActivityViewGoalDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initializes the navbar
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+        setNavigationBar()
 
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
@@ -57,6 +59,26 @@ class ViewGoalDetails : AppCompatActivity() {
                 else
                     binding.tvIsForChild.text = "No"
 
+            }
+        }
+    }
+
+    private fun setNavigationBar() {
+
+        var navUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("ParentUser").document(navUser).get().addOnSuccessListener {
+
+            val bottomNavigationViewChild = binding.bottomNav
+            val bottomNavigationViewParent = binding.bottomNavParent
+
+            if (it.exists()) {
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+            } else  {
+                bottomNavigationViewChild.visibility = View.VISIBLE
+                bottomNavigationViewParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
             }
         }
     }
