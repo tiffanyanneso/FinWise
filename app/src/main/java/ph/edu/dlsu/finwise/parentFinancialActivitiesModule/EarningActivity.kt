@@ -45,12 +45,12 @@ class EarningActivity : AppCompatActivity() {
         val bundle = intent.extras!!
         savingActivityID = bundle.getString("savingActivityID").toString()
         childID = bundle.getString("childID").toString()
-        user = bundle.getString("user").toString()
+        //user = bundle.getString("user").toString()
 
         checkUser()
         initializeFragments()
         loadButtons()
-        setNavigationBar()
+       //setNavigationBar()
 
         binding.btnAddEarningActivity.setOnClickListener {
             var newEarning = Intent(this, NewEarningActivity::class.java)

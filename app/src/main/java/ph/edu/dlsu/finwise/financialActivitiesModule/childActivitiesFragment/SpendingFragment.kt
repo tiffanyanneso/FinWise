@@ -12,9 +12,10 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
-import ph.edu.dlsu.finwise.databinding.FragmentSpendingBinding
+import ph.edu.dlsu.finwise.databinding.FragmentFinactSpendingBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.ShoppingListItem
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import java.util.*
@@ -25,7 +26,7 @@ class SpendingFragment : Fragment(){
 
     class BudgetItemAmount(var budgetItemID:String, var amount:Float)
 
-    private lateinit var binding: FragmentSpendingBinding
+    private lateinit var binding: FragmentFinactSpendingBinding
     private var firestore = Firebase.firestore
     private lateinit var spendingAdapter: FinactSpendingAdapter
 
@@ -35,6 +36,10 @@ class SpendingFragment : Fragment(){
 
     private var overSpending = 0.00F
     private var nBudgetItems = 0.00F
+
+    var overspendingPercentage = 0.00F
+    var purchasePlanningPercentage = 0.00F
+    var overallSpending = 0.00F
 
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
@@ -52,7 +57,7 @@ class SpendingFragment : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSpendingBinding.inflate(inflater, container, false)
+        binding = FragmentFinactSpendingBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
@@ -114,7 +119,7 @@ class SpendingFragment : Fragment(){
     }
 
     private fun checkOverSpending(budgetItemID:String, budgetItemAmount:Float){
-        firestore.collection("Transactions").whereEqualTo("category", budgetItemID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { spendingTransactions ->
+        firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { spendingTransactions ->
             var amountSpent = 0.00F
             for (expense in spendingTransactions) {
                 var expenseObject = expense.toObject<Transactions>()
@@ -125,13 +130,39 @@ class SpendingFragment : Fragment(){
                 overSpending++
 
         }.continueWith {
-            var overspendingPercentage = (overSpending/nBudgetItems)*100
+            overspendingPercentage = (overSpending/nBudgetItems)*100
             binding.progressBarOverspending.progress = overspendingPercentage.toInt()
             binding.tvOverspendingPercentage.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
+
+            purchasePlanning()
 
 //            if (overSpending )
 //            binding.tvOverspendingPercentage.setTextColor(getResources().getColor(R.color.red))
 //            binding.tvOverspendingStatus.setTextColor(getResources().getColor(R.color.red))
+        }
+    }
+
+    private fun purchasePlanning() {
+        //items planned / all the items they bought * 100
+        var nPlanned = 0.00F
+        var nTotalPurchased = 0.00F
+        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").get().addOnSuccessListener { allSpendingActivities ->
+            for (spendingActivityID in allSpendingActivities) {
+                firestore.collection("ShoppingListItems").whereEqualTo("spendingActivityID", spendingActivityID.id).get().addOnSuccessListener { shoppingListItems ->
+                    for (shoppingListItem in shoppingListItems) {
+                        var shoppingListItemObject = shoppingListItem.toObject<ShoppingListItem>()
+                        if (shoppingListItemObject.status == "Purchased")
+                            nPlanned++
+                    }
+                }.continueWith {
+                    firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID.id).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { expenseTransactions ->
+                        nTotalPurchased += expenseTransactions.size().toFloat()
+                    }.continueWith {
+                        //TODO: ELIANA OVERALL
+                        overallSpending = (overspendingPercentage + ((nPlanned/nTotalPurchased)*100)) /2
+                    }
+                }
+            }
         }
     }
 

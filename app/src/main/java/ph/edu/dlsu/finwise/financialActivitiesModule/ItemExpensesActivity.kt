@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.ActivityBudgetExpenseBinding
 import ph.edu.dlsu.finwise.databinding.ActivityItemExpensesBinding
 
 class ItemExpensesActivity : AppCompatActivity() {

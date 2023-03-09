@@ -10,12 +10,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ph.edu.dlsu.finwise.adapter.FinactBudgetingAdapter
-import ph.edu.dlsu.finwise.databinding.FragmentBudgetingBinding
+import ph.edu.dlsu.finwise.databinding.FragmentFinactBudgetingBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import java.text.DecimalFormat
@@ -25,7 +21,7 @@ import kotlin.math.roundToInt
 
 class BudgetingFragment : Fragment() {
 
-    private lateinit var binding: FragmentBudgetingBinding
+    private lateinit var binding: FragmentFinactBudgetingBinding
     private var firestore = Firebase.firestore
     private lateinit var bugdetingAdapater: FinactBudgetingAdapter
 
@@ -58,7 +54,7 @@ class BudgetingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentBudgetingBinding.inflate(inflater, container, false)
+        binding = FragmentFinactBudgetingBinding.inflate(inflater, container, false)
         return binding.root
     }
 

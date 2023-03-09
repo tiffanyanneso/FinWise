@@ -81,6 +81,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
     }
 
     private fun setFields() {
+        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         bundle = intent.extras!!
         //decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
         binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
@@ -89,12 +90,12 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         financialGoalID = bundle.getString("financialGoalID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
 
-        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2").get().addOnSuccessListener {
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener {
             var wallet = it.documents[0].toObject<ChildWallet>()
-            binding.tvWalletBalance.text = "₱ " +  (wallet?.currentBalance!!.toFloat() - bundle.getFloat("amount"))
+            binding.tvWalletBalance.text = "₱ " +  DecimalFormat("##0.00").format((wallet?.currentBalance!!.toFloat() - bundle.getFloat("amount")))
         }
 
-        binding.tvUpdatedGoalSavings.text = "₱ " +  (bundle.getFloat("savedAmount") + bundle.getFloat("amount"))
+        binding.tvUpdatedGoalSavings.text = "₱ " +  DecimalFormat("##0.00").format((bundle.getFloat("savedAmount") + bundle.getFloat("amount")))
     }
 
     private fun adjustUserBalance() {

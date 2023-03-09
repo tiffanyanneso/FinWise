@@ -9,7 +9,6 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.SpendingExpenseAdapter
-import ph.edu.dlsu.finwise.databinding.ActivityBudgetExpenseBinding
 import ph.edu.dlsu.finwise.databinding.ActivityReasonExpensesBinding
 import ph.edu.dlsu.finwise.model.Transactions
 

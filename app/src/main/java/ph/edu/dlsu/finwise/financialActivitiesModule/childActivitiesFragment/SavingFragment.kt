@@ -11,12 +11,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.firebase.Timestamp
-import com.google.firebase.Timestamp.now
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -25,10 +23,11 @@ import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
-import ph.edu.dlsu.finwise.databinding.FragmentSavingBinding
+import ph.edu.dlsu.finwise.databinding.FragmentFinactSavingBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
 import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
 import ph.edu.dlsu.finwise.model.*
+import java.lang.String.format
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -39,7 +38,7 @@ import kotlin.collections.ArrayList
 
 class SavingFragment : Fragment() {
 
-    private lateinit var binding: FragmentSavingBinding
+    private lateinit var binding: FragmentFinactSavingBinding
     private var firestore = Firebase.firestore
     private lateinit var goalAdapter: FinactSavingAdapter
 
@@ -74,7 +73,7 @@ class SavingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSavingBinding.inflate(inflater, container, false)
+        binding = FragmentFinactSavingBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -109,6 +108,7 @@ class SavingFragment : Fragment() {
         checkAge()
         getGoals()
         getSavingActivities()
+        computeOverallScore()
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){ }
@@ -175,6 +175,30 @@ class SavingFragment : Fragment() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun computeOverallScore() {
+        var nTotal = 0.00F
+        var nOnTime =0.00F
+        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+            nTotal = results.size().toFloat()
+            for (goal in results) {
+                var goalObject = goal.toObject<FinancialGoals>()
+                if (goalObject.dateCompleted != null) {
+                    var targetDate = goalObject?.targetDate!!.toDate()
+                    var completedDate = goalObject?.dateCompleted!!.toDate()
+
+                    //goal was completed before the target date, meaning it was completed on time
+                    if (completedDate.before(targetDate) || completedDate.equals(targetDate)) {
+                        nOnTime++
+                    }
+                }
+            }
+
+            //TODO: ELIANA OVERALL
+            var overall = (nOnTime/nTotal) * 100
+        }
+    }
+
     private fun setReasonPieChart() {
         var percentageBuying = 0.00F
         var percentageEvent = 0.00F
@@ -233,8 +257,7 @@ class SavingFragment : Fragment() {
     }
 
     private fun getGoals() {
-        var currentUser = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
-        //var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
             totalGoals = results.size()
             for (goalSnapshot in results) {

@@ -70,7 +70,8 @@ class BudgetActivity : AppCompatActivity() {
 
         checkUser()
         getBudgetItems()
-        getExpenses()
+        if (spendingActivityID!=null)
+            getExpenses()
         getBalance()
 
 
@@ -146,13 +147,12 @@ class BudgetActivity : AppCompatActivity() {
 
     private fun getAvailableToBudget () {
         availableToBudget = balance
-        println("print avilable to budget" + availableToBudget)
         firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).get().addOnSuccessListener { results ->
             for (item in results) {
                 var budgetItem = item.toObject<BudgetItem>()
                 availableToBudget -= budgetItem.amount!!
             }
-            binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,###.00").format(availableToBudget)
+            binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,##0.00").format(availableToBudget)
         }
     }
 
@@ -201,6 +201,7 @@ class BudgetActivity : AppCompatActivity() {
     }
 
     private fun getExpenses() {
+        println("print " + spendingActivityID)
         var expenses = ArrayList<Transactions>()
         firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { results ->
             for (transaction in results)
@@ -349,6 +350,7 @@ class BudgetActivity : AppCompatActivity() {
                                     editedBudgetCategory = BudgetItem(itemName, dialogBinding.dialogEtOtherCategoryName.text.toString(), budgetActivityID, itemAmount, "Active", currentUser)
                                 firestore.collection("BudgetItems").add(editedBudgetCategory)
                             }
+                            getAvailableToBudget()
                             budgetCategoryIDArrayList.add(budgetItem.id)
                             budgetCategoryAdapter.notifyDataSetChanged()
                             dialog.dismiss()

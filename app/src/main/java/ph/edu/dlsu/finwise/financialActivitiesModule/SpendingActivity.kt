@@ -12,7 +12,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.ActivityBudgetExpenseBinding
+import ph.edu.dlsu.finwise.databinding.ActivitySpendingBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.spendingExpenseFragments.SpendingExpenseListFragment
 import ph.edu.dlsu.finwise.financialActivitiesModule.spendingExpenseFragments.SpendingShoppingListFragment
 import ph.edu.dlsu.finwise.model.BudgetItem
@@ -22,7 +22,7 @@ import kotlin.collections.ArrayList
 
 class SpendingActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityBudgetExpenseBinding
+    private lateinit var binding : ActivitySpendingBinding
     private var firestore = Firebase.firestore
 
     //private lateinit var budgetCategoryID: String
@@ -40,7 +40,7 @@ class SpendingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityBudgetExpenseBinding.inflate(layoutInflater)
+        binding = ActivitySpendingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Hides actionbar,
