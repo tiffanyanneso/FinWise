@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.financialActivitiesModule.IncomeActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.MarkChoreCompletedActivity
 import ph.edu.dlsu.finwise.databinding.ItemEarningBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
 import java.text.DecimalFormat
@@ -69,7 +69,7 @@ class EarningToDoAdapter : RecyclerView.Adapter<EarningToDoAdapter.EarningToDoVi
         }
 
         override fun onClick(p0: View?) {
-            var income = Intent (context, IncomeActivity::class.java)
+            var income = Intent (context, MarkChoreCompletedActivity::class.java)
             var bundle = Bundle()
             bundle.putString("earningActivityID", itemBinding.tvEarningActivityId.text.toString())
             bundle.putString("savingActivityID", itemBinding.tvSavingActivityId.text.toString())

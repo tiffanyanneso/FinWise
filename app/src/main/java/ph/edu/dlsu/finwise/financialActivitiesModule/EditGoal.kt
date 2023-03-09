@@ -15,15 +15,13 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.ActivityChildEditGoalBinding
-import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
-import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.databinding.ActivityEditGoalBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ChildEditGoal : AppCompatActivity() {
-    private lateinit var binding : ActivityChildEditGoalBinding
+class EditGoal : AppCompatActivity() {
+    private lateinit var binding : ActivityEditGoalBinding
     private var firestore = Firebase.firestore
 
     private lateinit var financialGoalID:String
@@ -32,7 +30,7 @@ class ChildEditGoal : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityChildEditGoalBinding.inflate(layoutInflater)
+        binding = ActivityEditGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         var bundle = intent.extras!!

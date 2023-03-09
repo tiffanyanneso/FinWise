@@ -80,7 +80,7 @@ class ViewGoalActivity : AppCompatActivity() {
         sendBundle.putString("source", "viewGoal")
 
         binding.btnEditGoal.setOnClickListener {
-            var goToEditGoal = Intent(this, ChildEditGoal::class.java)
+            var goToEditGoal = Intent(this, EditGoal::class.java)
             goToEditGoal.putExtras(sendBundle)
             this.startActivity(goToEditGoal)
         }
@@ -101,9 +101,7 @@ class ViewGoalActivity : AppCompatActivity() {
 
         binding.btnWithdraw.setOnClickListener {
             var goalWithdraw = Intent(this, SavingsWithdrawActivity::class.java)
-            sendBundle.putFloat("savedAmount", savedAmount)
             sendBundle.putString("savingActivityID", savingActivityID)
-            sendBundle.putInt("progress", binding.progressBar.progress)
             goalWithdraw.putExtras(sendBundle)
             this.startActivity(goalWithdraw)
         }

@@ -10,6 +10,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityConfirmWithdrawBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
+import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -50,18 +51,39 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
             )
             firestore.collection("Transactions").add(withdrawal).addOnSuccessListener {
                 firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
+                    // if not goal is not completed, adjust the savings
                     var goal = it.toObject<FinancialGoals>()
-                    var updatedSavings = goal?.currentSavings!! - bundle.getFloat("amount")
-                    firestore.collection("FinancialGoals").document(financialGoalID).update("currentSavings", updatedSavings).addOnSuccessListener {
-                        //TODO: ADJUST USER BALANCE (INCREASE WALLET BALANCE)
-                        var bundle = Bundle()
-                        //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-                        bundle.putString("financialGoalID", financialGoalID)
-                        var saving = Intent(this, ViewGoalActivity::class.java)
-                        saving.putExtras(bundle)
-                        saving.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        this.startActivity(saving)
-                        finish()
+                    if (goal?.status != "Completed") {
+                        var updatedSavings = goal?.currentSavings!! - bundle.getFloat("amount")
+                        firestore.collection("FinancialGoals").document(financialGoalID).update("currentSavings", updatedSavings).addOnSuccessListener {
+                            //TODO: ADJUST USER BALANCE (INCREASE WALLET BALANCE)
+                            var bundle = Bundle()
+                            //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
+                            bundle.putString("financialGoalID", financialGoalID)
+                            var saving = Intent(this, ViewGoalActivity::class.java)
+                            saving.putExtras(bundle)
+                            saving.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            this.startActivity(saving)
+                            finish()
+                        }
+                    }
+                    //withdraw done when child is already in budgeting/spending
+                    else {
+                        var sendBundle = Bundle()
+                        firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener{ results ->
+                            for (activity in results) {
+                                var activityObject = activity.toObject<FinancialActivities>()
+                                if (activityObject.financialActivityName == "Saving")
+                                    sendBundle.putString("savingActivityID", activity.id)
+                                if (activityObject.financialActivityName == "Budgeting")
+                                    sendBundle.putString("budgetActivityID", activity.id)
+                                if (activityObject.financialActivityName == "Spending")
+                                    sendBundle.putString("spendingActivityID", activity.id)
+                            }
+                            var budgeting = Intent(this, BudgetActivity::class.java)
+                            budgeting.putExtras(sendBundle)
+                            startActivity(budgeting)
+                        }
                     }
                 }
             }

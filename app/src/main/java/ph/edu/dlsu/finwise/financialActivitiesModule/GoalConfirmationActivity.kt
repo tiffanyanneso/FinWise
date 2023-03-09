@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +17,6 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalConfirmationBinding
-import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartGoalInfoBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.ChildUser
@@ -145,7 +143,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
-            val goToNewGoal = Intent(applicationContext, ChildNewGoal::class.java)
+            val goToNewGoal = Intent(applicationContext, NewGoal::class.java)
             goToNewGoal.putExtras(bundle)
             goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(goToNewGoal)

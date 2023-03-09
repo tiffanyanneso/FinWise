@@ -11,7 +11,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityTestFinancialBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
+import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.AchievedFragment
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.BudgetingFragment
 
@@ -46,7 +46,7 @@ class TestFinancialActivity : AppCompatActivity() {
 
         binding.btnNewGoal.setOnClickListener {
             context=this
-            var goToNewGoal = Intent(context, ChildNewGoal::class.java)
+            var goToNewGoal = Intent(context, NewGoal::class.java)
             context.startActivity(goToNewGoal)
         }
 

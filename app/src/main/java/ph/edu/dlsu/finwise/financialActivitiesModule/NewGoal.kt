@@ -15,7 +15,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.ActivityChildNewGoalBinding
+import ph.edu.dlsu.finwise.databinding.ActivityNewGoalBinding
 import ph.edu.dlsu.finwise.model.ChildUser
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import java.text.DecimalFormat
@@ -25,9 +25,9 @@ import java.time.Period
 import java.time.format.DateTimeFormatter
 
 
-class ChildNewGoal : AppCompatActivity() {
+class NewGoal : AppCompatActivity() {
 
-    private lateinit var binding : ActivityChildNewGoalBinding
+    private lateinit var binding : ActivityNewGoalBinding
     private var firestore = Firebase.firestore
 
     private lateinit var currentUserType:String
@@ -39,7 +39,7 @@ class ChildNewGoal : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityChildNewGoalBinding.inflate(layoutInflater)
+        binding = ActivityNewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // Hides actionbar,
         // and initializes the navbar

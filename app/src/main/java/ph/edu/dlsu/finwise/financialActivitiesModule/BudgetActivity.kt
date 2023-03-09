@@ -101,7 +101,15 @@ class BudgetActivity : AppCompatActivity() {
         }
 
         binding.btnWithdraw.setOnClickListener {
-            // TODO Connect to withdraw activity
+            var withdraw = Intent(this, SavingsWithdrawActivity::class.java)
+            var sendBundle = Bundle()
+            firestore.collection("FinancialActivities").document(budgetActivityID).get().addOnSuccessListener {
+                var activity = it.toObject<FinancialActivities>()
+                sendBundle.putString("savingActivityID", savingActivityID)
+                sendBundle.putString("financialGoalID", activity?.financialGoalID)
+                withdraw.putExtras(sendBundle)
+                startActivity(withdraw)
+            }
         }
 
         binding.btnNewCategory.setOnClickListener { showNewBudgetItemDialog() }

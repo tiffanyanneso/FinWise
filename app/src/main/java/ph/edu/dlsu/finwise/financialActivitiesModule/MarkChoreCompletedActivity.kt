@@ -9,13 +9,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.databinding.ActivityIncomeBinding
+import ph.edu.dlsu.finwise.databinding.ActivityMarkChoreCompletedBinding
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
-class IncomeActivity : AppCompatActivity() {
+class MarkChoreCompletedActivity : AppCompatActivity() {
 
-    private lateinit var binding:ActivityIncomeBinding
+    private lateinit var binding:ActivityMarkChoreCompletedBinding
 
     private var firestore = Firebase.firestore
 
@@ -27,7 +27,7 @@ class IncomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityIncomeBinding.inflate(layoutInflater)
+        binding = ActivityMarkChoreCompletedBinding.inflate(layoutInflater)
         setContentView(binding.root)
         checkUser()
 

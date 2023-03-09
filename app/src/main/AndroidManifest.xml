@@ -67,7 +67,7 @@
             android:name=".parentFinancialActivitiesModule.EarningMenuActivity"
             android:exported="false" />
         <activity
-            android:name=".financialActivitiesModule.IncomeActivity"
+            android:name=".financialActivitiesModule.MarkChoreCompletedActivity"
             android:exported="false" />
         <activity
             android:name=".AssessmentActivity"
@@ -320,10 +320,10 @@
             android:exported="false" />
         -->
         <activity
-            android:name=".financialActivitiesModule.ChildEditGoal"
+            android:name=".financialActivitiesModule.EditGoal"
             android:exported="false" />
         <activity
-            android:name=".financialActivitiesModule.ChildNewGoal"
+            android:name=".financialActivitiesModule.NewGoal"
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivity"

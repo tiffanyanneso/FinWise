@@ -11,7 +11,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.FragmentGoalFeedbackBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.ChildEditGoal
+import ph.edu.dlsu.finwise.financialActivitiesModule.EditGoal
 import ph.edu.dlsu.finwise.financialActivitiesModule.UpdateGoalActivity
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.GoalRating

@@ -17,12 +17,10 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactGoalSettingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.databinding.FragmentGoalSettingBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
-import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.GoalRating
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.roundToInt
 
 class GoalSettingFragment : Fragment() {
 
@@ -72,7 +70,7 @@ class GoalSettingFragment : Fragment() {
             if (ongoingGoals >= 5)
                 buildDialog()
             else {
-                var goToNewGoal = Intent(requireContext().applicationContext, ChildNewGoal::class.java)
+                var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
                 var bundle = Bundle()
                 bundle.putString("source", "childFinancialActivity")
                 goToNewGoal.putExtras(bundle)
@@ -208,7 +206,7 @@ class GoalSettingFragment : Fragment() {
         dialogBinding.tvMessage.text= "You have $ongoingGoals ongoing goals.\nAre you sure you want to start another one?"
 
         dialogBinding.btnOk.setOnClickListener {
-            var newGoal = Intent (requireContext().applicationContext, ChildNewGoal::class.java)
+            var newGoal = Intent (requireContext().applicationContext, NewGoal::class.java)
 
             var bundle = Bundle()
             bundle.putString("source", "childFinancialActivity")

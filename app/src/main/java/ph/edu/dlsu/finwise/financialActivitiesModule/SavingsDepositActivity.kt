@@ -141,6 +141,10 @@ class SavingsDepositActivity : AppCompatActivity() {
         dialog.window!!.setLayout(1000, 1200)
 
         var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
+        firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
+            var goal = it.toObject<FinancialGoals>()
+            calendar.minDate = goal?.dateCreated!!.toDate().time
+        }
         calendar.maxDate = System.currentTimeMillis()
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->

@@ -2,7 +2,6 @@ package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 
 import android.app.Dialog
 import android.content.Intent
-import android.graphics.Color.blue
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -19,15 +18,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.databinding.FragmentFinactSavingBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.ChildNewGoal
+import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
 import ph.edu.dlsu.finwise.model.*
-import java.lang.String.format
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -86,7 +83,7 @@ class SavingFragment : Fragment() {
             if (ongoingGoals >= 5)
                 buildDialog()
             else {
-                var goToNewGoal = Intent(requireContext().applicationContext, ChildNewGoal::class.java)
+                var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
                 var bundle = Bundle()
                 bundle.putString("source", "childFinancialActivity")
                 goToNewGoal.putExtras(bundle)
@@ -294,7 +291,7 @@ class SavingFragment : Fragment() {
         dialogBinding.tvMessage.text= "You have $ongoingGoals ongoing goals.\nAre you sure you want to start another one?"
 
         dialogBinding.btnOk.setOnClickListener {
-            var newGoal = Intent (requireContext().applicationContext, ChildNewGoal::class.java)
+            var newGoal = Intent (requireContext().applicationContext, NewGoal::class.java)
 
             var bundle = Bundle()
             bundle.putString("source", "childFinancialActivity")
