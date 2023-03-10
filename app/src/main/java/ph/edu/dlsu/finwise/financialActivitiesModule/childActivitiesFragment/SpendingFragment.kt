@@ -64,19 +64,18 @@ class SpendingFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.title.text= "Overall Spending Performance"
      /*   binding.progressBarOverspending.progress = 0
         binding.textPerformance.text = "0.00%"*/
 //        binding.textStatus.text = "Good"
 //        binding.textPerformance.setTextColor(getResources().getColor(R.color.dark_green))
 //        binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
 
-        binding.progressBarOverspending.progress = 0
-        binding.tvOverspendingPercentage.text = "0.00%"
 //        binding.tvOverspendingStatus.text = "Bad"
 //        binding.tvOverspendingPercentage.setTextColor(getResources().getColor(R.color.red))
 //        binding.tvOverspendingStatus.setTextColor(getResources().getColor(R.color.red))
 
-        binding.titleOverspendingFrequency.text = "Overspending\nFrequency"
       //  binding.titleOverallSpendingPerformance.text = "Overall Spending\nPerformance"
     }
 
@@ -131,8 +130,8 @@ class SpendingFragment : Fragment(){
 
         }.continueWith {
             overspendingPercentage = (overSpending/nBudgetItems)*100
-            binding.progressBarOverspending.progress = overspendingPercentage.toInt()
-            binding.tvOverspendingPercentage.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
+//            binding.progressBarOverspending.progress = overspendingPercentage.toInt()
+//            binding.tvOverspendingPercentage.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
 
             purchasePlanning()
 
@@ -140,6 +139,16 @@ class SpendingFragment : Fragment(){
 //            binding.tvOverspendingPercentage.setTextColor(getResources().getColor(R.color.red))
 //            binding.tvOverspendingStatus.setTextColor(getResources().getColor(R.color.red))
         }
+    }
+
+    private fun showSeeMoreButton() {
+        binding.btnSeeMore.visibility = View.VISIBLE
+        binding.layoutButtons.visibility = View.GONE
+    }
+
+    private fun showReviewButton() {
+        binding.btnSeeMore.visibility = View.GONE
+        binding.layoutButtons.visibility = View.VISIBLE
     }
 
     private fun purchasePlanning() {
@@ -158,8 +167,41 @@ class SpendingFragment : Fragment(){
                     firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID.id).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { expenseTransactions ->
                         nTotalPurchased += expenseTransactions.size().toFloat()
                     }.continueWith {
-                        //TODO: ELIANA OVERALL
                         overallSpending = (overspendingPercentage + ((nPlanned/nTotalPurchased)*100)) /2
+
+                        binding.tvPerformanceText.text ="${overallSpending}%"
+
+                        if (overallSpending >= 90) {
+                            binding.imgFace.setImageResource(R.drawable.excellent)
+                            binding.textStatus.text = "Excellent"
+                            binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
+                            binding.tvPerformanceText.text = "Keep up the excellent work! Spending wisely is your strong point. Keep it up!"
+                            showSeeMoreButton()
+                        } else if (overallSpending < 90 && overallSpending >= 80) {
+                            binding.imgFace.setImageResource(R.drawable.great)
+                            binding.textStatus.text = "Great"
+                            binding.textStatus.setTextColor(getResources().getColor(R.color.green))
+                            binding.tvPerformanceText.text = " Great job! You are performing well. Keep spending wisely!"
+                            showSeeMoreButton()
+                        } else if (overallSpending < 80 && overallSpending >= 70) {
+                            binding.imgFace.setImageResource(R.drawable.good)
+                            binding.textStatus.text = "Good"
+                            binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
+                            binding.tvPerformanceText.text = "Good job! With a bit more planning to detail, you’ll surely up your performance!"
+                            showSeeMoreButton()
+                        } else if (overallSpending < 70 && overallSpending >= 60) {
+                            binding.imgFace.setImageResource(R.drawable.average)
+                            binding.textStatus.text = "Average"
+                            binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
+                            binding.tvPerformanceText.text = "Nice work! Work on improving your spending performance by always planning ahead. You’ll get there soon!"
+                            showReviewButton()
+                        } else if (overallSpending < 60) {
+                            binding.imgFace.setImageResource(R.drawable.bad)
+                            binding.textStatus.text = "Bad"
+                            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+                            binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
+                            showReviewButton()
+                        }
                     }
                 }
             }
