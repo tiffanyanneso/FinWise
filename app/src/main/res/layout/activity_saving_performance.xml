@@ -82,7 +82,7 @@
 
                             <ImageView
                                 android:src="@drawable/good"
-                                android:id="@+id/iv_score"
+                                android:id="@+id/img_face"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center"/>

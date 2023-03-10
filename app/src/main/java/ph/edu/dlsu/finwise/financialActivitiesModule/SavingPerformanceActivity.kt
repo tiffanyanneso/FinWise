@@ -1,7 +1,9 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -20,6 +22,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySavingPerformanceBinding
     private var firestore = Firebase.firestore
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private var ongoingGoals = 0
     //includes achieved goals in count
@@ -74,6 +77,58 @@ class SavingPerformanceActivity : AppCompatActivity() {
         }.continueWith {
             setDurationPieChart()
             setReasonPieChart()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun computeOverallScore() {
+        var nTotal = 0.00F
+        var nOnTime =0.00F
+        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+            nTotal = results.size().toFloat()
+            for (goal in results) {
+                var goalObject = goal.toObject<FinancialGoals>()
+                if (goalObject.dateCompleted != null) {
+                    var targetDate = goalObject?.targetDate!!.toDate()
+                    var completedDate = goalObject?.dateCompleted!!.toDate()
+
+                    //goal was completed before the target date, meaning it was completed on time
+                    if (completedDate.before(targetDate) || completedDate.equals(targetDate)) {
+                        nOnTime++
+                    }
+                }
+            }
+
+            var overall = (nOnTime/nTotal) * 100
+
+            binding.tvPerformancePercentage.text ="${overall}%"
+
+            if (overall >= 90) {
+                binding.imgFace.setImageResource(R.drawable.excellent)
+                binding.tvPerformanceStatus.text = "Excellent"
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
+                binding.tvPerformanceText.text = "Keep up the excellent work! Saving is your strong point. Keep completing those goals!"
+            } else if (overall < 90 && overall >= 80) {
+                binding.imgFace.setImageResource(R.drawable.great)
+                binding.tvPerformanceStatus.text = "Great"
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
+                binding.tvPerformanceText.text = "Great job! You are performing well. Keep completing those goals!"
+            } else if (overall < 80 && overall >= 70) {
+                binding.imgFace.setImageResource(R.drawable.good)
+                binding.tvPerformanceStatus.text = "Good"
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
+                binding.tvPerformanceText.text = "Good job! With a bit more dedication and effort, you’ll surely up your performance!"
+            } else if (overall < 70 && overall >= 60) {
+                binding.imgFace.setImageResource(R.drawable.average)
+                binding.tvPerformanceStatus.text = "Average"
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
+                binding.tvPerformanceText.text = "Nice work! Work on improving your saving performance through time and effort. You’ll get there soon!"
+            } else if (overall < 60) {
+                binding.imgFace.setImageResource(R.drawable.bad)
+                binding.tvPerformanceStatus.text = "Bad"
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                binding.tvPerformanceText.text = "Uh oh! Your saving performance needs a lot of improvement.  Click review to learn how!"
+            }
         }
     }
 

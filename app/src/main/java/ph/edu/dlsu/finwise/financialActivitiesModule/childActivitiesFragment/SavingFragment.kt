@@ -172,6 +172,16 @@ class SavingFragment : Fragment() {
         }
     }
 
+    private fun showSeeMoreButton() {
+        binding.btnSeeMore.visibility = View.VISIBLE
+        binding.layoutButtons.visibility = View.GONE
+    }
+
+    private fun showReviewButton() {
+        binding.btnSeeMore.visibility = View.GONE
+        binding.layoutButtons.visibility = View.VISIBLE
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun computeOverallScore() {
         var nTotal = 0.00F
@@ -191,58 +201,91 @@ class SavingFragment : Fragment() {
                 }
             }
 
-            //TODO: ELIANA OVERALL
             var overall = (nOnTime/nTotal) * 100
+
+            binding.tvPerformancePercentage.text ="${overall}%"
+
+            if (overall >= 90) {
+                binding.imgFace.setImageResource(R.drawable.excellent)
+                binding.tvPerformanceStatus.text = "Excellent"
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
+                binding.tvPerformanceText.text = "Keep up the excellent work! Saving is your strong point. Keep completing those goals!"
+                showSeeMoreButton()
+            } else if (overall < 90 && overall >= 80) {
+                binding.imgFace.setImageResource(R.drawable.great)
+                binding.tvPerformanceStatus.text = "Great"
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
+                binding.tvPerformanceText.text = "Great job! You are performing well. Keep completing those goals!"
+                showSeeMoreButton()
+            } else if (overall < 80 && overall >= 70) {
+                binding.imgFace.setImageResource(R.drawable.good)
+                binding.tvPerformanceStatus.text = "Good"
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
+                binding.tvPerformanceText.text = "Good job! With a bit more dedication and effort, you’ll surely up your performance!"
+                showSeeMoreButton()
+            } else if (overall < 70 && overall >= 60) {
+                binding.imgFace.setImageResource(R.drawable.average)
+                binding.tvPerformanceStatus.text = "Average"
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
+                binding.tvPerformanceText.text = "Nice work! Work on improving your saving performance through time and effort. You’ll get there soon!"
+                showReviewButton()
+            } else if (overall < 60) {
+                binding.imgFace.setImageResource(R.drawable.bad)
+                binding.tvPerformanceStatus.text = "Bad"
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                binding.tvPerformanceText.text = "Uh oh! Your saving performance needs a lot of improvement.  Click review to learn how!"
+                showReviewButton()
+            }
         }
     }
 
-    private fun setReasonPieChart() {
-        var percentageBuying = 0.00F
-        var percentageEvent = 0.00F
-        var percentageEmergency = 0.00F
-        var percentageSituational = 0.00F
-        var percentageDonating = 0.00F
-        var percentageEarning = 0.00F
-
-        if (totalGoals!=0) {
-             percentageBuying = ((nBuyingItem.toFloat() / totalGoals.toFloat()) * 100)
-             percentageEvent = ((nEvent.toFloat() / totalGoals.toFloat()) * 100)
-             percentageEmergency = ((nEmergency.toFloat() / totalGoals.toFloat()) * 100)
-             percentageSituational = ((nSituational.toFloat() / totalGoals.toFloat()) * 100)
-             percentageDonating = ((nCharity.toFloat() / totalGoals.toFloat()) * 100)
-             percentageEarning = ((nEarning.toFloat() / totalGoals.toFloat()) * 100)
-        }
-
-
-
-        val entries = listOf(
-            PieEntry(percentageBuying, "Buying Items"),
-            PieEntry(percentageEvent, "Planning An Event"),
-            PieEntry(percentageEmergency, "Saving For Emergency Funds"),
-            PieEntry(percentageSituational, "Situational Shopping"),
-            PieEntry(percentageDonating, "Donating To Charity"),
-            PieEntry(percentageEarning, "Earning Money"),
-        )
-
-        var dataSet = PieDataSet(entries, "Data")
-
-        val colors: ArrayList<Int> = ArrayList()
-        colors.add(resources.getColor(R.color.purple_200))
-        colors.add(resources.getColor( R.color.yellow))
-        colors.add(resources.getColor(R.color.red))
-        colors.add(resources.getColor( R.color.dark_green))
-        colors.add(resources.getColor( R.color.teal_200))
-        colors.add(resources.getColor( R.color.black))
-
-
-        // setting colors.
-        dataSet.colors = colors
-
-        var data = PieData(dataSet)
-
-//        binding.pcReasonCategories.data = data
-//        binding.pcReasonCategories.invalidate()
-    }
+//    private fun setReasonPieChart() {
+//        var percentageBuying = 0.00F
+//        var percentageEvent = 0.00F
+//        var percentageEmergency = 0.00F
+//        var percentageSituational = 0.00F
+//        var percentageDonating = 0.00F
+//        var percentageEarning = 0.00F
+//
+//        if (totalGoals!=0) {
+//             percentageBuying = ((nBuyingItem.toFloat() / totalGoals.toFloat()) * 100)
+//             percentageEvent = ((nEvent.toFloat() / totalGoals.toFloat()) * 100)
+//             percentageEmergency = ((nEmergency.toFloat() / totalGoals.toFloat()) * 100)
+//             percentageSituational = ((nSituational.toFloat() / totalGoals.toFloat()) * 100)
+//             percentageDonating = ((nCharity.toFloat() / totalGoals.toFloat()) * 100)
+//             percentageEarning = ((nEarning.toFloat() / totalGoals.toFloat()) * 100)
+//        }
+//
+//
+//
+//        val entries = listOf(
+//            PieEntry(percentageBuying, "Buying Items"),
+//            PieEntry(percentageEvent, "Planning An Event"),
+//            PieEntry(percentageEmergency, "Saving For Emergency Funds"),
+//            PieEntry(percentageSituational, "Situational Shopping"),
+//            PieEntry(percentageDonating, "Donating To Charity"),
+//            PieEntry(percentageEarning, "Earning Money"),
+//        )
+//
+//        var dataSet = PieDataSet(entries, "Data")
+//
+//        val colors: ArrayList<Int> = ArrayList()
+//        colors.add(resources.getColor(R.color.purple_200))
+//        colors.add(resources.getColor( R.color.yellow))
+//        colors.add(resources.getColor(R.color.red))
+//        colors.add(resources.getColor( R.color.dark_green))
+//        colors.add(resources.getColor( R.color.teal_200))
+//        colors.add(resources.getColor( R.color.black))
+//
+//
+//        // setting colors.
+//        dataSet.colors = colors
+//
+//        var data = PieData(dataSet)
+//
+////        binding.pcReasonCategories.data = data
+////        binding.pcReasonCategories.invalidate()
+//    }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
         goalAdapter = FinactSavingAdapter(requireContext().applicationContext, goalIDArrayList)
@@ -274,7 +317,7 @@ class SavingFragment : Fragment() {
 
         }.continueWith {
             setGoalCount()
-            setReasonPieChart()
+//            setReasonPieChart()
         }
     }
 
