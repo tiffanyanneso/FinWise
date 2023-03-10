@@ -1,10 +1,13 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -27,6 +30,7 @@ import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
+import kotlin.math.absoluteValue
 
 class SpendingActivity : AppCompatActivity() {
 
@@ -92,6 +96,7 @@ class SpendingActivity : AppCompatActivity() {
     }
 
 
+    @SuppressLint("ResourceAsColor")
     private fun getAvailableBudget() {
         firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
             var budgetCategory = it.toObject<BudgetItem>()
@@ -105,8 +110,20 @@ class SpendingActivity : AppCompatActivity() {
                     spent += expenseObject.amount!!.toFloat()
                 }
             }.continueWith {
-                    remainingBudget = categoryAmount?.minus(spent)!!
+                remainingBudget = categoryAmount?.minus(spent)!!
+                if (remainingBudget!! >= 0.00F ) {
+                    binding.tvTitle.text = "Remaining Budget"
+                    binding.tvTitle.setTextColor(getResources().getColor(R.color.white))
                     binding.tvCategoryAmount.text = "₱ " + DecimalFormat("###0.00").format(remainingBudget).toString()
+                    binding.tvCategoryAmount.setTextColor(getResources().getColor(R.color.white))
+                    binding.layoutAmount.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.dark_green))
+                } else {
+                    binding.tvTitle.text = "Amount spent over the budget"
+                    binding.tvTitle.setTextColor(getResources().getColor(R.color.black))
+                    binding.tvCategoryAmount.text = "₱ " + DecimalFormat("###0.00").format(remainingBudget.absoluteValue).toString()
+                    binding.tvCategoryAmount.setTextColor(getResources().getColor(R.color.black))
+                    binding.layoutAmount.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.light_red))
+                }
             }
         }.continueWith { initializeFragments() }
     }
