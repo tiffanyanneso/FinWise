@@ -69,11 +69,11 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
 
     private fun goToEarningActivity() {
         binding.btnEarning.setOnClickListener {
-            var goToEarningActivity = Intent(this, EarningMenuActivity::class.java)
+            val goToHomeRewardsActivity = Intent(this, EarningActivity::class.java)
             bundle.putString("childID", childID)
-            bundle.putString("user", "parent")
-            goToEarningActivity.putExtras(bundle)
-            startActivity(goToEarningActivity)
+            bundle.putString("module", "pfm")
+            goToHomeRewardsActivity.putExtras(bundle)
+            startActivity(goToHomeRewardsActivity)
         }
     }
 

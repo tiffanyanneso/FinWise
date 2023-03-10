@@ -51,6 +51,7 @@ class NewEarningActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
+        savingActivityID = bundle.getString("savingActivityID").toString()
 
         initializeDropDowns()
         loadBackButton()

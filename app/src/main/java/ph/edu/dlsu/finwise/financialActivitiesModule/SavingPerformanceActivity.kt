@@ -101,9 +101,10 @@ class SavingPerformanceActivity : AppCompatActivity() {
                 }
             }
 
-            var overall = (nOnTime/nTotal) * 100
+            val overall = (nOnTime/nTotal) * 100
+            val overallRoundedNumber = "%.1f".format(overall).toFloat()
 
-            binding.tvPerformancePercentage.text ="${overall}%"
+            binding.tvPerformancePercentage.text ="${overallRoundedNumber}%"
 
             if (overall >= 90) {
                 binding.imgFace.setImageResource(R.drawable.excellent)

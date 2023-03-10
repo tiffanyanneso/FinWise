@@ -309,6 +309,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             val goToEarningActivity = Intent(applicationContext, EarningMenuActivity::class.java)
             val bundle = Bundle()
             bundle.putString("childID", childID)
+            bundle.putString("module", "pfm")
             bundle.putString("user", "child")
             goToEarningActivity.putExtras(bundle)
             startActivity(goToEarningActivity)

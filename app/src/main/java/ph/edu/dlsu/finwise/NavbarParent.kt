@@ -28,6 +28,7 @@ class NavbarParent (bottomNavigationView: BottomNavigationView, appCon: Context,
 
                 //TODO: can't navigate back to this activity because it doesn't pass a childID
                 // that is needed in this activity in line 61
+                // make childID global variable?
                 R.id.nav_parent_goal -> {
                     val intent = Intent(appCon, ParentGoalActivity::class.java)
                     appCon.startActivity(intent)
