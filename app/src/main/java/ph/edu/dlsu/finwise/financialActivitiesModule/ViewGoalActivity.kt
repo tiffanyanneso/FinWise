@@ -156,6 +156,7 @@ class ViewGoalActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setFinancialActivityID() {
+        var allComplete = true
         firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
             for (finActivity in results) {
                 var activityObject = finActivity.toObject<FinancialActivities>()
@@ -170,14 +171,39 @@ class ViewGoalActivity : AppCompatActivity() {
                         binding.btnEditGoal.isEnabled = true
                         binding.btnEditGoal.isClickable = true
                         binding.btnEditGoal.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_green)))
+                        allComplete = false
                     }
                 }
                 if (activityObject.financialActivityName == "Budgeting")
                     budgetingActivityID = finActivity.id
+
                 if (activityObject.financialActivityName == "Spending")
                     spendingActivityID = finActivity.id
+
+                if (activityObject.status != "Completed")
+                    allComplete = false
             }
         }.continueWith {
+            //if all activities are complete, no more updates are allowed
+            if (allComplete) {
+                binding.layoutDeposit.visibility = View.GONE
+                binding.layoutWithdraw.visibility = View.GONE
+                binding.layoutEarning.visibility = View.GONE
+                binding.layoutEdit.visibility = View.GONE
+                binding.tvDeposit.visibility = View.GONE
+                binding.tvWithdraw.visibility = View.GONE
+                binding.tvEarning.visibility = View.GONE
+                binding.tvEditGoal.visibility = View.GONE
+            } else {
+                binding.layoutDeposit.visibility = View.VISIBLE
+                binding.layoutWithdraw.visibility = View.VISIBLE
+                binding.layoutEarning.visibility = View.VISIBLE
+                binding.layoutEdit.visibility = View.VISIBLE
+                binding.tvDeposit.visibility = View.VISIBLE
+                binding.tvWithdraw.visibility = View.VISIBLE
+                binding.tvEarning.visibility = View.VISIBLE
+                binding.tvEditGoal.visibility = View.VISIBLE
+            }
             getTransactions() }
     }
 

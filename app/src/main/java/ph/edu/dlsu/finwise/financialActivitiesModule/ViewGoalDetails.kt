@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,6 +13,7 @@ import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalDetailsBinding
+import ph.edu.dlsu.finwise.databinding.DialogDeleteGoalWarningBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -39,6 +41,33 @@ class ViewGoalDetails : AppCompatActivity() {
             goToGoal.putExtras(bundle)
             goToGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(goToGoal)
+        }
+
+        binding.btnDelete.setOnClickListener {
+            var dialogBinding= DialogDeleteGoalWarningBinding.inflate(getLayoutInflater())
+            var dialog= Dialog(this);
+            dialog.setContentView(dialogBinding.getRoot())
+
+            dialog.window!!.setLayout(800, 1000)
+
+            dialogBinding.btnOk.setOnClickListener {
+                dialog.dismiss()
+                //mark financial goal as deleted
+                firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Deleted")
+                //mark related activities as deleted
+                firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
+                    for (activity in results )
+                        firestore.collection("FinancialActivities").document(activity.id).update("status", "Deleted")
+                }
+                var finact = Intent(this, FinancialActivity::class.java)
+                startActivity(finact)
+                finish()
+            }
+
+            dialogBinding.btnCancel.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
         }
     }
 

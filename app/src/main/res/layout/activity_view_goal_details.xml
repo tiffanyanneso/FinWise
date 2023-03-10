@@ -236,6 +236,20 @@
                     android:textColor="@color/black"/>
             </LinearLayout>
         </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Delete Goal"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/red"
+            android:background="@drawable/button_border_grey"
+            android:layout_marginRight="10dp"
+            />
     </LinearLayout>
 
     <!--Bottom navigation bar-->

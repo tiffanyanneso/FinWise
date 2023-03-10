@@ -16,6 +16,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEditGoalBinding
+import ph.edu.dlsu.finwise.databinding.DialogDeleteGoalWarningBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.SimpleDateFormat
 import java.util.*
@@ -91,16 +92,20 @@ class EditGoal : AppCompatActivity() {
     }
 
     private fun confirmDeleteGoal() {
+        var dialogBinding= DialogDeleteGoalWarningBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
 
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Delete Goal?")
-        builder.setMessage("Are you sure you want to delete your goal?\nSavings will be returned to wallet")
+        dialog.window!!.setLayout(800, 1000)
 
-        builder.setPositiveButton(android.R.string.yes) { dialog, which -> deleteGoal()}
+        dialogBinding.btnOk.setOnClickListener {
+           deleteGoal()
+        }
 
-        builder.setNegativeButton(android.R.string.no) { dialog, which -> dialog.dismiss() }
-
-        builder.show()
+        dialogBinding.btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun deleteGoal() {
@@ -113,6 +118,7 @@ class EditGoal : AppCompatActivity() {
         }
         var goalList = Intent(this, FinancialActivity::class.java)
         this.startActivity(goalList)
+        finish()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

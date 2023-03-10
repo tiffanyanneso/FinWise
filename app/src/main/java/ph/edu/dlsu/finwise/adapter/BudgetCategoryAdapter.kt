@@ -16,6 +16,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ItemBudgetCategoryBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetActivity
 import ph.edu.dlsu.finwise.model.BudgetItem
+import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import kotlin.math.absoluteValue
@@ -26,12 +27,13 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
     private var context: Context
     private var menuClick:MenuClick
     private var itemClick:ItemClick
-
+    private var spendingActivityID:String
     private var firestore = Firebase.firestore
 
-    constructor(context: Context, budgetCategoryIDArrayList:ArrayList<String>,  menuClick:MenuClick, itemClick:ItemClick) {
+    constructor(context: Context, budgetCategoryIDArrayList:ArrayList<String>, spendingActivityID:String , menuClick:MenuClick, itemClick:ItemClick) {
         this.context = context
         this.budgetCategoryIDArrayList = budgetCategoryIDArrayList
+        this.spendingActivityID = spendingActivityID
         this.menuClick = menuClick
         this.itemClick = itemClick
     }
@@ -64,6 +66,7 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
 
         @SuppressLint("ResourceAsColor")
         fun bindCategory(budgetItemID: String){
+
             itemBinding.btnSettings.setOnClickListener {
                 val popup = PopupMenu(context, it)
                 popup.inflate(R.menu.menu_budget_category)
@@ -116,6 +119,20 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
                         itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.light_red))
                     }
                     itemBinding.progressBar.progress = (spent/ categoryAmount!! *100).toInt()
+
+                    var activitiesDone = true
+                    firestore.collection("FinancialActivities").document(budgetCategory?.financialActivityID!!).get().addOnSuccessListener { budget ->
+                        if (budget.toObject<FinancialActivities>()!!.status != "Completed")
+                            activitiesDone = false
+                    }.continueWith {
+                        firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener { spend ->
+                            if (spend.toObject<FinancialActivities>()!!.status != "Completed")
+                                activitiesDone = false
+                        }.continueWith {
+                            if (activitiesDone)
+                                itemBinding.btnSettings.visibility = View.GONE
+                        }
+                    }
                 }
             }
         }

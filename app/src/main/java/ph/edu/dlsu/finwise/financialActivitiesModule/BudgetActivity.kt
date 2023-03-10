@@ -25,6 +25,7 @@ import ph.edu.dlsu.finwise.databinding.DialogFinishBudgetingBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import java.util.*
@@ -75,9 +76,7 @@ class BudgetActivity : AppCompatActivity() {
             getExpenses()
         getBalance()
 
-
-        //checks if child has already finished setting budget
-        //if they are done setting budget, any changes would count as an update that would affect their overall score
+        var allCompleted = true
         firestore.collection("FinancialActivities").document(budgetActivityID).get().addOnSuccessListener {
             var financialActivity = it.toObject<FinancialActivities>()
             if (financialActivity?.status == "Completed") {
@@ -86,14 +85,34 @@ class BudgetActivity : AppCompatActivity() {
                 binding.btnWithdraw.isEnabled = false
                 binding.btnDoneSettingBudget.visibility = View.GONE
                 binding.btnDoneSpending.visibility = View.VISIBLE
-                //binding.linearLayoutText.visibility = View.GONE
                 binding.tvAvailable.text = "Savings available to spend"
             }
             else {
                 binding.btnDoneSettingBudget.visibility = View.VISIBLE
                 binding.btnDoneSpending.visibility = View.GONE
                 binding.tvAvailable.text = "Savings available to budget"
+                allCompleted = false
             }
+
+
+            firestore.collection("FinancialGoals").document(financialActivity?.financialGoalID!!).get().addOnSuccessListener {
+                binding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
+            }
+        }.continueWith {
+            firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
+                var financialActivity = it.toObject<FinancialActivities>()
+                if (financialActivity?.status != "Completed")
+                    allCompleted = false
+            }.continueWith {
+                if (allCompleted)
+                    binding.btnNewCategory.visibility = View.GONE
+            }
+        }
+
+        //check if spending is done, if yes, hide buttons
+        firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
+            if (it.toObject<FinancialActivities>()!!.status == "Completed")
+                binding.linearLayoutButtons.visibility = View.GONE
         }
 
 
@@ -114,6 +133,17 @@ class BudgetActivity : AppCompatActivity() {
                 sendBundle.putString("financialGoalID", activity?.financialGoalID)
                 withdraw.putExtras(sendBundle)
                 startActivity(withdraw)
+            }
+        }
+
+        binding.btnGoalDetails.setOnClickListener{
+            firestore.collection("FinancialActivities").document(savingActivityID).get().addOnSuccessListener {
+                var financialGoalID = it.toObject<FinancialActivities>()!!.financialGoalID
+                var goalDetails = Intent (this, ViewGoalDetails::class.java)
+                var sendBundle = Bundle()
+                sendBundle.putString("financialGoalID", financialGoalID)
+                goalDetails.putExtras(sendBundle)
+                startActivity(goalDetails)
             }
         }
 
@@ -161,6 +191,7 @@ class BudgetActivity : AppCompatActivity() {
             budgetCategoryAdapter = BudgetCategoryAdapter(
                 this,
                 budgetCategoryIDArrayList,
+                spendingActivityID,
                 object : BudgetCategoryAdapter.MenuClick {
                     override fun clickMenuItem(position: Int, menuOption: String, budgetItemID: String) {
                         if (menuOption == "Edit")
@@ -432,8 +463,9 @@ class BudgetActivity : AppCompatActivity() {
         dialogBinding.btnOk.setOnClickListener {
             isCompleted = true
             firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "Completed")
-            //TODO: REDIRECT TO SPENDING COMPLETION PAGE
             dialog.dismiss()
+            var finact = Intent(this, FinancialActivity::class.java)
+            startActivity(finact)
         }
 
         dialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
