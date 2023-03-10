@@ -199,19 +199,19 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         val bitmap: Bitmap
 
         if (ratio >= 200) {
-            grade = "Excellent \uD83D\uDCB0 \n Your child is doing great! They have a good handle on their finances and are spending less than they earn."
+            grade = "Excellent \n Your child is demonstrating good financial habits by spending less than they earn"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (ratio >= 150 && ratio < 200) {
-             grade = "Great \uD83D\uDC4D \n Your child is doing pretty well, but there is room for improvement. They are spending close to what they earn but could benefit from finding ways to increase their income or reduce their expenses so they can save more money."
+             grade = "Great \n Your child is doing well but could save more money by finding ways to increase their income or reduce their expenses"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (ratio >= 100 && ratio < 150) {
-             grade = "Good \uD83D\uDE42 \n Your child is spending more than they earn and may be struggling to save money. It's important to help them find ways to cut back on expenses and increase their income, so they can achieve a healthier financial situation."
+             grade = "Good \n Your child is overspending and struggling to save, so finding ways to cut back on expenses and increase their income can help them achieve a healthier financial situation"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
         } else if (ratio >= 50 && ratio < 100) {
-             grade = "Average \uD83D\uDE10 \n Your child is spending significantly more than they earn and may be in danger of accumulating debt. It's important to take action to help them reduce their expenses and increase their income as soon as possible."
+             grade = "Average \n Your child's financial situation could benefit from reducing expenses and increasing income, as they are currently spending much more than they earn"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else {
-             grade = "Bad \uD83D\uDCB8 \n Your child is spending far more than they earn and is likely accumulating debt. It's crucial to take immediate action to help them get their finances in order, including reducing expenses and finding ways to increase income."
+             grade = "Bad \n Your child's expenses exceed their income, so it's important to take immediate action to help them improve their financial situation by reducing expenses and finding ways to increase income"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
         }
 
