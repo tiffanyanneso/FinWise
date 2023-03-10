@@ -60,7 +60,7 @@ class EarningPendingConfirmationAdapter : RecyclerView.Adapter<EarningPendingCon
                 itemBinding.tvActivity.text = earning?.activityName
                 itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
                 itemBinding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
-                itemBinding.tvSource.text = earning?.source
+                itemBinding.tvSource.text = earning?.depositTo
                 itemBinding.tvEarningActivityId.text = earningID
                 itemBinding.tvChildId.text = earning?.childID
                 //itemBinding.tvFinishDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.dateCompleted!!.toDate())

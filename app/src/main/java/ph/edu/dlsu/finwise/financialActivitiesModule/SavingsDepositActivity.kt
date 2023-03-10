@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -31,6 +32,8 @@ class SavingsDepositActivity : AppCompatActivity() {
 
     private lateinit var financialGoalID:String
     private lateinit var savingActivityID:String
+
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private var savedAmount = 0.00F
     private var walletBalance = 0.00F
@@ -89,7 +92,7 @@ class SavingsDepositActivity : AppCompatActivity() {
                     " / ₱ " + DecimalFormat("#,##0.00").format(financialGoal?.targetAmount)
         }
 
-        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2").get().addOnSuccessListener {
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener {
             var wallet = it.documents[0].toObject<ChildWallet>()
             walletBalance = wallet?.currentBalance!!
             binding.tvBalance.text = "You currently have ₱${DecimalFormat("#,##0.00").format(walletBalance)} in your wallet"

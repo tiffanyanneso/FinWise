@@ -12,6 +12,6 @@ class EarningActivityModel (
     var status:String?=null,
     var dateCompleted: Timestamp?=null,
     //field to identify if the earning activity was made from pfm of goal
-    var source:String?=null
+    var depositTo:String?=null
         ) {
 }

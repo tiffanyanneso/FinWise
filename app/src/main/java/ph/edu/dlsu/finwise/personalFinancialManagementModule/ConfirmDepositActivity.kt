@@ -70,13 +70,10 @@ class ConfirmDepositActivity : AppCompatActivity() {
         goal = bundle!!.getString("goal")
         date = bundle!!.getSerializable("date") as Date
 
-        val dec = DecimalFormat("#,##0.00")
-        val textAmount = dec.format(bundle!!.getFloat("amount"))
-        binding.tvAmount.text = "₱$textAmount"
+
+        binding.tvAmount.text = "₱${DecimalFormat("#,##0.00").format(bundle!!.getFloat("amount"))}"
         binding.tvGoal.text = goal.toString()
-        binding.tvWalletBalance.text = "₱ " +
-                DecimalFormat("#,##0.00")
-                    .format(balance - amount)
+        binding.tvWalletBalance.text = "₱${DecimalFormat("#,##0.00").format(balance - amount)}"
 
         val formatter = SimpleDateFormat("MM/dd/yyyy")
         val dateSerializable = bundle!!.getSerializable("date")

@@ -24,7 +24,6 @@ class EarningSellingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEarningSellingBinding
 
     private lateinit var childID:String
-    private lateinit var savingActivityID:String
 
     private var firestore = Firebase.firestore
 
@@ -41,8 +40,6 @@ class EarningSellingActivity : AppCompatActivity() {
 
         val bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
-        savingActivityID = bundle.getString("savingActivityID").toString()
-        Log.d("asdas", "onCreate: +"+savingActivityID)
 
         getSales()
 
@@ -50,7 +47,6 @@ class EarningSellingActivity : AppCompatActivity() {
             val newSale = Intent(this, RecordEarningSaleActivity::class.java)
             val sendBundle = Bundle()
             sendBundle.putString("childID", childID)
-            sendBundle.putString("savingActivityID", savingActivityID)
             newSale.putExtras(sendBundle)
             startActivity(newSale)
         }
@@ -59,24 +55,10 @@ class EarningSellingActivity : AppCompatActivity() {
 
     private fun getSales() {
         salesArrayList.clear()
-        if (savingActivityID == "null") {
-            firestore.collection("SellingItems").whereEqualTo("childID",  childID)
-                .get().addOnSuccessListener { results ->
-                    for (sale in results)
-                        salesArrayList.add(sale.toObject<SellingItems>())
-
-                    setSalesAdapter()
-                }
-        } else {
-            firestore.collection("SellingItems")
-                .whereEqualTo("savingActivityID", savingActivityID)
-                .whereEqualTo("source", "Financial Activity")
-                .get().addOnSuccessListener { results ->
-                    for (sale in results)
-                        salesArrayList.add(sale.toObject<SellingItems>())
-
-                    setSalesAdapter()
-                }
+        firestore.collection("SellingItems").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
+            for (sale in results)
+                salesArrayList.add(sale.toObject<SellingItems>())
+            setSalesAdapter()
         }
     }
 

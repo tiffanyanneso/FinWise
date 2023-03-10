@@ -11,6 +11,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
+import ph.edu.dlsu.finwise.databinding.ItemSellingBinding
 import ph.edu.dlsu.finwise.databinding.ItemShoppingListBinding
 import ph.edu.dlsu.finwise.databinding.ItemTransactionBinding
 import ph.edu.dlsu.finwise.model.SellingItems
@@ -40,7 +41,7 @@ class EarningSalesAdapter : RecyclerView.Adapter<EarningSalesAdapter.EarningSale
         parent: ViewGroup,
         viewType: Int
     ): EarningSalesAdapter.EarningSalesViewHolder {
-        val itemBinding = ItemTransactionBinding
+        val itemBinding = ItemSellingBinding
             .inflate(
                 LayoutInflater.from(parent.context),
                 parent, false)
@@ -52,16 +53,17 @@ class EarningSalesAdapter : RecyclerView.Adapter<EarningSalesAdapter.EarningSale
         holder.bindItem(salesIDArrayList[position])
     }
 
-    inner class EarningSalesViewHolder(private val itemBinding: ItemTransactionBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
+    inner class EarningSalesViewHolder(private val itemBinding: ItemSellingBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
 
         init {
             itemView.setOnClickListener(this)
         }
 
         fun bindItem(sale: SellingItems){
-            itemBinding.tvName.text = sale.itemName
+            itemBinding.tvItemName.text = sale.itemName
             itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(sale.amount)
             itemBinding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(sale.date!!.toDate())
+            itemBinding.tvSource.text = sale.depositTo
         }
 
         override fun onClick(p0: View?) {
