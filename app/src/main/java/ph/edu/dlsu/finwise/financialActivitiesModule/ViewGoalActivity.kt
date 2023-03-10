@@ -7,6 +7,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,7 @@ import ph.edu.dlsu.finwise.databinding.DialogFinishSavingBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -69,6 +71,7 @@ class ViewGoalActivity : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         childID = bundle.getString("childID").toString()
+
         checkUser()
         setFinancialActivityID()
         loadButtons()
@@ -108,11 +111,18 @@ class ViewGoalActivity : AppCompatActivity() {
 
 
         binding.btnChores.setOnClickListener {
-            var goToEarningMenu = Intent(this, EarningMenuActivity::class.java)
+            val goToEarningMenu = Intent(this, EarningMenuActivity::class.java)
             sendBundle.putString("savingActivityID", savingActivityID)
+            sendBundle.putString("module", "finact")
             sendBundle.putString("childID", childID)
             goToEarningMenu.putExtras(sendBundle)
             startActivity(goToEarningMenu)
+            /*val goToHomeRewardsActivity = Intent(this, EarningActivity::class.java)
+            sendBundle.putString("childID", childID)
+            sendBundle.putString("module", "finact")
+            goToHomeRewardsActivity.putExtras(sendBundle)
+            startActivity(goToHomeRewardsActivity)*/
+
         }
 
 
@@ -159,7 +169,7 @@ class ViewGoalActivity : AppCompatActivity() {
         var allComplete = true
         firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
             for (finActivity in results) {
-                var activityObject = finActivity.toObject<FinancialActivities>()
+                val activityObject = finActivity.toObject<FinancialActivities>()
                 if (activityObject.financialActivityName == "Saving") {
                     savingActivityID = finActivity.id
                     if (activityObject.status == "Completed") {
@@ -315,20 +325,20 @@ class ViewGoalActivity : AppCompatActivity() {
 //                binding.layoutBtnDepositWithdraw.visibility = View.GONE
                 binding.btnWithdraw.isEnabled = false
                 binding.btnWithdraw.isClickable = false
-                binding.btnWithdraw.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_grey)))
+                binding.btnWithdraw.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_grey))
 
                 binding.btnDeposit.isEnabled = false
                 binding.btnDeposit.isClickable = false
-                binding.btnDeposit.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_grey)))
+                binding.btnDeposit.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_grey))
             }
             else {
                 binding.btnWithdraw.isEnabled = true
                 binding.btnWithdraw.isClickable = true
-                binding.btnWithdraw.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_green)))
+                binding.btnWithdraw.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_green))
 
                 binding.btnDeposit.isEnabled = true
                 binding.btnDeposit.isClickable = true
-                binding.btnDeposit.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_green)))
+                binding.btnDeposit.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_green))
             }
         }
     }

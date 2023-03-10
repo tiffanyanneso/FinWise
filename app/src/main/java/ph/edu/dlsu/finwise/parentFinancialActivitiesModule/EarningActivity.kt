@@ -27,13 +27,14 @@ class EarningActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private lateinit var childID:String
+    private lateinit var module:String
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private val tabIcons = intArrayOf(
-        ph.edu.dlsu.finwise.R.drawable.baseline_directions_run_24,
-        ph.edu.dlsu.finwise.R.drawable.baseline_access_alarm_24,
-        ph.edu.dlsu.finwise.R.drawable.baseline_check_circle_24
+        R.drawable.baseline_directions_run_24,
+        R.drawable.baseline_access_alarm_24,
+        R.drawable.baseline_check_circle_24
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +44,7 @@ class EarningActivity : AppCompatActivity() {
 
         val bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
+        module = bundle.getString("module").toString()
         //user = bundle.getString("user").toString()
 
         checkUser()
@@ -51,8 +53,8 @@ class EarningActivity : AppCompatActivity() {
        //setNavigationBar()
 
         binding.btnAddEarningActivity.setOnClickListener {
-            var newEarning = Intent(this, NewEarningActivity::class.java)
-            var sendBundle = Bundle()
+            val newEarning = Intent(this, NewEarningActivity::class.java)
+            val sendBundle = Bundle()
             sendBundle.putString("childID", childID)
             newEarning.putExtras(sendBundle)
             startActivity(newEarning)
@@ -124,7 +126,9 @@ class EarningActivity : AppCompatActivity() {
             } else {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
-                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
+                if (module == "pfm")
+                    NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
+                else NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
             }
 
         }

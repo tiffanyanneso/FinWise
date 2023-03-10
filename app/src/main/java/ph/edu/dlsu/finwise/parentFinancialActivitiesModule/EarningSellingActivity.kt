@@ -3,7 +3,9 @@ package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -37,15 +39,16 @@ class EarningSellingActivity : AppCompatActivity() {
         loadButtons()
         setNavigationBar()
 
-        var bundle = intent.extras!!
+        val bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
+        Log.d("asdas", "onCreate: +"+savingActivityID)
 
         getSales()
 
         binding.btnNewSale.setOnClickListener {
-            var newSale = Intent(this, RecordEarningSaleActivity::class.java)
-            var sendBundle = Bundle()
+            val newSale = Intent(this, RecordEarningSaleActivity::class.java)
+            val sendBundle = Bundle()
             sendBundle.putString("childID", childID)
             sendBundle.putString("savingActivityID", savingActivityID)
             newSale.putExtras(sendBundle)
@@ -56,15 +59,32 @@ class EarningSellingActivity : AppCompatActivity() {
 
     private fun getSales() {
         salesArrayList.clear()
-        firestore.collection("SellingItems").whereEqualTo("savingActivityID", savingActivityID).whereEqualTo("source", "Financial Activity").get().addOnSuccessListener { results ->
-            for (sale in results)
-                salesArrayList.add(sale.toObject<SellingItems>())
+        if (savingActivityID == "null") {
+            firestore.collection("SellingItems").whereEqualTo("childID",  childID)
+                .get().addOnSuccessListener { results ->
+                    for (sale in results)
+                        salesArrayList.add(sale.toObject<SellingItems>())
 
-            salesAdapter = EarningSalesAdapter(this, salesArrayList)
-            binding.rvViewTransactions.adapter = salesAdapter
-            binding.rvViewTransactions.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            salesAdapter.notifyDataSetChanged()
+                    setSalesAdapter()
+                }
+        } else {
+            firestore.collection("SellingItems")
+                .whereEqualTo("savingActivityID", savingActivityID)
+                .whereEqualTo("source", "Financial Activity")
+                .get().addOnSuccessListener { results ->
+                    for (sale in results)
+                        salesArrayList.add(sale.toObject<SellingItems>())
+
+                    setSalesAdapter()
+                }
         }
+    }
+
+    private fun setSalesAdapter() {
+        salesAdapter = EarningSalesAdapter(this, salesArrayList)
+        binding.rvViewTransactions.adapter = salesAdapter
+        binding.rvViewTransactions.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        salesAdapter.notifyDataSetChanged()
     }
 
     private fun loadButtons() {
@@ -73,7 +93,7 @@ class EarningSellingActivity : AppCompatActivity() {
 
     private fun setNavigationBar() {
 
-        var navUser = FirebaseAuth.getInstance().currentUser!!.uid
+        val navUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("ParentUser").document(navUser).get().addOnSuccessListener {
 
             val bottomNavigationViewChild = binding.bottomNav
@@ -83,6 +103,7 @@ class EarningSellingActivity : AppCompatActivity() {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
                 NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+                binding.btnNewSale.visibility = View.GONE
             } else  {
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
