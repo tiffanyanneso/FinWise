@@ -19,7 +19,6 @@ class EarningMenuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEarningMenuBinding
     private var firestore = Firebase.firestore
     lateinit var module: String
-    lateinit var savingActivityID: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,19 +32,10 @@ class EarningMenuActivity : AppCompatActivity() {
         val childID = bundle.getString("childID").toString()
         module = bundle.getString("module").toString()
 
-        savingActivityID = if (bundle.containsKey("savingActivityID")) {
-            bundle.getString("savingActivityID").toString()
-            // do something with the value
-        } else {
-            "null"
-        }
-        Log.d("asdas", "onCreate: +"+savingActivityID)
-
 
         val sendBundle = Bundle()
         sendBundle.putString("childID", childID)
         sendBundle.putString("module", module)
-        sendBundle.putString("savingActivityID", savingActivityID)
         binding.btnHomeRewards.setOnClickListener {
             val goToHomeRewardsActivity = Intent(this, EarningActivity::class.java)
             goToHomeRewardsActivity.putExtras(sendBundle)
@@ -54,7 +44,6 @@ class EarningMenuActivity : AppCompatActivity() {
 
         binding.btnSelling.setOnClickListener {
             val goToSellingActivity = Intent(this, EarningSellingActivity::class.java)
-            sendBundle.putString("savingActivityID", savingActivityID)
             goToSellingActivity.putExtras(sendBundle)
             startActivity(goToSellingActivity)
         }
