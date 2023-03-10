@@ -25,7 +25,6 @@ class CompletedEarningActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         var earningActivityID = bundle.getString("earningActivityID").toString()
-        var savingActivityID = bundle.getString("savingActivityID").toString()
         var childID = bundle.getString("childID").toString()
 
 
@@ -43,7 +42,6 @@ class CompletedEarningActivity : AppCompatActivity() {
         binding.btnFinish.setOnClickListener {
             var earning = Intent(this, EarningActivity::class.java)
             var bundle = Bundle()
-            bundle.putString("savingActivityID", savingActivityID)
             bundle.putString("childID", childID)
             earning.putExtras(bundle)
             this.startActivity(earning)

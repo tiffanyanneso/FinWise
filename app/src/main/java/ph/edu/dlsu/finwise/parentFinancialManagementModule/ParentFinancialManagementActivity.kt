@@ -22,6 +22,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityParentFinancialManagementBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.BalanceFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.ExplanationFragment
@@ -68,7 +69,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
 
     private fun goToEarningActivity() {
         binding.btnEarning.setOnClickListener {
-            var goToEarningActivity = Intent(this, EarningActivityPFM::class.java)
+            var goToEarningActivity = Intent(this, EarningMenuActivity::class.java)
             bundle.putString("childID", childID)
             bundle.putString("user", "parent")
             goToEarningActivity.putExtras(bundle)

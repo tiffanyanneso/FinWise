@@ -60,8 +60,8 @@ class EarningPendingConfirmationAdapter : RecyclerView.Adapter<EarningPendingCon
                 itemBinding.tvActivity.text = earning?.activityName
                 itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
                 itemBinding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
+                itemBinding.tvSource.text = earning?.source
                 itemBinding.tvEarningActivityId.text = earningID
-                itemBinding.tvSavingActivityId.text = earning?.savingActivityID
                 itemBinding.tvChildId.text = earning?.childID
                 //itemBinding.tvFinishDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.dateCompleted!!.toDate())
             }
@@ -71,7 +71,6 @@ class EarningPendingConfirmationAdapter : RecyclerView.Adapter<EarningPendingCon
             var confirm = Intent (context, EarningSendMoneyActivity::class.java)
             var bundle = Bundle()
             bundle.putString("earningActivityID", itemBinding.tvEarningActivityId.text.toString())
-            bundle.putString("savingActivityID", itemBinding.tvSavingActivityId.text.toString())
             bundle.putString("childID", itemBinding.tvChildId.text.toString())
             confirm.putExtras(bundle)
             confirm.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

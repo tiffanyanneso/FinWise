@@ -98,6 +98,49 @@
             android:focusable="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/container_destination"
+        app:layout_constraintTop_toBottomOf="@+id/date_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Destination"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_marginHorizontal="20dp"
+        app:startIconDrawable="@drawable/baseline_wallet_24"
+        app:helperTextEnabled="true"
+        app:helperText=""
+        app:helperTextTextColor="@color/red">
+
+        <AutoCompleteTextView
+            android:id="@+id/dropdown_destination"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/container_goal"
+        app:layout_constraintTop_toBottomOf="@+id/container_destination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Goal"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_marginHorizontal="20dp"
+        app:startIconDrawable="@drawable/baseline_star_24"
+        app:helperTextEnabled="true"
+        app:helperText=""
+        app:helperTextTextColor="@color/red"
+        android:visibility="gone">
+
+        <AutoCompleteTextView
+            android:id="@+id/dropdown_goal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/amount_container"
@@ -106,7 +149,7 @@
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_container"
+        app:layout_constraintTop_toBottomOf="@+id/container_goal"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:helperText=""

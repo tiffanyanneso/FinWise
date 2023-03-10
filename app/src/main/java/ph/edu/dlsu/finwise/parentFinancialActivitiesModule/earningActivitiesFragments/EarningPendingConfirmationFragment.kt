@@ -46,7 +46,7 @@ class EarningPendingConfirmationFragment : Fragment() {
 
     private fun getCompletedEarning() {
         var earningPendingArrayList = ArrayList<String>()
-        firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("source", "Financial Activity").whereEqualTo("status", "Pending").get().addOnSuccessListener { results ->
+        firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("status", "Pending").get().addOnSuccessListener { results ->
             for (earning in results)
                 earningPendingArrayList.add(earning.id)
 

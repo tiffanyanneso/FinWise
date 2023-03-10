@@ -21,6 +21,7 @@ import ph.edu.dlsu.finwise.adapter.PFMAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
 import ph.edu.dlsu.finwise.parentFinancialManagementModule.EarningMenuActivityPFM
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.SavingsFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.BalanceFragment
@@ -306,7 +307,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private fun goToEarningActivity() {
         binding.btnEarning.setOnClickListener {
-            val goToEarningActivity = Intent(applicationContext, EarningMenuActivityPFM::class.java)
+            val goToEarningActivity = Intent(applicationContext, EarningMenuActivity::class.java)
             val bundle = Bundle()
             bundle.putString("childID", childID)
             bundle.putString("user", "child")

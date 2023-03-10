@@ -5,9 +5,11 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
@@ -18,6 +20,8 @@ import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityNewEarningBinding
 import ph.edu.dlsu.finwise.model.ChildUser
+import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -28,12 +32,15 @@ class NewEarningActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityNewEarningBinding
 
-    private lateinit var savingActivityID:String
+    private var savingActivityID:String?=null
     private lateinit var childID:String
 
     private var firestore = Firebase.firestore
 
     private var maxAmount = 0.00F
+
+    private var goalDropDownArrayList = ArrayList<GoalDropDown>()
+    private lateinit var goalAdapter: ArrayAdapter<String>
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -43,50 +50,74 @@ class NewEarningActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         var bundle = intent.extras!!
-        savingActivityID = bundle.getString("savingActivityID").toString()
         childID = bundle.getString("childID").toString()
 
-        initializeDropDownForChores()
+        initializeDropDowns()
         loadBackButton()
         cancel()
 
         // Initializes the navbar
         NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
 
-        binding.etDate.setOnClickListener{
-            showCalendar()
-        }
+        binding.etDate.setOnClickListener{ showCalendar() }
 
         binding.dropdownChore.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
            changeDuration()
         }
 
+        binding.dropdownDestination.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            if (binding.dropdownDestination.text.toString() == "Personal Finance")
+                binding.containerGoal.visibility = View.GONE
+            else if (binding.dropdownDestination.text.toString() == "Financial Goal")
+                binding.containerGoal.visibility = View.VISIBLE
+        }
+
+        binding.dropdownGoal.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            savingActivityID = goalDropDownArrayList[position].savingActivityID
+        }
+
         binding.btnConfirm.setOnClickListener {
-            var earningActivity = hashMapOf(
-                 "activityName" to binding.dropdownChore.text.toString(),
-                 "targetDate" to SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()),
-                 "requiredTime" to binding.etDuration.text.toString().toInt(),
-                 "amount" to binding.etAmount.text.toString().toFloat(),
-                 "childID" to childID,
-                "savingActivityID" to savingActivityID,
-                "status" to "Ongoing",
-                "source" to "Financial Activity"
-            )
-            firestore.collection("EarningActivities").add(earningActivity).addOnSuccessListener {
-                var earning = Intent(this, EarningActivity::class.java)
-                var sendBundle = Bundle()
-                sendBundle.putString("childID", childID)
-                sendBundle.putString("savingActivityID", savingActivityID)
-                earning.putExtras(sendBundle)
-                startActivity(earning)
+            if (binding.dropdownDestination.text.toString() == "Personal Finance") {
+                var earningActivity = hashMapOf(
+                    "activityName" to binding.dropdownChore.text.toString(),
+                    "targetDate" to SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()),
+                    "requiredTime" to binding.etDuration.text.toString().toInt(),
+                    "amount" to binding.etAmount.text.toString().toFloat(),
+                    "childID" to childID,
+                    "status" to "Ongoing",
+                    "source" to binding.dropdownDestination.text.toString()
+                )
+                firestore.collection("EarningActivities").add(earningActivity).addOnSuccessListener {
+                    Toast.makeText(this, "Earning activity saved", Toast.LENGTH_SHORT).show()
+                }
+            } else if (binding.dropdownDestination.text.toString() == "Financial Goal") {
+                var earningActivity = hashMapOf(
+                    "activityName" to binding.dropdownChore.text.toString(),
+                    "targetDate" to SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()),
+                    "requiredTime" to binding.etDuration.text.toString().toInt(),
+                    "amount" to binding.etAmount.text.toString().toFloat(),
+                    "childID" to childID,
+                    "savingActivityID" to savingActivityID,
+                    "status" to "Ongoing",
+                    "source" to binding.dropdownDestination.text.toString()
+                )
+                firestore.collection("EarningActivities").add(earningActivity).addOnSuccessListener {
+                    Toast.makeText(this, "Earning activity saved", Toast.LENGTH_SHORT).show()
+                }
             }
+
+            var earning = Intent(this, EarningActivity::class.java)
+            var sendBundle = Bundle()
+            sendBundle.putString("childID", childID)
+            earning.putExtras(sendBundle)
+            startActivity(earning)
+
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun initializeDropDownForChores() {
+    private fun initializeDropDowns() {
         var dropdownContent = ArrayList<String>()
-
         firestore.collection("ChildUser").document(childID).get().addOnSuccessListener {
             var child = it.toObject<ChildUser>()
 
@@ -101,7 +132,6 @@ class NewEarningActivity : AppCompatActivity() {
             var age = difference.years
             if (age == 9) {
                 maxAmount = 100F
-                binding.tvMaxAmount.text = "The max amount that can be given is ₱${DecimalFormat("#0.00").format(maxAmount)}"
             }
             //chores for age 9-12
             dropdownContent.add("Put Away Groceries")
@@ -111,7 +141,6 @@ class NewEarningActivity : AppCompatActivity() {
 
             if (age == 10 || age == 11 || age == 12) {
                 maxAmount = 300F
-                binding.tvMaxAmount.text = "The max amount that can be given is ₱${DecimalFormat("#0.00").format(maxAmount)}"
 
                 dropdownContent.add("Fold Laundry")
                 dropdownContent.add("Help Parent Prepare Meal")
@@ -121,7 +150,6 @@ class NewEarningActivity : AppCompatActivity() {
 
                 if (age == 12) {
                     maxAmount = 500F
-                    binding.tvMaxAmount.text = "The max amount that can be given is ₱${DecimalFormat("#0.00").format(maxAmount)}"
 
                     dropdownContent.add("Mop Floor")
                     dropdownContent.add("Clean Bathroom")
@@ -130,12 +158,35 @@ class NewEarningActivity : AppCompatActivity() {
                     dropdownContent.add("Prepare Meal")
                     dropdownContent.add("Take Care Of Younger Sibling")}
             }
+            binding.tvMaxAmount.text = "The max amount that can be given is ₱${DecimalFormat("#0.00").format(maxAmount)}"
         }
 
         // for the dropdown
-        val adapter = ArrayAdapter(this, R.layout.list_item, dropdownContent)
-        binding.dropdownChore.setAdapter(adapter)
+        val choresAdapter = ArrayAdapter(this, R.layout.list_item, dropdownContent)
+        binding.dropdownChore.setAdapter(choresAdapter)
+
+        val incomeDestinationAdapter = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.income_destination))
+        binding.dropdownDestination.setAdapter(incomeDestinationAdapter)
+
+        firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { activityResults ->
+            println("print saving results" + activityResults.size())
+
+            for (saving in activityResults) {
+                firestore.collection("FinancialGoals").document(saving.toObject<FinancialActivities>().financialGoalID!!).get().addOnSuccessListener { goal ->
+                    goalDropDownArrayList.add(GoalDropDown(saving.id, goal.toObject<FinancialGoals>()?.goalName!!))
+                    println("print in query" + goalDropDownArrayList.size)
+                }.continueWith {
+                    println("print outside query" + goalDropDownArrayList.size)
+
+                    goalAdapter = ArrayAdapter(this, R.layout.list_item, goalDropDownArrayList.map { it.goalName })
+                    binding.dropdownGoal.setAdapter(goalAdapter)
+                }
+            }
+        }
     }
+
+
+    class GoalDropDown(var savingActivityID:String, val goalName:String)
 
     private fun changeDuration() {
         var chore = binding.dropdownChore.text.toString()

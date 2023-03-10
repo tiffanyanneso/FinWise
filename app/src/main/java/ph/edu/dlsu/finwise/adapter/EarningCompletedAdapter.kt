@@ -58,6 +58,7 @@ class EarningCompletedAdapter : RecyclerView.Adapter<EarningCompletedAdapter.Ear
                 itemBinding.tvActivity.text = earning?.activityName
                 itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
                 itemBinding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
+                itemBinding.tvSource.text = earning?.source
                 itemBinding.tvFinishDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.dateCompleted!!.toDate())
             }
         }

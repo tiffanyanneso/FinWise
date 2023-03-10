@@ -23,7 +23,6 @@ import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFrag
 class EarningActivity : AppCompatActivity() {
     private lateinit var binding:ActivityEarningBinding
 
-    private lateinit var savingActivityID:String
 
     private var firestore = Firebase.firestore
 
@@ -43,7 +42,6 @@ class EarningActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val bundle = intent.extras!!
-        savingActivityID = bundle.getString("savingActivityID").toString()
         childID = bundle.getString("childID").toString()
         //user = bundle.getString("user").toString()
 
@@ -55,7 +53,6 @@ class EarningActivity : AppCompatActivity() {
         binding.btnAddEarningActivity.setOnClickListener {
             var newEarning = Intent(this, NewEarningActivity::class.java)
             var sendBundle = Bundle()
-            sendBundle.putString("savingActivityID", savingActivityID)
             sendBundle.putString("childID", childID)
             newEarning.putExtras(sendBundle)
             startActivity(newEarning)

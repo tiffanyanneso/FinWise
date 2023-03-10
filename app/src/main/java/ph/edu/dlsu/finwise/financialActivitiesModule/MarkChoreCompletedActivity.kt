@@ -20,7 +20,6 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private lateinit var earningActivityID:String
-    private lateinit var savingActivityID:String
     private lateinit var childID:String
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
@@ -33,7 +32,6 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         earningActivityID = bundle.getString("earningActivityID").toString()
-        savingActivityID = bundle.getString("savingActivityID").toString()
         childID = bundle.getString("childID").toString()
 
         getDetails()
@@ -43,7 +41,6 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
             firestore.collection("EarningActivities").document(earningActivityID).update("dateCompleted", Timestamp.now())
             val bundle = Bundle()
             bundle.putString("earningActivityID", earningActivityID)
-            bundle.putString("savingActivityID", savingActivityID)
             bundle.putString("childID", childID)
             completedEarning.putExtras(bundle)
             startActivity(completedEarning)
@@ -57,6 +54,7 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
             binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.targetDate!!.toDate()).toString()
             binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
             binding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
+            binding.tvSource.text = earning?.source
         }
     }
 
