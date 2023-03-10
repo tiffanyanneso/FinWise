@@ -166,196 +166,172 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1"
-                    android:layout_marginTop="5sp">
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/button_border_white"
+                    android:backgroundTint="@color/light_green"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="15dp">
 
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Short Term"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar_short_term"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:max="100"/>
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/percentage_short_term"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="xxx%"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/award" />
 
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Medium Term"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar_medium_term"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:max="100"/>
+                            <TextView
+                                android:id="@+id/tv_top_performing_duration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:text="Duration"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/percentage_medium_term"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="xx%"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="TOP PERFORMING"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="2"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_top_performing_rating"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:text="x/5"
+                                android:textAlignment="textEnd"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Long Term"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar_long_term"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:max="100"/>
-
-                    <TextView
-                        android:id="@+id/percentage_long_term"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="xx%"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
-                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp"
                     android:background="@drawable/button_border_white"
-                    android:backgroundTint="@color/light_green"
-                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/very_light_green"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="15dp"
                     android:layout_marginTop="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <ImageView
-                            android:src="@drawable/award"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center"/>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginLeft="15dp">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textStyle="bold"
-                                android:text="Strength: Term Goals"
-                                android:textSize="16sp"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="You do best with \duration\ term  goals! Keep setting them."
-                                android:textSize="16sp"
-                                android:textColor="@color/black"/>
-                        </LinearLayout>
+                            android:layout_gravity="center"
+                            android:text="2"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:textSize="18sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/tv_duration_2nd"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:gravity="center_vertical"
+                            android:text="Duration"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="15dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_duration2_rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:text="xxx%"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp"
                     android:background="@drawable/button_border_white"
-                    android:backgroundTint="@color/light_red">
+                    android:backgroundTint="@color/light_red"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="15dp"
+                    android:layout_marginTop="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <ImageView
-                            android:src="@drawable/baseline_gpp_maybe_24"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center"
-                            app:tint="@color/red" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginLeft="15dp">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textStyle="bold"
-                                android:text="Weakness: Term Goals"
-                                android:textSize="16sp"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Pay better attention to your \duration\ term goals! You may want to practice these more."
-                                android:textSize="16sp"
-                                android:textColor="@color/black"/>
-                        </LinearLayout>
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="3"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_duration_3rd"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:gravity="center_vertical"
+                            android:text="Duration"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="15dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_duration3_rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:text="xxx%"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btn_view_duration_review"
+                        android:id="@+id/btn_review_duration"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:text="View Refresher"
+                        android:text="Review"
                         android:textColor="@color/off_white"
                         android:backgroundTint="@color/dark_green"
                         android:background="@drawable/button_border"
@@ -399,307 +375,317 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1"
-                    android:layout_marginTop="5sp">
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/button_border_white"
+                    android:backgroundTint="@color/light_green"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="15dp">
 
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Buying Items"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar_buying_items"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:max="100"/>
-
-                    <TextView
-                        android:id="@+id/percentage_buying_items"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="xx%"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Planning an Event"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:layout_gravity="center" />
+                        android:orientation="horizontal">
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar_planning_event"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_gravity="center"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:max="100"/>
+                        <ImageView
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/award" />
 
-                    <TextView
-                        android:id="@+id/percentage_planning_event"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="xx%"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_top_performing_activity"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical"
+                                android:text="Activity"
+                                android:textColor="@color/black"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:text="TOP PERFORMING"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="2"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tv_top_performing_activity_percentage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:text="100%"
+                                android:textAlignment="textEnd"
+                                android:textColor="@color/black"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_height="50dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Saving for Emergency Funds"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar_emergency_funds"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:layout_gravity="center"
-                        android:max="100"/>
-
-                    <TextView
-                        android:id="@+id/percentage_emergency_funds"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="xx%"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Donating to Charity"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar_donating"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:layout_gravity="center"
-                        android:max="100"/>
-
-                    <TextView
-                        android:id="@+id/percentage_donating"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="xx%"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Situational Shopping"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar_situational_shopping"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:layout_gravity="center"
-                        android:max="100"/>
-
-                    <TextView
-                        android:id="@+id/percentage_situational_shopping"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="xx%"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:text="Earning"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-
-                    <ProgressBar
-                        android:id="@+id/progress_bar_earning_money"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.25"
-                        android:layout_marginRight="10dp"
-                        android:layout_gravity="center"
-                        android:max="100"/>
-
-                    <TextView
-                        android:id="@+id/percentage_earning_money"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="xx%"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
-                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp"
                     android:background="@drawable/button_border_white"
-                    android:backgroundTint="@color/light_green"
-                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@color/very_light_green"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="15dp"
                     android:layout_marginTop="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <ImageView
-                            android:src="@drawable/award"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center"/>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginLeft="15dp">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textStyle="bold"
-                                android:text="Strength: Activity"
-                                android:textSize="16sp"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="You are able to complete category goals the most consistently. This is your strength!"
-                                android:textSize="16sp"
-                                android:textColor="@color/black"/>
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
+                            android:layout_gravity="center"
+                            android:text="2"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:textSize="18sp"
+                            android:textStyle="bold"/>
 
+                        <TextView
+                            android:id="@+id/tv_activity_2nd"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:gravity="center_vertical"
+                            android:text="@string/goal_setting"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="15dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_concept2_activity"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:text="x/5"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp"
                     android:background="@drawable/button_border_white"
-                    android:backgroundTint="@color/light_red">
+                    android:backgroundTint="@color/very_light_green"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="15dp"
+                    android:layout_marginTop="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <ImageView
-                            android:src="@drawable/baseline_gpp_maybe_24"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center"
-                            app:tint="@color/red" />
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_marginLeft="15dp">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textStyle="bold"
-                                android:text="Weakness: Category"
-                                android:textSize="16sp"
-                                android:textColor="@color/black"/>
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="You struggle with completing category goals Keep on practicing them!"
-                                android:textSize="16sp"
-                                android:textColor="@color/black"/>
-                        </LinearLayout>
+                            android:layout_gravity="center"
+                            android:text="3"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:textSize="18sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/tv_activity_3rd"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:gravity="center_vertical"
+                            android:text="@string/goal_setting"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="15dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_activity3_rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:text="x/5"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/button_border_white"
+                    android:backgroundTint="@color/very_light_green"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="15dp"
+                    android:layout_marginTop="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="4"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:textSize="18sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/tv_activity_4th"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:gravity="center_vertical"
+                            android:text="@string/goal_setting"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="15dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_activity4_rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:text="x/5"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/button_border_white"
+                    android:backgroundTint="@color/very_light_green"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="15dp"
+                    android:layout_marginTop="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="5"
+                            android:textColor="@color/black"
+                            android:gravity="center"
+                            android:textSize="18sp"
+                            android:textStyle="bold"/>
+
+                        <TextView
+                            android:id="@+id/tv_activity_6th"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:gravity="center_vertical"
+                            android:text="@string/goal_setting"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="15dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_activity5_rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:text="x/5"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/button_border_white"
+                    android:backgroundTint="@color/light_red"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="15dp"
+                    android:layout_marginTop="10dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="6"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_activity_5th"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:gravity="center_vertical"
+                            android:text="@string/goal_setting"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:layout_marginLeft="15dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_activity6_rating"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:text="x/5"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
                     <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btn_view_category_review"
+                        android:id="@+id/btn_review_concept"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:text="View Refresher"
+                        android:text="Review"
                         android:textColor="@color/off_white"
                         android:backgroundTint="@color/dark_green"
                         android:background="@drawable/button_border"

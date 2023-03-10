@@ -9,10 +9,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivitySavingPerformanceBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
+import kotlin.math.roundToInt
 
 class SavingPerformanceActivity : AppCompatActivity() {
 
@@ -35,7 +37,9 @@ class SavingPerformanceActivity : AppCompatActivity() {
     var nCharity = 0
     var nSituational =0
     var nEarning = 0
-            
+
+    data class DurationRating(var name: String? = null, var score: Int = 0)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySavingPerformanceBinding.inflate(layoutInflater)
@@ -73,6 +77,14 @@ class SavingPerformanceActivity : AppCompatActivity() {
         }
     }
 
+    private fun DurationRatingObject(name: String, score: Int): DurationRating {
+        val rating = DurationRating()
+
+        rating.name = name
+        rating.score = score
+
+        return rating
+    }
     private fun setDurationPieChart() {
         var percentageShort = 0.00F
         var percentageMedium = 0.00F
@@ -105,12 +117,34 @@ class SavingPerformanceActivity : AppCompatActivity() {
         binding.pcDuration.data = data
         binding.pcDuration.invalidate()
 
-        binding.progressBarShortTerm.progress = percentageShort.toInt()
-        binding.percentageShortTerm.text = DecimalFormat("###0.00").format(percentageShort) + "%"
-        binding.progressBarMediumTerm.progress = percentageMedium.toInt()
-        binding.percentageMediumTerm.text = DecimalFormat("###0.00").format(percentageMedium) + "%"
-        binding.progressBarLongTerm.progress = percentageLong.toInt()
-        binding.percentageLongTerm.text =DecimalFormat("###0.00").format(percentageLong) + "%"
+        val durationRatingArray = ArrayList<DurationRating>()
+
+        durationRatingArray.add(DurationRatingObject("Short Term", DecimalFormat("###0.00").format(percentageShort).toInt()))
+        durationRatingArray.add(DurationRatingObject("Medium Term", DecimalFormat("###0.00").format(percentageMedium).toInt()))
+        durationRatingArray.add(DurationRatingObject("Long Term", DecimalFormat("###0.00").format(percentageLong).toInt()))
+
+        durationRatingArray.sortByDescending{it.score}
+
+        for (i in durationRatingArray.indices) {
+            var num = i + 1
+
+            if (num == 1) {
+                binding.tvTopPerformingDuration.text = durationRatingArray[i].name
+                binding.tvTopPerformingRating.text = durationRatingArray[i].score.toString() + "%"
+            } else if (num == 2) {
+                binding.tvDuration2nd.text = durationRatingArray[i].name
+                binding.tvDuration2Rating.text = durationRatingArray[i].score.toString() + "%"
+            } else if (num == 3) {
+                binding.tvDuration3rd.text = durationRatingArray[i].name
+                binding.tvDuration3Rating.text = durationRatingArray[i].score.toString() + "%"
+            }
+        }
+//        binding.progressBarShortTerm.progress = percentageShort.toInt()
+//        binding.percentageShortTerm.text = DecimalFormat("###0.00").format(percentageShort) + "%"
+//        binding.progressBarMediumTerm.progress = percentageMedium.toInt()
+//        binding.percentageMediumTerm.text = DecimalFormat("###0.00").format(percentageMedium) + "%"
+//        binding.progressBarLongTerm.progress = percentageLong.toInt()
+//        binding.percentageLongTerm.text =DecimalFormat("###0.00").format(percentageLong) + "%"
     }
 
     private fun setReasonPieChart() {
@@ -160,17 +194,52 @@ class SavingPerformanceActivity : AppCompatActivity() {
         binding.pcCategory.data = data
         binding.pcCategory.invalidate()
 
-        binding.progressBarBuyingItems.progress = percentageBuying.toInt()
-        binding.percentageBuyingItems.text = DecimalFormat("###0.00").format(percentageBuying) + "%"
-        binding.progressBarPlanningEvent.progress = percentageEvent.toInt()
-        binding.percentagePlanningEvent.text = DecimalFormat("###0.00").format(percentageEvent) + "%"
-        binding.progressBarEmergencyFunds.progress = percentageEmergency.toInt()
-        binding.percentageEmergencyFunds.text =DecimalFormat("###0.00").format(percentageEmergency) + "%"
-        binding.progressBarSituationalShopping.progress = percentageSituational.toInt()
-        binding.percentageSituationalShopping.text = DecimalFormat("###0.00").format(percentageSituational) + "%"
-        binding.progressBarDonating.progress = percentageDonating.toInt()
-        binding.percentageDonating.text = DecimalFormat("###0.00").format(percentageDonating) + "%"
-        binding.progressBarEarningMoney.progress = percentageEarning.toInt()
-        binding.percentageEarningMoney.text =DecimalFormat("###0.00").format(percentageEarning) + "%"
+        val categoryRatingArray = ArrayList<DurationRating>()
+
+        categoryRatingArray.add(DurationRatingObject("Buying Items", DecimalFormat("###0.00").format(percentageBuying).toInt()))
+        categoryRatingArray.add(DurationRatingObject("Planning an Event", DecimalFormat("###0.00").format(percentageEvent).toInt()))
+        categoryRatingArray.add(DurationRatingObject("Saving for Emergency Funds", DecimalFormat("###0.00").format(percentageEmergency).toInt()))
+        categoryRatingArray.add(DurationRatingObject("Situational Shopping", DecimalFormat("###0.00").format(percentageSituational).toInt()))
+        categoryRatingArray.add(DurationRatingObject("Donating to Charity", DecimalFormat("###0.00").format(percentageDonating).toInt()))
+        categoryRatingArray.add(DurationRatingObject("Earning Money", DecimalFormat("###0.00").format(percentageEarning).toInt()))
+
+        categoryRatingArray.sortByDescending{it.score}
+
+        for (i in categoryRatingArray.indices) {
+            var num = i + 1
+
+            if (num == 1) {
+                binding.tvTopPerformingActivity.text = categoryRatingArray[i].name
+                binding.tvTopPerformingActivityPercentage.text = categoryRatingArray[i].score.toString() + "%"
+            } else if (num == 2) {
+                binding.tvActivity2nd.text = categoryRatingArray[i].name
+                binding.tvConcept2Activity.text = categoryRatingArray[i].score.toString() + "%"
+            } else if (num == 3) {
+                binding.tvActivity3rd.text = categoryRatingArray[i].name
+                binding.tvActivity3Rating.text = categoryRatingArray[i].score.toString() + "%"
+            } else if (num == 4) {
+                binding.tvActivity4th.text = categoryRatingArray[i].name
+                binding.tvActivity4Rating.text = categoryRatingArray[i].score.toString() + "%"
+            } else if (num == 5) {
+                binding.tvActivity5th.text = categoryRatingArray[i].name
+                binding.tvActivity5Rating.text = categoryRatingArray[i].score.toString() + "%"
+            } else if (num == 6) {
+                binding.tvActivity6th.text = categoryRatingArray[i].name
+                binding.tvActivity6Rating.text = categoryRatingArray[i].score.toString() + "%"
+            }
+        }
+
+//        binding.progressBarBuyingItems.progress = percentageBuying.toInt()
+//        binding.percentageBuyingItems.text = DecimalFormat("###0.00").format(percentageBuying) + "%"
+//        binding.progressBarPlanningEvent.progress = percentageEvent.toInt()
+//        binding.percentagePlanningEvent.text = DecimalFormat("###0.00").format(percentageEvent) + "%"
+//        binding.progressBarEmergencyFunds.progress = percentageEmergency.toInt()
+//        binding.percentageEmergencyFunds.text =DecimalFormat("###0.00").format(percentageEmergency) + "%"
+//        binding.progressBarSituationalShopping.progress = percentageSituational.toInt()
+//        binding.percentageSituationalShopping.text = DecimalFormat("###0.00").format(percentageSituational) + "%"
+//        binding.progressBarDonating.progress = percentageDonating.toInt()
+//        binding.percentageDonating.text = DecimalFormat("###0.00").format(percentageDonating) + "%"
+//        binding.progressBarEarningMoney.progress = percentageEarning.toInt()
+//        binding.percentageEarningMoney.text =DecimalFormat("###0.00").format(percentageEarning) + "%"
     }
 }
