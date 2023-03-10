@@ -54,7 +54,7 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
             binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.targetDate!!.toDate()).toString()
             binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
             binding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
-            binding.tvSource.text = earning?.source
+            binding.tvSource.text = earning?.depositTo
         }
     }
 

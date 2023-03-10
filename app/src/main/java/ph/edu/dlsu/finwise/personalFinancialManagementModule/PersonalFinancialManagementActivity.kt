@@ -22,7 +22,6 @@ import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBindin
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
-import ph.edu.dlsu.finwise.parentFinancialManagementModule.EarningMenuActivityPFM
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.SavingsFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.BalanceFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.ExplanationFragment

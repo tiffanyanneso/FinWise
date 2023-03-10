@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.model
 import com.google.firebase.Timestamp
 
 class Transactions(
+    var userID:String?=null,
     var childID:String?=null,
     var transactionType:String?=null,
     var transactionName:String?=null,

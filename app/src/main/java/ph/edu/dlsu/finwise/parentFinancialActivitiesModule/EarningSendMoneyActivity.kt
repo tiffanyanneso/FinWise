@@ -86,8 +86,8 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             binding.tvAmountEarned.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
             amount = earning?.amount!!.toFloat()
             binding.tvStatus.text = earning?.status
-            binding.tvSource.text = earning?.source
-            source = earning?.source!!
+            binding.tvSource.text = earning?.depositTo
+            source = earning?.depositTo!!
             if (source == "Financial Goal")
                 savingActivityID = earning?.savingActivityID!!
         }

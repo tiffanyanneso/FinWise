@@ -8,6 +8,6 @@ class SellingItems (
     var date:Timestamp?=null,
     var childID:String?=null,
     var savingActivityID:String?=null,
-    var source:String?=null
+    var depositTo:String?=null
         ) {
 }

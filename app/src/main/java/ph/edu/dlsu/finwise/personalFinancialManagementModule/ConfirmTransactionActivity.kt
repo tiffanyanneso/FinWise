@@ -72,24 +72,16 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         transactionType = bundle!!.getString("transactionType").toString()
         if (transactionType == "Income") {
             binding.tvTransactionType.text = "Income"
-            binding.tvWalletBalance.text = "₱ " +
-                    DecimalFormat("#,##0.00")
-                        .format(balance + amount)
+            binding.tvWalletBalance.text = "₱ " + DecimalFormat("#,##0.00").format(balance + amount)
         } else {
             binding.tvTransactionType.text = "Expense"
-            binding.tvWalletBalance.text = "₱ " +
-                    DecimalFormat("#,##0.00")
-                        .format(balance - amount)
+            binding.tvWalletBalance.text = "₱ " + DecimalFormat("#,##0.00").format(balance - amount)
         }
 
         if (transactionType == "Expense") {
-            binding.tvWalletBalance.text = "₱ " +
-                    DecimalFormat("#,##0.00")
-                        .format(balance - amount)
+            binding.tvWalletBalance.text = "₱ " + DecimalFormat("#,##0.00").format(balance - amount)
         } else if (transactionType == "Income") {
-            binding.tvWalletBalance.text = "₱ " +
-                    DecimalFormat("#,##0.00")
-                        .format(balance + amount)
+            binding.tvWalletBalance.text = "₱ " + DecimalFormat("#,##0.00").format(balance + amount)
         }
 
 
@@ -107,14 +99,12 @@ class ConfirmTransactionActivity : AppCompatActivity() {
 
     private fun confirm() {
         binding.btnConfirm.setOnClickListener {
-            //TODO: add the createdBy
             val transaction = hashMapOf(
-                //TODO: add childID, createdBy
                 "transactionName" to name,
                 "transactionType" to transactionType,
                 "category" to category,
                 "date" to bundle!!.getSerializable("date"),
-                "createdBy" to childID,
+                "userID" to childID,
                 "amount" to amount
             )
             adjustUserBalance()

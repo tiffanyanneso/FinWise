@@ -22,7 +22,6 @@ class EarningSellingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEarningSellingBinding
 
     private lateinit var childID:String
-    private lateinit var savingActivityID:String
 
     private var firestore = Firebase.firestore
 
@@ -39,7 +38,6 @@ class EarningSellingActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
-        savingActivityID = bundle.getString("savingActivityID").toString()
 
         getSales()
 
@@ -47,7 +45,6 @@ class EarningSellingActivity : AppCompatActivity() {
             var newSale = Intent(this, RecordEarningSaleActivity::class.java)
             var sendBundle = Bundle()
             sendBundle.putString("childID", childID)
-            sendBundle.putString("savingActivityID", savingActivityID)
             newSale.putExtras(sendBundle)
             startActivity(newSale)
         }
@@ -56,7 +53,7 @@ class EarningSellingActivity : AppCompatActivity() {
 
     private fun getSales() {
         salesArrayList.clear()
-        firestore.collection("SellingItems").whereEqualTo("savingActivityID", savingActivityID).whereEqualTo("source", "Financial Activity").get().addOnSuccessListener { results ->
+        firestore.collection("SellingItems").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
             for (sale in results)
                 salesArrayList.add(sale.toObject<SellingItems>())
 

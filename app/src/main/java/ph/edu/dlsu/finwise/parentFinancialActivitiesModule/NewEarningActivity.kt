@@ -85,7 +85,7 @@ class NewEarningActivity : AppCompatActivity() {
                     "amount" to binding.etAmount.text.toString().toFloat(),
                     "childID" to childID,
                     "status" to "Ongoing",
-                    "source" to binding.dropdownDestination.text.toString()
+                    "depositTo" to binding.dropdownDestination.text.toString()
                 )
                 firestore.collection("EarningActivities").add(earningActivity).addOnSuccessListener {
                     Toast.makeText(this, "Earning activity saved", Toast.LENGTH_SHORT).show()
@@ -99,7 +99,7 @@ class NewEarningActivity : AppCompatActivity() {
                     "childID" to childID,
                     "savingActivityID" to savingActivityID,
                     "status" to "Ongoing",
-                    "source" to binding.dropdownDestination.text.toString()
+                    "depositTo" to binding.dropdownDestination.text.toString()
                 )
                 firestore.collection("EarningActivities").add(earningActivity).addOnSuccessListener {
                     Toast.makeText(this, "Earning activity saved", Toast.LENGTH_SHORT).show()
@@ -169,15 +169,10 @@ class NewEarningActivity : AppCompatActivity() {
         binding.dropdownDestination.setAdapter(incomeDestinationAdapter)
 
         firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { activityResults ->
-            println("print saving results" + activityResults.size())
-
             for (saving in activityResults) {
                 firestore.collection("FinancialGoals").document(saving.toObject<FinancialActivities>().financialGoalID!!).get().addOnSuccessListener { goal ->
                     goalDropDownArrayList.add(GoalDropDown(saving.id, goal.toObject<FinancialGoals>()?.goalName!!))
-                    println("print in query" + goalDropDownArrayList.size)
                 }.continueWith {
-                    println("print outside query" + goalDropDownArrayList.size)
-
                     goalAdapter = ArrayAdapter(this, R.layout.list_item, goalDropDownArrayList.map { it.goalName })
                     binding.dropdownGoal.setAdapter(goalAdapter)
                 }

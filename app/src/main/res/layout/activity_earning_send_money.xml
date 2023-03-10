@@ -224,7 +224,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:text="Money will be deposited in"
+                android:text="Money will be deposited to"
                 android:textSize="16sp"
                 android:textColor="@color/black"/>
 

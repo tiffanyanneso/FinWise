@@ -153,7 +153,7 @@ class TransactionHistoryIncomeFragment : Fragment() {
                 val transactionID = transactionSnapshot.id
                 val transaction = transactionSnapshot.toObject<Transactions>()
 
-                if (transaction.transactionType == "Income" || transaction.transactionType == "Withdrawal") {
+                if (transaction.transactionType == "Incme" || transaction.transactionType == "Withdrawal") {
                     transactionFilterArrayList.add(
                         TransactionFilter(
                             transactionID,

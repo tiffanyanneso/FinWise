@@ -63,7 +63,7 @@ class EarningToDoAdapter : RecyclerView.Adapter<EarningToDoAdapter.EarningToDoVi
                 itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
                 itemBinding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
                 itemBinding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.targetDate!!.toDate()).toString()
-                itemBinding.tvSource.text = earning?.source
+                itemBinding.tvSource.text = earning?.depositTo
                 itemBinding.tvChildId.text = earning?.childID
             }
         }
