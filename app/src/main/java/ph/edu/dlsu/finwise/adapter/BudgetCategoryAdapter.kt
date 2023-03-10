@@ -1,11 +1,13 @@
 package ph.edu.dlsu.finwise.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -16,6 +18,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetActivity
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
+import kotlin.math.absoluteValue
 
 class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetCategoryViewHolder>{
 
@@ -59,6 +62,7 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
             itemView.setOnClickListener(this)
         }
 
+        @SuppressLint("ResourceAsColor")
         fun bindCategory(budgetItemID: String){
             itemBinding.btnSettings.setOnClickListener {
                 val popup = PopupMenu(context, it)
@@ -104,7 +108,13 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
                     }
                 }.continueWith {
                     var available = categoryAmount?.minus(spent)
-                    itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(available) + " left available"
+                    if (available!! >= 0.00F ) {
+                        itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(available) + " left available"
+                        itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.very_light_green))
+                    } else {
+                        itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(available.absoluteValue) + " over the budget"
+                        itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.light_red))
+                    }
                     itemBinding.progressBar.progress = (spent/ categoryAmount!! *100).toInt()
                 }
             }

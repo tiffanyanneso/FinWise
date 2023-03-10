@@ -55,6 +55,7 @@
                     android:layout_marginTop="20dp"/>
 
                 <LinearLayout
+                    android:id="@+id/layout_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -64,6 +65,7 @@
                     android:layout_marginHorizontal="20dp">
 
                     <TextView
+                        android:id="@+id/tv_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16dp"

@@ -20,6 +20,7 @@ import ph.edu.dlsu.finwise.adapter.SpendingExpenseAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetBinding
 import ph.edu.dlsu.finwise.databinding.DialogAdjustBudgetBinding
 import ph.edu.dlsu.finwise.databinding.DialogDoneSettingBudgetBinding
+import ph.edu.dlsu.finwise.databinding.DialogDoneSpendingBinding
 import ph.edu.dlsu.finwise.databinding.DialogFinishBudgetingBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
@@ -84,11 +85,15 @@ class BudgetActivity : AppCompatActivity() {
                 binding.btnWithdraw.isClickable = false
                 binding.btnWithdraw.isEnabled = false
                 binding.btnDoneSettingBudget.visibility = View.GONE
+                binding.btnDoneSpending.visibility = View.VISIBLE
                 //binding.linearLayoutText.visibility = View.GONE
                 binding.tvAvailable.text = "Savings available to spend"
             }
-            else
+            else {
+                binding.btnDoneSettingBudget.visibility = View.VISIBLE
+                binding.btnDoneSpending.visibility = View.GONE
                 binding.tvAvailable.text = "Savings available to budget"
+            }
         }
 
 
@@ -113,28 +118,8 @@ class BudgetActivity : AppCompatActivity() {
         }
 
         binding.btnNewCategory.setOnClickListener { showNewBudgetItemDialog() }
-        binding.btnDoneSettingBudget.setOnClickListener {
-            var dialogBinding = DialogDoneSettingBudgetBinding.inflate(getLayoutInflater())
-            var dialog = Dialog(this);
-            dialog.setContentView(dialogBinding.getRoot())
-            dialog.window!!.setLayout(900, 800)
-
-            dialogBinding.btnOk.setOnClickListener {
-                firestore.collection("FinancialActivities").document(budgetActivityID).update("status", "Completed").addOnSuccessListener {
-                    binding.btnDoneSettingBudget.visibility = View.GONE
-                    //binding.linearLayoutText.visibility = View.GONE
-                    isCompleted = true
-                    dialog.dismiss()
-                    firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "In Progress")
-                }
-            }
-
-            dialogBinding.btnCancel.setOnClickListener {
-                dialog.dismiss()
-            }
-
-            dialog.show()
-        }
+        binding.btnDoneSettingBudget.setOnClickListener { doneSettingBudgetDialog() }
+        binding.btnDoneSpending.setOnClickListener { doneSpendingDialog()}
     }
 
     private fun getBalance() {
@@ -284,13 +269,10 @@ class BudgetActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
                 budgetCategoryAdapter.notifyDataSetChanged()
-
             }
         }
 
-        dialogBinding.btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
+        dialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
         dialog.show()
     }
 
@@ -340,7 +322,6 @@ class BudgetActivity : AppCompatActivity() {
                     if (filledUpAndValid()) {
                         var itemName = dialogBinding.dialogDropdownCategoryName.text.toString()
                         var itemAmount = dialogBinding.dialogEtCategoryAmount.text.toString().toFloat()
-                        //they made a change after they declared that they're done setting a budget
 
                         lateinit var budgetItem : BudgetItem
                         if (itemName!= "Others")
@@ -366,9 +347,7 @@ class BudgetActivity : AppCompatActivity() {
                     }
                 }
 
-                dialogBinding.btnCancel.setOnClickListener {
-                    dialog.dismiss()
-                }
+                dialogBinding.btnCancel.setOnClickListener { dialog.dismiss()}
                 dialog.show()
             }}
 
@@ -380,12 +359,9 @@ class BudgetActivity : AppCompatActivity() {
         adjustBudgetDialog.setContentView(adjustBudgetDialogBinding.getRoot())
 
         adjustBudgetDialog.window!!.setLayout(900, 800)
-        adjustBudgetDialogBinding.btnOk.setOnClickListener {
-            adjustBudgetDialog.dismiss()
-        }
+        adjustBudgetDialogBinding.btnOk.setOnClickListener { adjustBudgetDialog.dismiss() }
 
         adjustBudgetDialog.show()
-
     }
 
     private fun finishBudgeting() {
@@ -396,9 +372,7 @@ class BudgetActivity : AppCompatActivity() {
         dialog.window!!.setLayout(900, 800)
         dialog.show()
 
-        dialogBinding.btnOk.setOnClickListener {
-            dialog.dismiss()
-        }
+        dialogBinding.btnOk.setOnClickListener { dialog.dismiss() }
     }
 
     private fun filledUpAndValid() : Boolean {
@@ -427,6 +401,46 @@ class BudgetActivity : AppCompatActivity() {
 
         return valid
     }
+
+    private fun doneSettingBudgetDialog() {
+        var dialogBinding = DialogDoneSettingBudgetBinding.inflate(getLayoutInflater())
+        var dialog = Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+        dialog.window!!.setLayout(900, 800)
+
+        dialogBinding.btnOk.setOnClickListener {
+            firestore.collection("FinancialActivities").document(budgetActivityID).update("status", "Completed").addOnSuccessListener {
+                binding.btnDoneSettingBudget.visibility = View.GONE
+                //binding.linearLayoutText.visibility = View.GONE
+                isCompleted = true
+                dialog.dismiss()
+                firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "In Progress")
+            }
+        }
+
+        dialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
+
+        dialog.show()
+    }
+
+    private fun doneSpendingDialog() {
+        var dialogBinding = DialogDoneSpendingBinding.inflate(getLayoutInflater())
+        var dialog = Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+        dialog.window!!.setLayout(900, 800)
+
+        dialogBinding.btnOk.setOnClickListener {
+            isCompleted = true
+            firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "Completed")
+            //TODO: REDIRECT TO SPENDING COMPLETION PAGE
+            dialog.dismiss()
+        }
+
+        dialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
+
+        dialog.show()
+    }
+
 
     private fun checkUser() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
