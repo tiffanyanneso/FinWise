@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -48,6 +49,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
         binding = ActivitySavingPerformanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getGoals()
+        loadBackButton()
     }
 
     private fun getGoals() {
@@ -296,5 +298,12 @@ class SavingPerformanceActivity : AppCompatActivity() {
 //        binding.percentageDonating.text = DecimalFormat("###0.00").format(percentageDonating) + "%"
 //        binding.progressBarEarningMoney.progress = percentageEarning.toInt()
 //        binding.percentageEarningMoney.text =DecimalFormat("###0.00").format(percentageEarning) + "%"
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 }

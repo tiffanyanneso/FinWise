@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title=""
-        android:icon="@drawable/goal"
-        android:id="@+id/nav_parent_goal"/>
-    <item android:title=""
         android:icon="@drawable/personalfinance"
         android:id="@+id/nav_parent_finance"/>
+    <item android:title=""
+        android:icon="@drawable/goal"
+        android:id="@+id/nav_parent_goal"/>
     <item android:title=""
         android:icon="@drawable/baseline_dashboard_24"
         android:id="@+id/nav_parent_dashboard"/>
