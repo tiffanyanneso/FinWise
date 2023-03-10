@@ -82,23 +82,23 @@ class SpendingPerformanceActivity : AppCompatActivity() {
             if (overspendingPercentage >= 90) {
                 binding.textOverspendingText.text = "Excellent"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.dark_green))
-                binding.tvOverspendingText.text = "Excellent Text"
+                binding.tvOverspendingText.text = "Excellent work! You always spend within your budget. Keep it up"
             } else if (overspendingPercentage < 90 && overspendingPercentage >= 80) {
                 binding.textOverspendingText.text = "Great"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.green))
-                binding.tvOverspendingText.text = " Great Text"
+                binding.tvOverspendingText.text = "Great job! Keep thinking before your buy and sticking to your budget!"
             } else if (overspendingPercentage < 80 && overspendingPercentage >= 70) {
                 binding.textOverspendingText.text = "Good"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.light_green))
-                binding.tvOverspendingText.text = "Good Texxt"
+                binding.tvOverspendingText.text = "Good job! With a bit more restraint and thought put into your purchases, you’ll surely up your performance!"
             } else if (overspendingPercentage < 70 && overspendingPercentage >= 60) {
                 binding.textOverspendingText.text = "Average"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.yellow))
-                binding.tvOverspendingText.text = "Average Text"
+                binding.tvOverspendingText.text = "Nice work! Work on improving your performance by using your budget as a guide and thinking before your buy."
             } else if (overspendingPercentage < 60) {
                 binding.textOverspendingText.text = "Bad"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.red))
-                binding.tvOverspendingText.text = "Bad Text"
+                binding.tvOverspendingText.text = "Uh oh! Your spending performance needs a lot of improvement. Click review to learn how!"
             }
 
             purchasePlanning()
@@ -134,23 +134,23 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                         if (purchasePlanningPercentage >= 90) {
                             binding.textPurchasePlanningText.text = "Excellent"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.dark_green))
-                            binding.tvPurchasePlanningText.text = "Excellent Text"
+                            binding.tvPurchasePlanningText.text = "Excellent job! You have a high purchase planning percentage which means that you always plan for your expenses by putting them in your shopping list. Keep this up!"
                         } else if (purchasePlanningPercentage < 90 && purchasePlanningPercentage >= 80) {
                             binding.textPurchasePlanningText.text = "Great"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.green))
-                            binding.tvPurchasePlanningText.text = " Great Text"
+                            binding.tvPurchasePlanningText.text = "Great job planning your purchases in your shopping list. Keep this up!"
                         } else if (purchasePlanningPercentage < 80 && purchasePlanningPercentage >= 70) {
                             binding.textPurchasePlanningText.text = "Good"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.light_green))
-                            binding.tvPurchasePlanningText.text = "Good Texxt"
+                            binding.tvPurchasePlanningText.text = "Good job! Up your performance by listing down the items you wanna buy in the shopping list."
                         } else if (purchasePlanningPercentage < 70 && purchasePlanningPercentage >= 60) {
                             binding.textPurchasePlanningText.text = "Average"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.yellow))
-                            binding.tvPurchasePlanningText.text = "Average Text"
+                            binding.tvPurchasePlanningText.text = "Nice Work! To improve, you may want to plan your expenses more via the shopping list."
                         } else if (purchasePlanningPercentage < 60) {
                             binding.textPurchasePlanningText.text = "Bad"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.red))
-                            binding.tvPurchasePlanningText.text = "Bad Text"
+                            binding.tvPurchasePlanningText.text = "Uh oh! Seems like you haven’t really been planning your expenses by putting them in your shopping list. Try this out next time!"
                         }
 
                         overallSpending = (overspendingPercentage + ((nPlanned/nTotalPurchased)*100)) /2
