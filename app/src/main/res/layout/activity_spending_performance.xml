@@ -451,7 +451,7 @@
                                 app:layout_constraintVertical_bias="0.5">
 
                                 <TextView
-                                    android:id="@+id/text__purchase_planning"
+                                    android:id="@+id/text_purchase_planning"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
