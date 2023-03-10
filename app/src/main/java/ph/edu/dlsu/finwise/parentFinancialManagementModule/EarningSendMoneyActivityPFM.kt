@@ -79,7 +79,6 @@ class EarningSendMoneyActivityPFM : AppCompatActivity() {
                 binding.tvStatus.text = earning?.status
             }
 
-
         sendMoney()
 
     }
@@ -87,7 +86,6 @@ class EarningSendMoneyActivityPFM : AppCompatActivity() {
     private fun sendMoney() {
         binding.btnSendMoney.setOnClickListener {
             payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
-
         }
     }
 

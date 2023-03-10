@@ -25,20 +25,20 @@ class EarningMenuActivity : AppCompatActivity() {
         loadButtons()
         setNavigationBar()
 
-        var bundle = intent.extras!!
-        var childID = bundle.getString("childID").toString()
+        val bundle = intent.extras!!
+        val childID = bundle.getString("childID").toString()
 
 
-        var sendBundle = Bundle()
+        val sendBundle = Bundle()
         sendBundle.putString("childID", childID)
         binding.btnHomeRewards.setOnClickListener {
-            var goToHomeRewardsActivity = Intent(this, EarningActivity::class.java)
+            val goToHomeRewardsActivity = Intent(this, EarningActivity::class.java)
             goToHomeRewardsActivity.putExtras(sendBundle)
             startActivity(goToHomeRewardsActivity)
         }
 
         binding.btnSelling.setOnClickListener {
-            var goToSellingActivity = Intent(this, EarningSellingActivity::class.java)
+            val goToSellingActivity = Intent(this, EarningSellingActivity::class.java)
             goToSellingActivity.putExtras(sendBundle)
             startActivity(goToSellingActivity)
         }
