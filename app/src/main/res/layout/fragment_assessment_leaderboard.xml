@@ -28,7 +28,7 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/button_border_white"
-            android:backgroundTint="@color/light_green">
+            android:backgroundTint="@color/teal">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
@@ -57,7 +57,8 @@
                     app:layout_constraintEnd_toEndOf="@+id/progress_bar"
                     app:layout_constraintStart_toStartOf="@+id/progress_bar"
                     app:layout_constraintTop_toTopOf="@+id/progress_bar"
-                    tools:text="35%" />
+                    tools:text="35%"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/text_view_performance_text"
@@ -71,7 +72,8 @@
                     app:layout_constraintTop_toTopOf="@+id/progress_bar"
                     app:layout_constraintVertical_bias="0.75"
                     tools:text="Poor"
-                    android:textSize="16dp"/>
+                    android:textSize="16dp"
+                    />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -82,7 +84,7 @@
                 android:id="@+id/tv_rank"
                 android:text="@string/rank"
                 android:textSize="20sp"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:paddingBottom="5dp"
                 android:layout_gravity="center"/>
         </LinearLayout>

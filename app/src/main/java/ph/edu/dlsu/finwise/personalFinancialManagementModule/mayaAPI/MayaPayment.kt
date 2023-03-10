@@ -55,8 +55,8 @@ class MayaPayment : AppCompatActivity() {
 
     private fun goToMayaQRConfirmPayment(){
         binding.btnConfirm.setOnClickListener {
-            Toast.makeText(this, "confirm", Toast.LENGTH_SHORT).show()
-            /*if (validateAndSetUserInput() && validAmount()) {
+
+            if (validateAndSetUserInput() && validAmount()) {
                 setBundle()
                 val goToMayaQRConfirmPayment = Intent(applicationContext, MayaConfirmPayment::class.java)
                 goToMayaQRConfirmPayment.putExtras(bundle)
@@ -67,7 +67,7 @@ class MayaPayment : AppCompatActivity() {
                     baseContext, "Please fill up the form correctly.",
                     Toast.LENGTH_SHORT
                 ).show()
-            }*/
+            }
         }
     }
 

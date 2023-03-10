@@ -55,6 +55,7 @@ class EarningActivity : AppCompatActivity() {
         binding.btnAddEarningActivity.setOnClickListener {
             val newEarning = Intent(this, NewEarningActivity::class.java)
             val sendBundle = Bundle()
+          //TODO:  sendBundle.putString("module", childID)
             sendBundle.putString("childID", childID)
             newEarning.putExtras(sendBundle)
             startActivity(newEarning)
@@ -118,14 +119,19 @@ class EarningActivity : AppCompatActivity() {
             //current user is a child
             val bottomNavigationViewChild = binding.bottomNav
             val bottomNavigationViewParent = binding.bottomNavParent
+            Toast.makeText(this, ""+module, Toast.LENGTH_SHORT).show()
             if (it.exists()) {
                 binding.btnAddEarningActivity.visibility = View.GONE
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
-                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+
+                if (module == "pfm")
+                    Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+                else Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
             } else {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
+
                 if (module == "pfm")
                     NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
                 else NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
