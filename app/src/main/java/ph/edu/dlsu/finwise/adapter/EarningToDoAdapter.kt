@@ -63,7 +63,7 @@ class EarningToDoAdapter : RecyclerView.Adapter<EarningToDoAdapter.EarningToDoVi
                 itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
                 itemBinding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
                 itemBinding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.targetDate!!.toDate()).toString()
-                itemBinding.tvSavingActivityId.text = earning?.savingActivityID
+                itemBinding.tvSource.text = earning?.source
                 itemBinding.tvChildId.text = earning?.childID
             }
         }
@@ -72,7 +72,6 @@ class EarningToDoAdapter : RecyclerView.Adapter<EarningToDoAdapter.EarningToDoVi
             var income = Intent (context, MarkChoreCompletedActivity::class.java)
             var bundle = Bundle()
             bundle.putString("earningActivityID", itemBinding.tvEarningActivityId.text.toString())
-            bundle.putString("savingActivityID", itemBinding.tvSavingActivityId.text.toString())
             bundle.putString("childID", itemBinding.tvChildId.text.toString())
             income.putExtras(bundle)
             income.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

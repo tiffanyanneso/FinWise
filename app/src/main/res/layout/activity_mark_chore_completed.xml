@@ -121,31 +121,31 @@
                 android:textColor="@color/black" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="5dp">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_marginBottom="5dp">-->
 
-            <TextView
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:text="Finish Date"
-                android:textSize="16sp"
-                android:textColor="@color/black" />
+<!--            <TextView-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:textStyle="bold"-->
+<!--                android:text="Finish Date"-->
+<!--                android:textSize="16sp"-->
+<!--                android:textColor="@color/black" />-->
 
-            <TextView
-                android:id="@+id/tv_finish_date"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="Finish Date (Hide depending on source)"
-                android:layout_width="60dp"
-                android:textSize="16sp"
-                android:gravity="end"
-                android:textColor="@color/black" />
-        </LinearLayout>
+<!--            <TextView-->
+<!--                android:id="@+id/tv_finish_date"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="2"-->
+<!--                android:text="Finish Date (Hide depending on source)"-->
+<!--                android:layout_width="60dp"-->
+<!--                android:textSize="16sp"-->
+<!--                android:gravity="end"-->
+<!--                android:textColor="@color/black" />-->
+<!--        </LinearLayout>-->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -194,6 +194,32 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:text="Amount"
+                android:gravity="end"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="Money will be deposited in"
+                android:textSize="16sp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/tv_source"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="Source"
                 android:gravity="end"
                 android:textSize="16sp"
                 android:textColor="@color/black"/>

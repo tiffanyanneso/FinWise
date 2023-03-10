@@ -27,12 +27,10 @@ class EarningMenuActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         var childID = bundle.getString("childID").toString()
-        var savingActivityID = bundle.getString("savingActivityID").toString()
 
 
         var sendBundle = Bundle()
         sendBundle.putString("childID", childID)
-        sendBundle.putString("savingActivityID", savingActivityID)
         binding.btnHomeRewards.setOnClickListener {
             var goToHomeRewardsActivity = Intent(this, EarningActivity::class.java)
             goToHomeRewardsActivity.putExtras(sendBundle)

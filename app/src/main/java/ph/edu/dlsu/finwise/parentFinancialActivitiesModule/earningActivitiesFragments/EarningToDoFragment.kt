@@ -44,7 +44,7 @@ class EarningToDoFragment : Fragment() {
 
     private fun getToDoEarning() {
         var earningToDoArrayList = ArrayList<String>()
-        firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("source", "Financial Activity").whereEqualTo("status", "Ongoing").get().addOnSuccessListener { results ->
+        firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("status", "Ongoing").get().addOnSuccessListener { results ->
             for (earning in results)
                 earningToDoArrayList.add(earning.id)
 
