@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -59,9 +60,8 @@ class BudgetActivity : AppCompatActivity() {
         setContentView(binding.root)
         context =this
 
-        // Hides actionbar,
-        // and initializes the navbar
-        supportActionBar?.hide()
+        // initializes the navbar
+
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         bundle = intent.extras!!
@@ -71,6 +71,7 @@ class BudgetActivity : AppCompatActivity() {
 
         checkUser()
         getBudgetItems()
+        loadBackButton()
         if (spendingActivityID!=null)
             getExpenses()
         getBalance()
@@ -452,6 +453,12 @@ class BudgetActivity : AppCompatActivity() {
                 binding.btnDoneSettingBudget.visibility = View.GONE
                 //binding.linearLayoutText.visibility = View.GONE
             }
+        }
+    }
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
         }
     }
 }

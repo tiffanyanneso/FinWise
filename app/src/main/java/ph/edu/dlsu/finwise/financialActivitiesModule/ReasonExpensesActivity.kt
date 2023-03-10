@@ -2,6 +2,7 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObjects
@@ -31,8 +32,7 @@ class ReasonExpensesActivity : AppCompatActivity() {
         budgetActivityID = bundle.getString("budgetActivityID").toString()
 
         getExpenseList()
-
-        supportActionBar?.hide()
+        loadBackButton()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
     }
 
@@ -49,6 +49,13 @@ class ReasonExpensesActivity : AppCompatActivity() {
                     spendingExpensesAdapter.notifyDataSetChanged()
                 }
             }
+        }
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
         }
     }
 }
