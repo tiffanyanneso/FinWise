@@ -56,7 +56,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
                 nTimeBound += ratingObject.timeBound!!
             }
         }.continueWith {
-            var overall = nOverall/nRatings
+            val overall = nOverall/nRatings
             binding.tvOverallRating.text ="${overall}/5"
             var percentage = (overall / 5) * 100
 

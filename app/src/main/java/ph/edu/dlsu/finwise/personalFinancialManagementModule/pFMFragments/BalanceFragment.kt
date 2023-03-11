@@ -48,25 +48,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     var graphData = mutableListOf<Entry>()
 
 
-
-/*
-    // Balance bar chart
-    // variable for our bar chart
-    private var barChart: BarChart? = null
-
-    // variable for bar data set.
-    private var barDataSet1: BarDataSet? = null
-    // variable for bar data set.
-    private var barDataSet2: BarDataSet? = null
-
-    // array list for storing entries.
-    private var barEntriesIncome = ArrayList<BarEntry>()
-    private var barEntriesExpense = ArrayList<BarEntry>()
-
-    // creating a string array for displaying days.
-    private var datesBar = arrayListOf<String>()*/
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

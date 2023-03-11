@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".financialAssessmentModule.FinancialAssessmentLandingPage">
+    tools:context=".financialAssessmentModule.FinancialAssessmentLandingPageActivity">
 
 
     <com.google.android.material.appbar.AppBarLayout
@@ -27,13 +27,13 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+        android:id="@+id/tab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/TopBar"
-        app:layout_constraintBottom_toTopOf="@id/viewPager2"
+        app:layout_constraintBottom_toTopOf="@id/viewpager"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/teal_700"
         app:tabSelectedTextColor="@color/black">
@@ -51,15 +51,15 @@
     <!--        app:layout_constraintRight_toRightOf="parent"-->
     <!--        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />-->
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager2"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/tab" />
 
 
 
@@ -90,6 +90,7 @@
         app:itemIconSize="36dp"
         android:visibility="gone"
         app:itemIconTint="@drawable/selector"/>
+
 
 
 

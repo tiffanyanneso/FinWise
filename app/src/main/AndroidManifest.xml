@@ -235,7 +235,7 @@
             android:name=".financialAssessmentModule.FinancialAssessmentQuiz"
             android:exported="false" />
         <activity
-            android:name=".financialAssessmentModule.FinancialAssessmentLandingPage"
+            android:name=".financialAssessmentModule.FinancialAssessmentLandingPageActivity"
             android:exported="false">
 
             <!--

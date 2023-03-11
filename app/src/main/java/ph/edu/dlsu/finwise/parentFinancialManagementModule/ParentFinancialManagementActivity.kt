@@ -196,27 +196,40 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         val ratio = (income / expense * 100).toInt() // convert to percentage and round down to nearest integer
         val imageView = binding.ivScore
         val grade: String
+        val performance: String
         val bitmap: Bitmap
 
         if (ratio >= 200) {
-            grade = "Excellent \n Your child is demonstrating good financial habits by spending less than they earn"
+            performance = "Excellent!"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.dark_green))
+            grade = "Your child is demonstrating good financial habits by spending less than they earn"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
-        } else if (ratio >= 150 && ratio < 200) {
-             grade = "Great \n Your child is doing well but could save more money by finding ways to increase their income or reduce their expenses"
+        } else if (ratio in 150..199) {
+            performance = "Great!"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.green))
+            grade = "Your child is doing well but could save more money by finding ways to increase their income or reduce their expenses"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
-        } else if (ratio >= 100 && ratio < 150) {
-             grade = "Good \n Your child is overspending and struggling to save, so finding ways to cut back on expenses and increase their income can help them achieve a healthier financial situation"
+        } else if (ratio in 100..149) {
+            performance = "Okay"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.light_green))
+            grade = "Your child is overspending and struggling to save, so finding ways to cut back on expenses and increase their income can help them achieve a healthier financial situation"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
-        } else if (ratio >= 50 && ratio < 100) {
-             grade = "Average \n Your child's financial situation could benefit from reducing expenses and increasing income, as they are currently spending much more than they earn"
+        } else if (ratio in 50..99) {
+            performance = "Average"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.yellow))
+            grade = "Your child's financial situation could benefit from reducing expenses and increasing income, as they are currently spending much more than they earn"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else {
-             grade = "Bad \n Your child's expenses exceed their income, so it's important to take immediate action to help them improve their financial situation by reducing expenses and finding ways to increase income"
+            performance = "Bad"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            grade = "Your child's expenses exceed their income, so it's important to take immediate action to help them improve their financial situation by reducing expenses and finding ways to increase income"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
         }
 
         imageView.setImageBitmap(bitmap)
         binding.tvScore.text = grade
+        binding.tvPerformance.text = performance
+
     }
 
     private fun loadExplanation() {

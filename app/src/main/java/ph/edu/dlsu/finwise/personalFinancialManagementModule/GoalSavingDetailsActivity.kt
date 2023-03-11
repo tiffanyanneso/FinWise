@@ -343,6 +343,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
 
   /*  private fun setTopThreeCategories() {
         val totals = mapOf(
+
             "Clothes" to clothes,
             "Food" to food,
             "Gift" to gift,

@@ -100,30 +100,44 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         val ratio = (income / expense * 100).toInt() // convert to percentage and round down to nearest integer
         val imageView = binding.ivScore
         val grade: String
+        val performance: String
         val bitmap: Bitmap
 
         if (ratio >= 200) {
-            grade = "Excellent!\n Your income is more than enough to cover your expenses and save some money for the future"
+            performance = "Excellent!"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.dark_green))
+            grade = "Your income is more than enough to cover your expenses and save some money for the future"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (ratio in 150..199) {
+            performance = "Great!"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.green))
             grade = "Great!\n Keep up the good work on managing your income and expenses, but try cutting back on unnecessary expenses and finding ways to earn more"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (ratio in 100..149) {
+            performance = "Good!"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.light_green))
             grade = "Good!\n You're spending most of your income on expenses without saving much, so it's crucial to start exploring ways to save more money"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
         } else if (ratio in 50..99) {
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.yellow))
+            performance = "Average!"
             grade = "Average\n You are spending more money than you make can cause financial problems, so it's crucial to find ways to boost your income and cut down on expenses"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else if (ratio in 1..49) {
+            performance = "Bad..!"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
             grade = "Bad..\n You are spending more than what you earn may lead to financial troubles, so it's best to consult with your parent on how to improve your finances."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
         } else {
+            performance = "Bad...!"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
             grade = "Bad...\n You are have 0 balance. Explore the app by clicking on the buttons."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         }
 
         imageView.setImageBitmap(bitmap)
         binding.tvScore.text = grade
+        binding.tvPerformance.text = performance
 
     }
 

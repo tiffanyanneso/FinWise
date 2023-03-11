@@ -298,6 +298,17 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                             android:layout_gravity="center"
                             />
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:id="@+id/tv_performance"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            android:text="Loading..."
+                            android:textColor="@color/cream"/>
+
+
 
                         <TextView
                             android:layout_width="325dp"

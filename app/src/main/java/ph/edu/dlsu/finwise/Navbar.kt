@@ -5,8 +5,7 @@ import android.content.Intent
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ph.edu.dlsu.finwise.childDashboardModule.childDashboardActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
-import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
-import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentLandingPage
+import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentLandingPageActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import ph.edu.dlsu.finwise.profileModule.ProfileActivity
 
@@ -35,7 +34,7 @@ class Navbar(bottomNavigationView: BottomNavigationView, appCon: Context, navIte
                 }
 
                 R.id.nav_assessment -> {
-                    val intent = Intent(appCon, FinancialAssessmentLandingPage::class.java)
+                    val intent = Intent(appCon, FinancialAssessmentLandingPageActivity::class.java)
                     appCon.startActivity(intent)
                 }
 

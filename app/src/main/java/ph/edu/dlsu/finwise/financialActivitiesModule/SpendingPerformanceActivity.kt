@@ -41,7 +41,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
     }
 
     private fun getBudgeting() {
-        var budgetingActivityIDArrayList = ArrayList<String>()
+        val budgetingActivityIDArrayList = ArrayList<String>()
         //get only completed budgeting activities because they should complete budgeting first before they are able to spend
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             for (activity in results)
@@ -53,7 +53,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                     nBudgetItems += results.size()
                     for (budgetItem in results) {
 
-                        var budgetItemObject = budgetItem.toObject<BudgetItem>()
+                        val budgetItemObject = budgetItem.toObject<BudgetItem>()
                         checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
 //                        budgetItemsIDArrayList.add(BudgetItemAmount(budgetItem.id, budgetItemObject.amount!!))
 //                        println("print add item in budgetItems array list")
@@ -126,7 +126,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                     firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID.id).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { expenseTransactions ->
                         nTotalPurchased += expenseTransactions.size().toFloat()
                     }.continueWith {
-                        var purchasePlanningPercentage = (nPlanned/nTotalPurchased)*100
+                        val purchasePlanningPercentage = (nPlanned/nTotalPurchased)*100
 
                         binding.progressBarPurchasePlanning.progress = purchasePlanningPercentage.toInt()
                         binding.textPurchasePlanning.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
