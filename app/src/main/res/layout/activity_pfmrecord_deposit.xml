@@ -41,13 +41,54 @@
         app:startIconDrawable="@drawable/baseline_star_24">
 
         <AutoCompleteTextView
-            android:id="@+id/dropdown_activity"
+            android:id="@+id/dropdown_goal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="none"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/container_goal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16dp"
+        android:layout_marginTop="10dp"
+        android:textAllCaps = "true"
+        android:text="Goal Progress"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"/>
+
+    <TextView
+        android:id="@+id/tv_progress_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16dp"
+        android:layout_marginTop="5dp"
+        android:text="₱ 0.00 / ₱ 0.00"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"/>
+
+    <ProgressBar
+        android:id="@+id/pb_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_progress_amount"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="10dp"
+        android:scaleY="4"
+        android:max="100"
+        />
 
 <!--    <androidx.appcompat.widget.AppCompatSpinner-->
 <!--        android:id="@+id/spinner_goal"-->
@@ -65,7 +106,7 @@
         android:id="@+id/date_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/container_goal"
+        app:layout_constraintTop_toBottomOf="@+id/pb_progress"
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
@@ -154,6 +195,19 @@
             android:hint="@string/amount"
             />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_balance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/amount_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16dp"
+        android:text="You currently have ₱XXX.XX"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"
+        />
 
 <!--    <TextView-->
 <!--        android:id="@+id/tv_amount"-->

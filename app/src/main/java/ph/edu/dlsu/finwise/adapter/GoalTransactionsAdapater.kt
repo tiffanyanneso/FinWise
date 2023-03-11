@@ -72,11 +72,11 @@ class GoalTransactionsAdapater : RecyclerView.Adapter<GoalTransactionsAdapater.G
 
                 if (transaction?.transactionType == "Deposit") {
                     itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.very_light_green))
-                    itemBinding.tvAmount.text = "+ ₱ " + DecimalFormat("#,##0.00").format(transaction.amount)
+                    itemBinding.tvAmount.text = "+ ₱" + DecimalFormat("#,##0.00").format(transaction.amount)
                 }
                 else if (transaction?.transactionType == "Withdrawal") {
                     itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.light_red))
-                    itemBinding.tvAmount.text = "- ₱ " + DecimalFormat("#,##0.00").format(transaction.amount)
+                    itemBinding.tvAmount.text = "- ₱" + DecimalFormat("#,##0.00").format(transaction.amount)
                 }
             }
         }

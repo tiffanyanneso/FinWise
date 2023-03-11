@@ -113,7 +113,7 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
         withdrawAmount = bundle.getFloat("amount")
         binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
         binding.tvUpdatedGoalSavings.text = "₱ " +  DecimalFormat("#,##0.00").format((bundle.getFloat("savedAmount") - bundle.getFloat("amount")))
-        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2").get().addOnSuccessListener {
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener {
             var wallet = it.documents[0].toObject<ChildWallet>()
             binding.tvWalletBalance.text = "₱ " +  DecimalFormat("#,##0.00").format((wallet?.currentBalance!!.toFloat() + bundle.getFloat("amount")))
         }

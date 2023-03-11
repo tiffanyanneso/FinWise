@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
@@ -18,8 +19,10 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordDepositBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
+import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -41,6 +44,12 @@ class RecordDepositActivity : AppCompatActivity() {
 
     private var childID = FirebaseAuth.getInstance().currentUser!!.uid
 
+    private var savingActivityID:String?=null
+
+    private var goalDropDownArrayList = ArrayList<GoalDropDown>()
+    private lateinit var goalAdapter: ArrayAdapter<String>
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,11 +62,20 @@ class RecordDepositActivity : AppCompatActivity() {
         Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
 
 
+
         firestore.collection("ChildWallet").whereEqualTo("childID", childID).get().addOnSuccessListener {
             walletBalance = it.documents[0].toObject<ChildWallet>()!!.currentBalance!!
+
+            binding.tvBalance.text = "You currently have ₱${DecimalFormat("#,##0.00").format(walletBalance)} in your wallet"
         }.continueWith {
             initializeDatePicker()
             getGoals()
+            binding.dropdownGoal.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+                savingActivityID = goalDropDownArrayList[position].savingActivityID
+                binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goalDropDownArrayList[position].currentSavings) +
+                        " / ₱ " + DecimalFormat("#,##0.00").format(goalDropDownArrayList[position].targetAmount)
+                binding.pbProgress.progress = ((goalDropDownArrayList[position].currentSavings/goalDropDownArrayList[position].targetAmount) *100).toInt()
+            }
             loadBackButton()
             goToConfirmation()
             cancel()
@@ -74,19 +92,21 @@ class RecordDepositActivity : AppCompatActivity() {
     }
 
     private fun getGoals() {
-        firestore.collection("FinancialGoals").whereEqualTo("childID", childID). whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
-            for (goal in results) {
-                val goalObject = goal.toObject<FinancialGoals>()
-                goals.add(goalObject.goalName.toString())
-                goalArrayID.add(goal.id)
+        firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { activityResults ->
+            for (saving in activityResults) {
+                firestore.collection("FinancialGoals").document(saving.toObject<FinancialActivities>().financialGoalID!!).get().addOnSuccessListener { goal ->
+                    var goalObject = goal.toObject<FinancialGoals>()
+                    goalDropDownArrayList.add(GoalDropDown(saving.id, goalObject?.goalName!!, goalObject.currentSavings!!, goalObject.targetAmount!!))
+                }.continueWith {
+                    goalAdapter = ArrayAdapter(this, R.layout.list_item, goalDropDownArrayList.map { it.goalName })
+                    binding.dropdownGoal.setAdapter(goalAdapter)
+                }
             }
-
-            val adapter = ArrayAdapter(this, ph.edu.dlsu.finwise.R.layout.list_item, goals)
-            binding.dropdownActivity.setAdapter(adapter)
-
-            //getGoalProgress()
         }
     }
+
+    class GoalDropDown(var savingActivityID:String, var goalName:String, var currentSavings:Float, var targetAmount:Float)
+
     private fun loadBackButton() {
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
@@ -110,18 +130,21 @@ class RecordDepositActivity : AppCompatActivity() {
             valid = false
         } else amount = binding.etAmount.text.toString().trim()
 
-        if (binding.dropdownActivity.text.toString() == "") {
-            binding.dropdownActivity.error = "Please select a Goal."
+        if (binding.dropdownGoal.text.toString() == "") {
+            binding.dropdownGoal.error = "Please select a Goal."
             valid = false
         } else {
-            binding.dropdownActivity.error = null
-            goal = binding.dropdownActivity.text.toString()
+            binding.dropdownGoal.error = null
+            goal = binding.dropdownGoal.text.toString()
         }
 
         if (binding.etDate.text.toString().trim().isEmpty()) {
             binding.etDate.error = "Please enter the name of the transaction."
             binding.etDate.requestFocus()
             valid = false
+        } else {
+            binding.etDate.error = null
+            date = SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString())
         }
 
         return valid
@@ -136,10 +159,7 @@ class RecordDepositActivity : AppCompatActivity() {
                 goToConfirmDeposit.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(goToConfirmDeposit)
             } else {
-                Toast.makeText(
-                    baseContext, "Please fill up correctly the form.",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(baseContext, "Please fill up correctly the form.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -166,6 +186,7 @@ class RecordDepositActivity : AppCompatActivity() {
         bundle.putFloat("amount", amount.toFloat())
         bundle.putString("goal", goal)
         bundle.putString("source", "PFMDepositToGoal")
+        bundle.putString("savingActivityID", savingActivityID)
         bundle.putSerializable("date", date)
         bundle.putFloat("balance", walletBalance)
 

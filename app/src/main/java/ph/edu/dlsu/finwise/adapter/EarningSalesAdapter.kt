@@ -5,17 +5,11 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ItemSellingBinding
-import ph.edu.dlsu.finwise.databinding.ItemShoppingListBinding
-import ph.edu.dlsu.finwise.databinding.ItemTransactionBinding
 import ph.edu.dlsu.finwise.model.SellingItems
-import ph.edu.dlsu.finwise.model.ShoppingListItem
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 

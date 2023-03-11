@@ -18,6 +18,7 @@ import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmtransactionHistoryBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.*
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryAllFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryExpenseFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryIncomeFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionSortFragment
@@ -100,7 +101,6 @@ class TransactionHistoryActivity : AppCompatActivity() {
         user = getBundle!!.getString("user").toString()
         if (user == "parent") {
             childID = getBundle?.getString("childID").toString()
-            Toast.makeText(this, "cc "+childID , Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -121,10 +121,13 @@ class TransactionHistoryActivity : AppCompatActivity() {
             withContext(Dispatchers.Main) {
                 val adapter = ViewPagerAdapter(supportFragmentManager)
 
+                val allFragment = TransactionHistoryAllFragment()
                 val incomeFragment = TransactionHistoryIncomeFragment()
                 val expenseFragment = TransactionHistoryExpenseFragment()
+                allFragment.arguments = setBundle
                 incomeFragment.arguments = setBundle
                 expenseFragment.arguments = setBundle
+                adapter.addFragment(allFragment, "All")
                 adapter.addFragment(incomeFragment, "Income")
                 adapter.addFragment(expenseFragment, "Expense")
 
@@ -142,8 +145,8 @@ class TransactionHistoryActivity : AppCompatActivity() {
     }
 
     private fun setupTabIcons() {
-        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
-        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[1])
 
     }
 
