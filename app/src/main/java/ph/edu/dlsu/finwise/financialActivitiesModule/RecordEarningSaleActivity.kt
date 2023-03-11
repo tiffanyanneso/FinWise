@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -48,6 +49,7 @@ class RecordEarningSaleActivity : AppCompatActivity() {
         var bundle = intent.extras!!
         var childID = bundle.getString("childID").toString()
 
+        binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
         binding.etDate.setOnClickListener { showCalendar() }
 
         binding.dropdownDestination.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->

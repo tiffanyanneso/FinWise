@@ -15,7 +15,7 @@
         android:visibility="gone"/>
 
     <TextView
-        android:id="@+id/tv_saving_activity_id"
+        android:id="@+id/tv_budgeting_activity_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"/>

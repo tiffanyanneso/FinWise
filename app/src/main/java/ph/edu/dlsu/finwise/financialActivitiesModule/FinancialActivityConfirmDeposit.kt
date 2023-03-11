@@ -32,15 +32,16 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
     val time = Calendar.getInstance().time
     val current = formatter.format(time)
 
-    var amount : String? =null
+    var amount : Float? =null
 
     private lateinit var financialGoalID:String
     private lateinit var savingActivityID:String
+    private lateinit var budgetingActivityID:String
+    private lateinit var spendingActivityID:String
 
     private lateinit var bundle:Bundle
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +66,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 "financialActivityID" to bundle.getString("savingActivityID")
             )
 
-            //adjustUserBalance()
+            adjustUserBalance()
 
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
                 firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
@@ -86,9 +87,12 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         //decisionMakingActivityID = bundle.getString("decisionMakingActivityID").toString()
         binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
         binding.tvAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
+        amount = bundle.getFloat("amount")
         binding.tvGoal.text= bundle.getString("goalName")
         financialGoalID = bundle.getString("financialGoalID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
+        budgetingActivityID = bundle.getString("budgetingActivityID").toString()
+        spendingActivityID = bundle.getString("spendingActivityID").toString()
 
         firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener {
             var wallet = it.documents[0].toObject<ChildWallet>()
@@ -99,28 +103,20 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
     }
 
     private fun adjustUserBalance() {
-        //TODO: Change user based on who is logged in
-        /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2")
-            .get().addOnSuccessListener { documents ->
-                lateinit var id: String
-                for (document in documents) {
-                    id = document.id
-                }
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener { result ->
+            var walletID = result.documents[0].id
 
-                var adjustedBalance = amount?.toDouble()
-                adjustedBalance = -abs(adjustedBalance!!)
-                Toast.makeText(this, adjustedBalance.toString(), Toast.LENGTH_SHORT).show()
-
-                firestore.collection("ChildWallet").document(id)
-                    .update("currentBalance", FieldValue.increment(adjustedBalance))
-            }
+            var adjustedBalance = -abs(amount?.toDouble()!!)
+            firestore.collection("ChildWallet").document(walletID).update("currentBalance", FieldValue.increment(adjustedBalance))
+        }
     }
 
     private fun checkGoalCompletion() {
-        val bundle = Bundle()
-        bundle.putString("financialGoalID", financialGoalID)
-        bundle.putString("savingActivityID", savingActivityID)
+        val sendBundle = Bundle()
+        sendBundle.putString("financialGoalID", financialGoalID)
+        sendBundle.putString("savingActivityID", savingActivityID)
+        sendBundle.putString("budgetingActivityID", budgetingActivityID)
+        sendBundle.putString("spendingActivityID", spendingActivityID)
         firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var goal = it.toObject<FinancialGoals>()
             //target amount has already been met, update status of goal and fin activity to completed
@@ -129,13 +125,13 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 firestore.collection("FinancialGoals").document(financialGoalID).update("dateCompleted", Timestamp.now())
                 firestore.collection("FinancialActivities").document(savingActivityID).update("status", "Completed")
                 val goalAccomplished = Intent(this, GoalAccomplishedActivity::class.java)
-                goalAccomplished.putExtras(bundle)
+                goalAccomplished.putExtras(sendBundle)
                 goalAccomplished.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this.startActivity(goalAccomplished)
                 finish()
             } else {
                 val savingActivity = Intent(this, ViewGoalActivity::class.java)
-                savingActivity.putExtras(bundle)
+                savingActivity.putExtras(sendBundle)
                 savingActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this.startActivity(savingActivity)
                 finish()

@@ -87,7 +87,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
 
         binding.tvName.text = name
         binding.tvCategory.text = category
-        binding.tvAmount.text = "₱$amount"
+        binding.tvAmount.text = "₱${DecimalFormat("#,##0.00").format(amount)}"
         //binding.tvGoal.text = goal
         val formatter = SimpleDateFormat("MM/dd/yyyy")
         val dateSerializable = bundle!!.getSerializable("date")

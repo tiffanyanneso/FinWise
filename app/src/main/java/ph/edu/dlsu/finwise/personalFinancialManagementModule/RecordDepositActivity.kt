@@ -11,8 +11,11 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordDepositBinding
@@ -34,7 +37,9 @@ class RecordDepositActivity : AppCompatActivity() {
     lateinit var goal : String
     lateinit var amount: String
     lateinit var date: Date
-    var balance = 0.00f
+    var walletBalance = 0.00f
+
+    private var childID = FirebaseAuth.getInstance().currentUser!!.uid
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,23 +53,28 @@ class RecordDepositActivity : AppCompatActivity() {
         Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
 
 
-        initializeDatePicker()
-        getGoals()
-        loadBackButton()
-        goToConfirmation()
-        cancel()
+        firestore.collection("ChildWallet").whereEqualTo("childID", childID).get().addOnSuccessListener {
+            walletBalance = it.documents[0].toObject<ChildWallet>()!!.currentBalance!!
+        }.continueWith {
+            initializeDatePicker()
+            getGoals()
+            loadBackButton()
+            goToConfirmation()
+            cancel()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeDatePicker() {
+        binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+
         binding.etDate.setOnClickListener{
             showCalendar()
         }
     }
 
     private fun getGoals() {
-        //TODO: UPDATE LATER WITH CHILD ID
-        firestore.collection("FinancialGoals").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", childID). whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             for (goal in results) {
                 val goalObject = goal.toObject<FinancialGoals>()
                 goals.add(goalObject.goalName.toString())
@@ -137,12 +147,10 @@ class RecordDepositActivity : AppCompatActivity() {
 
 
     private fun validAmount(): Boolean {
-        val bundle2 = intent.extras!!
-        balance = bundle2.getFloat("balance")
         //trying to deposit more than their current balance
-        if (binding.etAmount.text.toString().toFloat() > balance) {
+        if (binding.etAmount.text.toString().toFloat() > walletBalance) {
             binding.etAmount.error =
-                "You cannot deposit more than your current balance of ₱$balance"
+                "You cannot deposit more than your current balance of ₱$walletBalance"
             binding.etAmount.requestFocus()
             return false
         }
@@ -159,7 +167,7 @@ class RecordDepositActivity : AppCompatActivity() {
         bundle.putString("goal", goal)
         bundle.putString("source", "PFMDepositToGoal")
         bundle.putSerializable("date", date)
-        bundle.putFloat("balance", balance)
+        bundle.putFloat("balance", walletBalance)
 
         //TODO: reset spinner and date to default value
         /* binding.etName.text.clear()

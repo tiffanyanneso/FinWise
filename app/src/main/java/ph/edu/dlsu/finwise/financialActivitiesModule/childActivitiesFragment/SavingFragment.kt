@@ -201,7 +201,10 @@ class SavingFragment : Fragment() {
                 }
             }
 
-            val overall = (nOnTime/nTotal) * 100
+            var overall = 0.00F
+            if (nTotal != 0.00F)
+                overall = (nOnTime/nTotal) * 100
+
             val overallRoundedNumber = "%.1f".format(overall).toFloat()
 
             binding.tvPerformancePercentage.text ="${overallRoundedNumber}%"

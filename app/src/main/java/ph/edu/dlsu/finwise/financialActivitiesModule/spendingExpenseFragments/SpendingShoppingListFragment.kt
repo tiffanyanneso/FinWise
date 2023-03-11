@@ -24,7 +24,7 @@ import kotlin.collections.ArrayList
 class SpendingShoppingListFragment : Fragment() {
 
     private lateinit var binding: FragmentSpendingShoppingListBinding
-    private lateinit var budgetActivityID:String
+    private lateinit var budgetingActivityID:String
 
     private lateinit var savingActivityID:String
     private lateinit var budgetItemID:String
@@ -41,7 +41,7 @@ class SpendingShoppingListFragment : Fragment() {
         arguments?.let {
             var bundle = arguments
             savingActivityID = bundle?.getString("savingActivityID").toString()
-            budgetActivityID = bundle?.getString("budgetActivityID").toString()
+            budgetingActivityID = bundle?.getString("budgetingActivityID").toString()
             budgetItemID = bundle?.getString("budgetItemID").toString()
             spendingActivityID = bundle?.getString("spendingActivityID").toString()
         }

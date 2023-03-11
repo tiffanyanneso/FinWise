@@ -42,7 +42,7 @@ class BudgetActivity : AppCompatActivity() {
     lateinit var context:Context
     lateinit var bundle: Bundle
 
-    private lateinit var budgetActivityID:String
+    private lateinit var budgetingActivityID:String
     private lateinit var savingActivityID:String
     private lateinit var spendingActivityID:String
 
@@ -67,7 +67,7 @@ class BudgetActivity : AppCompatActivity() {
 
         bundle = intent.extras!!
         savingActivityID = bundle.getString("savingActivityID").toString()
-        budgetActivityID = bundle.getString("budgetActivityID").toString()
+        budgetingActivityID = bundle.getString("budgetingActivityID").toString()
         spendingActivityID = bundle.getString("spendingActivityID").toString()
 
         checkUser()
@@ -78,7 +78,7 @@ class BudgetActivity : AppCompatActivity() {
         getBalance()
 
         var allCompleted = true
-        firestore.collection("FinancialActivities").document(budgetActivityID).get().addOnSuccessListener {
+        firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
             var financialActivity = it.toObject<FinancialActivities>()
             if (financialActivity?.status == "Completed") {
                 isCompleted = true
@@ -120,7 +120,7 @@ class BudgetActivity : AppCompatActivity() {
         binding.btnTransactions.setOnClickListener{
             var goToTransactions = Intent(this, ReasonExpensesActivity::class.java)
             var sendBundle = Bundle()
-            sendBundle.putString("budgetActivityID", budgetActivityID)
+            sendBundle.putString("budgetingActivityID", budgetingActivityID)
             goToTransactions.putExtras(sendBundle)
             this.startActivity(goToTransactions)
         }
@@ -128,7 +128,7 @@ class BudgetActivity : AppCompatActivity() {
         binding.btnWithdraw.setOnClickListener {
             var withdraw = Intent(this, SavingsWithdrawActivity::class.java)
             var sendBundle = Bundle()
-            firestore.collection("FinancialActivities").document(budgetActivityID).get().addOnSuccessListener {
+            firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
                 var activity = it.toObject<FinancialActivities>()
                 sendBundle.putString("savingActivityID", savingActivityID)
                 sendBundle.putString("financialGoalID", activity?.financialGoalID)
@@ -171,7 +171,7 @@ class BudgetActivity : AppCompatActivity() {
 
     private fun getAvailableToBudget () {
         availableToBudget = balance
-        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).get().addOnSuccessListener { results ->
+        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).get().addOnSuccessListener { results ->
             for (item in results) {
                 var budgetItem = item.toObject<BudgetItem>()
                 availableToBudget -= budgetItem.amount!!
@@ -181,7 +181,7 @@ class BudgetActivity : AppCompatActivity() {
     }
 
     private fun getBudgetItems() {
-        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).get().addOnSuccessListener { budgetItems ->
+        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).get().addOnSuccessListener { budgetItems ->
             for (item in budgetItems) {
                 var budgetItemObject = item.toObject<BudgetItem>()
                 if (budgetItemObject.status == "Active")
@@ -201,13 +201,13 @@ class BudgetActivity : AppCompatActivity() {
                             deleteBudgetItem(position, budgetItemID)
                     }},
                     object : BudgetCategoryAdapter.ItemClick {
-                        override fun clickItem(budgetItemID: String, budgetActivityID: String) {
+                        override fun clickItem(budgetItemID: String, budgetingActivityID: String) {
                             //"done setting budget" already clicked, they can access expense
                             if (isCompleted) {
                                 var budgetExpense = Intent(context, SpendingActivity::class.java)
                                 var bundle = Bundle()
 
-                                bundle.putString("budgetActivityID", budgetActivityID)
+                                bundle.putString("budgetingActivityID", budgetingActivityID)
                                 bundle.putString("savingActivityID", savingActivityID)
                                 bundle.putString("budgetItemID", budgetItemID)
                                 bundle.putString("spendingActivityID", spendingActivityID)
@@ -254,7 +254,7 @@ class BudgetActivity : AppCompatActivity() {
         dialogBinding.dialogDropdownCategoryName.setAdapter(adapter)
 
         availableToBudget = balance
-        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
+        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
             for (budgetItem in results) {
                 var budgetItemObject = budgetItem.toObject<BudgetItem>()
                 availableToBudget -= budgetItemObject.amount!!
@@ -284,9 +284,9 @@ class BudgetActivity : AppCompatActivity() {
                     firestore.collection("BudgetItems").document(budgetItemID).update("status", "Edited").addOnSuccessListener {
                         lateinit var budgetItem : BudgetItem
                         if (itemName!= "Others")
-                            budgetItem = BudgetItem(itemName, null, budgetActivityID, itemAmount, "Active", currentUser)
+                            budgetItem = BudgetItem(itemName, null, budgetingActivityID, itemAmount, "Active", currentUser)
                         else
-                            budgetItem = BudgetItem(itemName, dialogBinding.dialogEtOtherCategoryName.text.toString(), budgetActivityID, itemAmount, "Active", currentUser)
+                            budgetItem = BudgetItem(itemName, dialogBinding.dialogEtOtherCategoryName.text.toString(), budgetingActivityID, itemAmount, "Active", currentUser)
 
                         budgetCategoryIDArrayList.removeAt(position)
 
@@ -337,7 +337,7 @@ class BudgetActivity : AppCompatActivity() {
         }
 
         availableToBudget = balance
-        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
+        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
             for (budgetItem in results) {
                 var budgetItemObject = budgetItem.toObject<BudgetItem>()
                 availableToBudget -= budgetItemObject.amount!!
@@ -357,18 +357,18 @@ class BudgetActivity : AppCompatActivity() {
 
                         lateinit var budgetItem : BudgetItem
                         if (itemName!= "Others")
-                            budgetItem = BudgetItem(itemName, null, budgetActivityID, itemAmount, "Active", currentUser)
+                            budgetItem = BudgetItem(itemName, null, budgetingActivityID, itemAmount, "Active", currentUser)
                         else
-                            budgetItem = BudgetItem(itemName, dialogBinding.dialogEtOtherCategoryName.text.toString(), budgetActivityID, itemAmount, "Active", currentUser)
+                            budgetItem = BudgetItem(itemName, dialogBinding.dialogEtOtherCategoryName.text.toString(), budgetingActivityID, itemAmount, "Active", currentUser)
 
                         firestore.collection("BudgetItems").add(budgetItem).addOnSuccessListener { budgetItem ->
                             //if the kid is done budgeting, add the edited version so that it will be counted as an edited item later
                             if (isCompleted) {
                                 var editedBudgetCategory:BudgetItem
                                 if (itemName!= "Others")
-                                    editedBudgetCategory = BudgetItem(itemName, null, budgetActivityID, itemAmount, "Edited ", currentUser)
+                                    editedBudgetCategory = BudgetItem(itemName, null, budgetingActivityID, itemAmount, "Edited ", currentUser)
                                 else
-                                    editedBudgetCategory = BudgetItem(itemName, dialogBinding.dialogEtOtherCategoryName.text.toString(), budgetActivityID, itemAmount, "Active", currentUser)
+                                    editedBudgetCategory = BudgetItem(itemName, dialogBinding.dialogEtOtherCategoryName.text.toString(), budgetingActivityID, itemAmount, "Active", currentUser)
                                 firestore.collection("BudgetItems").add(editedBudgetCategory)
                             }
                             getAvailableToBudget()
@@ -441,7 +441,7 @@ class BudgetActivity : AppCompatActivity() {
         dialog.window!!.setLayout(900, 800)
 
         dialogBinding.btnOk.setOnClickListener {
-            firestore.collection("FinancialActivities").document(budgetActivityID).update("status", "Completed").addOnSuccessListener {
+            firestore.collection("FinancialActivities").document(budgetingActivityID).update("status", "Completed").addOnSuccessListener {
                 binding.btnDoneSettingBudget.visibility = View.GONE
                 //binding.linearLayoutText.visibility = View.GONE
                 isCompleted = true

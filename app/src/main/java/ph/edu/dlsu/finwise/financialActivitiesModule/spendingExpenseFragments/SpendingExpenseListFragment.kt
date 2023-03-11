@@ -23,7 +23,7 @@ class SpendingExpenseListFragment : Fragment() {
     private var firestore = Firebase.firestore
 
     private lateinit var binding: FragmentSpendingExpenseBinding
-    private lateinit var budgetActivityID:String
+    private lateinit var budgetingActivityID:String
     private lateinit var budgetItemID:String
     private lateinit var savingActivityID:String
     private lateinit var spendingActivityID:String
@@ -36,7 +36,7 @@ class SpendingExpenseListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             var bundle = arguments
-            budgetActivityID = bundle?.getString("budgetActivityID").toString()
+            budgetingActivityID = bundle?.getString("budgetingActivityID").toString()
             budgetItemID = bundle?.getString("budgetItemID").toString()
             spendingActivityID = bundle?.getString("spendingActivityID").toString()
             remainingBudget = bundle?.getFloat("remainingBudget")!!

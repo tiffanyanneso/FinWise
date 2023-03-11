@@ -18,7 +18,7 @@ class ReasonExpensesActivity : AppCompatActivity() {
     private lateinit var binding : ActivityReasonExpensesBinding
     private var firestore = Firebase.firestore
 
-    private lateinit var budgetActivityID:String
+    private lateinit var budgetingActivityID:String
 
     private lateinit var spendingExpensesAdapter: SpendingExpenseAdapter
 
@@ -29,7 +29,7 @@ class ReasonExpensesActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         var bundle = intent.extras!!
-        budgetActivityID = bundle.getString("budgetActivityID").toString()
+        budgetingActivityID = bundle.getString("budgetingActivityID").toString()
 
         getExpenseList()
         loadBackButton()
@@ -38,7 +38,7 @@ class ReasonExpensesActivity : AppCompatActivity() {
 
     private fun getExpenseList() {
         var expensesArrayList = ArrayList<Transactions>()
-        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).get().addOnSuccessListener { budgetItems ->
+        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).get().addOnSuccessListener { budgetItems ->
             for (item in budgetItems) {
                 firestore.collection("Transactions").whereEqualTo("budgetItemID", item.id).get().addOnSuccessListener { transactions ->
                     expensesArrayList.addAll(transactions.toObjects())

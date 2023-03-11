@@ -95,7 +95,7 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
             firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
                 var budgetCategory = it.toObject<BudgetItem>()
                 itemBinding.tvBudgetItemId.text = it.id
-                itemBinding.budgetActivityId.text = budgetCategory?.financialActivityID
+                itemBinding.tvBudgetingActivityId.text = budgetCategory?.financialActivityID
 
                 if (budgetCategory?.budgetItemName != "Others")
                     itemBinding.tvBudgetItemName.text = budgetCategory?.budgetItemName
@@ -138,7 +138,7 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
         }
 
         override fun onClick(p0: View?) {
-            itemClick.clickItem(itemBinding.tvBudgetItemId.text.toString(), itemBinding.budgetActivityId.text.toString())
+            itemClick.clickItem(itemBinding.tvBudgetItemId.text.toString(), itemBinding.tvBudgetingActivityId.text.toString())
         }
     }
 
@@ -147,6 +147,6 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
     }
 
     interface ItemClick{
-        fun clickItem (budgetItemID:String, budgetActivityID:String)
+        fun clickItem (budgetItemID:String, budgetingActivityID:String)
     }
 }

@@ -246,7 +246,7 @@
                     app:helperTextTextColor="@color/red"
                     app:endIconMode="custom"
                     app:startIconDrawable="@drawable/baseline_calendar_today_24"
-                    android:hint="Target Date"
+                    android:hint="Birthday"
                     android:layout_marginBottom="10dp">
 
                     <com.google.android.material.textfield.TextInputEditText

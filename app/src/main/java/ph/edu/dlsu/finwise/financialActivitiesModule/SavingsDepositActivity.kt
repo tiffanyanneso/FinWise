@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -20,6 +21,7 @@ import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.util.*
 
 class SavingsDepositActivity : AppCompatActivity() {
 
@@ -32,6 +34,8 @@ class SavingsDepositActivity : AppCompatActivity() {
 
     private lateinit var financialGoalID:String
     private lateinit var savingActivityID:String
+    private lateinit var budgetingActivityID:String
+    private lateinit var spendingActivityID:String
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -69,6 +73,8 @@ class SavingsDepositActivity : AppCompatActivity() {
                 //bundle.putString("source", "DirectGoalDeposit")
                 sendBundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
                 sendBundle.putString("savingActivityID", savingActivityID)
+                sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                sendBundle.putString("spendingActivityID", spendingActivityID)
 
                 var goToDepositConfirmation = Intent(context, FinancialActivityConfirmDeposit::class.java)
                 goToDepositConfirmation.putExtras(sendBundle)
@@ -82,8 +88,12 @@ class SavingsDepositActivity : AppCompatActivity() {
         bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
+        budgetingActivityID = bundle.getString("budgetingActivityID").toString()
+        spendingActivityID = bundle.getString("spendingActivityID").toString()
         savedAmount = bundle.getFloat("savedAmount")
         binding.pbProgress.progress = bundle.getInt("progress")
+        binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+
 
         firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()

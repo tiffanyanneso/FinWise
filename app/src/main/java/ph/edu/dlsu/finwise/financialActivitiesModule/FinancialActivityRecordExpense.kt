@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -48,6 +49,8 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
         savingActivityID = bundle.getString("savingActivityID").toString()
         spendingActivityID = bundle.getString("spendingActivityID").toString()
         budgetItemID = bundle.getString("budgetItemID").toString()
+        binding.etTransactionDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+
         if (bundle.containsKey("shoppingListItem")) {
             shoppingListItemID = bundle.getString("shoppingListItem")
             firestore.collection("ShoppingListItems").document(shoppingListItemID.toString()).get().addOnSuccessListener {

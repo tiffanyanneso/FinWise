@@ -27,7 +27,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
     var amount : String? =null
 
     private lateinit var budgetItemID:String
-    private lateinit var budgetActivityID:String
+    private lateinit var budgetingActivityID:String
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -46,7 +46,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
         setFields()
 
         var sendBundle = Bundle()
-        sendBundle.putString("budgetActivityID", budgetActivityID)
+        sendBundle.putString("budgetingActivityID", budgetingActivityID)
         sendBundle.putString("budgetItemID", budgetItemID)
 
         binding.btnConfirm.setOnClickListener {
@@ -81,7 +81,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
 
                 firestore.collection("Transactions").add(expense).addOnSuccessListener {
                     var spending = Intent(this, SpendingActivity::class.java)
-                    sendBundle.putString("budgetActivityID", budgetActivityID)
+                    sendBundle.putString("budgetingActivityID", budgetingActivityID)
                     sendBundle.putString("budgetItemID", budgetItemID)
                     spending.putExtras(sendBundle)
                     this.startActivity(spending)
@@ -102,7 +102,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
     }
 
     private fun setFields() {
-        budgetActivityID = bundle.getString("budgetActivityID").toString()
+        budgetingActivityID = bundle.getString("budgetingActivityID").toString()
         budgetItemID = bundle.getString("budgetItemID").toString()
 
         amount = bundle.getFloat("amount").toString()

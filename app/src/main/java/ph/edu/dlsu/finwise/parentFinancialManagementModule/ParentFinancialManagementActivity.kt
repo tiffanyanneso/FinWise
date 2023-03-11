@@ -243,9 +243,9 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         firestore.collection("ChildWallet").whereEqualTo("childID", childID)
             .get().addOnSuccessListener { document ->
                 val childWallet = document.documents[0].toObject<ChildWallet>()
-                val dec = DecimalFormat("#,###.00")
-                balance = childWallet?.currentBalance!!
-                val amount = dec.format(balance)
+                var amount = DecimalFormat("#,##0.00").format(childWallet?.currentBalance!!)
+                if (childWallet?.currentBalance!! < 0.00F)
+                    amount = "0.00"
                 binding.tvCurrentBalanceOfChild.text = "₱$amount"
             }
     }

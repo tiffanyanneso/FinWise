@@ -245,12 +245,21 @@ class ParentRegisterChildActivity : AppCompatActivity() {
         dialog.window!!.setLayout(1000, 1200)
 
         var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
-        calendar.minDate = System.currentTimeMillis()
+        calendar.minDate = getMillisFromYearMonthDay(2003, 0, 1)
+        calendar.maxDate = getMillisFromYearMonthDay(2017, 0, 1)
+
+
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
             binding.etBirthday.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun getMillisFromYearMonthDay(year: Int, month: Int, day: Int): Long {
+        val calendar = Calendar.getInstance()
+        calendar.set(year, month, day)
+        return calendar.timeInMillis
     }
 }

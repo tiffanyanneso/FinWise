@@ -72,6 +72,7 @@ class FinactSavingAdapter : RecyclerView.Adapter<FinactSavingAdapter.ChildGoalVi
                 itemBinding.tvTargetDate.text = date.toString()
                 itemBinding.tvProgressAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(goal?.currentSavings) + " of ₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
                 itemBinding.progressBar.progress = (goal?.currentSavings!! / goal?.targetAmount!! * 100).toInt()
+                itemBinding.tvProgressPercent.text = DecimalFormat("#,##0.00").format((goal?.currentSavings!! / goal?.targetAmount!! * 100)) + "%"
             }
         }
 

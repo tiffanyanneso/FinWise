@@ -44,7 +44,7 @@ class SpendingActivity : AppCompatActivity() {
     private var totalBudgetCategory = 0.00F
     private var remainingBudget = 0.00F
 
-    private lateinit var budgetActivityID:String
+    private lateinit var budgetingActivityID:String
     private lateinit var budgetItemID:String
 
     private lateinit var savingActivityID:String
@@ -63,7 +63,7 @@ class SpendingActivity : AppCompatActivity() {
         bundle = intent.extras!!
         savingActivityID = bundle.getString("savingActivityID").toString()
         budgetItemID = bundle.getString("budgetItemID").toString()
-        budgetActivityID = bundle.getString("budgetActivityID").toString()
+        budgetingActivityID = bundle.getString("budgetingActivityID").toString()
         spendingActivityID = bundle.getString("spendingActivityID").toString()
 
         //checkUser()
@@ -134,7 +134,7 @@ class SpendingActivity : AppCompatActivity() {
 
         var fragmentBundle = Bundle()
         fragmentBundle.putString("savingActivityID", savingActivityID)
-        fragmentBundle.putString("budgetActivityID", budgetActivityID)
+        fragmentBundle.putString("budgetingActivityID", budgetingActivityID)
         fragmentBundle.putString("budgetItemID", budgetItemID)
         fragmentBundle.putString("spendingActivityID", spendingActivityID)
         fragmentBundle.putFloat("remainingBudget", remainingBudget)

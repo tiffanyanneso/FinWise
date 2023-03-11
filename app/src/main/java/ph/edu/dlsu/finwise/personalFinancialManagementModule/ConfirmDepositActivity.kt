@@ -84,16 +84,13 @@ class ConfirmDepositActivity : AppCompatActivity() {
 
 
     private fun getGoalAmount() {
-        firestore.collection("FinancialGoals").whereEqualTo("goalName", goal)
-            .get().addOnSuccessListener { document ->
-                val financialGoal = document.documents[0].toObject<FinancialGoals>()
-                val goalAmount = financialGoal?.targetAmount
-                if (goalAmount != null) {
-                    binding.tvUpdatedGoalAmount.text = "₱ " +
-                            DecimalFormat("#,##0.00")
-                                .format(goalAmount - amount)
-                }
+        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("goalName", goal).get().addOnSuccessListener { document ->
+            val financialGoal = document.documents[0].toObject<FinancialGoals>()
+            val goalAmount = financialGoal?.targetAmount
+            if (goalAmount != null) {
+                binding.tvUpdatedGoalAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goalAmount - amount)
             }
+        }
     }
 
     private fun confirm() {
@@ -109,12 +106,11 @@ class ConfirmDepositActivity : AppCompatActivity() {
                 "category" to "Goal",
                 "createdBy" to childID,
                 "amount" to amount,
-                "goal" to goal,
             )
             adjustUserBalance()
             // TODO: Change where transaction is added
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
-                Toast.makeText(this, "Goal added", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Deposit successful", Toast.LENGTH_SHORT).show()
                 val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
                 goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(goToPFM)
@@ -126,17 +122,13 @@ class ConfirmDepositActivity : AppCompatActivity() {
     }
 
     private fun adjustUserBalance() {
-        //TODO: Change user based on who is logged in
-        /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
         firestore.collection("ChildWallet").whereEqualTo("childID", childID)
             .get().addOnSuccessListener { documents ->
                 lateinit var id: String
                 for (document in documents) {
                     id = document.id
                 }
-                var adjustedBalance = amount?.toDouble()
-                    adjustedBalance = -abs(adjustedBalance!!)
-                Toast.makeText(this, adjustedBalance.toString(), Toast.LENGTH_SHORT).show()
+                var adjustedBalance = -abs(amount?.toDouble()!!)
 
                 firestore.collection("ChildWallet").document(id)
                     .update("currentBalance", FieldValue.increment(adjustedBalance))

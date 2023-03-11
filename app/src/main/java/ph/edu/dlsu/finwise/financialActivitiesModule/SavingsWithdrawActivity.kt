@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -28,6 +29,8 @@ class SavingsWithdrawActivity : AppCompatActivity() {
 
     private lateinit var financialGoalID:String
     private lateinit var savingActivityID:String
+    private lateinit var budgetingActivityID:String
+    private lateinit var spendingActivityID:String
 
     private lateinit var bundle:Bundle
 
@@ -56,6 +59,8 @@ class SavingsWithdrawActivity : AppCompatActivity() {
                 sendBundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
                 sendBundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
                 sendBundle.putString("savingActivityID", savingActivityID)
+                sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                sendBundle.putString("spendingActivityID", spendingActivityID)
                 sendBundle.putFloat("savedAmount", savedAmount)
 
 
@@ -140,6 +145,10 @@ class SavingsWithdrawActivity : AppCompatActivity() {
         bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
+        budgetingActivityID = bundle.getString("budgetingActivityID").toString()
+        spendingActivityID = bundle.getString("spendingActivityID").toString()
+        binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+
         //savedAmount = bundle.getFloat("savedAmount")
         //binding.pbProgress.progress = bundle.getInt("progress")
         savedAmount = 0.00F

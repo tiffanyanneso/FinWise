@@ -250,11 +250,9 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         firestore.collection("ChildWallet").whereEqualTo("childID", childID)
             .get().addOnSuccessListener { document ->
                 val childWallet = document.documents[0].toObject<ChildWallet>()
-                val dec = DecimalFormat("#,###.00")
-                balance = childWallet?.currentBalance!!
-                var amount = dec.format(balance)
-                if (balance < 0)
-                    amount = "0"
+                var amount = DecimalFormat("#,##0.00").format(childWallet?.currentBalance!!)
+                if (childWallet?.currentBalance!! < 0.00F)
+                    amount = "0.00"
                 binding.tvBalance.text = "₱$amount"
                 initializeButtons()
             }

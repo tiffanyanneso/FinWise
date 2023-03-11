@@ -102,9 +102,22 @@ class ViewGoalActivity : AppCompatActivity() {
             this.startActivity(goToGoalTransactions)
         }
 
+        binding.btnDeposit.setOnClickListener {
+            var goalDeposit = Intent(this, SavingsDepositActivity::class.java)
+            sendBundle.putFloat("savedAmount", savedAmount)
+            sendBundle.putString("savingActivityID", savingActivityID)
+            sendBundle.putString("budgetingActivityID", budgetingActivityID)
+            sendBundle.putString("spendingActivityID", spendingActivityID)
+            sendBundle.putInt("progress", binding.progressBar.progress)
+            goalDeposit.putExtras(sendBundle)
+            this.startActivity(goalDeposit)
+        }
+
         binding.btnWithdraw.setOnClickListener {
             var goalWithdraw = Intent(this, SavingsWithdrawActivity::class.java)
             sendBundle.putString("savingActivityID", savingActivityID)
+            sendBundle.putString("budgetingActivityID", budgetingActivityID)
+            sendBundle.putString("spendingActivityID", spendingActivityID)
             goalWithdraw.putExtras(sendBundle)
             this.startActivity(goalWithdraw)
         }
@@ -117,24 +130,8 @@ class ViewGoalActivity : AppCompatActivity() {
             sendBundle.putString("childID", childID)
             goToEarningMenu.putExtras(sendBundle)
             startActivity(goToEarningMenu)
-            /*val goToHomeRewardsActivity = Intent(this, EarningActivity::class.java)
-            sendBundle.putString("childID", childID)
-            sendBundle.putString("module", "finact")
-            goToHomeRewardsActivity.putExtras(sendBundle)
-            startActivity(goToHomeRewardsActivity)*/
-
         }
 
-
-
-        binding.btnDeposit.setOnClickListener {
-            var goalDeposit = Intent(this, SavingsDepositActivity::class.java)
-            sendBundle.putFloat("savedAmount", savedAmount)
-            sendBundle.putString("savingActivityID", savingActivityID)
-            sendBundle.putInt("progress", binding.progressBar.progress)
-            goalDeposit.putExtras(sendBundle)
-            this.startActivity(goalDeposit)
-        }
 
         binding.btnGoalDetails.setOnClickListener {
             var goalDetails = Intent(this, ViewGoalDetailsTabbedActivity::class.java)
@@ -145,7 +142,7 @@ class ViewGoalActivity : AppCompatActivity() {
         binding.layoutActivityName.setOnClickListener {
             if (savedAmount>=targetAmount) {
                 var budgeting  = Intent (this, BudgetActivity::class.java)
-                sendBundle.putString("budgetActivityID", budgetingActivityID)
+                sendBundle.putString("budgetingActivityID", budgetingActivityID)
                 sendBundle.putString("savingActivityID", savingActivityID)
                 sendBundle.putString("spendingActivityID", spendingActivityID)
                 budgeting.putExtras(sendBundle)

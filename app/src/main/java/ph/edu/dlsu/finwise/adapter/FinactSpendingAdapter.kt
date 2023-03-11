@@ -89,7 +89,7 @@ class FinactSpendingAdapter : RecyclerView.Adapter<FinactSpendingAdapter.FinactS
         override fun onClick(p0: View?) {
             var bundle = Bundle()
             bundle.putString("savingActivityID",  itemBinding.tvSavingActivityId.text.toString())
-            bundle.putString("budgetActivityID", itemBinding.tvBudgetingActivityId.text.toString())
+            bundle.putString("budgetingActivityID", itemBinding.tvBudgetingActivityId.text.toString())
             bundle.putString("spendingActivityID", itemBinding.tvSpendingActivityId.text.toString())
             var viewGoal = Intent(context, BudgetActivity::class.java)
             viewGoal.putExtras(bundle)

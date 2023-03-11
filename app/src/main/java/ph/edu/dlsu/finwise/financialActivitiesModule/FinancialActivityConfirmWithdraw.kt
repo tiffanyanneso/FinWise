@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -14,6 +15,7 @@ import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import kotlin.math.abs
 
 
 class FinancialActivityConfirmWithdraw : AppCompatActivity() {
@@ -25,8 +27,12 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
 
     private lateinit var financialGoalID:String
     private lateinit var savingActivityID:String
+    private lateinit var budgetingActivityID:String
+    private lateinit var spendingActivityID:String
 
     private var savedAmount = 0.00F
+
+    private var withdrawAmount = 0.00F
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -56,7 +62,7 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
                     if (goal?.status != "Completed") {
                         var updatedSavings = goal?.currentSavings!! - bundle.getFloat("amount")
                         firestore.collection("FinancialGoals").document(financialGoalID).update("currentSavings", updatedSavings).addOnSuccessListener {
-                            //TODO: ADJUST USER BALANCE (INCREASE WALLET BALANCE)
+                            adjustUserBalance()
                             var bundle = Bundle()
                             //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
                             bundle.putString("financialGoalID", financialGoalID)
@@ -70,20 +76,12 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
                     //withdraw done when child is already in budgeting/spending
                     else {
                         var sendBundle = Bundle()
-                        firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener{ results ->
-                            for (activity in results) {
-                                var activityObject = activity.toObject<FinancialActivities>()
-                                if (activityObject.financialActivityName == "Saving")
-                                    sendBundle.putString("savingActivityID", activity.id)
-                                if (activityObject.financialActivityName == "Budgeting")
-                                    sendBundle.putString("budgetActivityID", activity.id)
-                                if (activityObject.financialActivityName == "Spending")
-                                    sendBundle.putString("spendingActivityID", activity.id)
-                            }
-                            var budgeting = Intent(this, BudgetActivity::class.java)
-                            budgeting.putExtras(sendBundle)
-                            startActivity(budgeting)
-                        }
+                        sendBundle.putString("savingActivityID", savingActivityID)
+                        sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                        sendBundle.putString("spendingActivityID", spendingActivityID)
+                        var budgeting = Intent(this, BudgetActivity::class.java)
+                        budgeting.putExtras(sendBundle)
+                        startActivity(budgeting)
                     }
                 }
             }
@@ -94,8 +92,10 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
             val goToWithdraw = Intent(applicationContext, SavingsWithdrawActivity::class.java)
 
             var backBundle = Bundle()
-            backBundle.putString("financialGoalID", bundle.getString("financialGoalID"))
-            backBundle.putString("savingActivityID", bundle.getString("savingActivityID"))
+            backBundle.putString("financialGoalID", financialGoalID)
+            backBundle.putString("savingActivityID", savingActivityID)
+            backBundle.putString("budgetingActivityID", budgetingActivityID)
+            backBundle.putString("spendingActivityID", spendingActivityID)
 
             goToWithdraw.putExtras(backBundle)
             goToWithdraw.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -106,13 +106,25 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
     private fun setFields() {
         financialGoalID = bundle.getString("financialGoalID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
+        budgetingActivityID = bundle.getString("budgetingActivityID").toString()
+        spendingActivityID = bundle.getString("spendingActivityID").toString()
         binding.tvGoal.text = bundle.getString("goalName")
         binding.tvAmount.text = "₱ " + DecimalFormat("#,###.00").format(bundle.getFloat("amount"))
+        withdrawAmount = bundle.getFloat("amount")
         binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
         binding.tvUpdatedGoalSavings.text = "₱ " +  DecimalFormat("#,##0.00").format((bundle.getFloat("savedAmount") - bundle.getFloat("amount")))
         firestore.collection("ChildWallet").whereEqualTo("childID", "eWZNOIb9qEf8kVNdvdRzKt4AYrA2").get().addOnSuccessListener {
             var wallet = it.documents[0].toObject<ChildWallet>()
             binding.tvWalletBalance.text = "₱ " +  DecimalFormat("#,##0.00").format((wallet?.currentBalance!!.toFloat() + bundle.getFloat("amount")))
+        }
+    }
+
+    private fun adjustUserBalance() {
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener { result ->
+            var walletID = result.documents[0].id
+
+            var adjustedBalance = abs(withdrawAmount?.toDouble()!!)
+            firestore.collection("ChildWallet").document(walletID).update("currentBalance", FieldValue.increment(adjustedBalance))
         }
     }
 }
