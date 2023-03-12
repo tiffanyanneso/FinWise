@@ -152,8 +152,8 @@ class AssessmentPerformanceFragment : Fragment() {
 
     private fun setPerformanceView() {
         //TODO: Add budgeting and adjust  maxpossiblesum
-        val totalSum = spendingPercentage + savingPercentage + financialGoalsPercentage
-        val maxPossibleSum = 3 * 100  // assuming the maximum possible value for each variable is 100
+        val totalSum = spendingPercentage + savingPercentage + financialGoalsPercentage + budgetingPercentage
+        val maxPossibleSum = 4 * 100  // assuming the maximum possible value for each variable is 100
 
         val percentage = (totalSum.toDouble() / maxPossibleSum) * 100
         binding.textViewProgress.text = String.format("%.1f%%", percentage)
