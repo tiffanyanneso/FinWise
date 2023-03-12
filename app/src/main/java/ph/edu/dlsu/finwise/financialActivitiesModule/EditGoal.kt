@@ -5,15 +5,19 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEditGoalBinding
 import ph.edu.dlsu.finwise.databinding.DialogDeleteGoalWarningBinding
@@ -37,6 +41,7 @@ class EditGoal : AppCompatActivity() {
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         getFinancialGoal()
+        checkUser()
 
 
         // for the dropdown
@@ -135,6 +140,25 @@ class EditGoal : AppCompatActivity() {
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
             binding.etTargetDate.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
             dialog.dismiss()
+        }
+    }
+
+    private fun checkUser() {
+        val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
+            //current user is a child
+            val bottomNavigationViewChild = binding.bottomNav
+            val bottomNavigationViewParent = binding.bottomNavParent
+            if (it.exists()) {
+                bottomNavigationViewChild.visibility = View.VISIBLE
+                bottomNavigationViewParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+            } else {
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+            }
+
         }
     }
 }

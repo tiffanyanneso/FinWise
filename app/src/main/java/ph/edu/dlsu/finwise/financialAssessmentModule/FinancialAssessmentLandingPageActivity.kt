@@ -25,8 +25,8 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
 
     //TODO: Change to the right icons
     private val tabIcons2 = intArrayOf(
-        R.drawable.baseline_account_balance_24,
-        R.drawable.baseline_wallet_24
+        R.drawable.baseline_performance_24,
+        R.drawable.baseline_leaderboard_24
     )
 
 
@@ -39,6 +39,7 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
         setBundle()
         setUpChartTabs()
         //TODO: Initialize navbar
+        checkUser()
        // Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_assessment)
     }
 
