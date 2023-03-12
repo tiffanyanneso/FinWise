@@ -21,6 +21,8 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
+import ph.edu.dlsu.finwise.databinding.DialogSavingReviewBinding
+import ph.edu.dlsu.finwise.databinding.DialogSmartReviewBinding
 import ph.edu.dlsu.finwise.databinding.FragmentFinactSavingBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
@@ -90,6 +92,10 @@ class SavingFragment : Fragment() {
                 goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this.startActivity(goToNewGoal)
             }
+        }
+
+        binding.btnReviewSaving.setOnClickListener{
+            showGoalDialog()
         }
 
         binding.btnSeeMore.setOnClickListener {
@@ -373,5 +379,18 @@ class SavingFragment : Fragment() {
 
         }
     }
+    private fun showGoalDialog() {
 
+        var dialogBinding= DialogSavingReviewBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(requireContext().applicationContext);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
 }

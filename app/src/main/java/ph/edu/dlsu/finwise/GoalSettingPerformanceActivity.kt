@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise
 
+import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,6 +10,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityGoalSettingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordDepositBinding
+import ph.edu.dlsu.finwise.databinding.DialogSmartReviewBinding
 import ph.edu.dlsu.finwise.model.GoalRating
 import kotlin.math.roundToInt
 
@@ -34,6 +36,10 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initializeRating()
+
+        binding.btnViewSMARTGoalsInfo.setOnClickListener{
+            showGoalDialog()
+        }
     }
     private fun RatingObject(name: String, score: Int): Rating {
         val rating = Rating()
@@ -129,5 +135,20 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
 //            binding.progressBarTime.progress = (nTimeBound/nRatings).roundToInt()
 //            binding.ratingTime.text = "${(nTimeBound/nRatings)}/5"
         }
+    }
+
+    private fun showGoalDialog() {
+
+        var dialogBinding= DialogSmartReviewBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

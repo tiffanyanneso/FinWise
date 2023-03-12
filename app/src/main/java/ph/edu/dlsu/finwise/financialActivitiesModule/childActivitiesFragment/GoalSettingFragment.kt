@@ -16,6 +16,8 @@ import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactGoalSettingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
+import ph.edu.dlsu.finwise.databinding.DialogSmartGoalCriteriaParentBinding
+import ph.edu.dlsu.finwise.databinding.DialogSmartReviewBinding
 import ph.edu.dlsu.finwise.databinding.FragmentGoalSettingBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.GoalRating
@@ -77,6 +79,10 @@ class GoalSettingFragment : Fragment() {
                 goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this.startActivity(goToNewGoal)
             }
+        }
+
+        binding.btnViewSMARTGoalsInfo.setOnClickListener{
+            showGoalDialog()
         }
 
         binding.btnSeeMore.setOnClickListener {
@@ -219,6 +225,21 @@ class GoalSettingFragment : Fragment() {
         dialogBinding.btnCancel.setOnClickListener {
             dialog.dismiss()
         }
+        dialog.show()
+    }
+
+    private fun showGoalDialog() {
+
+        var dialogBinding= DialogSmartReviewBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(requireContext().applicationContext);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
         dialog.show()
     }
 }

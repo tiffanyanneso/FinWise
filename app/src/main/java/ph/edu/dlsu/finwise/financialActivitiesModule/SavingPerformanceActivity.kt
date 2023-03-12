@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.app.Dialog
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,6 +16,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivitySavingPerformanceBinding
+import ph.edu.dlsu.finwise.databinding.DialogSavingReviewBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
@@ -44,12 +46,14 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
     data class DurationRating(var name: String? = null, var score: Int = 0)
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySavingPerformanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
         getGoals()
         loadBackButton()
+        computeOverallScore()
     }
 
     private fun getGoals() {
@@ -79,6 +83,10 @@ class SavingPerformanceActivity : AppCompatActivity() {
         }.continueWith {
             setDurationPieChart()
             setReasonPieChart()
+        }
+
+        binding.btnReview.setOnClickListener{
+            showGoalDialog()
         }
     }
 
@@ -306,5 +314,20 @@ class SavingPerformanceActivity : AppCompatActivity() {
         binding.topAppBar.setNavigationOnClickListener {
             onBackPressed()
         }
+    }
+
+    private fun showGoalDialog() {
+
+        var dialogBinding= DialogSavingReviewBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }
