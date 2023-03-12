@@ -1,10 +1,12 @@
 package ph.edu.dlsu.finwise.financialAssessmentModule.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -50,11 +52,11 @@ class AssessmentPerformanceFragment : Fragment() {
 
     private fun getBundles() {
         childID = arguments?.getString("childID").toString()
+        Toast.makeText(context, ""+childID, Toast.LENGTH_SHORT).show()
     }
 
     private fun getAssessments() {
         //TODO: change id when we can pass childid through navigation , intent.extras!! causes crash
-        childID = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         firestore.collection("AssessmentAttempts").whereEqualTo("childID", childID)
             .get().addOnSuccessListener { documents ->
                 for (assessments in documents) {
@@ -73,7 +75,7 @@ class AssessmentPerformanceFragment : Fragment() {
                         val assessmentObject = assessmentDocument.toObject<FinancialAssessmentDetails>()
                         val percentage = getPercentage(assessment)
                         when (assessmentObject?.assessmentCategory) {
-                            "Financial Goals" -> financialGoalsScores.add(percentage)
+                            "Goal Setting" -> financialGoalsScores.add(percentage)
                             "Saving" -> savingScores.add(percentage)
                             "Budgeting" -> budgetingScores.add(percentage)
                             "Spending" -> spendingScores.add(percentage)
@@ -127,7 +129,7 @@ class AssessmentPerformanceFragment : Fragment() {
             "Spending" to spendingPercentage,
             "Saving" to savingPercentage,
             "Goal Setting" to financialGoalsPercentage,
-            /*"Budgeting" to other*/
+            "Budgeting" to budgetingPercentage
         )
         val top3Categories = totals.entries.sortedByDescending { it.value }
 

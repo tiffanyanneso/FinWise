@@ -47,6 +47,9 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
 
     private fun updateAssessmentDetails() {
         firestore.collection("Assessments").document(assessmentID).update("description", binding.etDescription.text.toString())
+        //TODO: Need to make the number of questions either automatic
+        // or move it edit text below and make it required the adding of question
+        // so the user doesn't forget to input it to avoid bugs
         firestore.collection("Assessments").document(assessmentID).update("nQuestionsInAssessment", binding.etNumberOfQuestions.text.toString().toInt())
 
         for (questionStatus in questionStatusArrayList)

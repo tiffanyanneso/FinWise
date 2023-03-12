@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.financialAssessmentModule
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -43,13 +44,16 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
 
     private fun setBundle() {
         val getBundle = intent.extras
-        //TODO: send user bundle
-        if (getBundle?.containsKey("childID") == true) {
-            childID = getBundle.getString("childID").toString()
+        //TODO: receive user bundle pero hindi ko alam ujng saan so hard code muna
+        childID = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
+        setBundle.putString("childID", childID)
+        Toast.makeText(this, ""+childID, Toast.LENGTH_SHORT).show()
+        /*if (getBundle?.containsKey("childID") == true) {
+            //childID = getBundle.getString("childID").toString()
             checkUser()
             setBundle.putString("childID", childID)
             // do something with myValue
-        }
+        }*/
     }
 
     private fun checkUser() {

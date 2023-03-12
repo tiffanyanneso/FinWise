@@ -21,19 +21,19 @@
         <activity
             android:name=".financialActivitiesModule.UpdateGoalActivity"
             android:exported="false" />
-        <activity
+        <!--<activity
             android:name=".personalFinancialManagementModule.RecordEarningSaleConfirmationActivityPFM"
-            android:exported="false" />
-        <activity
+            android:exported="false" />-->
+        <!--<activity
             android:name=".personalFinancialManagementModule.RecordEarningSaleActivityPFM"
-            android:exported="false" />
-        <activity
+            android:exported="false" />-->
+        <!--<activity
             android:name=".parentFinancialManagementModule.EarningSellingPFMActivity"
-            android:exported="false" />
+            android:exported="false" />-->
         <activity
             android:name=".GoalSettingPerformanceActivity"
             android:exported="false" />
-        <activity
+        <!--<activity
             android:name=".parentFinancialManagementModule.EarningMenuActivityPFM"
             android:exported="false" />
         <activity
@@ -50,7 +50,7 @@
             android:exported="true" />
         <activity
             android:name=".parentFinancialManagementModule.NewEarningActivityPFM"
-            android:exported="false" />
+            android:exported="false" />-->
         <activity
             android:name=".personalFinancialManagementModule.GoalSavingDetailsActivity"
             android:exported="false" />
@@ -92,9 +92,6 @@
             android:exported="false" />
         <activity
             android:name=".ViewShoppingListItem"
-            android:exported="false" />
-        <activity
-            android:name=".NewShoppingListItemActivity"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.SavingPerformanceActivity"
@@ -254,15 +251,13 @@
             android:exported="true" />
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity"
-            android:exported="true">
-
-            <!--
-            <intent-filter>
+            android:exported="false">
+            <!--<intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
             <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-            -->
+        </intent-filter>-->
+
         </activity>
         <activity
             android:name=".financialAssessmentModuleFinlitExpert.FinlitExpertEditAssessmentActivity"
