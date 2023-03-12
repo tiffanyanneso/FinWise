@@ -16,6 +16,8 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivitySavingPerformanceBinding
+import ph.edu.dlsu.finwise.databinding.DialogSavingCategoryReviewBinding
+import ph.edu.dlsu.finwise.databinding.DialogSavingDurationReviewBinding
 import ph.edu.dlsu.finwise.databinding.DialogSavingReviewBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
@@ -87,6 +89,14 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
         binding.btnReview.setOnClickListener{
             showGoalDialog()
+        }
+
+        binding.btnReviewDuration.setOnClickListener{
+            showDurationDialog()
+        }
+
+        binding.btnReviewConcept.setOnClickListener{
+            showCategoryDialog()
         }
     }
 
@@ -319,6 +329,36 @@ class SavingPerformanceActivity : AppCompatActivity() {
     private fun showGoalDialog() {
 
         var dialogBinding= DialogSavingReviewBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun showDurationDialog() {
+
+        var dialogBinding= DialogSavingDurationReviewBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun showCategoryDialog() {
+
+        var dialogBinding= DialogSavingCategoryReviewBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 

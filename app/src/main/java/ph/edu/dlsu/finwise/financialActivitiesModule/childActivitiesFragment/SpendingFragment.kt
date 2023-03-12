@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,8 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
+import ph.edu.dlsu.finwise.databinding.DialogBudgetingReviewBinding
+import ph.edu.dlsu.finwise.databinding.DialogSpendingReviewBinding
 import ph.edu.dlsu.finwise.databinding.FragmentFinactSpendingBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
@@ -66,17 +69,10 @@ class SpendingFragment : Fragment(){
         super.onViewCreated(view, savedInstanceState)
 
         binding.title.text= "Overall Spending Performance"
-     /*   binding.progressBarOverspending.progress = 0
-        binding.textPerformance.text = "0.00%"*/
-//        binding.textStatus.text = "Good"
-//        binding.textPerformance.setTextColor(getResources().getColor(R.color.dark_green))
-//        binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
 
-//        binding.tvOverspendingStatus.text = "Bad"
-//        binding.tvOverspendingPercentage.setTextColor(getResources().getColor(R.color.red))
-//        binding.tvOverspendingStatus.setTextColor(getResources().getColor(R.color.red))
-
-      //  binding.titleOverallSpendingPerformance.text = "Overall Spending\nPerformance"
+        binding.btnSpendingReview.setOnClickListener {
+            showSpendingReivewDialog()
+        }
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
@@ -215,5 +211,20 @@ class SpendingFragment : Fragment(){
             LinearLayoutManager.VERTICAL,
             false)
         spendingAdapter.notifyDataSetChanged()
+    }
+
+    private fun showSpendingReivewDialog() {
+
+        var dialogBinding= DialogSpendingReviewBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(requireContext().applicationContext);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

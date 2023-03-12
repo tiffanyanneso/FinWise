@@ -1,5 +1,7 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 
+import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +13,11 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.FinactBudgetingAdapter
+import ph.edu.dlsu.finwise.databinding.DialogBudgetingReviewBinding
+import ph.edu.dlsu.finwise.databinding.DialogSavingReviewBinding
 import ph.edu.dlsu.finwise.databinding.FragmentFinactBudgetingBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetingPerformanceActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import java.text.DecimalFormat
@@ -63,6 +69,20 @@ class BudgetingFragment : Fragment() {
         //binding.titleOverallBudegtingPerformance.text = "Overall Budgeting\nPerformance"
         binding.tvPerformancePercentage.text = "0.00%"
         getBudgeting()
+
+        binding.btnSeeMore.setOnClickListener {
+            var goToPerformance = Intent(requireContext().applicationContext, BudgetingPerformanceActivity::class.java)
+            this.startActivity(goToPerformance)
+        }
+
+        binding.btnSeeMore2.setOnClickListener {
+            var goToPerformance = Intent(requireContext().applicationContext, BudgetingPerformanceActivity::class.java)
+            this.startActivity(goToPerformance)
+        }
+
+        binding.btnBudgetingReview.setOnClickListener{
+            showBudgetingReivewDialog()
+        }
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
@@ -78,37 +98,37 @@ class BudgetingFragment : Fragment() {
                 var activityObject = activity.toObject<FinancialActivities>()
                 goalIDArrayList.add(activityObject?.financialGoalID.toString())
             }
-            getParentalInvolvement()
+//            getParentalInvolvement()
             loadRecyclerView(goalIDArrayList)
         }
     }
 
-    private fun getParentalInvolvement() {
-        parentalInvolvementArrayList.clear()
-        //saving activities that are in progress means that there the goal is also in progress because they are connected
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").get().addOnSuccessListener { results ->
-            for (activity in results) {
-                //for parent involvement
-                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).get().addOnSuccessListener { budgetItems ->
-                    for (budgetItem in budgetItems) {
-                        budgetItemCount++
-                        var budgetItemObject = budgetItem.toObject<BudgetItem>()
-
-                        firestore.collection("ParentUser").document(budgetItemObject?.createdBy.toString()).get().addOnSuccessListener { user ->
-                            //parent is the one who added the budget item
-                            if (user.exists())
-                                nParent++
-
-                        }.continueWith {
-                            binding.tvParentalInvolvementPercent.text = DecimalFormat("##0.##").format((nParent.toFloat()/budgetItemCount.toFloat())*100)+ "%"
-                            binding.progressBarParentalInvolvement.progress = ((nParent.toFloat()/budgetItemCount.toFloat())*100).roundToInt()
-                        }
-                    }
-                }
-                getAverageUpdates(activity.id)
-            }
-        }
-    }
+//    private fun getParentalInvolvement() {
+//        parentalInvolvementArrayList.clear()
+//        //saving activities that are in progress means that there the goal is also in progress because they are connected
+//        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").get().addOnSuccessListener { results ->
+//            for (activity in results) {
+//                //for parent involvement
+//                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).get().addOnSuccessListener { budgetItems ->
+//                    for (budgetItem in budgetItems) {
+//                        budgetItemCount++
+//                        var budgetItemObject = budgetItem.toObject<BudgetItem>()
+//
+//                        firestore.collection("ParentUser").document(budgetItemObject?.createdBy.toString()).get().addOnSuccessListener { user ->
+//                            //parent is the one who added the budget item
+//                            if (user.exists())
+//                                nParent++
+//
+//                        }.continueWith {
+//                            binding.tvParentalInvolvementPercent.text = DecimalFormat("##0.##").format((nParent.toFloat()/budgetItemCount.toFloat())*100)+ "%"
+//                            binding.progressBarParentalInvolvement.progress = ((nParent.toFloat()/budgetItemCount.toFloat())*100).roundToInt()
+//                        }
+//                    }
+//                }
+//                getAverageUpdates(activity.id)
+//            }
+//        }
+//    }
 
     private fun getAverageUpdates(budgetingActivityID:String){
         firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).get().addOnSuccessListener { budgetItems ->
@@ -132,4 +152,18 @@ class BudgetingFragment : Fragment() {
         bugdetingAdapater.notifyDataSetChanged()
     }
 
+    private fun showBudgetingReivewDialog() {
+
+        var dialogBinding= DialogBudgetingReviewBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(requireContext().applicationContext);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
 }

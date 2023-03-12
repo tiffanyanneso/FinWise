@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -9,6 +10,9 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
 import ph.edu.dlsu.finwise.databinding.ActivitySpendingPerformanceBinding
+import ph.edu.dlsu.finwise.databinding.DialogOverspendingReviewBinding
+import ph.edu.dlsu.finwise.databinding.DialogPurchasePlanningReviewBinding
+import ph.edu.dlsu.finwise.databinding.DialogSpendingReviewBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.SpendingFragment
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.ShoppingListItem
@@ -38,6 +42,18 @@ class SpendingPerformanceActivity : AppCompatActivity() {
         budgetItemsIDArrayList.clear()
 
         getBudgeting()
+
+        binding.btnReview.setOnClickListener {
+            showSpendingReivewDialog()
+        }
+
+        binding.btnOverspendingReview.setOnClickListener {
+            showOverspendingReivewDialog()
+        }
+
+        binding.btnPurchasePlanningReview.setOnClickListener {
+            showSpendingPurchasePlanningReviewDialog()
+        }
     }
 
     private fun getBudgeting() {
@@ -187,5 +203,49 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+    private fun showSpendingReivewDialog() {
+
+        var dialogBinding= DialogSpendingReviewBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun showOverspendingReivewDialog() {
+
+        var dialogBinding= DialogOverspendingReviewBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    private fun showSpendingPurchasePlanningReviewDialog() {
+
+        var dialogBinding= DialogPurchasePlanningReviewBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 }

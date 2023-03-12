@@ -111,7 +111,7 @@
                         android:layout_marginTop="10dp">
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btn_view_SMART_goals_info"
+                            android:id="@+id/btn_budgeting_review"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Review"
@@ -224,83 +224,77 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1"
-                    android:layout_marginTop="10dp">
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:layout_marginTop="10dp">-->
 
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="Accuracy"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center_vertical" />
+<!--                    <TextView-->
+<!--                        android:layout_width="200dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="Accuracy"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:gravity="center_vertical" />-->
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar_accuracy"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:scaleY="4"
-                        android:layout_weight="1.5"
-                        android:max="100"/>
+<!--                    <ProgressBar-->
+<!--                        android:id="@+id/progress_bar_accuracy"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--                        android:scaleY="4"-->
+<!--                        android:layout_weight="1.5"-->
+<!--                        android:max="100"/>-->
 
-                    <TextView
-                        android:id="@+id/tv_accuracy_percent"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="x%"
-                        android:textSize="14sp"
-                        android:textColor="@color/black"
-                        android:gravity="center"/>
-                </LinearLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/tv_accuracy_percent"-->
+<!--                        android:layout_width="150dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="x%"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:gravity="center"/>-->
+<!--                </LinearLayout>-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="50dp"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:orientation="horizontal">-->
 
-                    <TextView
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Parental Involvement"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:layout_gravity="center"/>
+<!--                    <TextView-->
+<!--                        android:layout_width="200dp"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:text="Parental Involvement"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="14sp"-->
+<!--                        android:layout_gravity="center"/>-->
 
-                    <ProgressBar
-                        android:id="@+id/progress_bar_parental_involvement"
-                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_weight="1.5"
-                        android:scaleY="4"
-                        android:layout_gravity="center"
-                        android:max="100"/>
+<!--                    <ProgressBar-->
+<!--                        android:id="@+id/progress_bar_parental_involvement"-->
+<!--                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        android:layout_weight="1.5"-->
+<!--                        android:scaleY="4"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:max="100"/>-->
 
-                    <TextView
-                        android:id="@+id/tv_parental_involvement_percent"
-                        android:layout_width="150dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="x%"
-                        android:textColor="@color/black"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <com.google.android.material.divider.MaterialDivider
-                    android:id="@+id/div_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="20dp"/>
+<!--                    <TextView-->
+<!--                        android:id="@+id/tv_parental_involvement_percent"-->
+<!--                        android:layout_width="150dp"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:layout_weight="1"-->
+<!--                        android:gravity="center"-->
+<!--                        android:text="x%"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="14sp" />-->
+<!--                </LinearLayout>-->
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -309,7 +303,8 @@
                     android:text="Budgeting Activities"
                     android:textSize="20sp"
                     android:textColor="@color/black"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="20dp"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_view_goals"
