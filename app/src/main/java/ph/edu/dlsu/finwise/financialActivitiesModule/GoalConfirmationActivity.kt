@@ -44,7 +44,10 @@ class GoalConfirmationActivity : AppCompatActivity() {
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     //will be changed depending on who set the goal or what age the kid is
-    private var goalStatus: String = "For Review"
+    private var goalStatus: String = "In Progress"
+
+    private lateinit var childID:String
+    private lateinit var createdBy:String
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +55,6 @@ class GoalConfirmationActivity : AppCompatActivity() {
         binding = ActivityGoalConfirmationBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context= this
-        getCurrentUserType()
 
         // Hides actionbar,
         // and initializes the navbar
@@ -67,8 +69,8 @@ class GoalConfirmationActivity : AppCompatActivity() {
             binding.tvIsForChild.text = "Yes"
         else
             binding.tvIsForChild.text = "No"
-        checkAge()
 
+        getCurrentUserType()
 
 
         var targetDate = bundle.getSerializable("targetDate")
@@ -79,14 +81,6 @@ class GoalConfirmationActivity : AppCompatActivity() {
         binding.btnConfirm.setOnClickListener{
 
             computeDateDifference(formattedDate)
-
-            var childID:String = currentUser
-            var createdBy:String = currentUser
-            if (currentUserType == "Parent") {
-                var childIDBundle = intent.extras!!
-                childID = childIDBundle.getString("childID").toString()
-                createdBy = FirebaseAuth.getInstance().currentUser!!.uid
-            }
 
             var goal = hashMapOf(
                 "childID" to childID,
@@ -186,13 +180,13 @@ class GoalConfirmationActivity : AppCompatActivity() {
     private fun saveFinancialActivities(financialActivity:String, goalID:String) {
         lateinit var savingActivity: FinancialActivities
         if (goalStatus == "For Review")
-             savingActivity = FinancialActivities (goalID, currentUser, "Saving", "Locked")
+             savingActivity = FinancialActivities (goalID, childID, "Saving", "Locked")
         else
-            savingActivity = FinancialActivities (goalID, currentUser, "Saving", "In Progress")
+            savingActivity = FinancialActivities (goalID, childID, "Saving", "In Progress")
         firestore.collection("FinancialActivities").add(savingActivity)
         if (financialActivity == "Buying Items" ||financialActivity == "Planning An Event" || financialActivity == "Situational Shopping") {
-            var budgetingActivity = FinancialActivities(goalID, currentUser, "Budgeting", "Locked")
-            var spendingActivity = FinancialActivities(goalID, currentUser, "Spending", "Locked")
+            var budgetingActivity = FinancialActivities(goalID, childID, "Budgeting", "Locked")
+            var spendingActivity = FinancialActivities(goalID, childID, "Spending", "Locked")
             firestore.collection("FinancialActivities").add(budgetingActivity)
             firestore.collection("FinancialActivities").add(spendingActivity)
         }
@@ -210,8 +204,8 @@ class GoalConfirmationActivity : AppCompatActivity() {
             var difference = Period.between(to, from)
 
             var age = difference.years
-            if (age == 9 || age == 12)
-                goalStatus = "In Progress"
+            if (age == 10 || age == 11)
+                goalStatus = "For Review"
         }
     }
 
@@ -219,11 +213,19 @@ class GoalConfirmationActivity : AppCompatActivity() {
     private fun getCurrentUserType() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
-            if (it.exists())
+            if (it.exists()) {
                 currentUserType = "Parent"
-            else
-                currentUserType ="Child"
+                childID = intent.extras!!.getString("childID").toString()
+                createdBy  = FirebaseAuth.getInstance().currentUser!!.uid
+            }
+            else {
+                currentUserType = "Child"
+                childID = FirebaseAuth.getInstance().currentUser!!.uid
+                createdBy  = FirebaseAuth.getInstance().currentUser!!.uid
+                checkAge()
+            }
         }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

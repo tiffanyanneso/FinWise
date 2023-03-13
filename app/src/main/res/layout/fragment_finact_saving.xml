@@ -178,7 +178,7 @@
                                 android:id="@+id/tv_goal_savings"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="₱ XXXX.XX"
+                                android:text="₱ 0.00"
                                 android:textColor="@color/white"
                                 android:textSize="24sp"
                                 android:textStyle="bold" />
