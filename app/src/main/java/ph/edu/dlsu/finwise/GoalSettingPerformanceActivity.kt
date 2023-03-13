@@ -1,16 +1,21 @@
 package ph.edu.dlsu.finwise
 
 import android.app.Dialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityGoalSettingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordDepositBinding
+import ph.edu.dlsu.finwise.databinding.DialogSmartIndividualBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartReviewBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.GoalRating
 import kotlin.math.roundToInt
 
@@ -25,6 +30,8 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
     private var nAchievable = 0.00F
     private var nRelevant = 0.00F
     private var nTimeBound = 0.00F
+
+    private var SMARTIndividual = "Specific"
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
     data class Rating(var name: String? = null, var score: Int = 0)
@@ -121,6 +128,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
                 } else if (num == 5) {
                     binding.tvSMART5th.text = ratingArray[i].name
                     binding.tvSMART5Rating.text = ratingArray[i].score.toString() + "/5"
+                    SMARTIndividual =  ratingArray[i].name.toString()
                 }
             }
 
@@ -142,6 +150,59 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
         var dialogBinding= DialogSmartReviewBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogBinding.btnReviewGoals.setOnClickListener {
+            dialog.dismiss()
+            var goToGoalSetting = Intent(this, FinancialActivity::class.java)
+            this.startActivity(goToGoalSetting)
+        }
+
+        dialogBinding.btnSetNewGoal.setOnClickListener {
+            dialog.dismiss()
+            var goToNewGoal = Intent(this, NewGoal::class.java)
+            var bundle = Bundle()
+            bundle.putString("source", "childFinancialActivity")
+            goToNewGoal.putExtras(bundle)
+            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(goToNewGoal)
+        }
+
+        dialog.show()
+    }
+
+    private fun showIndividualDialog() {
+
+        var dialogBinding= DialogSmartIndividualBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        if (SMARTIndividual == "Specific") {
+            dialogBinding.tvName.text = "Specific"
+            dialogBinding.tvDefinition.text = "Specific goals are very clear with what should be achieved."
+            dialogBinding.tvGuideQuestions.text = "1. Is the goal clear?\n" + "2. What do I want to achieve?"
+        } else if (SMARTIndividual == "Measurable") {
+            dialogBinding.tvName.text = "Measurable"
+            dialogBinding.tvDefinition.text = "Measurable goals have target amounts. "
+            dialogBinding.tvGuideQuestions.text = "1. Is there a way to measure the goal?\n" + "2. How much do I need to save?\n" + "3. How will I know if I have achieved the goal?"
+        } else if (SMARTIndividual == "Achievable") {
+            dialogBinding.tvName.text = "Achievable"
+            dialogBinding.tvDefinition.text = "Achievable goals are realistic."
+            dialogBinding.tvGuideQuestions.text = "1. Can I achieve the goal?\n" + "2. Will I be able to save or earn enough money?\n" + "3. Do I have enough time to achieve the goal?"
+        } else if (SMARTIndividual == "Relevant") {
+            dialogBinding.tvName.text = "Relevant"
+            dialogBinding.tvDefinition.text = "Relevant goals are important to you and with what you want to do."
+            dialogBinding.tvGuideQuestions.text = "1.Is this goal important to me?\n" + "2. Why do I want to achieve this goal?"
+        } else if (SMARTIndividual == "Time-Bound") {
+            dialogBinding.tvName.text = "Time-Bound"
+            dialogBinding.tvDefinition.text = "Time-bound goals have a target or end date."
+            dialogBinding.tvGuideQuestions.text = "1. How long will it take me to complete this goal?\n" + "2. When do I need to complete this goal?"
+        }
 
         dialog.window!!.setLayout(1000, 1700)
 
