@@ -77,6 +77,7 @@ class ViewGoalDetails : AppCompatActivity() {
             if (document != null) {
                 var goal = document.toObject(FinancialGoals::class.java)
                 //binding.tvMyGoals.text = goal?.goalName.toString()
+                binding.tvGoalName.text = goal?.goalName.toString()
                 binding.tvGoalAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount?.toFloat())
                 binding.tvActivity.text = goal?.financialActivity.toString()
 

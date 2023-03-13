@@ -68,13 +68,20 @@ class NewEarningActivity : AppCompatActivity() {
 
         binding.dropdownDestination.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             if (binding.dropdownDestination.text.toString() == "Personal Finance")
-                binding.containerGoal.visibility = View.GONE
+                binding.layoutGoal.visibility = View.GONE
             else if (binding.dropdownDestination.text.toString() == "Financial Goal")
-                binding.containerGoal.visibility = View.VISIBLE
+                binding.layoutGoal.visibility = View.VISIBLE
         }
 
         binding.dropdownGoal.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             savingActivityID = goalDropDownArrayList[position].savingActivityID
+
+            firestore.collection("FinancialActivities").document(savingActivityID.toString()).get().addOnSuccessListener { saving ->
+                firestore.collection("FinancialGoals").document(saving.toObject<FinancialActivities>()?.financialGoalID!!).get().addOnSuccessListener { goal ->
+                    binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal.toObject<FinancialGoals>()?.currentSavings)!! +
+                            " / ₱ " + DecimalFormat("#,##0.00").format(goal.toObject<FinancialGoals>()?.targetAmount!!)
+                }
+            }
         }
 
         binding.btnConfirm.setOnClickListener {

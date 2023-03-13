@@ -52,61 +52,66 @@
                 android:maxLines="1"
                 android:layout_weight="@integer/material_motion_duration_short_1"/>
 
-            <TextView
-                android:id="@+id/tv_progress_percent"
-                android:layout_marginLeft="5dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/dark_green"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10%"/>
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/right_arrow"/>
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv_progress_percent"-->
+<!--                android:layout_marginLeft="5dp"-->
+<!--                android:textSize="20sp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:textColor="@color/dark_green"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="10%"/>-->
         </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linear_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_below="@+id/linear_layout_1">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/linear_layout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:layout_below="@+id/linear_layout_1">-->
 
-                <TextView
-                    android:id="@+id/tb_budgeted_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_goal"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:text="Progress amount"
-                    android:textStyle="bold"
-                    android:layout_marginTop="10dp"/>
-            </LinearLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/tb_budgeted_amount"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_below="@id/tv_goal"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:text="Progress amount"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:layout_marginTop="10dp"/>-->
+<!--            </LinearLayout>-->
 
-        <LinearLayout
-            android:id="@+id/linear_layout1"
-            android:layout_marginTop="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@+id/linear_layout">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/linear_layout1"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_below="@+id/linear_layout">-->
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="@integer/material_motion_duration_short_1"
-                android:max="100"
-                android:scaleY="4" />
-        </LinearLayout>
+<!--            <ProgressBar-->
+<!--                android:id="@+id/progress_bar"-->
+<!--                style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_weight="@integer/material_motion_duration_short_1"-->
+<!--                android:max="100"-->
+<!--                android:scaleY="4" />-->
+<!--        </LinearLayout>-->
 
-        <TextView
-            android:layout_below="@+id/linear_layout1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="AMOUNT BUDGETED"
-            android:textColor="@color/black"
-            android:textSize="14dp"/>
+<!--        <TextView-->
+<!--            android:layout_below="@+id/linear_layout1"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="AMOUNT BUDGETED"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:textSize="14dp"/>-->
     </RelativeLayout>
 
 
