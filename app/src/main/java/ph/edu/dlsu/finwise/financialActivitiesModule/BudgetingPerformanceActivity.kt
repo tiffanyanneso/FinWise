@@ -4,10 +4,17 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.DialogBudgetAccuracyAmountReviewBinding
 import ph.edu.dlsu.finwise.databinding.DialogBudgetAccuracyItemsReviewBinding
@@ -15,6 +22,7 @@ import ph.edu.dlsu.finwise.databinding.DialogBudgetingReviewBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.BudgetingFragment
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
@@ -23,12 +31,6 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBudgetingPerformanceBinding
     private var firestore = Firebase.firestore
 
-    //contains only going budgeting activities for the recycler view
-    var goalIDArrayList = ArrayList<String>()
-    //used to get all budgeting activities to count parent involvement
-    private var parentalInvolvementArrayList = ArrayList<String>()
-    var budgetingArrayList = ArrayList<FinancialActivities>()
-    var goalFilterArrayList = ArrayList<BudgetingFragment.GoalFilter>()
     //arraylist that holds all user IDs for createdBy fields in BudgetItem, for parental involvement
     private var createdByUserIDArrayList = ArrayList<String>()
 
@@ -39,6 +41,13 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     //number of budget items in total
     private var budgetItemCount = 0
 
+    private var budgetingActivityIDArrayList = ArrayList<String>()
+    private var budgetItemIDArrayList = ArrayList<String>()
+
+    private var parentalInvolvementPercentage = 0.00F
+    private var budgetAmountAccuracyPercentage = 0.00F
+    private var budgetItemAccuracyPercentage = 0.00F
+
     var nUpdates = 0.00F
     var nItems = 0.00F
 
@@ -47,50 +56,46 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         binding = ActivityBudgetingPerformanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-            getBudgeting()
+        getBudgeting()
 
-            binding.btnReview.setOnClickListener {
-                showBudgetingReivewDialog()
-            }
+        binding.btnReview.setOnClickListener {
+            showBudgetingReivewDialog()
+        }
 
-            binding.btnBudgetAccuracyReview.setOnClickListener{
-                showBudgetAccuracyAmountReivewDialog()
-            }
+        binding.btnBudgetAccuracyReview.setOnClickListener{
+            showBudgetAccuracyAmountReivewDialog()
+        }
 
-            binding.btnBudgetItemsAccuracyReview.setOnClickListener{
-                showBudgetAccuracyItemsReivewDialog()
-            }
+        binding.btnBudgetItemsAccuracyReview.setOnClickListener{
+            showBudgetAccuracyItemsReivewDialog()
+        }
 
-            binding.btnParentalInvolvementReview.setOnClickListener{
-                showBudgetParentalInvolvementReivewDialog()
-            }
-    }
-
-    private fun getBudgeting() {
-        goalIDArrayList.clear()
-        //saving activities that are in progress means that there the goal is also in progress because they are connected
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
-//            binding.tvInProgress.text = results.size().toString()
-            for (activity in results) {
-                //add id to arraylit to load in recycler view
-                var activityObject = activity.toObject<FinancialActivities>()
-                goalIDArrayList.add(activityObject?.financialGoalID.toString())
-            }
-            getParentalInvolvement()
-//            loadRecyclerView(goalIDArrayList)
+        binding.btnParentalInvolvementReview.setOnClickListener{
+            showBudgetParentalInvolvementReivewDialog()
         }
     }
 
-        private fun getParentalInvolvement() {
-        parentalInvolvementArrayList.clear()
-        //saving activities that are in progress means that there the goal is also in progress because they are connected
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").get().addOnSuccessListener { results ->
-            for (activity in results) {
-                //for parent involvement
-                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).get().addOnSuccessListener { budgetItems ->
-                    for (budgetItem in budgetItems) {
+    private fun getBudgeting() {
+        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
+//            binding.tvInProgress.text = results.size().toString()
+            for (activity in results)
+                budgetingActivityIDArrayList.add(activity.id)
+        }.continueWith {
+            getParentalInvolvement()
+            getBudgetAmountAccuracy()
+            getBudgetItemsAccuracy()
+        }
+    }
+
+    private fun getParentalInvolvement() {
+        nParent = 0
+        budgetItemCount = 0
+        for (budgetID in budgetingActivityIDArrayList) {
+            firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetID).get().addOnSuccessListener { results ->
+                for (budgetItemID in results) {
+                    firestore.collection("BudgetItems").document(budgetItemID.id).get().addOnSuccessListener {
+                        var budgetItemObject = it.toObject<BudgetItem>()
                         budgetItemCount++
-                        var budgetItemObject = budgetItem.toObject<BudgetItem>()
 
                         firestore.collection("ParentUser").document(budgetItemObject?.createdBy.toString()).get().addOnSuccessListener { user ->
                             //parent is the one who added the budget item
@@ -98,6 +103,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
                                 nParent++
 
                         }.continueWith {
+                            parentalInvolvementPercentage = nParent.toFloat()/budgetItemCount.toFloat()*100
                             binding.textViewProgressParentalInvolvement.text = DecimalFormat("##0.##").format((nParent.toFloat()/budgetItemCount.toFloat())*100)+ "%"
                             binding.progressBarParentalInvolvement.progress = ((nParent.toFloat()/budgetItemCount.toFloat())*100).roundToInt()
 
@@ -105,22 +111,56 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
                         }
                     }
                 }
-//                getAverageUpdates(activity.id)
             }
         }
     }
 
-//    private fun getAverageUpdates(budgetingActivityID:String){
-//        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).get().addOnSuccessListener { budgetItems ->
-//            for (budgetItem in budgetItems){
-//                var budgetItemObject = budgetItem.toObject<BudgetItem>()
-//                nItems++
-//                if (budgetItemObject.status == "Edited")
-//                    nUpdates++
-//            }
-//            binding.tvAverageUpdates.text = DecimalFormat("##0.##").format((nUpdates/nItems.roundToInt()))
-//        }
-//    }
+
+    private fun getBudgetAmountAccuracy() {
+
+        var budgetAmountScore = 0.00F
+        for (budgetID in budgetingActivityIDArrayList) {
+            firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetID).get().addOnSuccessListener { results ->
+                for (budgetItemID in results) {
+                    var nBudgetItems = results.size()
+                    firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID.id).get().addOnSuccessListener { transactionsResult ->
+                        var spentForBudgetItem = 0.00F
+                        for (transaction in transactionsResult)
+                            spentForBudgetItem += transaction.toObject<Transactions>().amount!!
+
+                        firestore.collection("BudgetItems").document(budgetItemID.id).get().addOnSuccessListener {
+                            budgetAmountScore = spentForBudgetItem / it.toObject<BudgetItem>()?.amount!!
+                        }.continueWith {
+                            budgetAmountAccuracyPercentage = (budgetAmountScore/nBudgetItems.toFloat())*100
+                            binding.textViewBudgetAccuracyProgress.text = DecimalFormat("##0.00").format(budgetAmountAccuracyPercentage) + "%"
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getBudgetItemsAccuracy() {
+        var budgetItemsScore = 0.00F
+        var originalCount = 0.00F
+        var endCount = 0.00F
+        println("print budget amount accuracy activity id list size " +  budgetingActivityIDArrayList.size)
+        for (budgetActivityID in budgetingActivityIDArrayList) {
+            firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).whereEqualTo("whenAdded", "Before").get().addOnSuccessListener { beforeResults ->
+                originalCount = beforeResults.size().toFloat()
+            }.continueWith {
+                var query1 = firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).whereEqualTo("whenAdded", "Before").whereEqualTo("status", "Active").get()
+                var query2 = firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).whereEqualTo("whenAdded", "After").whereEqualTo("status", "Active").get()
+                val combinedResult = Tasks.whenAllSuccess<QuerySnapshot>(query1, query2).result
+                endCount = combinedResult.sumOf { it.size() }.toFloat()
+                budgetItemsScore += originalCount/endCount
+            }
+
+        }
+
+        budgetItemsScore /= budgetItemIDArrayList.size.toFloat()
+        binding.textViewBudgetItemsAccuracyProgress.text = DecimalFormat("##0.00").format(budgetItemsScore) + "%"
+    }
 
     private fun showBudgetingReivewDialog() {
 

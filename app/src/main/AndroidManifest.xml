@@ -21,36 +21,9 @@
         <activity
             android:name=".financialActivitiesModule.UpdateGoalActivity"
             android:exported="false" />
-        <!--<activity
-            android:name=".personalFinancialManagementModule.RecordEarningSaleConfirmationActivityPFM"
-            android:exported="false" />-->
-        <!--<activity
-            android:name=".personalFinancialManagementModule.RecordEarningSaleActivityPFM"
-            android:exported="false" />-->
-        <!--<activity
-            android:name=".parentFinancialManagementModule.EarningSellingPFMActivity"
-            android:exported="false" />-->
         <activity
             android:name=".GoalSettingPerformanceActivity"
             android:exported="false" />
-        <!--<activity
-            android:name=".parentFinancialManagementModule.EarningMenuActivityPFM"
-            android:exported="false" />
-        <activity
-            android:name=".parentFinancialManagementModule.EarningSendMoneyActivityPFM"
-            android:exported="false" />
-        <activity
-            android:name=".personalFinancialManagementModule.CompletedEarningActivityPFM"
-            android:exported="false" />
-        <activity
-            android:name=".personalFinancialManagementModule.IncomeActivityPFM"
-            android:exported="false" />
-        <activity
-            android:name=".parentFinancialManagementModule.EarningActivityPFM"
-            android:exported="true" />
-        <activity
-            android:name=".parentFinancialManagementModule.NewEarningActivityPFM"
-            android:exported="false" />-->
         <activity
             android:name=".personalFinancialManagementModule.GoalSavingDetailsActivity"
             android:exported="false" />
@@ -95,6 +68,12 @@
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.SavingPerformanceActivity"
+            android:exported="true" />
+        <activity
+            android:name=".financialActivitiesModule.BudgetingPerformanceActivity"
+            android:exported="true" />
+        <activity
+            android:name=".financialActivitiesModule.SpendingPerformanceActivity"
             android:exported="true" />
         <activity
             android:name=".LeaderboardActivity"

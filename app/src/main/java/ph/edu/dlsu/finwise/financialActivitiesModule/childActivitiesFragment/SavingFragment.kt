@@ -100,12 +100,12 @@ class SavingFragment : Fragment() {
 
         binding.btnSeeMore.setOnClickListener {
             var goToPerformance = Intent(requireContext().applicationContext, SavingPerformanceActivity::class.java)
-            this.startActivity(goToPerformance)
+            startActivity(goToPerformance)
         }
 
         binding.btnSeeMore2.setOnClickListener {
             var goToPerformance = Intent(requireContext().applicationContext, SavingPerformanceActivity::class.java)
-            this.startActivity(goToPerformance)
+            startActivity(goToPerformance)
         }
 
         checkAge()
@@ -126,7 +126,8 @@ class SavingFragment : Fragment() {
                 goalIDArrayList.add(activityObject?.financialGoalID.toString())
             }
             loadRecyclerView(goalIDArrayList)
-        }.continueWith { getTotalSavings() }
+        }.continueWith { getTotalSavings()
+            setGoalCount()}
     }
 
     private fun getTotalSavings() {
@@ -154,6 +155,7 @@ class SavingFragment : Fragment() {
         var currentTime = Timestamp.now().toDate().time
 
         //set number of goals nearing completion and nearing deadline
+        println("print " + goalIDArrayList.size)
         for (goalID in goalIDArrayList) {
             firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
                 var goalObject = it.toObject<FinancialGoals>()
@@ -167,7 +169,9 @@ class SavingFragment : Fragment() {
                 //there is only 20% left before their target date, mark goal as near deadline
                 //target date in miliseconds
                 var targetDate = goalObject?.targetDate!!.toDate().time
+
                 var timeRemaining = ((targetDate!! - currentTime!!) / 100)
+                println("print " + timeRemaining)
                 if (timeRemaining <= 20)
                     nearDeadline++
 
@@ -326,7 +330,6 @@ class SavingFragment : Fragment() {
             }
 
         }.continueWith {
-            setGoalCount()
 //            setReasonPieChart()
         }
     }
