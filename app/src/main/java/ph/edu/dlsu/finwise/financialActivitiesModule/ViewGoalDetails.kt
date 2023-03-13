@@ -35,6 +35,7 @@ class ViewGoalDetails : AppCompatActivity() {
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         getGoal()
+        checkUser()
 
         binding.topAppBar.setNavigationOnClickListener {
             val goToGoal = Intent(applicationContext, ViewGoalActivity::class.java)
@@ -89,6 +90,16 @@ class ViewGoalDetails : AppCompatActivity() {
                     binding.tvIsForChild.text = "No"
 
             }
+        }
+    }
+
+    private fun checkUser() {
+        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+            if (it.exists())
+                binding.btnDelete.visibility = View.GONE
+            else
+                binding.btnDelete.visibility = View.VISIBLE
         }
     }
 

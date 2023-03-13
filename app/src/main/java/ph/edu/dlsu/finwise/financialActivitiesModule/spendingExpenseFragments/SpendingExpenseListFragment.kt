@@ -14,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.SpendingExpenseAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentSpendingExpenseBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivityRecordExpense
+import ph.edu.dlsu.finwise.financialActivitiesModule.SpendingTransactionsActivity
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.Transactions
 
@@ -63,6 +64,13 @@ class SpendingExpenseListFragment : Fragment() {
         }
         binding.btnRecordExpense.setOnClickListener {
             recordExpense()
+        }
+        binding.tvViewAll.setOnClickListener {
+            var spendingTransactions = Intent(requireContext().applicationContext, SpendingTransactionsActivity::class.java)
+            var sendBundle = Bundle()
+            sendBundle.putString("spendingActivityID", spendingActivityID)
+            spendingTransactions.putExtras(sendBundle)
+            startActivity(spendingTransactions)
         }
     }
 

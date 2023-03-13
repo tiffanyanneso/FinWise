@@ -199,7 +199,7 @@ class SavingFragment : Fragment() {
     private fun computeOverallScore() {
         var nTotal = 0.00F
         var nOnTime =0.00F
-        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
 
             if (results.size()!=0) {
                 nTotal = results.size().toFloat()
@@ -255,6 +255,10 @@ class SavingFragment : Fragment() {
                     binding.tvPerformanceText.text = "Uh oh! Your saving performance needs a lot of improvement.  Click review to learn how!"
                     showReviewButton()
                 }
+            } else {
+                binding.imgFace.setImageResource(R.drawable.good)
+                binding.tvPerformanceStatus.text = ""
+                binding.tvPerformanceText.text = "Complete your goals to see your performance"
             }
         }
     }
