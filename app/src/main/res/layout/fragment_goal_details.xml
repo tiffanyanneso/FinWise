@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="20dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/button_border_white"
             android:backgroundTint="@color/very_light_green">
 
@@ -73,7 +74,6 @@
                 android:layout_marginVertical="15dp"
                 app:dividerColor="@color/light_green"/>
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -85,17 +85,17 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textStyle="bold"
-                    android:text="@string/status"
+                    android:text="Goal Name"
                     android:textSize="16sp"
                     android:textColor="@color/black"
                     />
 
                 <TextView
-                    android:id="@+id/tv_status"
+                    android:id="@+id/tv_goal_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="@string/status"
+                    android:text="Goal Name"
                     android:gravity="end"
                     android:textSize="16sp"
                     android:textColor="@color/black"
@@ -129,6 +129,9 @@
                     android:textColor="@color/black"
                     />
             </LinearLayout>
+
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -190,7 +193,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -213,7 +217,49 @@
                     android:textColor="@color/black"
                     />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:text="@string/status"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="@string/status"
+                    android:gravity="end"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    />
+            </LinearLayout>
         </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_delete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="Delete Goal"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/red"
+            android:background="@drawable/button_border_grey"
+            android:layout_marginRight="10dp"
+            />
     </LinearLayout>
 
 
