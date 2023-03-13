@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="20dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@drawable/button_border_white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,17 +14,132 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_goal_feedback"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="Saving Review"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@id/img" />
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/baseline_wallet_24"
+            app:tint="@color/light_green"
+            android:layout_gravity="center"/>
 
+        <TextView
+            android:id="@+id/tv_goal_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="Saving"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/img" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_gpp_good_24"
+                app:tint="@color/red"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="Importance"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_marginLeft="10dp"
+            android:text="1. Important step in reaching your financial goals\n2. By saving, you will be able to have money to use in the future\n3. Through saving, you are able to afford bigger purchases"
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/question_mark"
+                app:tint="@color/yellow"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="How can you Save?"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="1. Set a bit of money aside from the allowances, rewards, and gifts your receive.\n 2. In order to earn money to save, you can help with chores around the house or even sell items!
+"
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_directions_run_24"
+                app:tint="@color/light_green"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="What can you do?"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_review_goals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border"
+            android:backgroundTint="@color/dark_green"
+            android:layout_marginTop="20dp"
+            android:text="Review Goals"
+            android:textColor="@color/off_white"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_set_new_goal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border"
+            android:backgroundTint="@color/dark_green"
+            android:layout_marginTop="10dp"
+            android:text="New Goal"
+            android:textColor="@color/off_white"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_got_it"
@@ -31,8 +147,8 @@
             android:layout_height="wrap_content"
             android:background="@drawable/button_border"
             android:backgroundTint="@color/dark_green"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:text="Got it!"
-            android:textColor="@color/off_white" />
+            android:textColor="@color/off_white"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

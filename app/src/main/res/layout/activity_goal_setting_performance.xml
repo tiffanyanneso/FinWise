@@ -401,15 +401,16 @@
                         android:textSize="16sp"
                         android:textStyle="bold" />
                 </LinearLayout>
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_review_concept"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:text="Review"
-                    android:textColor="@color/off_white"
-                    android:backgroundTint="@color/dark_green"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/button_border"
-                    android:layout_marginTop="10dp"/>
+                    android:backgroundTint="@color/dark_green"
+                    android:text="Review"
+                    android:textColor="@color/off_white" />
             </LinearLayout>
         </LinearLayout>
 <!--        <LinearLayout-->

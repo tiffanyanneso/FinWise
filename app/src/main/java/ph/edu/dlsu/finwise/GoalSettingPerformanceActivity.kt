@@ -47,6 +47,10 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
         binding.btnViewSMARTGoalsInfo.setOnClickListener{
             showGoalDialog()
         }
+
+        binding.btnReviewConcept.setOnClickListener{
+            showIndividualDialog()
+        }
     }
     private fun RatingObject(name: String, score: Int): Rating {
         val rating = Rating()

@@ -68,7 +68,7 @@ class FinancialActivity : AppCompatActivity() {
             var difference = Period.between(to, from)
 
             var age = difference.years
-            if (age == 10 || age == 1)
+            if (age == 10 || age == 11)
                 setOwnGoals = true
             if (age == 12) {
                 setOwnGoals = true

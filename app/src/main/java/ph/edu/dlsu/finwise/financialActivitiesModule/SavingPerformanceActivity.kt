@@ -1,9 +1,11 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import com.github.mikephil.charting.data.PieData
@@ -15,12 +17,14 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.ActivitySavingPerformanceBinding
-import ph.edu.dlsu.finwise.databinding.DialogSavingCategoryReviewBinding
-import ph.edu.dlsu.finwise.databinding.DialogSavingDurationReviewBinding
-import ph.edu.dlsu.finwise.databinding.DialogSavingReviewBinding
+import ph.edu.dlsu.finwise.databinding.*
+import ph.edu.dlsu.finwise.model.ChildUser
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 class SavingPerformanceActivity : AppCompatActivity() {
@@ -32,6 +36,8 @@ class SavingPerformanceActivity : AppCompatActivity() {
     private var ongoingGoals = 0
     //includes achieved goals in count
     private var totalGoals = 0
+
+    private var setOwnGoals = false
 
     //var for duration for pie chart
     var nShort = 0
@@ -46,6 +52,9 @@ class SavingPerformanceActivity : AppCompatActivity() {
     var nSituational =0
     var nEarning = 0
 
+    private var specificDuration = "Short"
+    private var specificCategory = "Buying Items"
+
     data class DurationRating(var name: String? = null, var score: Int = 0)
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -56,6 +65,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
         getGoals()
         loadBackButton()
         computeOverallScore()
+        checkAge()
     }
 
     private fun getGoals() {
@@ -79,7 +89,6 @@ class SavingPerformanceActivity : AppCompatActivity() {
                     "Saving For Emergency Funds" -> nEmergency++
                     "Donating To Charity" -> nCharity++
                     "Situational Shopping" -> nSituational++
-                    "Earning Money" -> nEarning++
                 }
             }
         }.continueWith {
@@ -205,14 +214,15 @@ class SavingPerformanceActivity : AppCompatActivity() {
             var num = i + 1
 
             if (num == 1) {
-                binding.tvTopPerformingDuration.text = durationRatingArray[i].name
+                binding.tvTopPerformingDuration.text = durationRatingArray[i].name.toString() + " Term"
                 binding.tvTopPerformingRating.text = durationRatingArray[i].score.toString() + "%"
             } else if (num == 2) {
-                binding.tvDuration2nd.text = durationRatingArray[i].name
+                binding.tvDuration2nd.text = durationRatingArray[i].name.toString() + " Term"
                 binding.tvDuration2Rating.text = durationRatingArray[i].score.toString() + "%"
             } else if (num == 3) {
-                binding.tvDuration3rd.text = durationRatingArray[i].name
+                binding.tvDuration3rd.text = durationRatingArray[i].name.toString() + " Term"
                 binding.tvDuration3Rating.text = durationRatingArray[i].score.toString() + "%"
+                specificDuration = durationRatingArray[i].name.toString()
             }
         }
 //        binding.progressBarShortTerm.progress = percentageShort.toInt()
@@ -299,9 +309,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             } else if (num == 5) {
                 binding.tvActivity5th.text = categoryRatingArray[i].name
                 binding.tvActivity5Rating.text = categoryRatingArray[i].score.toString() + "%"
-            } else if (num == 6) {
-                binding.tvActivity6th.text = categoryRatingArray[i].name
-                binding.tvActivity6Rating.text = categoryRatingArray[i].score.toString() + "%"
+                specificCategory = categoryRatingArray[i].name.toString()
             }
         }
 
@@ -326,6 +334,24 @@ class SavingPerformanceActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun checkAge() {
+        firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
+            var child = it.toObject<ChildUser>()
+            //compute age
+            val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            var difference = Period.between(to, from)
+
+            var age = difference.years
+            if (age == 10 || age == 11 || age == 12)
+                setOwnGoals = true
+
+        }.continueWith { }
+    }
+
     private fun showGoalDialog() {
 
         var dialogBinding= DialogSavingReviewBinding.inflate(getLayoutInflater())
@@ -334,10 +360,30 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
         dialog.window!!.setLayout(1000, 1700)
 
+        if (!setOwnGoals)
+            dialogBinding.btnSetNewGoal.visibility = View.GONE
+        else
+            dialogBinding.btnSetNewGoal.visibility = View.GONE
+
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }
 
+        dialogBinding.btnReviewGoals.setOnClickListener {
+            dialog.dismiss()
+            var goToGoalSetting = Intent(this, FinancialActivity::class.java)
+            this.startActivity(goToGoalSetting)
+        }
+
+        dialogBinding.btnSetNewGoal.setOnClickListener {
+            dialog.dismiss()
+            var goToNewGoal = Intent(this, NewGoal::class.java)
+            var bundle = Bundle()
+            bundle.putString("source", "childFinancialActivity")
+            goToNewGoal.putExtras(bundle)
+            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(goToNewGoal)
+        }
         dialog.show()
     }
 
@@ -348,6 +394,34 @@ class SavingPerformanceActivity : AppCompatActivity() {
         dialog.setContentView(dialogBinding.getRoot())
 
         dialog.window!!.setLayout(1000, 1700)
+
+        if (specificDuration == "Short") {
+            dialogBinding.tvTitle.text = "Short Term"
+            dialogBinding.tvDefinition.text = "1. Can be achieved in a short amount of time and have \n" + "2. Duration: Less than 2 weeks"
+            dialogBinding.tvExamples.text = "1. Saving for a Fried Chicken Sandwich\n" +
+                    "2. Saving for a Small Toy\n" +
+                    "3. Saving for a Book"
+            dialogBinding.tvTips.text = "1. Set aside money consistently\n" +
+                    "2. Keep the target date in mind"
+        }  else if (specificDuration == "Medium") {
+            dialogBinding.tvTitle.text = "Medium Term"
+            dialogBinding.tvDefinition.text = "1. Takes a longer time to achieve and usually involves bigger target amounts \n" +
+                    "2. Duration: 2 to 4 weeks"
+            dialogBinding.tvExamples.text = "1. Saving for school supplies\n" +
+                    "2. Saving for a larger toy"
+            dialogBinding.tvTips.text = "1. Set aside money consistently\n" +
+                    "2. Earn extra by helping with chores and selling items\n" +
+                    "3. Keep the target date in mind"
+        } else if (specificDuration == "Long") {
+            dialogBinding.tvTitle.text = "Long Term"
+            dialogBinding.tvDefinition.text = "1. Takes a long time to achieve and involves bigger target amounts \n" +
+                    "2. Duration: Over a month"
+            dialogBinding.tvExamples.text = "1. Saving for a trip \n" +
+                    "2. Saving for a birthday party"
+            dialogBinding.tvTips.text = "1. SStart saving early. Even if the target date may seem far away, target amounts for long term goals tend to be larger.\n" +
+                    "2. Set aside money consistently\n" +
+                    "3. Earn extra by helping with chores and selling items"
+        }
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
@@ -364,6 +438,47 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
         dialog.window!!.setLayout(1000, 1700)
 
+        if (specificCategory == "Buying Items") {
+            dialogBinding.tvTitle.text = "Buying Items"
+            dialogBinding.tvDefinition.text = "Purchasing things such as goods or services."
+            dialogBinding.tvExamples.text = "1. Buying a toy\n" +
+            "2. Buying a book \n"
+            dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
+                    "2. Keep your target date in mind.\n"
+        } else if (specificCategory == "Planning An Event") {
+            dialogBinding.tvTitle.text = "Planning An Event"
+            dialogBinding.tvDefinition.text = "Organizing an event and ensuring that all needed materials or services are accounted for."
+            dialogBinding.tvExamples.text = "1. Birthday party\n" +
+                    "2. Out of town trip"
+            dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
+            "2. Start saving early. Goals related to planning events tend to have larger target amounts.\n" +
+            "3. Keep your target date in mind."
+
+        } else if (specificCategory == "Saving For Emergency Funds") {
+            dialogBinding.tvTitle.text = "Saving For Emergency Funds"
+            dialogBinding.tvDefinition.text = "1. Saving money to be used in the future for unexpected situations \n" +
+                    "2. Important to be prepared for these situations"
+            dialogBinding.tvExamples.text = "1. Loss of valuables \n" +
+                    "2. Unexpected expenses"
+            dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
+                    "2. Think about your future."
+        } else if (specificCategory == "Donating To Charity") {
+            dialogBinding.tvTitle.text = "Donating To Charity"
+            dialogBinding.tvDefinition.text = "1. Giving money to a non-profit organization to support an advocacy.\n" +
+                    "2. Important to think about others"
+            dialogBinding.tvExamples.text = "1. Donating to a church \n" +
+                    "2. Donating to Red Cross"
+            dialogBinding.tvTips.text = "1. Donate to an organization that you share an advocacy with \n" +
+                    "2. Set aside money consistently"
+        } else if (specificCategory == "Situational Shopping") {
+            dialogBinding.tvTitle.text = "Situational Shopping"
+            dialogBinding.tvDefinition.text = "Shopping for a certain event or happening."
+            dialogBinding.tvExamples.text = "1. Grocery shopping \n" +
+                    "2. Back to school shopping"
+            dialogBinding.tvTips.text = "1. Set aside money consistently. \n" +
+                    "2. Keep your target date in mind."
+        }
+        
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }

@@ -24,6 +24,7 @@ import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.databinding.DialogSavingReviewBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartReviewBinding
 import ph.edu.dlsu.finwise.databinding.FragmentFinactSavingBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
 import ph.edu.dlsu.finwise.model.*
@@ -48,6 +49,8 @@ class SavingFragment : Fragment() {
     private var ongoingGoals = 0
     //includes achieved goals in count
     private var totalGoals = 0
+
+    private var setOwnGoals = false
 
     //vars for activity types for pie chart
     var nBuyingItem = 0
@@ -380,11 +383,13 @@ class SavingFragment : Fragment() {
             var age = difference.years
             if (age == 9)
                 binding.btnNewGoal.visibility = View.GONE
-            else
+            else {
                 binding.btnNewGoal.visibility = View.VISIBLE
-
+                setOwnGoals = true
+            }
         }
     }
+
     private fun showGoalDialog() {
 
         var dialogBinding= DialogSavingReviewBinding.inflate(getLayoutInflater())
@@ -393,10 +398,32 @@ class SavingFragment : Fragment() {
 
         dialog.window!!.setLayout(1000, 1700)
 
+        if (!setOwnGoals)
+            dialogBinding.btnSetNewGoal.visibility = View.GONE
+        else
+            dialogBinding.btnSetNewGoal.visibility = View.GONE
+
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }
 
+        dialogBinding.btnReviewGoals.setOnClickListener {
+            dialog.dismiss()
+            var goToGoalSetting = Intent(requireContext().applicationContext, FinancialActivity::class.java)
+            this.startActivity(goToGoalSetting)
+        }
+
+        dialogBinding.btnSetNewGoal.setOnClickListener {
+            dialog.dismiss()
+            var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
+            var bundle = Bundle()
+            bundle.putString("source", "childFinancialActivity")
+            goToNewGoal.putExtras(bundle)
+            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(goToNewGoal)
+        }
+
         dialog.show()
     }
+
 }
