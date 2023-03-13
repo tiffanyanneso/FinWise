@@ -48,16 +48,6 @@ class NewGoal : AppCompatActivity() {
 
         getCurrentUserType()
 
-        //TODO: how to bring back values to edit text fields
-        /*var bundle: Bundle = intent.extras!!
-        if (bundle!=null) {
-            binding.etGoal.text = bundle.getString("goalName")
-            binding.tvActivity.text = bundle.getString("activity")
-            binding.etAmount.text = bundle.getString("amount")
-            binding.etTargetDate.text = bundle.getString("targetDate")
-        }*/
-
-
         binding.etTargetDate.setOnClickListener{
             showCalendar()
         }
