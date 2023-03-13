@@ -78,7 +78,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     }
 
     private fun loadFinancialHealth() {
-        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
+        firestore.collection("Transactions").whereEqualTo("childID", childID)
             .get().addOnSuccessListener { documents ->
                 val transactionsArrayList = initializeTransactions(documents)
                 getIncomeAndExpense(transactionsArrayList)
@@ -131,7 +131,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         } else {
             performance = "Bad...!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
-            grade = "Bad...\n You are have 0 balance. Explore the app by clicking on the buttons."
+            grade = "Bad...\n You have 0 balance. Add your income above ."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         }
 
