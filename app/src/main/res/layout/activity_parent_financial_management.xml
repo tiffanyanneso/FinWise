@@ -306,6 +306,7 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:text="Loading..."
+                            android:layout_marginTop="15dp"
                             android:textColor="@color/cream"/>
 
 
@@ -317,7 +318,7 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                             android:gravity="center"
                             android:textSize="16sp"
                             android:textStyle="bold"
-                            android:layout_margin="15dp"
+
                             android:text="Loading data 🔃 \n For the meantime, you could look at the functions above to send or track your child's money. \n You could also check the navigation bar for more cool features!"
                             android:textColor="@color/white"/>
 

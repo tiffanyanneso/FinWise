@@ -408,6 +408,7 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:text="Loading..."
+                    android:layout_marginTop="15dp"
                     android:textColor="@color/cream"/>
 
                 <!--<TextView
@@ -434,7 +435,7 @@
                         android:id="@+id/tv_score"
                         android:gravity="center"
                         android:textSize="16sp"
-                        android:layout_margin="10dp"
+                        android:layout_margin="5dp"
                         android:textStyle="bold"
                         android:text="Loading data \n For the meantime, you could look at the functions above to track your money. \n You could also check the navigation bar for more cool features! \n Thank you for your patience!"
                         android:textColor="@color/white"/>
