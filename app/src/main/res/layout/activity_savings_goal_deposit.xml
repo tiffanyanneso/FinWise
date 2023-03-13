@@ -129,7 +129,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="16dp"
         android:layout_marginTop="5dp"
-        android:text="₱X / X"
+        android:text="₱0.00 / ₱0.00"
         android:textColor="@color/black"
         android:layout_marginStart="20dp"/>
 
@@ -215,7 +215,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="16dp"
         android:layout_marginTop="5dp"
-        android:text="You currently have ₱XXX.XX"
+        android:text="You currently have ₱0.00"
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         />

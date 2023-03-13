@@ -35,6 +35,7 @@ class ViewGoalDetails : AppCompatActivity() {
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         getGoal()
+        checkUser()
 
         binding.topAppBar.setNavigationOnClickListener {
             val goToGoal = Intent(applicationContext, ViewGoalActivity::class.java)
@@ -76,6 +77,7 @@ class ViewGoalDetails : AppCompatActivity() {
             if (document != null) {
                 var goal = document.toObject(FinancialGoals::class.java)
                 //binding.tvMyGoals.text = goal?.goalName.toString()
+                binding.tvGoalName.text = goal?.goalName.toString()
                 binding.tvGoalAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount?.toFloat())
                 binding.tvActivity.text = goal?.financialActivity.toString()
 
@@ -89,6 +91,16 @@ class ViewGoalDetails : AppCompatActivity() {
                     binding.tvIsForChild.text = "No"
 
             }
+        }
+    }
+
+    private fun checkUser() {
+        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+            if (it.exists())
+                binding.btnDelete.visibility = View.GONE
+            else
+                binding.btnDelete.visibility = View.VISIBLE
         }
     }
 

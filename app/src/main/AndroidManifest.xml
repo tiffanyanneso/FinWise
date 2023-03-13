@@ -46,7 +46,7 @@
             android:name=".AssessmentActivity"
             android:exported="false" />
         <activity
-            android:name=".SpendingTransactionsActivity"
+            android:name=".financialActivitiesModule.SpendingTransactionsActivity"
             android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.EarningSendMoneyActivity"

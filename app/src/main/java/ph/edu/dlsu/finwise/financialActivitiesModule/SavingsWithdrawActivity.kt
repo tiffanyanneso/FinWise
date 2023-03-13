@@ -13,6 +13,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivitySavingsWithdrawBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
@@ -44,6 +45,7 @@ class SavingsWithdrawActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setFields()
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         binding.etDate.setOnClickListener {
             showCalendar()

@@ -62,13 +62,13 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
             showBudgetingReivewDialog()
         }
 
-        binding.btnBudgetAccuracyReview.setOnClickListener{
-            showBudgetAccuracyAmountReivewDialog()
-        }
-
-        binding.btnBudgetItemsAccuracyReview.setOnClickListener{
-            showBudgetAccuracyItemsReivewDialog()
-        }
+//        binding.btnBudgetAccuracyReview.setOnClickListener{
+//            showBudgetAccuracyAmountReivewDialog()
+//        }
+//
+//        binding.btnBudgetItemsAccuracyReview.setOnClickListener{
+//            showBudgetAccuracyItemsReivewDialog()
+//        }
 
         binding.btnParentalInvolvementReview.setOnClickListener{
             showBudgetParentalInvolvementReivewDialog()
@@ -82,8 +82,8 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
                 budgetingActivityIDArrayList.add(activity.id)
         }.continueWith {
             getParentalInvolvement()
-            getBudgetAmountAccuracy()
-            getBudgetItemsAccuracy()
+//            getBudgetAmountAccuracy()
+//            getBudgetItemsAccuracy()
         }
     }
 
@@ -116,51 +116,51 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     }
 
 
-    private fun getBudgetAmountAccuracy() {
-
-        var budgetAmountScore = 0.00F
-        for (budgetID in budgetingActivityIDArrayList) {
-            firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetID).get().addOnSuccessListener { results ->
-                for (budgetItemID in results) {
-                    var nBudgetItems = results.size()
-                    firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID.id).get().addOnSuccessListener { transactionsResult ->
-                        var spentForBudgetItem = 0.00F
-                        for (transaction in transactionsResult)
-                            spentForBudgetItem += transaction.toObject<Transactions>().amount!!
-
-                        firestore.collection("BudgetItems").document(budgetItemID.id).get().addOnSuccessListener {
-                            budgetAmountScore = spentForBudgetItem / it.toObject<BudgetItem>()?.amount!!
-                        }.continueWith {
-                            budgetAmountAccuracyPercentage = (budgetAmountScore/nBudgetItems.toFloat())*100
-                            binding.textViewBudgetAccuracyProgress.text = DecimalFormat("##0.00").format(budgetAmountAccuracyPercentage) + "%"
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun getBudgetItemsAccuracy() {
-        var budgetItemsScore = 0.00F
-        var originalCount = 0.00F
-        var endCount = 0.00F
-        println("print budget amount accuracy activity id list size " +  budgetingActivityIDArrayList.size)
-        for (budgetActivityID in budgetingActivityIDArrayList) {
-            firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).whereEqualTo("whenAdded", "Before").get().addOnSuccessListener { beforeResults ->
-                originalCount = beforeResults.size().toFloat()
-            }.continueWith {
-                var query1 = firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).whereEqualTo("whenAdded", "Before").whereEqualTo("status", "Active").get()
-                var query2 = firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).whereEqualTo("whenAdded", "After").whereEqualTo("status", "Active").get()
-                val combinedResult = Tasks.whenAllSuccess<QuerySnapshot>(query1, query2).result
-                endCount = combinedResult.sumOf { it.size() }.toFloat()
-                budgetItemsScore += originalCount/endCount
-            }
-
-        }
-
-        budgetItemsScore /= budgetItemIDArrayList.size.toFloat()
-        binding.textViewBudgetItemsAccuracyProgress.text = DecimalFormat("##0.00").format(budgetItemsScore) + "%"
-    }
+//    private fun getBudgetAmountAccuracy() {
+//
+//        var budgetAmountScore = 0.00F
+//        for (budgetID in budgetingActivityIDArrayList) {
+//            firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetID).get().addOnSuccessListener { results ->
+//                for (budgetItemID in results) {
+//                    var nBudgetItems = results.size()
+//                    firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID.id).get().addOnSuccessListener { transactionsResult ->
+//                        var spentForBudgetItem = 0.00F
+//                        for (transaction in transactionsResult)
+//                            spentForBudgetItem += transaction.toObject<Transactions>().amount!!
+//
+//                        firestore.collection("BudgetItems").document(budgetItemID.id).get().addOnSuccessListener {
+//                            budgetAmountScore = spentForBudgetItem / it.toObject<BudgetItem>()?.amount!!
+//                        }.continueWith {
+//                            budgetAmountAccuracyPercentage = (budgetAmountScore/nBudgetItems.toFloat())*100
+//                            binding.textViewBudgetAccuracyProgress.text = DecimalFormat("##0.00").format(budgetAmountAccuracyPercentage) + "%"
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    private fun getBudgetItemsAccuracy() {
+//        var budgetItemsScore = 0.00F
+//        var originalCount = 0.00F
+//        var endCount = 0.00F
+//        println("print budget amount accuracy activity id list size " +  budgetingActivityIDArrayList.size)
+//        for (budgetActivityID in budgetingActivityIDArrayList) {
+//            firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).whereEqualTo("whenAdded", "Before").get().addOnSuccessListener { beforeResults ->
+//                originalCount = beforeResults.size().toFloat()
+//            }.continueWith {
+//                var query1 = firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).whereEqualTo("whenAdded", "Before").whereEqualTo("status", "Active").get()
+//                var query2 = firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetActivityID).whereEqualTo("whenAdded", "After").whereEqualTo("status", "Active").get()
+//                val combinedResult = Tasks.whenAllSuccess<QuerySnapshot>(query1, query2).result
+//                endCount = combinedResult.sumOf { it.size() }.toFloat()
+//                budgetItemsScore += originalCount/endCount
+//            }
+//
+//        }
+//
+//        budgetItemsScore /= budgetItemIDArrayList.size.toFloat()
+//        binding.textViewBudgetItemsAccuracyProgress.text = DecimalFormat("##0.00").format(budgetItemsScore) + "%"
+//    }
 
     private fun showBudgetingReivewDialog() {
 

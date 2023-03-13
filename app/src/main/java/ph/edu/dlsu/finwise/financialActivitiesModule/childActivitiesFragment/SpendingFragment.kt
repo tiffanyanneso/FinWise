@@ -16,11 +16,12 @@ import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogBudgetingReviewBinding
 import ph.edu.dlsu.finwise.databinding.DialogSpendingReviewBinding
 import ph.edu.dlsu.finwise.databinding.FragmentFinactSpendingBinding
-import ph.edu.dlsu.finwise.model.BudgetItem
-import ph.edu.dlsu.finwise.model.FinancialActivities
-import ph.edu.dlsu.finwise.model.ShoppingListItem
-import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.sign
@@ -96,7 +97,6 @@ class SpendingFragment : Fragment(){
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             for (activity in results)
                 budgetingActivityIDArrayList.add(activity.id)
-            println("print number of budgeting activity " + budgetingActivityIDArrayList.size)
 
             for (budgetingID in budgetingActivityIDArrayList) {
                 firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
@@ -129,7 +129,25 @@ class SpendingFragment : Fragment(){
 //            binding.progressBarOverspending.progress = overspendingPercentage.toInt()
 //            binding.tvOverspendingPercentage.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
 
-            purchasePlanning()
+
+            firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
+                var child = it.toObject<ChildUser>()
+                //compute age
+                val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                val from = LocalDate.now()
+                val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+                val to = LocalDate.parse(date.toString(), dateFormatter)
+                var difference = Period.between(to, from)
+
+                var age = difference.years
+                if (age > 9 )
+                    purchasePlanning()
+                else {
+                    overallSpending = overspendingPercentage
+                    setOverall()
+                }
+
+            }
 
 //            if (overSpending )
 //            binding.tvOverspendingPercentage.setTextColor(getResources().getColor(R.color.red))
@@ -137,21 +155,13 @@ class SpendingFragment : Fragment(){
         }
     }
 
-    private fun showSeeMoreButton() {
-        binding.btnSeeMore.visibility = View.VISIBLE
-        binding.layoutButtons.visibility = View.GONE
-    }
 
-    private fun showReviewButton() {
-        binding.btnSeeMore.visibility = View.GONE
-        binding.layoutButtons.visibility = View.VISIBLE
-    }
 
     private fun purchasePlanning() {
         //items planned / all the items they bought * 100
         var nPlanned = 0.00F
         var nTotalPurchased = 0.00F
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").get().addOnSuccessListener { allSpendingActivities ->
+        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { allSpendingActivities ->
             for (spendingActivityID in allSpendingActivities) {
                 firestore.collection("ShoppingListItems").whereEqualTo("spendingActivityID", spendingActivityID.id).get().addOnSuccessListener { shoppingListItems ->
                     for (shoppingListItem in shoppingListItems) {
@@ -166,43 +176,57 @@ class SpendingFragment : Fragment(){
                         overallSpending = (overspendingPercentage + ((nPlanned/nTotalPurchased)*100)) /2
 
                         binding.tvPerformanceText.text ="${overallSpending}%"
-
-                        if (overallSpending >= 90) {
-                            binding.imgFace.setImageResource(R.drawable.excellent)
-                            binding.textStatus.text = "Excellent"
-                            binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
-                            binding.tvPerformanceText.text = "Keep up the excellent work! Spending wisely is your strong point. Keep it up!"
-                            showSeeMoreButton()
-                        } else if (overallSpending < 90 && overallSpending >= 80) {
-                            binding.imgFace.setImageResource(R.drawable.great)
-                            binding.textStatus.text = "Great"
-                            binding.textStatus.setTextColor(getResources().getColor(R.color.green))
-                            binding.tvPerformanceText.text = " Great job! You are performing well. Keep spending wisely!"
-                            showSeeMoreButton()
-                        } else if (overallSpending < 80 && overallSpending >= 70) {
-                            binding.imgFace.setImageResource(R.drawable.good)
-                            binding.textStatus.text = "Good"
-                            binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
-                            binding.tvPerformanceText.text = "Good job! With a bit more planning to detail, you’ll surely up your performance!"
-                            showSeeMoreButton()
-                        } else if (overallSpending < 70 && overallSpending >= 60) {
-                            binding.imgFace.setImageResource(R.drawable.average)
-                            binding.textStatus.text = "Average"
-                            binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
-                            binding.tvPerformanceText.text = "Nice work! Work on improving your spending performance by always planning ahead. You’ll get there soon!"
-                            showReviewButton()
-                        } else if (overallSpending < 60) {
-                            binding.imgFace.setImageResource(R.drawable.bad)
-                            binding.textStatus.text = "Bad"
-                            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-                            binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
-                            showReviewButton()
-                        }
+                        setOverall()
                     }
                 }
             }
         }
     }
+
+    private fun setOverall() {
+        if (overallSpending >= 90) {
+            binding.imgFace.setImageResource(R.drawable.excellent)
+            binding.textStatus.text = "Excellent"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
+            binding.tvPerformanceText.text = "Keep up the excellent work! Spending wisely is your strong point. Keep it up!"
+            showSeeMoreButton()
+        } else if (overallSpending < 90 && overallSpending >= 80) {
+            binding.imgFace.setImageResource(R.drawable.great)
+            binding.textStatus.text = "Great"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.green))
+            binding.tvPerformanceText.text = " Great job! You are performing well. Keep spending wisely!"
+            showSeeMoreButton()
+        } else if (overallSpending < 80 && overallSpending >= 70) {
+            binding.imgFace.setImageResource(R.drawable.good)
+            binding.textStatus.text = "Good"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
+            binding.tvPerformanceText.text = "Good job! With a bit more planning to detail, you’ll surely up your performance!"
+            showSeeMoreButton()
+        } else if (overallSpending < 70 && overallSpending >= 60) {
+            binding.imgFace.setImageResource(R.drawable.average)
+            binding.textStatus.text = "Average"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
+            binding.tvPerformanceText.text = "Nice work! Work on improving your spending performance by always planning ahead. You’ll get there soon!"
+            showReviewButton()
+        } else if (overallSpending < 60) {
+            binding.imgFace.setImageResource(R.drawable.bad)
+            binding.textStatus.text = "Bad"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
+            showReviewButton()
+        }
+    }
+
+    private fun showSeeMoreButton() {
+        binding.btnSeeMore.visibility = View.VISIBLE
+        binding.layoutButtons.visibility = View.GONE
+    }
+
+    private fun showReviewButton() {
+        binding.btnSeeMore.visibility = View.GONE
+        binding.layoutButtons.visibility = View.VISIBLE
+    }
+
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
         spendingAdapter = FinactSpendingAdapter(requireContext().applicationContext, goalIDArrayList)
