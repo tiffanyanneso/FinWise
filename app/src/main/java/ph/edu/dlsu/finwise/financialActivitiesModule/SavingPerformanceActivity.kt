@@ -478,7 +478,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Set aside money consistently. \n" +
                     "2. Keep your target date in mind."
         }
-        
+
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }
