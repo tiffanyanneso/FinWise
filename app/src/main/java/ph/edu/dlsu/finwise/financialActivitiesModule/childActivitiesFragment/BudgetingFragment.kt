@@ -68,6 +68,7 @@ class BudgetingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //binding.titleOverallBudegtingPerformance.text = "Overall Budgeting\nPerformance"
         binding.tvPerformancePercentage.text = "0.00%"
+        binding.title.text = "Overall Budgeting Performance"
         getBudgeting()
 
         binding.btnSeeMore.setOnClickListener {

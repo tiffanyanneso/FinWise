@@ -71,14 +71,14 @@
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
-                                tools:text="12%" />
+                                tools:text="" />
 
                             <TextView
                                 android:id="@+id/tv_performance_status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="16sp"
-                                android:text="Good"
+                                android:text=""
                                 android:textColor="@color/light_green"
                                 android:textStyle="bold"
                                 android:layout_gravity="center"/>
@@ -89,7 +89,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:text="Good job! With a bit more dedication and effort, you’ll surely up your performance!"
+                            android:text="Complete your goals to see your performance"
                             android:textColor="@color/white"
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"/>
