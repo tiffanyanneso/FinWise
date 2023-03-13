@@ -19,7 +19,9 @@ import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartGoalCriteriaParentBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartReviewBinding
 import ph.edu.dlsu.finwise.databinding.FragmentGoalSettingBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.GoalRating
 import java.util.*
 import kotlin.collections.ArrayList
@@ -238,6 +240,22 @@ class GoalSettingFragment : Fragment() {
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
+        }
+
+        dialogBinding.btnReviewGoals.setOnClickListener {
+            dialog.dismiss()
+            var goToGoalSetting = Intent(requireContext().applicationContext, FinancialActivity::class.java)
+            this.startActivity(goToGoalSetting)
+        }
+
+        dialogBinding.btnSetNewGoal.setOnClickListener {
+            dialog.dismiss()
+            var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
+            var bundle = Bundle()
+            bundle.putString("source", "childFinancialActivity")
+            goToNewGoal.putExtras(bundle)
+            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(goToNewGoal)
         }
 
         dialog.show()
