@@ -65,7 +65,7 @@ class RecordIncomeActivity : AppCompatActivity() {
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeDatePicker() {
-        binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+      //  binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
 
         binding.etDate.setOnClickListener{
             showCalendar()
