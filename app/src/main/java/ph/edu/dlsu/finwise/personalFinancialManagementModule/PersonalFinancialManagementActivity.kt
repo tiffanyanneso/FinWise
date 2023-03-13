@@ -267,6 +267,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 var amount = DecimalFormat("#,##0.00").format(childWallet?.currentBalance!!)
                 if (childWallet?.currentBalance!! < 0.00F)
                     amount = "0.00"
+                balance = childWallet.currentBalance!!
                 binding.tvBalance.text = "₱$amount"
                 initializeButtons()
             }

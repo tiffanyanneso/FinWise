@@ -47,7 +47,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
-                    tools:progress="70" />
+                    tools:progress="50" />
 
                 <TextView
                     android:id="@+id/text_view_progress"
@@ -58,7 +58,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/progress_bar"
                     app:layout_constraintStart_toStartOf="@+id/progress_bar"
                     app:layout_constraintTop_toTopOf="@+id/progress_bar"
-                    tools:text="70.8%"
+                    tools:text="50.4%"
                     android:textStyle="bold"/>
 
                 <TextView
@@ -72,7 +72,7 @@
                     app:layout_constraintStart_toStartOf="@+id/progress_bar"
                     app:layout_constraintTop_toTopOf="@+id/progress_bar"
                     app:layout_constraintVertical_bias="0.75"
-                    tools:text="Very Good"
+                    tools:text="Poor"
                     android:textSize="14dp"
                     />
 
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:id="@+id/tv_rank_text"
-                android:text="Rank 2"
+                android:text="Rank 4"
                 android:textSize="20sp"
                 android:textColor="@color/white"
                 android:paddingBottom="5dp"
