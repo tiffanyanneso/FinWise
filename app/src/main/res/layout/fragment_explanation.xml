@@ -96,7 +96,7 @@
             android:text="For example, if you receive P20 and spends P10, your income to expense ratio would be 2.0 200% ($20 divided by $10 * 100)."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
-        
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

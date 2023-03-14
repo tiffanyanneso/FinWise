@@ -315,7 +315,7 @@
                 />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_done"
+                android:id="@+id/btn_set_new_goal"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"

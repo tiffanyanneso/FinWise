@@ -210,6 +210,11 @@
         <item>Other</item>
     </string-array>
 
+    <string-array name="payment_type">
+        <item>Cash</item>
+        <item>Maya</item>
+    </string-array>
+
     <string-array name="pfm_expense_category">
         <item>Clothing</item>
         <item>Food &amp; Drinks</item>

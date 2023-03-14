@@ -11,13 +11,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordIncomeBinding
-import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,6 +24,8 @@ class RecordIncomeActivity : AppCompatActivity() {
     lateinit var amount: String
     var balance = 0.00f
     lateinit var category: String
+    //TODO: 4.
+    lateinit var paymentType: String
     lateinit var date: Date
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -52,9 +49,16 @@ class RecordIncomeActivity : AppCompatActivity() {
 
     private fun initializeDropdown() {
         // for the dropdown
-        val items = resources.getStringArray(ph.edu.dlsu.finwise.R.array.pfm_income_category)
-        val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, items)
-        binding.dropdownCategory.setAdapter(adapter)
+        //TODO: 1.
+        val categoryItems = resources.getStringArray(ph.edu.dlsu.finwise.R.array.pfm_income_category)
+        val adapterCategoryItems = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, categoryItems)
+        binding.dropdownCategory.setAdapter(adapterCategoryItems)
+
+        val paymentTypeItems = resources.getStringArray(ph.edu.dlsu.finwise.R.array.payment_type)
+        val adapterPaymentTypeItems = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, paymentTypeItems)
+        binding.dropdownTypeOfPayment.setAdapter(adapterPaymentTypeItems)
+
+
     }
 
     private fun loadBackButton() {
@@ -89,6 +93,15 @@ class RecordIncomeActivity : AppCompatActivity() {
         } else {
             binding.dropdownCategory.error = null
             category = binding.dropdownCategory.text.toString()
+        }
+
+        //TODO: 3.
+        if (binding.dropdownTypeOfPayment.text.toString() == "") {
+            binding.dropdownTypeOfPayment.error = "Please select if you used cash or Maya"
+            valid = false
+        } else {
+            binding.dropdownTypeOfPayment.error = null
+            paymentType = binding.dropdownTypeOfPayment.text.toString()
         }
 
 
@@ -142,6 +155,8 @@ class RecordIncomeActivity : AppCompatActivity() {
         bundle.putString("transactionType", "Income")
         bundle.putString("transactionName", name)
         bundle.putString("category", category)
+        //TODO: 2.
+        bundle.putString("paymentType", paymentType)
         bundle.putFloat("balance", balance)
         bundle.putFloat("amount", amount.toFloat())
 //        bundle.putString("goal", goal)

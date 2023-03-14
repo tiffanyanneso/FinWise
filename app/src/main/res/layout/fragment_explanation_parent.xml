@@ -130,7 +130,7 @@
             android:layout_gravity="center_vertical"/>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_done"
+            android:id="@+id/btn_set_new_goal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button_border"

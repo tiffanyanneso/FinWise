@@ -264,6 +264,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
     }
 
     private fun loadExplanation() {
+        //TODO: Change Fragment to parent
         binding.btnExplanation.setOnClickListener {
             val activity = context as FragmentActivity
             val fm: FragmentManager = activity.supportFragmentManager

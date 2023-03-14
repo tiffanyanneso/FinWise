@@ -22,13 +22,13 @@ class ExplanationParentFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentExplanationBinding.bind(view)
-     //  loadDoneButton()
+       loadDoneButton()
     }
-/*
+
    private fun loadDoneButton() {
         binding.btnDone.setOnClickListener {
             dismiss()
         }
-    }*/
+    }
 
 }

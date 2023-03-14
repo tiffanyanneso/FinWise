@@ -13,5 +13,6 @@ class Transactions(
     var budgetItemID:String?=null,
     var merchant:String? = null,
     //var decisionMakingActivityID:String?=null,
-    var date:Timestamp?=null
+    var date:Timestamp?=null,
+    var paymentType:String?=null // cash or maya
 ){}

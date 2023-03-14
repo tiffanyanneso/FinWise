@@ -30,6 +30,7 @@ class ConfirmDepositActivity : AppCompatActivity() {
     var amount = 0.00f
     var balance = 0.00f
     var goal : String? =null
+    var paymentType : String? =null
     var date : Date? =null
     private var childID  = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -115,7 +116,8 @@ class ConfirmDepositActivity : AppCompatActivity() {
                 "createdBy" to childID,
                 "financialActivityID" to savingActivityID,
                 "amount" to amount,
-            )
+                "paymentType" to paymentType
+                )
             adjustUserBalance()
             adjustGoalCurrentSavings()
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {
