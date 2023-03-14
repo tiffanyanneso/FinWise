@@ -82,15 +82,15 @@ class AssessmentLeaderboardFragment : Fragment() {
 
 
     private fun addCurrentChildScore() {
-        firestore.collection("ChildUser").document(childID)
+        firestore.collection("Users").document(childID)
             .get().addOnSuccessListener { document ->
-                val child = document.toObject<ChildUser>()
+                val child = document.toObject<Users>()
                 childFriendFilterArray.add(ChildUsersWithID(child, document.id))
                 loadProgressBar(child)
             }.continueWith { sortLeaderboard() }
     }
 
-    private fun loadProgressBar(child: ChildUser?) {
+    private fun loadProgressBar(child: Users?) {
         binding.progressBar.progress = child?.assessmentPerformance!!.toInt()
         binding.textViewProgress.text =
             String.format("%.1f%%", child.assessmentPerformance)
@@ -121,7 +121,7 @@ class AssessmentLeaderboardFragment : Fragment() {
         //user = arguments?.getString("user").toString()
     }
 
-    data class ChildUsersWithID(val childUsersFilter: ChildUser? = null, val id: String)
+    data class ChildUsersWithID(val childUsersFilter: Users? = null, val id: String)
     data class FriendRanking(val rank: Int, val childUsers: ChildUsersWithID)
 
 
