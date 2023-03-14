@@ -4,18 +4,27 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.paymaya.sdk.android.common.LogLevel
+import com.paymaya.sdk.android.common.PayMayaEnvironment
+import com.paymaya.sdk.android.common.exceptions.BadRequestException
+import com.paymaya.sdk.android.common.models.RedirectUrl
+import com.paymaya.sdk.android.common.models.TotalAmount
+import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMaya
+import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMayaResult
+import com.paymaya.sdk.android.paywithpaymaya.SinglePaymentResult
+import com.paymaya.sdk.android.paywithpaymaya.models.SinglePaymentRequest
+import org.json.JSONObject
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmconfirmTransactionBinding
-import ph.edu.dlsu.finwise.model.FinancialGoals
-import java.security.Timestamp
+import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import kotlin.math.abs
@@ -34,6 +43,12 @@ class ConfirmTransactionActivity : AppCompatActivity() {
     var merchant = ""
     var phone = ""
     val childID  = FirebaseAuth.getInstance().currentUser!!.uid
+    // For Pay With PayMaya API: This is instantiating the Pay With PayMaya API.
+    val payWithPayMayaClient = PayWithPayMaya.newBuilder()
+        .clientPublicKey("pk-MOfNKu3FmHMVHtjyjG7vhr7vFevRkWxmxYL1Yq6iFk5")
+        .environment(PayMayaEnvironment.SANDBOX)
+        .logLevel(LogLevel.ERROR)
+        .build()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,9 +86,13 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         name = bundle!!.getString("transactionName").toString()
         category = bundle!!.getString("category").toString()
         paymentType = bundle!!.getString("paymentType").toString()
+        phone = bundle!!.getString("phone").toString()
+        merchant = bundle!!.getString("merchant").toString()
         amount = bundle!!.getFloat("amount")
         balance = bundle!!.getFloat("balance")
         date = bundle!!.getSerializable("date").toString()
+
+        checkIfMaya()
 
         transactionType = bundle!!.getString("transactionType").toString()
         if (transactionType == "Income") {
@@ -103,11 +122,90 @@ class ConfirmTransactionActivity : AppCompatActivity() {
 
     }
 
-    private fun confirm() {
-        binding.btnConfirm.setOnClickListener {
-            adjustUserBalance()
+    private fun checkIfMaya() {
+        if (paymentType == "Maya") {
+            binding.llMerchant.visibility = View.VISIBLE
+            binding.llPhone.visibility = View.VISIBLE
+            binding.tvMerchant.text = merchant
+            binding.tvPhoneNumber.text = phone
+
         }
     }
+
+    private fun confirm() {
+        binding.btnConfirm.setOnClickListener {
+            if (paymentType == "Maya")
+                payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
+            else if (paymentType == "Cash")
+                adjustUserBalance()
+        }
+    }
+
+    // For Pay With PayMaya API: Once A Pay With PayMaya Activity finishes, this function receives the results.
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        payWithPayMayaClient.onActivityResult(requestCode, resultCode, data)?.let {
+            processCheckoutResult(it)
+        }
+    }
+
+    private fun processCheckoutResult(result: PayWithPayMayaResult) {
+        when (result) {
+            is SinglePaymentResult.Success -> {
+                val resultID: String = result.paymentId
+                Toast.makeText(this, "Payment Successful. Payment ID: $resultID", Toast.LENGTH_LONG)
+                    .show()
+                Log.d("PayMayaa", resultID)
+                //adjustUserBalance()
+                adjustUserBalance()
+            }
+
+            is SinglePaymentResult.Cancel -> {
+                val resultID: String? = result.paymentId
+
+                Toast.makeText(this, "Payment Cancelled. Payment ID: $resultID", Toast.LENGTH_LONG)
+                    .show()
+                if (resultID != null) {
+                    Log.d("PayMayaa", resultID)
+                }
+            }
+
+            is SinglePaymentResult.Failure -> {
+                val resultID: String? = result.paymentId
+                val message =
+                    "Failure, checkoutId: ${resultID}, exception: ${result.exception}"
+                if (result.exception is BadRequestException) {
+                    Log.d("PayMayaa", (result.exception as BadRequestException).error.toString())
+                }
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                Log.d("PayMayaa", message)
+
+            }
+            else -> {}
+        }
+    }
+
+
+    private fun buildSinglePaymentRequest(): SinglePaymentRequest {
+        val amount = BigDecimal(amount.toDouble())
+        val currency = "PHP"
+        val redirectUrl = RedirectUrl(
+            success = "http://success.com",
+            failure = "http://failure.com",
+            cancel = "http://cancel.com"
+        )
+        /* val metadata = JSONObject()
+         metadata.put("customerName", "John Doe")
+         metadata.put("customerEmail", "johndoe@example.com")
+ */
+        return SinglePaymentRequest(
+            TotalAmount(amount, currency),
+            "123456789",
+            redirectUrl,
+            null as JSONObject?
+        )
+    }
+
 
     private fun adjustUserBalance() {
         //TODO: Change childIDs
@@ -120,14 +218,22 @@ class ConfirmTransactionActivity : AppCompatActivity() {
                         adjustedBalance = -abs(adjustedBalance)
 
                     val id = documents.documents[0].id
-                    firestore.collection("ChildWallet").document(id)
-                        .update("currentBalance", FieldValue.increment(adjustedBalance))
+                    updateChildWallet(id, adjustedBalance)
                 } else {
                     createWallet()
                 }
 
             }.continueWith { addTransaction() }
         }
+
+    private fun updateChildWallet(id: String, adjustedBalance: Double) {
+        val updates = hashMapOf(
+            "lastUpdated" to com.google.firebase.Timestamp.now(),
+            "currentBalance" to FieldValue.increment(adjustedBalance)
+        )
+        firestore.collection("ChildWallet").document(id)
+            .update(updates)
+    }
 
     private fun addTransaction() {
         val transaction = hashMapOf(

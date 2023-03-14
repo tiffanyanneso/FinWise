@@ -24,7 +24,6 @@ class RecordIncomeActivity : AppCompatActivity() {
     lateinit var amount: String
     var balance = 0.00f
     lateinit var category: String
-    //TODO: 4.
     lateinit var paymentType: String
     lateinit var date: Date
 
@@ -49,7 +48,6 @@ class RecordIncomeActivity : AppCompatActivity() {
 
     private fun initializeDropdown() {
         // for the dropdown
-        //TODO: 1.
         val categoryItems = resources.getStringArray(ph.edu.dlsu.finwise.R.array.pfm_income_category)
         val adapterCategoryItems = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, categoryItems)
         binding.dropdownCategory.setAdapter(adapterCategoryItems)
@@ -69,7 +67,6 @@ class RecordIncomeActivity : AppCompatActivity() {
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeDatePicker() {
-//TODO: update date to set date now
         binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
         date = SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString())
 
@@ -95,7 +92,6 @@ class RecordIncomeActivity : AppCompatActivity() {
             category = binding.dropdownCategory.text.toString()
         }
 
-        //TODO: 3.
         if (binding.dropdownTypeOfPayment.text.toString() == "") {
             binding.dropdownTypeOfPayment.error = "Please select if you used cash or Maya"
             valid = false
@@ -155,7 +151,6 @@ class RecordIncomeActivity : AppCompatActivity() {
         bundle.putString("transactionType", "Income")
         bundle.putString("transactionName", name)
         bundle.putString("category", category)
-        //TODO: 2.
         bundle.putString("paymentType", paymentType)
         bundle.putFloat("balance", balance)
         bundle.putFloat("amount", amount.toFloat())
@@ -190,7 +185,7 @@ class RecordIncomeActivity : AppCompatActivity() {
         dialog.setContentView(ph.edu.dlsu.finwise.R.layout.dialog_calendar)
         dialog.window!!.setLayout(1000, 1200)
 
-        var calendar = dialog.findViewById<DatePicker>(ph.edu.dlsu.finwise.R.id.et_date)
+        val calendar = dialog.findViewById<DatePicker>(ph.edu.dlsu.finwise.R.id.et_date)
         calendar.maxDate = System.currentTimeMillis()
 
 

@@ -98,7 +98,7 @@ class RecordDepositActivity : AppCompatActivity() {
         firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { activityResults ->
             for (saving in activityResults) {
                 firestore.collection("FinancialGoals").document(saving.toObject<FinancialActivities>().financialGoalID!!).get().addOnSuccessListener { goal ->
-                    var goalObject = goal.toObject<FinancialGoals>()
+                    val goalObject = goal.toObject<FinancialGoals>()
                     goalDropDownArrayList.add(GoalDropDown(saving.id, goalObject?.goalName!!, goalObject.currentSavings!!, goalObject.targetAmount!!))
                 }.continueWith {
                     goalAdapter = ArrayAdapter(this, R.layout.list_item, goalDropDownArrayList.map { it.goalName })

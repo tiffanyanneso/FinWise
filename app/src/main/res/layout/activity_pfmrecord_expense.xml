@@ -203,6 +203,37 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/merchant_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phone_container"
+        android:layout_marginHorizontal="20dp"
+        app:helperTextEnabled="true"
+        app:helperText=""
+        android:visibility="gone"
+        app:helperTextTextColor="@color/red"
+        android:paddingVertical="10dp"
+        app:startIconDrawable="@drawable/merchant"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_merchant"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lines="1"
+            android:inputType="text"
+            android:textSize="16sp"
+            android:hint="Merchant/Seller Name"
+            android:maxLength="11"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/phone_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -232,35 +263,7 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/merchant_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone_container"
-        android:layout_marginHorizontal="20dp"
-        app:helperTextEnabled="true"
-        app:helperText=""
-        android:visibility="gone"
-        app:helperTextTextColor="@color/red"
-        android:paddingVertical="10dp"
-        android:layout_marginTop="8dp"
-        app:startIconDrawable="@drawable/merchant"
-        >
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_merchant"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:lines="1"
-            android:inputType="text"
-            android:textSize="16sp"
-            android:hint="Merchant/Seller Name"
-            android:maxLength="11"
-            />
-    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

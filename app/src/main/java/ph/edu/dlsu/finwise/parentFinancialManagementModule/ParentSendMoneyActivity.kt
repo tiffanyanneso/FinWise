@@ -28,6 +28,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     private lateinit var name: String
     private lateinit var childID: String
     private lateinit var amount: String
+    private lateinit var paymentType: String
     private lateinit var note: String
     private lateinit var phone: String
     private lateinit var date: Date

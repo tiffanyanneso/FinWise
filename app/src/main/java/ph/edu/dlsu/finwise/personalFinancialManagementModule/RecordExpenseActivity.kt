@@ -4,6 +4,9 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
@@ -23,13 +26,18 @@ class RecordExpenseActivity : AppCompatActivity() {
     private lateinit var binding : ActivityPfmrecordExpenseBinding
     lateinit var bundle: Bundle
     private var firestore = Firebase.firestore
-    private var goals = ArrayList<String>()
 
+    private var goals = ArrayList<String>()
+    private lateinit var adapterPaymentTypeItems: ArrayAdapter<String>
     lateinit var name: String
     lateinit var amount: String
     var balance = 0.00f
     lateinit var category: String
+    lateinit var phone: String
+    lateinit var merchant: String
+    lateinit var paymentType: String
     lateinit var goal: String
+    private var selectedValue = "Cash"
     lateinit var date: Date
 
 
@@ -52,6 +60,20 @@ class RecordExpenseActivity : AppCompatActivity() {
         cancel()
     }
 
+    private fun isMayaPayment() {
+        binding.dropdownTypeOfPayment.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            selectedValue = adapterPaymentTypeItems.getItem(position).toString()
+            if (selectedValue == "Maya") {
+                binding.phoneContainer.visibility = View.VISIBLE
+                binding.merchantContainer.visibility = View.VISIBLE
+            }
+            else if (selectedValue == "Cash") {
+                binding.phoneContainer.visibility = View.GONE
+                binding.merchantContainer.visibility = View.GONE
+            }
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initizlizeDatePicker() {
 //TODO: update date to set date now
@@ -68,6 +90,13 @@ class RecordExpenseActivity : AppCompatActivity() {
         val items = resources.getStringArray(ph.edu.dlsu.finwise.R.array.pfm_expense_category)
         val adapter = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, items)
         binding.dropdownCategory.setAdapter(adapter)
+
+        val paymentTypeItems = resources.getStringArray(ph.edu.dlsu.finwise.R.array.payment_type)
+        adapterPaymentTypeItems = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, paymentTypeItems)
+        binding.dropdownTypeOfPayment.setAdapter(adapterPaymentTypeItems)
+        isMayaPayment()
+
+
     }
 
     private fun loadBackButton() {
@@ -92,6 +121,21 @@ class RecordExpenseActivity : AppCompatActivity() {
 
     private fun validateAndSetUserInput(): Boolean {
         var valid = true
+
+        if (selectedValue == "Maya") {
+            if (binding.etMerchant.text.toString().trim().isEmpty()) {
+                binding.etMerchant.error = "Please enter the name of the Merchant/Seller."
+                binding.etMerchant.requestFocus()
+                valid = false
+            } else merchant = binding.etMerchant.text.toString().trim()
+
+            if (binding.etPhone.text.toString().trim().isEmpty() || binding.etPhone.text?.length!! < 11) {
+                binding.etPhone.error = "Please enter the right 11 digit Phone Number."
+                binding.etPhone.requestFocus()
+                valid = false
+            } else phone = binding.etPhone.text.toString().trim()
+        }
+
         // Check if edit text is empty and valid
         if (binding.etName.text.toString().trim().isEmpty()) {
             binding.etName.error = "Please enter the name of the transaction."
@@ -105,6 +149,14 @@ class RecordExpenseActivity : AppCompatActivity() {
         } else {
             binding.dropdownCategory.error = null
             category = binding.dropdownCategory.text.toString()
+        }
+
+        if (binding.dropdownTypeOfPayment.text.toString() == "") {
+            binding.dropdownTypeOfPayment.error = "Please select if you used cash or Maya"
+            valid = false
+        } else {
+            binding.dropdownTypeOfPayment.error = null
+            paymentType = binding.dropdownTypeOfPayment.text.toString()
         }
 
         if (binding.etAmount.text.toString().trim().isEmpty()) {
@@ -122,8 +174,10 @@ class RecordExpenseActivity : AppCompatActivity() {
             valid = false
         }
 
+
         return valid
     }
+
 
     private fun validAmount(): Boolean {
         val bundle2 = intent.extras!!
@@ -170,6 +224,10 @@ class RecordExpenseActivity : AppCompatActivity() {
         bundle.putString("transactionType", "Expense")
         bundle.putString("transactionName", name)
         bundle.putString("category", category)
+        bundle.putString("paymentType", paymentType)
+        bundle.putString("merchant", merchant)
+        bundle.putString("phone", phone)
+
         bundle.putFloat("amount", amount.toFloat())
         bundle.putFloat("balance", balance)
        // bundle.putString("goal", goal)
@@ -196,7 +254,7 @@ class RecordExpenseActivity : AppCompatActivity() {
         dialog.setContentView(ph.edu.dlsu.finwise.R.layout.dialog_calendar)
         dialog.window!!.setLayout(1000, 1200)
 
-        var calendar = dialog.findViewById<DatePicker>(ph.edu.dlsu.finwise.R.id.et_date)
+        val calendar = dialog.findViewById<DatePicker>(ph.edu.dlsu.finwise.R.id.et_date)
         calendar.maxDate = System.currentTimeMillis()
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->

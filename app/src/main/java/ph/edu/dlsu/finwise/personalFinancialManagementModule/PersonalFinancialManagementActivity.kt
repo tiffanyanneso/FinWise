@@ -295,11 +295,15 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
         firestore.collection("ChildWallet").whereEqualTo("childID", childID)
             .get().addOnSuccessListener { document ->
-                val childWallet = document.documents[0].toObject<ChildWallet>()
-                var amount = DecimalFormat("#,##0.00").format(childWallet?.currentBalance!!)
-                if (childWallet.currentBalance!! < 0.00F)
+                var walletAmount = 0.00f
+                for (wallets in document) {
+                    val childWallet = wallets.toObject<ChildWallet>()
+                    walletAmount += childWallet.currentBalance!!
+                }
+                var amount = DecimalFormat("#,##0.00").format(walletAmount)
+                if (walletAmount < 0.00F)
                     amount = "0.00"
-                balance = childWallet.currentBalance!!
+                balance = walletAmount
                 binding.tvBalance.text = "₱$amount"
                 initializeButtons()
             }

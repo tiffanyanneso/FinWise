@@ -126,6 +126,12 @@ class MayaPayment : AppCompatActivity() {
             valid = false
         } else merchant = binding.etMerchant.text.toString().trim()
 
+        if (binding.etPhone.text.toString().trim().isEmpty() || binding.etPhone.text?.length!! < 11) {
+            binding.etPhone.error = "Please enter the right 11 digit Phone Number."
+            binding.etPhone.requestFocus()
+            valid = false
+        } else phone = binding.etPhone.text.toString().trim()
+
         if (binding.dropdownCategory.text.toString() == "") {
             binding.dropdownCategory.error = "Please select a category of the transaction."
             valid = false
@@ -140,12 +146,6 @@ class MayaPayment : AppCompatActivity() {
             valid = false
         } else amount = binding.etAmount.text.toString().trim()
 
-
-        if (binding.etPhone.text.toString().trim().isEmpty() || binding.etPhone.text?.length!! < 11) {
-            binding.etPhone.error = "Please enter the right 11 digit Phone Number."
-            binding.etPhone.requestFocus()
-            valid = false
-        } else phone = binding.etPhone.text.toString().trim()
 
 
         val time = Calendar.getInstance()
