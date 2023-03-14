@@ -246,7 +246,6 @@ class ViewGoalActivity : AppCompatActivity() {
         if (financialGoalID != null) {
             firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener { document ->
                 if (document != null) {
-                    //TODO: compute remaining days
                     var goal = document.toObject(FinancialGoals::class.java)
                     binding.tvGoalName.text = goal?.goalName.toString()
                     binding.tvActivityName.text = goal?.financialActivity.toString()
@@ -272,10 +271,10 @@ class ViewGoalActivity : AppCompatActivity() {
                     val date =  SimpleDateFormat("MM/dd/yyyy").format(goal.targetDate?.toDate())
                     val to = LocalDate.parse(date.toString(), dateFormatter)
 
-
                     if (goal?.status != "Completed") {
                         var difference = Period.between(from, to)
-                        binding.tvRemaining.text = difference.days.toString() + " days remaining"
+                        var differenceDays = ((difference.years * 365) + (difference.months * 30) + difference.days)
+                        binding.tvRemaining.text = differenceDays.toString() + " days remaining"
                     } else
                         binding.tvRemaining.visibility = View.GONE
 

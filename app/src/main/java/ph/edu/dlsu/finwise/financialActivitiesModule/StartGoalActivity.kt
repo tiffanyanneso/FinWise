@@ -15,6 +15,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityStartGoalBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.Duration
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
@@ -76,7 +77,8 @@ class StartGoalActivity : AppCompatActivity() {
         val to = LocalDate.parse(date.toString(), dateFormatter)
 
         var difference = Period.between(from, to)
-        binding.tvNDays.text = difference.days.toString() + " days"
-        binding.tvDaysString.text = "You have ${difference.days} days left to\n complete your goal on time!"
+        var differenceDays = ((difference.years * 365) + (difference.months * 30) + difference.days)
+        binding.tvNDays.text = differenceDays.toString()
+        binding.tvDaysString.text = "You have ${differenceDays} days left to\n complete your goal on time!"
     }
 }
