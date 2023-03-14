@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
@@ -84,7 +85,9 @@ class RecordDepositActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeDatePicker() {
-    //    binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+//TODO: update date to set date now
+        binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+        date = SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString())
 
         binding.etDate.setOnClickListener{
             showCalendar()

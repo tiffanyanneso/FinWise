@@ -7,5 +7,6 @@ class ChildUser (
     var firstName:String?=null,
     var lastName:String?=null,
     var birthday: Timestamp?=null,
-    var parentID:String?=null
+    var parentID:String?=null,
+    var assessmentPerformance:Double?=null
 ){}

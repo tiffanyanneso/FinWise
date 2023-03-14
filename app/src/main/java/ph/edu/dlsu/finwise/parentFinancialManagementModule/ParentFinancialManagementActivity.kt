@@ -164,7 +164,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
 
     private fun loadFinancialHealth() {
         //TODO: change to currentUser
-        firestore.collection("Transactions")
+        firestore.collection("Transactions").whereEqualTo("userID", childID)
             .get().addOnSuccessListener { documents ->
                 val transactionsArrayList = initializeTransactions(documents)
                 getIncomeAndExpense(transactionsArrayList)

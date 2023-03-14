@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ph.edu.dlsu.finwise.databinding.ActivityParentAssessmentLandingPageBinding
+import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentLandingPageActivity
 import ph.edu.dlsu.finwise.parentAssessmentModule.parentAssessmentLandingPage
 import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
@@ -41,7 +42,7 @@ class NavbarParent (bottomNavigationView: BottomNavigationView, appCon: Context,
                 }
 
                 R.id.nav_parent_assessment-> {
-                    val intent = Intent(appCon, parentAssessmentLandingPage::class.java)
+                    val intent = Intent(appCon, FinancialAssessmentLandingPageActivity::class.java)
                     appCon.startActivity(intent)
                 }
             }

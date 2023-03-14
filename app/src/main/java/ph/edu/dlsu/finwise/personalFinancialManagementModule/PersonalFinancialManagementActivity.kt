@@ -5,6 +5,8 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -72,13 +74,14 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     }
 
     private fun initializeFragments() {
+        bundle.putString("user", "child")
         setUpChartTabs()
         loadBalance()
         loadFinancialHealth()
     }
 
     private fun loadFinancialHealth() {
-        firestore.collection("Transactions").whereEqualTo("childID", childID)
+        firestore.collection("Transactions").whereEqualTo("userID", childID)
             .get().addOnSuccessListener { documents ->
                 val transactionsArrayList = initializeTransactions(documents)
                 getIncomeAndExpense(transactionsArrayList)
@@ -102,6 +105,9 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         val grade: String
         val performance: String
         val bitmap: Bitmap
+
+        Log.d("asdfdsa", "computeIncomeExpenseRatio: "+income)
+        Log.d("asdfdsa", "computeIncomeExpenseRatio: "+expense)
 
         if (ratio >= 200) {
             performance = "Excellent!"
@@ -265,7 +271,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             .get().addOnSuccessListener { document ->
                 val childWallet = document.documents[0].toObject<ChildWallet>()
                 var amount = DecimalFormat("#,##0.00").format(childWallet?.currentBalance!!)
-                if (childWallet?.currentBalance!! < 0.00F)
+                if (childWallet.currentBalance!! < 0.00F)
                     amount = "0.00"
                 balance = childWallet.currentBalance!!
                 binding.tvBalance.text = "₱$amount"

@@ -6,27 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemLeaderboardRankingBinding
-import ph.edu.dlsu.finwise.databinding.ItemViewFriendBinding
-import ph.edu.dlsu.finwise.model.ChildUser
+import ph.edu.dlsu.finwise.financialAssessmentModule.fragment.AssessmentLeaderboardFragment
 
 class LeaderboardRankingAdapter : RecyclerView.Adapter<LeaderboardRankingAdapter.LeaderboardRankingViewHolder> {
 
-    private var friendsIDArrayList = ArrayList<String>()
+    private var childRanked = listOf<AssessmentLeaderboardFragment.FriendRanking?>()
     private var context: Context
 
-    private var firestore = Firebase.firestore
 
-
-    constructor(context: Context, friendsIDArrayList: ArrayList<String>) {
+    constructor(context: Context, childRanked: List<AssessmentLeaderboardFragment.FriendRanking>) {
         this.context = context
-        this.friendsIDArrayList = friendsIDArrayList
+        this.childRanked = childRanked
     }
 
     override fun getItemCount(): Int {
-        return friendsIDArrayList.size
+        return childRanked.size
     }
 
     override fun onCreateViewHolder(
@@ -45,21 +41,32 @@ class LeaderboardRankingAdapter : RecyclerView.Adapter<LeaderboardRankingAdapter
         holder: LeaderboardRankingAdapter.LeaderboardRankingViewHolder,
         position: Int
     ) {
-        holder.bindItem(friendsIDArrayList[position])
+        holder.bindItem(childRanked[position])
     }
 
-    inner class LeaderboardRankingViewHolder(private val itemBinding: ItemLeaderboardRankingBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
+    inner class LeaderboardRankingViewHolder(private val itemBinding: ItemLeaderboardRankingBinding) :
+        RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
 
         init {
             itemView.setOnClickListener(this)
         }
 
-        fun bindItem(childID: String) {
-
+        fun bindItem(child: AssessmentLeaderboardFragment.FriendRanking?) {
+            itemBinding.tvUsername.text = child?.childUsers?.childUsersFilter?.username
+            itemBinding.tvScore.text =
+                String.format("%.1f%%", child?.childUsers?.childUsersFilter?.assessmentPerformance)
+            itemBinding.tvChildId.text = child?.childUsers?.id
+            itemBinding.tvRank.text = child?.rank.toString()
         }
 
         override fun onClick(p0: View?) {
-
+            /*val assessment = Intent (context, FinancialAssessmentLandingPageActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("friendChildID", itemBinding.tvChildId.text.toString())
+            assessment.putExtras(bundle)
+            assessment.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            context.startActivity(assessment)*/
         }
     }
+
 }

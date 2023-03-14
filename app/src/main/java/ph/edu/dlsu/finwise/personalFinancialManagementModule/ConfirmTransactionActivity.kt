@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
@@ -94,7 +95,6 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         val dateText = formatter.format(dateSerializable).toString()
         binding.tvDate.text = dateText
 
-
     }
 
     private fun confirm() {
@@ -107,6 +107,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
                 "userID" to childID,
                 "amount" to amount
             )
+
             adjustUserBalance()
             // TODO: Change where transaction is added
             firestore.collection("Transactions").add(transaction).addOnSuccessListener {

@@ -65,7 +65,9 @@ class RecordIncomeActivity : AppCompatActivity() {
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeDatePicker() {
-      //  binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+//TODO: update date to set date now
+        binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+        date = SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString())
 
         binding.etDate.setOnClickListener{
             showCalendar()
@@ -156,6 +158,7 @@ class RecordIncomeActivity : AppCompatActivity() {
     private fun getBalance() {
         val bundle2 = intent.extras!!
         balance = bundle2.getFloat("balance")
+        Toast.makeText(this, ""+balance, Toast.LENGTH_SHORT).show()
     }
 
     /*private fun getCurrentTime() {
