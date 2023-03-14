@@ -103,13 +103,22 @@ class GoalConfirmationActivity : AppCompatActivity() {
                 saveFinancialActivities(bundle.getString("activity").toString(), it.id)
 
                     if (currentUserType == "Child") {
-                        var goToStartGoal = Intent(context, StartGoalActivity::class.java)
-                        var bundle1: Bundle = intent.extras!!
-                        bundle1.putString("financialGoalID", it.id)
-                        goToStartGoal.putExtras(bundle1)
-                        goToStartGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        context.startActivity(goToStartGoal)
-                        finish()
+
+                        if (goalStatus == "For Review") {
+                            var waitGoalReview = Intent(this, WaitGoalReview::class.java)
+                            var sendBundle = Bundle()
+                            sendBundle.putString("financialGoalID", it.id)
+                            waitGoalReview.putExtras(sendBundle)
+                            startActivity(waitGoalReview)
+                        } else if (goalStatus == "In Progress") {
+                            var goToStartGoal = Intent(context, StartGoalActivity::class.java)
+                            var bundle1: Bundle = intent.extras!!
+                            bundle1.putString("financialGoalID", it.id)
+                            goToStartGoal.putExtras(bundle1)
+                            goToStartGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            context.startActivity(goToStartGoal)
+                            finish()
+                        }
                     } else {
                         var parentGoal = Intent(this, ParentGoalActivity::class.java)
                         var bundle = Bundle()
