@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="20dp"
     tools:context=".personalFinancialManagementModule.pFMFragments.ExplanationFragment"
     android:background="@drawable/button_border_white">
@@ -19,8 +20,7 @@
             android:id="@+id/img"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/baseline_star_24"
-            app:tint="@color/yellow"
+            android:src="@drawable/icon_financial_health"
             android:layout_gravity="center"/>
 
         <TextView
@@ -74,7 +74,7 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/baseline_star_24"
+                android:src="@drawable/baseline_calculate_24"
                 app:tint="@color/yellow"
                 android:layout_gravity="center"/>
 
@@ -130,7 +130,7 @@
             android:layout_gravity="center_vertical"/>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_set_new_goal"
+            android:id="@+id/btn_done"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button_border"

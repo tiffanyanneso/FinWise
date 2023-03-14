@@ -197,8 +197,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         goToIncomeActivity()
         goToExpenseActivity()
         goToTransactions()
-        goToPayMaya()
         goToEarningActivity()
+        goToCashMayaBalanceBreakdown()
         initializeDateButtons()
     }
 
@@ -305,6 +305,16 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             }
     }
 
+    private fun goToCashMayaBalanceBreakdown(){
+        binding.btnSeeMore.setOnClickListener{
+            val goToCashMayaBalanceBreakdown = Intent(applicationContext, CashMayaBalanceBreakdownActivity::class.java)
+            getBundles()
+            goToCashMayaBalanceBreakdown.putExtras(bundle)
+            startActivity(goToCashMayaBalanceBreakdown)
+        }
+    }
+
+
     private fun goToTransactions() {
         binding.btnViewTransactions.setOnClickListener {
             val goToTransactions = Intent(applicationContext, TransactionHistoryActivity::class.java)
@@ -313,14 +323,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             startActivity(goToTransactions)
         }
     }
-    private fun goToPayMaya() {
-        binding.btnPayWithMaya.setOnClickListener {
-            val goToTransactions = Intent(applicationContext, MayaPayment::class.java)
-            getBundles()
-            goToTransactions.putExtras(bundle)
-            startActivity(goToTransactions)
-        }
-    }
+
 
     private fun goToDepositGoalActivity() {
         binding.btnGoal.setOnClickListener {

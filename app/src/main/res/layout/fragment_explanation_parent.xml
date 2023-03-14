@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="20dp"
+    tools:context=".parentFinancialManagementModule.pFMFragments.ExplanationParentFragment"
     android:background="@drawable/button_border_white">
 
     <LinearLayout
@@ -18,16 +20,15 @@
             android:id="@+id/img"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/baseline_wallet_24"
-            app:tint="@color/light_green"
+            android:src="@drawable/icon_financial_health"
             android:layout_gravity="center"/>
 
         <TextView
             android:id="@+id/tv_goal_feedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Saving"
+            android:textSize="20sp"
+            android:text="Personal Finance Performance"
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="@color/black"
@@ -49,7 +50,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:layout_marginLeft="10dp"
                 android:text="Importance"
                 android:textColor="@color/black"
@@ -59,9 +60,9 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:layout_marginLeft="10dp"
-            android:text="1. Important step in reaching your financial goals\n2. By saving, you will be able to have money to use in the future\n3. Through saving, you are able to afford bigger purchases"
+            android:text="The purpose of this grading scale is to help you understand how your child's manage their money better. By earning a higher grade, you can feel proud for them and know that they are doing a good job. And if they get a lower grade, they can use it as a way to learn and improve their money management skills."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
         <LinearLayout
@@ -73,16 +74,16 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/question_mark"
+                android:src="@drawable/baseline_calculate_24"
                 app:tint="@color/yellow"
                 android:layout_gravity="center"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:layout_marginLeft="10dp"
-                android:text="How can you Save?"
+                android:text="How it was computed "
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_gravity="center_vertical"/>
@@ -91,12 +92,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:text="1. Set a bit of money aside from the allowances, rewards, and gifts your receive.\n 2. In order to earn money to save, you can help with chores around the house or even sell items!
-"
+            android:textSize="16sp"
+            android:text="For example, if your child receives P20 and spends P10, their income to expense ratio would be 2.0 200% ($20 divided by $10 * 100)."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
-
+        
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -113,7 +113,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:layout_marginLeft="10dp"
                 android:text="What can you do?"
                 android:textColor="@color/black"
@@ -121,15 +121,13 @@
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_review_goals"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_border"
-            android:backgroundTint="@color/dark_green"
-            android:layout_marginTop="20dp"
-            android:text="Review Goals"
-            android:textColor="@color/off_white"/>
+            android:textSize="16sp"
+            android:text="Click the Okay Button and scroll down for more information"
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_done"
@@ -137,18 +135,11 @@
             android:layout_height="wrap_content"
             android:background="@drawable/button_border"
             android:backgroundTint="@color/dark_green"
-            android:layout_marginTop="10dp"
-            android:text="New Goal"
+            android:layout_marginTop="30dp"
+            android:text="Okay"
             android:textColor="@color/off_white"/>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_got_it"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_border"
-            android:backgroundTint="@color/dark_green"
-            android:layout_marginTop="10dp"
-            android:text="Got it!"
-            android:textColor="@color/off_white"/>
+
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

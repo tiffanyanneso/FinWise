@@ -199,31 +199,62 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         val performance: String
         val bitmap: Bitmap
 
-        if (ratio >= 200) {
+        if (ratio >= 180) {
             performance = "Excellent!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.dark_green))
-            grade = "Your child is demonstrating good financial habits by spending less than they earn"
+            grade = "Your child's income is much more than their expenses, and they're saving a large amount of money. They're doing an amazing job!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
-        } else if (ratio in 150..199) {
-            performance = "Great!"
+        } else if (ratio in 160..180) {
+            performance = "Amazing!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.green))
-            grade = "Your child is doing well but could save more money by finding ways to increase their income or reduce their expenses"
+            grade = "Your child's income is significantly more than their expenses, and they're saving a substantial amount of money. They can look for ways to invest their money wisely."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
-        } else if (ratio in 100..149) {
-            performance = "Okay"
+        } else if (ratio in 140..159) {
+            performance = "Great!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.light_green))
-            grade = "Your child is overspending and struggling to save, so finding ways to cut back on expenses and increase their income can help them achieve a healthier financial situation"
+            grade = "Your child's income is much more than their expenses, and they're saving a good amount of money. They're on the right track!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
-        } else if (ratio in 50..99) {
-            performance = "Average"
+        } else if (ratio in 120..139) {
             binding.tvPerformance.setTextColor(resources.getColor(R.color.yellow))
-            grade = "Your child's financial situation could benefit from reducing expenses and increasing income, as they are currently spending much more than they earn"
+            performance = "Good!"
+            grade = "Your child's income is more than their expenses, and they're saving a decent amount of money. They should Keep it up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
-        } else {
-            performance = "Bad"
+        } else if (ratio in 100..119) {
+            performance = "Average"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
-            grade = "Your child's expenses exceed their income, so it's important to take immediate action to help them improve their financial situation by reducing expenses and finding ways to increase income"
+            grade = "Your child's income is slightly more than their expenses, and they're saving a small amount of money. They should keep it up and look for ways to increase their income and savings."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        } else if (ratio in 80..99) {
+            performance = "Nearly There"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            grade = "Your child's income and expenses are about the same, and they're not saving much money. They need to look for ways to increase their income and reduce their expenses."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        } else if (ratio in 60..79) {
+            performance = "Almost There"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            grade = "Your child's expenses are slightly more than their income, and they're saving a little bit of money. They should try to reduce their expenses further to save more money."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        } else if (ratio in 40..59) {
+            performance = "Getting There"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            grade = "Your child's expenses are more than their income, and they're barely saving any money. They need to cut down on their expenses to start saving money."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        } else if (ratio in 20..39) {
+            performance = "Not Quite There"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            grade = "Your child's expenses are much more than their income, and they're not saving any money. They need to make some changes to their spending habits."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        } else if (ratio in 1..19) {
+            performance = "Need Improvement"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            grade = "Your child's expenses are more than their income. This means that they're in trouble and need to take action right away to cut down their expenses."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        }
+        else {
+            performance = "Bad...!"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            grade = "Your child has 0 balance. You can give them money through Maya by clicking the button above"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         }
 
         imageView.setImageBitmap(bitmap)

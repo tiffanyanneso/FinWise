@@ -110,7 +110,7 @@
                                     android:id="@+id/current_balance_text"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Balance"
+                                    android:text="Total Balance"
                                     android:textAllCaps="true"
                                     android:textColor="@color/white"
                                     android:textSize="16sp" />
@@ -125,6 +125,25 @@
                                     android:textStyle="bold" />
                             </LinearLayout>
 
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/btn_see_more"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:backgroundTint="@color/light_green"
+                                android:textColor="@color/white"
+                                app:cardCornerRadius="25dp"
+                                android:layout_marginStart="55dp"
+                                android:layout_marginEnd="50dp"
+                                android:layout_marginTop="30dp"
+                                >
+
+                                <ImageView
+                                    android:src="@drawable/icon_see_more"
+                                    android:layout_width="35dp"
+                                    android:layout_height="35dp"
+                                    android:layout_gravity="center"
+                                   />
+                            </androidx.cardview.widget.CardView>
 
                         </LinearLayout>
                     </LinearLayout>
@@ -246,39 +265,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="15dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_weight="1"
-                            android:layout_gravity="center">
 
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/btn_pay_with_maya"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:textColor="@color/white"
-                                android:backgroundTint="@color/light_green"
-                                android:layout_gravity="center"
-                                app:cardCornerRadius="10dp">
-
-                                <ImageView
-                                    android:src="@drawable/baseline_payments_24"
-                                    android:layout_width="35dp"
-                                    android:layout_height="35dp"
-                                    android:layout_gravity="center"/>
-
-                            </androidx.cardview.widget.CardView>
-
-                            <TextView
-                                android:text="Pay Maya"
-                                android:textSize="16sp"
-                                android:textColor="@color/black"
-                                android:id="@+id/tv_pay_with_maya"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"/>
-                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"

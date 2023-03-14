@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
+package ph.edu.dlsu.finwise.parentFinancialManagementModule.pFMFragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.fragment.app.DialogFragment
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentExplanationBinding
 
-class ExplanationFragment : DialogFragment() {
+class ExplanationParentFragment : DialogFragment() {
     private lateinit var binding: FragmentExplanationBinding
 
     override fun onCreateView(
@@ -22,10 +22,10 @@ class ExplanationFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentExplanationBinding.bind(view)
-       // loadDoneButton()
+     //  loadDoneButton()
     }
-
-   /* private fun loadDoneButton() {
+/*
+   private fun loadDoneButton() {
         binding.btnDone.setOnClickListener {
             dismiss()
         }
