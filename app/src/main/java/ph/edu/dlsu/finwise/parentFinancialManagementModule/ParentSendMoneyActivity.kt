@@ -4,11 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -28,9 +31,11 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     private lateinit var name: String
     private lateinit var childID: String
     private lateinit var amount: String
+    private lateinit var adapterPaymentTypeItems: ArrayAdapter<String>
     private lateinit var paymentType: String
-    private lateinit var note: String
-    private lateinit var phone: String
+    private var phone = ""
+    private var balance = 0.00f
+    private var selectedValue = "Cash"
     private lateinit var date: Date
     private var childrenArray = ArrayList<String>()
     private var childrenIDArray = ArrayList<String>()
@@ -46,7 +51,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         // Initializes the navbar
         Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
         initializeDropdown()
-        goToMayaQRConfirmPayment()
+        goToConfirmPayment()
         cancel()
         loadBackButton()
     }
@@ -59,11 +64,11 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun goToMayaQRConfirmPayment(){
+    private fun goToConfirmPayment(){
         binding.btnConfirm.setOnClickListener {
             if (validateAndSetUserInput()) {
                 setBundle()
-
+                Toast.makeText(this, ""+paymentType, Toast.LENGTH_SHORT).show()
                 val goToMayaConfirmPayment = Intent(applicationContext, ParentMayaConfirmPayment::class.java)
                 goToMayaConfirmPayment.putExtras(bundle)
                 goToMayaConfirmPayment.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -83,17 +88,26 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         bundle.putString("name", name)
         bundle.putFloat("amount", amount.toFloat())
         bundle.putString("phone", phone)
-        bundle.putString("note", note)
+        bundle.putString("paymentType", paymentType)
         bundle.putString("childID", childID)
-        //bundle.putFloat("balance", balance)
+        bundle.putFloat("balance", balance)
 //        bundle.putString("goal", goal)
         bundle.putSerializable("date", date)
+
+        getBalance()
+
+
 
         //TODO: reset spinner and date to default value
         /* binding.etName.text.clear()
          binding.etAmount.text.clear()
          binding.spinnerCategory.clear()
          binding.spinnerGoal.adapter(null)*/
+    }
+
+    private fun getBalance() {
+        val bundle2 = intent.extras!!
+        balance = bundle2.getFloat("balance")
     }
 
 
@@ -127,9 +141,16 @@ class ParentSendMoneyActivity :AppCompatActivity () {
             name = binding.etChildName.text.toString().trim()
         }
 
+        if (binding.dropdownTypeOfPayment.text.toString() == "") {
+            binding.dropdownTypeOfPayment.error = "Please select if you used cash or Maya"
+            valid = false
+        } else {
+            binding.dropdownTypeOfPayment.error = null
+            paymentType = binding.dropdownTypeOfPayment.text.toString()
+        }
+
         getChildID()
 
-        note = binding.etNote.text.toString().trim()
 
         if (binding.etAmount.text.toString().trim().isEmpty()) {
             binding.etAmount.error = "Please enter the amount."
@@ -138,11 +159,14 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         } else amount = binding.etAmount.text.toString().trim()
 
 
-        if (binding.etPhone.text.toString().trim().isEmpty() || binding.etPhone.text?.length!! < 11) {
-            binding.etPhone.error = "Please enter the right 11 digit Phone Number."
-            binding.etPhone.requestFocus()
-            valid = false
-        } else phone = binding.etPhone.text.toString().trim()
+        if (selectedValue == "Maya") {
+            if (binding.etPhone.text.toString().trim().isEmpty() || binding.etPhone.text?.length!! < 11) {
+                binding.etPhone.error = "Please enter the right 11 digit Phone Number."
+                binding.etPhone.requestFocus()
+                valid = false
+            } else phone = binding.etPhone.text.toString().trim()
+        }
+
 
         getCurrentTime()
 
@@ -165,7 +189,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
 
     private fun initializeDropdown() {
         // TODO: set parent user id curent session
-        val parentID = "HeiVgm55YmgBq2DjjRh1OT9bFnP2"
+        val parentID = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("Users").whereEqualTo("parentID", parentID).get()
             .addOnSuccessListener {documents ->
                 for (d in documents) {
@@ -176,6 +200,11 @@ class ParentSendMoneyActivity :AppCompatActivity () {
 
                 val adapter = ArrayAdapter (this, R.layout.list_item, childrenArray)
                 binding.etChildName.setAdapter(adapter)
+            }.continueWith {
+                val paymentTypeItems = resources.getStringArray(R.array.payment_type)
+                adapterPaymentTypeItems = ArrayAdapter (this, R.layout.list_item, paymentTypeItems)
+                binding.dropdownTypeOfPayment.setAdapter(adapterPaymentTypeItems)
+                isMayaPayment()
             }
 
         /* val items = resources.getStringArray(R.array.pfm_income_category)
@@ -185,6 +214,17 @@ class ParentSendMoneyActivity :AppCompatActivity () {
 
     }
 
+    private fun isMayaPayment() {
+        binding.dropdownTypeOfPayment.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            selectedValue = adapterPaymentTypeItems.getItem(position).toString()
+            if (selectedValue == "Maya") {
+                binding.phoneContainer.visibility = View.VISIBLE
+            }
+            else if (selectedValue == "Cash") {
+                binding.phoneContainer.visibility = View.GONE
+            }
+        }
+    }
 
 
 

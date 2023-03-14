@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -21,12 +22,12 @@ import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMaya
 import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMayaResult
 import com.paymaya.sdk.android.paywithpaymaya.SinglePaymentResult
 import com.paymaya.sdk.android.paywithpaymaya.models.SinglePaymentRequest
-import kotlinx.coroutines.NonCancellable.cancel
 import org.json.JSONObject
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentMayaConfirmPaymentBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -41,7 +42,7 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
     lateinit var name : String
     lateinit var phone : String
     lateinit var amount : String
-    var note = "None"
+    lateinit var paymentType : String
     lateinit var date : String
     lateinit var childID : String
 
@@ -68,8 +69,10 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
 
     private fun payMaya(){
         binding.btnConfirm.setOnClickListener{
-            //TODO: Paymaya dito lagay
-            payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
+            if (paymentType == "Maya")
+                payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
+            else if (paymentType == "Cash")
+                addTransaction()
         }
     }
 
@@ -111,7 +114,7 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
                     .show()
                 Log.d("PayMayaa", resultID)
                 //adjustUserBalance()
-                addPayMayaTransaction()
+                addTransaction()
             }
 
             is SinglePaymentResult.Cancel -> {
@@ -139,22 +142,22 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
         }
     }
 
-    private fun addPayMayaTransaction() {
+    private fun addTransaction() {
         val transaction = hashMapOf(
             //TODO: add childID, createdBy
             "childName" to name,
-            "transactionName" to "Parent send money to child",
+            "transactionName" to "Sending Money",
+            "category" to "Sending Money to Child",
             "transactionType" to "Parent",
+            "paymentType" to paymentType,
             "date" to bundle!!.getSerializable("date"),
-            "createdBy" to parentID,
+            "userID" to parentID,
             "amount" to amount.toFloat(),
-            "phoneNumber" to phone,
-            "note" to note
+            "phoneNumber" to phone
         )
         adjustUserBalance()
         //TODO: fix transaction
         firestore.collection("Transactions").add(transaction).addOnSuccessListener {
-
             goToPFM()
         }
 
@@ -164,14 +167,49 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
         //TODO: Change user based on who is logged in
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
         firestore.collection("ChildWallet").whereEqualTo("childID", childID)
-            .get().addOnSuccessListener { document ->
-                val id = document.documents[0].id
-                var adjustedBalance = amount.toDouble()
+            .whereEqualTo("type", paymentType)
+            .get().addOnSuccessListener   { documents ->
+                if (!documents.isEmpty) {
+                    val adjustedBalance = amount.toDouble()
 
-                firestore.collection("ChildWallet").document(id)
-                    .update("currentBalance", FieldValue.increment(adjustedBalance))
+                    val id = documents.documents[0].id
+                    updateChildWallet(id, adjustedBalance)
+                } else {
+                    createWallet()
+                }
+
+            }
+
+
+    }
+
+    private fun updateChildWallet(id: String, adjustedBalance: Double) {
+        val updates = hashMapOf(
+            "lastUpdated" to com.google.firebase.Timestamp.now(),
+            "currentBalance" to FieldValue.increment(adjustedBalance)
+        )
+        firestore.collection("ChildWallet").document(id)
+            .update(updates)
+    }
+
+    private fun createWallet() {
+        val childWallet = hashMapOf(
+            "childID" to childID,
+            "currentBalance" to amount,
+            "lastUpdated" to com.google.firebase.Timestamp.now(),
+            "type" to paymentType
+        )
+
+        firestore.collection("ChildWallet").add(childWallet).addOnSuccessListener {
+            val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
+            goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(goToPFM)
+        }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to add transaction", Toast.LENGTH_SHORT).show()
             }
     }
+
 
 
     private fun goToPFM() {
@@ -188,16 +226,26 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
         binding.tvExpenseAmount.text = "₱$textAmount"
         binding.tvName.text = name
         binding.tvPhoneNumber.text = phone
-        binding.tvNote.text = note
+        binding.tvPaymentType.text = paymentType
         //binding.tvGoal.text = goal
         val formatter = SimpleDateFormat("MM/dd/yyyy")
         val dateSerializable = bundle!!.getSerializable("date")
         val dateText = formatter.format(dateSerializable).toString()
         binding.tvDate.text = dateText
 
+        checkIfMaya()
+
+
         getBalanceChild()
 
 
+    }
+
+    private fun checkIfMaya() {
+        if (paymentType == "Maya") {
+            binding.llPhone.visibility = View.VISIBLE
+            binding.tvPhoneNumber.text = phone
+        }
     }
 
     private fun getBalanceChild() {
@@ -222,6 +270,7 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
         name = bundle!!.getString("name").toString()
         phone = bundle!!.getString("merchant").toString()
         amount = bundle!!.getFloat("amount").toString()
+        paymentType = bundle!!.getString("paymentType").toString()
         /*balance = bundle!!.getFloat("balance")*/
         phone = bundle!!.getString("phone").toString()
         childID = bundle!!.getString("childID").toString()

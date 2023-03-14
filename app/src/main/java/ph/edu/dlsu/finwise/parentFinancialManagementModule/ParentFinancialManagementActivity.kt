@@ -278,6 +278,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         val parentID = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("Users").whereEqualTo("parentID", parentID)
             .get().addOnSuccessListener { document ->
+                //check which child
                 childID = document.documents[0].id
                 loadBalanceView()
                 initializeFragments()
@@ -287,10 +288,15 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
     private fun loadBalanceView() {
         firestore.collection("ChildWallet").whereEqualTo("childID", childID)
             .get().addOnSuccessListener { document ->
-                val childWallet = document.documents[0].toObject<ChildWallet>()
-                var amount = DecimalFormat("#,##0.00").format(childWallet?.currentBalance!!)
-                if (childWallet?.currentBalance!! < 0.00F)
+                var walletAmount = 0.00f
+                for (wallets in document) {
+                    val childWallet = wallets.toObject<ChildWallet>()
+                    walletAmount += childWallet.currentBalance!!
+                }
+                var amount = DecimalFormat("#,##0.00").format(walletAmount)
+                if (walletAmount < 0.00F)
                     amount = "0.00"
+                balance = walletAmount
                 binding.tvCurrentBalanceOfChild.text = "₱$amount"
             }
     }
@@ -299,8 +305,8 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
     private fun goToSendMoney() {
         binding.btnSendMoney.setOnClickListener {
             val goToSendMoney = Intent(applicationContext, ParentSendMoneyActivity::class.java)
-            /*Toast.makeText(this, "balance"+balance, Toast.LENGTH_SHORT).show()
-            bundle.putFloat("balance", balance)*/
+            Toast.makeText(this, "balance"+balance, Toast.LENGTH_SHORT).show()
+            bundle.putFloat("balance", balance)
             goToSendMoney.putExtras(bundle)
             startActivity(goToSendMoney)
         }

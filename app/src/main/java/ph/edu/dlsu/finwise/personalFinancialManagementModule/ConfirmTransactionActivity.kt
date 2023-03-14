@@ -124,11 +124,10 @@ class ConfirmTransactionActivity : AppCompatActivity() {
 
     private fun checkIfMaya() {
         if (paymentType == "Maya") {
-            binding.llMerchant.visibility = View.VISIBLE
             binding.llPhone.visibility = View.VISIBLE
-            binding.tvMerchant.text = merchant
             binding.tvPhoneNumber.text = phone
-
+            binding.llMerchant.visibility = View.VISIBLE
+            binding.tvMerchant.text = merchant
         }
     }
 
