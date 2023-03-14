@@ -54,7 +54,9 @@ class RecordExpenseActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initizlizeDatePicker() {
-     //   binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+//TODO: update date to set date now
+        binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+        date = SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString())
 
         binding.etDate.setOnClickListener{
             showCalendar()

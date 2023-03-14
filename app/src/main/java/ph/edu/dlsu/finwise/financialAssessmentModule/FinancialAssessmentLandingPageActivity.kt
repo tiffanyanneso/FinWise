@@ -1,9 +1,7 @@
 package ph.edu.dlsu.finwise.financialAssessmentModule
 
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -38,21 +36,23 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
         binding = ActivityFinancialAssessmentLandingPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setBundle()
-        setUpChartTabs()
-        //TODO: Initialize navbar
         checkUser()
-       // Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_assessment)
     }
 
-    private fun setBundle() {
+    private fun setBundle(user: String?) {
         val getBundle = intent.extras
         //TODO: receive user bundle pero hindi ko alam ujng saan so hard code muna
+        // sending of friendchildID
         childID = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         setBundle.putString("childID", childID)
-        Toast.makeText(this, ""+childID, Toast.LENGTH_SHORT).show()
+        setBundle.putString("user", user)
         /*if (getBundle?.containsKey("childID") == true) {
-            //childID = getBundle.getString("childID").toString()
+            childID = getBundle.getString("childID").toString()
+            if (getBundle?.containsKey("friendChildID") == true) {
+                val friendChildID = getBundle.getString("friendChildID").toString()
+                setBundle.putString("friendChildID", friendChildID)
+            }
+
             checkUser()
             setBundle.putString("childID", childID)
             // do something with myValue
@@ -62,7 +62,7 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
     private fun checkUser() {
         val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-            var user  = it.toObject<Users>()!!
+            var user = it.toObject<Users>()!!
             //current user is a child
             val bottomNavigationViewChild = binding.bottomNav
             val bottomNavigationViewParent = binding.bottomNavParent
@@ -70,17 +70,19 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
                 Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_assessment)
-            } else  if (user.userType == "Parent"){
+            } else if (user.userType == "Parent") {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
                 NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_assessment)
             }
-
         }
+        //}.continueWith { setUpChartTabs(it.id) }
     }
 
 
-    private fun setUpChartTabs() {
+    private fun setUpChartTabs(user: String?) {
+        setBundle(user)
+
         val adapter = PFMAdapter(supportFragmentManager)
         val assessmentLeaderboardFragment = AssessmentLeaderboardFragment()
         val assessmentPerformanceFragment = AssessmentPerformanceFragment()

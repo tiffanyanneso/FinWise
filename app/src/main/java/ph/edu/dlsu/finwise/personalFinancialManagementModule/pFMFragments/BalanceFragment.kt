@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentBalanceChartBinding
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
+import java.security.Timestamp
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
@@ -73,6 +75,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         val currUser = args?.getString("user")
         val child = args?.getString("childID")
 
+
         if (child != null) {
             childID = child
         }
@@ -86,6 +89,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
             selectedDatesSort = date
             transactionsArrayList.clear()
         }
+
     }
 
     private fun initializeDetails() {
@@ -105,8 +109,8 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeBalanceLineGraph() {
         // on below line we are initializing
-        // our variable with their ids.
-        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
+        // our variable with their ids.\
+        firestore.collection("Transactions").whereEqualTo("userID", childID)
             .get().addOnSuccessListener { documents ->
                 initializeTransactions(documents)
                 sortedDate = getDatesOfTransactions()
@@ -117,11 +121,12 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setData(): MutableList<Entry> {
-
         when (selectedDatesSort) {
             "weekly" -> {
                 selectedDates = getDaysOfWeek(sortedDate)
+
                 graphData = addWeeklyData(selectedDates)
+                Log.d("sdsdsdddd", "setData: "+graphData)
                 binding.tvBalanceTitle.text = "This Week's Balance Trend"
             }
             "monthly" -> {
@@ -258,6 +263,8 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
             for (transaction in transactionsArrayList) {
                 //comparing the dates if they are equal
                 if (date.compareTo(transaction.date?.toDate()) == 0) {
+                    Log.d("sdsdsdddd", "setData: "+transaction.amount)
+
                     if (transaction.transactionType == "Income"){
                         totalAmount += transaction.amount!!
                         totalIncome += transaction.amount!!
@@ -301,22 +308,20 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     }
 
     private fun getDatesOfTransactions(): List<Date> {
-//get unique dates in transaction arraylist
-        val dates = ArrayList<Date>()
+        // Step 1: Map the objects to a list of Date objects
+        val dates = transactionsArrayList.map { it.date!!.toDate() }
 
-        /*for (transaction in transactionsArrayList) {
-            //if array of dates doesn't contain date of the transaction, add the date to the arraylist
-            if (!dates.contains(transaction.date?.toDate()))
-                dates.add(transaction.date?.toDate()!!)
-        }*/
-        val sortedList = transactionsArrayList.sortedBy { it.date }
-        val uniqueList = sortedList.distinctBy { it.date }
+        // Step 2: Create a new list to store the unique dates
+        val uniqueDates = mutableListOf<Date>()
 
-        for (obj in uniqueList) {
-            dates.add(obj.date?.toDate()!!)
+        // Step 3-4: Loop through the dates and add unique dates to the list
+        for (date in dates) {
+            val uniqueDate = Date(date.year, date.month, date.date, 0, 0, 0)
+            if (!uniqueDates.contains(uniqueDate)) {
+                uniqueDates.add(uniqueDate)
+            }
         }
-
-        return dates
+    return uniqueDates.sorted()
     }
 
     private fun initializeTransactions(documents: QuerySnapshot) {
@@ -469,12 +474,14 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getDaysOfWeek(dates: List<Date>): List<Date> {
-        val startOfWeek = LocalDate.now().with(DayOfWeek.MONDAY)
-        val endOfWeek = LocalDate.now().with(DayOfWeek.SUNDAY)
+
+        val startOfWeek = LocalDate.now().with(DayOfWeek.SUNDAY)
+        val endOfWeek = LocalDate.now().with(DayOfWeek.SATURDAY)
         val filteredDates = dates.filter { date ->
             val localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
             !localDate.isBefore(startOfWeek) && !localDate.isAfter(endOfWeek)
         }
+        Log.d("sdfsdddd", "confirm: "+filteredDates)
 
         return filteredDates
     }

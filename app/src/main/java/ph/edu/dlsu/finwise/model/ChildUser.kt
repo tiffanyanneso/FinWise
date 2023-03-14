@@ -8,5 +8,6 @@ class ChildUser (
     var lastName:String?=null,
     var birthday: Timestamp?=null,
     var parentID:String?=null,
-    var lastLogin:Timestamp?=null
+    var lastLogin:Timestamp?=null,
+    var assessmentPerformance:Double?=null
 ){}
