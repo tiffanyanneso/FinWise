@@ -13,6 +13,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityParentSettingAgoalBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.UpdateGoalActivity
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -52,6 +53,15 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
             this.startActivity(goToReviewGoal)
         }
 
+        binding.btnEditGoal.setOnClickListener {
+            var bundle = Bundle()
+            bundle.putString("financialGoalID", financialGoalID)
+
+            var updatedGoal = Intent(this, UpdateGoalActivity::class.java)
+            updatedGoal.putExtras(bundle)
+            startActivity(updatedGoal)
+        }
+
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
 
@@ -81,10 +91,14 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
     private fun checkUser() {
         firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
             //user is parent
-            if (it.exists())
+            if (it.exists()) {
                 binding.btnReviewGoal.visibility = View.VISIBLE
-            else
+                binding.btnEditGoal.visibility = View.GONE
+            }
+            else {
                 binding.btnReviewGoal.visibility = View.GONE
+                binding.btnEditGoal.visibility = View.VISIBLE
+            }
         }
     }
 

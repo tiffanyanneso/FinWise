@@ -248,6 +248,21 @@
 
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_edit_goal"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="@string/edit"
+                    android:textColor="@color/off_white"
+                    android:backgroundTint="@color/dark_green"
+                    android:background="@drawable/button_border"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:visibility="gone"/>
+
+
+
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_review_goal"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
