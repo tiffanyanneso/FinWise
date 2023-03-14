@@ -10,7 +10,7 @@ class Users (
     var parentID:String?=null,
     val number:String?=null,
     var userType:String?=null,
-    var lastLogin: Timestamp?=null
+    var lastLogin: Timestamp?=null,
     var assessmentPerformance:Double?=null
     ) {
 }

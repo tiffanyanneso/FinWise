@@ -1,96 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:backgroundTint="@color/cream"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="20dp"
     tools:context=".personalFinancialManagementModule.pFMFragments.ExplanationFragment"
-    android:background="@drawable/button_border_green">
+    android:background="@drawable/button_border_white">
 
-
-<LinearLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp"
-        android:background="@drawable/button_border_white"
-        android:backgroundTint="@color/white"
-        android:layout_marginTop="0dp">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_amount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Explanation"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="15dp"
-            app:dividerColor="@color/light_green"/>
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/baseline_star_24"
+            app:tint="@color/yellow"
+            android:layout_gravity="center"/>
 
         <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:layout_margin="10dp"
-        android:layout_gravity="center"
-        android:text="We check if you're spending more money than you're earning using a ratio called income-to-expense. We want to make sure you don't run into money problems."
-        android:textSize="14sp"
-        android:textColor="@color/black"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:layout_margin="10dp"
-        android:layout_gravity="center"
-        android:text="We use a letter grade system to show how well you're doing. If you get an A, you're doing great! But if you get a B, C, or D, it means you need to work on spending less and earning more. If you get an F, it means you need to make big changes to your spending habits!"
-        android:textSize="14sp"
-        android:textColor="@color/black"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:layout_margin="10dp"
-        android:layout_gravity="center"
-        android:text="Remember, we want to make sure you're not spending more money than you're earning, so you can save for the future and not get into debt."
-        android:textSize="14sp"
-        android:textColor="@color/black"
-        />
-
-
-
-    <com.google.android.material.divider.MaterialDivider
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="15dp"
-        app:dividerColor="@color/light_green"/>
-
-
-    <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_done"
+            android:id="@+id/tv_goal_feedback"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="Done"
-            android:textColor="@color/off_white"
+            android:textSize="20dp"
+            android:text="SMART Goals"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/img" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_gpp_good_24"
+                app:tint="@color/red"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="Importance"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_marginLeft="10dp"
+            android:text="1. Financial goals give you direction on what to do with your money\n
+2. Setting SMART goals allows you to achieve your financial goals faster!
+"
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_star_24"
+                app:tint="@color/yellow"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="SMART stands for: "
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Specific- State what will be done"
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Measurable- Include a target amount "
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Achievable- See if the goal is realistic "
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Relevant- Ask yourself if it is important to you "
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Time-bound- Set a target date"
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_directions_run_24"
+                app:tint="@color/light_green"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="What can you do?"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_review_goals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border"
             android:backgroundTint="@color/dark_green"
-            android:background="@drawable/button_border" />
+            android:layout_marginTop="20dp"
+            android:text="Review Goals"
+            android:textColor="@color/off_white"/>
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_set_new_goal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border"
+            android:backgroundTint="@color/dark_green"
+            android:layout_marginTop="10dp"
+            android:text="New Goal"
+            android:textColor="@color/off_white"/>
 
-
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_got_it"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border"
+            android:backgroundTint="@color/dark_green"
+            android:layout_marginTop="10dp"
+            android:text="Got it!"
+            android:textColor="@color/off_white"/>
     </LinearLayout>
-
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

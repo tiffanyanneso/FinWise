@@ -71,7 +71,7 @@ class AssessmentLeaderboardFragment : Fragment() {
             val docSnapshot = docRef.get().await()
 
             if (docSnapshot.exists()) {
-                val child = docSnapshot.toObject<ChildUser>()
+                val child = docSnapshot.toObject<Users>()
                 childFriendFilterArray.add(ChildUsersWithID(child, docSnapshot.id))
             }
         }

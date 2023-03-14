@@ -109,35 +109,61 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         Log.d("asdfdsa", "computeIncomeExpenseRatio: "+income)
         Log.d("asdfdsa", "computeIncomeExpenseRatio: "+expense)
 
-        if (ratio >= 200) {
+        if (ratio >= 180) {
             performance = "Excellent!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.dark_green))
-            grade = "Your income is more than enough to cover your expenses and save some money for the future"
+            grade = "Your income is much more than your expenses, and you're saving a large amount of money. You're doing an amazing job!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
-        } else if (ratio in 150..199) {
-            performance = "Great!"
+        } else if (ratio in 160..180) {
+            performance = "Amazing!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.green))
-            grade = "Great!\n Keep up the good work on managing your income and expenses, but try cutting back on unnecessary expenses and finding ways to earn more"
+            grade = "Your income is significantly more than your expenses, and you're saving a substantial amount of money. Keep it up and look for ways to invest your money wisely."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
-        } else if (ratio in 100..149) {
-            performance = "Good!"
+        } else if (ratio in 140..159) {
+            performance = "Great!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.light_green))
-            grade = "Good!\n You're spending most of your income on expenses without saving much, so it's crucial to start exploring ways to save more money"
+            grade = "Your income is much more than your expenses, and you're saving a good amount of money. You're on the right track!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
-        } else if (ratio in 50..99) {
+        } else if (ratio in 120..139) {
             binding.tvPerformance.setTextColor(resources.getColor(R.color.yellow))
-            performance = "Average!"
-            grade = "Average\n You are spending more money than you make can cause financial problems, so it's crucial to find ways to boost your income and cut down on expenses"
+            performance = "Good!"
+            grade = "Your income is more than your expenses, and you're saving a decent amount of money. Keep it up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
-        } else if (ratio in 1..49) {
-            performance = "Bad..!"
+        } else if (ratio in 100..119) {
+            performance = "Average"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
-            grade = "Bad..\n You are spending more than what you earn may lead to financial troubles, so it's best to consult with your parent on how to improve your finances."
+            grade = "Your income is slightly more than your expenses, and you're saving a small amount of money. Keep it up and look for ways to increase your income and savings."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
-        } else {
+        } else if (ratio in 80..99) {
+            performance = "Nearly There"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            grade = "Your income and expenses are about the same, and you're not saving much money. You need to look for ways to increase your income and reduce your expenses."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        } else if (ratio in 60..79) {
+            performance = "Almost There"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            grade = "Your expenses are slightly more than your income, and you're saving a little bit of money. Try to reduce your expenses further to save more money."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        } else if (ratio in 40..59) {
+            performance = "Getting There"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            grade = "Your expenses are more than your income, and you're barely saving any money. You need to cut down on your expenses to start saving money."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        } else if (ratio in 20..39) {
+            performance = "Not Quite There"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            grade = "Your expenses are much more than your income, and you're not saving any money. You need to make some changes to your spending habits."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        } else if (ratio in 1..19) {
+            performance = "Need Improvement"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            grade = "Your expenses are more than your income. This means that you're in trouble and need to take action right away to cut down your expenses."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        }
+        else {
             performance = "Bad...!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
-            grade = "Bad...\n You have 0 balance. Add your income above ."
+            grade = "You have 0 balance. Click the income button above to add your money "
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         }
 
