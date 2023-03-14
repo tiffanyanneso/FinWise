@@ -22,6 +22,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.databinding.DialogFinishSavingBinding
+import ph.edu.dlsu.finwise.databinding.DialogWarningCannotWtithdrawBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
@@ -114,12 +115,16 @@ class ViewGoalActivity : AppCompatActivity() {
         }
 
         binding.btnWithdraw.setOnClickListener {
-            var goalWithdraw = Intent(this, SavingsWithdrawActivity::class.java)
-            sendBundle.putString("savingActivityID", savingActivityID)
-            sendBundle.putString("budgetingActivityID", budgetingActivityID)
-            sendBundle.putString("spendingActivityID", spendingActivityID)
-            goalWithdraw.putExtras(sendBundle)
-            this.startActivity(goalWithdraw)
+            if (currentBalance == 0.00F) {
+                cannotWithdrawDialog()
+            } else {
+                var goalWithdraw = Intent(this, SavingsWithdrawActivity::class.java)
+                sendBundle.putString("savingActivityID", savingActivityID)
+                sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                sendBundle.putString("spendingActivityID", spendingActivityID)
+                goalWithdraw.putExtras(sendBundle)
+                this.startActivity(goalWithdraw)
+            }
         }
 
 
@@ -311,6 +316,18 @@ class ViewGoalActivity : AppCompatActivity() {
         binding.topAppBar.setNavigationOnClickListener {
             onBackPressed()
         }
+    }
+
+    private fun cannotWithdrawDialog() {
+        var dialogBinding = DialogWarningCannotWtithdrawBinding.inflate(getLayoutInflater())
+        var dialog = Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+        dialog.window!!.setLayout(900, 800)
+
+        dialogBinding.btnOk.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun checkUser() {

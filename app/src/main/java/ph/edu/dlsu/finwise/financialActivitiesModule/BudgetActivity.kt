@@ -24,6 +24,7 @@ import ph.edu.dlsu.finwise.databinding.DialogDoneSettingBudgetBinding
 import ph.edu.dlsu.finwise.databinding.DialogDoneSpendingBinding
 import ph.edu.dlsu.finwise.databinding.DialogFinishBudgetingBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
+import ph.edu.dlsu.finwise.databinding.DialogWarningCannotWtithdrawBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
@@ -126,15 +127,20 @@ class BudgetActivity : AppCompatActivity() {
         }
 
         binding.btnWithdraw.setOnClickListener {
-            var withdraw = Intent(this, SavingsWithdrawActivity::class.java)
-            var sendBundle = Bundle()
-            firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
-                var activity = it.toObject<FinancialActivities>()
-                sendBundle.putString("savingActivityID", savingActivityID)
-                sendBundle.putString("financialGoalID", activity?.financialGoalID)
-                withdraw.putExtras(sendBundle)
-                startActivity(withdraw)
+            if (balance == 0.00F) {
+                cannotWithdrawDialog()
+            } else {
+                var withdraw = Intent(this, SavingsWithdrawActivity::class.java)
+                var sendBundle = Bundle()
+                firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
+                    var activity = it.toObject<FinancialActivities>()
+                    sendBundle.putString("savingActivityID", savingActivityID)
+                    sendBundle.putString("financialGoalID", activity?.financialGoalID)
+                    withdraw.putExtras(sendBundle)
+                    startActivity(withdraw)
+                }
             }
+
         }
 
         binding.btnGoalDetails.setOnClickListener{
@@ -474,6 +480,19 @@ class BudgetActivity : AppCompatActivity() {
         }
 
         dialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
+
+        dialog.show()
+    }
+
+    private fun cannotWithdrawDialog() {
+        var dialogBinding = DialogWarningCannotWtithdrawBinding.inflate(getLayoutInflater())
+        var dialog = Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+        dialog.window!!.setLayout(900, 800)
+
+        dialogBinding.btnOk.setOnClickListener {
+            dialog.dismiss()
+        }
 
         dialog.show()
     }
