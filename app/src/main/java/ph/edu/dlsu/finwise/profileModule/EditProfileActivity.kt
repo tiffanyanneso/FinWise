@@ -18,7 +18,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEditProfileBinding
-import ph.edu.dlsu.finwise.model.ChildUser
+import ph.edu.dlsu.finwise.model.Users
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -70,8 +70,8 @@ class EditProfileActivity : AppCompatActivity() {
         val currentUser  = FirebaseAuth.getInstance().currentUser!!.uid
 
 
-        firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener { documentSnapshot ->
-            var child = documentSnapshot.toObject<ChildUser>()
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener { documentSnapshot ->
+            var child = documentSnapshot.toObject<Users>()
             if (child?.firstName != null)
                 binding.etFirstName.setText(child?.firstName.toString())
             if (child?.lastName != null && child?.lastName != null)
@@ -96,7 +96,7 @@ class EditProfileActivity : AppCompatActivity() {
             "birthday" to birthday
         )
 
-        firestore.collection("ChildUser").document(currentUser).set(child, SetOptions.merge()).addOnSuccessListener {
+        firestore.collection("Users").document(currentUser).set(child, SetOptions.merge()).addOnSuccessListener {
             Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT)
             val intent = Intent (this, ProfileActivity::class.java)
             startActivity (intent)

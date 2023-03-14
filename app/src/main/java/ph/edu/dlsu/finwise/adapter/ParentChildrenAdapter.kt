@@ -12,7 +12,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import ph.edu.dlsu.finwise.databinding.ItemChildBinding
-import ph.edu.dlsu.finwise.model.ChildUser
+import ph.edu.dlsu.finwise.model.Users
 
 class ParentChildrenAdapter: RecyclerView.Adapter<ParentChildrenAdapter.ChildViewHolder> {
 
@@ -52,8 +52,8 @@ class ParentChildrenAdapter: RecyclerView.Adapter<ParentChildrenAdapter.ChildVie
         }
 
         fun bindTransaction(childID: String) {
-            firestore.collection("ChildUser").document(childID).get().addOnSuccessListener {
-                var child = it.toObject<ChildUser>()
+            firestore.collection("Users").document(childID).get().addOnSuccessListener {
+                var child = it.toObject<Users>()
                 itemBinding.tvChildId.text = it.id
                 itemBinding.tvUsername.text = child?.username
             }

@@ -15,6 +15,7 @@ import ph.edu.dlsu.finwise.databinding.DialogDeleteGoalWarningBinding
 import ph.edu.dlsu.finwise.databinding.FragmentGoalDetailsBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
@@ -93,10 +94,10 @@ class GoalDetailsFragment : Fragment() {
 
     private fun checkUser() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
-            if (it.exists())
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            if (it.toObject<Users>()!!.userType == "Parent")
                 binding.btnDelete.visibility = View.GONE
-            else
+            else if (it.toObject<Users>()!!.userType == "Child")
                 binding.btnDelete.visibility = View.VISIBLE
         }
     }

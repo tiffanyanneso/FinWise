@@ -9,11 +9,13 @@ import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEarningMenuBinding
+import ph.edu.dlsu.finwise.model.Users
 
 class EarningMenuActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEarningMenuBinding
@@ -56,16 +58,16 @@ class EarningMenuActivity : AppCompatActivity() {
     private fun setNavigationBar() {
 
         var navUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(navUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(navUser).get().addOnSuccessListener {
 
             val bottomNavigationViewChild = binding.bottomNav
             val bottomNavigationViewParent = binding.bottomNavParent
 
-            if (it.exists()) {
+            if (it.toObject<Users>()!!.userType == "Parent") {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
                 NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
-            } else  {
+            } else if (it.toObject<Users>()!!.userType == "Child") {
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
                     if (module == "finact")

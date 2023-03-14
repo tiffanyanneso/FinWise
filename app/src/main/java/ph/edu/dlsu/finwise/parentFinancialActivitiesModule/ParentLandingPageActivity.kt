@@ -38,7 +38,7 @@ class ParentLandingPageActivity : AppCompatActivity() {
     private fun loadChildren() {
         var parentID = FirebaseAuth.getInstance().currentUser?.uid
         var childIDArrayList = ArrayList<String>()
-        firestore.collection("ChildUser").whereEqualTo("parentID", parentID).get().addOnSuccessListener { results ->
+        firestore.collection("Users").whereEqualTo("userType", "Child").whereEqualTo("parentID", parentID).get().addOnSuccessListener { results ->
             if (results.size()!=0) {
                 for (child in results)
                     childIDArrayList.add(child.id)

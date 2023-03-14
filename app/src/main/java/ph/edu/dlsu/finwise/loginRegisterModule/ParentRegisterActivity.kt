@@ -7,6 +7,7 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.ktx.firestore
@@ -44,10 +45,12 @@ class ParentRegisterActivity : AppCompatActivity() {
                            "firstName" to firstName,
                            "lastName" to lastName,
                            "number" to contactNumber,
+                           "userType" to "Parent",
+                           "lastLogin" to Timestamp.now()
                        )
 
                        val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-                       firestore.collection("ParentUser").document(currentUser).set(user)
+                       firestore.collection("Users").document(currentUser).set(user)
                            .addOnSuccessListener {
                                clearForm()
 
@@ -68,10 +71,6 @@ class ParentRegisterActivity : AppCompatActivity() {
                        try {
                            throw task.exception!!
                        } catch (e: FirebaseAuthUserCollisionException) {
-                           Log.d(
-                               "ERRrrrrrrrrrr",
-                               "FirebaseAuthUserCollisionException $e"
-                           )
                            Toast.makeText(this, "Failed to register! Email is already in use by another account!",
                                Toast.LENGTH_SHORT).show()
 

@@ -19,6 +19,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.RecordEarningSaleActivity
 import ph.edu.dlsu.finwise.adapter.EarningSalesAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityEarningSellingBinding
 import ph.edu.dlsu.finwise.model.SellingItems
+import ph.edu.dlsu.finwise.model.Users
 
 class EarningSellingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEarningSellingBinding
@@ -76,17 +77,17 @@ class EarningSellingActivity : AppCompatActivity() {
     private fun setNavigationBar() {
 
         val navUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(navUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(navUser).get().addOnSuccessListener {
 
             val bottomNavigationViewChild = binding.bottomNav
             val bottomNavigationViewParent = binding.bottomNavParent
 
-            if (it.exists()) {
+            if (it.toObject<Users>()!!.userType == "Parent") {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
                 NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
                 binding.btnNewSale.visibility = View.GONE
-            } else  {
+            } else if (it.toObject<Users>()!!.userType == "Child") {
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
                 Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)

@@ -375,8 +375,8 @@ class SavingFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun checkAge() {
-        firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
-            var child = it.toObject<ChildUser>()
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            var child = it.toObject<Users>()
             //compute age
             val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
             val from = LocalDate.now()

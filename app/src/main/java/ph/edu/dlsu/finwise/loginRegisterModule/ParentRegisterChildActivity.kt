@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.ktx.firestore
@@ -66,13 +67,15 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                             "lastName" to lastName,
                             "username" to username,
                             "birthday" to SimpleDateFormat("MM/dd/yyyy").parse(birthday),
-                            "parentID" to parentuserID)
+                            "parentID" to parentuserID,
+                            "userType" to "Child",
+                            "lastLogin" to Timestamp.now())
 
                         println("current/child user   " + FirebaseAuth.getInstance().currentUser!!.uid.toString())
 
                         val childID = FirebaseAuth.getInstance().currentUser!!.uid
 
-                        firestore.collection("ChildUser").document(childID).set(user).addOnSuccessListener { childUser ->
+                        firestore.collection("Users").document(childID).set(user).addOnSuccessListener { childUser ->
                             clearForm()
                             createChildWallet(childID)
                             Toast.makeText(this, "Child register successful", Toast.LENGTH_SHORT).show()
@@ -81,10 +84,6 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                             val parentLandingPage = Intent (this, ParentLandingPageActivity::class.java)
                             startActivity (parentLandingPage)
                         }
-                        /*.addOnFailureListener { exception ->
-                            Toast.makeText(this, "Failed to Register", Toast.LENGTH_SHORT).show()
-                            //Log.w(TAG, "Error adding document $exception")
-                        }*/
                     } else {
                         //not successfully registered
                         Toast.makeText(this, task.exception!!.message.toString(), Toast.LENGTH_SHORT).show()
@@ -121,13 +120,23 @@ class ParentRegisterChildActivity : AppCompatActivity() {
         //val formatter = SimpleDateFormat("MM/dd/yyyy")
         //val current = formatter.format(time)
 
-        var wallet = hashMapOf(
+        var cashWallet = hashMapOf(
             "childID" to childID,
             "currentBalance" to 0,
+            "type" to "Cash",
             "lastUpdated" to time
         )
 
-        firestore.collection("ChildWallet").add(wallet)
+        var mayaWallet = hashMapOf(
+        "childID" to childID,
+        "currentBalance" to 0,
+        "type" to "Maya",
+        "lastUpdated" to time
+        )
+
+        firestore.collection("ChildWallet").add(cashWallet)
+        firestore.collection("ChildWallet").add(mayaWallet)
+
     }
 
     private fun validateAndSetUserInput(): Boolean {

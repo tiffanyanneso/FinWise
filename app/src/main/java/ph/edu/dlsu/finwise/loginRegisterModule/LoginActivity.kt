@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityLoginBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
+import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 
 class LoginActivity : AppCompatActivity() {
@@ -33,34 +36,26 @@ class LoginActivity : AppCompatActivity() {
     private fun login() {
         binding.btnLogin.setOnClickListener {
             if (validateAndSetUserInput()) {
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val currentUser: String = FirebaseAuth.getInstance().currentUser!!.uid
-                            firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val currentUser: String = FirebaseAuth.getInstance().currentUser!!.uid
+                        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
                             if (it.exists()) {
-                                val intent = Intent(this, ParentLandingPageActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            } else {
-                                val currentUser: String = FirebaseAuth.getInstance().currentUser!!.uid
-                                firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener { documentSnapshot->
-                                    if (documentSnapshot.exists()) {
-                                        val intent = Intent(this, PersonalFinancialManagementActivity::class.java)
-                                        startActivity(intent)
-                                        finish()
-                                    } else
-                                        Toast.makeText(
-                                            this,
-                                            "User does not exist",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                var user = it.toObject<Users>()!!
+                                firestore.collection("Users").document(currentUser).update("lastLogin", Timestamp.now())
+                                if (user.userType == "Parent") {
+                                    val intent = Intent(this, ParentLandingPageActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                } else if (user.userType == "Child") {
+                                    val intent = Intent(this, PersonalFinancialManagementActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
                                 }
                             }
                         }
-                        }
-
                     }
+                }
             } else {
                 Toast.makeText(
                     baseContext, "Wrong information given. Sign up if you don't have an account",

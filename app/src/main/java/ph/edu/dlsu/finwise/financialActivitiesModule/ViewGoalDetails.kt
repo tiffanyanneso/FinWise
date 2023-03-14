@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
@@ -15,6 +16,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalDetailsBinding
 import ph.edu.dlsu.finwise.databinding.DialogDeleteGoalWarningBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
@@ -96,10 +98,10 @@ class ViewGoalDetails : AppCompatActivity() {
 
     private fun checkUser() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
-            if (it.exists())
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            if (it.toObject<Users>()!!.userType == "Parent")
                 binding.btnDelete.visibility = View.GONE
-            else
+            else if (it.toObject<Users>()!!.userType == "Child")
                 binding.btnDelete.visibility = View.VISIBLE
         }
     }
@@ -107,16 +109,16 @@ class ViewGoalDetails : AppCompatActivity() {
     private fun setNavigationBar() {
 
         var navUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(navUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(navUser).get().addOnSuccessListener {
 
             val bottomNavigationViewChild = binding.bottomNav
             val bottomNavigationViewParent = binding.bottomNavParent
 
-            if (it.exists()) {
+            if (it.toObject<Users>()!!.userType == "Parent") {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
                 NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
-            } else  {
+            } else if (it.toObject<Users>()!!.userType == "Child") {
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
                 Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)

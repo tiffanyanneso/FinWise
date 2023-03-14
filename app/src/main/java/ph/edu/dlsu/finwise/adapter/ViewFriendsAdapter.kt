@@ -11,7 +11,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemAddFriendBinding
 import ph.edu.dlsu.finwise.databinding.ItemViewFriendBinding
-import ph.edu.dlsu.finwise.model.ChildUser
+import ph.edu.dlsu.finwise.model.Users
 
 class ViewFriendsAdapter : RecyclerView.Adapter<ViewFriendsAdapter.ViewFriendsViewHolder>{
 
@@ -53,8 +53,8 @@ class ViewFriendsAdapter : RecyclerView.Adapter<ViewFriendsAdapter.ViewFriendsVi
         }
 
         fun bindItem(childID: String){
-            firestore.collection("ChildUser").document(childID).get().addOnSuccessListener {
-                var child = it.toObject<ChildUser>()
+            firestore.collection("Users").document(childID).get().addOnSuccessListener {
+                var child = it.toObject<Users>()
                 itemBinding.tvUsername.text = child?.username
             }
         }

@@ -15,7 +15,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentSendMoneyBinding
-import ph.edu.dlsu.finwise.model.ChildUser
+import ph.edu.dlsu.finwise.model.Users
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -165,10 +165,10 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     private fun initializeDropdown() {
         // TODO: set parent user id curent session
         val parentID = "HeiVgm55YmgBq2DjjRh1OT9bFnP2"
-        firestore.collection("ChildUser").whereEqualTo("parentID", parentID).get()
+        firestore.collection("Users").whereEqualTo("parentID", parentID).get()
             .addOnSuccessListener {documents ->
                 for (d in documents) {
-                    val child = d.toObject<ChildUser>()
+                    val child = d.toObject<Users>()
                     childrenArray.add(child.firstName+" "+child.lastName)
                     childrenIDArray.add(d.id)
                 }

@@ -19,8 +19,8 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalConfirmationBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartGoalInfoBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
-import ph.edu.dlsu.finwise.model.ChildUser
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -203,8 +203,8 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun checkAge() {
-        firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
-            var child = it.toObject<ChildUser>()
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            var child = it.toObject<Users>()
             //compute age
             val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
             val from = LocalDate.now()
@@ -221,13 +221,13 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
     private fun getCurrentUserType() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
-            if (it.exists()) {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            if (it.toObject<Users>()!!.userType == "Parent") {
                 currentUserType = "Parent"
                 childID = intent.extras!!.getString("childID").toString()
                 createdBy  = FirebaseAuth.getInstance().currentUser!!.uid
             }
-            else {
+            else if (it.toObject<Users>()!!.userType == "Child") {
                 currentUserType = "Child"
                 childID = FirebaseAuth.getInstance().currentUser!!.uid
                 createdBy  = FirebaseAuth.getInstance().currentUser!!.uid

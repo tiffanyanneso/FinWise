@@ -13,7 +13,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.*
 import ph.edu.dlsu.finwise.databinding.ActivityProfileBinding
-import ph.edu.dlsu.finwise.model.ChildUser
+import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.profileModule.fragments.ProfileBadgesFragment
 import ph.edu.dlsu.finwise.profileModule.fragments.ProfileCurrentGoalsFragment
 
@@ -94,8 +94,8 @@ class ProfileActivity : AppCompatActivity(){
 
     fun getProfileData() {
 
-        firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener { documentSnapshot ->
-            var child = documentSnapshot.toObject<ChildUser>()
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener { documentSnapshot ->
+            var child = documentSnapshot.toObject<Users>()
 
             //TODO get profile picture
             if (child?.username != null)

@@ -10,6 +10,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityMarkChoreCompletedBinding
+import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
@@ -59,9 +60,9 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
     }
 
     private fun checkUser() {
-        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
             //current user is a parent
-            if (it.exists())
+            if (it.toObject<Users>()!!.userType == "Parent")
                 binding.btnCompleted.visibility = View.GONE
         }
     }

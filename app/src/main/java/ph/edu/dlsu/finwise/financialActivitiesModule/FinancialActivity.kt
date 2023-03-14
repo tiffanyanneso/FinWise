@@ -14,7 +14,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.*
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.*
-import ph.edu.dlsu.finwise.model.ChildUser
+import ph.edu.dlsu.finwise.model.Users
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
@@ -58,8 +58,8 @@ class FinancialActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun checkAge() {
-        firestore.collection("ChildUser").document(childID).get().addOnSuccessListener {
-            var child = it.toObject<ChildUser>()
+        firestore.collection("Users").document(childID).get().addOnSuccessListener {
+            var child = it.toObject<Users>()
             //compute age
             val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
             val from = LocalDate.now()

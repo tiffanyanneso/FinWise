@@ -17,6 +17,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivityRecordExpe
 import ph.edu.dlsu.finwise.financialActivitiesModule.SpendingTransactionsActivity
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.Users
 
 
 class SpendingExpenseListFragment : Fragment() {
@@ -102,10 +103,12 @@ class SpendingExpenseListFragment : Fragment() {
 
     private fun checkUser() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
             //current user is parent
-            if (it.exists())
+            if (it.toObject<Users>()!!.userType == "Parent")
                 binding.btnRecordExpense.visibility = View.GONE
+            else if (it.toObject<Users>()!!.userType == "Child")
+                binding.btnRecordExpense.visibility = View.VISIBLE
         }
     }
 }

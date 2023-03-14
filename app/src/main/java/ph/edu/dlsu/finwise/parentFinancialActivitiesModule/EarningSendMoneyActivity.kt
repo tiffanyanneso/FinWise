@@ -30,6 +30,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEarningSendMoneyBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.Users
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -242,9 +243,9 @@ class EarningSendMoneyActivity : AppCompatActivity() {
     }
 
     private fun checkUser() {
-        firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
             //user is a child
-            if (it.exists())
+            if (it.toObject<Users>()!!.userType == "Child")
                 binding.btnSendMoney.visibility = View.GONE
         }
     }

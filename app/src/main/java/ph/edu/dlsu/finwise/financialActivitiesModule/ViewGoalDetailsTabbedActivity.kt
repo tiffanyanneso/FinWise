@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
@@ -16,6 +17,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalDetailsTabbedBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.goalDetailsFragments.GoalDetailsFragment
 import ph.edu.dlsu.finwise.financialActivitiesModule.goalDetailsFragments.GoalFeedbackFragment
+import ph.edu.dlsu.finwise.model.Users
 
 class ViewGoalDetailsTabbedActivity : AppCompatActivity() {
 
@@ -109,16 +111,16 @@ class ViewGoalDetailsTabbedActivity : AppCompatActivity() {
     private fun setNavigationBar() {
 
         var navUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(navUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(navUser).get().addOnSuccessListener {
 
             val bottomNavigationViewChild = binding.bottomNav
             val bottomNavigationViewParent = binding.bottomNavParent
 
-            if (it.exists()) {
+            if (it.toObject<Users>()!!.userType == "Parent") {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
                 NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
-            } else  {
+            } else if (it.toObject<Users>()!!.userType == "Child"){
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
                 Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)

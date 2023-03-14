@@ -18,8 +18,8 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.*
-import ph.edu.dlsu.finwise.model.ChildUser
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -336,8 +336,8 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun checkAge() {
-        firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
-            var child = it.toObject<ChildUser>()
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            var child = it.toObject<Users>()
             //compute age
             val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
             val from = LocalDate.now()

@@ -23,6 +23,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.Bud
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
@@ -97,9 +98,9 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
                         var budgetItemObject = it.toObject<BudgetItem>()
                         budgetItemCount++
 
-                        firestore.collection("ParentUser").document(budgetItemObject?.createdBy.toString()).get().addOnSuccessListener { user ->
+                        firestore.collection("Users").document(budgetItemObject?.createdBy.toString()).get().addOnSuccessListener { user ->
                             //parent is the one who added the budget item
-                            if (user.exists())
+                            if (it.toObject<Users>()!!.userType == "Parent")
                                 nParent++
 
                         }.continueWith {

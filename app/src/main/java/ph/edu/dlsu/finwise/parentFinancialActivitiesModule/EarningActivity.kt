@@ -11,11 +11,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEarningBinding
+import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningCompletedFragment
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningPendingConfirmationFragment
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningToDoFragment
@@ -82,14 +84,15 @@ class EarningActivity : AppCompatActivity() {
         earningCompletedFragment.arguments = fragmentBundle
 
 
-        firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            var user  = it.toObject<Users>()!!
             //current user is a child
-            if (it.exists()) {
+            if (user.userType == "Child") {
                 adapter.addFragment(earningToDoFragment,"To Do")
                 adapter.addFragment(earningPendingFragment,"Pending")
                 adapter.addFragment(earningCompletedFragment,"Completed")
                 setupTabIconsChild()
-            } else {
+            } else  if (user.userType == "Parent"){
                 adapter.addFragment(earningPendingFragment,"Pending")
                 adapter.addFragment(earningToDoFragment,"To Do")
                 adapter.addFragment(earningCompletedFragment,"Completed")
@@ -115,12 +118,13 @@ class EarningActivity : AppCompatActivity() {
 
     private fun checkUser() {
         val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            var user  = it.toObject<Users>()!!
             //current user is a child
             val bottomNavigationViewChild = binding.bottomNav
             val bottomNavigationViewParent = binding.bottomNavParent
             Toast.makeText(this, ""+module, Toast.LENGTH_SHORT).show()
-            if (it.exists()) {
+            if (user.userType == "Child") {
                 binding.btnAddEarningActivity.visibility = View.GONE
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
@@ -128,7 +132,7 @@ class EarningActivity : AppCompatActivity() {
                 if (module == "pfm")
                     Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
                 else Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
-            } else {
+            } else  if (user.userType == "Parent"){
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
 

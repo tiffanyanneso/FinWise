@@ -25,10 +25,7 @@ import ph.edu.dlsu.finwise.databinding.DialogDoneSpendingBinding
 import ph.edu.dlsu.finwise.databinding.DialogFinishBudgetingBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
 import ph.edu.dlsu.finwise.databinding.DialogWarningCannotWtithdrawBinding
-import ph.edu.dlsu.finwise.model.BudgetItem
-import ph.edu.dlsu.finwise.model.FinancialActivities
-import ph.edu.dlsu.finwise.model.FinancialGoals
-import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -500,14 +497,20 @@ class BudgetActivity : AppCompatActivity() {
 
     private fun checkUser() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            var user  = it.toObject<Users>()!!
             //current user is parent
-            if (it.exists()) {
+            if (user.userType == "Parent") {
                 binding.layoutWithdraw.visibility = View.GONE
                 binding.btnDoneSettingBudget.visibility = View.GONE
                 binding.btnDoneSpending.visibility = View.GONE
                 binding.btnDoneSpending.visibility = View.GONE
                 //binding.linearLayoutText.visibility = View.GONE
+            } else if (user.userType == "Child") {
+                binding.layoutWithdraw.visibility = View.VISIBLE
+                binding.btnDoneSettingBudget.visibility = View.VISIBLE
+                binding.btnDoneSpending.visibility = View.VISIBLE
+                binding.btnDoneSpending.visibility = View.VISIBLE
             }
         }
     }

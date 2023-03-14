@@ -10,7 +10,6 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemLeaderboardRankingBinding
 import ph.edu.dlsu.finwise.databinding.ItemViewFriendBinding
-import ph.edu.dlsu.finwise.model.ChildUser
 
 class LeaderboardRankingAdapter : RecyclerView.Adapter<LeaderboardRankingAdapter.LeaderboardRankingViewHolder> {
 

@@ -22,8 +22,8 @@ import ph.edu.dlsu.finwise.databinding.ActivitySpendingBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.spendingExpenseFragments.SpendingExpenseListFragment
 import ph.edu.dlsu.finwise.financialActivitiesModule.spendingExpenseFragments.SpendingShoppingListFragment
 import ph.edu.dlsu.finwise.model.BudgetItem
-import ph.edu.dlsu.finwise.model.ChildUser
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -141,8 +141,8 @@ class SpendingActivity : AppCompatActivity() {
 
 
         var childID = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ChildUser").document(childID).get().addOnSuccessListener {
-            var child = it.toObject<ChildUser>()
+        firestore.collection("Users").document(childID).get().addOnSuccessListener {
+            var child = it.toObject<Users>()
             //compute age
             val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
             val from = LocalDate.now()

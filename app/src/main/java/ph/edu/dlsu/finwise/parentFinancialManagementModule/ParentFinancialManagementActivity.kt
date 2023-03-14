@@ -244,7 +244,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
 
     private fun loadBalance() {
         val parentID = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ChildUser").whereEqualTo("parentID", parentID)
+        firestore.collection("Users").whereEqualTo("parentID", parentID)
             .get().addOnSuccessListener { document ->
                 childID = document.documents[0].id
                 loadBalanceView()

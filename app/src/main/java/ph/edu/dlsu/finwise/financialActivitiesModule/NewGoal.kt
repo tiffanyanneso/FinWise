@@ -16,7 +16,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityNewGoalBinding
-import ph.edu.dlsu.finwise.model.ChildUser
+import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -113,13 +113,13 @@ class NewGoal : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getCurrentUserType() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
-            if (it.exists()) {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            if (it.toObject<Users>()!!.userType == "Parent"){
                 currentUserType = "Parent"
                 var childIDBundle = intent.extras!!
                 childID = childIDBundle.getString("childID").toString()
             }
-            else {
+            else if (it.toObject<Users>()!!.userType == "Child"){
                 currentUserType = "Child"
                 childID = currentUser
             }
@@ -132,8 +132,8 @@ class NewGoal : AppCompatActivity() {
     private fun initializeDropDownForReasons() {
         var dropdownContent = ArrayList<String>()
 
-        firestore.collection("ChildUser").document(childID).get().addOnSuccessListener {
-            var child = it.toObject<ChildUser>()
+        firestore.collection("Users").document(childID).get().addOnSuccessListener {
+            var child = it.toObject<Users>()
 
             //compute age
             val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")

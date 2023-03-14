@@ -130,8 +130,8 @@ class SpendingFragment : Fragment(){
 //            binding.tvOverspendingPercentage.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
 
 
-            firestore.collection("ChildUser").document(currentUser).get().addOnSuccessListener {
-                var child = it.toObject<ChildUser>()
+            firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+                var child = it.toObject<Users>()
                 //compute age
                 val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
                 val from = LocalDate.now()

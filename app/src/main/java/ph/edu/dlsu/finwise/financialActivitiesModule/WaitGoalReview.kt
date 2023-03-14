@@ -26,7 +26,7 @@ class WaitGoalReview : AppCompatActivity() {
         firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var goal = it.toObject<FinancialGoals>()
             binding.tvGoalName.text = goal?.goalName
-            binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount.toString())
+            binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
             binding.tvActivity.text = goal?.financialActivity
         }
 

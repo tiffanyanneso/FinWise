@@ -15,6 +15,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityParentSettingAgoalBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.UpdateGoalActivity
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
@@ -89,13 +90,13 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
     }
 
     private fun checkUser() {
-        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
             //user is parent
-            if (it.exists()) {
+            if (it.toObject<Users>()!!.userType == "Parent") {
                 binding.btnReviewGoal.visibility = View.VISIBLE
                 binding.btnEditGoal.visibility = View.GONE
             }
-            else {
+            else if (it.toObject<Users>()!!.userType == "Child") {
                 binding.btnReviewGoal.visibility = View.GONE
                 binding.btnEditGoal.visibility = View.VISIBLE
             }

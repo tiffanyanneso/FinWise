@@ -22,6 +22,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityRecordEarningSaleBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.NewEarningActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -132,16 +133,16 @@ class RecordEarningSaleActivity : AppCompatActivity() {
     private fun setNavigationBar() {
 
         var navUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(navUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(navUser).get().addOnSuccessListener {
 
             val bottomNavigationViewChild = binding.bottomNav
             val bottomNavigationViewParent = binding.bottomNavParent
 
-            if (it.exists()) {
+            if (it.toObject<Users>()!!.userType == "Parent"){
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
                 NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
-            } else  {
+            } else if (it.toObject<Users>()!!.userType == "Child"){
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
                 Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)

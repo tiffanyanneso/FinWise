@@ -26,6 +26,7 @@ import ph.edu.dlsu.finwise.databinding.DialogWarningCannotWtithdrawBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -294,16 +295,16 @@ class ViewGoalActivity : AppCompatActivity() {
     private fun setNavigationBar() {
 
         var navUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(navUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(navUser).get().addOnSuccessListener {
 
         val bottomNavigationViewChild = binding.bottomNav
         val bottomNavigationViewParent = binding.bottomNavParent
 
-        if (it.exists()) {
+        if (it.toObject<Users>()!!.userType == "Parent") {
             bottomNavigationViewChild.visibility = View.GONE
             bottomNavigationViewParent.visibility = View.VISIBLE
             NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
-        } else  {
+        } else if (it.toObject<Users>()!!.userType == "Child") {
             bottomNavigationViewChild.visibility = View.VISIBLE
             bottomNavigationViewParent.visibility = View.GONE
             Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
@@ -332,9 +333,9 @@ class ViewGoalActivity : AppCompatActivity() {
 
     private fun checkUser() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(currentUser).get().addOnSuccessListener {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
             //current user is parent
-            if (it.exists()) {
+            if (it.toObject<Users>()!!.userType == "Parent") {
 //                binding.layoutBtnDepositWithdraw.visibility = View.GONE
                 binding.btnWithdraw.isEnabled = false
                 binding.btnWithdraw.isClickable = false
@@ -344,7 +345,7 @@ class ViewGoalActivity : AppCompatActivity() {
                 binding.btnDeposit.isClickable = false
                 binding.btnDeposit.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_grey))
             }
-            else {
+            else if (it.toObject<Users>()!!.userType == "Child"){
                 binding.btnWithdraw.isEnabled = true
                 binding.btnWithdraw.isClickable = true
                 binding.btnWithdraw.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_green))

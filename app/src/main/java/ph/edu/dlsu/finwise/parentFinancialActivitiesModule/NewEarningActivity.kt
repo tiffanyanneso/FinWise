@@ -19,9 +19,9 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityNewEarningBinding
-import ph.edu.dlsu.finwise.model.ChildUser
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -126,8 +126,8 @@ class NewEarningActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeDropDowns() {
         var dropdownContent = ArrayList<String>()
-        firestore.collection("ChildUser").document(childID).get().addOnSuccessListener {
-            var child = it.toObject<ChildUser>()
+        firestore.collection("Users").document(childID).get().addOnSuccessListener {
+            var child = it.toObject<Users>()
 
             //compute age
             val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
