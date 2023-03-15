@@ -130,7 +130,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         //TODO: Update data based on user
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
         Toast.makeText(context, "" + childID, Toast.LENGTH_SHORT).show()
-        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
+        firestore.collection("Transactions").whereEqualTo("userID", childID)
             .get().addOnSuccessListener { transactionsSnapshot ->
                 for (document in transactionsSnapshot) {
                     val transaction = document.toObject<Transactions>()

@@ -6,8 +6,11 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.ktx.firestore
@@ -36,6 +39,7 @@ class SavingsWithdrawActivity : AppCompatActivity() {
     private lateinit var bundle:Bundle
 
     private var savedAmount = 0.00F
+    private var walletBalance = 0.00F
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -47,8 +51,8 @@ class SavingsWithdrawActivity : AppCompatActivity() {
         setFields()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
-        binding.etDate.setOnClickListener {
-            showCalendar()
+        binding.dropPaymentType.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            getAvailableBalance()
         }
 
         binding.btnNext.setOnClickListener {
@@ -64,7 +68,7 @@ class SavingsWithdrawActivity : AppCompatActivity() {
                 sendBundle.putString("budgetingActivityID", budgetingActivityID)
                 sendBundle.putString("spendingActivityID", spendingActivityID)
                 sendBundle.putFloat("savedAmount", savedAmount)
-
+                sendBundle.putString("paymentType", binding.dropPaymentType.text.toString())
 
                 var confirmWithdraw = Intent (this, FinancialActivityConfirmWithdraw::class.java)
                 confirmWithdraw.putExtras(sendBundle)
@@ -73,7 +77,7 @@ class SavingsWithdrawActivity : AppCompatActivity() {
             }
         }
 
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             var bundle = Bundle()
             bundle.putString("financialGoalID",financialGoalID)
@@ -84,6 +88,73 @@ class SavingsWithdrawActivity : AppCompatActivity() {
             this.startActivity(goToGoal)
         }
     }
+
+    private fun getAvailableBalance() {
+        walletBalance = 0.00F
+        var paymentType = binding.dropPaymentType.text.toString()
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereEqualTo("paymentType", paymentType).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
+            for (transaction in results) {
+                var transactionObject = transaction.toObject<Transactions>()
+
+                if (transactionObject.transactionType == "Deposit")
+                    walletBalance += transactionObject.amount!!
+
+                else if (transactionObject.transactionType == "Withdrawal")
+                    walletBalance -= transactionObject.amount!!
+            }
+            binding.tvSavings.text = "You currently have ₱ ${DecimalFormat("#,##0.00").format(walletBalance)} in this savings wallet"
+        }
+    }
+
+
+    private fun setFields() {
+        bundle = intent.extras!!
+        financialGoalID = bundle.getString("financialGoalID").toString()
+        savingActivityID = bundle.getString("savingActivityID").toString()
+        budgetingActivityID = bundle.getString("budgetingActivityID").toString()
+        spendingActivityID = bundle.getString("spendingActivityID").toString()
+        binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+
+        //savedAmount = bundle.getFloat("savedAmount")
+        //binding.pbProgress.progress = bundle.getInt("progress")
+        savedAmount = 0.00F
+
+        binding.etDate.setOnClickListener {
+            showCalendar()
+        }
+
+        getGoalInfo()
+        firestore.collection("FinancialActivities").document(savingActivityID).get().addOnSuccessListener {
+            var saving = it.toObject<FinancialActivities>()
+            if (saving?.status == "Completed") {
+                binding.tvProgress.visibility = View.GONE
+                binding.tvProgressAmount.visibility = View.GONE
+                binding.pbProgress.visibility = View.GONE
+            } else {
+                binding.tvProgress.visibility = View.VISIBLE
+                binding.tvProgressAmount.visibility = View.VISIBLE
+                binding.pbProgress.visibility = View.VISIBLE
+            }
+        }
+
+        val paymentTypeDropdown = ArrayAdapter (this, R.layout.list_item, resources.getStringArray(R.array.payment_type))
+        binding.dropPaymentType.setAdapter(paymentTypeDropdown)
+    }
+
+    private fun getGoalInfo() {
+        firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
+            var financialGoal = it.toObject<FinancialGoals>()!!
+            binding.tvGoalName.text = financialGoal.goalName
+            binding.pbProgress.progress = (financialGoal.currentSavings!! / financialGoal.targetAmount!! * 100).toInt()
+            binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(financialGoal.currentSavings!!) +
+                    " / ₱ " + DecimalFormat("#,##0.00").format(financialGoal?.targetAmount)
+            savedAmount = financialGoal.currentSavings!!
+            binding.tvSavings.text = "You currently have ₱ ${DecimalFormat("#,##0.00").format(financialGoal.currentSavings!!)} in this savings wallet"
+
+        }
+
+    }
+
 
     private fun filledUp(): Boolean{
         var valid  = true
@@ -112,8 +183,8 @@ class SavingsWithdrawActivity : AppCompatActivity() {
 
     private fun validAmount():Boolean {
         //trying to deposit more than their current balance
-        println("print " + savedAmount)
-        if (binding.etAmount.text.toString().toFloat() > savedAmount) {
+        println("print " + walletBalance)
+        if (binding.etAmount.text.toString().toFloat() > walletBalance) {
             binding.containerAmount.helperText = "You cannot withdraw more than your savings."
             return false
         }
@@ -141,54 +212,5 @@ class SavingsWithdrawActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
-    }
-
-    private fun setFields() {
-        bundle = intent.extras!!
-        financialGoalID = bundle.getString("financialGoalID").toString()
-        savingActivityID = bundle.getString("savingActivityID").toString()
-        budgetingActivityID = bundle.getString("budgetingActivityID").toString()
-        spendingActivityID = bundle.getString("spendingActivityID").toString()
-        binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
-
-        //savedAmount = bundle.getFloat("savedAmount")
-        //binding.pbProgress.progress = bundle.getInt("progress")
-        savedAmount = 0.00F
-
-        firestore.collection("FinancialActivities").document(savingActivityID).get().addOnSuccessListener {
-            var saving = it.toObject<FinancialActivities>()
-            if (saving?.status == "Completed") {
-                binding.tvProgress.visibility = View.GONE
-                binding.tvProgressAmount.visibility = View.GONE
-                binding.pbProgress.visibility = View.GONE
-            } else {
-                binding.tvProgress.visibility = View.VISIBLE
-                binding.tvProgressAmount.visibility = View.VISIBLE
-                binding.pbProgress.visibility = View.VISIBLE
-            }
-        }
-
-        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
-            for (transaction in results) {
-                var transactionObject = transaction.toObject<Transactions>()
-
-                if (transactionObject.transactionType == "Deposit")
-                    savedAmount += transactionObject.amount!!
-
-                else if (transactionObject.transactionType == "Withdrawal")
-                    savedAmount -= transactionObject.amount!!
-            }
-        }.continueWith {
-            firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
-                var financialGoal = it.toObject<FinancialGoals>()
-                binding.tvGoalName.text = financialGoal?.goalName
-                binding.pbProgress.progress = (savedAmount / financialGoal?.targetAmount!! * 100).toInt()
-                binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(savedAmount) +
-                        " / ₱ " + DecimalFormat("#,##0.00").format(financialGoal?.targetAmount)
-                binding.tvSavings.text = "You currently have ₱ ${DecimalFormat("#,##0.00").format(savedAmount)} in your savings"
-            }
-        }
-
-
     }
 }

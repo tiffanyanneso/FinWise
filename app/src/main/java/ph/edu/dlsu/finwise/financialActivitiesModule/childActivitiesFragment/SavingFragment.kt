@@ -137,7 +137,7 @@ class SavingFragment : Fragment() {
         var savedAmount = 0.00F
         binding.tvGoalSavings.text = "₱ " + DecimalFormat("#,##0.00").format(savedAmount)
 
-        firestore.collection("Transactions").whereEqualTo("createdBy", currentUser).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
+        firestore.collection("Transactions").whereEqualTo("userID", currentUser).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
             for (transaction in results) {
                var transactionObject = transaction.toObject<Transactions>()
                if (transactionObject?.transactionType == "Deposit")

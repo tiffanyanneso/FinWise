@@ -6,6 +6,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
@@ -57,10 +59,6 @@ class SavingsDepositActivity : AppCompatActivity() {
         setFields()
         loadBackButton()
 
-        binding.etDate.setOnClickListener {
-            showCalendar()
-        }
-
 
         binding.btnNext.setOnClickListener {
             if (filledUp() && validAmount()) {
@@ -75,6 +73,7 @@ class SavingsDepositActivity : AppCompatActivity() {
                 sendBundle.putString("savingActivityID", savingActivityID)
                 sendBundle.putString("budgetingActivityID", budgetingActivityID)
                 sendBundle.putString("spendingActivityID", spendingActivityID)
+                sendBundle.putString("paymentType", binding.dropPaymentType.text.toString())
 
                 var goToDepositConfirmation = Intent(context, FinancialActivityConfirmDeposit::class.java)
                 goToDepositConfirmation.putExtras(sendBundle)
@@ -85,6 +84,14 @@ class SavingsDepositActivity : AppCompatActivity() {
     }
 
     private fun setFields() {
+        binding.dropPaymentType.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            changeDisplayedBalance()
+        }
+
+        binding.etDate.setOnClickListener {
+            showCalendar()
+        }
+
         bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
@@ -94,6 +101,9 @@ class SavingsDepositActivity : AppCompatActivity() {
         binding.pbProgress.progress = bundle.getInt("progress")
         binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
 
+        val paymentTypeDropdown = ArrayAdapter (this, R.layout.list_item, resources.getStringArray(R.array.payment_type))
+        binding.dropPaymentType.setAdapter(paymentTypeDropdown)
+
 
         firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
@@ -101,12 +111,17 @@ class SavingsDepositActivity : AppCompatActivity() {
             binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(bundle.getFloat("savedAmount")) +
                     " / ₱ " + DecimalFormat("#,##0.00").format(financialGoal?.targetAmount)
         }
+    }
 
-        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener {
+    private fun changeDisplayedBalance() {
+        var balanceFrom = binding.dropPaymentType.text.toString()
+
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", balanceFrom).get().addOnSuccessListener {
             var wallet = it.documents[0].toObject<ChildWallet>()
             walletBalance = wallet?.currentBalance!!
-            binding.tvBalance.text = "You currently have ₱${DecimalFormat("#,##0.00").format(walletBalance)} in your wallet"
+            binding.tvBalance.text = "You currently have ₱${DecimalFormat("#,##0.00").format(wallet?.currentBalance)} in this wallet"
         }
+
     }
 
     private fun validAmount():Boolean {

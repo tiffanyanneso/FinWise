@@ -7,9 +7,10 @@ import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.databinding.ActivityConfirmWithdrawBinding
+import ph.edu.dlsu.finwise.databinding.ActivityFinancialConfirmWithdrawBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
@@ -20,7 +21,7 @@ import kotlin.math.abs
 
 class FinancialActivityConfirmWithdraw : AppCompatActivity() {
 
-    private lateinit var binding: ActivityConfirmWithdrawBinding
+    private lateinit var binding: ActivityFinancialConfirmWithdrawBinding
     private var firestore = Firebase.firestore
 
     private lateinit var bundle:Bundle
@@ -29,6 +30,8 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
     private lateinit var savingActivityID:String
     private lateinit var budgetingActivityID:String
     private lateinit var spendingActivityID:String
+
+    private lateinit var paymentType:String
 
     private var savedAmount = 0.00F
 
@@ -39,7 +42,7 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityConfirmWithdrawBinding.inflate(layoutInflater)
+        binding = ActivityFinancialConfirmWithdrawBinding.inflate(layoutInflater)
         setContentView(binding.root)
         bundle = intent.extras!!
 
@@ -51,41 +54,36 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
                 "transactionType" to "Withdrawal",
                 "category" to "Goal",
                 "date" to bundle.getSerializable("date"),
-                "createdBy" to currentUser,
+                "userID" to currentUser,
                 "amount" to bundle.getFloat("amount"),
-                "financialActivityID" to bundle.getString("savingActivityID")
+                "financialActivityID" to bundle.getString("savingActivityID"),
+                "paymentType" to bundle.getString("paymentType")
             )
             firestore.collection("Transactions").add(withdrawal).addOnSuccessListener {
-                firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
-                    // if not goal is not completed, adjust the savings
-                    var goal = it.toObject<FinancialGoals>()
-                    if (goal?.status != "Completed") {
-                        var updatedSavings = goal?.currentSavings!! - bundle.getFloat("amount")
-                        firestore.collection("FinancialGoals").document(financialGoalID).update("currentSavings", updatedSavings).addOnSuccessListener {
-                            adjustUserBalance()
-                            var bundle = Bundle()
-                            //bundle.putString("decisionMakingActivityID", decisionMakingActivityID)
-                            bundle.putString("financialGoalID", financialGoalID)
-                            var saving = Intent(this, ViewGoalActivity::class.java)
-                            saving.putExtras(bundle)
-                            saving.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            this.startActivity(saving)
-                            finish()
-                        }
-                    }
-                    //withdraw done when child is already in budgeting/spending
-                    else {
-                        var sendBundle = Bundle()
-                        sendBundle.putString("savingActivityID", savingActivityID)
-                        sendBundle.putString("budgetingActivityID", budgetingActivityID)
-                        sendBundle.putString("spendingActivityID", spendingActivityID)
+                adjustUserBalance()
+                var sendBundle = Bundle()
+                sendBundle.putString("savingActivityID", savingActivityID)
+                sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                sendBundle.putString("spendingActivityID", spendingActivityID)
+                sendBundle.putString("financialGoalID", financialGoalID)
+
+                firestore.collection("FinancialActivities").document(savingActivityID).get().addOnSuccessListener {
+                    if (it.toObject<FinancialActivities>()!!.status != "Completed") {
+                        var saving = Intent(this, ViewGoalActivity::class.java)
+                        saving.putExtras(bundle)
+                        this.startActivity(saving)
+                        finish()
+                    } else {
                         var budgeting = Intent(this, BudgetActivity::class.java)
                         budgeting.putExtras(sendBundle)
                         startActivity(budgeting)
+                        finish()
                     }
                 }
             }
+
         }
+
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
@@ -113,18 +111,30 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
         withdrawAmount = bundle.getFloat("amount")
         binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("date"))
         binding.tvUpdatedGoalSavings.text = "₱ " +  DecimalFormat("#,##0.00").format((bundle.getFloat("savedAmount") - bundle.getFloat("amount")))
-        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener {
+
+        paymentType = bundle.getString("paymentType").toString()
+        binding.tvWalletType.text = paymentType
+        binding.tvUpdatedGoalSavings.text = "₱ " +  DecimalFormat("#,##0.00").format((bundle.getFloat("savedAmount") - bundle.getFloat("amount")))
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", paymentType).get().addOnSuccessListener {
             var wallet = it.documents[0].toObject<ChildWallet>()
             binding.tvWalletBalance.text = "₱ " +  DecimalFormat("#,##0.00").format((wallet?.currentBalance!!.toFloat() + bundle.getFloat("amount")))
         }
     }
 
     private fun adjustUserBalance() {
-        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener { result ->
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", paymentType).get().addOnSuccessListener { result ->
             var walletID = result.documents[0].id
 
             var adjustedBalance = abs(withdrawAmount?.toDouble()!!)
             firestore.collection("ChildWallet").document(walletID).update("currentBalance", FieldValue.increment(adjustedBalance))
+        }.continueWith {
+            firestore.collection("FinancialActivities").document(savingActivityID).get().addOnSuccessListener {
+                var finact = it.toObject<FinancialActivities>()!!
+                if (finact.status != "Completed") {
+                    var adjustedSavings = -abs(withdrawAmount?.toDouble()!!)
+                    firestore.collection("FinancialGoals").document(finact.financialGoalID!!).update("currentSavings", FieldValue.increment(adjustedSavings))
+                }
+            }
         }
     }
 }

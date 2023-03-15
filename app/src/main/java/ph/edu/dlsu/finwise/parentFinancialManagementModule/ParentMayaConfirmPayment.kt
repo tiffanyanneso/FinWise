@@ -144,7 +144,6 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
 
     private fun addTransaction() {
         val transaction = hashMapOf(
-            //TODO: add childID, createdBy
             "childName" to name,
             "transactionName" to "Sending Money",
             "category" to "Sending Money to Child",

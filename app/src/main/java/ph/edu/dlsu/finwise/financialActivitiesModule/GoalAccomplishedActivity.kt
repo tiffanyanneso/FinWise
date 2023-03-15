@@ -93,7 +93,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
                     "transactionType" to "Withdrawal",
                     "category" to "Goal",
                     "date" to Timestamp.now(),
-                    "createdBy" to currentUser,
+                    "userID" to currentUser,
                     "amount" to goal.toObject<FinancialGoals>()?.currentSavings!!,
                     "financialActivityID" to savingActivityID
                 )

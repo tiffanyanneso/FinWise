@@ -197,12 +197,11 @@ class MayaConfirmPayment : AppCompatActivity() {
         val childID  = FirebaseAuth.getInstance().currentUser!!.uid
 
         val transaction = hashMapOf(
-            //TODO: add childID, createdBy
             "transactionName" to name,
             "transactionType" to "Expense (Maya)",
             "category" to category,
             "date" to bundle!!.getSerializable("date"),
-            "createdBy" to childID,
+            "userID" to childID,
             "amount" to amount.toFloat(),
             "merchant" to merchant,
             "phoneNumber" to phone

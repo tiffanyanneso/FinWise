@@ -152,6 +152,27 @@
                 />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tv_wallet_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:text="Wallet Type"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            />
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linear_layout_1"
+            app:dividerColor="@color/light_green"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -163,7 +184,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:text="Updated Wallet Balance"
+                android:text="Updated Balance"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 />
@@ -191,7 +212,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textStyle="bold"
-                android:text="Remaining Goal Savings"
+                android:text="Updated Goal Savings"
                 android:textSize="16sp"
                 android:textColor="@color/black"
                 />
@@ -201,12 +222,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:text="Remaining Savings"
+                android:text="Updated Savings"
                 android:textSize="16sp"
                 android:gravity="end"
                 android:textColor="@color/black"
                 />
         </LinearLayout>
+
+
 
 
     </LinearLayout>

@@ -109,19 +109,6 @@
         android:textColor="@color/black"
         android:layout_marginStart="20dp"/>
 
-    <ProgressBar
-        android:id="@+id/pb_progress"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="370dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_progress_amount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="10dp"
-        android:scaleY="4"
-        android:max="100"
-        />
-
     <!--    <TextView-->
     <!--        android:id="@+id/tv_amount"-->
     <!--        android:layout_width="match_parent"-->
@@ -153,6 +140,38 @@
     <!--        android:layout_marginEnd="20dp"-->
     <!--        />-->
 
+    <ProgressBar
+        android:id="@+id/pb_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:max="100"
+        android:scaleY="4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_progress_amount" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/container_payment_type"
+        app:layout_constraintTop_toBottomOf="@+id/pb_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Fund Source"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_marginHorizontal="20dp"
+        android:paddingTop="10dp"
+        app:startIconDrawable="@drawable/baseline_money_24">
+
+        <AutoCompleteTextView
+            android:id="@+id/drop_payment_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/container_amount"
         android:layout_width="match_parent"
@@ -160,7 +179,7 @@
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pb_progress"
+        app:layout_constraintTop_toBottomOf="@+id/container_payment_type"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:helperText=""
@@ -188,7 +207,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="16dp"
         android:layout_marginTop="5dp"
-        android:text="You currently have ₱XXX.XX"
+        android:text="You currently have ₱ 0.00 in this savings wallet"
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         />

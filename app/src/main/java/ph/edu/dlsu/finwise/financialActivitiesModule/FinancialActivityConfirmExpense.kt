@@ -45,20 +45,17 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
 
         setFields()
 
-        var sendBundle = Bundle()
-        sendBundle.putString("budgetingActivityID", budgetingActivityID)
-        sendBundle.putString("budgetItemID", budgetItemID)
-
         binding.btnConfirm.setOnClickListener {
             //withdraw money from savings to wallet
             var withdrawal = hashMapOf(
-                "createdBy" to currentUser,
+                "userID" to currentUser,
                 "transactionType" to "Withdrawal",
                 "transactionName" to bundle.getString("expenseName"),
                 "amount" to bundle.getFloat("amount"),
                 "category" to bundle.getString("budgetItemID"),
                 "financialActivityID" to bundle.getString("savingActivityID"),
-                "date" to bundle.getSerializable("date")
+                "date" to bundle.getSerializable("date"),
+                "paymentType" to bundle.getString("paymentType")
             )
 
             firestore.collection("Transactions").add(withdrawal)
@@ -69,25 +66,25 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
 
                 //from wallet balance, record expense
                 var expense = hashMapOf(
-                    "createdBy" to currentUser,
+                    "userID" to currentUser,
                     "transactionType" to "Expense",
                     "transactionName" to bundle.getString("expenseName"),
                     "amount" to bundle.getFloat("amount"),
                     "category" to categoryName,
                     "budgetItemID" to bundle.getString("budgetItemID"),
                     "financialActivityID" to bundle.getString("spendingActivityID"),
-                    "date" to bundle.getSerializable("date")
+                    "date" to bundle.getSerializable("date"),
+                    "paymentType" to bundle.getString("paymentType")
                 )
 
                 firestore.collection("Transactions").add(expense).addOnSuccessListener {
                     var spending = Intent(this, SpendingActivity::class.java)
+                    var sendBundle = Bundle()
                     sendBundle.putString("budgetingActivityID", budgetingActivityID)
                     sendBundle.putString("budgetItemID", budgetItemID)
                     spending.putExtras(sendBundle)
                     this.startActivity(spending)
                     finish()
-                }.continueWith {
-                    adjustUserBalance()
                 }
 
                 //check if bundle contains shoppingListItemID, meaning that the expense was from a shopping list and need to update the status
@@ -114,18 +111,6 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
         firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
             var budgetItem = it.toObject<BudgetItem>()
             binding.tvCategory.text = budgetItem?.budgetItemName.toString()
-        }
-    }
-
-    private fun adjustUserBalance() {
-        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener { documents -> lateinit var id: String
-            for (document in documents) {
-                id = document.id
-            }
-            var adjustedBalance = amount?.toDouble()
-                adjustedBalance = -abs(adjustedBalance!!)
-
-            firestore.collection("ChildWallet").document(id).update("currentBalance", FieldValue.increment(adjustedBalance))
         }
     }
 

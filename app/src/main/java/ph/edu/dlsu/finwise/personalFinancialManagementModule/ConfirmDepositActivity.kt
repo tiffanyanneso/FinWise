@@ -108,12 +108,11 @@ class ConfirmDepositActivity : AppCompatActivity() {
 
             val goalName = "Deposit to '$goal'"
             val transaction = hashMapOf(
-                //TODO: add childID, createdBy
                 "transactionName" to "Deposit to \'$goalName\'",
                 "transactionType" to "Deposit",
                 "date" to date ,
                 "category" to "Goal",
-                "createdBy" to childID,
+                "userID" to childID,
                 "financialActivityID" to savingActivityID,
                 "amount" to amount,
                 "paymentType" to paymentType

@@ -105,7 +105,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     private fun loadPieChart() {
         //TODO: Update data based on user
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
+        firestore.collection("Transactions").whereEqualTo("userID", childID)
             .get().addOnSuccessListener { transactionsSnapshot ->
                 for (document in transactionsSnapshot) {
                     val transaction = document.toObject<Transactions>()

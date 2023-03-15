@@ -120,7 +120,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeBalanceLineGraph() {
-        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
+        firestore.collection("Transactions").whereEqualTo("userID", childID)
             .get().addOnSuccessListener { documents ->
                 initializeTransactions(documents)
                 sortedDate = getDatesOfTransactions()

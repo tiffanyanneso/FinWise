@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
@@ -14,6 +15,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialRecordExpenseBinding
 import ph.edu.dlsu.finwise.model.ShoppingListItem
 import java.text.DecimalFormat
@@ -33,23 +35,15 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
 
     private var expenseCategories = ArrayList<String>()
 
+    private lateinit var bundle:Bundle
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialRecordExpenseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Hides actionbar,
-        // and initializes the navbar
-        supportActionBar?.hide()
-        Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_goal)
-
-
-        var bundle: Bundle = intent.extras!!
-        savingActivityID = bundle.getString("savingActivityID").toString()
-        spendingActivityID = bundle.getString("spendingActivityID").toString()
-        budgetItemID = bundle.getString("budgetItemID").toString()
-        binding.etTransactionDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+        setFields()
 
         if (bundle.containsKey("shoppingListItem")) {
             shoppingListItemID = bundle.getString("shoppingListItem")
@@ -61,10 +55,6 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
         binding.tvRemainingBudget.text = "You currently have ₱${DecimalFormat("#,##0.00").format(bundle.getFloat("remainingBudget"))} left in budget AND___ LEFT IN SAVINGS"
 
 
-        binding.etTransactionDate.setOnClickListener{
-            showCalendar()
-        }
-
         binding.btnNext.setOnClickListener {
             var sendBundle = Bundle()
             sendBundle.putString("expenseName", binding.etExpenseName.text.toString())
@@ -73,6 +63,7 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
             sendBundle.putString("savingActivityID", savingActivityID)
             sendBundle.putString("spendingActivityID", spendingActivityID)
             sendBundle.putString("budgetItemID", budgetItemID)
+            sendBundle.putString("paymentType", binding.dropPaymentType.text.toString())
             if (bundle.containsKey("shoppingListItem"))
                 sendBundle.putString("shoppingListItemID", shoppingListItemID)
             var confirmSpending = Intent(this, FinancialActivityConfirmExpense::class.java)
@@ -83,6 +74,35 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
         binding.btnCancel.setOnClickListener {
            //TODO: CANCEL BUTTON
         }
+    }
+
+    private fun changeDisplayedSavings() {
+
+    }
+
+    private fun setFields() {
+        bundle = intent.extras!!
+        savingActivityID = bundle.getString("savingActivityID").toString()
+        spendingActivityID = bundle.getString("spendingActivityID").toString()
+        budgetItemID = bundle.getString("budgetItemID").toString()
+        binding.etTransactionDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+
+        binding.dropPaymentType.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            changeDisplayedSavings()
+        }
+
+        // Hides actionbar, and initializes the navbar
+        supportActionBar?.hide()
+        Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_goal)
+
+
+        binding.etTransactionDate.setOnClickListener{
+            showCalendar()
+        }
+
+        val paymentTypeDropdown = ArrayAdapter (this, R.layout.list_item, resources.getStringArray(R.array.payment_type))
+        binding.dropPaymentType.setAdapter(paymentTypeDropdown)
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

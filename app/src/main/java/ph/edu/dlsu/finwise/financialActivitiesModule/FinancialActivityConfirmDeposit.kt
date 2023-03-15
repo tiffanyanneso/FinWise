@@ -39,6 +39,9 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
     private lateinit var budgetingActivityID:String
     private lateinit var spendingActivityID:String
 
+    private lateinit var paymentType:String
+
+
     private lateinit var bundle:Bundle
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
@@ -61,9 +64,10 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 "transactionType" to "Deposit",
                 "category" to "Goal",
                 "date" to bundle.getSerializable("date"),
-                "createdBy" to currentUser,
+                "userID" to currentUser,
                 "amount" to bundle.getFloat("amount"),
-                "financialActivityID" to bundle.getString("savingActivityID")
+                "financialActivityID" to bundle.getString("savingActivityID"),
+                "paymentType" to paymentType
             )
 
             adjustUserBalance()
@@ -94,16 +98,19 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         budgetingActivityID = bundle.getString("budgetingActivityID").toString()
         spendingActivityID = bundle.getString("spendingActivityID").toString()
 
-        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener {
+        paymentType = bundle.getString("paymentType").toString()
+        binding.tvWalletType.text = paymentType
+        binding.tvUpdatedGoalSavings.text = "₱ " +  DecimalFormat("#,##0.00").format((bundle.getFloat("savedAmount") + bundle.getFloat("amount")))
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", paymentType).get().addOnSuccessListener {
             var wallet = it.documents[0].toObject<ChildWallet>()
             binding.tvWalletBalance.text = "₱ " +  DecimalFormat("#,##0.00").format((wallet?.currentBalance!!.toFloat() - bundle.getFloat("amount")))
         }
 
-        binding.tvUpdatedGoalSavings.text = "₱ " +  DecimalFormat("#,##0.00").format((bundle.getFloat("savedAmount") + bundle.getFloat("amount")))
+
     }
 
     private fun adjustUserBalance() {
-        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener { result ->
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", paymentType).get().addOnSuccessListener { result ->
             var walletID = result.documents[0].id
 
             var adjustedBalance = -abs(amount?.toDouble()!!)
