@@ -63,15 +63,17 @@ class EarningPendingConfirmationAdapter : RecyclerView.Adapter<EarningPendingCon
                 itemBinding.tvSource.text = earning?.depositTo
                 itemBinding.tvEarningActivityId.text = earningID
                 itemBinding.tvChildId.text = earning?.childID
+                itemBinding.tvPaymentType.text = earning?.paymentType
                 //itemBinding.tvFinishDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.dateCompleted!!.toDate())
             }
         }
 
         override fun onClick(p0: View?) {
-            var confirm = Intent (context, EarningSendMoneyActivity::class.java)
-            var bundle = Bundle()
+            val confirm = Intent (context, EarningSendMoneyActivity::class.java)
+            val bundle = Bundle()
             bundle.putString("earningActivityID", itemBinding.tvEarningActivityId.text.toString())
             bundle.putString("childID", itemBinding.tvChildId.text.toString())
+            bundle.putString("paymentType", itemBinding.tvPaymentType.text.toString())
             confirm.putExtras(bundle)
             confirm.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(confirm)

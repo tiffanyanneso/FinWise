@@ -25,6 +25,7 @@ class EarningSellingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEarningSellingBinding
 
     private lateinit var childID:String
+    private lateinit var module:String
 
     private var firestore = Firebase.firestore
 
@@ -41,6 +42,8 @@ class EarningSellingActivity : AppCompatActivity() {
 
         val bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
+        module = bundle.getString("module").toString()
+
 
         getSales()
 
@@ -90,7 +93,9 @@ class EarningSellingActivity : AppCompatActivity() {
             } else if (it.toObject<Users>()!!.userType == "Child") {
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
-                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+                if (module == "finact")
+                    Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+                else  Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
             }
         }
     }

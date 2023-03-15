@@ -56,7 +56,6 @@ class EarningMenuActivity : AppCompatActivity() {
     }
 
     private fun setNavigationBar() {
-
         var navUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("Users").document(navUser).get().addOnSuccessListener {
 
@@ -70,9 +69,9 @@ class EarningMenuActivity : AppCompatActivity() {
             } else if (it.toObject<Users>()!!.userType == "Child") {
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
-                    if (module == "finact")
-                        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
-                    else  Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+                if (module == "finact")
+                    Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+                else  Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
 
 
             }

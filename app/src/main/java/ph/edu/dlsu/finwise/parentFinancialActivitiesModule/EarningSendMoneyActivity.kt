@@ -46,6 +46,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
     private lateinit var earningActivityID:String
     private lateinit var savingActivityID:String
     private lateinit var childID:String
+    private lateinit var paymentType:String
 
     private lateinit var source:String
 
@@ -67,6 +68,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
         val bundle = intent.extras!!
         earningActivityID = bundle.getString("earningActivityID").toString()
         childID = bundle.getString("childID").toString()
+        paymentType = bundle.getString("paymentType").toString()
         checkUser()
         loadBackButton()
 
@@ -79,18 +81,19 @@ class EarningSendMoneyActivity : AppCompatActivity() {
 
     private fun loadEarningActivityText() {
         firestore.collection("EarningActivities").document(earningActivityID).get().addOnSuccessListener {
-            var earning = it.toObject<EarningActivityModel>()
+            val earning = it.toObject<EarningActivityModel>()
             binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.targetDate!!.toDate())
-            binding.tvFinishDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.dateCompleted!!.toDate())
-            binding.tvActivity.text = earning?.activityName
-            binding.tvDuration.text = earning?.requiredTime.toString() + " Minutes"
+            binding.tvFinishDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning.dateCompleted!!.toDate())
+            binding.tvActivity.text = earning.activityName
+            binding.tvDuration.text = earning.requiredTime.toString() + " Minutes"
             binding.tvAmountEarned.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
-            amount = earning?.amount!!.toFloat()
-            binding.tvStatus.text = earning?.status
-            binding.tvSource.text = earning?.depositTo
-            source = earning?.depositTo!!
+            amount = earning.amount!!.toFloat()
+            binding.tvStatus.text = earning.status
+            binding.tvSource.text = earning.depositTo
+            binding.tvPaymentType.text = earning.paymentType
+            source = earning.depositTo!!
             if (source == "Financial Goal")
-                savingActivityID = earning?.savingActivityID!!
+                savingActivityID = earning.savingActivityID!!
         }
     }
 
@@ -117,7 +120,11 @@ class EarningSendMoneyActivity : AppCompatActivity() {
 
     private fun loadSendMoneyButton() {
         binding.btnSendMoney.setOnClickListener {
-            payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
+            if (paymentType == "Maya")
+                payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
+            else if (paymentType == "Cash")
+                logTransactions()
+
         }
     }
 
@@ -195,7 +202,8 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             "transactionType" to "Income",
             "category" to "Rewards",
             "date" to Timestamp.now(),
-            "amount" to amount
+            "amount" to amount,
+            "paymentType" to paymentType
         )
         firestore.collection("Transactions").add(income).addOnSuccessListener {
             //double
@@ -209,14 +217,17 @@ class EarningSendMoneyActivity : AppCompatActivity() {
 
     private fun makeTransactionsGoal() {
         println("print goal")
-        var income = hashMapOf(
+        val income = hashMapOf(
             "createdBy" to childID,
             "transactionName" to binding.tvActivity.text.toString(),
             "transactionType" to "Income",
             "category" to "Rewards",
             "date" to Timestamp.now(),
             "financialActivityID" to savingActivityID,
-            "amount" to amount)
+            "amount" to amount,
+            "paymentType" to paymentType
+
+        )
         firestore.collection("Transactions").add(income).addOnSuccessListener {
             var deposit = hashMapOf(
                 "createdBy" to childID,
@@ -225,7 +236,9 @@ class EarningSendMoneyActivity : AppCompatActivity() {
                 "category" to "Goal",
                 "date" to Timestamp.now(),
                 "financialActivityID" to savingActivityID,
-                "amount" to amount)
+                "amount" to amount,
+                "paymentType" to paymentType
+            )
             firestore.collection("Transactions").add(deposit).addOnSuccessListener {
                 firestore.collection("FinancialActivities").document(savingActivityID).get().addOnSuccessListener {
                     var activity = it.toObject<FinancialActivities>()

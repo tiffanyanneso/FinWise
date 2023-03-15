@@ -39,6 +39,7 @@ class RecordEarningSaleActivity : AppCompatActivity() {
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRecordEarningSaleBinding.inflate(layoutInflater)
@@ -48,8 +49,8 @@ class RecordEarningSaleActivity : AppCompatActivity() {
         initializeDropDowns()
         setNavigationBar()
 
-        var bundle = intent.extras!!
-        var childID = bundle.getString("childID").toString()
+        val bundle = intent.extras!!
+        val childID = bundle.getString("childID").toString()
 
         binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
         binding.etDate.setOnClickListener { showCalendar() }
@@ -64,7 +65,7 @@ class RecordEarningSaleActivity : AppCompatActivity() {
         binding.dropdownGoal.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             savingActivityID = goalDropDownArrayList[position].savingActivityID
 
-            firestore.collection("FinancialActivities").document(savingActivityID.toString()).get().addOnSuccessListener { saving ->
+            firestore.collection("FinancialActivities").document(savingActivityID).get().addOnSuccessListener { saving ->
                 firestore.collection("FinancialGoals").document(saving.toObject<FinancialActivities>()?.financialGoalID!!).get().addOnSuccessListener { goal ->
                     binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal.toObject<FinancialGoals>()?.currentSavings)!! +
                             " / ₱ " + DecimalFormat("#,##0.00").format(goal.toObject<FinancialGoals>()?.targetAmount!!)
@@ -80,6 +81,7 @@ class RecordEarningSaleActivity : AppCompatActivity() {
             sendBundle.putSerializable("saleDate", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
             sendBundle.putFloat("saleAmount", binding.etAmount.text.toString().toFloat())
             sendBundle.putString("depositTo", binding.dropdownDestination.text.toString())
+            sendBundle.putString("paymentType", binding.dropdownTypeOfPayment.text.toString())
             if (binding.dropdownDestination.text.toString() == "Financial Goal")
                 sendBundle.putString("savingActivityID", savingActivityID)
             confirmSale.putExtras(sendBundle)
@@ -91,6 +93,11 @@ class RecordEarningSaleActivity : AppCompatActivity() {
     private fun initializeDropDowns() {
         val incomeDestinationAdapter = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.income_destination))
         binding.dropdownDestination.setAdapter(incomeDestinationAdapter)
+
+        val paymentTypeItems = resources.getStringArray(R.array.payment_type)
+        val adapterPaymentTypeItems = ArrayAdapter (this, R.layout.list_item, paymentTypeItems)
+        binding.dropdownTypeOfPayment.setAdapter(adapterPaymentTypeItems)
+
 
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { activityResults ->
             for (saving in activityResults) {
@@ -116,7 +123,7 @@ class RecordEarningSaleActivity : AppCompatActivity() {
         dialog.setContentView(R.layout.dialog_calendar)
         dialog.window!!.setLayout(1000, 1200)
 
-        var calendar = dialog.findViewById<DatePicker>(R.id.et_date)
+        val calendar = dialog.findViewById<DatePicker>(R.id.et_date)
         calendar.maxDate = System.currentTimeMillis()
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->

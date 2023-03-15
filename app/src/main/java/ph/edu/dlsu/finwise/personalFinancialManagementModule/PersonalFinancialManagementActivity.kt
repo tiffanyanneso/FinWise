@@ -362,7 +362,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             val bundle = Bundle()
             bundle.putString("childID", childID)
             bundle.putString("module", "pfm")
-            bundle.putString("user", "child")
             goToEarningActivity.putExtras(bundle)
             startActivity(goToEarningActivity)
         }

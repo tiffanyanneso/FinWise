@@ -14,6 +14,7 @@ class EarningActivityModel (
     var depositTo:String?=null,
     var dateAdded:Timestamp?=null,
     var dateCompleted: Timestamp?=null,
+    var paymentType: String?=null,
     //date the money was sent to the kid
     var dateSent:Timestamp?=null
     ) {

@@ -86,13 +86,14 @@ class NewEarningActivity : AppCompatActivity() {
 
         binding.btnConfirm.setOnClickListener {
             if (binding.dropdownDestination.text.toString() == "Personal Finance") {
-                var earningActivity = hashMapOf(
+                val earningActivity = hashMapOf(
                     "activityName" to binding.dropdownChore.text.toString(),
                     "targetDate" to SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()),
                     "requiredTime" to binding.etDuration.text.toString().toInt(),
                     "amount" to binding.etAmount.text.toString().toFloat(),
                     "childID" to childID,
                     "status" to "Ongoing",
+                    "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
                     "depositTo" to binding.dropdownDestination.text.toString()
                 )
                 firestore.collection("EarningActivities").add(earningActivity).addOnSuccessListener {
@@ -107,6 +108,7 @@ class NewEarningActivity : AppCompatActivity() {
                     "childID" to childID,
                     "savingActivityID" to savingActivityID,
                     "status" to "Ongoing",
+                    "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
                     "depositTo" to binding.dropdownDestination.text.toString()
                 )
                 firestore.collection("EarningActivities").add(earningActivity).addOnSuccessListener {
@@ -114,8 +116,8 @@ class NewEarningActivity : AppCompatActivity() {
                 }
             }
 
-            var earning = Intent(this, EarningActivity::class.java)
-            var sendBundle = Bundle()
+            val earning = Intent(this, EarningActivity::class.java)
+            val sendBundle = Bundle()
             sendBundle.putString("childID", childID)
             earning.putExtras(sendBundle)
             startActivity(earning)
@@ -125,7 +127,11 @@ class NewEarningActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeDropDowns() {
-        var dropdownContent = ArrayList<String>()
+        val paymentTypeItems = resources.getStringArray(R.array.payment_type)
+        val adapterPaymentTypeItems = ArrayAdapter (this, R.layout.list_item, paymentTypeItems)
+        binding.dropdownTypeOfPayment.setAdapter(adapterPaymentTypeItems)
+
+        val dropdownContent = ArrayList<String>()
         firestore.collection("Users").document(childID).get().addOnSuccessListener {
             var child = it.toObject<Users>()
 

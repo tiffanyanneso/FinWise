@@ -55,6 +55,7 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
                     "amount" to bundle.getFloat("saleAmount"),
                     "date" to bundle.getSerializable("saleDate"),
                     "childID" to currentUser,
+                    "paymentType" to bundle.getString("paymentType"),
                     "savingActivityID" to bundle.getString("savingActivityID"),
                     "depositTo" to bundle.getString("depositTo")
                 )
@@ -65,8 +66,9 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
                     "amount" to bundle.getFloat("saleAmount"),
                     "date" to bundle.getSerializable("saleDate"),
                     "childID" to currentUser,
-                    "depositTo" to bundle.getString("depositTo")
-                )
+                    "depositTo" to bundle.getString("depositTo"),
+                    "paymentType" to bundle.getString("paymentType"),
+                    )
                 firestore.collection("SellingItems").add(sellingItem)
             }
             addTransactions()
@@ -80,6 +82,7 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
             "transactionName" to bundle.getString("saleName") + " Sale",
             "amount" to bundle.getFloat("saleAmount"),
             "category" to "Sale",
+            "paymentType" to bundle.getString("paymentType"),
             "date" to bundle.getSerializable("saleDate"),
         )
 
@@ -101,6 +104,7 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
                         "amount" to bundle.getFloat("saleAmount"),
                         "financialActivityID" to savingActivityID,
                         "category" to "Deposit",
+                        "paymentType" to bundle.getString("paymentType"),
                         "date" to bundle.getSerializable("saleDate")
                     )
 
@@ -139,6 +143,7 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
         binding.tvName.text = bundle.getString("saleName")
         binding.tvAmount.text =  "₱ " + DecimalFormat("#,##0.00").format(bundle.getFloat("saleAmount"))
         binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("saleDate"))
+        binding.tvPaymentType.text = bundle.getString("paymentType")
     }
 
     private fun loadButtons() {
