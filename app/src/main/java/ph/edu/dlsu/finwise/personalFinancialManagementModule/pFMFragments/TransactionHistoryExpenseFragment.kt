@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -52,16 +51,16 @@ class TransactionHistoryExpenseFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getExpenseTransactions() {
+        transactionFilterArrayList.clear()
         getChildID()
-        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
+        firestore.collection("Transactions").whereEqualTo("userID", childID)
             .get().addOnSuccessListener { documents ->
             for (transactionSnapshot in documents) {
                 //creating the object from list retrieved in db
                 val transactionID = transactionSnapshot.id
                 val transaction = transactionSnapshot.toObject<Transactions>()
 
-                if (transaction.transactionType == "Expense" || transaction.transactionType == "Deposit" ||
-                    transaction.transactionType == "Expense (Maya)" ) {
+                if (transaction.transactionType == "Expense" || transaction.transactionType == "Deposit") {
                     transactionFilterArrayList.add(
                         TransactionFilter(
                             transactionID,
@@ -82,7 +81,6 @@ class TransactionHistoryExpenseFragment : Fragment() {
 
     private fun getChildID() {
         childID = arguments?.getString("childID").toString()
-        Toast.makeText(context, "xs "+ childID, Toast.LENGTH_SHORT).show()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

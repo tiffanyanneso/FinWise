@@ -12,12 +12,16 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmtransactionHistoryBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.*
+import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryAllFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryExpenseFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.TransactionHistoryIncomeFragment
@@ -28,6 +32,7 @@ import java.util.*
 class TransactionHistoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPfmtransactionHistoryBinding
     private lateinit var context: Context
+
     private var getBundle: Bundle? = null
     private var setBundle: Bundle? = null
     private var checkedBoxes = "default"
@@ -57,17 +62,22 @@ class TransactionHistoryActivity : AppCompatActivity() {
     }
 
     private fun setNavigationBar() {
-        val bottomNavigationViewChild = binding.bottomNav
-        val bottomNavigationViewParent = binding.bottomNavParent
-
-        if (user == "child") {
-            bottomNavigationViewChild.visibility = View.VISIBLE
-            bottomNavigationViewParent.visibility = View.GONE
-            Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
-        } else if (user == "parent") {
-            bottomNavigationViewChild.visibility = View.GONE
-            bottomNavigationViewParent.visibility = View.VISIBLE
-            NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
+        val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        val firestore = Firebase.firestore
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            var user  = it.toObject<Users>()!!
+            //current user is a child
+            val bottomNavigationViewChild = binding.bottomNav
+            val bottomNavigationViewParent = binding.bottomNavParent
+            if (user.userType == "Child") {
+                bottomNavigationViewChild.visibility = View.VISIBLE
+                bottomNavigationViewParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+            } else  if (user.userType == "Parent"){
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
+            }
         }
     }
 
@@ -99,6 +109,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
         checkedBoxes = getBundle!!.getString("checkedBoxes").toString()
         isExpense = getBundle!!.getString("isExpense").toString()
         user = getBundle!!.getString("user").toString()
+        Toast.makeText(this, ""+user, Toast.LENGTH_SHORT).show()
         if (user == "parent") {
             childID = getBundle?.getString("childID").toString()
         }
@@ -141,7 +152,15 @@ class TransactionHistoryActivity : AppCompatActivity() {
 
     private fun redirectToFilteredTab() {
         if (isExpense == "yes")
-            binding.viewPager.currentItem = 1
+            binding.viewPager.currentItem = 2
+
+        when (checkedBoxes) {
+            "both" -> binding.viewPager.currentItem = 0
+            "income" -> binding.viewPager.currentItem = 1
+            "expense" -> binding.viewPager.currentItem = 2
+        }
+
+
     }
 
     private fun setupTabIcons() {

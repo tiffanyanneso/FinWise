@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -146,8 +145,9 @@ class TransactionHistoryAllFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getIncomeTransactions() {
+        transactionFilterArrayList.clear()
         getChildID()
-        firestore.collection("Transactions").whereEqualTo("createdBy", childID)
+        firestore.collection("Transactions").whereEqualTo("userID", childID)
             .get().addOnSuccessListener { documents ->
             for (transactionSnapshot in documents) {
                 //creating the object from list retrieved in db
@@ -168,7 +168,6 @@ class TransactionHistoryAllFragment : Fragment() {
 
     private fun getChildID() {
         childID = arguments?.getString("childID").toString()
-        Toast.makeText(context, "xs "+ childID, Toast.LENGTH_SHORT).show()
     }
 
     class TransactionFilter(var transactionID: String?=null, var transaction: Transactions?=null)
