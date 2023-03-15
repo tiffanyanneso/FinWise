@@ -38,16 +38,17 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityGoalSavingDetailsBinding
     private var firestore = Firebase.firestore
     private var transactionsArrayList = ArrayList<Transactions>()
+    private var childID = FirebaseAuth.getInstance().currentUser!!.uid
+    private var user = "child"
+    var total = 0.00f
     var depositTotalAmount = 0.00f
+    private var selectedDatesSort = "weekly"
     var withdrawalTotalAmount = 0.00f
     var savingsPercentage = 0.00f
     var withdrawalPercentage = 0.00f
-    var total = 0.00f
     private lateinit var sortedDate: List<Date>
     private lateinit var selectedDates: List<Date>
-    private var selectedDatesSort = "weekly"
-    private var user = "child"
-    private var childID = FirebaseAuth.getInstance().currentUser!!.uid
+
 
     lateinit var chart: PieChart
 
@@ -75,9 +76,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun loadPieChart() {
-        //TODO: Update data based on user
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-
         firestore.collection("Transactions").whereEqualTo("userID", childID)
             .get().addOnSuccessListener { transactionsSnapshot ->
                 for (document in transactionsSnapshot) {
@@ -156,16 +155,15 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
 
         binding.tvDepositTotal.text = "₱$deposit"
         binding.tvWithdrawalTotal.text = "₱$withdrawal"
-        setSummary(savingsAmount, savings)
+        setSummary(savings)
     }
 
-    private fun setSummary(savingsAmount: Float, savings: String?) {
+    private fun setSummary(savings: String?) {
         var dateRange = "week"
         when (selectedDatesSort) {
             "monthly" -> dateRange = "month"
             "yearly" -> dateRange = "quarter"
         }
-
         if (user == "child") {
             binding.tvSummary.text = "You've saved ₱$savings for this $dateRange!"
             binding.tvTips.text = "Go to the \"Financial Activities\" to develop your Financial Literacy using your money. Scroll down for more details"

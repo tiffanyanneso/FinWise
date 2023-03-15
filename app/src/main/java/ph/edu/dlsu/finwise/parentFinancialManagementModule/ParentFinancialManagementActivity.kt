@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -66,7 +65,17 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         initializeDateButtons()
         goToParentTransactions()
         goToEarningActivity()
-        goToCashMayaBalanceBreakdown()
+        goToCashMayaBalanceBreakdownParent()
+    }
+
+    private fun goToCashMayaBalanceBreakdownParent(){
+        binding.btnSeeMore.setOnClickListener{
+            val goToCashMayaBalanceBreakdown = Intent(applicationContext, CashMayaBalanceBreakdownActivity::class.java)
+            bundle.putString("childID", childID)
+            bundle.putFloat("balance", balance)
+            goToCashMayaBalanceBreakdown.putExtras(bundle)
+            startActivity(goToCashMayaBalanceBreakdown)
+        }
     }
 
     private fun goToEarningActivity() {
@@ -189,7 +198,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         for (transaction in transactionsArrayList) {
             if (transaction.transactionType == "Income")
                 income += transaction.amount!!
-            else if (transaction.transactionType == "Income")
+            else if (transaction.transactionType == "Expense")
                 expense += transaction.amount!!
         }
     }
@@ -308,14 +317,13 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
                     amount = "0.00"
                 balance = walletAmount
                 binding.tvCurrentBalanceOfChild.text = "₱$amount"
-            }
+            }.continueWith { goToCashMayaBalanceBreakdown() }
     }
 
 
     private fun goToSendMoney() {
         binding.btnSendMoney.setOnClickListener {
             val goToSendMoney = Intent(applicationContext, ParentSendMoneyActivity::class.java)
-            Toast.makeText(this, "balance"+balance, Toast.LENGTH_SHORT).show()
             bundle.putFloat("balance", balance)
             goToSendMoney.putExtras(bundle)
             startActivity(goToSendMoney)

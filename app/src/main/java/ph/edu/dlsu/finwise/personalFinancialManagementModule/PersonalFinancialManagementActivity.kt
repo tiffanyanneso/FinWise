@@ -6,7 +6,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -177,7 +176,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         for (transaction in transactionsArrayList) {
             if (transaction.transactionType == "Income")
                 income += transaction.amount!!
-            else if (transaction.transactionType == "Income")
+            else if (transaction.transactionType == "Expense")
                 expense += transaction.amount!!
         }
     }
