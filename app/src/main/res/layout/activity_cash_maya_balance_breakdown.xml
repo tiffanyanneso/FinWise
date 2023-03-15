@@ -141,7 +141,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:cardCornerRadius="10dp"
-                android:layout_marginTop="120dp">
+                android:layout_marginTop="110dp">
 
                 <LinearLayout
                     android:id="@+id/linear_layout_1_maya"
@@ -220,7 +220,7 @@
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pc_cash_maya"
-                android:layout_width="370dp"
+                android:layout_width="350dp"
                 app:layout_constraintTop_toBottomOf="@+id/cv_maya_balance"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

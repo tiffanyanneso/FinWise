@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityCashMayaBalanceBreakdownBinding
+import ph.edu.dlsu.finwise.model.Users
 
 class CashMayaBalanceBreakdownActivity : AppCompatActivity() {
 
@@ -30,24 +32,23 @@ class CashMayaBalanceBreakdownActivity : AppCompatActivity() {
 
 
     private fun setNavigationBar() {
-
-        var navUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("ParentUser").document(navUser).get().addOnSuccessListener {
-
+        val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        val firestore = Firebase.firestore
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            var user  = it.toObject<Users>()!!
+            //current user is a child
             val bottomNavigationViewChild = binding.bottomNav
             val bottomNavigationViewParent = binding.bottomNavParent
-
-            if (it.exists()) {
-                bottomNavigationViewChild.visibility = View.GONE
-                bottomNavigationViewParent.visibility = View.VISIBLE
-                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
-            } else {
+            if (user.userType == "Child") {
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
                 Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+            } else  if (user.userType == "Parent"){
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
             }
         }
-
     }
 
     private fun loadBackButton() {
