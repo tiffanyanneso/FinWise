@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:textSize="16dp"
             android:layout_marginLeft="10dp"
-            android:text="1. Important step in reaching your financial goals\n2. By saving, you will be able to have money to use in the future\n3. Through saving, you are able to afford bigger purchases"
+            android:text="1. Helps you reach financial goals\n2. Allows you to have money in the future\n3. Allows you to afford bigger purchases"
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
         <LinearLayout
@@ -92,7 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Set a bit of money aside from the allowances, rewards, and gifts your receive.\n 2. In order to earn money to save, you can help with chores around the house or even sell items!
+            android:text="1. Set a bit of money aside from your income\n 2. Earn money by helping with chores or selling items!
 "
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
@@ -121,34 +121,52 @@
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_review_goals"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_border"
-            android:backgroundTint="@color/dark_green"
-            android:layout_marginTop="20dp"
-            android:text="Review Goals"
-            android:textColor="@color/off_white"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="10dp">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_set_new_goal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_border"
-            android:backgroundTint="@color/dark_green"
-            android:layout_marginTop="10dp"
-            android:text="New Goal"
-            android:textColor="@color/off_white"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_set_new_goal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@drawable/button_border"
+                android:backgroundTint="@color/dark_green"
+                android:text="New Goal"
+                android:textColor="@color/white"
+                android:layout_weight="1"
+                android:layout_marginRight="10dp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_review_goals"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="review goals"
+                android:textColor="@color/off_white"
+                android:backgroundTint="@color/dark_green"
+                android:background="@drawable/button_border"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_got_it"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button_border"
-            android:backgroundTint="@color/dark_green"
+            android:backgroundTint="@color/light_grey"
             android:layout_marginTop="10dp"
             android:text="Got it!"
-            android:textColor="@color/off_white"/>
+            android:textColor="@color/black"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

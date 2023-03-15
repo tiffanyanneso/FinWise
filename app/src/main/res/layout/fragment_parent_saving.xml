@@ -182,129 +182,129 @@
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linear_layout_3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_goal_completion_Rate">
+<!--        <LinearLayout-->
+<!--            android:id="@+id/linear_layout_3"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tv_goal_completion_Rate">-->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_weight="1">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/button_border_white"
-                    android:backgroundTint="@color/light_green"
-                    android:paddingVertical="10dp"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="5dp">
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:background="@drawable/button_border_white"-->
+<!--                    android:backgroundTint="@color/light_green"-->
+<!--                    android:paddingVertical="10dp"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginRight="5dp">-->
 
-                    <TextView
-                        android:id="@+id/tv_in_progress"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="X"
-                        android:textSize="20dp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:textAlignment="center"
-                        android:gravity="center"/>
+<!--                    <TextView-->
+<!--                        android:id="@+id/tv_in_progress"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="X"-->
+<!--                        android:textSize="20dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:gravity="center"/>-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="In\nProgress"
-                        android:textSize="14dp"
-                        android:textColor="@color/black"
-                        android:layout_gravity="center"
-                        android:textAlignment="center"
-                        android:gravity="center"/>
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1">
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="In\nProgress"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:gravity="center"/>-->
+<!--                </LinearLayout>-->
+<!--            </LinearLayout>-->
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_weight="1">-->
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/button_border_white"
-                    android:backgroundTint="@color/light_green"
-                    android:paddingVertical="10dp"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="2.5dp">
+<!--                <LinearLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:background="@drawable/button_border_white"-->
+<!--                    android:backgroundTint="@color/light_green"-->
+<!--                    android:paddingVertical="10dp"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginHorizontal="2.5dp">-->
 
-                    <TextView
-                        android:id="@+id/tv_nearing_completion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="X"
-                        android:textColor="@color/black"
-                        android:textSize="20dp"
-                        android:textStyle="bold"
-                        android:textAlignment="center"
-                        android:gravity="center"/>
+<!--                    <TextView-->
+<!--                        android:id="@+id/tv_nearing_completion"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="X"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textSize="20dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:gravity="center"/>-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Nearing Completion"
-                        android:textSize="14dp"
-                        android:textColor="@color/black"
-                        android:layout_gravity="center"
-                        android:textAlignment="center"
-                        android:gravity="center"/>
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Nearing Completion"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:gravity="center"/>-->
 
-                </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1">
+<!--                </LinearLayout>-->
+<!--            </LinearLayout>-->
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_weight="1">-->
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/button_border_white"
-                    android:backgroundTint="@color/light_green"
-                    android:paddingVertical="10dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="5dp">
+<!--                <LinearLayout-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="vertical"-->
+<!--                    android:background="@drawable/button_border_white"-->
+<!--                    android:backgroundTint="@color/light_green"-->
+<!--                    android:paddingVertical="10dp"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="5dp">-->
 
-                    <TextView
-                        android:id="@+id/tv_nearing_deadline"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="X"
-                        android:textSize="20dp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
-                        android:textAlignment="center"
-                        android:gravity="center"/>
+<!--                    <TextView-->
+<!--                        android:id="@+id/tv_nearing_deadline"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="X"-->
+<!--                        android:textSize="20dp"-->
+<!--                        android:textStyle="bold"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:textAlignment="center"-->
+<!--                        android:gravity="center"/>-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Nearing\nDeadline"
-                        android:textSize="14dp"
-                        android:textColor="@color/black"
-                        android:layout_gravity="center"
-                        android:textAlignment="center"/>
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:text="Nearing\nDeadline"-->
+<!--                        android:textSize="14dp"-->
+<!--                        android:textColor="@color/black"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:textAlignment="center"/>-->
+<!--                </LinearLayout>-->
+<!--            </LinearLayout>-->
+<!--        </LinearLayout>-->
 
         <LinearLayout
             android:id="@+id/linear_layout_1"
@@ -315,15 +315,16 @@
             android:layout_marginTop="20dp">
 
             <TextView
+                android:id="@+id/tv_title_in_progress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="My Goals"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:gravity="center_vertical"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:layout_gravity="center"/>
+                android:gravity="center_vertical"
+                android:text="My Goals"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_new_goal"

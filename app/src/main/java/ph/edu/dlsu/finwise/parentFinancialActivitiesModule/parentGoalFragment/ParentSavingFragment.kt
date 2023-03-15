@@ -67,14 +67,16 @@ class ParentSavingFragment : Fragment() {
     private fun getSaving() {
         goalIDArrayList.clear()
         firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+            binding.tvTitleInProgress.text = "My Goals (" + results.size().toString() + ")"
             for (saving in results) {
                 var savingActivity = saving.toObject<FinancialActivities>()
                 savingsArrayList.add(savingActivity)
 
                 goalIDArrayList.add(savingActivity.financialGoalID.toString())
-                loadRecyclerView(goalIDArrayList)
+
             }
-        }.continueWith { getTotalSavings() }
+            loadRecyclerView(goalIDArrayList)
+        }.continueWith { getTotalSavings()}
     }
 
 

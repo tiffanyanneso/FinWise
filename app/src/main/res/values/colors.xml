@@ -6,12 +6,6 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="teal">#52B7AD</color>
-    <color name="red">#E43A18</color>
-    <color name="yellow">#F5C116</color>
-    <color name="light_green">#AED86C</color>
-    <color name="light_red">#FFCCCB</color>
-    <color name="dark_green">#058B47</color>
-    <color name="green">#5EC57E</color>
     <color name="light_grey">#E3E3E3</color>
     <color name="info_grey">#C3C3C3</color>
     <color name="dark_grey">#5A5A5A</color>
@@ -20,6 +14,22 @@
     <color name="off_white">#FFFAF6</color>
     <color name="cream">#FDF8F5</color>
     <color name="very_light_green">#E1F6BF</color>
+
+    <color name="dark_green">#058B47</color>
+    <color name="amazing_green">#40AD62</color>
+    <color name="green">#5EC57E</color>
+    <color name="light_green">#AED86C</color>
+    <color name="yellow">#F5C116</color>
+    <color name="nearly_there_yellow">#FFBE3F</color>
+    <color name="almost_there_yellow">#FFAC0C</color>
+    <color name="getting_there_orange">#FFAC0C</color>
+    <color name="not_quite_there_red">#FA5733</color>
+    <color name="red">#E43A18</color>
+
+
+    <color name="light_red">#FFCCCB</color>
+
+
     <color name="bright_green">#4C9A2A</color>
     <color name="bright_yellow">#FFFF00</color>
 </resources>

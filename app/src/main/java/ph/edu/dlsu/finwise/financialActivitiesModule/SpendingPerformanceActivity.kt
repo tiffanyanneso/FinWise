@@ -173,30 +173,55 @@ class SpendingPerformanceActivity : AppCompatActivity() {
 
                         binding.tvPerformancePercentage.text ="${overallSpending}%"
 
-                        if (overallSpending >= 90) {
+                        if (overallSpending >= 96) {
                             binding.imgFace.setImageResource(R.drawable.excellent)
                             binding.tvPerformanceStatus.text = "Excellent"
-                            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
+                            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.dark_green))
                             binding.tvPerformanceText.text = "Keep up the excellent work! Spending wisely is your strong point. Keep it up!"
+                        } else if (overallSpending < 96 && overallSpending >= 86) {
+                            binding.imgFace.setImageResource(R.drawable.amazing)
+                            binding.tvPerformanceStatus.text = "Amazing"
+                            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.green))
+                            binding.tvPerformanceText.text = "Amazing job! You are performing well. Spending wisely is your strong point. Keep completing those goals!"
                         } else if (overallSpending < 90 && overallSpending >= 80) {
                             binding.imgFace.setImageResource(R.drawable.great)
                             binding.tvPerformanceStatus.text = "Great"
-                            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
+                            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.green))
                             binding.tvPerformanceText.text = " Great job! You are performing well. Keep spending wisely!"
                         } else if (overallSpending < 80 && overallSpending >= 70) {
                             binding.imgFace.setImageResource(R.drawable.good)
                             binding.tvPerformanceStatus.text = "Good"
-                            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
+                            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.light_green))
                             binding.tvPerformanceText.text = "Good job! With a bit more planning to detail, you’ll surely up your performance!"
                         } else if (overallSpending < 70 && overallSpending >= 60) {
                             binding.imgFace.setImageResource(R.drawable.average)
                             binding.tvPerformanceStatus.text = "Average"
-                            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
+                            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
                             binding.tvPerformanceText.text = "Nice work! Work on improving your spending performance by always planning ahead. You’ll get there soon!"
-                        } else if (overallSpending < 60) {
+                        } else if (overallSpending < 56 && overallSpending >= 46) {
+                            binding.imgFace.setImageResource(R.drawable.nearly_there)
+                            binding.tvPerformanceStatus.text = "Nearly There"
+                            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
+                            binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
+                        }  else if (overallSpending < 46 && overallSpending >= 36) {
+                            binding.imgFace.setImageResource(R.drawable.almost_there)
+                            binding.tvPerformanceStatus.text = "Almost There"
+                            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
+                            binding.tvPerformanceText.text = "Almost there! You need to work on your spending. Click review to learn how!"
+                        } else if (overallSpending < 36 && overallSpending >= 26) {
+                            binding.imgFace.setImageResource(R.drawable.getting_there)
+                            binding.tvPerformanceStatus.text = "Getting There"
+                            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
+                            binding.tvPerformanceText.text = "Getting there! You need to work on your spending. Click review to learn how!"
+                        } else if (overallSpending < 26 && overallSpending >= 16) {
+                            binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
+                            binding.tvPerformanceStatus.text = "Not Quite There Yet"
+                            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
+                            binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
+                        } else if (overallSpending < 15) {
                             binding.imgFace.setImageResource(R.drawable.bad)
-                            binding.tvPerformanceStatus.text = "Bad"
-                            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                            binding.tvPerformanceStatus.text = "Needs Improvement"
+                            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
                             binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
                         }
                     }
@@ -210,7 +235,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1700)
+        dialog.window!!.setLayout(1000, 1400)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
@@ -225,7 +250,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1700)
+        dialog.window!!.setLayout(1000, 1400)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
@@ -240,7 +265,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1700)
+        dialog.window!!.setLayout(1000, 1400)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()

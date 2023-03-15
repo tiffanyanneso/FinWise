@@ -1,10 +1,12 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 
 import android.app.Dialog
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -48,6 +50,7 @@ class SpendingFragment : Fragment(){
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         spendingActivityIDArrayList.clear()
@@ -88,9 +91,10 @@ class SpendingFragment : Fragment(){
                 spendingActivityIDArrayList.add(activityObject?.financialGoalID.toString())
             }
             loadRecyclerView(spendingActivityIDArrayList)
-        }.continueWith { binding.tvInProgress.text = spendingActivityIDArrayList.size.toString() }
+        }.continueWith { binding.tvTitleInProgress.text = "Spending Activities (" + spendingActivityIDArrayList.size.toString() + ")" }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getBudgeting() {
         var budgetingActivityIDArrayList = ArrayList<String>()
         //get only completed budgeting activities because they should complete budgeting first before they are able to spend
@@ -113,6 +117,7 @@ class SpendingFragment : Fragment(){
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun checkOverSpending(budgetItemID:String, budgetItemAmount:Float){
         firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { spendingTransactions ->
             var amountSpent = 0.00F
@@ -184,12 +189,17 @@ class SpendingFragment : Fragment(){
     }
 
     private fun setOverall() {
-        if (overallSpending >= 90) {
+        if (overallSpending >= 96) {
             binding.imgFace.setImageResource(R.drawable.excellent)
             binding.textStatus.text = "Excellent"
             binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
             binding.tvPerformanceText.text = "Keep up the excellent work! Spending wisely is your strong point. Keep it up!"
             showSeeMoreButton()
+        } else if (overallSpending < 96 && overallSpending >= 86) {
+            binding.imgFace.setImageResource(R.drawable.amazing)
+            binding.textStatus.text = "Amazing"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.green))
+            binding.tvPerformanceText.text = "Amazing job! You are performing well. Spending wisely is your strong point. Keep completing those goals!"
         } else if (overallSpending < 90 && overallSpending >= 80) {
             binding.imgFace.setImageResource(R.drawable.great)
             binding.textStatus.text = "Great"
@@ -207,10 +217,34 @@ class SpendingFragment : Fragment(){
             binding.textStatus.text = "Average"
             binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
             binding.tvPerformanceText.text = "Nice work! Work on improving your spending performance by always planning ahead. You’ll get there soon!"
+            showSeeMoreButton()
+        } else if (overallSpending < 56 && overallSpending >= 46) {
+            binding.imgFace.setImageResource(R.drawable.nearly_there)
+            binding.textStatus.text = "Nearly There"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
             showReviewButton()
-        } else if (overallSpending < 60) {
+        }  else if (overallSpending < 46 && overallSpending >= 36) {
+            binding.imgFace.setImageResource(R.drawable.almost_there)
+            binding.textStatus.text = "Almost There"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceText.text = "Almost there! You need to work on your spending. Click review to learn how!"
+            showReviewButton()
+        } else if (overallSpending < 36 && overallSpending >= 26) {
+            binding.imgFace.setImageResource(R.drawable.getting_there)
+            binding.textStatus.text = "Getting There"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceText.text = "Getting there! You need to work on your spending. Click review to learn how!"
+            showReviewButton()
+        } else if (overallSpending < 26 && overallSpending >= 16) {
+            binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
+            binding.textStatus.text = "Not Quite There Yet"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
+            showReviewButton()
+        } else if (overallSpending < 15) {
             binding.imgFace.setImageResource(R.drawable.bad)
-            binding.textStatus.text = "Bad"
+            binding.textStatus.text = "Needs Improvement"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
             showReviewButton()
@@ -243,7 +277,7 @@ class SpendingFragment : Fragment(){
         var dialog= Dialog(requireContext().applicationContext);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1700)
+        dialog.window!!.setLayout(1000, 1400)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()

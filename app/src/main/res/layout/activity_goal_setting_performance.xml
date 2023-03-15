@@ -166,7 +166,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:layout_weight="1"
-                        android:orientation="vertical">>
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/tv_top_performing_SMART"

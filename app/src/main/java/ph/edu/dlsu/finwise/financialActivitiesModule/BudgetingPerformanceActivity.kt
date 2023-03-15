@@ -63,6 +63,10 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
             showBudgetingReivewDialog()
         }
 
+            binding.btnReview.setOnClickListener{
+                showBudgetingReivewDialog()
+            }
+
 //        binding.btnBudgetAccuracyReview.setOnClickListener{
 //            showBudgetAccuracyAmountReivewDialog()
 //        }
@@ -70,10 +74,6 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
 //        binding.btnBudgetItemsAccuracyReview.setOnClickListener{
 //            showBudgetAccuracyItemsReivewDialog()
 //        }
-
-        binding.btnParentalInvolvementReview.setOnClickListener{
-            showBudgetParentalInvolvementReivewDialog()
-        }
     }
 
     private fun getBudgeting() {
@@ -196,20 +196,6 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     private fun showBudgetAccuracyAmountReivewDialog() {
 
         var dialogBinding= DialogBudgetAccuracyAmountReviewBinding.inflate(getLayoutInflater())
-        var dialog= Dialog(this);
-        dialog.setContentView(dialogBinding.getRoot())
-
-        dialog.window!!.setLayout(1000, 1700)
-
-        dialogBinding.btnGotIt.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialog.show()
-    }
-    private fun showBudgetParentalInvolvementReivewDialog() {
-
-        var dialogBinding= DialogBudgetAccuracyItemsReviewBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 

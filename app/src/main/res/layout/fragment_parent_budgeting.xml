@@ -5,23 +5,315 @@
     android:layout_height="match_parent"
     tools:context=".parentFinancialActivitiesModule.parentGoalFragment.ParentBudgetingFragment">
 
-    <ScrollView
-        android:id="@+id/scroll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_view_goals"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="8"
-        android:padding="20dp"
-        tools:listitem="@layout/item_finact_saving"/>
-    </LinearLayout>
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:background="@drawable/button_border_white"
+                    android:backgroundTint="@color/teal"
+                    android:layout_marginBottom="10dp">
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="Overall Budgeting Performance"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"
+                        android:layout_marginBottom="10dp"
+                        android:layout_gravity="center"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:background="@drawable/button_border_white"
+                            android:backgroundTint="@color/white"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:src="@drawable/good"
+                                android:id="@+id/iv_score"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"/>
+
+                            <TextView
+                                android:id="@+id/tv_performance_percentage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                                tools:text="12%"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:layout_gravity="center"
+                                android:textAlignment="center"/>
+
+                            <TextView
+                                android:id="@+id/tv_performance_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Good"
+                                android:textColor="@color/light_green"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/tv_performance_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:text="Complete budgeting activities to see your performance"
+                            android:textColor="@color/white"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="15dp"/>
+                    </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_see_more"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:text="See more"
+                        android:textColor="@color/off_white"
+                        android:backgroundTint="@color/dark_green"
+                        android:background="@drawable/button_border"
+                        android:layout_marginTop="10dp"/>
+                    <LinearLayout
+                        android:id="@+id/layout_buttons"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp">
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btn_budgeting_review"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Review"
+                            android:textColor="@color/off_white"
+                            android:backgroundTint="@color/dark_green"
+                            android:background="@drawable/button_border_grey"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btn_see_more2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="See More"
+                            android:textColor="@color/off_white"
+                            android:backgroundTint="@color/dark_green"
+                            android:background="@drawable/button_border"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/linear_layout_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+
+                            android:layout_marginRight="5dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:background="@drawable/button_border_white"
+                                android:backgroundTint="@color/light_green"
+                                android:paddingVertical="10dp"
+                                android:layout_gravity="center"
+                                android:layout_marginHorizontal="2.5dp">
+
+                                <TextView
+                                    android:id="@+id/tv_average_updates"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="X"
+                                    android:textColor="@color/black"
+                                    android:textSize="20dp"
+                                    android:textStyle="bold"
+                                    android:textAlignment="center"
+                                    android:gravity="center"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Average\nUpdates"
+                                    android:textSize="14dp"
+                                    android:textColor="@color/black"
+                                    android:layout_gravity="center"
+                                    android:textAlignment="center"/>
+                            </LinearLayout>
+                        </LinearLayout>
+                        <!--                        <LinearLayout-->
+                        <!--                            android:layout_width="match_parent"-->
+                        <!--                            android:layout_height="match_parent"-->
+                        <!--                            android:orientation="vertical"-->
+                        <!--                            android:layout_weight="1">-->
+
+                        <!--                            <LinearLayout-->
+                        <!--                                android:layout_width="match_parent"-->
+                        <!--                                android:layout_height="wrap_content"-->
+                        <!--                                android:orientation="vertical"-->
+                        <!--                                android:background="@drawable/button_border_white"-->
+                        <!--                                android:backgroundTint="@color/light_green"-->
+                        <!--                                android:paddingVertical="10dp"-->
+                        <!--                                android:layout_gravity="center">-->
+
+                        <!--                                <TextView-->
+                        <!--                                    android:id="@+id/tv_in_progress"-->
+                        <!--                                    android:layout_width="match_parent"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:text="X"-->
+                        <!--                                    android:textSize="20dp"-->
+                        <!--                                    android:textStyle="bold"-->
+                        <!--                                    android:textColor="@color/black"-->
+                        <!--                                    android:textAlignment="center"-->
+                        <!--                                    android:gravity="center"/>-->
+
+                        <!--                                <TextView-->
+                        <!--                                    android:layout_width="wrap_content"-->
+                        <!--                                    android:layout_height="wrap_content"-->
+                        <!--                                    android:text="In\nProgress"-->
+                        <!--                                    android:textSize="14dp"-->
+                        <!--                                    android:textColor="@color/black"-->
+                        <!--                                    android:layout_gravity="center"-->
+                        <!--                                    android:gravity="center"-->
+                        <!--                                    android:textAlignment="center"/>-->
+                        <!--                            </LinearLayout>-->
+                        <!--                        </LinearLayout>-->
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!--                <LinearLayout-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:orientation="horizontal"-->
+                <!--                    android:layout_weight="1"-->
+                <!--                    android:layout_marginTop="10dp">-->
+
+                <!--                    <TextView-->
+                <!--                        android:layout_width="200dp"-->
+                <!--                        android:layout_height="match_parent"-->
+                <!--                        android:layout_weight="1"-->
+                <!--                        android:text="Accuracy"-->
+                <!--                        android:textSize="14sp"-->
+                <!--                        android:textColor="@color/black"-->
+                <!--                        android:gravity="center_vertical" />-->
+
+                <!--                    <ProgressBar-->
+                <!--                        android:id="@+id/progress_bar_accuracy"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="30dp"-->
+                <!--                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+                <!--                        android:scaleY="4"-->
+                <!--                        android:layout_weight="1.5"-->
+                <!--                        android:max="100"/>-->
+
+                <!--                    <TextView-->
+                <!--                        android:id="@+id/tv_accuracy_percent"-->
+                <!--                        android:layout_width="150dp"-->
+                <!--                        android:layout_height="match_parent"-->
+                <!--                        android:layout_weight="1"-->
+                <!--                        android:text="x%"-->
+                <!--                        android:textSize="14sp"-->
+                <!--                        android:textColor="@color/black"-->
+                <!--                        android:gravity="center"/>-->
+                <!--                </LinearLayout>-->
+
+                <!--                <LinearLayout-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="50dp"-->
+                <!--                    android:layout_weight="1"-->
+                <!--                    android:orientation="horizontal">-->
+
+                <!--                    <TextView-->
+                <!--                        android:layout_width="200dp"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:layout_weight="1"-->
+                <!--                        android:text="Parental Involvement"-->
+                <!--                        android:textColor="@color/black"-->
+                <!--                        android:textSize="14sp"-->
+                <!--                        android:layout_gravity="center"/>-->
+
+                <!--                    <ProgressBar-->
+                <!--                        android:id="@+id/progress_bar_parental_involvement"-->
+                <!--                        style="@style/Widget.AppCompat.ProgressBar.Horizontal"-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="30dp"-->
+                <!--                        android:layout_weight="1.5"-->
+                <!--                        android:scaleY="4"-->
+                <!--                        android:layout_gravity="center"-->
+                <!--                        android:max="100"/>-->
+
+                <!--                    <TextView-->
+                <!--                        android:id="@+id/tv_parental_involvement_percent"-->
+                <!--                        android:layout_width="150dp"-->
+                <!--                        android:layout_height="match_parent"-->
+                <!--                        android:layout_weight="1"-->
+                <!--                        android:gravity="center"-->
+                <!--                        android:text="x%"-->
+                <!--                        android:textColor="@color/black"-->
+                <!--                        android:textSize="14sp" />-->
+                <!--                </LinearLayout>-->
+
+                <TextView
+                    android:id="@+id/tv_title_in_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="Budgeting Activities"
+                    android:textSize="20sp"
+                    android:textColor="@color/black"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="20dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_view_goals"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    tools:listitem="@layout/item_finact_budgeting"/>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
 </FrameLayout>

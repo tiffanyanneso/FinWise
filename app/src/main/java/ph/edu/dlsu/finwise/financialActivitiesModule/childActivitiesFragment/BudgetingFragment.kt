@@ -93,7 +93,7 @@ class BudgetingFragment : Fragment() {
         goalIDArrayList.clear()
         //saving activities that are in progress means that there the goal is also in progress because they are connected
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
-            binding.tvInProgress.text = results.size().toString()
+            binding.tvTitleInProgress.text = "Budgeting Activities (" + results.size().toString() + ")"
             for (activity in results) {
                 //add id to arraylit to load in recycler view
                 var activityObject = activity.toObject<FinancialActivities>()
@@ -159,7 +159,7 @@ class BudgetingFragment : Fragment() {
         var dialog= Dialog(requireContext().applicationContext);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1700)
+        dialog.window!!.setLayout(1000, 1400)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()

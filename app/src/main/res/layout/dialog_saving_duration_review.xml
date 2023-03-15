@@ -42,7 +42,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/question_mark"
-                app:tint="@color/red"
+                app:tint="@color/dark_green"
                 android:layout_gravity="center"/>
 
             <TextView
@@ -60,9 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:layout_marginLeft="10dp"
-            android:text="1. Can be achieved in a short amount of time and has lower target amount\n2. Duration: Less than 2 weeks
-"
+            android:text="1. Achievable in a short amount of time and has lower target amount\n2. Duration: Less than 2 weeks"
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
         <LinearLayout
@@ -94,7 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Saving for a Fried Chicken Sandwich\n. Saving for a Small Toy\n3. Saving for a Book"
+            android:text="1. Saving for a Fried Chicken Sandwich\n2. Saving for a Small Toy\n3. Saving for a Book"
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
 
