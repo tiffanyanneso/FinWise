@@ -54,7 +54,8 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:cardCornerRadius="10dp">
+                app:cardCornerRadius="10dp"
+                android:layout_marginTop="10dp">
 
                 <LinearLayout
                     android:id="@+id/linear_layout_1_peso"
@@ -63,7 +64,8 @@
                     android:orientation="vertical"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    >
 
                     <LinearLayout
                         android:id="@+id/linear_layout_text_peso"
@@ -72,13 +74,15 @@
                         android:orientation="vertical"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        >
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:background="@drawable/button_border_green"
-                            android:backgroundTint="@color/dark_green">
+                            android:backgroundTint="@color/dark_green"
+                           >
 
                             <LinearLayout
                                 android:id="@+id/linear_layout_2_peso"
@@ -139,9 +143,9 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cv_peso_balance"
                 app:cardCornerRadius="10dp"
-                android:layout_marginTop="110dp">
+                android:layout_marginTop="20dp">
 
                 <LinearLayout
                     android:id="@+id/linear_layout_1_maya"
@@ -150,7 +154,8 @@
                     android:orientation="vertical"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:layout_constraintTop_toTopOf="parent"
+                    >
 
                     <LinearLayout
                         android:id="@+id/linear_layout_text_maya"
@@ -246,7 +251,7 @@
                         android:textStyle="bold"
                         android:textColor="@color/dark_green"
                         android:layout_gravity="center"
-                        android:layout_marginBottom="10dp"/>
+                        android:layout_marginBottom="5dp"/>
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/pc_cash_maya"

@@ -91,7 +91,8 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
                                     android:layout_marginStart="10dp"
-                                    android:layout_marginTop="5dp"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginBottom="10dp"
                                     android:contentDescription="Peso logo"
                                     android:src="@drawable/peso_coin"
                                     android:text="P" />
@@ -101,8 +102,8 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical"
-                                    android:layout_marginTop="15dp"
-                                    android:layout_marginStart="5dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_marginStart="10dp"
                                     app:layout_constraintLeft_toLeftOf="parent"
                                     app:layout_constraintRight_toRightOf="parent"
                                     app:layout_constraintTop_toTopOf="parent">
@@ -128,19 +129,19 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
 
                                 <androidx.cardview.widget.CardView
                                     android:id="@+id/btn_see_more"
-                                    android:layout_width="35dp"
-                                    android:layout_height="35dp"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
                                     android:backgroundTint="@color/light_green"
                                     android:textColor="@color/white"
                                     app:cardCornerRadius="25dp"
-                                    android:layout_marginStart="10dp"
+                                    android:layout_marginStart="35dp"
                                     android:layout_marginEnd="50dp"
                                     android:layout_marginTop="30dp">
 
                                     <ImageView
                                         android:src="@drawable/icon_see_more"
-                                        android:layout_width="35dp"
-                                        android:layout_height="35dp"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
                                         android:layout_gravity="center"
                                         />
                                 </androidx.cardview.widget.CardView>
@@ -324,7 +325,7 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:id="@+id/tv_performance"
-                            android:textSize="18sp"
+                            android:textSize="20sp"
                             android:textStyle="bold"
                             android:text="Loading..."
                             android:layout_marginTop="15dp"
