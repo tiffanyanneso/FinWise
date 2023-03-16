@@ -230,6 +230,8 @@ class ViewGoalActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getTransactions() {
+        var cashBalance = 0.00F
+        var mayaBalance = 0.00F
         var transactionFilterArrayList = ArrayList<TransactionFilter>()
         //TODO: INCLUDE IN QUERY SPENDING ACTIVITY ID
         firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
@@ -243,6 +245,20 @@ class ViewGoalActivity : AppCompatActivity() {
                 else if (transactionObject.transactionType == "Withdrawal")
                     currentBalance -= transactionObject.amount!!
 
+                if (transactionObject.paymentType == "Cash") {
+                    if (transactionObject?.transactionType == "Deposit")
+                        cashBalance += transactionObject?.amount!!
+                    else if (transactionObject.transactionType == "Withdrawal")
+                        cashBalance -= transactionObject?.amount!!
+                }
+
+                else if (transactionObject.paymentType == "Maya") {
+                    if (transactionObject?.transactionType == "Deposit")
+                        mayaBalance += transactionObject?.amount!!
+                    else if (transactionObject.transactionType == "Withdrawal")
+                        mayaBalance -= transactionObject?.amount!!
+                }
+
             }
 
             transactionFilterArrayList.sortByDescending { it.date }
@@ -250,6 +266,8 @@ class ViewGoalActivity : AppCompatActivity() {
                 transactionsArrayList.add(transaction.transactionID.toString())
         }.continueWith {
             binding.tvCurrentBalance.text = "Available balance: ₱ " + DecimalFormat("#,##0.00").format(currentBalance)
+            binding.tvCashSavings.text = "₱ " + DecimalFormat("#,##0.00").format(cashBalance)
+            binding.tvMayaSavings.text = "₱ " + DecimalFormat("#,##0.00").format(mayaBalance)
             setFields() }
     }
 
