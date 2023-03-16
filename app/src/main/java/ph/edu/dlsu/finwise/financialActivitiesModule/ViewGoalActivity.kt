@@ -21,6 +21,7 @@ import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
+import ph.edu.dlsu.finwise.databinding.DialogActivityLockedBinding
 import ph.edu.dlsu.finwise.databinding.DialogFinishSavingBinding
 import ph.edu.dlsu.finwise.databinding.DialogWarningCannotWtithdrawBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
@@ -60,6 +61,9 @@ class ViewGoalActivity : AppCompatActivity() {
     private lateinit var savingActivityID:String
     private lateinit var budgetingActivityID:String
     private lateinit var spendingActivityID:String
+
+    private lateinit var savingActivityStatus:String
+    private lateinit var budgetingActivityStatus:String
 
     private var savings = 0.00F
 
@@ -146,14 +150,7 @@ class ViewGoalActivity : AppCompatActivity() {
         }
 
         binding.layoutActivityName.setOnClickListener {
-            if (savedAmount>=targetAmount) {
-                var budgeting  = Intent (this, BudgetActivity::class.java)
-                sendBundle.putString("budgetingActivityID", budgetingActivityID)
-                sendBundle.putString("savingActivityID", savingActivityID)
-                sendBundle.putString("spendingActivityID", spendingActivityID)
-                budgeting.putExtras(sendBundle)
-                this.startActivity(budgeting)
-            } else {
+            if (savingActivityStatus == "In Progress") {
                 var dialogBinding= DialogFinishSavingBinding.inflate(getLayoutInflater())
                 var dialog= Dialog(this);
                 dialog.setContentView(dialogBinding.getRoot())
@@ -163,6 +160,23 @@ class ViewGoalActivity : AppCompatActivity() {
                 dialogBinding.btnOk.setOnClickListener{
                     dialog.dismiss()
                 }
+            } else if (savingActivityStatus == "Completed" && budgetingActivityStatus == "Locked") {
+                var dialogBinding= DialogActivityLockedBinding.inflate(getLayoutInflater())
+                var dialog= Dialog(this);
+                dialog.setContentView(dialogBinding.getRoot())
+                dialog.window!!.setLayout(900, 900)
+
+                dialog.show()
+                dialogBinding.btnOk.setOnClickListener{
+                    dialog.dismiss()
+                }
+            } else {
+                var budgeting  = Intent (this, BudgetActivity::class.java)
+                sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                sendBundle.putString("savingActivityID", savingActivityID)
+                sendBundle.putString("spendingActivityID", spendingActivityID)
+                budgeting.putExtras(sendBundle)
+                this.startActivity(budgeting)
             }
         }
     }
@@ -174,6 +188,7 @@ class ViewGoalActivity : AppCompatActivity() {
             for (finActivity in results) {
                 val activityObject = finActivity.toObject<FinancialActivities>()
                 if (activityObject.financialActivityName == "Saving") {
+                    savingActivityStatus = activityObject.status!!
                     savingActivityID = finActivity.id
                     if (activityObject.status == "Completed") {
 //                        binding.btnEditGoal.visibility = View.GONE
@@ -187,8 +202,10 @@ class ViewGoalActivity : AppCompatActivity() {
                         allComplete = false
                     }
                 }
-                if (activityObject.financialActivityName == "Budgeting")
+                if (activityObject.financialActivityName == "Budgeting") {
+                    budgetingActivityStatus = activityObject.status!!
                     budgetingActivityID = finActivity.id
+                }
 
                 if (activityObject.financialActivityName == "Spending")
                     spendingActivityID = finActivity.id
@@ -198,26 +215,15 @@ class ViewGoalActivity : AppCompatActivity() {
             }
         }.continueWith {
             //if all activities are complete, no more updates are allowed
-            if (allComplete) {
-                binding.layoutDeposit.visibility = View.GONE
-                binding.layoutWithdraw.visibility = View.GONE
-                binding.layoutEarning.visibility = View.GONE
+            if (allComplete || (savingActivityStatus == "Completed" && budgetingActivityStatus =="Locked")) {
+                binding.layoutUpperButtons.visibility = View.GONE
                 binding.layoutEdit.visibility = View.GONE
-                binding.tvDeposit.visibility = View.GONE
-                binding.tvWithdraw.visibility = View.GONE
-                binding.tvEarning.visibility = View.GONE
-                binding.tvEditGoal.visibility = View.GONE
             } else {
-                binding.layoutDeposit.visibility = View.VISIBLE
-                binding.layoutWithdraw.visibility = View.VISIBLE
-                binding.layoutEarning.visibility = View.VISIBLE
+                binding.layoutUpperButtons.visibility = View.VISIBLE
                 binding.layoutEdit.visibility = View.VISIBLE
-                binding.tvDeposit.visibility = View.VISIBLE
-                binding.tvWithdraw.visibility = View.VISIBLE
-                binding.tvEarning.visibility = View.VISIBLE
-                binding.tvEditGoal.visibility = View.VISIBLE
             }
-            getTransactions() }
+            getTransactions()
+        }
     }
 
     private class TransactionFilter(var transactionID:String?=null, var date: Date?=null)
@@ -283,11 +289,11 @@ class ViewGoalActivity : AppCompatActivity() {
                         binding.tvRemaining.text = differenceDays.toString() + " days remaining"
                     } else
                         binding.tvRemaining.visibility = View.GONE
-
                 }
             }
         }
     }
+
     private fun loadButtons(){
         loadBackButton()
     }

@@ -65,6 +65,8 @@ class GoalTransactionsHistoryAdapater : RecyclerView.Adapter<GoalTransactionsHis
                 val date =  SimpleDateFormat("MM/dd/yyyy").format(transaction?.date?.toDate())
                 itemBinding.tvDate.text = date.toString()
                 itemBinding.tvName.text  = transaction?.transactionName
+                itemBinding.tvPaymentType.text = transaction?.paymentType
+
 
                 if (transaction?.transactionType == "Deposit") {
                     itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.very_light_green))

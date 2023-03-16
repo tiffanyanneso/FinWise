@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
     android:id="@+id/card_view"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
+    android:layout_height="wrap_content"
     card_view:cardCornerRadius="10dp"
     android:layout_marginBottom="10dp">
 
@@ -31,12 +32,12 @@
                 android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="Name"
                 android:layout_weight="1"
+                android:maxLines="1"
+                android:text="Name"
+                android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:maxLines="1"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_amount"
@@ -45,19 +46,49 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:text="₱ XXXX.XX"
+                android:text="₱ 0.00"
                 android:maxLines="1"/>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/linear_layout">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Peso logo"
+                android:src="@drawable/baseline_wallet_24"
+                android:text="P"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                app:tint="@color/black"
+                />
+
+            <TextView
+                android:id="@+id/tv_payment_type"
+                android:layout_below="@id/linear_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Payment Type"
+                android:textSize="16sp"
+                android:layout_weight="1"/>
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/linear_layout"
+            android:layout_below="@id/linear_layout_1"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:maxLines="1"
-            android:text="XX/XX/XXXX"/>
+            android:text="01/01/2000"/>
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

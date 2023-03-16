@@ -15,9 +15,11 @@ import ph.edu.dlsu.finwise.databinding.ActivityGoalAccomplishedBinding
 import ph.edu.dlsu.finwise.databinding.DialogProceedNextActivityBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.abs
 
 class GoalAccomplishedActivity : AppCompatActivity() {
@@ -29,6 +31,8 @@ class GoalAccomplishedActivity : AppCompatActivity() {
     private lateinit var savingActivityID:String
     private lateinit var budgetingActivityID:String
     private lateinit var spendingActivityID:String
+
+    private lateinit var goalName:String
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -67,7 +71,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
 
             dialogBinding.btnNo.setOnClickListener {
                 //withdrawal transaction from goal to wallet
-                adjustUserBalance()
+                adjustWalletBalances()
             }
         }
     }
@@ -75,7 +79,8 @@ class GoalAccomplishedActivity : AppCompatActivity() {
     private fun setText () {
         firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
-            binding.tvGoal.text = financialGoal?.goalName
+            goalName = financialGoal?.goalName.toString()
+            binding.tvGoal.text = goalName
             binding.tvActivity.text = financialGoal?.financialActivity
             binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(financialGoal?.targetAmount)
             // convert timestamp to date string
@@ -83,35 +88,70 @@ class GoalAccomplishedActivity : AppCompatActivity() {
         }
     }
 
-    private fun adjustUserBalance() {
-        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener { result ->
-            var walletID = result.documents[0].id
+    private fun adjustWalletBalances() {
+        var cashBalance = 0.00F
+        var mayaBalance = 0.00F
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
+            for (transaction in results) {
+                var transactionObject = transaction.toObject<Transactions>()
+                if (transactionObject.paymentType == "Cash") {
+                    if (transactionObject?.transactionType == "Deposit")
+                        cashBalance += transactionObject?.amount!!
+                    else if (transactionObject.transactionType == "Withdrawal")
+                        cashBalance -= transactionObject?.amount!!
+                }
 
-            firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener { goal ->
-                var withdrawal = hashMapOf(
-                    "transactionName" to goal.toObject<FinancialGoals>()?.goalName + " Withdrawal",
-                    "transactionType" to "Withdrawal",
-                    "category" to "Goal",
-                    "date" to Timestamp.now(),
-                    "userID" to currentUser,
-                    "amount" to goal.toObject<FinancialGoals>()?.currentSavings!!,
-                    "financialActivityID" to savingActivityID
-                )
-                var adjustedBalance = abs(goal.toObject<FinancialGoals>()?.currentSavings!!.toDouble())
-                firestore.collection("Transactions").add(withdrawal).addOnSuccessListener {
-                    firestore.collection("ChildWallet").document(walletID).update("currentBalance", FieldValue.increment(adjustedBalance)).addOnSuccessListener {
-                        var sendBundle = Bundle()
-                        sendBundle.putString("financialGoalID", financialGoalID)
-                        sendBundle.putString("savingActivityID", savingActivityID)
-                        sendBundle.putString("budgetingActivityID", budgetingActivityID)
-                        sendBundle.putString("spendingActivityID", spendingActivityID)
-                        var pfm = Intent(this, PersonalFinancialManagementActivity::class.java)
-                        pfm.putExtras(sendBundle)
-                        this.startActivity(pfm)
-                    }
+                else if (transactionObject.paymentType == "Maya") {
+                    if (transactionObject?.transactionType == "Deposit")
+                        mayaBalance += transactionObject?.amount!!
+                    else if (transactionObject.transactionType == "Withdrawal")
+                        mayaBalance -= transactionObject?.amount!!
                 }
             }
+            adjustCashBalance(cashBalance)
+            adjustMayaBalance(mayaBalance)
+            var finact = Intent(this, FinancialActivities::class.java)
+            this.startActivity(finact)
         }
+    }
 
+    private fun adjustCashBalance(cashBalance:Float) {
+        //withdraw money from savings to wallet
+        var withdrawal = hashMapOf(
+            "userID" to currentUser,
+            "transactionType" to "Withdrawal",
+            "transactionName" to "$goalName Withdrawal",
+            "amount" to cashBalance,
+            "category" to "Goal",
+            "financialActivityID" to savingActivityID,
+            "date" to Timestamp.now(),
+            "paymentType" to "Cash"
+        )
+        firestore.collection("Transactions").add(withdrawal)
+
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", "Cash").get().addOnSuccessListener { result ->
+            var walletID = result.documents[0].id
+            firestore.collection("ChildWallet").document(walletID).update("currentBalance", FieldValue.increment(cashBalance.toDouble()))
+        }
+    }
+
+    private fun adjustMayaBalance(mayaBalance:Float) {
+        //withdraw money from savings to wallet
+        var withdrawal = hashMapOf(
+            "userID" to currentUser,
+            "transactionType" to "Withdrawal",
+            "transactionName" to "$goalName Withdrawal",
+            "amount" to mayaBalance,
+            "category" to "Goal",
+            "financialActivityID" to savingActivityID,
+            "date" to Timestamp.now(),
+            "paymentType" to "Maya"
+        )
+        firestore.collection("Transactions").add(withdrawal)
+
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", "Maya").get().addOnSuccessListener { result ->
+            var walletID = result.documents[0].id
+            firestore.collection("ChildWallet").document(walletID).update("currentBalance", FieldValue.increment(mayaBalance.toDouble()))
+        }
     }
 }
