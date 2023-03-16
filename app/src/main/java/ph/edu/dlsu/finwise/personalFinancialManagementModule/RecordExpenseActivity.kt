@@ -33,8 +33,8 @@ class RecordExpenseActivity : AppCompatActivity() {
     lateinit var amount: String
     var balance = 0.00f
     lateinit var category: String
-    lateinit var phone: String
-    lateinit var merchant: String
+    private var phone = ""
+    private var merchant = ""
     lateinit var paymentType: String
     lateinit var goal: String
     private var selectedValue = "Cash"
@@ -182,6 +182,7 @@ class RecordExpenseActivity : AppCompatActivity() {
     private fun validAmount(): Boolean {
         val bundle2 = intent.extras!!
         balance = bundle2.getFloat("balance")
+        Log.d("balance", "validAmount: "+balance)
         //trying to deposit more than their current balance
         if (binding.etAmount.text.toString().toFloat() > balance) {
             binding.etAmount.error =
@@ -202,6 +203,7 @@ class RecordExpenseActivity : AppCompatActivity() {
     }
 
     private fun goToConfirmation() {
+
         binding.btnConfirm.setOnClickListener {
             if (validateAndSetUserInput() && validAmount()) {
                 setBundle()
@@ -221,13 +223,12 @@ class RecordExpenseActivity : AppCompatActivity() {
     private fun setBundle() {
         //val goal = binding.spinnerGoal.selectedItem.toString()
         bundle = Bundle()
-        bundle.putString("transactionType", "Expense")
         bundle.putString("transactionName", name)
+        bundle.putString("transactionType", "Expense")
         bundle.putString("category", category)
         bundle.putString("paymentType", paymentType)
         bundle.putString("merchant", merchant)
         bundle.putString("phone", phone)
-
         bundle.putFloat("amount", amount.toFloat())
         bundle.putFloat("balance", balance)
        // bundle.putString("goal", goal)

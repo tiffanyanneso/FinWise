@@ -124,9 +124,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         when (selectedDatesSort) {
             "weekly" -> {
                 selectedDates = getDaysOfWeek(sortedDate)
-
                 graphData = addWeeklyData(selectedDates)
-                Log.d("sdsdsdddd", "setData: "+graphData)
                 binding.tvBalanceTitle.text = "This Week's Balance Trend"
             }
             "monthly" -> {
@@ -321,7 +319,8 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
                 uniqueDates.add(uniqueDate)
             }
         }
-    return uniqueDates.sorted()
+
+        return uniqueDates.sorted()
     }
 
     private fun initializeTransactions(documents: QuerySnapshot) {
@@ -474,16 +473,33 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getDaysOfWeek(dates: List<Date>): List<Date> {
-
-        val startOfWeek = LocalDate.now().with(DayOfWeek.SUNDAY)
-        val endOfWeek = LocalDate.now().with(DayOfWeek.SATURDAY)
-        val filteredDates = dates.filter { date ->
-            val localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-            !localDate.isBefore(startOfWeek) && !localDate.isAfter(endOfWeek)
+        val weekStart = Calendar.getInstance().apply {
+            firstDayOfWeek = Calendar.SUNDAY
+            set(Calendar.DAY_OF_WEEK, firstDayOfWeek)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
         }
-        Log.d("sdfsdddd", "confirm: "+filteredDates)
+        val weekEnd = weekStart.clone() as Calendar
+        weekEnd.add(Calendar.DAY_OF_MONTH, 6)
 
-        return filteredDates
+        val currentWeekDates = mutableListOf<Date>()
+        dates.forEach { date ->
+            val calendar = Calendar.getInstance().apply { time = date }
+            if (!calendar.before(weekStart) && !calendar.after(weekEnd)) {
+                currentWeekDates.add(calendar.time)
+            }
+        }
+
+        if (!currentWeekDates.contains(weekStart.time)) {
+            currentWeekDates.add(weekStart.time)
+        }
+        if (!currentWeekDates.contains(weekEnd.time)) {
+            currentWeekDates.add(weekEnd.time)
+        }
+
+        return currentWeekDates.sorted()
     }
 
     /*private fun addData(groups: Map<Int, List<Date>>): MutableList<Entry> {

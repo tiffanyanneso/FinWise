@@ -23,6 +23,13 @@ class ExplanationFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentExplanationBinding.bind(view)
         loadDoneButton()
+        setDialogSize()
+    }
+
+    private fun setDialogSize() {
+        val width = resources.getDimensionPixelSize(R.dimen.explanation_popup_width)
+        val height = resources.getDimensionPixelSize(R.dimen.explanation_popup_height)
+        dialog!!.window!!.setLayout(width, height)
     }
 
     private fun loadDoneButton() {
