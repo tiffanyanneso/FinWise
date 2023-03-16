@@ -135,6 +135,9 @@ class SavingFragment : Fragment() {
 
     private fun getTotalSavings() {
         var savedAmount = 0.00F
+        var cashBalance = 0.00F
+        var mayaBalance = 0.00F
+
         binding.tvGoalSavings.text = "₱ " + DecimalFormat("#,##0.00").format(savedAmount)
 
         firestore.collection("Transactions").whereEqualTo("userID", currentUser).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
@@ -144,9 +147,26 @@ class SavingFragment : Fragment() {
                    savedAmount += transactionObject?.amount!!
                else if (transactionObject.transactionType == "Withdrawal")
                    savedAmount -= transactionObject?.amount!!
+
+                if (transactionObject.paymentType == "Cash") {
+                    if (transactionObject?.transactionType == "Deposit")
+                        cashBalance += transactionObject?.amount!!
+                    else if (transactionObject.transactionType == "Withdrawal")
+                        cashBalance -= transactionObject?.amount!!
+                }
+
+                else if (transactionObject.paymentType == "Maya") {
+                    if (transactionObject?.transactionType == "Deposit")
+                        mayaBalance += transactionObject?.amount!!
+                    else if (transactionObject.transactionType == "Withdrawal")
+                        mayaBalance -= transactionObject?.amount!!
+                }
            }
         }.continueWith {
             binding.tvGoalSavings.text = "₱ " + DecimalFormat("#,##0.00").format(savedAmount)
+            binding.tvCashSavings.text = "₱ " + DecimalFormat("#,##0.00").format(cashBalance)
+            binding.tvMayaSavings.text = "₱ " + DecimalFormat("#,##0.00").format(mayaBalance)
+
         }
     }
 

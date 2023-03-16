@@ -172,6 +172,37 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <TextView
+        android:id="@+id/tv_cash_balance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/container_payment_type"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="You currently have ₱0.00 savings in cash"
+        android:ems="10"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="5dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_maya_balance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/tv_cash_balance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="You currently have ₱0.00 savings in maya"
+        android:ems="10"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="5dp"
+        />
+
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/container_amount"
         android:layout_width="match_parent"
@@ -179,7 +210,7 @@
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container_payment_type"
+        app:layout_constraintTop_toBottomOf="@+id/tv_maya_balance"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:helperText=""
@@ -198,19 +229,6 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/tv_savings"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/container_amount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="16dp"
-        android:layout_marginTop="5dp"
-        android:text="You currently have ₱ 0.00 in this savings wallet"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        />
 
     <LinearLayout
         android:layout_width="match_parent"

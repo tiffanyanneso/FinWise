@@ -69,60 +69,93 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:background="@drawable/button_border_white"
                 android:backgroundTint="@color/dark_green">
 
-                <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="13dp"
-                    android:contentDescription="Peso logo"
-                    android:src="@drawable/peso_coin"
-                    android:text="P" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/tv_available"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16dp"
-                        android:text="Available Savings"
-                        android:textAllCaps = "true"
-                        android:textColor="@color/white"
-                        />
+                    <ImageView
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="13dp"
+                        android:contentDescription="Peso logo"
+                        android:src="@drawable/peso_coin"
+                        android:text="P" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical"
+                        android:padding="20dp">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/tv_available"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:textStyle="bold"
-                            android:id="@+id/tv_savings_available"
-                            android:textSize="24sp"
-                            android:text="₱ XXXXX.XX"
+                            android:textSize="16dp"
+                            android:text="Available Savings"
+                            android:textAllCaps = "true"
                             android:textColor="@color/white"
-                            android:paddingBottom="5dp"
-                            android:gravity="center_vertical"/>
+                            />
 
-<!--                        <ImageView-->
-<!--                            android:layout_width="20dp"-->
-<!--                            android:layout_height="20dp"-->
-<!--                            android:src="@drawable/edit_pencil"-->
-<!--                            android:layout_gravity="center_vertical"-->
-<!--                            />-->
-                    </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textStyle="bold"
+                                android:id="@+id/tv_savings_available"
+                                android:textSize="24sp"
+                                android:text="₱ XXXXX.XX"
+                                android:textColor="@color/white"
+                                android:paddingBottom="5dp"
+                                android:gravity="center_vertical"/>
+                        </LinearLayout>
+
                 </LinearLayout>
+
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Cash Savings"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_cash_savings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="₱ 0.00"
+                        android:textColor="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Maya Savings"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_maya_savings"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="₱ 0.00"
+                        android:textColor="@color/white"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/linear_layout_buttons"

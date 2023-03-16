@@ -39,7 +39,8 @@ class SavingsWithdrawActivity : AppCompatActivity() {
     private lateinit var bundle:Bundle
 
     private var savedAmount = 0.00F
-    private var walletBalance = 0.00F
+    private var cashBalance = 0.00F
+    private var mayaBalance = 0.00F
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -51,12 +52,15 @@ class SavingsWithdrawActivity : AppCompatActivity() {
         setFields()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
+        getBalances()
+
         binding.dropPaymentType.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            getAvailableBalance()
+
         }
 
         binding.btnNext.setOnClickListener {
-            if (filledUp() && validAmount()) {
+            //TODO: ADD VALID AMOUNT FUNCTION CHECK
+            if (filledUp()) {
                 binding.containerAmount.helperText = ""
                 var sendBundle = Bundle()
                 sendBundle.putString("goalName", binding.tvGoalName.text.toString())
@@ -89,20 +93,47 @@ class SavingsWithdrawActivity : AppCompatActivity() {
         }
     }
 
-    private fun getAvailableBalance() {
-        walletBalance = 0.00F
-        var paymentType = binding.dropPaymentType.text.toString()
-        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereEqualTo("paymentType", paymentType).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
-            for (transaction in results) {
+    private fun getBalances() {
+        binding.tvCashBalance.visibility = View.VISIBLE
+        binding.tvMayaBalance.visibility = View.VISIBLE
+        binding.dropPaymentType.isEnabled = true
+        binding.dropPaymentType.isClickable = true
+        binding.dropPaymentType.text.clear()
+
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).get().addOnSuccessListener { transactions ->
+            for (transaction in transactions) {
                 var transactionObject = transaction.toObject<Transactions>()
+                if (transactionObject.paymentType == "Cash") {
+                    if (transactionObject?.transactionType == "Deposit")
+                        cashBalance += transactionObject?.amount!!
+                    else if (transactionObject.transactionType == "Withdrawal")
+                        cashBalance -= transactionObject?.amount!!
+                }
 
-                if (transactionObject.transactionType == "Deposit")
-                    walletBalance += transactionObject.amount!!
-
-                else if (transactionObject.transactionType == "Withdrawal")
-                    walletBalance -= transactionObject.amount!!
+                else if (transactionObject.paymentType == "Maya") {
+                    if (transactionObject?.transactionType == "Deposit")
+                        mayaBalance += transactionObject?.amount!!
+                    else if (transactionObject.transactionType == "Withdrawal")
+                        mayaBalance -= transactionObject?.amount!!
+                }
             }
-            binding.tvSavings.text = "You currently have ₱ ${DecimalFormat("#,##0.00").format(walletBalance)} in this savings wallet"
+            binding.tvCashBalance.text = "You currently have ₱${DecimalFormat("#,##0.00").format(cashBalance)} savings in cash"
+            binding.tvMayaBalance.text = "You currently have ₱${DecimalFormat("#,##0.00").format(mayaBalance)} savings in maya"
+
+            if (cashBalance == 0.00F) {
+                binding.tvCashBalance.visibility = View.GONE
+                binding.dropPaymentType.setText("Maya")
+                //disable them to select other fund source
+                binding.dropPaymentType.isEnabled = false
+                binding.dropPaymentType.isClickable = false
+            }
+            else if (mayaBalance == 0.00F) {
+                binding.tvMayaBalance.visibility = View.GONE
+                binding.dropPaymentType.setText("Cash")
+                //disable them to select other fund source
+                binding.dropPaymentType.isEnabled = false
+                binding.dropPaymentType.isClickable = false
+            }
         }
     }
 
@@ -126,6 +157,7 @@ class SavingsWithdrawActivity : AppCompatActivity() {
         getGoalInfo()
         firestore.collection("FinancialActivities").document(savingActivityID).get().addOnSuccessListener {
             var saving = it.toObject<FinancialActivities>()
+            //saving is completed, hide progress bar, and compute for current balance as they might have already spent their savings
             if (saving?.status == "Completed") {
                 binding.tvProgress.visibility = View.GONE
                 binding.tvProgressAmount.visibility = View.GONE
@@ -149,8 +181,6 @@ class SavingsWithdrawActivity : AppCompatActivity() {
             binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(financialGoal.currentSavings!!) +
                     " / ₱ " + DecimalFormat("#,##0.00").format(financialGoal?.targetAmount)
             savedAmount = financialGoal.currentSavings!!
-            binding.tvSavings.text = "You currently have ₱ ${DecimalFormat("#,##0.00").format(financialGoal.currentSavings!!)} in this savings wallet"
-
         }
 
     }
@@ -181,17 +211,17 @@ class SavingsWithdrawActivity : AppCompatActivity() {
         return valid
     }
 
-    private fun validAmount():Boolean {
-        //trying to deposit more than their current balance
-        println("print " + walletBalance)
-        if (binding.etAmount.text.toString().toFloat() > walletBalance) {
-            binding.containerAmount.helperText = "You cannot withdraw more than your savings."
-            return false
-        }
-        else
-            return true
-
-    }
+//    private fun validAmount():Boolean {
+//        //trying to deposit more than their current balance
+//        println("print " + walletBalance)
+//        if (binding.etAmount.text.toString().toFloat() > walletBalance) {
+//            binding.containerAmount.helperText = "You cannot withdraw more than your savings."
+//            return false
+//        }
+//        else
+//            return true
+//
+//    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showCalendar() {

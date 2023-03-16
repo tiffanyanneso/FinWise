@@ -165,6 +165,8 @@ class BudgetActivity : AppCompatActivity() {
     }
 
     private fun getBalance() {
+        var cashBalance = 0.00F
+        var mayaBalance = 0.00F
         firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
             for (transaction in results) {
                 var transactionObject = transaction.toObject<Transactions>()
@@ -172,9 +174,25 @@ class BudgetActivity : AppCompatActivity() {
                     balance += transactionObject.amount!!
                 else if (transactionObject.transactionType == "Withdrawal")
                     balance-= transactionObject.amount!!
+
+                if (transactionObject.paymentType == "Cash") {
+                    if (transactionObject?.transactionType == "Deposit")
+                        cashBalance += transactionObject?.amount!!
+                    else if (transactionObject.transactionType == "Withdrawal")
+                        cashBalance -= transactionObject?.amount!!
+                }
+
+                else if (transactionObject.paymentType == "Maya") {
+                    if (transactionObject?.transactionType == "Deposit")
+                        mayaBalance += transactionObject?.amount!!
+                    else if (transactionObject.transactionType == "Withdrawal")
+                        mayaBalance -= transactionObject?.amount!!
+                }
             }
         }.continueWith {
             binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,##0.00").format(balance)
+            binding.tvCashSavings.text = "₱ " + DecimalFormat("#,##0.00").format(cashBalance)
+            binding.tvMayaSavings.text = "₱ " + DecimalFormat("#,##0.00").format(mayaBalance)
             if (!isCompleted)
                 getAvailableToBudget()
         }
