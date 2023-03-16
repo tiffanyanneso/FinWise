@@ -83,9 +83,9 @@ class SpendingExpenseListFragment : Fragment() {
                 expensesArrayList.add(transactionObject)
             }
 
-            spendingExpensesAdapter = SpendingExpenseAdapter(requireContext().applicationContext, expensesArrayList)
+            spendingExpensesAdapter = SpendingExpenseAdapter(requireActivity().applicationContext, expensesArrayList)
             binding.rvViewItems.adapter = spendingExpensesAdapter
-            binding.rvViewItems.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
+            binding.rvViewItems.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
             spendingExpensesAdapter.notifyDataSetChanged()
         }
     }

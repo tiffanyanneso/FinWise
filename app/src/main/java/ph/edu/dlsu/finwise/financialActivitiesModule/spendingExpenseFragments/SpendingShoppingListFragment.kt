@@ -24,11 +24,13 @@ import kotlin.collections.ArrayList
 class SpendingShoppingListFragment : Fragment() {
 
     private lateinit var binding: FragmentSpendingShoppingListBinding
-    private lateinit var budgetingActivityID:String
+
+    private lateinit var budgetItemID:String
 
     private lateinit var savingActivityID:String
-    private lateinit var budgetItemID:String
+    private lateinit var budgetingActivityID:String
     private lateinit var spendingActivityID:String
+    private var remainingBudget = 0.00F
 
     private var firestore = Firebase.firestore
 
@@ -43,6 +45,7 @@ class SpendingShoppingListFragment : Fragment() {
             savingActivityID = bundle?.getString("savingActivityID").toString()
             budgetingActivityID = bundle?.getString("budgetingActivityID").toString()
             budgetItemID = bundle?.getString("budgetItemID").toString()
+            remainingBudget = bundle?.getFloat("remainingBudget")!!
             spendingActivityID = bundle?.getString("spendingActivityID").toString()
         }
     }
@@ -93,8 +96,10 @@ class SpendingShoppingListFragment : Fragment() {
                             var bundle = Bundle()
                             bundle.putString("budgetItemID", budgetItemID)
                             bundle.putString("savingActivityID", savingActivityID)
-                            bundle.putString("shoppingListItem", shoppingListItemID)
+                            bundle.putString("budgetingActivityID", budgetingActivityID)
                             bundle.putString("spendingActivityID", spendingActivityID)
+                            bundle.putString("shoppingListItem", shoppingListItemID)
+                            bundle.putFloat("remainingBudget", remainingBudget)
                             recordExpense.putExtras(bundle)
                             recordExpense.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(recordExpense)

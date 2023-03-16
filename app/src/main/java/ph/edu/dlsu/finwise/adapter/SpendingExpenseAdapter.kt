@@ -55,6 +55,7 @@ class SpendingExpenseAdapter : RecyclerView.Adapter<SpendingExpenseAdapter.Budge
         fun bindItem(transaction: Transactions){
             itemBinding.tvItem.text = transaction?.transactionName
             itemBinding.tvAmount.text = "- ₱ " + DecimalFormat("#,##0.00").format(transaction?.amount)
+            itemBinding.tvPaymentType.text = transaction?.paymentType
             itemBinding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(transaction?.date!!.toDate())
         }
 

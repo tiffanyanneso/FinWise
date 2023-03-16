@@ -124,8 +124,10 @@ class SpendingActivity : AppCompatActivity() {
                     binding.tvCategoryAmount.setTextColor(getResources().getColor(R.color.black))
                     binding.layoutAmount.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.light_red))
                 }
+
+                initializeFragments()
             }
-        }.continueWith { initializeFragments() }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -157,9 +159,9 @@ class SpendingActivity : AppCompatActivity() {
                 adapter.addFragment(spendingShoppingListFragment,"Shopping List")
             }
 
-            var spendingExpenseFragment = SpendingExpenseListFragment()
-            spendingExpenseFragment.arguments = fragmentBundle
-            adapter.addFragment(spendingExpenseFragment,"Expenses")
+//            var spendingExpenseFragment = SpendingExpenseListFragment()
+//            spendingExpenseFragment.arguments = fragmentBundle
+//            adapter.addFragment(spendingExpenseFragment,"Expenses")
             binding.viewPager.adapter = adapter
             binding.tabLayout.setupWithViewPager(binding.viewPager)
             adapter.notifyDataSetChanged()
