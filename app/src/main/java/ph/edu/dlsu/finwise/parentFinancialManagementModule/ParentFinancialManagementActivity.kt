@@ -22,6 +22,7 @@ import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
+import ph.edu.dlsu.finwise.parentFinancialManagementModule.pFMFragments.ExplanationParentFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.CashMayaBalanceBreakdownActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.BalanceFragment
@@ -287,7 +288,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         binding.btnExplanation.setOnClickListener {
             val activity = context as FragmentActivity
             val fm: FragmentManager = activity.supportFragmentManager
-            val dialogFragment = ExplanationFragment()
+            val dialogFragment = ExplanationParentFragment()
             dialogFragment.show(fm, "fragment_alert")
         }
     }

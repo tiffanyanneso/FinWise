@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -139,14 +140,21 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     }
 
     private fun getDatesOfTransactions(): List<Date> {
-    //get unique dates in transaction arraylist
-        val dates = ArrayList<Date>()
-        for (transaction in transactionsArrayList) {
-            //if array of dates doesn't contain date of the transaction, add the date to the arraylist
-            if (!dates.contains(transaction.date?.toDate()))
-                dates.add(transaction.date?.toDate()!!)
+        // Step 1: Map the objects to a list of Date objects
+        val dates = transactionsArrayList.map { it.date!!.toDate() }
+
+        // Step 2: Create a new list to store the unique dates
+        val uniqueDates = mutableListOf<Date>()
+
+        // Step 3-4: Loop through the dates and add unique dates to the list
+        for (date in dates) {
+            val uniqueDate = Date(date.year, date.month, date.date, 0, 0, 0)
+            if (!uniqueDates.contains(uniqueDate)) {
+                uniqueDates.add(uniqueDate)
+            }
         }
-        return dates.sortedBy { it }
+
+        return uniqueDates.sorted()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -174,13 +182,33 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getDaysOfWeek(dates: List<Date>): List<Date> {
-        val startOfWeek = LocalDate.now().with(DayOfWeek.MONDAY)
-        val endOfWeek = LocalDate.now().with(DayOfWeek.SUNDAY)
-        val filteredDates = dates.filter { date ->
-            val localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-            !localDate.isBefore(startOfWeek) && !localDate.isAfter(endOfWeek)
+        val weekStart = Calendar.getInstance().apply {
+            firstDayOfWeek = Calendar.SUNDAY
+            set(Calendar.DAY_OF_WEEK, firstDayOfWeek)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
         }
-        return filteredDates
+        val weekEnd = weekStart.clone() as Calendar
+        weekEnd.add(Calendar.DAY_OF_MONTH, 6)
+
+        val currentWeekDates = mutableListOf<Date>()
+        dates.forEach { date ->
+            val calendar = Calendar.getInstance().apply { time = date }
+            if (!calendar.before(weekStart) && !calendar.after(weekEnd)) {
+                currentWeekDates.add(calendar.time)
+            }
+        }
+
+        if (!currentWeekDates.contains(weekStart.time)) {
+            currentWeekDates.add(weekStart.time)
+        }
+        if (!currentWeekDates.contains(weekEnd.time)) {
+            currentWeekDates.add(weekEnd.time)
+        }
+
+        return currentWeekDates.sorted()
     }
 
     private fun addWeeklyData(selectedDates: List<Date>): MutableList<Entry> {

@@ -86,15 +86,15 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         name = bundle!!.getString("transactionName").toString()
         category = bundle!!.getString("category").toString()
         paymentType = bundle!!.getString("paymentType").toString()
-        phone = bundle!!.getString("phone").toString()
-        merchant = bundle!!.getString("merchant").toString()
+        phone = bundle?.getString("phone").toString()
+        merchant = bundle?.getString("merchant").toString()
         amount = bundle!!.getFloat("amount")
         balance = bundle!!.getFloat("balance")
         date = bundle!!.getSerializable("date").toString()
+        transactionType = bundle!!.getString("transactionType").toString()
 
         checkIfMaya()
 
-        transactionType = bundle!!.getString("transactionType").toString()
         if (transactionType == "Income") {
             binding.tvTransactionType.text = "Income"
             binding.tvWalletBalance.text = "₱ " + DecimalFormat("#,##0.00").format(balance + amount)
@@ -123,7 +123,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
     }
 
     private fun checkIfMaya() {
-        if (paymentType == "Maya") {
+        if (paymentType == "Maya" && transactionType == "Expense") {
             binding.llPhone.visibility = View.VISIBLE
             binding.tvPhoneNumber.text = phone
             binding.llMerchant.visibility = View.VISIBLE
@@ -133,9 +133,9 @@ class ConfirmTransactionActivity : AppCompatActivity() {
 
     private fun confirm() {
         binding.btnConfirm.setOnClickListener {
-            if (paymentType == "Maya")
+            if (paymentType == "Maya" && transactionType == "Expense")
                 payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
-            else if (paymentType == "Cash")
+            else if (paymentType == "Cash" || transactionType == "Income")
                 adjustUserBalance()
         }
     }
