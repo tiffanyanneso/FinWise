@@ -145,18 +145,15 @@ class SpendingFragment : Fragment(){
                 var difference = Period.between(to, from)
 
                 var age = difference.years
-                if (age > 9 )
+                if (age > 9 ) {
                     purchasePlanning()
+                }
                 else {
                     overallSpending = overspendingPercentage
-                    setOverall()
                 }
-
             }
 
-//            if (overSpending )
-//            binding.tvOverspendingPercentage.setTextColor(getResources().getColor(R.color.red))
-//            binding.tvOverspendingStatus.setTextColor(getResources().getColor(R.color.red))
+            setOverall()
         }
     }
 
@@ -200,13 +197,14 @@ class SpendingFragment : Fragment(){
             binding.textStatus.text = "Amazing"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "Amazing job! You are performing well. Spending wisely is your strong point. Keep completing those goals!"
+            showSeeMoreButton()
         } else if (overallSpending < 90 && overallSpending >= 80) {
             binding.imgFace.setImageResource(R.drawable.great)
             binding.textStatus.text = "Great"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = " Great job! You are performing well. Keep spending wisely!"
             showSeeMoreButton()
-        } else if (overallSpending < 80 && overallSpending >= 70) {
+        } else if (overallSpending < 90 && overallSpending >= 80) {
             binding.imgFace.setImageResource(R.drawable.good)
             binding.textStatus.text = "Good"
             binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))

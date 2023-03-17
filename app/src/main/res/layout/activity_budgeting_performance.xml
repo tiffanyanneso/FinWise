@@ -71,7 +71,7 @@
 
                             <ImageView
                                 android:src="@drawable/good"
-                                android:id="@+id/iv_score"
+                                android:id="@+id/img_face"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
                                 android:layout_gravity="center"/>
@@ -88,7 +88,7 @@
                                 android:textAlignment="center"/>
 
                             <TextView
-                                android:id="@+id/tv_performance_status"
+                                android:id="@+id/text_status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="16sp"
