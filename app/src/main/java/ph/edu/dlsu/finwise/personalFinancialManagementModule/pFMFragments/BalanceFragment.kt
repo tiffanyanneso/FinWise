@@ -373,28 +373,29 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     }
 
     private fun updateXAxisQuarterly(xAxis: XAxis?) {
-// quarter
-        // Create an array of month names
-        val monthNames = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 
-// Create a list of x-axis values
-        val xAxisValues = mutableListOf<Float>()
-        var i = 0f
-        for (monthList in months!!.values) {
-            xAxisValues.add(i + (monthList.size - 1f) / 2f)
-            i += monthList.size.toFloat()
-        }
-        // configure the X-axis
-        xAxis?.labelCount = 4
-        xAxis?.isGranularityEnabled = true
-        xAxis?.axisMinimum = 0f
+// Get the current quarter's months as an array
+        val currentQuarterMonthLabels = months?.values?.flatten()?.distinct()?.sorted()?.map { date ->
+            val calendar = Calendar.getInstance()
+            calendar.time = date
+            val monthIndex = calendar.get(Calendar.MONTH)
+            // Convert the month index to a quarter label (e.g. Q1, Q2, Q3, Q4)
+            val quarterLabel = "Q${monthIndex / 3 + 1}"
+            // Get the month name (e.g. January, February, March, etc.)
+            val monthName = SimpleDateFormat("MMMM").format(date)
+            "$quarterLabel $monthName"
+        }?.toTypedArray()
+
+// Set the X Axis value formatter
         xAxis?.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
+                // Get the month label for the corresponding value
                 val index = value.toInt()
-                if (index >= 0 && index < monthNames.size) {
-                    return monthNames[index]
+                return if (index >= 0 && index < currentQuarterMonthLabels?.size!!) {
+                    currentQuarterMonthLabels[index]
+                } else {
+                    ""
                 }
-                return ""
             }
         }
     }

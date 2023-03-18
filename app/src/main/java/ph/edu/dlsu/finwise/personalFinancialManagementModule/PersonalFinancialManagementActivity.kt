@@ -250,6 +250,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         val adapter = PFMAdapter(supportFragmentManager)
         val balanceFragment = BalanceFragment()
         val savingsFragment = SavingsFragment()
+        Log.d("sdfsfsdf", "getArgumentsFromPFM: "+bundle)
+
         balanceFragment.arguments = bundle
         savingsFragment.arguments = bundle
         adapter.addFragment(balanceFragment, "Balance")
