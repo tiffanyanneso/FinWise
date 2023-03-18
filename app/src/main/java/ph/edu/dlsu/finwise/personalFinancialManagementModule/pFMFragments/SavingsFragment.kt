@@ -88,6 +88,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     private fun getArgumentsFromPFM() {
         val args = arguments
         val date = args?.getString("date")
+
         val currUser = args?.getString("user")
 
         val child = args?.getString("childID")
@@ -402,7 +403,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
         // Set the data on the chart and customize it
         val lineData = LineData(dataSet)
         balanceLineGraphView.data = lineData
-        dataSet.valueTextSize = 14f
+        dataSet.valueTextSize = 12f
 
         // on below line adding animation
         balanceLineGraphView.animate()
@@ -423,7 +424,7 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
     }
 
     private fun updateXAxisWeekly(xAxis: XAxis?) {
-        val dateFormatter = SimpleDateFormat("EEEE")
+        val dateFormatter = SimpleDateFormat("EEE")
         val dates = selectedDates.distinct()
 
         if (dates.size < graphData.size) {
@@ -435,27 +436,11 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
 
 
     private fun updateXAxisMonthly(xAxis: XAxis) {
-        val dateMap = weeks // Your date map here
-
-// Create a list of week labels from the date map
-        val weekLabels = mutableListOf<String>()
-        for (weekDates in dateMap!!.values) {
-            val weekNo = weekLabels.size + 1
-            val weekSuffix = if (weekNo % 10 == 1 && weekNo != 11) "st"
-            else if (weekNo % 10 == 2 && weekNo != 12) "nd"
-            else if (weekNo % 10 == 3 && weekNo != 13) "rd"
-            else "th"
-            val weekLabel = "${weekNo}${weekSuffix} Week"
-            weekLabels.add(weekLabel)
-        }
-
         xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return if (value.toInt() < weekLabels.size) weekLabels[value.toInt()] else ""
+                return "Week ${value.toInt() + 1}"
             }
         }
-
-
     }
 
     private fun updateXAxisQuarterly(xAxis: XAxis?) {
