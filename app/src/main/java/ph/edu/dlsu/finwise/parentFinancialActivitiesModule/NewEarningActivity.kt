@@ -33,6 +33,7 @@ class NewEarningActivity : AppCompatActivity() {
     private lateinit var binding:ActivityNewEarningBinding
 
     private var savingActivityID:String?=null
+    private lateinit var module:String
     private lateinit var childID:String
 
     private var firestore = Firebase.firestore
@@ -51,7 +52,9 @@ class NewEarningActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
-        savingActivityID = bundle.getString("savingActivityID").toString()
+        module = bundle.getString("module").toString()
+
+        fillUpFields()
 
         initializeDropDowns()
         loadBackButton()
@@ -125,6 +128,44 @@ class NewEarningActivity : AppCompatActivity() {
         }
     }
 
+    private fun fillUpFields() {
+        if (module == "pfm") {
+            binding.dropdownDestination.setText("Personal Finance")
+            binding.dropdownGoal.visibility = View.GONE
+        } else if (module == "finact") {
+            var bundle = intent.extras!!
+            var financialGoalID = bundle.getString("financialGoalID").toString()
+
+            binding.dropdownDestination.setText("Financial Goal")
+            binding.layoutGoal.visibility = View.VISIBLE
+            firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener { goal ->
+                binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal.toObject<FinancialGoals>()?.currentSavings)!! +
+                        " / ₱ " + DecimalFormat("#,##0.00").format(goal.toObject<FinancialGoals>()?.targetAmount!!)
+                binding.dropdownGoal.setText(goal.toObject<FinancialGoals>()!!.goalName)
+                firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("financialActivityName", "Saving").get().addOnSuccessListener {
+                    savingActivityID = it.documents[0].id
+                }
+            }
+        }
+    }
+
+
+    class GoalDropDown(var savingActivityID:String, val goalName:String)
+
+    private fun changeDuration() {
+        var chore = binding.dropdownChore.text.toString()
+
+        if (chore == "Put Away Laundry" || chore == "Set Table")
+            binding.etDuration.setText("5")
+        else if (chore == "Put Away Groceries" || chore == "Clean Floor" || chore == "Fold Laundry" || chore == "Change Bed Sheets" || chore == "Feed Pets" || chore =="Mop Floor")
+            binding.etDuration.setText("10")
+        else if (chore == "Help Parent Prepare Meal" || chore == "Prepare Snack" || chore == "Wash Dishes")
+            binding.etDuration.setText("15")
+        else if (chore == "Clean Bathroom" || chore == "Wash Car" || chore == "Prepare Meal" || chore == "Take Care Of Younger Sibling")
+            binding.etDuration.setText("30")
+
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeDropDowns() {
         val paymentTypeItems = resources.getStringArray(R.array.payment_type)
@@ -192,23 +233,6 @@ class NewEarningActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-
-    class GoalDropDown(var savingActivityID:String, val goalName:String)
-
-    private fun changeDuration() {
-        var chore = binding.dropdownChore.text.toString()
-
-        if (chore == "Put Away Laundry" || chore == "Set Table")
-            binding.etDuration.setText("5")
-        else if (chore == "Put Away Groceries" || chore == "Clean Floor" || chore == "Fold Laundry" || chore == "Change Bed Sheets" || chore == "Feed Pets" || chore =="Mop Floor")
-            binding.etDuration.setText("10")
-        else if (chore == "Help Parent Prepare Meal" || chore == "Prepare Snack" || chore == "Wash Dishes")
-            binding.etDuration.setText("15")
-        else if (chore == "Clean Bathroom" || chore == "Wash Car" || chore == "Prepare Meal" || chore == "Take Care Of Younger Sibling")
-            binding.etDuration.setText("30")
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
