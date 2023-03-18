@@ -122,15 +122,21 @@ class SavingFragment : Fragment() {
     private fun getSavingActivities() {
         goalIDArrayList.clear()
         //saving activities that are in progress means that there the goal is also in progress because they are connected
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             binding.tvTitleInProgress.text = "My Goals (" + results.size().toString() + ")"
-            for (activity in results) {
-                var activityObject = activity.toObject<FinancialActivities>()
-                goalIDArrayList.add(activityObject?.financialGoalID.toString())
+            for (goal in results) {
+                var goalObject = goal.toObject<FinancialGoals>()
+                goalFilterArrayList.add(GoalFilter(goal.id, goalObject.targetDate!!.toDate()))
             }
+            goalFilterArrayList.sortBy { it.goalTargetDate }
+
+            for (goal in goalFilterArrayList)
+                goalIDArrayList.add(goal.financialGoalID.toString())
+
             loadRecyclerView(goalIDArrayList)
-        }.continueWith { getTotalSavings()
-            setGoalCount()}
+        }.continueWith {
+            getTotalSavings()
+            setGoalCount()} 
     }
 
     private fun getTotalSavings() {
@@ -178,7 +184,6 @@ class SavingFragment : Fragment() {
         var currentTime = Timestamp.now().toDate().time
 
         //set number of goals nearing completion and nearing deadline
-        println("print " + goalIDArrayList.size)
         for (goalID in goalIDArrayList) {
             firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener {
                 var goalObject = it.toObject<FinancialGoals>()
@@ -313,54 +318,6 @@ class SavingFragment : Fragment() {
         }
     }
 
-//    private fun setReasonPieChart() {
-//        var percentageBuying = 0.00F
-//        var percentageEvent = 0.00F
-//        var percentageEmergency = 0.00F
-//        var percentageSituational = 0.00F
-//        var percentageDonating = 0.00F
-//        var percentageEarning = 0.00F
-//
-//        if (totalGoals!=0) {
-//             percentageBuying = ((nBuyingItem.toFloat() / totalGoals.toFloat()) * 100)
-//             percentageEvent = ((nEvent.toFloat() / totalGoals.toFloat()) * 100)
-//             percentageEmergency = ((nEmergency.toFloat() / totalGoals.toFloat()) * 100)
-//             percentageSituational = ((nSituational.toFloat() / totalGoals.toFloat()) * 100)
-//             percentageDonating = ((nCharity.toFloat() / totalGoals.toFloat()) * 100)
-//             percentageEarning = ((nEarning.toFloat() / totalGoals.toFloat()) * 100)
-//        }
-//
-//
-//
-//        val entries = listOf(
-//            PieEntry(percentageBuying, "Buying Items"),
-//            PieEntry(percentageEvent, "Planning An Event"),
-//            PieEntry(percentageEmergency, "Saving For Emergency Funds"),
-//            PieEntry(percentageSituational, "Situational Shopping"),
-//            PieEntry(percentageDonating, "Donating To Charity"),
-//            PieEntry(percentageEarning, "Earning Money"),
-//        )
-//
-//        var dataSet = PieDataSet(entries, "Data")
-//
-//        val colors: ArrayList<Int> = ArrayList()
-//        colors.add(resources.getColor(R.color.purple_200))
-//        colors.add(resources.getColor( R.color.yellow))
-//        colors.add(resources.getColor(R.color.red))
-//        colors.add(resources.getColor( R.color.dark_green))
-//        colors.add(resources.getColor( R.color.teal_200))
-//        colors.add(resources.getColor( R.color.black))
-//
-//
-//        // setting colors.
-//        dataSet.colors = colors
-//
-//        var data = PieData(dataSet)
-//
-////        binding.pcReasonCategories.data = data
-////        binding.pcReasonCategories.invalidate()
-//    }
-
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
         goalAdapter = FinactSavingAdapter(requireContext().applicationContext, goalIDArrayList)
         binding.rvViewGoals.adapter = goalAdapter
@@ -389,8 +346,6 @@ class SavingFragment : Fragment() {
                 }
             }
 
-        }.continueWith {
-//            setReasonPieChart()
         }
     }
 

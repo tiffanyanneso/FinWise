@@ -43,6 +43,9 @@ class SpendingFragment : Fragment(){
     private var overSpending = 0.00F
     private var nBudgetItems = 0.00F
 
+    var nPlanned = 0.00F
+    var nTotalPurchased = 0.00F
+
     var overspendingPercentage = 0.00F
     var purchasePlanningPercentage = 0.00F
     var overallSpending = 0.00F
@@ -94,23 +97,26 @@ class SpendingFragment : Fragment(){
         }.continueWith { binding.tvTitleInProgress.text = "Spending Activities (" + spendingActivityIDArrayList.size.toString() + ")" }
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getBudgeting() {
         var budgetingActivityIDArrayList = ArrayList<String>()
-        //get only completed budgeting activities because they should complete budgeting first before they are able to spend
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
-            for (activity in results)
-                budgetingActivityIDArrayList.add(activity.id)
+        //get completed spending activities
+        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
+            for (spending in results) {
+                var spendingActivity = spending.toObject<FinancialActivities>()
+                println("print " + spendingActivity.financialGoalID )
+                firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", spendingActivity.financialGoalID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { budgeting ->
+                    var budgetingID = budgeting.documents[0].id
+                    firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
+                        nBudgetItems += results.size()
+                        for (budgetItem in results) {
 
-            for (budgetingID in budgetingActivityIDArrayList) {
-                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
-                    nBudgetItems += results.size()
-                    for (budgetItem in results) {
-
-                        var budgetItemObject = budgetItem.toObject<BudgetItem>()
-                        checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
+                            var budgetItemObject = budgetItem.toObject<BudgetItem>()
+                            checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
 //                        budgetItemsIDArrayList.add(BudgetItemAmount(budgetItem.id, budgetItemObject.amount!!))
 //                        println("print add item in budgetItems array list")
+                        }
                     }
                 }
             }
@@ -150,10 +156,9 @@ class SpendingFragment : Fragment(){
                 }
                 else {
                     overallSpending = overspendingPercentage
+                    setOverall()
                 }
             }
-
-            setOverall()
         }
     }
 
@@ -161,8 +166,6 @@ class SpendingFragment : Fragment(){
 
     private fun purchasePlanning() {
         //items planned / all the items they bought * 100
-        var nPlanned = 0.00F
-        var nTotalPurchased = 0.00F
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { allSpendingActivities ->
             for (spendingActivityID in allSpendingActivities) {
                 firestore.collection("ShoppingListItems").whereEqualTo("spendingActivityID", spendingActivityID.id).get().addOnSuccessListener { shoppingListItems ->
@@ -176,8 +179,6 @@ class SpendingFragment : Fragment(){
                         nTotalPurchased += expenseTransactions.size().toFloat()
                     }.continueWith {
                         overallSpending = (overspendingPercentage + ((nPlanned/nTotalPurchased)*100)) /2
-
-                        binding.tvPerformanceText.text ="${overallSpending}%"
                         setOverall()
                     }
                 }
@@ -186,6 +187,8 @@ class SpendingFragment : Fragment(){
     }
 
     private fun setOverall() {
+        binding.tvPerformanceText.text ="${overallSpending}%"
+
         if (overallSpending >= 96) {
             binding.imgFace.setImageResource(R.drawable.excellent)
             binding.textStatus.text = "Excellent"

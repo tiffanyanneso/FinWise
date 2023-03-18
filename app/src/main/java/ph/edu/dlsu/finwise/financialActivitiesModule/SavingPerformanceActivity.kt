@@ -55,7 +55,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
     private var specificDuration = "Short"
     private var specificCategory = "Buying Items"
 
-    data class DurationRating(var name: String? = null, var score: Int = 0)
+    data class DurationRating(var name: String? = null, var score: Float)
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -187,14 +187,6 @@ class SavingPerformanceActivity : AppCompatActivity() {
         }
     }
 
-    private fun DurationRatingObject(name: String, score: Int): DurationRating {
-        val rating = DurationRating()
-
-        rating.name = name
-        rating.score = score
-
-        return rating
-    }
     private fun setDurationPieChart() {
         var percentageShort = 0.00F
         var percentageMedium = 0.00F
@@ -229,9 +221,9 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
         val durationRatingArray = ArrayList<DurationRating>()
 
-        durationRatingArray.add(DurationRatingObject("Short Term", DecimalFormat("###0.00").format(percentageShort).toInt()))
-        durationRatingArray.add(DurationRatingObject("Medium Term", DecimalFormat("###0.00").format(percentageMedium).toInt()))
-        durationRatingArray.add(DurationRatingObject("Long Term", DecimalFormat("###0.00").format(percentageLong).toInt()))
+        durationRatingArray.add(DurationRating("Short Term", percentageShort))
+        durationRatingArray.add(DurationRating("Medium Term",percentageMedium))
+        durationRatingArray.add(DurationRating("Long Term", percentageLong))
 
         durationRatingArray.sortByDescending{it.score}
 
@@ -240,13 +232,13 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
             if (num == 1) {
                 binding.tvTopPerformingDuration.text = durationRatingArray[i].name.toString() + " Term"
-                binding.tvTopPerformingRating.text = durationRatingArray[i].score.toString() + "%"
+                binding.tvTopPerformingRating.text = DecimalFormat("##0.00").format(durationRatingArray[i].score) + "%"
             } else if (num == 2) {
                 binding.tvDuration2nd.text = durationRatingArray[i].name.toString() + " Term"
-                binding.tvDuration2Rating.text = durationRatingArray[i].score.toString() + "%"
+                binding.tvDuration2Rating.text = DecimalFormat("##0.00").format(durationRatingArray[i].score) + "%"
             } else if (num == 3) {
                 binding.tvDuration3rd.text = durationRatingArray[i].name.toString() + " Term"
-                binding.tvDuration3Rating.text = durationRatingArray[i].score.toString() + "%"
+                binding.tvDuration3Rating.text = DecimalFormat("##0.00").format(durationRatingArray[i].score) + "%"
                 specificDuration = durationRatingArray[i].name.toString()
             }
         }
@@ -264,7 +256,6 @@ class SavingPerformanceActivity : AppCompatActivity() {
         var percentageEmergency = 0.00F
         var percentageSituational = 0.00F
         var percentageDonating = 0.00F
-        var percentageEarning = 0.00F
 
         if (totalGoals!=0) {
             percentageBuying = ((nBuyingItem.toFloat() / totalGoals.toFloat()) * 100)
@@ -272,7 +263,6 @@ class SavingPerformanceActivity : AppCompatActivity() {
             percentageEmergency = ((nEmergency.toFloat() / totalGoals.toFloat()) * 100)
             percentageSituational = ((nSituational.toFloat() / totalGoals.toFloat()) * 100)
             percentageDonating = ((nCharity.toFloat() / totalGoals.toFloat()) * 100)
-            percentageEarning = ((nEarning.toFloat() / totalGoals.toFloat()) * 100)
         }
 
 
@@ -283,7 +273,6 @@ class SavingPerformanceActivity : AppCompatActivity() {
             PieEntry(percentageEmergency, "Saving For Emergency Funds"),
             PieEntry(percentageSituational, "Situational Shopping"),
             PieEntry(percentageDonating, "Donating To Charity"),
-            PieEntry(percentageEarning, "Earning Money"),
         )
 
         var dataSet = PieDataSet(entries, "Data")
@@ -307,12 +296,11 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
         val categoryRatingArray = ArrayList<DurationRating>()
 
-        categoryRatingArray.add(DurationRatingObject("Buying Items", DecimalFormat("###0.00").format(percentageBuying).toInt()))
-        categoryRatingArray.add(DurationRatingObject("Planning an Event", DecimalFormat("###0.00").format(percentageEvent).toInt()))
-        categoryRatingArray.add(DurationRatingObject("Saving for Emergency Funds", DecimalFormat("###0.00").format(percentageEmergency).toInt()))
-        categoryRatingArray.add(DurationRatingObject("Situational Shopping", DecimalFormat("###0.00").format(percentageSituational).toInt()))
-        categoryRatingArray.add(DurationRatingObject("Donating to Charity", DecimalFormat("###0.00").format(percentageDonating).toInt()))
-        categoryRatingArray.add(DurationRatingObject("Earning Money", DecimalFormat("###0.00").format(percentageEarning).toInt()))
+        categoryRatingArray.add(DurationRating("Buying Items", percentageBuying))
+        categoryRatingArray.add(DurationRating("Planning an Event", percentageEvent))
+        categoryRatingArray.add(DurationRating("Saving for Emergency Funds", percentageEmergency))
+        categoryRatingArray.add(DurationRating("Situational Shopping", percentageSituational))
+        categoryRatingArray.add(DurationRating("Donating to Charity", percentageDonating))
 
         categoryRatingArray.sortByDescending{it.score}
 
@@ -321,35 +309,22 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
             if (num == 1) {
                 binding.tvTopPerformingActivity.text = categoryRatingArray[i].name
-                binding.tvTopPerformingActivityPercentage.text = categoryRatingArray[i].score.toString() + "%"
+                binding.tvTopPerformingActivityPercentage.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
             } else if (num == 2) {
                 binding.tvActivity2nd.text = categoryRatingArray[i].name
-                binding.tvConcept2Activity.text = categoryRatingArray[i].score.toString() + "%"
+                binding.tvConcept2Activity.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
             } else if (num == 3) {
                 binding.tvActivity3rd.text = categoryRatingArray[i].name
-                binding.tvActivity3Rating.text = categoryRatingArray[i].score.toString() + "%"
+                binding.tvActivity3Rating.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
             } else if (num == 4) {
                 binding.tvActivity4th.text = categoryRatingArray[i].name
-                binding.tvActivity4Rating.text = categoryRatingArray[i].score.toString() + "%"
+                binding.tvActivity4Rating.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
             } else if (num == 5) {
                 binding.tvActivity5th.text = categoryRatingArray[i].name
-                binding.tvActivity5Rating.text = categoryRatingArray[i].score.toString() + "%"
+                binding.tvActivity5Rating.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
                 specificCategory = categoryRatingArray[i].name.toString()
             }
         }
-
-//        binding.progressBarBuyingItems.progress = percentageBuying.toInt()
-//        binding.percentageBuyingItems.text = DecimalFormat("###0.00").format(percentageBuying) + "%"
-//        binding.progressBarPlanningEvent.progress = percentageEvent.toInt()
-//        binding.percentagePlanningEvent.text = DecimalFormat("###0.00").format(percentageEvent) + "%"
-//        binding.progressBarEmergencyFunds.progress = percentageEmergency.toInt()
-//        binding.percentageEmergencyFunds.text =DecimalFormat("###0.00").format(percentageEmergency) + "%"
-//        binding.progressBarSituationalShopping.progress = percentageSituational.toInt()
-//        binding.percentageSituationalShopping.text = DecimalFormat("###0.00").format(percentageSituational) + "%"
-//        binding.progressBarDonating.progress = percentageDonating.toInt()
-//        binding.percentageDonating.text = DecimalFormat("###0.00").format(percentageDonating) + "%"
-//        binding.progressBarEarningMoney.progress = percentageEarning.toInt()
-//        binding.percentageEarningMoney.text =DecimalFormat("###0.00").format(percentageEarning) + "%"
     }
 
     private fun loadBackButton() {

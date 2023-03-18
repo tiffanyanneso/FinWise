@@ -21,6 +21,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetingPerformanceActivit
 import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -67,7 +68,6 @@ class BudgetingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //binding.titleOverallBudegtingPerformance.text = "Overall Budgeting\nPerformance"
         binding.tvPerformancePercentage.text = "0.00%"
         binding.title.text = "Overall Budgeting Performance"
         getBudgeting()
@@ -100,40 +100,37 @@ class BudgetingFragment : Fragment() {
                 var activityObject = activity.toObject<FinancialActivities>()
                 goalIDArrayList.add(activityObject?.financialGoalID.toString())
             }
-//            getParentalInvolvement()
+            getOverallBudgeting()
             loadRecyclerView(goalIDArrayList)
         }
     }
 
-//    private fun getParentalInvolvement() {
-//        parentalInvolvementArrayList.clear()
-//        //saving activities that are in progress means that there the goal is also in progress because they are connected
-//        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").get().addOnSuccessListener { results ->
-//            for (activity in results) {
-//                //for parent involvement
-//                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).get().addOnSuccessListener { budgetItems ->
-//                    for (budgetItem in budgetItems) {
-//                        budgetItemCount++
-//                        var budgetItemObject = budgetItem.toObject<BudgetItem>()
-//
-//                        firestore.collection("ParentUser").document(budgetItemObject?.createdBy.toString()).get().addOnSuccessListener { user ->
-//                            //parent is the one who added the budget item
-//                            if (user.exists())
-//                                nParent++
-//
-//                        }.continueWith {
-//                            binding.tvParentalInvolvementPercent.text = DecimalFormat("##0.##").format((nParent.toFloat()/budgetItemCount.toFloat())*100)+ "%"
-//                            binding.progressBarParentalInvolvement.progress = ((nParent.toFloat()/budgetItemCount.toFloat())*100).roundToInt()
-//                        }
-//                    }
-//                }
-//                getAverageUpdates(activity.id)
-//            }
-//        }
-//    }
+    private fun getOverallBudgeting() {
+        parentalInvolvementArrayList.clear()
+        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
+            for (activity in results) {
+                //for parent involvement
+                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).get().addOnSuccessListener { budgetItems ->
+                    for (budgetItem in budgetItems) {
+                        budgetItemCount++
+                        var budgetItemObject = budgetItem.toObject<BudgetItem>()
+                        firestore.collection("Users").document(budgetItemObject.createdBy.toString()).get().addOnSuccessListener { user ->
+                            //parent is the one who added the budget item
+                            if (user.toObject<Users>()!!.userType == "Parent")
+                                nParent++
+                        }
+                    }
+                }
+                getAverageUpdates(activity.id)
+            }
+        }
+    }
 
-    private fun setOverall(overall: Int) {
-        // TODO set percentage
+    private fun setOverall() {
+
+        var overall = (1 - (nParent.toFloat()/budgetItemCount.toFloat())) * 100
+
+        binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(overall)}%"
 
         if (overall >= 96) {
             binding.imgFace.setImageResource(R.drawable.excellent)
@@ -207,14 +204,19 @@ class BudgetingFragment : Fragment() {
         binding.layoutButtons.visibility = View.VISIBLE
     }
     private fun getAverageUpdates(budgetingActivityID:String){
-        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).get().addOnSuccessListener { budgetItems ->
+        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).whereEqualTo("status", "Completed").get().addOnSuccessListener { budgetItems ->
             for (budgetItem in budgetItems){
                 var budgetItemObject = budgetItem.toObject<BudgetItem>()
                 nItems++
                 if (budgetItemObject.status == "Edited")
                     nUpdates++
             }
-            binding.tvAverageUpdates.text = DecimalFormat("##0.##").format((nUpdates/nItems.roundToInt()))
+            var averageUpdates = 0
+            if (nItems != 0.00F )
+                averageUpdates = (nUpdates/nItems).roundToInt()
+
+            binding.tvAverageUpdates.text = DecimalFormat("##0.##").format(averageUpdates)
+            setOverall()
         }
     }
 

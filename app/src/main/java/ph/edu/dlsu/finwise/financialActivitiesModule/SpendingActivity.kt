@@ -159,9 +159,9 @@ class SpendingActivity : AppCompatActivity() {
                 adapter.addFragment(spendingShoppingListFragment,"Shopping List")
             }
 
-//            var spendingExpenseFragment = SpendingExpenseListFragment()
-//            spendingExpenseFragment.arguments = fragmentBundle
-//            adapter.addFragment(spendingExpenseFragment,"Expenses")
+            var spendingExpenseFragment = SpendingExpenseListFragment()
+            spendingExpenseFragment.arguments = fragmentBundle
+            adapter.addFragment(spendingExpenseFragment,"Expenses")
             binding.viewPager.adapter = adapter
             binding.tabLayout.setupWithViewPager(binding.viewPager)
             adapter.notifyDataSetChanged()

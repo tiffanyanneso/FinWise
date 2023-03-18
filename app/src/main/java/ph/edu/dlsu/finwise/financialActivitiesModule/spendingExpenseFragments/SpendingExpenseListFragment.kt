@@ -67,7 +67,7 @@ class SpendingExpenseListFragment : Fragment() {
             recordExpense()
         }
         binding.tvViewAll.setOnClickListener {
-            var spendingTransactions = Intent(requireContext().applicationContext, SpendingTransactionsActivity::class.java)
+            var spendingTransactions = Intent(requireActivity().applicationContext, SpendingTransactionsActivity::class.java)
             var sendBundle = Bundle()
             sendBundle.putString("spendingActivityID", spendingActivityID)
             spendingTransactions.putExtras(sendBundle)
@@ -91,7 +91,7 @@ class SpendingExpenseListFragment : Fragment() {
     }
 
     private fun recordExpense() {
-        var recordExpense = Intent (requireContext().applicationContext, FinancialActivityRecordExpense::class.java)
+        var recordExpense = Intent (requireActivity().applicationContext, FinancialActivityRecordExpense::class.java)
         var bundle = Bundle()
         bundle.putString("savingActivityID", savingActivityID)
         bundle.putString("spendingActivityID", spendingActivityID)
