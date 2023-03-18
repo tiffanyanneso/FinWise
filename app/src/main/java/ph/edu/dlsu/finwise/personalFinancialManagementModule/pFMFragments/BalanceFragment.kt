@@ -75,7 +75,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         val currUser = args?.getString("user")
         val child = args?.getString("childID")
 
-
         if (child != null) {
             childID = child
         }
@@ -121,6 +120,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun setData(): MutableList<Entry> {
+
         when (selectedDatesSort) {
             "weekly" -> {
                 selectedDates = getDaysOfWeek(sortedDate)
@@ -130,6 +130,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
             "monthly" -> {
                 weeks = getWeeksOfCurrentMonth(sortedDate)
                 graphData = iterateWeeksOfCurrentMonth(weeks!!)
+
                 /*val group = groupDates(sortedDate, "month")
                 iterateDatesByQuarter(group)*/
                 binding.tvBalanceTitle.text = "This Month's Balance Trend"
@@ -137,6 +138,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
             "quarterly" -> {
                 months = getMonthsOfQuarter(sortedDate)
                 graphData =  forEachDateInMonths(months!!)
+                Log.d("zaza", "QUARTER: "+graphData)
                 binding.tvBalanceTitle.text = "This Quarter's Balance Trend"
             }
         }
@@ -261,7 +263,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
             for (transaction in transactionsArrayList) {
                 //comparing the dates if they are equal
                 if (date.compareTo(transaction.date?.toDate()) == 0) {
-                    Log.d("sdsdsdddd", "setData: "+transaction.amount)
 
                     if (transaction.transactionType == "Income"){
                         totalAmount += transaction.amount!!
@@ -333,7 +334,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     }
 
     private fun updateXAxisWeekly(xAxis: XAxis?) {
-        val dateFormatter = SimpleDateFormat("EEEE")
+        val dateFormatter = SimpleDateFormat("EEE")
         val dates = selectedDates.distinct()
 
         if (dates.size < graphData.size) {
@@ -364,27 +365,11 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     }
 
     private fun updateXAxisMonthly(xAxis: XAxis) {
-        val dateMap = weeks // Your date map here
-
-// Create a list of week labels from the date map
-        val weekLabels = mutableListOf<String>()
-        for (weekDates in dateMap!!.values) {
-            val weekNo = weekLabels.size + 1
-            val weekSuffix = if (weekNo % 10 == 1 && weekNo != 11) "st"
-            else if (weekNo % 10 == 2 && weekNo != 12) "nd"
-            else if (weekNo % 10 == 3 && weekNo != 13) "rd"
-            else "th"
-            val weekLabel = "${weekNo}${weekSuffix} Week"
-            weekLabels.add(weekLabel)
-        }
-
         xAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return if (value.toInt() < weekLabels.size) weekLabels[value.toInt()] else ""
+                return "Week ${value.toInt() + 1}"
             }
         }
-
-
     }
 
     private fun updateXAxisQuarterly(xAxis: XAxis?) {
@@ -446,7 +431,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         val dataSet = LineDataSet(graphData, "Balance")
         dataSet.color = R.color.red
         dataSet.setCircleColor(R.color.teal_200)
-        dataSet.valueTextSize = 14f
+        dataSet.valueTextSize = 12f
 
 
         //Set the data on the chart and customize it
@@ -466,7 +451,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         // Add a Peso sign in the data points in the graph
         dataSet.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return String.format("₱%.2f", value) // add the ₱ character to the data point values
+                return String.format("₱$value") // add the ₱ character to the data point values
             }
         }
     }

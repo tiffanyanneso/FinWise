@@ -105,9 +105,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         val performance: String
         val bitmap: Bitmap
 
-        Log.d("asdfdsa", "computeIncomeExpenseRatio: "+income)
-        Log.d("asdfdsa", "computeIncomeExpenseRatio: "+expense)
-
         if (ratio >= 180) {
             performance = "Excellent!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.dark_green))
