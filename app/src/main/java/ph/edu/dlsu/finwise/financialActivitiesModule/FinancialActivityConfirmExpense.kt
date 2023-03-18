@@ -3,18 +3,31 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.paymaya.sdk.android.common.LogLevel
+import com.paymaya.sdk.android.common.PayMayaEnvironment
+import com.paymaya.sdk.android.common.exceptions.BadRequestException
+import com.paymaya.sdk.android.common.models.RedirectUrl
+import com.paymaya.sdk.android.common.models.TotalAmount
+import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMaya
+import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMayaResult
+import com.paymaya.sdk.android.paywithpaymaya.SinglePaymentResult
+import com.paymaya.sdk.android.paywithpaymaya.models.SinglePaymentRequest
+import org.json.JSONObject
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialConfirmExpenseBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,6 +57,13 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
 
+    // For Pay With PayMaya API: This is instantiating the Pay With PayMaya API.
+    val payWithPayMayaClient = PayWithPayMaya.newBuilder()
+        .clientPublicKey("pk-MOfNKu3FmHMVHtjyjG7vhr7vFevRkWxmxYL1Yq6iFk5")
+        .environment(PayMayaEnvironment.SANDBOX)
+        .logLevel(LogLevel.ERROR)
+        .build()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialConfirmExpenseBinding.inflate(layoutInflater)
@@ -66,10 +86,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
                     normalTransaction()
             } else if (paymentType == "Maya") {
                 //need to split transaction
-                if (expenseAmount > mayaBalance)
-                    splitMayaTransaction()
-                else
-                    normalTransaction()
+                payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
             }
 
             //check if bundle contains shoppingListItemID, meaning that the expense was from a shopping list and need to update the status
@@ -78,8 +95,8 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
                 firestore.collection("ShoppingListItems").document(bundle.getString("shoppingListItemID").toString()).update("status", "Purchased")
             }
 
-            var spending = Intent(this, SpendingActivity::class.java)
-            var sendBundle = Bundle()
+            val spending = Intent(this, SpendingActivity::class.java)
+            val sendBundle = Bundle()
             sendBundle.putString("budgetingActivityID", budgetingActivityID)
             sendBundle.putString("budgetItemID", budgetItemID)
             spending.putExtras(sendBundle)
@@ -88,6 +105,78 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
         }
         //TODO: BTN CANCEL
     }
+
+    private fun buildSinglePaymentRequest(): SinglePaymentRequest {
+        val amount = BigDecimal(mayaBalance.toDouble())
+        val currency = "PHP"
+        val redirectUrl = RedirectUrl(
+            success = "http://success.com",
+            failure = "http://failure.com",
+            cancel = "http://cancel.com"
+        )
+        /* val metadata = JSONObject()
+         metadata.put("customerName", "John Doe")
+         metadata.put("customerEmail", "johndoe@example.com")
+ */
+        return SinglePaymentRequest(
+            TotalAmount(amount, currency),
+            "123456789",
+            redirectUrl,
+            null as JSONObject?
+        )
+    }
+
+    // For Pay With PayMaya API: Once A Pay With PayMaya Activity finishes, this function receives the results.
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        payWithPayMayaClient.onActivityResult(requestCode, resultCode, data)?.let {
+            processCheckoutResult(it)
+        }
+    }
+
+    private fun processCheckoutResult(result: PayWithPayMayaResult) {
+        when (result) {
+            is SinglePaymentResult.Success -> {
+                val resultID: String = result.paymentId
+                Toast.makeText(this, "Payment Successful. Payment ID: $resultID", Toast.LENGTH_LONG)
+                    .show()
+                Log.d("PayMayaa", resultID)
+                //adjustUserBalance()
+                //lagay sa paywithpayamyaclient to
+                mayaTransaction()
+            }
+            is SinglePaymentResult.Cancel -> {
+                val resultID: String? = result.paymentId
+
+                Toast.makeText(this, "Payment Cancelled. Payment ID: $resultID", Toast.LENGTH_LONG)
+                    .show()
+                if (resultID != null) {
+                    Log.d("PayMayaa", resultID)
+                }
+            }
+
+            is SinglePaymentResult.Failure -> {
+                val resultID: String? = result.paymentId
+                val message =
+                    "Failure, checkoutId: ${resultID}, exception: ${result.exception}"
+                if (result.exception is BadRequestException) {
+                    Log.d("PayMayaa", (result.exception as BadRequestException).error.toString())
+                }
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                Log.d("PayMayaa", message)
+
+            }
+            else -> {}
+        }
+    }
+
+    private fun mayaTransaction() {
+        if (expenseAmount > mayaBalance)
+            splitMayaTransaction()
+        else
+            normalTransaction()
+    }
+
 
     //primary payment method selected is cash, use up all cash savings first
     private fun splitCashTransaction() {
@@ -144,8 +233,8 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
 
     //primary payment method selected is maya, use up all maya savings first
     private fun splitMayaTransaction() {
-        var remainingAmount = expenseAmount - mayaBalance
-        var withdrawal = hashMapOf(
+        val remainingAmount = expenseAmount - mayaBalance
+        val withdrawal = hashMapOf(
             "userID" to currentUser,
             "transactionType" to "Withdrawal",
             "transactionName" to "$goalName Withdrawal for $expenseName",
@@ -157,7 +246,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
         firestore.collection("Transactions").add(withdrawal)
 
         //from wallet balance, record expense
-        var expense = hashMapOf(
+        val expense = hashMapOf(
             "userID" to currentUser,
             "transactionType" to "Expense",
             "transactionName" to bundle.getString("expenseName"),
@@ -170,7 +259,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
         )
         firestore.collection("Transactions").add(expense)
 
-        var remainingWithdrawal = hashMapOf(
+        val remainingWithdrawal = hashMapOf(
             "userID" to currentUser,
             "transactionType" to "Withdrawal",
             "transactionName" to "$goalName Withdrawal for $expenseName",
@@ -182,7 +271,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
         firestore.collection("Transactions").add(remainingWithdrawal)
 
         //from wallet balance, record expense
-        var remainingExpense = hashMapOf(
+        val remainingExpense = hashMapOf(
             "userID" to currentUser,
             "transactionType" to "Expense",
             "transactionName" to bundle.getString("expenseName"),
