@@ -14,6 +14,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.MainActivity
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.PFMAdapter
@@ -57,6 +58,19 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         //Initializes the navbar
         NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
         loadBalance()
+
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId) {
+                R.id.btn_logout -> {
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent (this, MainActivity::class.java)
+                    startActivity (intent)
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun initializeFragments() {

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import androidx.annotation.RequiresApi
@@ -14,6 +15,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityNewGoalBinding
 import ph.edu.dlsu.finwise.model.Users
@@ -41,12 +43,11 @@ class NewGoal : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityNewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        // Hides actionbar,
-        // and initializes the navbar
-        supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
+        setNavigationBar()
         getCurrentUserType()
+        loadBackButton()
+
 
         binding.etTargetDate.setOnClickListener{
             showCalendar()
@@ -84,12 +85,6 @@ class NewGoal : AppCompatActivity() {
         }
 
         binding.btnCancel.setOnClickListener {
-            val goalList = Intent(this, FinancialActivity::class.java)
-            this.startActivity(goalList)
-        }
-
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
-        binding.topAppBar.setNavigationOnClickListener {
             var backBundle = intent.extras!!
             var source = backBundle.getString("source").toString()
 
@@ -108,6 +103,26 @@ class NewGoal : AppCompatActivity() {
                 this.startActivity(goToParentGoalActivity)
             }
         }
+     /*   binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            var backBundle = intent.extras!!
+            var source = backBundle.getString("source").toString()
+
+            var navBundle = Bundle()
+            navBundle.putString("childID", childID)
+
+            if (source =="childFinancialActivity") {
+                val goToFinancialActivity = Intent(applicationContext, FinancialActivity::class.java)
+                goToFinancialActivity.putExtras(navBundle)
+                goToFinancialActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(goToFinancialActivity)
+            } else if (source =="parentGoalActivity") {
+                val goToParentGoalActivity = Intent(applicationContext, ParentGoalActivity::class.java)
+                goToParentGoalActivity.putExtras(navBundle)
+                goToParentGoalActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(goToParentGoalActivity)
+            }
+        }*/
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -227,5 +242,31 @@ class NewGoal : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+    private fun setNavigationBar() {
+
+        val navUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("Users").document(navUser).get().addOnSuccessListener {
+
+            val bottomNavigationViewChild = binding.bottomNav
+            val bottomNavigationViewParent = binding.bottomNavParent
+
+            if (it.toObject<Users>()!!.userType == "Parent") {
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+            } else if (it.toObject<Users>()!!.userType == "Child") {
+                bottomNavigationViewChild.visibility = View.VISIBLE
+                bottomNavigationViewParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+
+            }
+        }
+    }
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 }

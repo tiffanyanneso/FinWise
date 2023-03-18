@@ -28,6 +28,7 @@
                 android:backgroundTint="@color/dark_green"
                 app:navigationIcon="@drawable/baseline_arrow_back_24"
                 app:title="Child Goals"
+                app:menu="@menu/top_app_bar_logout"
                 app:titleCentered="true" />
         </com.google.android.material.appbar.AppBarLayout>
 

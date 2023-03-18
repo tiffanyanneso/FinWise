@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,9 +9,11 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.MainActivity
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentGoalBinding
@@ -70,6 +73,19 @@ class ParentGoalActivity : AppCompatActivity() {
 //                else -> false
 //            }
 //        }
+
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId) {
+                R.id.btn_logout -> {
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent (this, MainActivity::class.java)
+                    startActivity (intent)
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
