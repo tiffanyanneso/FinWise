@@ -47,15 +47,17 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
                 android:text="Goal Name"
-                android:textSize="20sp"
-                android:textStyle="bold"
+                android:textSize="18sp"
                 android:maxLines="1"
-                android:layout_weight="@integer/material_motion_duration_short_1"/>
+                android:layout_weight="@integer/material_motion_duration_short_1"
+                android:layout_gravity="center"
+                android:paddingVertical="10dp"/>
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/right_arrow"/>
+                android:src="@drawable/right_arrow"
+                android:layout_gravity="center"/>
 
 <!--            <TextView-->
 <!--                android:id="@+id/tv_progress_percent"-->

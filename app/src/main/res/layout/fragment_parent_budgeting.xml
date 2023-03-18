@@ -102,35 +102,6 @@
                         android:backgroundTint="@color/dark_green"
                         android:background="@drawable/button_border"
                         android:layout_marginTop="10dp"/>
-                    <LinearLayout
-                        android:id="@+id/layout_buttons"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:layout_marginTop="10dp">
-
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btn_budgeting_review"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Review"
-                            android:textColor="@color/off_white"
-                            android:backgroundTint="@color/dark_green"
-                            android:background="@drawable/button_border_grey"
-                            android:layout_marginRight="10dp"
-                            android:layout_weight="1" />
-
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btn_see_more2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="See More"
-                            android:textColor="@color/off_white"
-                            android:backgroundTint="@color/dark_green"
-                            android:background="@drawable/button_border"
-                            android:layout_weight="1" />
-                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout
