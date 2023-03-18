@@ -21,6 +21,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetingPerformanceActivit
 import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.util.*
@@ -36,18 +37,17 @@ class BudgetingFragment : Fragment() {
     //contains only going budgeting activities for the recycler view
     var goalIDArrayList = ArrayList<String>()
     //used to get all budgeting activities to count parent involvement
-    private var parentalInvolvementArrayList = ArrayList<String>()
     var budgetingArrayList = ArrayList<FinancialActivities>()
     var goalFilterArrayList = ArrayList<GoalFilter>()
-    //arraylist that holds all user IDs for createdBy fields in BudgetItem, for parental involvement
-    private var createdByUserIDArrayList = ArrayList<String>()
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     //number of times the item was modified by the parent
     private var nParent = 0
     //number of budget items in total
-    private var budgetItemCount = 0
+    private var budgetItemCount = 0.00F
+    //budget variance
+    private var totalBudgetVariance = 0.00F
 
     var nUpdates = 0.00F
     var nItems = 0.00F
@@ -106,7 +106,6 @@ class BudgetingFragment : Fragment() {
     }
 
     private fun getOverallBudgeting() {
-        parentalInvolvementArrayList.clear()
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             for (activity in results) {
                 //for parent involvement
@@ -114,6 +113,22 @@ class BudgetingFragment : Fragment() {
                     for (budgetItem in budgetItems) {
                         budgetItemCount++
                         var budgetItemObject = budgetItem.toObject<BudgetItem>()
+
+                        if (budgetItemObject.status == "Edited")
+                            nUpdates++
+                        binding.tvAverageUpdates.text = (nUpdates/budgetItemCount).roundToInt().toString()
+
+
+                        //budget variance - lower budget variance means better budgeting performance
+                        firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItem.id).get().addOnSuccessListener { transactions ->
+                            var spent = 0.00F
+                            for (transaction in transactions)
+                                spent += transaction.toObject<Transactions>()!!.amount!!
+
+                            var budgetVariance = budgetItemObject.amount
+                        }
+
+                        //parental involvement
                         firestore.collection("Users").document(budgetItemObject.createdBy.toString()).get().addOnSuccessListener { user ->
                             //parent is the one who added the budget item
                             if (user.toObject<Users>()!!.userType == "Parent")
@@ -121,14 +136,13 @@ class BudgetingFragment : Fragment() {
                         }
                     }
                 }
-                getAverageUpdates(activity.id)
+                setOverall()
             }
         }
     }
 
     private fun setOverall() {
-
-        var overall = (1 - (nParent.toFloat()/budgetItemCount.toFloat())) * 100
+        var overall = (1 - (nParent.toFloat()/budgetItemCount)) * 100
 
         binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(overall)}%"
 
@@ -203,22 +217,21 @@ class BudgetingFragment : Fragment() {
         binding.btnSeeMore.visibility = View.GONE
         binding.layoutButtons.visibility = View.VISIBLE
     }
-    private fun getAverageUpdates(budgetingActivityID:String){
-        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).whereEqualTo("status", "Completed").get().addOnSuccessListener { budgetItems ->
-            for (budgetItem in budgetItems){
-                var budgetItemObject = budgetItem.toObject<BudgetItem>()
-                nItems++
-                if (budgetItemObject.status == "Edited")
-                    nUpdates++
-            }
-            var averageUpdates = 0
-            if (nItems != 0.00F )
-                averageUpdates = (nUpdates/nItems).roundToInt()
 
-            binding.tvAverageUpdates.text = DecimalFormat("##0.##").format(averageUpdates)
-            setOverall()
-        }
-    }
+//    private fun getAverageUpdates(budgetingActivityID:String){
+//        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).whereEqualTo("status", "Completed").get().addOnSuccessListener { budgetItems ->
+//            for (budgetItem in budgetItems){
+//                var budgetItemObject = budgetItem.toObject<BudgetItem>()
+//                nItems++
+//
+//            }
+//            var averageUpdates = 0
+//            if (nItems != 0.00F )
+//                averageUpdates = (nUpdates/nItems).roundToInt()
+//
+//            binding.tvAverageUpdates.text = DecimalFormat("##0.##").format(averageUpdates)
+//        }
+//    }
 
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {

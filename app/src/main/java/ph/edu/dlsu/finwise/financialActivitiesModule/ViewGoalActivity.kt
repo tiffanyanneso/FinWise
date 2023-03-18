@@ -360,7 +360,6 @@ class ViewGoalActivity : AppCompatActivity() {
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
             //current user is parent
             if (it.toObject<Users>()!!.userType == "Parent") {
-//                binding.layoutBtnDepositWithdraw.visibility = View.GONE
                 binding.btnWithdraw.isEnabled = false
                 binding.btnWithdraw.isClickable = false
                 binding.btnWithdraw.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_grey))
@@ -368,6 +367,10 @@ class ViewGoalActivity : AppCompatActivity() {
                 binding.btnDeposit.isEnabled = false
                 binding.btnDeposit.isClickable = false
                 binding.btnDeposit.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_grey))
+
+                binding.btnEditGoal.isEnabled = false
+                binding.btnEditGoal.isClickable = false
+                binding.btnEditGoal.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_grey))
             }
             else if (it.toObject<Users>()!!.userType == "Child"){
                 binding.btnWithdraw.isEnabled = true
@@ -377,6 +380,10 @@ class ViewGoalActivity : AppCompatActivity() {
                 binding.btnDeposit.isEnabled = true
                 binding.btnDeposit.isClickable = true
                 binding.btnDeposit.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_green))
+
+                binding.btnEditGoal.isEnabled = true
+                binding.btnEditGoal.isClickable = true
+                binding.btnEditGoal.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_green))
             }
         }
     }

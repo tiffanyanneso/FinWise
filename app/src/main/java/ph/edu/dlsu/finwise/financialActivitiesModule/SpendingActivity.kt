@@ -50,6 +50,8 @@ class SpendingActivity : AppCompatActivity() {
     private lateinit var savingActivityID:String
     private lateinit var spendingActivityID:String
 
+    private lateinit var childID:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySpendingBinding.inflate(layoutInflater)
@@ -65,6 +67,7 @@ class SpendingActivity : AppCompatActivity() {
         budgetItemID = bundle.getString("budgetItemID").toString()
         budgetingActivityID = bundle.getString("budgetingActivityID").toString()
         spendingActivityID = bundle.getString("spendingActivityID").toString()
+        childID = bundle.getString("childID").toString()
 
         //checkUser()
         bundle.putString("source", "viewGoal")
@@ -142,7 +145,6 @@ class SpendingActivity : AppCompatActivity() {
         fragmentBundle.putFloat("remainingBudget", remainingBudget)
 
 
-        var childID = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("Users").document(childID).get().addOnSuccessListener {
             var child = it.toObject<Users>()
             //compute age

@@ -17,6 +17,7 @@ import ph.edu.dlsu.finwise.databinding.DialogShoppingListRecordExpenseBinding
 import ph.edu.dlsu.finwise.databinding.FragmentSpendingShoppingListBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivityRecordExpense
 import ph.edu.dlsu.finwise.model.ShoppingListItem
+import ph.edu.dlsu.finwise.model.Users
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -38,10 +39,13 @@ class SpendingShoppingListFragment : Fragment() {
 
     private var shoppingListArrayList = ArrayList<String>()
 
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             var bundle = arguments
+            checkUser()
             savingActivityID = bundle?.getString("savingActivityID").toString()
             budgetingActivityID = bundle?.getString("budgetingActivityID").toString()
             budgetItemID = bundle?.getString("budgetItemID").toString()
@@ -166,5 +170,15 @@ class SpendingShoppingListFragment : Fragment() {
         firestore.collection("ShoppingListItems").document(shoppingListItemID).update("status", "Deleted")
         shoppingListArrayList.removeAt(position)
         shoppingListAdapter.notifyDataSetChanged()
+    }
+
+    private fun checkUser() {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            if (it.toObject<Users>()!!.userType == "Parent")
+                binding.btnAddShoppingListItem.visibility = View.GONE
+            else if (it.toObject<Users>()!!.userType == "Child")
+                binding.btnAddShoppingListItem.visibility = View.VISIBLE
+
+        }
     }
 }

@@ -91,6 +91,7 @@ class FinactSpendingAdapter : RecyclerView.Adapter<FinactSpendingAdapter.FinactS
             bundle.putString("savingActivityID",  itemBinding.tvSavingActivityId.text.toString())
             bundle.putString("budgetingActivityID", itemBinding.tvBudgetingActivityId.text.toString())
             bundle.putString("spendingActivityID", itemBinding.tvSpendingActivityId.text.toString())
+            bundle.putString("childID", childID)
             var viewGoal = Intent(context, BudgetActivity::class.java)
             viewGoal.putExtras(bundle)
             viewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

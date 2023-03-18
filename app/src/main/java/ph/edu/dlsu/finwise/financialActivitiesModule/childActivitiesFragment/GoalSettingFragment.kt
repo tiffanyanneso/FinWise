@@ -211,17 +211,6 @@ class GoalSettingFragment : Fragment() {
                 binding.tvPerformanceText.text = "Uh oh! You need to work on your goal setting. Click review to learn how!"
                 showReviewButton()
             }
-//            binding.ratingBarOverall.rating = overall
-//            binding.progressBarSpecific.progress = (nSpecific/nRatings).roundToInt()
-//            binding.ratingSpecific.text = "${(nSpecific/nRatings)}/5"
-//            binding.progressBarMeasurable.progress = (nMeasurable/nRatings).roundToInt()
-//            binding.ratingMeasurable.text = "${(nMeasurable/nRatings)}/5"
-//            binding.progressBarAchievable.progress = (nAchievable/nRatings).roundToInt()
-//            binding.ratingAchievable.text = "${(nAchievable/nRatings)}/5"
-//            binding.progressBarRelevant.progress = (nRelevant/nRatings).roundToInt()
-//            binding.ratingRelevant.text = "${(nRelevant/nRatings)}/5"
-//            binding.progressBarTime.progress = (nTimeBound/nRatings).roundToInt()
-//            binding.ratingTime.text = "${(nTimeBound/nRatings)}/5"
         }
     }
 

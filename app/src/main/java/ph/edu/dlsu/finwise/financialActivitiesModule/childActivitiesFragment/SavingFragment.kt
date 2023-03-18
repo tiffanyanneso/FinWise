@@ -199,7 +199,6 @@ class SavingFragment : Fragment() {
                 var targetDate = goalObject?.targetDate!!.toDate().time
 
                 var timeRemaining = ((targetDate!! - currentTime!!) / 100)
-                println("print " + timeRemaining)
                 if (timeRemaining <= 20)
                     nearDeadline++
 

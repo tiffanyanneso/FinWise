@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -18,6 +19,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetActivity
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import kotlin.math.absoluteValue
 
@@ -29,6 +31,8 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
     private var itemClick:ItemClick
     private var spendingActivityID:String
     private var firestore = Firebase.firestore
+
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     constructor(context: Context, budgetCategoryIDArrayList:ArrayList<String>, spendingActivityID:String , menuClick:MenuClick, itemClick:ItemClick) {
         this.context = context
@@ -134,6 +138,13 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
                         }
                     }
                 }
+            }
+
+            firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+                if (it.toObject<Users>()!!.userType == "Parent")
+                    itemBinding.btnSettings.visibility = View.GONE
+                else if (it.toObject<Users>()!!.userType == "Child")
+                    itemBinding.btnSettings.visibility = View.VISIBLE
             }
         }
 

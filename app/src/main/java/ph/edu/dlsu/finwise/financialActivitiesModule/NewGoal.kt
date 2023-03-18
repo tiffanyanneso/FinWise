@@ -70,9 +70,7 @@ class NewGoal : AppCompatActivity() {
                 bundle.putFloat("amount", amount)
                 bundle.putSerializable("targetDate",  SimpleDateFormat("MM/dd/yyyy").parse(targetDate))
                 bundle.putBoolean("goalIsForSelf", goalIsForSelf)
-
-                if(currentUserType == "Parent")
-                    bundle.putString("childID", childID)
+                bundle.putString("childID", childID)
 
                 //TODO: reset spinner and date to default value
                 binding.etGoal.text?.clear()

@@ -15,6 +15,7 @@ import ph.edu.dlsu.finwise.databinding.FragmentParentSavingBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -67,13 +68,17 @@ class ParentSavingFragment : Fragment() {
     private fun getSaving() {
         goalIDArrayList.clear()
         firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
-            binding.tvTitleInProgress.text = "My Goals (" + results.size().toString() + ")"
             for (saving in results) {
                 var savingActivity = saving.toObject<FinancialActivities>()
                 savingsArrayList.add(savingActivity)
 
                 goalIDArrayList.add(savingActivity.financialGoalID.toString())
 
+            }
+
+            firestore.collection("Users").document(childID).get().addOnSuccessListener {
+                var childName = it.toObject<Users>()!!.firstName
+                binding.tvTitleInProgress.text = "$childName's Goals (" + results.size().toString() + ")"
             }
             loadRecyclerView(goalIDArrayList)
         }.continueWith { getTotalSavings()}

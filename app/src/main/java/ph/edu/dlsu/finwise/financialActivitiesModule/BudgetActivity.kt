@@ -49,9 +49,11 @@ class BudgetActivity : AppCompatActivity() {
     private var balance = 0.00F
     private var availableToBudget = 0.00F
 
-    private var isCompleted = false
+    private var isBudgetingCompleted = false
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+    private lateinit  var currentUserType:String
+    private lateinit var childID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +69,7 @@ class BudgetActivity : AppCompatActivity() {
         savingActivityID = bundle.getString("savingActivityID").toString()
         budgetingActivityID = bundle.getString("budgetingActivityID").toString()
         spendingActivityID = bundle.getString("spendingActivityID").toString()
+        childID = bundle.getString("childID").toString()
 
         checkUser()
         getBudgetItems()
@@ -76,25 +79,28 @@ class BudgetActivity : AppCompatActivity() {
 
         var allCompleted = true
         firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
-            var financialActivity = it.toObject<FinancialActivities>()
-            if (financialActivity?.status == "Completed") {
-                isCompleted = true
-//                binding.btnWithdraw.isClickable = false
-//                binding.btnWithdraw.isEnabled = false
-                binding.btnDoneSettingBudget.visibility = View.GONE
-                binding.btnDoneSpending.visibility = View.VISIBLE
+            var budgetingActivity = it.toObject<FinancialActivities>()
+            if (budgetingActivity?.status == "Completed") {
+                isBudgetingCompleted = true
                 binding.tvAvailable.text = "Savings available to spend"
+
+                if (currentUserType == "Child") {
+                    binding.btnDoneSettingBudget.visibility = View.GONE
+                    binding.btnDoneSpending.visibility = View.VISIBLE
+                }
             }
-            else {
-                binding.btnDoneSettingBudget.visibility = View.VISIBLE
-                binding.btnDoneSpending.visibility = View.GONE
+            else if (budgetingActivity?.status != "Completed"){
                 binding.tvAvailable.text = "Savings available to budget"
                 allCompleted = false
+                if (currentUserType == "Child") {
+                    binding.btnDoneSettingBudget.visibility = View.VISIBLE
+                    binding.btnDoneSpending.visibility = View.GONE
+                }
             }
 
             getBalance()
 
-            firestore.collection("FinancialGoals").document(financialActivity?.financialGoalID!!).get().addOnSuccessListener {
+            firestore.collection("FinancialGoals").document(budgetingActivity?.financialGoalID!!).get().addOnSuccessListener {
                 binding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
             }
         }.continueWith {
@@ -102,16 +108,13 @@ class BudgetActivity : AppCompatActivity() {
                 var financialActivity = it.toObject<FinancialActivities>()
                 if (financialActivity?.status != "Completed")
                     allCompleted = false
+                //spending is done, hide buttons
+                else
+                    binding.linearLayoutButtons.visibility = View.GONE
             }.continueWith {
                 if (allCompleted)
                     binding.btnNewCategory.visibility = View.GONE
             }
-        }
-
-        //check if spending is done, if yes, hide buttons
-        firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
-            if (it.toObject<FinancialActivities>()!!.status == "Completed")
-                binding.linearLayoutButtons.visibility = View.GONE
         }
 
 
@@ -150,7 +153,6 @@ class BudgetActivity : AppCompatActivity() {
                 startActivity(goalDetails)
             }
         }
-
         binding.btnNewCategory.setOnClickListener { showNewBudgetItemDialog() }
         binding.btnDoneSettingBudget.setOnClickListener { doneSettingBudgetDialog() }
         binding.btnDoneSpending.setOnClickListener { doneSpendingDialog()}
@@ -177,23 +179,23 @@ class BudgetActivity : AppCompatActivity() {
 
                 if (transactionObject.paymentType == "Cash") {
                     if (transactionObject?.transactionType == "Deposit")
-                        cashBalance += transactionObject?.amount!!
+                        cashBalance += transactionObject.amount!!
                     else if (transactionObject.transactionType == "Withdrawal")
-                        cashBalance -= transactionObject?.amount!!
+                        cashBalance -= transactionObject.amount!!
                 }
 
                 else if (transactionObject.paymentType == "Maya") {
                     if (transactionObject?.transactionType == "Deposit")
-                        mayaBalance += transactionObject?.amount!!
+                        mayaBalance += transactionObject.amount!!
                     else if (transactionObject.transactionType == "Withdrawal")
-                        mayaBalance -= transactionObject?.amount!!
+                        mayaBalance -= transactionObject.amount!!
                 }
             }
         }.continueWith {
             binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,##0.00").format(balance)
             binding.tvCashSavings.text = "₱ " + DecimalFormat("#,##0.00").format(cashBalance)
             binding.tvMayaSavings.text = "₱ " + DecimalFormat("#,##0.00").format(mayaBalance)
-            if (!isCompleted)
+            if (!isBudgetingCompleted)
                 getAvailableToBudget()
         }
     }
@@ -232,7 +234,7 @@ class BudgetActivity : AppCompatActivity() {
                     object : BudgetCategoryAdapter.ItemClick {
                         override fun clickItem(budgetItemID: String, budgetingActivityID: String) {
                             //"done setting budget" already clicked, they can access expense
-                            if (isCompleted) {
+                            if (isBudgetingCompleted) {
                                 var budgetExpense = Intent(context, SpendingActivity::class.java)
                                 var bundle = Bundle()
 
@@ -240,6 +242,7 @@ class BudgetActivity : AppCompatActivity() {
                                 bundle.putString("savingActivityID", savingActivityID)
                                 bundle.putString("budgetItemID", budgetItemID)
                                 bundle.putString("spendingActivityID", spendingActivityID)
+                                bundle.putString("childID", childID)
                                 budgetExpense.putExtras(bundle)
                                 budgetExpense.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                 context.startActivity(budgetExpense)
@@ -269,10 +272,11 @@ class BudgetActivity : AppCompatActivity() {
 
     fun editBudgetItem(position:Int, budgetItemID:String) {
         var amount = 0
-        var dialogBinding= DialogNewBudgetCategoryBinding.inflate(getLayoutInflater())
-        var dialog= Dialog(this);
+        var dialogBinding = DialogNewBudgetCategoryBinding.inflate(getLayoutInflater())
+        var dialog = Dialog(this);
 
-        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
+        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID)
+            .whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
             for (budgetItem in results) {
                 var budgetItemObject = budgetItem.toObject<BudgetItem>()
                 availableToBudget -= budgetItemObject.amount!!
@@ -284,54 +288,55 @@ class BudgetActivity : AppCompatActivity() {
                 dialogBinding.dialogDropdownCategoryName.setText(budgetItem?.budgetItemName.toString())
                 dialogBinding.dialogEtCategoryAmount.setText(budgetItem?.amount!!.toInt().toString())
             }
-            dialogBinding.tvRemainingBalance.text = "You have ₱${DecimalFormat("#,##0.00").format(availableToBudget)} remaining left to budget"
+
+            if(!isBudgetingCompleted)
+                dialogBinding.tvRemainingBalance.text = "You have ₱${DecimalFormat("#,##0.00").format(availableToBudget)} remaining left to budget"
+            else
+                dialogBinding.tvRemainingBalance.text = "You have ₱${DecimalFormat("#,##0.00").format(balance)} in your savings"
         }
         dialog.setContentView(dialogBinding.getRoot())
 
-        if (availableToBudget <= 0.0F || balance <= 0.00F)
-            adjustBudgetDialog()
-        else {
-            dialog.window!!.setLayout(900, 1000)
+        dialog.window!!.setLayout(900, 1000)
 
-            //disable editing of category
-            dialogBinding.dialogDropdownCategoryName.isClickable = false
-            dialogBinding.dialogDropdownCategoryName.isEnabled = false
-            availableToBudget = balance
+        //disable editing of category
+        dialogBinding.dialogDropdownCategoryName.isClickable = false
+        dialogBinding.dialogDropdownCategoryName.isEnabled = false
+        availableToBudget = balance
 
 
-            dialogBinding.btnSave.setOnClickListener {
-                var itemName = dialogBinding.dialogDropdownCategoryName.text.toString()
-                var itemAmount = dialogBinding.dialogEtCategoryAmount.text.toString().toFloat()
-                //check that the fields were changed
-                if (dialogBinding.dialogEtCategoryAmount.text.toString().toInt() != amount) {
-                    //budgeting is already completed
-                    if (isCompleted) {
-                        firestore.collection("BudgetItems").document(budgetItemID).update("status", "Edited").addOnSuccessListener {
-                            lateinit var budgetItem : BudgetItem
-                            if (itemName!= "Others")
-                                budgetItem = BudgetItem(itemName, null, budgetingActivityID, itemAmount, "Active", "After", currentUser)
-                            else
-                                budgetItem = BudgetItem(itemName, dialogBinding.dialogEtOtherCategoryName.text.toString(), budgetingActivityID, itemAmount, "Active", "After", currentUser)
+        dialogBinding.btnSave.setOnClickListener {
+            var itemName = dialogBinding.dialogDropdownCategoryName.text.toString()
+            var itemAmount = dialogBinding.dialogEtCategoryAmount.text.toString().toFloat()
+            //check that the fields were changed
+            if (dialogBinding.dialogEtCategoryAmount.text.toString().toInt() != amount) {
+                //budgeting is already completed
+                if (isBudgetingCompleted) {
+                    firestore.collection("BudgetItems").document(budgetItemID).update("status", "Edited").addOnSuccessListener {
+                        lateinit var budgetItem: BudgetItem
+                        if (itemName != "Others")
+                            budgetItem = BudgetItem(itemName, null, budgetingActivityID, itemAmount, "Active", "After", currentUser)
+                        else
+                            budgetItem = BudgetItem(itemName, dialogBinding.dialogEtOtherCategoryName.text.toString(), budgetingActivityID, itemAmount, "Active", "After", currentUser)
 
-                            budgetCategoryIDArrayList.removeAt(position)
+                        budgetCategoryIDArrayList.removeAt(position)
 
-                            firestore.collection("BudgetItems").add(budgetItem).addOnSuccessListener { newBudgetItem ->
+                        firestore.collection("BudgetItems").add(budgetItem)
+                            .addOnSuccessListener { newBudgetItem ->
                                 budgetCategoryIDArrayList.add(position, newBudgetItem.id)
                                 dialog.dismiss()
                             }
-                        }
-                        //budgeting is not yet done, so just update directly
-                    } else {
-                        firestore.collection("BudgetItems").document(budgetItemID).update("amount", itemAmount)
-                        dialog.dismiss()
                     }
-                    budgetCategoryAdapter.notifyDataSetChanged()
+                    //budgeting is not yet done, so just update directly
+                } else {
+                    firestore.collection("BudgetItems").document(budgetItemID).update("amount", itemAmount)
+                    dialog.dismiss()
                 }
+                budgetCategoryAdapter.notifyDataSetChanged()
             }
-
-            dialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
-            dialog.show()
         }
+
+        dialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
+        dialog.show()
     }
 
     private fun deleteBudgetItem(position:Int, budgetItemID:String) {
@@ -339,7 +344,7 @@ class BudgetActivity : AppCompatActivity() {
         budgetCategoryAdapter.notifyDataSetChanged()
 
         //deleting budget item after declaring that done setting budget counts as an edit
-        if (isCompleted)
+        if (isBudgetingCompleted)
             firestore.collection("BudgetItems").document(budgetItemID).update("status", "Edited")
         else
             firestore.collection("BudgetItems").document(budgetItemID).update("status", "Deleted")
@@ -371,8 +376,11 @@ class BudgetActivity : AppCompatActivity() {
         }.continueWith {
             dialogBinding.tvRemainingBalance.text = "You have ₱${DecimalFormat("#,##0.00").format(availableToBudget)} remaining left to budget"
 
-            if (availableToBudget <= 0.0F || balance <= 0.00F)
-                adjustBudgetDialog()
+            //budgeting is not yet done
+            if (!isBudgetingCompleted) {
+                if (availableToBudget <= 0.0F)
+                    adjustBudgetDialog()
+            }
             else  {
                 dialog.window!!.setLayout(900, 1100)
 
@@ -384,7 +392,7 @@ class BudgetActivity : AppCompatActivity() {
                         lateinit var budgetItem : BudgetItem
 
                         var whenAdded = "Before"
-                        if (isCompleted)
+                        if (isBudgetingCompleted)
                             whenAdded = "After"
 
                         if (itemName!= "Others")
@@ -466,7 +474,7 @@ class BudgetActivity : AppCompatActivity() {
             firestore.collection("FinancialActivities").document(budgetingActivityID).update("status", "Completed").addOnSuccessListener {
                 binding.btnDoneSettingBudget.visibility = View.GONE
                 //binding.linearLayoutText.visibility = View.GONE
-                isCompleted = true
+                isBudgetingCompleted = true
                 dialog.dismiss()
                 firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "In Progress")
                 var refresh = Intent(this, BudgetActivity::class.java)
@@ -491,7 +499,6 @@ class BudgetActivity : AppCompatActivity() {
         dialog.window!!.setLayout(900, 800)
 
         dialogBinding.btnOk.setOnClickListener {
-            isCompleted = true
             firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "Completed")
             dialog.dismiss()
             var finact = Intent(this, FinancialActivity::class.java)
@@ -518,21 +525,20 @@ class BudgetActivity : AppCompatActivity() {
 
 
     private fun checkUser() {
-        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
             var user  = it.toObject<Users>()!!
+            currentUserType = user.userType!!
             //current user is parent
             if (user.userType == "Parent") {
                 binding.layoutWithdraw.visibility = View.GONE
                 binding.btnDoneSettingBudget.visibility = View.GONE
                 binding.btnDoneSpending.visibility = View.GONE
-                binding.btnDoneSpending.visibility = View.GONE
-                //binding.linearLayoutText.visibility = View.GONE
+                binding.btnNewCategory.visibility = View.GONE
             } else if (user.userType == "Child") {
                 binding.layoutWithdraw.visibility = View.VISIBLE
                 binding.btnDoneSettingBudget.visibility = View.VISIBLE
                 binding.btnDoneSpending.visibility = View.VISIBLE
-                binding.btnDoneSpending.visibility = View.VISIBLE
+                binding.btnNewCategory.visibility = View.VISIBLE
             }
         }
     }
