@@ -87,16 +87,7 @@ class ParentGoalSettingFragment : Fragment() {
             }
         }
 
-        binding.btnViewSMARTGoalsInfo.setOnClickListener{
-            showGoalDialog()
-        }
-
         binding.btnSeeMore.setOnClickListener {
-            var goToPerformance = Intent(requireContext().applicationContext, GoalSettingPerformanceActivity::class.java)
-            this.startActivity(goToPerformance)
-        }
-
-        binding.btnSeeMore2.setOnClickListener {
             var goToPerformance = Intent(requireContext().applicationContext, GoalSettingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
@@ -124,16 +115,6 @@ class ParentGoalSettingFragment : Fragment() {
         }
     }
 
-    private fun showSeeMoreButton() {
-        binding.btnSeeMore.visibility = View.VISIBLE
-        binding.layoutButtons.visibility = View.GONE
-    }
-
-    private fun showReviewButton() {
-        binding.btnSeeMore.visibility = View.GONE
-        binding.layoutButtons.visibility = View.VISIBLE
-    }
-
     @SuppressLint("SetTextI18n")
     private fun initializeRating() {
         firestore.collection("GoalRating").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
@@ -158,61 +139,51 @@ class ParentGoalSettingFragment : Fragment() {
                 binding.tvPerformanceStatus.text = "Excellent"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
                 binding.tvPerformanceText.text = "Keep up the excellent work! Goal Setting is your strong point. Keep setting those goals!"
-                showSeeMoreButton()
             } else if (percentage < 96 && percentage >= 86) {
                 binding.imgFace.setImageResource(R.drawable.amazing)
                 binding.tvPerformanceStatus.text = "Amazing"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
                 binding.tvPerformanceText.text = "Amazing job! You are performing well. Goal Setting is your strong point. Keep setting those goals!"
-                showSeeMoreButton()
             } else if (percentage < 86 && percentage >= 76) {
                 binding.imgFace.setImageResource(R.drawable.great)
                 binding.tvPerformanceStatus.text = "Great"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
                 binding.tvPerformanceText.text = "Great job! You are performing well. Keep setting those goals!"
-                showSeeMoreButton()
             } else if (percentage < 76 && percentage >= 66) {
                 binding.imgFace.setImageResource(R.drawable.good)
                 binding.tvPerformanceStatus.text = "Good"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
                 binding.tvPerformanceText.text = "Good job! With a bit more dedication and effort, you’ll surely up your performance!"
-                showSeeMoreButton()
             } else if (percentage < 66 && percentage >= 56) {
                 binding.imgFace.setImageResource(R.drawable.average)
                 binding.tvPerformanceStatus.text = "Average"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
                 binding.tvPerformanceText.text = "Nice work! Work on improving your goal setting performance. Review SMART Goals!"
-                showReviewButton()
             } else if (percentage < 56 && percentage >= 46) {
                 binding.imgFace.setImageResource(R.drawable.nearly_there)
                 binding.tvPerformanceStatus.text = "Nearly There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
-                showReviewButton()
             } else if (percentage < 46 && percentage >= 36) {
                 binding.imgFace.setImageResource(R.drawable.almost_there)
                 binding.tvPerformanceStatus.text = "Almost There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "Almost there! You need to work on your goal setting. Click review to learn how!"
-                showReviewButton()
             } else if (percentage < 36 && percentage >= 26) {
                 binding.imgFace.setImageResource(R.drawable.getting_there)
                 binding.tvPerformanceStatus.text = "Getting There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "Getting there! You need to work on your goal setting. Click review to learn how!"
-                showReviewButton()
             } else if (percentage < 26 && percentage >= 16) {
                 binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                 binding.tvPerformanceStatus.text = "Not Quite There Yet"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
-                showReviewButton()
             } else if (percentage < 15) {
                 binding.imgFace.setImageResource(R.drawable.bad)
                 binding.tvPerformanceStatus.text = "Needs Improvement"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "Uh oh! You need to work on your goal setting. Click review to learn how!"
-                showReviewButton()
             }
         }
     }
