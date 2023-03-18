@@ -22,6 +22,8 @@ class EarningMenuActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
     lateinit var module: String
 
+    private var financialGoalID:String?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEarningMenuBinding.inflate(layoutInflater)
@@ -38,6 +40,11 @@ class EarningMenuActivity : AppCompatActivity() {
         val sendBundle = Bundle()
         sendBundle.putString("childID", childID)
         sendBundle.putString("module", module)
+        if (module == "finact") {
+            financialGoalID = bundle.getString("financialGoalID")
+            sendBundle.putString("financialGoalID", financialGoalID)
+        }
+
         binding.btnHomeRewards.setOnClickListener {
             val goToHomeRewardsActivity = Intent(this, EarningActivity::class.java)
             goToHomeRewardsActivity.putExtras(sendBundle)

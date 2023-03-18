@@ -135,7 +135,7 @@ class ViewGoalActivity : AppCompatActivity() {
 
         binding.btnChores.setOnClickListener {
             val goToEarningMenu = Intent(this, EarningMenuActivity::class.java)
-            sendBundle.putString("savingActivityID", savingActivityID)
+            sendBundle.putString("financialGoalID", financialGoalID)
             sendBundle.putString("module", "finact")
             sendBundle.putString("childID", childID)
             goToEarningMenu.putExtras(sendBundle)

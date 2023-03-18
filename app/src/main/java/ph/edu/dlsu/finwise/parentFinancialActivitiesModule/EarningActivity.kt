@@ -57,7 +57,11 @@ class EarningActivity : AppCompatActivity() {
         binding.btnAddEarningActivity.setOnClickListener {
             val newEarning = Intent(this, NewEarningActivity::class.java)
             val sendBundle = Bundle()
-          //TODO:  sendBundle.putString("module", childID)
+            if (module == "finact") {
+                var financialGoalID = bundle.getString("financialGoalID")
+                sendBundle.putString("financialGoalID", financialGoalID)
+            }
+            sendBundle.putString("module", module)
             sendBundle.putString("childID", childID)
             newEarning.putExtras(sendBundle)
             startActivity(newEarning)
