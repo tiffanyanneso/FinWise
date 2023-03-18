@@ -37,6 +37,7 @@ class ConfirmDepositActivity : AppCompatActivity() {
     private lateinit var savingActivityID:String
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPfmconfirmDepositBinding.inflate(layoutInflater)
@@ -72,11 +73,13 @@ class ConfirmDepositActivity : AppCompatActivity() {
         amount = bundle!!.getFloat("amount")
         goal = bundle!!.getString("goal")
         date = bundle!!.getSerializable("date") as Date
+        paymentType = bundle!!.getString("paymentType").toString()
         savingActivityID = bundle!!.getString("savingActivityID").toString()
 
 
         binding.tvAmount.text = "₱${DecimalFormat("#,##0.00").format(bundle!!.getFloat("amount"))}"
         binding.tvGoal.text = goal.toString()
+        binding.tvPaymentType.text = paymentType
         binding.tvWalletBalance.text = "₱${DecimalFormat("#,##0.00").format(balance - amount)}"
 
         val formatter = SimpleDateFormat("MM/dd/yyyy")
@@ -104,44 +107,80 @@ class ConfirmDepositActivity : AppCompatActivity() {
 
     private fun confirm() {
         binding.btnConfirm.setOnClickListener {
-            val childID  = FirebaseAuth.getInstance().currentUser!!.uid
-
-            val goalName = "Deposit to '$goal'"
-            val transaction = hashMapOf(
-                "transactionName" to "Deposit to \'$goalName\'",
-                "transactionType" to "Deposit",
-                "date" to date ,
-                "category" to "Goal",
-                "userID" to childID,
-                "financialActivityID" to savingActivityID,
-                "amount" to amount,
-                "paymentType" to paymentType
-                )
             adjustUserBalance()
             adjustGoalCurrentSavings()
-            firestore.collection("Transactions").add(transaction).addOnSuccessListener {
-                Toast.makeText(this, "Deposit successful", Toast.LENGTH_SHORT).show()
-                val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
-                goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(goToPFM)
-            }.addOnFailureListener {
-                    Toast.makeText(this, "Failed to add transaction", Toast.LENGTH_SHORT).show()
-                }
+            addTransaction()
         }
+    }
+
+    private fun addTransaction() {
+        val goalName = "Deposit to '$goal'"
+        val transaction = hashMapOf(
+            "transactionName" to "Deposit to \'$goalName\'",
+            "transactionType" to "Deposit",
+            "date" to date ,
+            "category" to "Goal",
+            "userID" to childID,
+            "financialActivityID" to savingActivityID,
+            "amount" to amount,
+            "paymentType" to paymentType
+        )
+        firestore.collection("Transactions").add(transaction).addOnSuccessListener {
+            goToPFM()
+        }.addOnFailureListener {
+            Toast.makeText(this, "Failed to add transaction", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun goToPFM() {
+        Toast.makeText(this, "Deposit successful", Toast.LENGTH_SHORT).show()
+        val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
+        goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(goToPFM)
     }
 
     private fun adjustUserBalance() {
-        firestore.collection("ChildWallet").whereEqualTo("childID", childID).get().addOnSuccessListener { documents ->
-            var walletID = documents.documents[0].id
-            var adjustedBalance = -abs(amount?.toDouble()!!)
+        firestore.collection("ChildWallet").whereEqualTo("childID", childID)
+            .whereEqualTo("type", paymentType)
+            .get().addOnSuccessListener   { documents ->
+                if (!documents.isEmpty) {
+                    val adjustedBalance = -abs(amount.toDouble())
 
-            firestore.collection("ChildWallet").document(walletID).update("currentBalance", FieldValue.increment(adjustedBalance))
-        }
+                    val id = documents.documents[0].id
+                    updateChildWallet(id, adjustedBalance)
+                } else {
+                    createWallet()
+                }
+            }
     }
+
+    private fun updateChildWallet(id: String, adjustedBalance: Double) {
+        firestore.collection("ChildWallet").document(id)
+            .update("currentBalance", FieldValue.increment(adjustedBalance))
+    }
+
+    private fun createWallet() {
+        val childWallet = hashMapOf(
+            "childID" to childID,
+            "currentBalance" to amount,
+            "lastUpdated" to com.google.firebase.Timestamp.now(),
+            "type" to paymentType
+        )
+
+        firestore.collection("ChildWallet").add(childWallet).addOnSuccessListener {
+            val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
+            goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(goToPFM)
+        }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to add transaction", Toast.LENGTH_SHORT).show()
+            }
+    }
+
 
     private fun adjustGoalCurrentSavings() {
         firestore.collection("FinancialActivities").document(savingActivityID).get().addOnSuccessListener { activity ->
-            var financialGoalID = activity.toObject<FinancialActivities>()!!.financialGoalID!!
+            val financialGoalID = activity.toObject<FinancialActivities>()!!.financialGoalID!!
             firestore.collection("FinancialGoals").document(financialGoalID).update("currentSavings", FieldValue.increment(amount.toDouble()))
         }
     }

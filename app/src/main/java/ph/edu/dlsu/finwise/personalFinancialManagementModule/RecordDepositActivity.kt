@@ -36,11 +36,12 @@ class RecordDepositActivity : AppCompatActivity() {
     var bundle = Bundle()
     private var firestore = Firebase.firestore
 
-    private var goals = ArrayList<String>()
-    private var goalArrayID = ArrayList<String>()
+    private lateinit var adapterPaymentTypeItems: ArrayAdapter<String>
+    private var selectedPaymentType = "Cash"
     lateinit var goal : String
     lateinit var amount: String
     lateinit var date: Date
+    lateinit var paymentType: String
     var walletBalance = 0.00f
 
     private var childID = FirebaseAuth.getInstance().currentUser!!.uid
@@ -77,10 +78,19 @@ class RecordDepositActivity : AppCompatActivity() {
                         " / ₱ " + DecimalFormat("#,##0.00").format(goalDropDownArrayList[position].targetAmount)
                 binding.pbProgress.progress = ((goalDropDownArrayList[position].currentSavings/goalDropDownArrayList[position].targetAmount) *100).toInt()
             }
+
+            initializePaymentTypeDropdown()
+
             loadBackButton()
             goToConfirmation()
             cancel()
         }
+    }
+
+    private fun initializePaymentTypeDropdown() {
+        val paymentTypeItems = resources.getStringArray(R.array.payment_type)
+        adapterPaymentTypeItems = ArrayAdapter (this, R.layout.list_item, paymentTypeItems)
+        binding.dropdownTypeOfPayment.setAdapter(adapterPaymentTypeItems)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -150,6 +160,14 @@ class RecordDepositActivity : AppCompatActivity() {
             date = SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString())
         }
 
+        if (binding.dropdownTypeOfPayment.text.toString() == "") {
+            binding.dropdownTypeOfPayment.error = "Please select if you used cash or Maya"
+            valid = false
+        } else {
+            binding.dropdownTypeOfPayment.error = null
+            paymentType = binding.dropdownTypeOfPayment.text.toString()
+        }
+
         return valid
     }
 
@@ -191,6 +209,7 @@ class RecordDepositActivity : AppCompatActivity() {
         bundle.putString("source", "PFMDepositToGoal")
         bundle.putString("savingActivityID", savingActivityID)
         bundle.putSerializable("date", date)
+        bundle.putString("paymentType", paymentType)
         bundle.putFloat("balance", walletBalance)
 
         //TODO: reset spinner and date to default value

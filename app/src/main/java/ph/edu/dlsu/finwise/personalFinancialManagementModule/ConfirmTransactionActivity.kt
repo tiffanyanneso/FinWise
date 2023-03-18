@@ -207,7 +207,6 @@ class ConfirmTransactionActivity : AppCompatActivity() {
 
 
     private fun adjustUserBalance() {
-        //TODO: Change childIDs
         firestore.collection("ChildWallet").whereEqualTo("childID", childID)
             .whereEqualTo("type", paymentType)
             .get().addOnSuccessListener   { documents ->

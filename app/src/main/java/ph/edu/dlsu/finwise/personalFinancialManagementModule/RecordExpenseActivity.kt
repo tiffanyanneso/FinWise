@@ -29,6 +29,7 @@ class RecordExpenseActivity : AppCompatActivity() {
 
     private var goals = ArrayList<String>()
     private lateinit var adapterPaymentTypeItems: ArrayAdapter<String>
+    private var selectedPaymentType = "Cash"
     lateinit var name: String
     lateinit var amount: String
     var balance = 0.00f
@@ -37,7 +38,6 @@ class RecordExpenseActivity : AppCompatActivity() {
     private var merchant = ""
     lateinit var paymentType: String
     lateinit var goal: String
-    private var selectedValue = "Cash"
     lateinit var date: Date
 
 
@@ -62,12 +62,12 @@ class RecordExpenseActivity : AppCompatActivity() {
 
     private fun isMayaPayment() {
         binding.dropdownTypeOfPayment.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            selectedValue = adapterPaymentTypeItems.getItem(position).toString()
-            if (selectedValue == "Maya") {
+            selectedPaymentType = adapterPaymentTypeItems.getItem(position).toString()
+            if (selectedPaymentType == "Maya") {
                 binding.phoneContainer.visibility = View.VISIBLE
                 binding.merchantContainer.visibility = View.VISIBLE
             }
-            else if (selectedValue == "Cash") {
+            else if (selectedPaymentType == "Cash") {
                 binding.phoneContainer.visibility = View.GONE
                 binding.merchantContainer.visibility = View.GONE
             }
@@ -95,8 +95,6 @@ class RecordExpenseActivity : AppCompatActivity() {
         adapterPaymentTypeItems = ArrayAdapter (this, ph.edu.dlsu.finwise.R.layout.list_item, paymentTypeItems)
         binding.dropdownTypeOfPayment.setAdapter(adapterPaymentTypeItems)
         isMayaPayment()
-
-
     }
 
     private fun loadBackButton() {
@@ -122,7 +120,7 @@ class RecordExpenseActivity : AppCompatActivity() {
     private fun validateAndSetUserInput(): Boolean {
         var valid = true
 
-        if (selectedValue == "Maya") {
+        if (selectedPaymentType == "Maya") {
             if (binding.etMerchant.text.toString().trim().isEmpty()) {
                 binding.etMerchant.error = "Please enter the name of the Merchant/Seller."
                 binding.etMerchant.requestFocus()

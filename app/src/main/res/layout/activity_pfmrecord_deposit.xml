@@ -56,7 +56,7 @@
         app:layout_constraintTop_toBottomOf="@+id/container_goal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:layout_marginTop="10dp"
         android:textAllCaps = "true"
         android:text="Goal Progress"
@@ -71,7 +71,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_progress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:layout_marginTop="5dp"
         android:text="₱ 0.00 / ₱ 0.00"
         android:textColor="@color/black"
@@ -196,14 +196,34 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/container_type_of_payment"
+        app:layout_constraintTop_toBottomOf="@+id/amount_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Select Type of Payment"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_marginHorizontal="20dp"
+        android:textSize="16sp"
+        app:startIconDrawable="@drawable/baseline_saved_search_24">
+
+        <AutoCompleteTextView
+            android:id="@+id/dropdown_type_of_payment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
     <TextView
         android:id="@+id/tv_balance"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/amount_container"
+        app:layout_constraintTop_toBottomOf="@+id/container_type_of_payment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:text="You currently have ₱XXX.XX"
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
