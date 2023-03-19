@@ -46,7 +46,6 @@ class NewGoal : AppCompatActivity() {
 
         setNavigationBar()
         getCurrentUserType()
-        loadBackButton()
 
 
         binding.etTargetDate.setOnClickListener{
@@ -83,44 +82,59 @@ class NewGoal : AppCompatActivity() {
         }
 
         binding.btnCancel.setOnClickListener {
-            var backBundle = intent.extras!!
-            var source = backBundle.getString("source").toString()
+            // Determine the source of the user
+            val source = intent.getStringExtra("source")
 
-            var navBundle = Bundle()
-            navBundle.putString("childID", childID)
+            // Create a bundle with any data you want to pass to the next activity
+            val bundle = Bundle()
+            bundle.putString("childID", childID)
 
-            if (source =="childFinancialActivity") {
-                val goToFinancialActivity = Intent(applicationContext, FinancialActivity::class.java)
-                goToFinancialActivity.putExtras(navBundle)
-                goToFinancialActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                this.startActivity(goToFinancialActivity)
-            } else if (source =="parentGoalActivity") {
-                val goToParentGoalActivity = Intent(applicationContext, ParentGoalActivity::class.java)
-                goToParentGoalActivity.putExtras(navBundle)
-                goToParentGoalActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                this.startActivity(goToParentGoalActivity)
+            // Depending on the source, navigate to the appropriate activity
+            when (source) {
+                "Child" -> {
+                    val intent = Intent(this, FinancialActivity::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                }
+                "Parent" -> {
+                    val intent = Intent(this, ParentGoalActivity::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                }
+                // Add additional cases for other sources
+                else -> {
+                    // If the source is unknown or not specified, just finish the current activity
+                    finish()
+                }
             }
         }
-     /*   binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
-            var backBundle = intent.extras!!
-            var source = backBundle.getString("source").toString()
+            // Determine the source of the user
+            val source = intent.getStringExtra("source")
 
-            var navBundle = Bundle()
-            navBundle.putString("childID", childID)
+            // Create a bundle with any data you want to pass to the next activity
+            val bundle = Bundle()
+            bundle.putString("childID", childID)
 
-            if (source =="childFinancialActivity") {
-                val goToFinancialActivity = Intent(applicationContext, FinancialActivity::class.java)
-                goToFinancialActivity.putExtras(navBundle)
-                goToFinancialActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                this.startActivity(goToFinancialActivity)
-            } else if (source =="parentGoalActivity") {
-                val goToParentGoalActivity = Intent(applicationContext, ParentGoalActivity::class.java)
-                goToParentGoalActivity.putExtras(navBundle)
-                goToParentGoalActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                this.startActivity(goToParentGoalActivity)
+            // Depending on the source, navigate to the appropriate activity
+            when (source) {
+                "Child" -> {
+                    val intent = Intent(this, FinancialActivity::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                }
+                "Parent" -> {
+                    val intent = Intent(this, ParentGoalActivity::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                }
+                // Add additional cases for other sources
+                else -> {
+                    // If the source is unknown or not specified, just finish the current activity
+                    finish()
+                }
             }
-        }*/
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -261,10 +275,5 @@ class NewGoal : AppCompatActivity() {
             }
         }
     }
-    private fun loadBackButton() {
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
-        binding.topAppBar.setNavigationOnClickListener {
-            onBackPressed()
-        }
-    }
+
 }

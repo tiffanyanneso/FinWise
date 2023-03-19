@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogBudgetingReviewBinding
 import ph.edu.dlsu.finwise.databinding.DialogSpendingReviewBinding
 import ph.edu.dlsu.finwise.databinding.FragmentFinactSpendingBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.SpendingPerformanceActivity
 import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -79,6 +81,11 @@ class SpendingFragment : Fragment(){
 
         binding.btnSpendingReview.setOnClickListener {
             showSpendingReivewDialog()
+        }
+
+        binding.btnSeeMore.setOnClickListener {
+            var goToPerformance = Intent(requireContext().applicationContext, SpendingPerformanceActivity::class.java)
+            this.startActivity(goToPerformance)
         }
     }
 
