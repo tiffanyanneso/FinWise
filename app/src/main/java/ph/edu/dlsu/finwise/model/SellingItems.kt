@@ -7,6 +7,7 @@ class SellingItems (
     var amount:Float?=null,
     var date:Timestamp?=null,
     var childID:String?=null,
+    var paymentType:String?=null,
     var savingActivityID:String?=null,
     var depositTo:String?=null
         ) {

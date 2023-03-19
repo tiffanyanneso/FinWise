@@ -75,7 +75,7 @@ class SpendingActivity : AppCompatActivity() {
         initializeFragments()
 
 
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             val goToBudgetActivity = Intent(applicationContext, BudgetActivity::class.java)
 
@@ -140,8 +140,8 @@ class SpendingActivity : AppCompatActivity() {
         var fragmentBundle = Bundle()
         fragmentBundle.putString("savingActivityID", savingActivityID)
         fragmentBundle.putString("budgetingActivityID", budgetingActivityID)
-        fragmentBundle.putString("budgetItemID", budgetItemID)
         fragmentBundle.putString("spendingActivityID", spendingActivityID)
+        fragmentBundle.putString("budgetItemID", budgetItemID)
         fragmentBundle.putFloat("remainingBudget", remainingBudget)
 
 

@@ -1,8 +1,9 @@
 package ph.edu.dlsu.finwise.model
 
 class UserBadges(
-    var userID:String?=null,
-    var badgeID:String?=null,
-    var date:String?=null
+    var childID:String?=null,
+    var badgeName:String?=null,
+    var badgeDescription:String?=null,
+    var dateAcquired:String?=null
 ) {
 }

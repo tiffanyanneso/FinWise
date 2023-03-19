@@ -38,11 +38,11 @@ class SpendingExpenseListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             var bundle = arguments
+            savingActivityID = bundle?.getString("savingActivityID").toString()
             budgetingActivityID = bundle?.getString("budgetingActivityID").toString()
-            budgetItemID = bundle?.getString("budgetItemID").toString()
             spendingActivityID = bundle?.getString("spendingActivityID").toString()
+            budgetItemID = bundle?.getString("budgetItemID").toString()
             remainingBudget = bundle?.getFloat("remainingBudget")!!
-            savingActivityID = bundle.getString("savingActivityID").toString()
         }
     }
 
@@ -94,6 +94,7 @@ class SpendingExpenseListFragment : Fragment() {
         var recordExpense = Intent (requireActivity().applicationContext, FinancialActivityRecordExpense::class.java)
         var bundle = Bundle()
         bundle.putString("savingActivityID", savingActivityID)
+        bundle.putString("budgetingActivityID", budgetingActivityID)
         bundle.putString("spendingActivityID", spendingActivityID)
         bundle.putString("budgetItemID", budgetItemID)
         bundle.putFloat("remainingBudget", remainingBudget)

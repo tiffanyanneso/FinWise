@@ -42,7 +42,6 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
     private lateinit var bundle:Bundle
 
     private lateinit var budgetItemID:String
-    private lateinit var budgetingActivityID:String
 
     private var expenseAmount = 0.00F
     private var cashBalance = 0.00F
@@ -53,6 +52,10 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
     private lateinit var categoryName:String
     private lateinit var goalName:String
     private lateinit var expenseName:String
+
+    private lateinit var savingActivityID:String
+    private lateinit var budgetingActivityID:String
+    private lateinit var spendingActivityID:String
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -86,7 +89,10 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
                     normalTransaction()
             } else if (paymentType == "Maya") {
                 //need to split transaction
-                payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
+                if (expenseAmount > mayaBalance)
+                    splitMayaTransaction()
+                else
+                    normalTransaction()
             }
 
             //check if bundle contains shoppingListItemID, meaning that the expense was from a shopping list and need to update the status
@@ -94,20 +100,12 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
                 firestore.collection("ShoppingListItems").document(bundle.getString("shoppingListItemID").toString()).update("itemName", bundle.getString("expenseName"))
                 firestore.collection("ShoppingListItems").document(bundle.getString("shoppingListItemID").toString()).update("status", "Purchased")
             }
-
-            val spending = Intent(this, SpendingActivity::class.java)
-            val sendBundle = Bundle()
-            sendBundle.putString("budgetingActivityID", budgetingActivityID)
-            sendBundle.putString("budgetItemID", budgetItemID)
-            spending.putExtras(sendBundle)
-            this.startActivity(spending)
-            finish()
         }
         //TODO: BTN CANCEL
     }
 
-    private fun buildSinglePaymentRequest(): SinglePaymentRequest {
-        val amount = BigDecimal(mayaBalance.toDouble())
+    private fun buildSinglePaymentRequest(amount:Float): SinglePaymentRequest {
+        val amount = BigDecimal(amount.toDouble())
         val currency = "PHP"
         val redirectUrl = RedirectUrl(
             success = "http://success.com",
@@ -143,7 +141,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
                 Log.d("PayMayaa", resultID)
                 //adjustUserBalance()
                 //lagay sa paywithpayamyaclient to
-                mayaTransaction()
+                goToSpending()
             }
             is SinglePaymentResult.Cancel -> {
                 val resultID: String? = result.paymentId
@@ -170,13 +168,6 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
         }
     }
 
-    private fun mayaTransaction() {
-        if (expenseAmount > mayaBalance)
-            splitMayaTransaction()
-        else
-            normalTransaction()
-    }
-
 
     //primary payment method selected is cash, use up all cash savings first
     private fun splitCashTransaction() {
@@ -187,7 +178,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
             "transactionName" to "$goalName Withdrawal for $expenseName",
             "amount" to cashBalance,
             "category" to "Goal",
-            "financialActivityID" to bundle.getString("savingActivityID"),
+            "financialActivityID" to savingActivityID,
             "date" to bundle.getSerializable("date"),
             "paymentType" to "Cash")
         firestore.collection("Transactions").add(withdrawal)
@@ -199,8 +190,8 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
             "transactionName" to bundle.getString("expenseName"),
             "amount" to cashBalance,
             "category" to categoryName,
-            "budgetItemID" to bundle.getString("budgetItemID"),
-            "financialActivityID" to bundle.getString("spendingActivityID"),
+            "budgetItemID" to budgetItemID,
+            "financialActivityID" to spendingActivityID,
             "date" to bundle.getSerializable("date"),
             "paymentType" to "Cash")
         firestore.collection("Transactions").add(expense)
@@ -211,7 +202,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
             "transactionName" to "$goalName Withdrawal for $expenseName",
             "amount" to remainingAmount,
             "category" to "Goal",
-            "financialActivityID" to bundle.getString("savingActivityID"),
+            "financialActivityID" to savingActivityID,
             "date" to bundle.getSerializable("date"),
             "paymentType" to "Maya")
         firestore.collection("Transactions").add(remainingWithdrawal)
@@ -223,24 +214,26 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
             "transactionName" to bundle.getString("expenseName"),
             "amount" to remainingAmount,
             "category" to categoryName,
-            "budgetItemID" to bundle.getString("budgetItemID"),
-            "financialActivityID" to bundle.getString("spendingActivityID"),
+            "budgetItemID" to budgetItemID,
+            "financialActivityID" to spendingActivityID,
             "date" to bundle.getSerializable("date"),
             "paymentType" to "Maya")
         firestore.collection("Transactions").add(remainingExpense)
 
+        payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest(remainingAmount))
     }
 
     //primary payment method selected is maya, use up all maya savings first
     private fun splitMayaTransaction() {
         val remainingAmount = expenseAmount - mayaBalance
+        //from goal savings to wallet
         val withdrawal = hashMapOf(
             "userID" to currentUser,
             "transactionType" to "Withdrawal",
             "transactionName" to "$goalName Withdrawal for $expenseName",
             "amount" to mayaBalance,
             "category" to "Goal",
-            "financialActivityID" to bundle.getString("savingActivityID"),
+            "financialActivityID" to savingActivityID,
             "date" to bundle.getSerializable("date"),
             "paymentType" to "Maya")
         firestore.collection("Transactions").add(withdrawal)
@@ -252,20 +245,23 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
             "transactionName" to bundle.getString("expenseName"),
             "amount" to mayaBalance,
             "category" to categoryName,
-            "budgetItemID" to bundle.getString("budgetItemID"),
-            "financialActivityID" to bundle.getString("spendingActivityID"),
+            "budgetItemID" to budgetItemID,
+            "financialActivityID" to spendingActivityID,
             "date" to bundle.getSerializable("date"),
             "paymentType" to "Maya"
         )
         firestore.collection("Transactions").add(expense)
 
+        payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest(mayaBalance))
+
+        //from goal savings to wallet
         val remainingWithdrawal = hashMapOf(
             "userID" to currentUser,
             "transactionType" to "Withdrawal",
             "transactionName" to "$goalName Withdrawal for $expenseName",
             "amount" to remainingAmount,
             "category" to "Goal",
-            "financialActivityID" to bundle.getString("savingActivityID"),
+            "financialActivityID" to savingActivityID,
             "date" to bundle.getSerializable("date"),
             "paymentType" to "Cash")
         firestore.collection("Transactions").add(remainingWithdrawal)
@@ -277,12 +273,13 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
             "transactionName" to bundle.getString("expenseName"),
             "amount" to remainingAmount,
             "category" to categoryName,
-            "budgetItemID" to bundle.getString("budgetItemID"),
-            "financialActivityID" to bundle.getString("spendingActivityID"),
+            "budgetItemID" to budgetItemID,
+            "financialActivityID" to spendingActivityID,
             "date" to bundle.getSerializable("date"),
             "paymentType" to "Cash"
         )
         firestore.collection("Transactions").add(remainingExpense)
+
     }
 
     private fun normalTransaction() {
@@ -293,7 +290,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
             "transactionName" to "$goalName Withdrawal for $expenseName",
             "amount" to expenseAmount,
             "category" to "Goal",
-            "financialActivityID" to bundle.getString("savingActivityID"),
+            "financialActivityID" to savingActivityID,
             "date" to bundle.getSerializable("date"),
             "paymentType" to paymentType
         )
@@ -307,17 +304,25 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
             "transactionName" to bundle.getString("expenseName"),
             "amount" to expenseAmount,
             "category" to categoryName,
-            "budgetItemID" to bundle.getString("budgetItemID"),
-            "financialActivityID" to bundle.getString("spendingActivityID"),
+            "budgetItemID" to budgetItemID,
+            "financialActivityID" to spendingActivityID,
             "date" to bundle.getSerializable("date"),
             "paymentType" to paymentType
         )
 
         firestore.collection("Transactions").add(expense)
+
+        if (paymentType == "Maya")
+            payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest(expenseAmount))
+        else
+            goToSpending()
+
     }
 
     private fun setFields() {
+        savingActivityID = bundle.getString("savingActivityID").toString()
         budgetingActivityID = bundle.getString("budgetingActivityID").toString()
+        spendingActivityID = bundle.getString("spendingActivityID").toString()
         budgetItemID = bundle.getString("budgetItemID").toString()
         expenseAmount = bundle.getFloat("amount")
         cashBalance = bundle.getFloat("cashBalance")
@@ -357,13 +362,14 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
             }
         }
 
-        firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
+        firestore.collection("BudgetItems").document(bundle.getString("budgetItemID")!!).get().addOnSuccessListener {
             categoryName = it.toObject<BudgetItem>()!!.budgetItemName!!
             if (categoryName != "Others")
                 binding.tvCategory.text = categoryName
             else
                 binding.tvCategory.text = it.toObject<BudgetItem>()!!.budgetItemNameOther
         }
+
 
         firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener { activity ->
             var financialGoalID = activity.toObject<FinancialActivities>()!!.financialGoalID!!
@@ -372,6 +378,19 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
                 goalName = goal.toObject<FinancialGoals>()!!.goalName!!
             }
         }
+    }
+
+    private fun goToSpending() {
+        var spending = Intent(this, SpendingActivity::class.java)
+        var sendBundle = Bundle()
+        sendBundle.putString("savingActivityID", savingActivityID)
+        sendBundle.putString("budgetingActivityID", budgetingActivityID)
+        sendBundle.putString("spendingActivityID", spendingActivityID)
+        sendBundle.putString("budgetItemID", budgetItemID)
+        sendBundle.putString("childID", currentUser)
+        spending.putExtras(sendBundle)
+        startActivity(spending)
+
     }
 
 }

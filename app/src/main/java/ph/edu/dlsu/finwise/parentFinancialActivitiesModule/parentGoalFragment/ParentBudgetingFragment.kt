@@ -76,15 +76,6 @@ class ParentBudgetingFragment : Fragment() {
             var goToPerformance = Intent(requireContext().applicationContext, BudgetingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
-
-        binding.btnSeeMore2.setOnClickListener {
-            var goToPerformance = Intent(requireContext().applicationContext, BudgetingPerformanceActivity::class.java)
-            this.startActivity(goToPerformance)
-        }
-
-        binding.btnBudgetingReview.setOnClickListener{
-            showBudgetingReivewDialog()
-        }
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
@@ -167,7 +158,6 @@ class ParentBudgetingFragment : Fragment() {
             binding.textStatus.text = "Excellent"
             binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
             binding.tvPerformanceText.text = "Keep up the excellent work! Budgeting is your strong point. Keep making those budgets!"
-            showSeeMoreButton()
         } else if (overall < 96 && overall >= 86) {
             binding.imgFace.setImageResource(R.drawable.amazing)
             binding.textStatus.text = "Amazing"
@@ -178,60 +168,42 @@ class ParentBudgetingFragment : Fragment() {
             binding.textStatus.text = "Great"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "You are performing well. Keep making those budgets!"
-            showSeeMoreButton()
         } else if (overall < 80 && overall >= 70) {
             binding.imgFace.setImageResource(R.drawable.good)
             binding.textStatus.text = "Good"
             binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
             binding.tvPerformanceText.text = "Good job! With a bit more attention to detail, you’ll surely up your performance!"
-            showSeeMoreButton()
         } else if (overall < 70 && overall >= 60) {
             binding.imgFace.setImageResource(R.drawable.average)
             binding.textStatus.text = "Average"
             binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
             binding.tvPerformanceText.text = "Nice work! Work on improving your budget by always doublechecking. You’ll get there soon!"
-            showSeeMoreButton()
         } else if (overall < 56 && overall >= 46) {
             binding.imgFace.setImageResource(R.drawable.nearly_there)
             binding.textStatus.text = "Nearly There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
-            showReviewButton()
         }  else if (overall < 46 && overall >= 36) {
             binding.imgFace.setImageResource(R.drawable.almost_there)
             binding.textStatus.text = "Almost There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Almost there! You need to work on your budgeting. Click review to learn how!"
-            showReviewButton()
         } else if (overall < 36 && overall >= 26) {
             binding.imgFace.setImageResource(R.drawable.getting_there)
             binding.textStatus.text = "Getting There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Getting there! You need to work on your budgeting. Click review to learn how!"
-            showReviewButton()
         } else if (overall < 26 && overall >= 16) {
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
             binding.textStatus.text = "Not Quite There Yet"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
-            showReviewButton()
         } else if (overall < 15) {
             binding.imgFace.setImageResource(R.drawable.bad)
             binding.textStatus.text = "Needs Improvement"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your budgeting performance needs a lot of improvement. Click review to learn how!"
-            showReviewButton()
         }
-    }
-
-    private fun showSeeMoreButton() {
-        binding.btnSeeMore.visibility = View.VISIBLE
-        binding.layoutButtons.visibility = View.GONE
-    }
-
-    private fun showReviewButton() {
-        binding.btnSeeMore.visibility = View.GONE
-        binding.layoutButtons.visibility = View.VISIBLE
     }
 
 

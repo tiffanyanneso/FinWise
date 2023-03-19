@@ -104,6 +104,13 @@ class SavingsDepositActivity : AppCompatActivity() {
         val paymentTypeDropdown = ArrayAdapter (this, R.layout.list_item, resources.getStringArray(R.array.payment_type))
         binding.dropPaymentType.setAdapter(paymentTypeDropdown)
 
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+            var totalBalance =  0.00F
+            for (wallet in results)
+                totalBalance += wallet.toObject<ChildWallet>().currentBalance!!
+
+            binding.tvBalance.text = "You currently have ₱${DecimalFormat("#,##0.00").format(totalBalance)}"
+        }
 
         firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
