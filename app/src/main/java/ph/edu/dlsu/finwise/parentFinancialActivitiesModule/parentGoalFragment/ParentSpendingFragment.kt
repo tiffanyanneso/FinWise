@@ -74,9 +74,9 @@ class ParentSpendingFragment : Fragment() {
         binding.textPerformance.text = "0.00%"
         binding.title.text= "Overall Spending Performance"
 
-        binding.btnSpendingReview.setOnClickListener {
+        /*binding.btnSpendingReview.setOnClickListener {
             showSpendingReivewDialog()
-        }
+        }*/
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
@@ -251,12 +251,12 @@ class ParentSpendingFragment : Fragment() {
 
     private fun showSeeMoreButton() {
         binding.btnSeeMore.visibility = View.VISIBLE
-        binding.layoutButtons.visibility = View.GONE
+        //binding.layoutButtons.visibility = View.GONE
     }
 
     private fun showReviewButton() {
         binding.btnSeeMore.visibility = View.GONE
-        binding.layoutButtons.visibility = View.VISIBLE
+        //binding.layoutButtons.visibility = View.VISIBLE
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {

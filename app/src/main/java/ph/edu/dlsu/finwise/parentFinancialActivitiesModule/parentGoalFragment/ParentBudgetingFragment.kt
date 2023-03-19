@@ -77,14 +77,14 @@ class ParentBudgetingFragment : Fragment() {
             this.startActivity(goToPerformance)
         }
 
-        binding.btnSeeMore2.setOnClickListener {
+        /*binding.btnSeeMore2.setOnClickListener {
             var goToPerformance = Intent(requireContext().applicationContext, BudgetingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
 
         binding.btnBudgetingReview.setOnClickListener{
             showBudgetingReivewDialog()
-        }
+        }*/
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
@@ -226,12 +226,12 @@ class ParentBudgetingFragment : Fragment() {
 
     private fun showSeeMoreButton() {
         binding.btnSeeMore.visibility = View.VISIBLE
-        binding.layoutButtons.visibility = View.GONE
+        //binding.layoutButtons.visibility = View.GONE
     }
 
     private fun showReviewButton() {
         binding.btnSeeMore.visibility = View.GONE
-        binding.layoutButtons.visibility = View.VISIBLE
+        //binding.layoutButtons.visibility = View.VISIBLE
     }
 
 
