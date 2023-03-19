@@ -78,7 +78,7 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
             var goal = it.toObject<FinancialGoals>()
             binding.tvGoalName.text = goal?.goalName
             binding.tvActivity.text = goal?.financialActivity
-            binding.tvAmount.text = DecimalFormat("#,###.00").format(goal?.targetAmount)
+            binding.tvAmount.text =  "₱ "  + DecimalFormat("#,##0.00").format(goal?.targetAmount)
             binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(goal?.targetDate!!.toDate())
             if (goal.goalIsForSelf ==  true)
                 binding.tvIsForChild.text = "Yes"

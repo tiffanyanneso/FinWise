@@ -218,28 +218,10 @@ class BudgetingFragment : Fragment() {
         binding.layoutButtons.visibility = View.VISIBLE
     }
 
-//    private fun getAverageUpdates(budgetingActivityID:String){
-//        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).whereEqualTo("status", "Completed").get().addOnSuccessListener { budgetItems ->
-//            for (budgetItem in budgetItems){
-//                var budgetItemObject = budgetItem.toObject<BudgetItem>()
-//                nItems++
-//
-//            }
-//            var averageUpdates = 0
-//            if (nItems != 0.00F )
-//                averageUpdates = (nUpdates/nItems).roundToInt()
-//
-//            binding.tvAverageUpdates.text = DecimalFormat("##0.##").format(averageUpdates)
-//        }
-//    }
-
-
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
         bugdetingAdapater = FinactBudgetingAdapter(requireContext().applicationContext, goalIDArrayList)
         binding.rvViewGoals.adapter = bugdetingAdapater
-        binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
-            LinearLayoutManager.VERTICAL,
-            false)
+        binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
         bugdetingAdapater.notifyDataSetChanged()
     }
 

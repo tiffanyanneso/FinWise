@@ -73,10 +73,6 @@ class ParentSpendingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.textPerformance.text = "0.00%"
         binding.title.text= "Overall Spending Performance"
-
-//        binding.btnSpendingReview.setOnClickListener {
-//            showSpendingReivewDialog()
-//        }
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
@@ -134,9 +130,6 @@ class ParentSpendingFragment : Fragment() {
 
         }.continueWith {
             overspendingPercentage = (overSpending/nBudgetItems)*100
-//            binding.progressBarOverspending.progress = overspendingPercentage.toInt()
-//            binding.tvOverspendingPercentage.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
-
 
             firestore.collection("Users").document(childID).get().addOnSuccessListener {
                 var child = it.toObject<Users>()
@@ -238,16 +231,6 @@ class ParentSpendingFragment : Fragment() {
             binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
         }
     }
-
-//    private fun showSeeMoreButton() {
-//        binding.btnSeeMore.visibility = View.VISIBLE
-//        binding.layoutButtons.visibility = View.GONE
-//    }
-//
-//    private fun showReviewButton() {
-//        binding.btnSeeMore.visibility = View.GONE
-//        binding.layoutButtons.visibility = View.VISIBLE
-//    }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
         spendingAdapter = FinactSpendingAdapter(requireContext().applicationContext, goalIDArrayList)

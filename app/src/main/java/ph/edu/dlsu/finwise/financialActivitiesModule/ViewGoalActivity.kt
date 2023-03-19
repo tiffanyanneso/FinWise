@@ -67,6 +67,8 @@ class ViewGoalActivity : AppCompatActivity() {
 
     private var savings = 0.00F
 
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -196,10 +198,14 @@ class ViewGoalActivity : AppCompatActivity() {
                         binding.btnEditGoal.isClickable = false
                         binding.btnEditGoal.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_grey)))
                     } else {
-                        binding.btnEditGoal.isEnabled = true
-                        binding.btnEditGoal.isClickable = true
-                        binding.btnEditGoal.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_green)))
-                        allComplete = false
+                        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+                            if (it.toObject<Users>()!!.userType == "Child") {
+                                binding.btnEditGoal.isEnabled = true
+                                binding.btnEditGoal.isClickable = true
+                                binding.btnEditGoal.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_green)))
+                                allComplete = false
+                            }
+                        }
                     }
                 }
                 if (activityObject.financialActivityName == "Budgeting") {
@@ -356,7 +362,6 @@ class ViewGoalActivity : AppCompatActivity() {
     }
 
     private fun checkUser() {
-        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
             //current user is parent
             if (it.toObject<Users>()!!.userType == "Parent") {

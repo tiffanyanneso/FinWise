@@ -17,6 +17,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityReviewGoalBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartGoalCriteriaParentBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartGoalInfoBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
 class ReviewGoalActivity : AppCompatActivity() {
@@ -65,7 +66,7 @@ class ReviewGoalActivity : AppCompatActivity() {
             var financialGoal = it.toObject<FinancialGoals>()
             binding.tvGoal.text = financialGoal?.goalName
             binding.tvActivity.text = financialGoal?.financialActivity
-            binding.tvAmount.text = financialGoal?.targetAmount.toString()
+            binding.tvAmount.text =  "₱ "  + DecimalFormat("#,##0.00").format(financialGoal?.targetAmount)
             binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(financialGoal?.targetDate?.toDate())
             if (financialGoal?.goalIsForSelf ==  true)
                 binding.tvIsForChild.text = "Yes"
