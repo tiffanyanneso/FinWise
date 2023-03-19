@@ -115,6 +115,7 @@ class NewEarningActivity : AppCompatActivity() {
                     "depositTo" to binding.dropdownDestination.text.toString()
                 )
                 firestore.collection("EarningActivities").add(earningActivity).addOnSuccessListener {
+                    finish()
                     Toast.makeText(this, "Earning activity saved", Toast.LENGTH_SHORT).show()
                 }
             }

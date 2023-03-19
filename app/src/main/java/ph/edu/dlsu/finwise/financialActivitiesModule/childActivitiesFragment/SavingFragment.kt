@@ -121,6 +121,7 @@ class SavingFragment : Fragment() {
 
     private fun getSavingActivities() {
         goalIDArrayList.clear()
+        goalAdapter.notifyDataSetChanged()
         //saving activities that are in progress means that there the goal is also in progress because they are connected
         firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             binding.tvTitleInProgress.text = "My Goals (" + results.size().toString() + ")"
@@ -320,9 +321,7 @@ class SavingFragment : Fragment() {
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
         goalAdapter = FinactSavingAdapter(requireContext().applicationContext, goalIDArrayList)
         binding.rvViewGoals.adapter = goalAdapter
-        binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
-            LinearLayoutManager.VERTICAL,
-            false)
+        binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
         goalAdapter.notifyDataSetChanged()
     }
 

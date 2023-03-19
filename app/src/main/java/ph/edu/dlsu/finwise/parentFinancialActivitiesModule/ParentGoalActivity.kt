@@ -61,18 +61,6 @@ class ParentGoalActivity : AppCompatActivity() {
         var sendBundle = Bundle()
         sendBundle.putString("childID", childID)
 
-//        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
-//            when (menuItem.itemId) {
-//                R.id.btn_settings -> {
-//                    var settings = Intent(this, GoalSettingsActivity::class.java)
-//                    settings.putExtras(sendBundle)
-//                    settings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                    this.startActivity(settings)
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
 
         binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
             when (menuItem.itemId) {
@@ -100,7 +88,7 @@ class ParentGoalActivity : AppCompatActivity() {
             var difference = Period.between(to, from)
 
             var age = difference.years
-            if (age == 10 || age == 1)
+            if (age == 10 || age == 11)
                 setOwnGoals = true
             if (age == 12) {
                 setOwnGoals = true
@@ -136,8 +124,10 @@ class ParentGoalActivity : AppCompatActivity() {
         var disapprovedFragment = ParentDisapprovedFragment()
         disapprovedFragment.arguments = fragmentBundle
 
+
         if (setOwnGoals && !autoApprove)
-            adapter.addFragment(goalSettingFragment,"Goal Setting")
+            adapter.addFragment(goalSettingFragment, "Goal Setting")
+
 
         adapter.addFragment(savingFragment,"Saving")
         adapter.addFragment(budgetingFragment,"Budgeting")

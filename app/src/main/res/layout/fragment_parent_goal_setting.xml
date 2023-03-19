@@ -58,7 +58,7 @@
                             android:padding="10dp">
 
                             <ImageView
-                                android:src="@drawable/excellent"
+                                android:src="@drawable/good"
                                 android:id="@+id/img_face"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
@@ -80,7 +80,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="16sp"
-                                android:text="Excellent"
+                                android:text=""
                                 android:textColor="@color/dark_green"
                                 android:textStyle="bold"
                                 android:layout_gravity="center"/>
@@ -91,7 +91,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:text="Keep up the excellent work! Goal Setting is definitely a strong point of yours. Keep setting those goals!"
+                            android:text="Your goal hasn't set any goals yet. Check back again!"
                             android:textColor="@color/white"
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"/>
