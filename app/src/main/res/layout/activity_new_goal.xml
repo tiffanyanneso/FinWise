@@ -169,7 +169,7 @@
             android:textColor="@color/black"
             android:paddingTop="5dp"
             android:textSize="16dp"
-            android:text="The max amount that can be given is ₱XX.XX"/>
+            android:text="The max amount that can be given is ₱0.00"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

@@ -193,7 +193,11 @@ class NewGoal : AppCompatActivity() {
         } else
             binding.goalContainer.helperText = ""
 
-      //TODO: VALIDATION FOR REASON
+      if (binding.dropdownActivity.text.toString().trim().isEmpty()) {
+            binding.containerActivity.helperText = "Input goal name."
+            valid = false
+        } else
+            binding.containerActivity.helperText = ""
 
         if (binding.etAmount.text.toString().trim().isEmpty()) {
             binding.amountContainer.helperText = "Input target amount."

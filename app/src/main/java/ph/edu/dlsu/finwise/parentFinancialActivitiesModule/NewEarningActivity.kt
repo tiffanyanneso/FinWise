@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
+import kotlin.math.max
 
 class NewEarningActivity : AppCompatActivity() {
 
@@ -63,69 +64,125 @@ class NewEarningActivity : AppCompatActivity() {
         // Initializes the navbar
         NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
 
-        binding.etDate.setOnClickListener{ showCalendar() }
+        binding.etDate.setOnClickListener { showCalendar() }
 
-        binding.dropdownChore.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-           changeDuration()
-        }
+        binding.dropdownChore.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                changeDuration()
+            }
 
-        binding.dropdownDestination.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            if (binding.dropdownDestination.text.toString() == "Personal Finance")
-                binding.layoutGoal.visibility = View.GONE
-            else if (binding.dropdownDestination.text.toString() == "Financial Goal")
-                binding.layoutGoal.visibility = View.VISIBLE
-        }
+        binding.dropdownDestination.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                if (binding.dropdownDestination.text.toString() == "Personal Finance")
+                    binding.layoutGoal.visibility = View.GONE
+                else if (binding.dropdownDestination.text.toString() == "Financial Goal")
+                    binding.layoutGoal.visibility = View.VISIBLE
+            }
 
-        binding.dropdownGoal.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            savingActivityID = goalDropDownArrayList[position].savingActivityID
+        binding.dropdownGoal.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                savingActivityID = goalDropDownArrayList[position].savingActivityID
 
-            firestore.collection("FinancialActivities").document(savingActivityID.toString()).get().addOnSuccessListener { saving ->
-                firestore.collection("FinancialGoals").document(saving.toObject<FinancialActivities>()?.financialGoalID!!).get().addOnSuccessListener { goal ->
-                    binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal.toObject<FinancialGoals>()?.currentSavings)!! +
-                            " / ₱ " + DecimalFormat("#,##0.00").format(goal.toObject<FinancialGoals>()?.targetAmount!!)
+                firestore.collection("FinancialActivities").document(savingActivityID.toString())
+                    .get().addOnSuccessListener { saving ->
+                    firestore.collection("FinancialGoals")
+                        .document(saving.toObject<FinancialActivities>()?.financialGoalID!!).get()
+                        .addOnSuccessListener { goal ->
+                            binding.tvProgressAmount.text =
+                                "₱ " + DecimalFormat("#,##0.00").format(goal.toObject<FinancialGoals>()?.currentSavings)!! +
+                                        " / ₱ " + DecimalFormat("#,##0.00").format(goal.toObject<FinancialGoals>()?.targetAmount!!)
+                        }
                 }
             }
-        }
 
         binding.btnConfirm.setOnClickListener {
-            if (binding.dropdownDestination.text.toString() == "Personal Finance") {
-                val earningActivity = hashMapOf(
-                    "activityName" to binding.dropdownChore.text.toString(),
-                    "targetDate" to SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()),
-                    "requiredTime" to binding.etDuration.text.toString().toInt(),
-                    "amount" to binding.etAmount.text.toString().toFloat(),
-                    "childID" to childID,
-                    "status" to "Ongoing",
-                    "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
-                    "depositTo" to binding.dropdownDestination.text.toString()
-                )
-                firestore.collection("EarningActivities").add(earningActivity).addOnSuccessListener {
-                    Toast.makeText(this, "Earning activity saved", Toast.LENGTH_SHORT).show()
+            if (filledUp() && validAmount()) {
+                if (binding.dropdownDestination.text.toString() == "Personal Finance") {
+                    val earningActivity = hashMapOf(
+                        "activityName" to binding.dropdownChore.text.toString(),
+                        "targetDate" to SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()),
+                        "requiredTime" to binding.etDuration.text.toString().toInt(),
+                        "amount" to binding.etAmount.text.toString().toFloat(),
+                        "childID" to childID,
+                        "status" to "Ongoing",
+                        "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
+                        "depositTo" to binding.dropdownDestination.text.toString()
+                    )
+                    firestore.collection("EarningActivities").add(earningActivity)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Earning activity saved", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                } else if (binding.dropdownDestination.text.toString() == "Financial Goal") {
+                    var earningActivity = hashMapOf(
+                        "activityName" to binding.dropdownChore.text.toString(),
+                        "targetDate" to SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()),
+                        "requiredTime" to binding.etDuration.text.toString().toInt(),
+                        "amount" to binding.etAmount.text.toString().toFloat(),
+                        "childID" to childID,
+                        "savingActivityID" to savingActivityID,
+                        "status" to "Ongoing",
+                        "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
+                        "depositTo" to binding.dropdownDestination.text.toString()
+                    )
+                    firestore.collection("EarningActivities").add(earningActivity)
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Earning activity saved", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                 }
-            } else if (binding.dropdownDestination.text.toString() == "Financial Goal") {
-                var earningActivity = hashMapOf(
-                    "activityName" to binding.dropdownChore.text.toString(),
-                    "targetDate" to SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()),
-                    "requiredTime" to binding.etDuration.text.toString().toInt(),
-                    "amount" to binding.etAmount.text.toString().toFloat(),
-                    "childID" to childID,
-                    "savingActivityID" to savingActivityID,
-                    "status" to "Ongoing",
-                    "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
-                    "depositTo" to binding.dropdownDestination.text.toString()
-                )
-                firestore.collection("EarningActivities").add(earningActivity).addOnSuccessListener {
-                    Toast.makeText(this, "Earning activity saved", Toast.LENGTH_SHORT).show()
-                }
+                val earning = Intent(this, EarningActivity::class.java)
+                val sendBundle = Bundle()
+                sendBundle.putString("childID", childID)
+                earning.putExtras(sendBundle)
+                startActivity(earning)
             }
-
-            val earning = Intent(this, EarningActivity::class.java)
-            val sendBundle = Bundle()
-            sendBundle.putString("childID", childID)
-            earning.putExtras(sendBundle)
-            startActivity(earning)
-
         }
+    }
+
+    private fun validAmount():Boolean {
+        if (binding.etAmount.text.toString().toFloat() > maxAmount) {
+            binding.amountContainer.helperText = "You cannot deposit more than your current balance"
+            return false
+        }
+        else
+            return true
+    }
+
+    private fun filledUp(): Boolean {
+        var valid = true
+
+        if (binding.dropdownChore.text.toString().isEmpty()) {
+            binding.containerChore.helperText = "Please select a chore"
+            valid = false
+        } else
+            binding.containerChore.helperText = ""
+
+        if (binding.etDate.text.toString().trim().isEmpty()) {
+            binding.dateContainer.helperText = "Please select a target date"
+            valid = false
+        } else
+            binding.dateContainer.helperText = ""
+
+        if (binding.dropdownDestination.text.toString().trim().isEmpty()) {
+            binding.containerDestination.helperText = "Please select a destination"
+            valid = false
+        } else
+            binding.containerDestination.helperText = ""
+
+        if (binding.etAmount.text.toString().trim().isEmpty()) {
+            binding.amountContainer.helperText = "Please input an amount"
+            valid = false
+        } else
+            binding.amountContainer.helperText = ""
+
+        if (binding.dropdownTypeOfPayment.text.toString().trim().isEmpty()) {
+            binding.containerTypeOfPayment.helperText = "Please select a type of payment"
+            valid = false
+        } else
+            binding.containerTypeOfPayment.helperText = ""
+
+        return valid
     }
 
     private fun fillUpFields() {

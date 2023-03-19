@@ -42,7 +42,9 @@ class SavingsDepositActivity : AppCompatActivity() {
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private var savedAmount = 0.00F
-    private var walletBalance = 0.00F
+    private var selectedWalletBalance = 0.00F
+    private var cashBalance = 0.00F
+    private var mayaBalance = 0.00F
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,8 +108,15 @@ class SavingsDepositActivity : AppCompatActivity() {
 
         firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
             var totalBalance =  0.00F
-            for (wallet in results)
-                totalBalance += wallet.toObject<ChildWallet>().currentBalance!!
+            for (wallet in results) {
+                var walletObject = wallet.toObject<ChildWallet>()
+                totalBalance += walletObject.currentBalance!!
+                if (walletObject.type == "Maya")
+                    mayaBalance = walletObject.currentBalance!!
+                else if (walletObject.type == "Cash")
+                    cashBalance = walletObject.currentBalance!!
+
+            }
 
             binding.tvBalance.text = "You currently have ₱${DecimalFormat("#,##0.00").format(totalBalance)}"
         }
@@ -121,25 +130,21 @@ class SavingsDepositActivity : AppCompatActivity() {
     }
 
     private fun changeDisplayedBalance() {
-        var balanceFrom = binding.dropPaymentType.text.toString()
-
-        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", balanceFrom).get().addOnSuccessListener {
-            var wallet = it.documents[0].toObject<ChildWallet>()
-            walletBalance = wallet?.currentBalance!!
-            binding.tvBalance.text = "You currently have ₱${DecimalFormat("#,##0.00").format(wallet?.currentBalance)} in this wallet"
-        }
-
+        if (binding.dropPaymentType.text.toString() == "Cash")
+            selectedWalletBalance = cashBalance
+        else if (binding.dropPaymentType.text.toString() == "Maya")
+            selectedWalletBalance = mayaBalance
+        binding.tvBalance.text = "You currently have ₱${DecimalFormat("#,##0.00").format(selectedWalletBalance)} in this wallet"
     }
 
     private fun validAmount():Boolean {
         //trying to deposit more than their current balance
-        if (binding.etAmount.text.toString().toFloat() > walletBalance) {
+        if (binding.etAmount.text.toString().toFloat() > selectedWalletBalance) {
             binding.containerAmount.helperText = "You cannot deposit more than your current balance"
             return false
         }
         else
             return true
-
     }
 
     private fun filledUp() : Boolean {
@@ -152,12 +157,16 @@ class SavingsDepositActivity : AppCompatActivity() {
             binding.containerAmount.helperText = ""
             //check if amount is greater than 0
             if (binding.etAmount.text.toString().toFloat() <= 0) {
-                binding.containerAmount.helperText = "Input a valid amount."
                 valid = false
             } else
                 binding.containerAmount.helperText = ""
         }
 
+        if (binding.dropPaymentType.text.toString().isEmpty()) {
+            binding.containerPaymentType.helperText = "Please select fund source."
+            valid = false
+        } else
+            binding.containerPaymentType.helperText = ""
 
         if (binding.etDate.text.toString().trim().isEmpty()) {
             binding.dateContainer.helperText = "Select date of transaction."

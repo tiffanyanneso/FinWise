@@ -74,19 +74,58 @@ class RecordEarningSaleActivity : AppCompatActivity() {
         }
 
         binding.btnConfirm.setOnClickListener {
-            var confirmSale = Intent(this, RecordEarningSaleConfirmationActivity::class.java)
-            var sendBundle = Bundle()
-            sendBundle.putString("childID", childID)
-            sendBundle.putString("saleName", binding.etName.text.toString())
-            sendBundle.putSerializable("saleDate", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
-            sendBundle.putFloat("saleAmount", binding.etAmount.text.toString().toFloat())
-            sendBundle.putString("depositTo", binding.dropdownDestination.text.toString())
-            sendBundle.putString("paymentType", binding.dropdownTypeOfPayment.text.toString())
-            if (binding.dropdownDestination.text.toString() == "Financial Goal")
-                sendBundle.putString("savingActivityID", savingActivityID)
-            confirmSale.putExtras(sendBundle)
-            startActivity(confirmSale)
+            if (filledUp()) {
+                var confirmSale = Intent(this, RecordEarningSaleConfirmationActivity::class.java)
+                var sendBundle = Bundle()
+                sendBundle.putString("childID", childID)
+                sendBundle.putString("saleName", binding.etName.text.toString())
+                sendBundle.putSerializable("saleDate", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
+                sendBundle.putFloat("saleAmount", binding.etAmount.text.toString().toFloat())
+                sendBundle.putString("depositTo", binding.dropdownDestination.text.toString())
+                sendBundle.putString("paymentType", binding.dropdownTypeOfPayment.text.toString())
+                if (binding.dropdownDestination.text.toString() == "Financial Goal")
+                    sendBundle.putString("savingActivityID", savingActivityID)
+                confirmSale.putExtras(sendBundle)
+                startActivity(confirmSale)
+            }
         }
+    }
+
+    private fun filledUp() :Boolean {
+        var valid = true
+
+        if (binding.etName.text.toString().trim().isEmpty()) {
+            binding.containerSaleName.helperText = "Please input name of sale item"
+            valid = false
+        } else
+            binding.containerSaleName.helperText = ""
+
+        if (binding.etAmount.text.toString().trim().isEmpty()) {
+            binding.amountContainer.helperText = "Please input name an amount"
+            valid = false
+        } else
+            binding.amountContainer.helperText = ""
+
+        if (binding.dropdownDestination.text.toString().trim().isEmpty()) {
+            binding.containerDestination.helperText = "Please select a destination"
+            valid = false
+        } else
+            binding.containerDestination.helperText = ""
+
+        if (binding.etDate.text.toString().trim().isEmpty()) {
+            binding.dateContainer.helperText = "Please select a date"
+            valid = false
+        } else
+            binding.dateContainer.helperText = ""
+
+        if (binding.dropdownTypeOfPayment.text.toString().trim().isEmpty()) {
+            binding.containerTypeOfPayment.helperText = "Please select a type of payment"
+            valid = false
+        } else
+            binding.containerTypeOfPayment.helperText = ""
+
+
+        return valid
     }
 
 

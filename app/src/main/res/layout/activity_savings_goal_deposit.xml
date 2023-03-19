@@ -187,6 +187,9 @@
         android:hint="Fund Source"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_marginHorizontal="20dp"
+        app:helperTextEnabled="true"
+        app:helperText=""
+        app:helperTextTextColor="@color/red"
         android:paddingTop="10dp"
         app:startIconDrawable="@drawable/baseline_money_24">
 
