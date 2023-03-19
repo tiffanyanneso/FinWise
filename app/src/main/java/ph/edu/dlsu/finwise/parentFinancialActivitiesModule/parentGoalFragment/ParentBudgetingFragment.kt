@@ -73,7 +73,7 @@ class ParentBudgetingFragment : Fragment() {
         getBudgeting()
 
         binding.btnSeeMore.setOnClickListener {
-            var goToPerformance = Intent(requireContext().applicationContext,BudgetingPerformanceActivity::class.java)
+            var goToPerformance = Intent(requireContext().applicationContext, BudgetingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
     }
@@ -205,6 +205,7 @@ class ParentBudgetingFragment : Fragment() {
             binding.tvPerformanceText.text = "Your budgeting performance needs a lot of improvement. Click review to learn how!"
         }
     }
+
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
         budgetingAdapter = FinactBudgetingAdapter(requireContext().applicationContext, goalIDArrayList)
