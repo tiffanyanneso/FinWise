@@ -66,13 +66,13 @@ class FinactGoalSettingAdapter : RecyclerView.Adapter<FinactGoalSettingAdapter.F
             firestore.collection("FinancialGoals").document(goalID).get().addOnSuccessListener{ document ->
                 var goal = document.toObject<FinancialGoals>()
                 itemBinding.tvGoalId.text = document.id
-                itemBinding.tvGoalStatus.text = goal?.status.toString()
                 childID = goal?.childID.toString()
                 itemBinding.tvGoal.text = goal?.goalName
                 // convert timestamp to date
                 val date = SimpleDateFormat("MM/dd/yyyy").format(goal?.targetDate?.toDate())
                 itemBinding.tvTargetDate.text = date.toString()
                 itemBinding.tvTargetAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
+                itemBinding.tvStatus.text = goal?.status.toString()
             }
         }
 
@@ -82,7 +82,7 @@ class FinactGoalSettingAdapter : RecyclerView.Adapter<FinactGoalSettingAdapter.F
             bundle.putString ("financialGoalID", financialGoalID)
             bundle.putString ("childID", childID)
 
-            var status = itemBinding.tvGoalStatus.text.toString()
+            var status = itemBinding.tvStatus.text.toString()
             if (status == "For Review") {
                 var reviewGoal = Intent(context, ParentSettingAGoalActivity::class.java)
                 reviewGoal.putExtras(bundle)
