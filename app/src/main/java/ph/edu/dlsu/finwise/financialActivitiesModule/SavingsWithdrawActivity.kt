@@ -41,6 +41,7 @@ class SavingsWithdrawActivity : AppCompatActivity() {
     private var savedAmount = 0.00F
     private var cashBalance = 0.00F
     private var mayaBalance = 0.00F
+    private var selectedWalletBalance = 0.00F
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -55,12 +56,12 @@ class SavingsWithdrawActivity : AppCompatActivity() {
         getBalances()
 
         binding.dropPaymentType.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            changeDisplayedBalance()
 
         }
 
         binding.btnNext.setOnClickListener {
-            //TODO: ADD VALID AMOUNT FUNCTION CHECK
-            if (filledUp()) {
+            if (filledUp() && validAmount()) {
                 binding.containerAmount.helperText = ""
                 var sendBundle = Bundle()
                 sendBundle.putString("goalName", binding.tvGoalName.text.toString())
@@ -137,6 +138,70 @@ class SavingsWithdrawActivity : AppCompatActivity() {
         }
     }
 
+    private fun changeDisplayedBalance() {
+        if (binding.dropPaymentType.text.toString() == "Cash") {
+            selectedWalletBalance = cashBalance
+            binding.tvCashBalance.visibility = View.VISIBLE
+            binding.tvMayaBalance.visibility = View.GONE
+        }
+        else if (binding.dropPaymentType.text.toString() == "Maya") {
+            selectedWalletBalance = mayaBalance
+            binding.tvMayaBalance.visibility = View.VISIBLE
+            binding.tvCashBalance.visibility = View.GONE}
+    }
+
+    private fun getGoalInfo() {
+        firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
+            var financialGoal = it.toObject<FinancialGoals>()!!
+            binding.tvGoalName.text = financialGoal.goalName
+            binding.pbProgress.progress = (financialGoal.currentSavings!! / financialGoal.targetAmount!! * 100).toInt()
+            binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(financialGoal.currentSavings!!) +
+                    " / ₱ " + DecimalFormat("#,##0.00").format(financialGoal?.targetAmount)
+            savedAmount = financialGoal.currentSavings!!
+        }
+    }
+
+
+    private fun filledUp(): Boolean{
+        var valid  = true
+        if (binding.etAmount.text.toString().trim().isEmpty()) {
+            binding.containerAmount.helperText = "Please input an amount."
+            valid = false
+        } else {
+            //amount field is not empty
+            binding.containerAmount.helperText = ""
+            //check if amount is greater than 0
+            if (binding.etAmount.text.toString().toFloat() <= 0) {
+                binding.containerAmount.helperText = "Input a valid amount."
+                valid = false
+            } else
+                binding.containerAmount.helperText = ""
+        }
+
+        if (binding.dropPaymentType.text.toString().isEmpty()) {
+            binding.containerPaymentType.helperText = "Please select fund source."
+            valid = false
+        } else
+            binding.containerPaymentType.helperText = ""
+
+        if (binding.etDate.text.toString().trim().isEmpty()) {
+            binding.dateContainer.helperText = "Select date of transaction."
+            valid = false
+        } else
+            binding.dateContainer.helperText = ""
+
+        return valid
+    }
+
+    private fun validAmount():Boolean {
+        //trying to deposit more than their current balance
+        if (binding.etAmount.text.toString().toFloat() > selectedWalletBalance) {
+            binding.containerAmount.helperText = "You cannot deposit more than your current balance"
+            return false
+        }
+        else
+            return true
+    }
 
     private fun setFields() {
         bundle = intent.extras!!
@@ -173,55 +238,6 @@ class SavingsWithdrawActivity : AppCompatActivity() {
         binding.dropPaymentType.setAdapter(paymentTypeDropdown)
     }
 
-    private fun getGoalInfo() {
-        firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
-            var financialGoal = it.toObject<FinancialGoals>()!!
-            binding.tvGoalName.text = financialGoal.goalName
-            binding.pbProgress.progress = (financialGoal.currentSavings!! / financialGoal.targetAmount!! * 100).toInt()
-            binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(financialGoal.currentSavings!!) +
-                    " / ₱ " + DecimalFormat("#,##0.00").format(financialGoal?.targetAmount)
-            savedAmount = financialGoal.currentSavings!!
-        }
-
-    }
-
-
-    private fun filledUp(): Boolean{
-        var valid  = true
-        if (binding.etAmount.text.toString().trim().isEmpty()) {
-            binding.containerAmount.helperText = "Please input an amount."
-            valid = false
-        } else {
-            //amount field is not empty
-            binding.containerAmount.helperText = ""
-            //check if amount is greater than 0
-            if (binding.etAmount.text.toString().toFloat() <= 0) {
-                binding.containerAmount.helperText = "Input a valid amount."
-                valid = false
-            } else
-                binding.containerAmount.helperText = ""
-        }
-
-        if (binding.etDate.text.toString().trim().isEmpty()) {
-            binding.dateContainer.helperText = "Select date of transaction."
-            valid = false
-        } else
-            binding.dateContainer.helperText = ""
-
-        return valid
-    }
-
-//    private fun validAmount():Boolean {
-//        //trying to deposit more than their current balance
-//        println("print " + walletBalance)
-//        if (binding.etAmount.text.toString().toFloat() > walletBalance) {
-//            binding.containerAmount.helperText = "You cannot withdraw more than your savings."
-//            return false
-//        }
-//        else
-//            return true
-//
-//    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showCalendar() {

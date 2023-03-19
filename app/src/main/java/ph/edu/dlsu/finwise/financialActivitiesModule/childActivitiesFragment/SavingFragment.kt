@@ -352,23 +352,23 @@ class SavingFragment : Fragment() {
     private fun buildDialog() {
 
         var dialogBinding= DialogNewGoalWarningBinding.inflate(getLayoutInflater())
-        var dialog= Dialog(requireContext().applicationContext);
+        var dialog= Dialog(requireContext());
         dialog.setContentView(dialogBinding.getRoot())
         // Initialize dialog
 
-        dialog.window!!.setLayout(900, 600)
+        dialog.window!!.setLayout(900, 800)
 
         dialogBinding.tvMessage.text= "You have $ongoingGoals ongoing goals.\nAre you sure you want to start another one?"
 
         dialogBinding.btnOk.setOnClickListener {
-            var newGoal = Intent (requireContext().applicationContext, NewGoal::class.java)
+            var newGoal = Intent (requireContext(), NewGoal::class.java)
 
             var bundle = Bundle()
             bundle.putString("source", "childFinancialActivity")
             newGoal.putExtras(bundle)
             newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-            this.startActivity(newGoal)
+            startActivity(newGoal)
             dialog.dismiss()
         }
         dialogBinding.btnCancel.setOnClickListener {

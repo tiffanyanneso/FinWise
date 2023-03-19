@@ -49,6 +49,7 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
 
     private var cashBalance = 0.00F
     private var mayaBalance = 0.00f
+    private var selectedWalletBalance = 0.00F
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,22 +70,24 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
 
 
         binding.btnNext.setOnClickListener {
-            var sendBundle = Bundle()
-            sendBundle.putString("expenseName", binding.etExpenseName.text.toString())
-            sendBundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
-            sendBundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etTransactionDate.text.toString()))
-            sendBundle.putString("savingActivityID", savingActivityID)
-            sendBundle.putString("budgetingActivityID", budgetingActivityID)
-            sendBundle.putString("spendingActivityID", spendingActivityID)
-            sendBundle.putString("budgetItemID", budgetItemID)
-            sendBundle.putString("paymentType", binding.dropPaymentType.text.toString())
-            sendBundle.putFloat("cashBalance", cashBalance)
-            sendBundle.putFloat("mayaBalance", mayaBalance)
-            if (bundle.containsKey("shoppingListItem"))
-                sendBundle.putString("shoppingListItemID", shoppingListItemID)
-            var confirmSpending = Intent(this, FinancialActivityConfirmExpense::class.java)
-            confirmSpending.putExtras(sendBundle)
-            this.startActivity(confirmSpending)
+            if (filledUp()) {
+                var sendBundle = Bundle()
+                sendBundle.putString("expenseName", binding.etExpenseName.text.toString())
+                sendBundle.putFloat("amount", binding.etAmount.text.toString().toFloat())
+                sendBundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etTransactionDate.text.toString()))
+                sendBundle.putString("savingActivityID", savingActivityID)
+                sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                sendBundle.putString("spendingActivityID", spendingActivityID)
+                sendBundle.putString("budgetItemID", budgetItemID)
+                sendBundle.putString("paymentType", binding.dropPaymentType.text.toString())
+                sendBundle.putFloat("cashBalance", cashBalance)
+                sendBundle.putFloat("mayaBalance", mayaBalance)
+                if (bundle.containsKey("shoppingListItem"))
+                    sendBundle.putString("shoppingListItemID", shoppingListItemID)
+                var confirmSpending = Intent(this, FinancialActivityConfirmExpense::class.java)
+                confirmSpending.putExtras(sendBundle)
+                this.startActivity(confirmSpending)
+            }
         }
 
         binding.btnCancel.setOnClickListener {
@@ -95,9 +98,11 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
     private fun changeDisplayedSavings() {
         var paymentType = binding.dropPaymentType.text.toString()
         if (paymentType == "Cash") {
+            selectedWalletBalance = cashBalance
             binding.tvCashBalance.visibility = View.VISIBLE
             binding.tvMayaBalance.visibility = View.GONE
         } else if (paymentType =="Maya") {
+            selectedWalletBalance = mayaBalance
             binding.tvCashBalance.visibility = View.GONE
             binding.tvMayaBalance.visibility = View.VISIBLE
         }
@@ -201,6 +206,44 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
                 binding.dropPaymentType.isClickable = false
             }
         }
+    }
+
+    private fun filledUp():Boolean {
+        var valid  = true
+
+        if (binding.etExpenseName.text.toString().trim().isEmpty()) {
+            binding.containerExpenseName.helperText = "Please input an amount."
+            valid = false
+        } else
+            binding.containerExpenseName.helperText = ""
+
+        if (binding.etAmount.text.toString().trim().isEmpty()) {
+            binding.containerAmount.helperText = "Please input an amount."
+            valid = false
+        } else {
+            //amount field is not empty
+            binding.containerAmount.helperText = ""
+            //check if amount is greater than 0
+            if (binding.etAmount.text.toString().toFloat() <= 0) {
+                binding.containerAmount.helperText = "Please enter a valid amount"
+                valid = false
+            } else
+                binding.containerAmount.helperText = ""
+        }
+
+        if (binding.dropPaymentType.text.toString().isEmpty()) {
+            binding.containerPaymentType.helperText = "Please select fund source."
+            valid = false
+        } else
+            binding.containerPaymentType.helperText = ""
+
+        if (binding.etTransactionDate.text.toString().trim().isEmpty()) {
+            binding.dateContainer.helperText = "Select date of transaction."
+            valid = false
+        } else
+            binding.dateContainer.helperText = ""
+
+        return valid
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
