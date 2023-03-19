@@ -15,6 +15,13 @@
         android:visibility="gone"
         />
 
+    <TextView
+        android:id="@+id/tv_goal_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -81,14 +88,6 @@
                     android:textStyle="bold"/>
             </LinearLayout>
 
-        <TextView
-            android:layout_below="@+id/linear_layout_2"
-            android:id="@+id/tv_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-            android:text="Status"/>
     </RelativeLayout>
 
 

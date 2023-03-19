@@ -89,7 +89,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="Complete spending activities to see your spending performance"
+                    android:text="Complete spending activities to see your performance"
                     android:textColor="@color/white"
                     android:layout_gravity="center"
                     android:layout_marginLeft="15dp"/>

@@ -84,7 +84,6 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                             println("current/parent user   " + FirebaseAuth.getInstance().currentUser!!.uid.toString())
                             val parentLandingPage = Intent (this, ParentLandingPageActivity::class.java)
                             startActivity (parentLandingPage)
-                            finish()
                         }
                     } else {
                         //not successfully registered
