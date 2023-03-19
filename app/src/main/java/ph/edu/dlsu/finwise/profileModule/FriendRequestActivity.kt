@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -40,7 +41,7 @@ class FriendRequestActivity : AppCompatActivity() {
     }
 
     private fun getFriendRequests() {
-        var currentUser = "5WBSRjQj4pEaeeIJWwVm"
+        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         var friendRequestIDArrayList = ArrayList<String>()
         firestore.collection("Friends").whereEqualTo("receiverID", currentUser).whereEqualTo("status", "Pending").get().addOnSuccessListener { results ->
             for (friendRequest in results)

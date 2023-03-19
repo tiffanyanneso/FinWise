@@ -54,7 +54,7 @@ class LeaderboardRankingAdapter : RecyclerView.Adapter<LeaderboardRankingAdapter
         fun bindItem(child: AssessmentLeaderboardFragment.FriendRanking?) {
             itemBinding.tvUsername.text = child?.childUsers?.childUsersFilter?.username
             itemBinding.tvScore.text =
-                String.format("%.1f%%", child?.childUsers?.childUsersFilter?.assessmentPerformance)
+                String.format("%.1f%%", child?.childUsers?.assessmentPercentage)
             itemBinding.tvChildId.text = child?.childUsers?.id
             itemBinding.tvRank.text = child?.rank.toString()
         }

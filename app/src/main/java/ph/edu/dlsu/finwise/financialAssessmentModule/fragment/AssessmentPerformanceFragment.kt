@@ -1,14 +1,18 @@
 package ph.edu.dlsu.finwise.financialAssessmentModule.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentAssessmentPerformanceBinding
 import ph.edu.dlsu.finwise.model.*
@@ -20,7 +24,6 @@ class AssessmentPerformanceFragment : Fragment() {
     private lateinit var user: String
 
     private val assessmentsTaken = ArrayList<FinancialAssessmentAttempts>()
-    val assessmentsMap = mutableMapOf<String, Int>()
     private var financialGoalsPercentage = 0.00F
     private var financialGoalsScores = ArrayList<Float>()
     private var savingPercentage = 0.00F
@@ -29,7 +32,6 @@ class AssessmentPerformanceFragment : Fragment() {
     private var budgetingScores = ArrayList<Float>()
     private var spendingPercentage = 0.00F
     private var spendingScores = ArrayList<Float>()
-    private var nRatings = 0
 
 
     override fun onCreateView(
@@ -67,21 +69,24 @@ class AssessmentPerformanceFragment : Fragment() {
 
 
     private fun getScores() {
-        if (assessmentsTaken.isNotEmpty()) {
-            for (assessment in assessmentsTaken) {
-                firestore.collection("Assessments").document(assessment.assessmentID!!)
-                    .get().addOnSuccessListener { assessmentDocument ->
-                        val assessmentObject = assessmentDocument.toObject<FinancialAssessmentDetails>()
-                        val percentage = getPercentage(assessment)
-                        when (assessmentObject?.assessmentCategory) {
-                            "Goal Setting" -> financialGoalsScores.add(percentage)
-                            "Saving" -> savingScores.add(percentage)
-                            "Budgeting" -> budgetingScores.add(percentage)
-                            "Spending" -> spendingScores.add(percentage)
-                        }
-                    }.continueWith { computeForPercentages() }
-            }
-        } else setEmptyAssessmentText()
+        CoroutineScope(Dispatchers.Main).launch {
+            if (assessmentsTaken.isNotEmpty()) {
+                for (assessment in assessmentsTaken) {
+                    val docRef = firestore.collection("Assessments")
+                        .document(assessment.assessmentID!!)
+                    val assessmentDocument = docRef.get().await()
+                    val assessmentObject = assessmentDocument.toObject<FinancialAssessmentDetails>()
+                    val percentage = getPercentage(assessment)
+                    when (assessmentObject?.assessmentCategory) {
+                        "Goal Setting" -> financialGoalsScores.add(percentage)
+                        "Saving" -> savingScores.add(percentage)
+                        "Budgeting" -> budgetingScores.add(percentage)
+                        "Spending" -> spendingScores.add(percentage)
+                    }
+                }
+                computeForPercentages()
+            } else setEmptyAssessmentText()
+        }
 
     }
 
@@ -91,8 +96,25 @@ class AssessmentPerformanceFragment : Fragment() {
         spendingPercentage = (spendingScores.sum() / (maxScore * spendingScores.size)) * 100
         budgetingPercentage = (budgetingScores.sum() / (maxScore * budgetingScores.size)) * 100
         financialGoalsPercentage = (financialGoalsScores.sum() / (maxScore * financialGoalsScores.size)) * 100
+        checkIfNaN()
         setPerformanceView()
         setRanking()
+    }
+
+    private fun checkIfNaN() {
+        val percentages = mutableListOf(savingPercentage, spendingPercentage, budgetingPercentage,
+            financialGoalsPercentage)
+
+        for (i in percentages.indices) {
+            if (percentages[i].isNaN()) {
+                when (i) {
+                    0 -> savingPercentage = 0.00f
+                    1 -> spendingPercentage = 0.00f
+                    2 -> budgetingPercentage = 0.00f
+                    3 -> financialGoalsPercentage = 0.00f
+                }
+            }
+        }
     }
 
     private fun getPercentage(assessment: FinancialAssessmentAttempts): Float {
@@ -104,24 +126,6 @@ class AssessmentPerformanceFragment : Fragment() {
         return percentage.toFloat()
     }
 
-    private fun setEmptyAssessmentText() {
-        binding.ivScore.setImageResource(R.drawable.bad)
-        binding.textViewProgress.visibility = View.GONE
-
-        binding.textViewPerformanceText.text = "Bad"
-        binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.red))
-        binding.tvPerformanceText.text =
-            "You haven't taken any assessments yet!"
-
-        binding.tvTopPerformingConcept.text = "N/A"
-
-        binding.tvConcept2nd.text = "N/A"
-
-        binding.tvConcept3rd.text = "N/A"
-
-        binding.tvConcept4th.text = "N/A"
-    }
-
     private fun setRanking() {
         val totals = mapOf(
             "Spending" to spendingPercentage,
@@ -129,34 +133,32 @@ class AssessmentPerformanceFragment : Fragment() {
             "Goal Setting" to financialGoalsPercentage,
             "Budgeting" to budgetingPercentage
         )
-        val top3Categories = totals.entries.sortedByDescending { it.value }
+        val topCategories = totals.entries.sortedByDescending { it.value }
 
-        binding.tvTopPerformingConcept.text = top3Categories[0].key
-        binding.tvTopPerformingPercentage.text = String.format("%.1f%%", top3Categories[0].value)
+        binding.tvTopPerformingConcept.text = topCategories[0].key
+        binding.tvTopPerformingPercentage.text = String.format("%.1f%%", topCategories[0].value)
 
-        binding.tvConcept2nd.text = top3Categories[1].key
-        binding.tvConcept2Percentage.text = String.format("%.1f%%", top3Categories[1].value)
+        binding.tvConcept2nd.text = topCategories[1].key
+        binding.tvConcept2Percentage.text = String.format("%.1f%%", topCategories[1].value)
 
-        binding.tvConcept3rd.text = top3Categories[2].key
-        binding.tvConcept3Percentage.text = String.format("%.1f%%", top3Categories[2].value)
+        binding.tvConcept3rd.text = topCategories[2].key
+        binding.tvConcept3Percentage.text = String.format("%.1f%%", topCategories[2].value)
 
-        //TODO: Add binding
-        binding.tvConcept4th.text = top3Categories[3].key
-        binding.tvConcept4Percentage.text = String.format("%.1f%%", top3Categories[3].value)
+        binding.tvConcept4th.text = topCategories[3].key
+        binding.tvConcept4Percentage.text = String.format("%.1f%%", topCategories[3].value)
 
 
 
     }
 
     private fun setPerformanceView() {
-        //TODO: Add budgeting and adjust  maxpossiblesum
         val totalSum = spendingPercentage + savingPercentage + financialGoalsPercentage + budgetingPercentage
         val maxPossibleSum = 4 * 100  // assuming the maximum possible value for each variable is 100
 
         val percentage = (totalSum.toDouble() / maxPossibleSum) * 100
 
         //Update to be used in the leaderboard
-        firestore.collection("ChildUser").document(childID).update("assessmentPerformance", percentage)
+        /*firestore.collection("ChildUser").document(childID).update("assessmentPerformance", percentage)*/
 
         binding.textViewProgress.text = String.format("%.1f%%", percentage)
 
@@ -243,6 +245,25 @@ class AssessmentPerformanceFragment : Fragment() {
             //showReviewButton()
         }
     }
+
+    private fun setEmptyAssessmentText() {
+        binding.ivScore.setImageResource(R.drawable.bad)
+        binding.textViewProgress.visibility = View.GONE
+
+        binding.textViewPerformanceText.text = "Bad"
+        binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.red))
+        binding.tvPerformanceText.text =
+            "You haven't taken any assessments yet!"
+
+        binding.tvTopPerformingConcept.text = "N/A"
+
+        binding.tvConcept2nd.text = "N/A"
+
+        binding.tvConcept3rd.text = "N/A"
+
+        binding.tvConcept4th.text = "N/A"
+    }
+
 
     /*private fun showReviewButton() {
         binding.btnSeeMore.visibility = View.GONE

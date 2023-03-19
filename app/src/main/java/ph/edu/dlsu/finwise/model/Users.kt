@@ -13,7 +13,6 @@ class Users (
     var userType:String?=null,
     var lastLogin: Timestamp?=null,
     //when notifs were last shown to the user, only show notifs once a day
-    var lastShown:Timestamp?=null,
-    var assessmentPerformance:Double?=null
-    ) {
+    var lastShown:Timestamp?=null
+) {
 }

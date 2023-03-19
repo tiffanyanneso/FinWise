@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -15,7 +15,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.LeaderboardRankingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentAssessmentLeaderboardBinding
@@ -26,9 +25,21 @@ class AssessmentLeaderboardFragment : Fragment() {
     private lateinit var binding: FragmentAssessmentLeaderboardBinding
     private var firestore = Firebase.firestore
     private lateinit var childID: String
-    private var friendsIDArrayList = ArrayList<String>()
-    private val childFriendFilterArray = ArrayList<ChildUsersWithID?>()
+    private var childrenIDArrayList = ArrayList<String>()
+    private val userScoresArray = ArrayList<ChildUsersWithID>()
     //private lateinit var user: String
+    private val assessmentsTaken = ArrayList<FinancialAssessmentAttempts>()
+    private var financialGoalsPercentage = 0.00F
+    private var financialGoalsScores = ArrayList<Float>()
+    private var savingPercentage = 0.00F
+    private var savingScores = ArrayList<Float>()
+    private var budgetingPercentage = 0.00F
+    private var budgetingScores = ArrayList<Float>()
+    private var spendingPercentage = 0.00F
+    private var spendingScores = ArrayList<Float>()
+    private var childObject: Users? = null
+    private lateinit var assessmentChildID: String
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,61 +59,144 @@ class AssessmentLeaderboardFragment : Fragment() {
     }
 
     private fun loadLeaderboard() {
-
         firestore.collection("Friends").whereEqualTo("senderID", childID)
             .get().addOnSuccessListener { documents ->
                 for (friend in documents) {
                     val friendVar = friend.toObject<Friends>()
                     if (friendVar.status == "Accepted")
-                        friendVar.receiverID?.let { friendsIDArrayList.add(it) }
+                        friendVar.receiverID?.let { childrenIDArrayList.add(it) }
                 }
-            }.continueWith { loadCoroutine() }
+
+            }.continueWith { loadData() }
     }
 
-    private fun loadCoroutine() {
+    private fun loadData() {
         CoroutineScope(Dispatchers.Main).launch {
-            initializeFriendScores()
+            initializeLeaderboardScores()
         }
     }
 
-    private suspend fun initializeFriendScores() {
-        for (friendID in friendsIDArrayList) {
-            val docRef = firestore.collection("ChildUser").document(friendID)
-            val docSnapshot = docRef.get().await()
 
-            if (docSnapshot.exists()) {
-                val child = docSnapshot.toObject<Users>()
-                childFriendFilterArray.add(ChildUsersWithID(child, docSnapshot.id))
+    private suspend fun initializeLeaderboardScores() {
+        childrenIDArrayList.add(childID)
+        for (friendID in childrenIDArrayList) {
+            assessmentsTaken.clear()
+            val docSnapshot = getAssessmentAtemps(friendID)
+            addScoreToArray(docSnapshot)
+            assessmentChildID = friendID
+            childObject = getUserObject(friendID)
+            getScores()
+            computeForPercentages()
+        }
+        loadProgressBarOfCurrentUser()
+        sortLeaderboard()
+    }
+
+    private suspend fun getAssessmentAtemps(friendID: String): QuerySnapshot? {
+        val docRef = firestore.collection("AssessmentAttempts")
+            .whereEqualTo("childID", friendID)
+        return docRef.get().await()
+    }
+
+    private fun addScoreToArray(docSnapshot: QuerySnapshot?) {
+        if (!docSnapshot?.isEmpty!!) {
+            for (document in docSnapshot) {
+                val assessmentObject = document.toObject<FinancialAssessmentAttempts>()
+                assessmentsTaken.add(assessmentObject)
             }
         }
-        addCurrentChildScore()
+    }
 
-
+    private suspend fun getUserObject(id: String): Users? {
+        val docRef = firestore.collection("Users").document(id)
+        val docSnapshot = docRef.get().await()
+        return docSnapshot.toObject<Users>()
     }
 
 
-    private fun addCurrentChildScore() {
-        firestore.collection("Users").document(childID)
-            .get().addOnSuccessListener { document ->
-                val child = document.toObject<Users>()
-                childFriendFilterArray.add(ChildUsersWithID(child, document.id))
-                loadProgressBar(child)
-            }.continueWith { sortLeaderboard() }
+    private suspend fun getScores() {
+        if (assessmentsTaken.isNotEmpty()) {
+            financialGoalsScores.clear()
+            savingScores.clear()
+            budgetingScores.clear()
+            spendingScores.clear()
+            for (assessment in assessmentsTaken) {
+                val documentRef = firestore.collection("Assessments")
+                    .document(assessment.assessmentID!!)
+                val assessmentDocument = documentRef.get().await()
+                val assessmentObject = assessmentDocument.toObject<FinancialAssessmentDetails>()
+                val percentage = getPercentage(assessment)
+                when (assessmentObject?.assessmentCategory) {
+                    "Goal Setting" -> financialGoalsScores.add(percentage)
+                    "Saving" -> savingScores.add(percentage)
+                    "Budgeting" -> budgetingScores.add(percentage)
+                    "Spending" -> spendingScores.add(percentage)
+                }
+            }
+        }
+
     }
 
-    private fun loadProgressBar(child: Users?) {
-        binding.progressBar.progress = child?.assessmentPerformance!!.toInt()
-        binding.textViewProgress.text =
-            String.format("%.1f%%", child.assessmentPerformance)
+    private fun computeForPercentages() {
+        val maxScore = 100
+        savingPercentage = (savingScores.sum() / (maxScore * savingScores.size)) * 100
+        spendingPercentage = (spendingScores.sum() / (maxScore * spendingScores.size)) * 100
+        budgetingPercentage = (budgetingScores.sum() / (maxScore * budgetingScores.size)) * 100
+        financialGoalsPercentage = (financialGoalsScores.sum() / (maxScore * financialGoalsScores.size)) * 100
+        checkIfNaN()
+        computePerformance()
+        //setRanking()
+    }
+
+    private fun checkIfNaN() {
+        val percentages = mutableListOf(savingPercentage, spendingPercentage, budgetingPercentage,
+            financialGoalsPercentage)
+
+        for (i in percentages.indices) {
+            if (percentages[i].isNaN()) {
+                when (i) {
+                    0 -> savingPercentage = 0.00f
+                    1 -> spendingPercentage = 0.00f
+                    2 -> budgetingPercentage = 0.00f
+                    3 -> financialGoalsPercentage = 0.00f
+                }
+            }
+        }
+    }
+
+
+    private fun computePerformance() {
+        val totalSum = spendingPercentage + savingPercentage + financialGoalsPercentage + budgetingPercentage
+        val maxPossibleSum = 4 * 100  // assuming the maximum possible value for each variable is 100
+
+        val percentage = (totalSum.toDouble() / maxPossibleSum) * 100
+
+        userScoresArray.add(ChildUsersWithID(childObject, assessmentChildID, percentage))
+    }
+
+    private fun getPercentage(assessment: FinancialAssessmentAttempts): Float {
+        val percentage = if (assessment.nAnsweredCorrectly!! > 0) {
+            (assessment.nAnsweredCorrectly!!.toFloat() / assessment.nQuestions!!.toFloat()) * 100
+        } else {
+            0.0
+        }
+        return percentage.toFloat()
+    }
+
+    private fun loadProgressBarOfCurrentUser() {
+        if (userScoresArray.isNotEmpty()) {
+            binding.progressBar.progress = userScoresArray[0].assessmentPercentage?.toInt()!!
+            binding.textViewProgress.text =
+                String.format("%.1f%%", userScoresArray[0].assessmentPercentage)
+        }
     }
 
     private fun sortLeaderboard() {
-        val sortedChildScoresObject = childFriendFilterArray
-            .sortedByDescending { it?.childUsersFilter?.assessmentPerformance}
-        Log.d("aassss", "initializeFriendScores: "+sortedChildScoresObject[1]?.childUsersFilter?.assessmentPerformance)
+        val sortedChildScoresObject = userScoresArray
+            .sortedByDescending { it.assessmentPercentage}
 
         val rankedFriends = sortedChildScoresObject.mapIndexed { index, value ->
-            FriendRanking(index + 1, value!!)
+            FriendRanking(index + 1, value)
         }
 
         loadRecyclerView(rankedFriends)
@@ -121,8 +215,10 @@ class AssessmentLeaderboardFragment : Fragment() {
         //user = arguments?.getString("user").toString()
     }
 
-    data class ChildUsersWithID(val childUsersFilter: Users? = null, val id: String)
+    data class ChildUsersWithID(val childUsersFilter: Users? = null, val id: String? = null,
+                                val assessmentPercentage: Double? = null)
     data class FriendRanking(val rank: Int, val childUsers: ChildUsersWithID)
 
 
 }
+

@@ -21,7 +21,7 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
     private var childID = FirebaseAuth.getInstance().currentUser!!.uid
     private var firestore = Firebase.firestore
     private lateinit var binding: ActivityFinancialAssessmentLandingPageBinding
-    val setBundle = Bundle()
+    private val setBundle = Bundle()
 
     //TODO: Change to the right icons
     private val tabIcons2 = intArrayOf(
@@ -43,7 +43,6 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
         val getBundle = intent.extras
         //TODO: receive user bundle pero hindi ko alam ujng saan so hard code muna
         // sending of friendchildID
-        childID = "eWZNOIb9qEf8kVNdvdRzKt4AYrA2"
         setBundle.putString("childID", childID)
         setBundle.putString("user", user)
         /*if (getBundle?.containsKey("childID") == true) {
@@ -62,7 +61,7 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
     private fun checkUser() {
         val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-            var user = it.toObject<Users>()!!
+            val user = it.toObject<Users>()!!
             //current user is a child
             val bottomNavigationViewChild = binding.bottomNav
             val bottomNavigationViewParent = binding.bottomNavParent
@@ -75,8 +74,9 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
                 bottomNavigationViewParent.visibility = View.VISIBLE
                 NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_assessment)
             }
+
+            setUpChartTabs(it.id)
         }
-        //}.continueWith { setUpChartTabs(it.id) }
     }
 
 
