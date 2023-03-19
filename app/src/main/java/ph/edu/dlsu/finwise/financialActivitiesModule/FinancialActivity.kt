@@ -145,8 +145,9 @@ class FinancialActivity : AppCompatActivity() {
 
     private fun initializeFragments() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
+
         if (setOwnGoals && !autoApprove)
-            adapter.addFragment(GoalSettingFragment(), "Goal Setting")
+            adapter.addFragment(GoalSettingFragment(),"Goal Setting")
 
         adapter.addFragment(SavingFragment(),"Saving")
         adapter.addFragment(BudgetingFragment(),"Budgeting")
@@ -158,8 +159,6 @@ class FinancialActivity : AppCompatActivity() {
         binding.tabLayout.setupWithViewPager(binding.viewPager)
         setupTabIcons()
     }
-
-
 
     private fun updateForReviewGoalStatus() {
         firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "For Review").get().addOnSuccessListener { results ->
