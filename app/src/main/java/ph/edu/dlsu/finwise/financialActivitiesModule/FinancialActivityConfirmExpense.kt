@@ -136,8 +136,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
         when (result) {
             is SinglePaymentResult.Success -> {
                 val resultID: String = result.paymentId
-                Toast.makeText(this, "Payment Successful. Payment ID: $resultID", Toast.LENGTH_LONG)
-                    .show()
+                //Toast.makeText(this, "Payment Successful. Payment ID: $resultID", Toast.LENGTH_LONG).show()
                 Log.d("PayMayaa", resultID)
                 //adjustUserBalance()
                 //lagay sa paywithpayamyaclient to
@@ -146,8 +145,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
             is SinglePaymentResult.Cancel -> {
                 val resultID: String? = result.paymentId
 
-                Toast.makeText(this, "Payment Cancelled. Payment ID: $resultID", Toast.LENGTH_LONG)
-                    .show()
+                //Toast.makeText(this, "Payment Cancelled. Payment ID: $resultID", Toast.LENGTH_LONG).show()
                 if (resultID != null) {
                     Log.d("PayMayaa", resultID)
                 }
@@ -160,7 +158,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
                 if (result.exception is BadRequestException) {
                     Log.d("PayMayaa", (result.exception as BadRequestException).error.toString())
                 }
-                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                //Toast.makeText(this, message, Toast.LENGTH_LONG).show()
                 Log.d("PayMayaa", message)
 
             }

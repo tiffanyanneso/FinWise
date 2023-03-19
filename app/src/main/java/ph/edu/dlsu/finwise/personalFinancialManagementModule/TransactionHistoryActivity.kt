@@ -109,7 +109,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
         checkedBoxes = getBundle!!.getString("checkedBoxes").toString()
         isExpense = getBundle!!.getString("isExpense").toString()
         user = getBundle!!.getString("user").toString()
-        Toast.makeText(this, ""+user, Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, ""+user, Toast.LENGTH_SHORT).show()
         if (user == "parent") {
             childID = getBundle?.getString("childID").toString()
         }

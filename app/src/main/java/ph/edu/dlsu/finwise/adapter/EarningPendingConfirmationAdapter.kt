@@ -12,6 +12,8 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemEarningPendingConfirmationBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
+import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningSendMoneyActivity
 import java.text.DecimalFormat
 
@@ -65,6 +67,15 @@ class EarningPendingConfirmationAdapter : RecyclerView.Adapter<EarningPendingCon
                 itemBinding.tvChildId.text = earning?.childID
                 itemBinding.tvPaymentType.text = earning?.paymentType
                 //itemBinding.tvFinishDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.dateCompleted!!.toDate())
+
+                if (earning?.depositTo == "Financial Goal") {
+                    firestore.collection("FinancialActivities").document(earning?.savingActivityID!!).get().addOnSuccessListener {
+                        var goalID = it.toObject<FinancialActivities>()!!.financialGoalID
+                        firestore.collection("FinancialGoals").document(goalID!!).get().addOnSuccessListener {
+                            itemBinding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
+                        }
+                    }
+                }
             }
         }
 

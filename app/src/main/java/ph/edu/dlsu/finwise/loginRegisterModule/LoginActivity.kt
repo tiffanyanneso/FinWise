@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
                 }
             } else {
                 Toast.makeText(
-                    baseContext, "Wrong information given. Sign up if you don't have an account",
+                    baseContext, "Account not found.",
                     Toast.LENGTH_SHORT
                 ).show()
             }

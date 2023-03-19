@@ -10,6 +10,8 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemEarningCompletedBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
+import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
@@ -60,6 +62,15 @@ class EarningCompletedAdapter : RecyclerView.Adapter<EarningCompletedAdapter.Ear
                 itemBinding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
                 itemBinding.tvSource.text = earning?.depositTo
                 itemBinding.tvFinishDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.dateCompleted!!.toDate())
+
+                if (earning?.depositTo == "Financial Goal") {
+                    firestore.collection("FinancialActivities").document(earning?.savingActivityID!!).get().addOnSuccessListener {
+                        var goalID = it.toObject<FinancialActivities>()!!.financialGoalID
+                        firestore.collection("FinancialGoals").document(goalID!!).get().addOnSuccessListener {
+                            itemBinding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
+                        }
+                    }
+                }
             }
         }
 

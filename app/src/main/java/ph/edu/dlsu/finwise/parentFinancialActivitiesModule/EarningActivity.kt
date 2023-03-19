@@ -127,7 +127,6 @@ class EarningActivity : AppCompatActivity() {
             //current user is a child
             val bottomNavigationViewChild = binding.bottomNav
             val bottomNavigationViewParent = binding.bottomNavParent
-            Toast.makeText(this, ""+module, Toast.LENGTH_SHORT).show()
             if (user.userType == "Child") {
                 binding.btnAddEarningActivity.visibility = View.GONE
                 bottomNavigationViewChild.visibility = View.VISIBLE

@@ -56,7 +56,7 @@ class StartGoalActivity : AppCompatActivity() {
                     binding.tvTargetDate.text = date.toString()
                     computeDays(goal?.targetDate?.toDate()!!)
                 } else {
-                    Toast.makeText(this, "No data", Toast.LENGTH_SHORT)
+                    //Toast.makeText(this, "No data", Toast.LENGTH_SHORT)
                 }
             }
         }

@@ -91,6 +91,17 @@
                 android:maxLines="1"
                 android:layout_weight="@integer/material_motion_duration_short_1" />
 
+            <TextView
+                android:id="@+id/tv_goal_name"
+                android:layout_below="@id/linear_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Goal Name"
+                android:textSize="16sp"
+                android:maxLines="1"
+                android:layout_weight="@integer/material_motion_duration_short_1" />
+
         </LinearLayout>
 
         <LinearLayout

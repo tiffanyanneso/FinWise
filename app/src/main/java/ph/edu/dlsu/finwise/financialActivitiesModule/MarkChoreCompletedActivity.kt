@@ -10,6 +10,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityMarkChoreCompletedBinding
+import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -56,6 +58,17 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
             binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
             binding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
             binding.tvSource.text = earning?.depositTo
+
+            if (earning.depositTo == "Financial Goal") {
+                binding.layoutGoalName.visibility = View.VISIBLE
+                firestore.collection("FinancialActivities").document(earning?.savingActivityID!!).get().addOnSuccessListener {
+                    var goalID = it.toObject<FinancialActivities>()!!.financialGoalID
+                    firestore.collection("FinancialGoals").document(goalID!!).get().addOnSuccessListener {
+                        binding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
+                    }
+                }
+            } else
+                binding.layoutGoalName.visibility = View.GONE
         }
     }
 

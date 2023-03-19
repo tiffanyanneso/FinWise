@@ -30,6 +30,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEarningSendMoneyBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
 import java.math.BigDecimal
 import java.text.DecimalFormat
@@ -92,8 +93,19 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             binding.tvSource.text = earning.depositTo
             binding.tvPaymentType.text = earning.paymentType
             source = earning.depositTo!!
-            if (source == "Financial Goal")
+
+            if (earning.depositTo == "Financial Goal") {
                 savingActivityID = earning.savingActivityID!!
+                binding.layoutGoalName.visibility = View.VISIBLE
+                firestore.collection("FinancialActivities").document(earning?.savingActivityID!!).get().addOnSuccessListener {
+                    var goalID = it.toObject<FinancialActivities>()!!.financialGoalID
+                    firestore.collection("FinancialGoals").document(goalID!!).get().addOnSuccessListener {
+                        binding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
+                    }
+                }
+            } else
+                binding.layoutGoalName.visibility = View.GONE
+
         }
     }
 
@@ -176,7 +188,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
     private fun logTransactions() {
         firestore.collection("EarningActivities").document(earningActivityID).update("status", "Completed")
         firestore.collection("EarningActivities").document(earningActivityID).update("dateCompleted", Timestamp.now())
-        adjustUserBalance()
+
         if (source == "Financial Goal")
             makeTransactionsGoal()
         else if (source == "Personal Finance")
@@ -184,18 +196,15 @@ class EarningSendMoneyActivity : AppCompatActivity() {
     }
 
     private fun adjustUserBalance() {
-        firestore.collection("ChildWallet").whereEqualTo("childID", childID)
-            .get().addOnSuccessListener { document ->
-                val id = document.documents[0].id
-                val adjustedBalance = amount.toDouble()
+        firestore.collection("ChildWallet").whereEqualTo("childID", childID).whereEqualTo("type", paymentType).get().addOnSuccessListener { document ->
+            val id = document.documents[0].id
+            val adjustedBalance = amount.toDouble()
 
-                firestore.collection("ChildWallet").document(id)
-                    .update("currentBalance", FieldValue.increment(adjustedBalance))
-            }
+            firestore.collection("ChildWallet").document(id).update("currentBalance", FieldValue.increment(adjustedBalance))
+        }
     }
 
     private fun makeTransactionsPersonalFinance() {
-        println("print ppersonal finance")
         val income = hashMapOf(
             "userID" to childID,
             "transactionName" to binding.tvActivity.text.toString(),
@@ -206,7 +215,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             "paymentType" to paymentType
         )
         firestore.collection("Transactions").add(income).addOnSuccessListener {
-            //double
+            adjustUserBalance()
             val earning = Intent(this, EarningActivity::class.java)
             val bundle = Bundle()
             bundle.putString("childID", childID)
@@ -216,7 +225,6 @@ class EarningSendMoneyActivity : AppCompatActivity() {
     }
 
     private fun makeTransactionsGoal() {
-        println("print goal")
         val income = hashMapOf(
             "createdBy" to childID,
             "transactionName" to binding.tvActivity.text.toString(),

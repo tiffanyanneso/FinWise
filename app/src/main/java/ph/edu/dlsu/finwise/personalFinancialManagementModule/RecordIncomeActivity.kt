@@ -168,7 +168,7 @@ class RecordIncomeActivity : AppCompatActivity() {
     private fun getBalance() {
         val bundle2 = intent.extras!!
         balance = bundle2.getFloat("balance")
-        Toast.makeText(this, ""+balance, Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, ""+balance, Toast.LENGTH_SHORT).show()
     }
 
     /*private fun getCurrentTime() {
