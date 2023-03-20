@@ -150,18 +150,23 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
         var paymentType = binding.dropPaymentType.text.toString()
 
         //TODO: CHANGE TEXT COLOR FOR WARNING
-        if (paymentType == "Cash") {
-            if (amount > cashBalance)
-                binding.containerAmount.helperText = "You do not have enough Cash savings to pay for the item. The remaining amount will be deducted from your Maya savings"
-            else
-                binding.containerAmount.helperText = ""
+        if (amount <= (cashBalance+mayaBalance)) {
+            if (paymentType == "Cash") {
+                if (amount > cashBalance) {
+                    binding.containerAmount.helperText =
+                        "You do not have enough Cash savings to pay for the item. The remaining amount will be deducted from your Maya savings"
+                } else
+                    binding.containerAmount.helperText = ""
 
-        } else if (paymentType == "Maya") {
-            if (amount > mayaBalance)
-                binding.containerAmount.helperText = "You do not have enough Maya savings to pay for the item. The remaining amount will be deducted from your Cash savings"
-            else
-                binding.containerAmount.helperText = ""
-        }
+            } else if (paymentType == "Maya") {
+                if (amount > mayaBalance)
+                    binding.containerAmount.helperText =
+                        "You do not have enough Maya savings to pay for the item. The remaining amount will be deducted from your Cash savings"
+                else
+                    binding.containerAmount.helperText = ""
+            }
+        } else
+            binding.containerAmount.helperText = "You do not have enough savings to pay for the item"
     }
 
     private fun getBalances() {
@@ -180,7 +185,6 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
                     else if (transactionObject.transactionType == "Withdrawal")
                         cashBalance -= transactionObject?.amount!!
                 }
-
                 else if (transactionObject.paymentType == "Maya") {
                     if (transactionObject?.transactionType == "Deposit")
                         mayaBalance += transactionObject?.amount!!
@@ -227,8 +231,13 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
             if (binding.etAmount.text.toString().toFloat() <= 0) {
                 binding.containerAmount.helperText = "Please enter a valid amount"
                 valid = false
-            } else
-                binding.containerAmount.helperText = ""
+            } else {
+                if (binding.etAmount.text.toString().toFloat() > (cashBalance+mayaBalance)) {
+                    binding.containerAmount.helperText = "You do not have enough savings"
+                    valid = false
+                } else
+                    binding.containerAmount.helperText = ""
+            }
         }
 
         if (binding.dropPaymentType.text.toString().isEmpty()) {

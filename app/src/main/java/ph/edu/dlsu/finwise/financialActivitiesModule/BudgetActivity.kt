@@ -552,12 +552,10 @@ class BudgetActivity : AppCompatActivity() {
                 binding.layoutWithdraw.visibility = View.GONE
                 binding.btnDoneSettingBudget.visibility = View.GONE
                 binding.btnDoneSpending.visibility = View.GONE
-                binding.btnNewCategory.visibility = View.GONE
             } else if (user.userType == "Child") {
                 binding.layoutWithdraw.visibility = View.VISIBLE
                 binding.btnDoneSettingBudget.visibility = View.VISIBLE
                 binding.btnDoneSpending.visibility = View.VISIBLE
-                binding.btnNewCategory.visibility = View.VISIBLE
             }
         }
     }

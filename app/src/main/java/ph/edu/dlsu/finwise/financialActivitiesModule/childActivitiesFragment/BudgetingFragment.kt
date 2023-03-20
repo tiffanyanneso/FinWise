@@ -26,6 +26,7 @@ import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.abs
 import kotlin.math.roundToInt
 
 class BudgetingFragment : Fragment() {
@@ -46,8 +47,10 @@ class BudgetingFragment : Fragment() {
     private var nParent = 0
     //number of budget items in total
     private var budgetItemCount = 0.00F
+    //this is to count the number of budget items that have been already purchased in spending for budget accuracy
+    private var purchasedBudgetItemCount  = 0.00F
     //budget variance
-    private var totalBudgetVariance = 0.00F
+    private var totalBudgetAccuracy = 0.00F
 
     var nUpdates = 0.00F
     var nItems = 0.00F
@@ -108,41 +111,55 @@ class BudgetingFragment : Fragment() {
     private fun getOverallBudgeting() {
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             for (activity in results) {
-                //for parent involvement
                 firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).get().addOnSuccessListener { budgetItems ->
                     for (budgetItem in budgetItems) {
                         budgetItemCount++
                         var budgetItemObject = budgetItem.toObject<BudgetItem>()
-
                         if (budgetItemObject.status == "Edited")
                             nUpdates++
-                        binding.tvAverageUpdates.text = (nUpdates/budgetItemCount).roundToInt().toString()
+                        binding.tvAverageUpdates.text = (nUpdates / budgetItemCount).roundToInt().toString()
 
-
-                        //budget variance - lower budget variance means better budgeting performance
-                        firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItem.id).get().addOnSuccessListener { transactions ->
-                            var spent = 0.00F
-                            for (transaction in transactions)
-                                spent += transaction.toObject<Transactions>()!!.amount!!
-
-                            var budgetVariance = budgetItemObject.amount
-                        }
 
                         //parental involvement
                         firestore.collection("Users").document(budgetItemObject.createdBy.toString()).get().addOnSuccessListener { user ->
                             //parent is the one who added the budget item
                             if (user.toObject<Users>()!!.userType == "Parent")
                                 nParent++
+                        }.continueWith {
+                            getBudgetAccuracy(activity.id, budgetItem.id, budgetItemObject)
                         }
                     }
                 }
-                setOverall()
             }
         }
     }
 
+    private fun getBudgetAccuracy(budgetingActivityID:String, budgetItemID:String, budgetItemObject:BudgetItem) {
+        firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
+            firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", it.toObject<FinancialActivities>()!!.financialGoalID!!).whereEqualTo("financialActivityName", "Spending").get().addOnSuccessListener { spending ->
+                var spendingActivity = spending.documents[0].toObject<FinancialActivities>()
+                if (spendingActivity?.status == "Completed") {
+                    //budget accuracy
+                    purchasedBudgetItemCount++
+                    firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).get().addOnSuccessListener { transactions ->
+                        var spent = 0.00F
+                        for (transaction in transactions)
+                            spent += transaction.toObject<Transactions>()!!.amount!!
+                        println("print budget accuracy " +  (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100))
+                        totalBudgetAccuracy += (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100)
+                    }.continueWith {
+                        setOverall()
+                    }
+                } else
+                    setOverall()
+            }
+        }
+
+
+    }
+
     private fun setOverall() {
-        var overall = (1 - (nParent.toFloat()/budgetItemCount)) * 100
+        var overall = ((totalBudgetAccuracy/purchasedBudgetItemCount) + ((1 - (nParent.toFloat()/budgetItemCount)) * 100)) /2
 
         binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(overall)}%"
 

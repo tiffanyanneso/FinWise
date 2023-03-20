@@ -143,10 +143,9 @@ class SpendingFragment : Fragment(){
                 overSpending++
 
         }.continueWith {
+            println("print oberspending" + overallSpending)
+            println("print nbudgetitems" + nBudgetItems)
             overspendingPercentage = (overSpending/nBudgetItems)*100
-//            binding.progressBarOverspending.progress = overspendingPercentage.toInt()
-//            binding.tvOverspendingPercentage.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
-
 
             firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
                 var child = it.toObject<Users>()
@@ -194,7 +193,7 @@ class SpendingFragment : Fragment(){
     }
 
     private fun setOverall() {
-        binding.tvPerformanceText.text ="${overallSpending}%"
+        binding.textPerformance.text ="${DecimalFormat("##0.00").format(overallSpending)}%"
 
         if (overallSpending >= 96) {
             binding.imgFace.setImageResource(R.drawable.excellent)

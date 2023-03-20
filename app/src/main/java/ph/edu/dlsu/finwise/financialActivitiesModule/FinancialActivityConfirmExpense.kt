@@ -328,27 +328,28 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
         paymentType = bundle.getString("paymentType").toString()
         expenseName = bundle.getString("expenseName").toString()
 
-        binding.tvAmount.text = "₱ " + DecimalFormat("#,###.00").format(bundle.getFloat("amount"))
+        binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(bundle.getFloat("amount"))
         binding.tvName.text = bundle.getString("expenseName")
         var date = bundle.getSerializable("date")
         binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(date)
 
         var totalBalance = cashBalance + mayaBalance - expenseAmount
-        binding.tvUpdatedTotalSavings.text = "₱ " + DecimalFormat("#,###.00").format(totalBalance)
+        binding.tvUpdatedTotalSavings.text = "₱ " + DecimalFormat("#,##0.00").format(totalBalance)
+
 
         if (paymentType == "Cash") {
             if (cashBalance > expenseAmount) {
-                binding.tvUpdatedCashSavings.text = "₱ " + DecimalFormat("#,###.00").format(cashBalance - expenseAmount)
-                binding.tvUpdatedMayaSavings.text = "₱ " + DecimalFormat("#,###.00").format(mayaBalance)
+                binding.tvUpdatedCashSavings.text = "₱ " + DecimalFormat("#,###0.00").format(cashBalance - expenseAmount)
+                binding.tvUpdatedMayaSavings.text = "₱ " + DecimalFormat("#,##0.00").format(mayaBalance)
             }
             //split between cash and maya, finish cash first
-            else if (expenseAmount > cashBalance) {
+            else if (expenseAmount >= cashBalance) {
                 var remaining  = expenseAmount - cashBalance
                 binding.tvUpdatedCashSavings.text = "₱ " + DecimalFormat("#,##0.00").format(0)
                 binding.tvUpdatedMayaSavings.text = "₱ " + DecimalFormat("#,##0.00").format( mayaBalance - remaining)
             }
         } else if (paymentType == "Maya") {
-            if (mayaBalance > expenseAmount) {
+            if (mayaBalance >= expenseAmount) {
                 binding.tvUpdatedMayaSavings.text = "₱ " + DecimalFormat("#,##0.00").format( mayaBalance - expenseAmount)
                 binding.tvUpdatedCashSavings.text = "₱ " + DecimalFormat("#,##0.00").format(cashBalance)
             }
@@ -371,7 +372,6 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
 
         firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener { activity ->
             var financialGoalID = activity.toObject<FinancialActivities>()!!.financialGoalID!!
-            println("print " +  financialGoalID)
             firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener { goal ->
                 goalName = goal.toObject<FinancialGoals>()!!.goalName!!
             }
