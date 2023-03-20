@@ -154,8 +154,6 @@ class BudgetingFragment : Fragment() {
                     setOverall()
             }
         }
-
-
     }
 
     private fun setOverall() {

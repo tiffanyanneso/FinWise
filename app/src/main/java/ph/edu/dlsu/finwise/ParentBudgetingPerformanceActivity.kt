@@ -1,29 +1,13 @@
-package ph.edu.dlsu.finwise.financialActivitiesModule
+package ph.edu.dlsu.finwise
 
 import android.app.Dialog
-import android.content.Intent
-import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.res.ResourcesCompat
-import com.google.android.gms.tasks.Tasks
+import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import ph.edu.dlsu.finwise.Navbar
-import ph.edu.dlsu.finwise.NavbarParent
-import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.ActivityBudgetingPerformanceBinding
-import ph.edu.dlsu.finwise.databinding.DialogBudgetAccuracyAmountReviewBinding
-import ph.edu.dlsu.finwise.databinding.DialogBudgetAccuracyItemsReviewBinding
-import ph.edu.dlsu.finwise.databinding.DialogBudgetingReviewBinding
+import ph.edu.dlsu.finwise.databinding.*
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.BudgetingFragment
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
@@ -33,9 +17,8 @@ import java.text.DecimalFormat
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-class BudgetingPerformanceActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityBudgetingPerformanceBinding
+class ParentBudgetingPerformanceActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityParentBudgetingPerformanceBinding
     private var firestore = Firebase.firestore
 
     //contains only going budgeting activities for the recycler view
@@ -68,28 +51,34 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     var nUpdates = 0.00F
     var nItems = 0.00F
 
-        override fun onCreate(savedInstanceState: Bundle?) {
+    private lateinit var childID: String
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityBudgetingPerformanceBinding.inflate(layoutInflater)
+        binding = ActivityParentBudgetingPerformanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.hide()
+        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_goal)
+
+        var bundle = Bundle()
+        childID = bundle.getString("childID").toString()
+
         getBudgeting()
-        setNavigationBar()
-        loadBackButton()
 
         binding.btnReview.setOnClickListener {
             showBudgetingReivewDialog()
         }
 
-            binding.btnReview.setOnClickListener{
-                showBudgetingReivewDialog()
-            }
+        binding.btnReview.setOnClickListener{
+            showBudgetingReivewDialog()
+        }
     }
 
     private fun getBudgeting() {
         goalIDArrayList.clear()
         //saving activities that are in progress means that there the goal is also in progress because they are connected
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+        firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             for (activity in results) {
                 //add id to arraylit to load in recycler view
                 var activityObject = activity.toObject<FinancialActivities>()
@@ -181,7 +170,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     }
 
     private fun getOverallBudgeting() {
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
+        firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             for (activity in results) {
                 firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).get().addOnSuccessListener { budgetItems ->
                     for (budgetItem in budgetItems) {
@@ -288,15 +277,15 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
 
     private fun showBudgetingReivewDialog() {
 
-        var dialogBinding= DialogBudgetingReviewBinding.inflate(getLayoutInflater())
+        var dialogBinding= DialogParentBudgetingTipsBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
         dialog.window!!.setLayout(1000, 1700)
 
-        dialogBinding.btnGotIt.setOnClickListener {
-            dialog.dismiss()
-        }
+//        dialogBinding.btnGotIt.setOnClickListener {
+//            dialog.dismiss()
+//        }
 
         dialog.show()
     }
@@ -329,32 +318,5 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         }
 
         dialog.show()
-    }
-
-    private fun setNavigationBar() {
-        var navUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("Users").document(navUser).get().addOnSuccessListener {
-
-            val bottomNavigationViewChild = binding.bottomNav
-            val bottomNavigationViewParent = binding.bottomNavParent
-
-            if (it.toObject<Users>()!!.userType == "Parent") {
-                bottomNavigationViewChild.visibility = View.GONE
-                bottomNavigationViewParent.visibility = View.VISIBLE
-                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
-            } else if (it.toObject<Users>()!!.userType == "Child") {
-                bottomNavigationViewChild.visibility = View.VISIBLE
-                bottomNavigationViewParent.visibility = View.GONE
-                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
-
-            }
-        }
-    }
-
-    private fun loadBackButton() {
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
-        binding.topAppBar.setNavigationOnClickListener {
-            onBackPressed()
-        }
     }
 }

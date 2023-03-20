@@ -105,7 +105,7 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
                 binding.imgFace.setImageResource(R.drawable.good)
                 binding.tvPerformanceStatus.text = "Good"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
-                binding.tvPerformanceText.text = "Your child is doing a great job of setting goals! Encourage them to follow the SMART framework."
+                binding.tvPerformanceText.text = "Your child is doing a good job of setting goals! Encourage them to follow the SMART framework."
             } else if (percentage < 66 && percentage >= 56) {
                 binding.imgFace.setImageResource(R.drawable.average)
                 binding.tvPerformanceStatus.text = "Average"
