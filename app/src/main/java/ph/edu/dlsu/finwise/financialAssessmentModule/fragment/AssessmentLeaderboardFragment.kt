@@ -59,6 +59,7 @@ class AssessmentLeaderboardFragment : Fragment() {
     }
 
     private fun loadLeaderboard() {
+        childrenIDArrayList.add(childID)
         firestore.collection("Friends").whereEqualTo("senderID", childID)
             .get().addOnSuccessListener { documents ->
                 for (friend in documents) {
@@ -78,7 +79,6 @@ class AssessmentLeaderboardFragment : Fragment() {
 
 
     private suspend fun initializeLeaderboardScores() {
-        childrenIDArrayList.add(childID)
         for (friendID in childrenIDArrayList) {
             assessmentsTaken.clear()
             val docSnapshot = getAssessmentAtemps(friendID)
@@ -171,6 +171,8 @@ class AssessmentLeaderboardFragment : Fragment() {
 
         val percentage = (totalSum.toDouble() / maxPossibleSum) * 100
 
+
+
         userScoresArray.add(ChildUsersWithID(childObject, assessmentChildID, percentage))
     }
 
@@ -199,7 +201,15 @@ class AssessmentLeaderboardFragment : Fragment() {
             FriendRanking(index + 1, value)
         }
 
+        setRankOfChildUser(rankedFriends)
+
         loadRecyclerView(rankedFriends)
+    }
+
+    private fun setRankOfChildUser(rankedFriends: List<FriendRanking>) {
+        val result = rankedFriends.find { it.childUsers.id == childID }
+        val rankNumber = result?.rank
+        binding.tvRank.text = "You are rank $rankNumber!"
     }
 
     private fun loadRecyclerView(rankedFriends: List<FriendRanking>) {
