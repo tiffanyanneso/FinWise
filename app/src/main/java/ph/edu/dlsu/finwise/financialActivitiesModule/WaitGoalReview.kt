@@ -9,6 +9,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityWaitGoalReviewBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 
 class WaitGoalReview : AppCompatActivity() {
 
@@ -28,6 +29,7 @@ class WaitGoalReview : AppCompatActivity() {
             binding.tvGoalName.text = goal?.goalName
             binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
             binding.tvActivity.text = goal?.financialActivity
+            binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(goal?.targetDate!!.toDate())
         }
 
         binding.btnActivities.setOnClickListener{

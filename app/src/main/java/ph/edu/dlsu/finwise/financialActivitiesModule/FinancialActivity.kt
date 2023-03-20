@@ -106,16 +106,19 @@ class FinancialActivity : AppCompatActivity() {
                         nearingDeadlineGoalIDArrayList.add(goal.id)
                 }
             }
-            var dialogBinding= DialogNearingDeadlineBinding.inflate(layoutInflater)
-            var dialog= Dialog(this)
-            dialog.setContentView(dialogBinding.root)
-            dialog.window!!.setLayout(900, 1400)
-            dialogBinding.btnOk.setOnClickListener { dialog.dismiss() }
-            nearingDeadlineAdapter = NearingDeadlineAdapter(this, nearingDeadlineGoalIDArrayList)
-            dialogBinding.rvNearDeadline.adapter = nearingDeadlineAdapter
-            dialogBinding.rvNearDeadline.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            nearingDeadlineAdapter.notifyDataSetChanged()
-            dialog.show()
+
+            if (nearingDeadlineGoalIDArrayList.size > 0) {
+                var dialogBinding = DialogNearingDeadlineBinding.inflate(layoutInflater)
+                var dialog = Dialog(this)
+                dialog.setContentView(dialogBinding.root)
+                dialog.window!!.setLayout(900, 1400)
+                dialogBinding.btnOk.setOnClickListener { dialog.dismiss() }
+                nearingDeadlineAdapter = NearingDeadlineAdapter(this, nearingDeadlineGoalIDArrayList)
+                dialogBinding.rvNearDeadline.adapter = nearingDeadlineAdapter
+                dialogBinding.rvNearDeadline.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                nearingDeadlineAdapter.notifyDataSetChanged()
+                dialog.show()
+            }
         }
     }
 

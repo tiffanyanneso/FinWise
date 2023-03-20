@@ -24,6 +24,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.GoalRating
+import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -213,7 +214,7 @@ class GoalSettingFragment : Fragment() {
                     showReviewButton()
                 }
                 binding.tvOverallRating.visibility = View.VISIBLE
-                binding.tvOverallRating.text ="${overall}/5"
+                binding.tvOverallRating.text ="${DecimalFormat("0.0").format(overall)}/5.0"
             }
         }
     }
