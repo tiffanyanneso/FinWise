@@ -52,6 +52,7 @@ class SpendingActivity : AppCompatActivity() {
 
     private lateinit var childID:String
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySpendingBinding.inflate(layoutInflater)
@@ -90,6 +91,7 @@ class SpendingActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getInfo() {
         firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
             var budgetItem = it.toObject<BudgetItem>()
@@ -99,6 +101,7 @@ class SpendingActivity : AppCompatActivity() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("ResourceAsColor")
     private fun getAvailableBudget() {
         firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {

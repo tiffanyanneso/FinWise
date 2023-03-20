@@ -14,12 +14,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
+import ph.edu.dlsu.finwise.ParentGoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactGoalSettingAdapter
-import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
-import ph.edu.dlsu.finwise.databinding.DialogSmartReviewBinding
-import ph.edu.dlsu.finwise.databinding.FragmentGoalSettingBinding
-import ph.edu.dlsu.finwise.databinding.FragmentParentGoalSettingBinding
+import ph.edu.dlsu.finwise.databinding.*
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.FinancialGoals
@@ -40,7 +38,6 @@ class ParentGoalSettingFragment : Fragment() {
     private var nRelevant = 0.00F
     private var nTimeBound = 0.00F
 
-    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
     private lateinit var childID:String
 
     private var ongoingGoals = 0
@@ -87,8 +84,12 @@ class ParentGoalSettingFragment : Fragment() {
             }
         }
 
+        binding.btnViewSMARTGoalsInfo.setOnClickListener{
+            showGoalDialog()
+        }
+
         binding.btnSeeMore.setOnClickListener {
-            var goToPerformance = Intent(requireContext().applicationContext, GoalSettingPerformanceActivity::class.java)
+            var goToPerformance = Intent(requireContext().applicationContext, ParentGoalSettingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
     }
@@ -110,14 +111,14 @@ class ParentGoalSettingFragment : Fragment() {
     }
 
     private fun getOnGoingGoals() {
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+        firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             ongoingGoals = results.size()
         }
     }
 
     @SuppressLint("SetTextI18n")
     private fun initializeRating() {
-        firestore.collection("GoalRating").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+        firestore.collection("GoalRating").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
             nRatings = results.size()
             for (rating in results) {
                 var ratingObject = rating.toObject<GoalRating>()
@@ -139,52 +140,67 @@ class ParentGoalSettingFragment : Fragment() {
                     binding.imgFace.setImageResource(R.drawable.excellent)
                     binding.tvPerformanceStatus.text = "Excellent"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
-                    binding.tvPerformanceText.text = "Keep up the excellent work! Goal Setting is your strong point. Keep setting those goals!"
+                    binding.tvPerformanceText.text = "Your child excels at goal setting! Encourage them to continue."
+                    showSeeMoreButton()
                 } else if (percentage < 96 && percentage >= 86) {
                     binding.imgFace.setImageResource(R.drawable.amazing)
                     binding.tvPerformanceStatus.text = "Amazing"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
-                    binding.tvPerformanceText.text = "Amazing job! You are performing well. Goal Setting is your strong point. Keep setting those goals!"
+                    binding.tvPerformanceText.text = "Your child is amazing at goal setting! Encourage them to keep setting those goals!"
+                    showSeeMoreButton()
                 } else if (percentage < 86 && percentage >= 76) {
                     binding.imgFace.setImageResource(R.drawable.great)
                     binding.tvPerformanceStatus.text = "Great"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
-                    binding.tvPerformanceText.text = "Great job! You are performing well. Keep setting those goals!"
+                    binding.tvPerformanceText.text = "Your child is doing a great job of setting goals!"
+                    showSeeMoreButton()
                 } else if (percentage < 76 && percentage >= 66) {
                     binding.imgFace.setImageResource(R.drawable.good)
                     binding.tvPerformanceStatus.text = "Good"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
-                    binding.tvPerformanceText.text = "Good job! With a bit more dedication and effort, you’ll surely up your performance!"
+                    binding.tvPerformanceText.text = "Your child is doing a great job of setting goals! Encourage them to follow the SMART framework."
+                    showSeeMoreButton()
                 } else if (percentage < 66 && percentage >= 56) {
                     binding.imgFace.setImageResource(R.drawable.average)
                     binding.tvPerformanceStatus.text = "Average"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
-                    binding.tvPerformanceText.text = "Nice work! Work on improving your goal setting performance. Review SMART Goals!"
+                    binding.tvPerformanceText.text = "Your child is doing a nice job of setting goals! Encourage them to follow the SMART framework."
+                    showReviewButton()
                 } else if (percentage < 56 && percentage >= 46) {
                     binding.imgFace.setImageResource(R.drawable.nearly_there)
                     binding.tvPerformanceStatus.text = "Nearly There"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
-                    binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
+                    binding.tvPerformanceText.text = "Your child is nearly there! Click the tips button to learn how to help them get there!"
+                    showReviewButton()
                 } else if (percentage < 46 && percentage >= 36) {
                     binding.imgFace.setImageResource(R.drawable.almost_there)
                     binding.tvPerformanceStatus.text = "Almost There"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
-                    binding.tvPerformanceText.text = "Almost there! You need to work on your goal setting. Click review to learn how!"
+                    binding.tvPerformanceText.text = "Your child is almost there! Click the tips button to learn how to help them get there!"
+                    showReviewButton()
                 } else if (percentage < 36 && percentage >= 26) {
                     binding.imgFace.setImageResource(R.drawable.getting_there)
                     binding.tvPerformanceStatus.text = "Getting There"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
-                    binding.tvPerformanceText.text = "Getting there! You need to work on your goal setting. Click review to learn how!"
+                    binding.tvPerformanceText.text = "Your child is getting there! Click the tips button to learn how to help them get there!"
+                    showReviewButton()
                 } else if (percentage < 26 && percentage >= 16) {
                     binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                     binding.tvPerformanceStatus.text = "Not Quite There Yet"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
-                    binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
+                    binding.tvPerformanceText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
+                    showReviewButton()
                 } else if (percentage < 15) {
                     binding.imgFace.setImageResource(R.drawable.bad)
                     binding.tvPerformanceStatus.text = "Needs Improvement"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
-                    binding.tvPerformanceText.text = "Uh oh! You need to work on your goal setting. Click review to learn how!"
+                    binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them improve their goal setting!"
+                    showReviewButton()
+                } else {
+                    binding.imgFace.setImageResource(R.drawable.good)
+                    binding.tvPerformanceStatus.text = ""
+                    binding.tvPerformanceText.text = "Child has yet to complete goals."
+                    showSeeMoreButton()
                 }
                 binding.tvOverallRating.visibility = View.VISIBLE
                 binding.tvOverallRating.text ="${overall}/5"
@@ -201,6 +217,17 @@ class ParentGoalSettingFragment : Fragment() {
         goalSettingAdapter.notifyDataSetChanged()
     }
 
+    private fun showSeeMoreButton() {
+        binding.btnSeeMore.visibility = View.VISIBLE
+        binding.layoutButtons.visibility = View.GONE
+    }
+
+    private fun showReviewButton() {
+        binding.btnSeeMore.visibility = View.GONE
+        binding.layoutButtons.visibility = View.VISIBLE
+    }
+
+
     private fun buildDialog() {
 
         var dialogBinding= DialogNewGoalWarningBinding.inflate(getLayoutInflater())
@@ -210,12 +237,13 @@ class ParentGoalSettingFragment : Fragment() {
 
         dialog.window!!.setLayout(900, 600)
 
-        dialogBinding.tvMessage.text= "You have $ongoingGoals ongoing goals.\nAre you sure you want to start another one?"
+        dialogBinding.tvMessage.text= "Your child has $ongoingGoals ongoing goals.\nAre you sure you want to start another one?"
 
         dialogBinding.btnOk.setOnClickListener {
             var newGoal = Intent (requireContext().applicationContext, NewGoal::class.java)
 
             var bundle = Bundle()
+            // TODO change source
             bundle.putString("source", "childFinancialActivity")
             newGoal.putExtras(bundle)
             newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -231,31 +259,32 @@ class ParentGoalSettingFragment : Fragment() {
 
     private fun showGoalDialog() {
 
-        var dialogBinding= DialogSmartReviewBinding.inflate(getLayoutInflater())
+        var dialogBinding= DialogParentSmartConceptTipBinding.inflate(getLayoutInflater())
         var dialog= Dialog(requireContext().applicationContext);
         dialog.setContentView(dialogBinding.getRoot())
 
         dialog.window!!.setLayout(1000, 1700)
 
-        dialogBinding.btnGotIt.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialogBinding.btnReviewGoals.setOnClickListener {
-            dialog.dismiss()
-            var goToGoalSetting = Intent(requireContext().applicationContext, FinancialActivity::class.java)
-            this.startActivity(goToGoalSetting)
-        }
-
-        dialogBinding.btnSetNewGoal.setOnClickListener {
-            dialog.dismiss()
-            var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
-            var bundle = Bundle()
-            bundle.putString("source", "childFinancialActivity")
-            goToNewGoal.putExtras(bundle)
-            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            this.startActivity(goToNewGoal)
-        }
+//        dialogBinding.btnGotIt.setOnClickListener {
+//            dialog.dismiss()
+//        }
+//
+//        dialogBinding.btnReviewGoals.setOnClickListener {
+//            dialog.dismiss()
+//            var goToGoalSetting = Intent(requireContext().applicationContext, FinancialActivity::class.java)
+//            this.startActivity(goToGoalSetting)
+//        }
+//
+//        dialogBinding.btnSetNewGoal.setOnClickListener {
+//            dialog.dismiss()
+//            var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
+//            var bundle = Bundle()
+//            // TODO change source
+//            bundle.putString("source", "childFinancialActivity")
+//            goToNewGoal.putExtras(bundle)
+//            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            this.startActivity(goToNewGoal)
+//        }
 
         dialog.show()
     }

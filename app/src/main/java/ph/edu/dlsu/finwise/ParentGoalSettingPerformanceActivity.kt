@@ -4,14 +4,14 @@ import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityGoalSettingPerformanceBinding
-import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordDepositBinding
+import ph.edu.dlsu.finwise.databinding.ActivityParentGoalSettingPerformanceBinding
+import ph.edu.dlsu.finwise.databinding.DialogParentSmartConceptTipBinding
+import ph.edu.dlsu.finwise.databinding.DialogParentSmartTipBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartIndividualBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartReviewBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
@@ -19,9 +19,9 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.GoalRating
 import kotlin.math.roundToInt
 
-class GoalSettingPerformanceActivity : AppCompatActivity() {
+class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityParentGoalSettingPerformanceBinding
 
-    private lateinit var binding: ActivityGoalSettingPerformanceBinding
     private var firestore = Firebase.firestore
     private var nRatings = 0
     private var nOverall = 0.00F
@@ -32,33 +32,37 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
     private var nTimeBound = 0.00F
 
     private var SMARTIndividual = "Specific"
+    private lateinit var childID:String
 
-    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
     data class Rating(var name: String? = null, var score: Int = 0)
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityGoalSettingPerformanceBinding.inflate(layoutInflater)
+        binding = ActivityParentGoalSettingPerformanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        var bundle = Bundle()
+        childID = bundle.getString("childID").toString()
 
         // Hides actionbar,
         // and initializes the navbar
         supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_goal)
 
         initializeRating()
 
-        binding.btnViewSMARTGoalsInfo.setOnClickListener{
+        binding.btnViewSMARTGoalsTip.setOnClickListener{
             showGoalDialog()
         }
 
-        binding.btnReviewConcept.setOnClickListener{
+        binding.btnConceptTip.setOnClickListener{
             showIndividualDialog()
         }
+
     }
-    private fun RatingObject(name: String, score: Int): Rating {
-        val rating = Rating()
+
+    private fun RatingObject(name: String, score: Int): GoalSettingPerformanceActivity.Rating {
+        val rating = GoalSettingPerformanceActivity.Rating()
 
         rating.name = name
         rating.score = score
@@ -66,7 +70,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
         return rating
     }
     private fun initializeRating() {
-        firestore.collection("GoalRating").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+        firestore.collection("GoalRating").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
             nRatings = results.size()
             for (rating in results) {
                 var ratingObject = rating.toObject<GoalRating>()
@@ -86,55 +90,55 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
                 binding.imgFace.setImageResource(R.drawable.excellent)
                 binding.tvPerformanceStatus.text = "Excellent"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
-                binding.tvPerformanceText.text = "Keep up the excellent work! Goal Setting is your strong point. Keep setting those goals!"
+                binding.tvPerformanceText.text = "Your child excels at goal setting. Encourage them to continue."
             } else if (percentage < 96 && percentage >= 86) {
                 binding.imgFace.setImageResource(R.drawable.amazing)
                 binding.tvPerformanceStatus.text = "Amazing"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
-                binding.tvPerformanceText.text = "Amazing job! You are performing well. Goal Setting is your strong point. Keep setting those goals!"
+                binding.tvPerformanceText.text = "Your child is amazing at goal setting! Encourage them to keep setting those goals!"
             } else if (percentage < 86 && percentage >= 76) {
                 binding.imgFace.setImageResource(R.drawable.great)
                 binding.tvPerformanceStatus.text = "Great"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
-                binding.tvPerformanceText.text = "Great job! You are performing well. Keep setting those goals!"
+                binding.tvPerformanceText.text = "Your child is doing a great job of setting goals!"
             } else if (percentage < 76 && percentage >= 66) {
                 binding.imgFace.setImageResource(R.drawable.good)
                 binding.tvPerformanceStatus.text = "Good"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
-                binding.tvPerformanceText.text = "Good job! With a bit more dedication and effort, you’ll surely up your performance!"
+                binding.tvPerformanceText.text = "Your child is doing a great job of setting goals! Encourage them to follow the SMART framework."
             } else if (percentage < 66 && percentage >= 56) {
                 binding.imgFace.setImageResource(R.drawable.average)
                 binding.tvPerformanceStatus.text = "Average"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
-                binding.tvPerformanceText.text = "Nice work! Work on improving your goal setting performance. Review SMART Goals!"
+                binding.tvPerformanceText.text = "Your child is doing a nice job of setting goals! Encourage them to follow the SMART framework."
             } else if (percentage < 56 && percentage >= 46) {
                 binding.imgFace.setImageResource(R.drawable.nearly_there)
                 binding.tvPerformanceStatus.text = "Nearly There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
-                binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
+                binding.tvPerformanceText.text = "Your child is nearly there! Click the tips button to learn how to help them get there!"
             } else if (percentage < 46 && percentage >= 36) {
                 binding.imgFace.setImageResource(R.drawable.almost_there)
                 binding.tvPerformanceStatus.text = "Almost There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
-                binding.tvPerformanceText.text = "Almost there! You need to work on your goal setting. Click review to learn how!"
+                binding.tvPerformanceText.text = "Your child is almost there! Click the tips button to learn how to help them get there!"
             } else if (percentage < 36 && percentage >= 26) {
                 binding.imgFace.setImageResource(R.drawable.getting_there)
                 binding.tvPerformanceStatus.text = "Getting There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
-                binding.tvPerformanceText.text = "Getting there! You need to work on your goal setting. Click review to learn how!"
+                binding.tvPerformanceText.text = "Your child is getting there! Click the tips button to learn how to help them get there!"
             } else if (percentage < 26 && percentage >= 16) {
                 binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                 binding.tvPerformanceStatus.text = "Not Quite There Yet"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
-                binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
+                binding.tvPerformanceText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
             } else if (percentage < 15) {
                 binding.imgFace.setImageResource(R.drawable.bad)
                 binding.tvPerformanceStatus.text = "Needs Improvement"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
-                binding.tvPerformanceText.text = "Uh oh! You need to work on your goal setting. Click review to learn how!"
+                binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them improve their goal setting!"
             }
 
-            val ratingArray = ArrayList<Rating>()
+            val ratingArray = ArrayList<GoalSettingPerformanceActivity.Rating>()
 
             ratingArray.add(RatingObject("Specific", (nSpecific/nRatings).roundToInt()))
             ratingArray.add(RatingObject("Measurable", (nMeasurable/nRatings).roundToInt()))
@@ -165,85 +169,74 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
                     SMARTIndividual =  ratingArray[i].name.toString()
                 }
             }
-
-//            binding.progressBarSpecific.progress = (nSpecific/nRatings).roundToInt()
-//            binding.ratingSpecific.text = "${(nSpecific/nRatings)}/5"
-//            binding.progressBarMeasurable.progress = (nMeasurable/nRatings).roundToInt()
-//            binding.ratingMeasurable.text = "${(nMeasurable/nRatings)}/5"
-//            binding.progressBarAchievable.progress = (nAchievable/nRatings).roundToInt()
-//            binding.ratingAchievable.text = "${(nAchievable/nRatings)}/5"
-//            binding.progressBarRelevant.progress = (nRelevant/nRatings).roundToInt()
-//            binding.ratingRelevant.text = "${(nRelevant/nRatings)}/5"
-//            binding.progressBarTime.progress = (nTimeBound/nRatings).roundToInt()
-//            binding.ratingTime.text = "${(nTimeBound/nRatings)}/5"
         }
     }
 
     private fun showGoalDialog() {
 
-        var dialogBinding= DialogSmartReviewBinding.inflate(getLayoutInflater())
+        var dialogBinding= DialogParentSmartTipBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
         dialog.window!!.setLayout(1000, 1700)
 
-        dialogBinding.btnGotIt.setOnClickListener {
-            dialog.dismiss()
-        }
+//        dialogBinding.btnGotIt.setOnClickListener {
+//            dialog.dismiss()
+//        }
 
-        dialogBinding.btnReviewGoals.setOnClickListener {
-            dialog.dismiss()
-            var goToGoalSetting = Intent(this, FinancialActivity::class.java)
-            this.startActivity(goToGoalSetting)
-        }
+//        dialogBinding.btnReviewGoals.setOnClickListener {
+//            dialog.dismiss()
+//            var goToGoalSetting = Intent(this, FinancialActivity::class.java)
+//            this.startActivity(goToGoalSetting)
+//        }
 
-        dialogBinding.btnSetNewGoal.setOnClickListener {
-            dialog.dismiss()
-            var goToNewGoal = Intent(this, NewGoal::class.java)
-            var bundle = Bundle()
-            bundle.putString("source", "childFinancialActivity")
-            goToNewGoal.putExtras(bundle)
-            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            this.startActivity(goToNewGoal)
-        }
+//        dialogBinding.btnSetNewGoal.setOnClickListener {
+//            dialog.dismiss()
+//            var goToNewGoal = Intent(this, NewGoal::class.java)
+//            var bundle = Bundle()
+//            bundle.putString("source", "childFinancialActivity")
+//            goToNewGoal.putExtras(bundle)
+//            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//            this.startActivity(goToNewGoal)
+//        }
 
         dialog.show()
     }
 
     private fun showIndividualDialog() {
 
-        var dialogBinding= DialogSmartIndividualBinding.inflate(getLayoutInflater())
+        var dialogBinding= DialogParentSmartConceptTipBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
 
-        if (SMARTIndividual == "Specific") {
-            dialogBinding.tvName.text = "Specific"
-            dialogBinding.tvDefinition.text = "Specific goals are very clear with what should be achieved."
-            dialogBinding.tvGuideQuestions.text = "1. Is the goal clear?\n" + "2. What do I want to achieve?"
-        } else if (SMARTIndividual == "Measurable") {
-            dialogBinding.tvName.text = "Measurable"
-            dialogBinding.tvDefinition.text = "Measurable goals have target amounts. "
-            dialogBinding.tvGuideQuestions.text = "1. Is there a way to measure the goal?\n" + "2. How much do I need to save?\n" + "3. How will I know if I have achieved the goal?"
-        } else if (SMARTIndividual == "Achievable") {
-            dialogBinding.tvName.text = "Achievable"
-            dialogBinding.tvDefinition.text = "Achievable goals are realistic."
-            dialogBinding.tvGuideQuestions.text = "1. Can I achieve the goal?\n" + "2. Will I be able to save or earn enough money?\n" + "3. Do I have enough time to achieve the goal?"
-        } else if (SMARTIndividual == "Relevant") {
-            dialogBinding.tvName.text = "Relevant"
-            dialogBinding.tvDefinition.text = "Relevant goals are important to you and with what you want to do."
-            dialogBinding.tvGuideQuestions.text = "1.Is this goal important to me?\n" + "2. Why do I want to achieve this goal?"
-        } else if (SMARTIndividual == "Time-Bound") {
-            dialogBinding.tvName.text = "Time-Bound"
-            dialogBinding.tvDefinition.text = "Time-bound goals have a target or end date."
-            dialogBinding.tvGuideQuestions.text = "1. How long will it take me to complete this goal?\n" + "2. When do I need to complete this goal?"
-        }
+//        if (SMARTIndividual == "Specific") {
+//            dialogBinding.tvName.text = "Specific"
+//            dialogBinding.tvDefinition.text = "Specific goals are very clear with what should be achieved."
+//            dialogBinding.tvGuideQuestions.text = "1. Is the goal clear?\n" + "2. What do I want to achieve?"
+//        } else if (SMARTIndividual == "Measurable") {
+//            dialogBinding.tvName.text = "Measurable"
+//            dialogBinding.tvDefinition.text = "Measurable goals have target amounts. "
+//            dialogBinding.tvGuideQuestions.text = "1. Is there a way to measure the goal?\n" + "2. How much do I need to save?\n" + "3. How will I know if I have achieved the goal?"
+//        } else if (SMARTIndividual == "Achievable") {
+//            dialogBinding.tvName.text = "Achievable"
+//            dialogBinding.tvDefinition.text = "Achievable goals are realistic."
+//            dialogBinding.tvGuideQuestions.text = "1. Can I achieve the goal?\n" + "2. Will I be able to save or earn enough money?\n" + "3. Do I have enough time to achieve the goal?"
+//        } else if (SMARTIndividual == "Relevant") {
+//            dialogBinding.tvName.text = "Relevant"
+//            dialogBinding.tvDefinition.text = "Relevant goals are important to you and with what you want to do."
+//            dialogBinding.tvGuideQuestions.text = "1.Is this goal important to me?\n" + "2. Why do I want to achieve this goal?"
+//        } else if (SMARTIndividual == "Time-Bound") {
+//            dialogBinding.tvName.text = "Time-Bound"
+//            dialogBinding.tvDefinition.text = "Time-bound goals have a target or end date."
+//            dialogBinding.tvGuideQuestions.text = "1. How long will it take me to complete this goal?\n" + "2. When do I need to complete this goal?"
+//        }
 
         dialog.setContentView(dialogBinding.getRoot())
 
         dialog.window!!.setLayout(1000, 700)
 
-        dialogBinding.btnGotIt.setOnClickListener {
-            dialog.dismiss()
-        }
+//        dialogBinding.btnGotIt.setOnClickListener {
+//            dialog.dismiss()
+//        }
 
         dialog.show()
     }
