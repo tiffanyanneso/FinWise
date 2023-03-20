@@ -167,7 +167,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_marginHorizontal="20dp"
         android:textSize="16sp"
-        app:startIconDrawable="@drawable/baseline_saved_search_24">
+        app:startIconDrawable="@drawable/baseline_money_24">
 
         <AutoCompleteTextView
             android:id="@+id/dropdown_type_of_payment"

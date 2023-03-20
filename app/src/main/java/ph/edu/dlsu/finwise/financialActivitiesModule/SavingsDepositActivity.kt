@@ -18,7 +18,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.ActivitySavingsGoalDepositBinding
+import ph.edu.dlsu.finwise.databinding.ActivitySavingsDepositBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
@@ -27,7 +27,7 @@ import java.util.*
 
 class SavingsDepositActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivitySavingsGoalDepositBinding
+    private lateinit var binding : ActivitySavingsDepositBinding
     private var firestore = Firebase.firestore
 
     private lateinit var context: Context
@@ -49,7 +49,7 @@ class SavingsDepositActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySavingsGoalDepositBinding.inflate(layoutInflater)
+        binding = ActivitySavingsDepositBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context=this
 

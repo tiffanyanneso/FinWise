@@ -73,6 +73,31 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/date_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/container_category"
+        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        app:helperTextEnabled="true"
+        app:endIconMode="custom"
+        app:startIconDrawable="@drawable/baseline_calendar_today_24"
+        android:hint="Date">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:lines="1"
+            android:inputType="numberDecimal"
+            android:textSize="16sp"
+            android:enabled="true"
+            android:focusable="false"
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
 <!--    <androidx.appcompat.widget.AppCompatSpinner-->
 <!--        android:id="@+id/spinner_category"-->
 <!--        app:layout_constraintTop_toBottomOf="@+id/container_category"-->
@@ -137,7 +162,7 @@
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container_category"
+        app:layout_constraintTop_toBottomOf="@+id/date_container"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:helperText=""
@@ -163,11 +188,11 @@
         app:layout_constraintTop_toBottomOf="@+id/amount_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Select Type of Payment"
+        android:hint="Payment Type"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_marginHorizontal="20dp"
         android:textSize="16sp"
-        app:startIconDrawable="@drawable/baseline_saved_search_24">
+        app:startIconDrawable="@drawable/baseline_money_24">
 
         <AutoCompleteTextView
             android:id="@+id/dropdown_type_of_payment"
@@ -175,31 +200,6 @@
             android:layout_height="wrap_content"
             android:inputType="none" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/date_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/container_type_of_payment"
-        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
-        app:helperTextEnabled="true"
-        app:endIconMode="custom"
-        app:startIconDrawable="@drawable/baseline_calendar_today_24"
-        android:hint="Date">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_date"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:lines="1"
-            android:inputType="numberDecimal"
-            android:textSize="16sp"
-            android:enabled="true"
-            android:focusable="false"
-            />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

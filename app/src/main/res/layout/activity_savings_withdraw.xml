@@ -105,7 +105,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="16sp"
         android:layout_marginTop="5dp"
-        android:text="₱X / X"
+        android:text="₱ 0.00 / ₱ 0.00"
         android:textColor="@color/black"
         android:layout_marginStart="20dp"/>
 

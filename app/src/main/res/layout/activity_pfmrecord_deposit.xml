@@ -201,11 +201,11 @@
         app:layout_constraintTop_toBottomOf="@+id/amount_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Select Type of Payment"
+        android:hint="Fund Source"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_marginHorizontal="20dp"
         android:textSize="16sp"
-        app:startIconDrawable="@drawable/baseline_saved_search_24">
+        app:startIconDrawable="@drawable/baseline_money_24">
 
         <AutoCompleteTextView
             android:id="@+id/dropdown_type_of_payment"
@@ -224,7 +224,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:textSize="16sp"
-        android:text="You currently have ₱XXX.XX"
+        android:text="You currently have ₱ 0.00"
         android:textColor="@color/black"
         android:layout_marginStart="20dp"
         />
