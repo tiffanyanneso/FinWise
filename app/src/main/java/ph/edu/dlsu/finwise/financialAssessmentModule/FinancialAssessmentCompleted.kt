@@ -7,6 +7,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentCompletedBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
 import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
 
@@ -29,7 +30,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         binding = ActivityFinancialAssessmentCompletedBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var bundle = intent.extras!!
+        val bundle = intent.extras!!
         assessmentID = bundle.getString("assessmentID").toString()
         assessmentAttemptID = bundle.getString("assessmentAttemptID").toString()
         answerHistoryArrayList = bundle.getSerializable("answerHistory") as ArrayList<FinancialAssessmentQuiz.AnswerHistory>
@@ -38,12 +39,12 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         updateAnswerCorrectness()
 
         // compute for percentage
-        var percentage = (answeredCorrectly / nQuestions) * 100
+        val percentage = (answeredCorrectly / nQuestions) * 100
         firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("nAnsweredCorrectly", answeredCorrectly)
         firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("nQuestions", nQuestions)
         firestore.collection("Assessments").document(assessmentID).get().addOnSuccessListener {
-            var assessment = it.toObject<FinancialAssessmentDetails>()
-            var updatedNTimesAssessmentTaken = assessment?.nTakes!! + 1
+            val assessment = it.toObject<FinancialAssessmentDetails>()
+            val updatedNTimesAssessmentTaken = assessment?.nTakes!! + 1
             firestore.collection("Assessments").document(assessmentID).update("nTakes", updatedNTimesAssessmentTaken)
         }
 
@@ -51,7 +52,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         //binding.progressBar.max = nQuestions
 
         binding.btnFinish.setOnClickListener {
-            var assessmentTop  = Intent (this, FinancialAssessmentActivity::class.java)
+            val assessmentTop  = Intent (this, FinancialActivity::class.java)
             this.startActivity(assessmentTop)
         }
     }

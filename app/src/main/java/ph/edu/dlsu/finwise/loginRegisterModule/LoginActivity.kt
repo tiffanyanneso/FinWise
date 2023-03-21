@@ -7,12 +7,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityLoginBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
+import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 
@@ -41,16 +42,16 @@ class LoginActivity : AppCompatActivity() {
                         val currentUser: String = FirebaseAuth.getInstance().currentUser!!.uid
                         firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
                             if (it.exists()) {
-                                var user = it.toObject<Users>()!!
-                                firestore.collection("Users").document(currentUser).update("lastLogin", Timestamp.now())
-                                if (user.userType == "Parent") {
-                                    val intent = Intent(this, ParentLandingPageActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
-                                } else if (user.userType == "Child") {
-                                    val intent = Intent(this, PersonalFinancialManagementActivity::class.java)
-                                    startActivity(intent)
-                                    finish()
+                                // User information already exists in the database
+                                if (it.contains("lastLogin")) {
+                                    firestore.collection("Users").document(currentUser)
+                                        .update("lastLogin", Timestamp.now())
+                                    initializeRedirect(it, false)
+                                } else {
+                                    firestore.collection("Users").document(currentUser)
+                                        .update("lastLogin", Timestamp.now())
+                                    // User is logging in for the first time
+                                    initializeRedirect(it, true)
                                 }
                             }
                         }
@@ -64,6 +65,36 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun initializeRedirect(documentSnapshot: DocumentSnapshot, isFirstLogin: Boolean) {
+        val user = documentSnapshot.toObject<Users>()!!
+        if (user.userType == "Parent") {
+            goToParentLandingPage()
+        } else if (user.userType == "Child") {
+            goToChild(isFirstLogin)
+        }
+    }
+
+    private fun goToChild(isFirstLogin: Boolean) {
+        if (isFirstLogin) {
+            val intent = Intent(this, FinancialAssessmentActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("assessmentType", "Preliminary")
+            intent.putExtras(bundle)
+            startActivity(intent)
+            finish()
+        } else {
+            val intent = Intent(this, PersonalFinancialManagementActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    private fun goToParentLandingPage() {
+        val intent = Intent(this, ParentLandingPageActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun validateAndSetUserInput(): Boolean {

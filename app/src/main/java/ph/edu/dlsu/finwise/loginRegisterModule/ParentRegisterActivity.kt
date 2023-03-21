@@ -55,7 +55,7 @@ class ParentRegisterActivity : AppCompatActivity() {
                                clearForm()
 
                                val parentLandingPage = Intent (this, ParentLandingPageActivity::class.java)
-                               var bundle = Bundle()
+                               val bundle = Bundle()
                                bundle.putString("parentUserID", currentUser)
                                parentLandingPage.putExtras(bundle)
                                startActivity (parentLandingPage)

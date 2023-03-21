@@ -67,7 +67,6 @@ class AssessmentLeaderboardFragment : Fragment() {
                     if (friendVar.status == "Accepted")
                         friendVar.receiverID?.let { childrenIDArrayList.add(it) }
                 }
-
             }.continueWith { loadData() }
     }
 

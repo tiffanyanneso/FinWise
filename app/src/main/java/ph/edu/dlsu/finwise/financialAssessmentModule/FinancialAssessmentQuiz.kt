@@ -31,14 +31,14 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
     private var answerHistoryArrayList = ArrayList<AnswerHistory>()
 
     //holds which index is the correct answer is to highlight it
-    var correctChoice = 0
+    private var correctChoice = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialAssessmentQuizBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var bundle = intent.extras!!
+        val bundle = intent.extras!!
         assessmentID = bundle.getString("assessmentID").toString()
         assessmentAttemptID = bundle.getString("assessmentAttemptID").toString()
         score = bundle.getInt("score")
@@ -54,7 +54,7 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
     }
 
     private fun getQuestion() {
-        val questionIndex = Random.nextInt(questionIDArrayList!!.size)
+        val questionIndex = Random.nextInt(questionIDArrayList.size)
 
         firestore.collection("AssessmentQuestions").document(questionIDArrayList[questionIndex]).get().addOnSuccessListener {
             questionID = it.id
@@ -110,7 +110,7 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
     }
 
     private fun nextQuestion() {
-        var sendBundle = Bundle()
+        val sendBundle = Bundle()
         sendBundle.putString("assessmentID", assessmentID)
         sendBundle.putString("assessmentAttemptID", assessmentAttemptID)
         sendBundle.putStringArrayList("questionIDArrayList", questionIDArrayList)
@@ -119,12 +119,12 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
 
         //if there are still questions, go to the next
         if (questionIDArrayList.size > 0) {
-            var nextQuestion = Intent(this, FinancialAssessmentQuiz::class.java)
+            val nextQuestion = Intent(this, FinancialAssessmentQuiz::class.java)
             nextQuestion.putExtras(sendBundle)
             this.startActivity(nextQuestion)
         }
         else{
-            var assessmentCompleted = Intent(this, FinancialAssessmentCompleted::class.java)
+            val assessmentCompleted = Intent(this, FinancialAssessmentCompleted::class.java)
             assessmentCompleted.putExtras(sendBundle)
             this.startActivity(assessmentCompleted)
         }
