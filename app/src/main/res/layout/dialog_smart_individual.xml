@@ -70,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Is the goal clear?\n2.What do I want to achieve?"
+            android:text="1. Is the goal clear?\n2. What do I want to achieve?"
             android:textColor="@color/black"
             android:layout_marginLeft="10dp"/>
 

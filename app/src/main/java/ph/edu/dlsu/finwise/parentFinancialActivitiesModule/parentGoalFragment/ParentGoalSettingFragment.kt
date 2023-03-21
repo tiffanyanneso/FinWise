@@ -22,6 +22,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.GoalRating
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import java.util.*
 
 class ParentGoalSettingFragment : Fragment() {
@@ -90,6 +91,25 @@ class ParentGoalSettingFragment : Fragment() {
 
         binding.btnSeeMore.setOnClickListener {
             var goToPerformance = Intent(requireContext().applicationContext, ParentGoalSettingPerformanceActivity::class.java)
+
+            var bundle = Bundle()
+
+            bundle.putString("childID", childID)
+            goToPerformance.putExtras(bundle)
+            goToPerformance.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+            this.startActivity(goToPerformance)
+        }
+
+        binding.btnSeeMore2.setOnClickListener {
+            var goToPerformance = Intent(requireContext().applicationContext, ParentGoalSettingPerformanceActivity::class.java)
+
+            var bundle = Bundle()
+
+            bundle.putString("childID", childID)
+            goToPerformance.putExtras(bundle)
+            goToPerformance.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
             this.startActivity(goToPerformance)
         }
     }
@@ -259,32 +279,21 @@ class ParentGoalSettingFragment : Fragment() {
 
     private fun showGoalDialog() {
 
-        var dialogBinding= DialogParentSmartConceptTipBinding.inflate(getLayoutInflater())
+        var dialogBinding= DialogParentSmartTipBinding.inflate(getLayoutInflater())
         var dialog= Dialog(requireContext().applicationContext);
         dialog.setContentView(dialogBinding.getRoot())
 
         dialog.window!!.setLayout(1000, 1700)
 
-//        dialogBinding.btnGotIt.setOnClickListener {
-//            dialog.dismiss()
-//        }
-//
-//        dialogBinding.btnReviewGoals.setOnClickListener {
-//            dialog.dismiss()
-//            var goToGoalSetting = Intent(requireContext().applicationContext, FinancialActivity::class.java)
-//            this.startActivity(goToGoalSetting)
-//        }
-//
-//        dialogBinding.btnSetNewGoal.setOnClickListener {
-//            dialog.dismiss()
-//            var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
-//            var bundle = Bundle()
-//            // TODO change source
-//            bundle.putString("source", "childFinancialActivity")
-//            goToNewGoal.putExtras(bundle)
-//            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            this.startActivity(goToNewGoal)
-//        }
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogBinding.btnReviewGoals.setOnClickListener {
+            dialog.dismiss()
+            var goToGoalSetting = Intent(requireContext().applicationContext, ParentGoalActivity::class.java)
+            this.startActivity(goToGoalSetting)
+        }
 
         dialog.show()
     }

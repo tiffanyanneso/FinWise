@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -17,6 +18,7 @@ import ph.edu.dlsu.finwise.databinding.DialogSmartReviewBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.GoalRating
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import kotlin.math.roundToInt
 
 class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
@@ -48,6 +50,11 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
         // and initializes the navbar
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_goal)
+
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
 
         initializeRating()
 
@@ -180,25 +187,15 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
 
         dialog.window!!.setLayout(1000, 1700)
 
-//        dialogBinding.btnGotIt.setOnClickListener {
-//            dialog.dismiss()
-//        }
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
 
-//        dialogBinding.btnReviewGoals.setOnClickListener {
-//            dialog.dismiss()
-//            var goToGoalSetting = Intent(this, FinancialActivity::class.java)
-//            this.startActivity(goToGoalSetting)
-//        }
-
-//        dialogBinding.btnSetNewGoal.setOnClickListener {
-//            dialog.dismiss()
-//            var goToNewGoal = Intent(this, NewGoal::class.java)
-//            var bundle = Bundle()
-//            bundle.putString("source", "childFinancialActivity")
-//            goToNewGoal.putExtras(bundle)
-//            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            this.startActivity(goToNewGoal)
-//        }
+        dialogBinding.btnReviewGoals.setOnClickListener {
+            dialog.dismiss()
+            var goToGoalSetting = Intent(this, ParentGoalActivity::class.java)
+            this.startActivity(goToGoalSetting)
+        }
 
         dialog.show()
     }
@@ -208,27 +205,32 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
         var dialogBinding= DialogParentSmartConceptTipBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
 
-//        if (SMARTIndividual == "Specific") {
-//            dialogBinding.tvName.text = "Specific"
-//            dialogBinding.tvDefinition.text = "Specific goals are very clear with what should be achieved."
-//            dialogBinding.tvGuideQuestions.text = "1. Is the goal clear?\n" + "2. What do I want to achieve?"
-//        } else if (SMARTIndividual == "Measurable") {
-//            dialogBinding.tvName.text = "Measurable"
-//            dialogBinding.tvDefinition.text = "Measurable goals have target amounts. "
-//            dialogBinding.tvGuideQuestions.text = "1. Is there a way to measure the goal?\n" + "2. How much do I need to save?\n" + "3. How will I know if I have achieved the goal?"
-//        } else if (SMARTIndividual == "Achievable") {
-//            dialogBinding.tvName.text = "Achievable"
-//            dialogBinding.tvDefinition.text = "Achievable goals are realistic."
-//            dialogBinding.tvGuideQuestions.text = "1. Can I achieve the goal?\n" + "2. Will I be able to save or earn enough money?\n" + "3. Do I have enough time to achieve the goal?"
-//        } else if (SMARTIndividual == "Relevant") {
-//            dialogBinding.tvName.text = "Relevant"
-//            dialogBinding.tvDefinition.text = "Relevant goals are important to you and with what you want to do."
-//            dialogBinding.tvGuideQuestions.text = "1.Is this goal important to me?\n" + "2. Why do I want to achieve this goal?"
-//        } else if (SMARTIndividual == "Time-Bound") {
-//            dialogBinding.tvName.text = "Time-Bound"
-//            dialogBinding.tvDefinition.text = "Time-bound goals have a target or end date."
-//            dialogBinding.tvGuideQuestions.text = "1. How long will it take me to complete this goal?\n" + "2. When do I need to complete this goal?"
-//        }
+        if (SMARTIndividual == "Specific") {
+            dialogBinding.tvName.text = "Specific"
+            dialogBinding.tvDefinition.text = "Specific goals are very clear with what should be achieved."
+            dialogBinding.tvGuideQuestions.text = "1. Is the goal clear?\n" + "2. What is to be achieved?"
+            dialogBinding.tvTips.text = "1. Encourage them to figure out what they want to accomplish.\n2. Help them put their goal into words."
+        } else if (SMARTIndividual == "Measurable") {
+            dialogBinding.tvName.text = "Measurable"
+            dialogBinding.tvDefinition.text = "Measurable goals have target amounts. "
+            dialogBinding.tvGuideQuestions.text = "1. Is there a way to measure the goal?\n" + "2. How much needs to be saved?\n" + "3. How will it be known that the goal has been achieved?"
+            dialogBinding.tvTips.text = "1. It is important that a target amount be set.\n2. Ensure that this target amount is reasonable."
+        } else if (SMARTIndividual == "Achievable") {
+            dialogBinding.tvName.text = "Achievable"
+            dialogBinding.tvDefinition.text = "Achievable goals are realistic."
+            dialogBinding.tvGuideQuestions.text = "1. Is the goal achievable?\n" + "2. Is it possible to save or earn enough money?\n" + "3. Is the timeline realistic?"
+            dialogBinding.tvTips.text = "1. "
+        } else if (SMARTIndividual == "Relevant") {
+            dialogBinding.tvName.text = "Relevant"
+            dialogBinding.tvDefinition.text = "Relevant goals are important to you and with what you want to do."
+            dialogBinding.tvGuideQuestions.text = "1.Is the goal important?\n" + "2. What is the reasoning behind the goal?"
+            dialogBinding.tvTips.text =
+        } else if (SMARTIndividual == "Time-Bound") {
+            dialogBinding.tvName.text = "Time-Bound"
+            dialogBinding.tvDefinition.text = "Time-bound goals have a target or end date."
+            dialogBinding.tvGuideQuestions.text = "1. How long will it take for the goal to be accomplished?\n" + "2. When does the goal need to be completed?"
+            dialogBinding.tvTips.text =
+        }
 
         dialog.setContentView(dialogBinding.getRoot())
 
