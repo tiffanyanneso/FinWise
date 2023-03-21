@@ -113,7 +113,7 @@
         app:endIconMode="custom"
         app:startIconDrawable="@drawable/baseline_calendar_today_24"
         android:hint="Date"
-        android:paddingTop="10dp">
+        android:paddingVertical="10dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_date"
@@ -126,6 +126,38 @@
             android:focusable="false"
             />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/container_type_of_payment"
+        app:layout_constraintTop_toBottomOf="@+id/date_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Fund Source"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_marginHorizontal="20dp"
+        android:textSize="16sp"
+        app:startIconDrawable="@drawable/baseline_money_24">
+
+        <AutoCompleteTextView
+            android:id="@+id/dropdown_type_of_payment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_balance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/container_type_of_payment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textSize="16sp"
+        android:text="You currently have ₱ 0.00"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"
+        />
 
     <!--<TextView
         android:id="@+id/tv_goal_progress"
@@ -175,7 +207,7 @@
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_container"
+        app:layout_constraintTop_toBottomOf="@+id/tv_balance"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:helperText=""
@@ -196,38 +228,6 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/container_type_of_payment"
-        app:layout_constraintTop_toBottomOf="@+id/amount_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Fund Source"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_marginHorizontal="20dp"
-        android:textSize="16sp"
-        app:startIconDrawable="@drawable/baseline_money_24">
-
-        <AutoCompleteTextView
-            android:id="@+id/dropdown_type_of_payment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <TextView
-        android:id="@+id/tv_balance"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/container_type_of_payment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="16sp"
-        android:text="You currently have ₱ 0.00"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"
-        />
 
 <!--    <TextView-->
 <!--        android:id="@+id/tv_amount"-->

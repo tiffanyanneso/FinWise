@@ -219,17 +219,16 @@
         app:helperText=""
         app:helperTextTextColor="@color/red"
         android:paddingTop="10dp"
-        >
+        app:startIconDrawable="@drawable/peso">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_amount"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:lines="1"
-            android:inputType="numberDecimal"
-            android:textSize="16dp"
             android:hint="@string/amount"
-            />
+            android:inputType="numberDecimal"
+            android:lines="1"
+            android:textSize="16dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
 

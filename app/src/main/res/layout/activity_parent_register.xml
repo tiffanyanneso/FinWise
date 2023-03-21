@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".loginRegisterModule.ParentRegisterActivity"
-    android:background="@color/off_white">
+    tools:context=".loginRegisterModule.ParentRegisterActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/topbar"
