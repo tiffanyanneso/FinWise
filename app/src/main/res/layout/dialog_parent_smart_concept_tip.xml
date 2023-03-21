@@ -1,6 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="20dp"
+    android:background="@drawable/button_border_white">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/baseline_star_24"
+            app:tint="@color/yellow"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:text="SPECIFIC"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/tv_definition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Specific goals are very clear with what should be achieved."
+            android:layout_marginTop="10sp"
+            android:textAlignment="center"
+            android:textColor="@color/black"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/question_mark"
+                app:tint="@color/red"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="Guide Questions"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_guide_questions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="1. Is the goal clear?\n2. What is to be achieved?"
+            android:textColor="@color/black"
+            android:layout_marginLeft="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_directions_run_24"
+                app:tint="@color/light_green"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"
+                android:text="Tips"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="1. Encourage them to figure out what they want to accomplish.\n2. Help them put their goal into words."
+            android:textColor="@color/black"
+            android:layout_marginLeft="10dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_got_it"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border"
+            android:backgroundTint="@color/dark_green"
+            android:layout_marginTop="20dp"
+            android:text="Got it!"
+            android:textColor="@color/off_white" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

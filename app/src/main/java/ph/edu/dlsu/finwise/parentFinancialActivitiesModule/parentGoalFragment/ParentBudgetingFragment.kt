@@ -78,11 +78,25 @@ class ParentBudgetingFragment : Fragment() {
 
         binding.btnSeeMore.setOnClickListener {
             var goToPerformance = Intent(requireContext().applicationContext, ParentBudgetingPerformanceActivity::class.java)
+
+            var bundle = Bundle()
+
+            bundle.putString("childID", childID)
+            goToPerformance.putExtras(bundle)
+            goToPerformance.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
             this.startActivity(goToPerformance)
         }
 
         binding.btnSeeMore2.setOnClickListener {
             var goToPerformance = Intent(requireContext().applicationContext, ParentBudgetingPerformanceActivity::class.java)
+
+            var bundle = Bundle()
+
+            bundle.putString("childID", childID)
+            goToPerformance.putExtras(bundle)
+            goToPerformance.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
             this.startActivity(goToPerformance)
         }
 

@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -72,6 +73,11 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
 
         binding.btnBudgetAccuracyTips.setOnClickListener{
             showBudgetAccuracyAmountReivewDialog()
+        }
+
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
         }
     }
 

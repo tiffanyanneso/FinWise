@@ -110,11 +110,25 @@ class ParentSavingFragment : Fragment() {
 
         binding.btnSeeMore.setOnClickListener {
             var goToPerformance = Intent(requireContext().applicationContext, ParentSavingPerformanceActivity::class.java)
+
+            var bundle = Bundle()
+
+            bundle.putString("childID", childID)
+            goToPerformance.putExtras(bundle)
+            goToPerformance.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
             startActivity(goToPerformance)
         }
 
         binding.btnSeeMore2.setOnClickListener {
             var goToPerformance = Intent(requireContext().applicationContext, ParentSavingPerformanceActivity::class.java)
+
+            var bundle = Bundle()
+
+            bundle.putString("childID", childID)
+            goToPerformance.putExtras(bundle)
+            goToPerformance.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
             startActivity(goToPerformance)
         }
 
