@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -48,6 +49,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         initializeRating()
+        loadBackButton()
 
         binding.btnViewSMARTGoalsInfo.setOnClickListener{
             showGoalDialog()
@@ -176,6 +178,13 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
 //            binding.ratingRelevant.text = "${(nRelevant/nRatings)}/5"
 //            binding.progressBarTime.progress = (nTimeBound/nRatings).roundToInt()
 //            binding.ratingTime.text = "${(nTimeBound/nRatings)}/5"
+        }
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
         }
     }
 
