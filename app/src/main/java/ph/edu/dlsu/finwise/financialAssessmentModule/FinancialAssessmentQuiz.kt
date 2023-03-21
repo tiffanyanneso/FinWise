@@ -23,6 +23,9 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
 
     private lateinit var assessmentID:String
     private lateinit var assessmentAttemptID:String
+    private lateinit var assessmentName:String
+    private var nNumberOfQuestions: Int = 0
+    private var currentNumber: Int = 0
     private var score =0
     private lateinit var questionIDArrayList:ArrayList<String>
 
@@ -40,11 +43,15 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
 
         val bundle = intent.extras!!
         assessmentID = bundle.getString("assessmentID").toString()
+        nNumberOfQuestions = bundle.getInt("nNumberOfQuestions")
+        currentNumber = bundle.getInt("currentNumber")
         assessmentAttemptID = bundle.getString("assessmentAttemptID").toString()
+        assessmentName = bundle.getString("assessmentName").toString()
         score = bundle.getInt("score")
         questionIDArrayList = bundle.getStringArrayList("questionIDArrayList")!!
         answerHistoryArrayList = bundle.getParcelableArrayList("answerHistory")!!
 
+        initializeTitleAndNumber()
         getQuestion()
         initializeLayoutClicks()
 
@@ -53,12 +60,20 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
         }
     }
 
+    private fun initializeTitleAndNumber() {
+        val assessmentTitle = "$assessmentName Quiz"
+        binding.assessmentTitle.text = assessmentTitle
+
+        binding.questionsLeft.text = "$currentNumber / $nNumberOfQuestions"
+    }
+
     private fun getQuestion() {
         val questionIndex = Random.nextInt(questionIDArrayList.size)
 
-        firestore.collection("AssessmentQuestions").document(questionIDArrayList[questionIndex]).get().addOnSuccessListener {
+        firestore.collection("AssessmentQuestions")
+            .document(questionIDArrayList[questionIndex]).get().addOnSuccessListener {
             questionID = it.id
-            var question = it.toObject<FinancialAssessmentQuestions>()
+            val question = it.toObject<FinancialAssessmentQuestions>()
             binding.tvQuestion.text = question?.question
             questionIDArrayList.removeAt(questionIndex)
         }.continueWith { getChoices() }
@@ -68,33 +83,35 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
         firestore.collection("AssessmentChoices").whereEqualTo("questionID", questionID).get().addOnSuccessListener { results ->
             var index = 1
             for (choice in results ) {
-                var choiceObject = choice.toObject<FinancialAssessmentChoices>()
+                val choiceObject = choice.toObject<FinancialAssessmentChoices>()
                 if (choiceObject.isCorrect == true)
                     correctChoice = index
-                if (index == 1) {
-                    binding.tvChoice1ID.text = choice.id
-                    binding.tvChoice1.text = choiceObject.choice
-                    binding.tvIsCorrect1.text = choiceObject.isCorrect.toString()
-                    binding.layoutChoice1.setBackgroundColor(ContextCompat.getColor(this, R.color.cream))
-                }
-                else if (index == 2) {
-                    binding.tvChoice2ID.text = choice.id
-                    binding.tvChoice2.text = choiceObject.choice
-                    binding.tvIsCorrect2.text = choiceObject.isCorrect.toString()
-                    binding.layoutChoice2.setBackgroundColor(ContextCompat.getColor(this, R.color.cream))
+                when (index) {
+                    1 -> {
+                        binding.tvChoice1ID.text = choice.id
+                        binding.tvChoice1.text = choiceObject.choice
+                        binding.tvIsCorrect1.text = choiceObject.isCorrect.toString()
+                        binding.layoutChoice1.setBackgroundColor(ContextCompat.getColor(this, R.color.cream))
+                    }
+                    2 -> {
+                        binding.tvChoice2ID.text = choice.id
+                        binding.tvChoice2.text = choiceObject.choice
+                        binding.tvIsCorrect2.text = choiceObject.isCorrect.toString()
+                        binding.layoutChoice2.setBackgroundColor(ContextCompat.getColor(this, R.color.cream))
 
-                }
-                else if (index == 3) {
-                    binding.tvChoice3ID.text = choice.id
-                    binding.tvChoice3.text = choiceObject.choice
-                    binding.tvIsCorrect3.text = choiceObject.isCorrect.toString()
-                    binding.layoutChoice3.setBackgroundColor(ContextCompat.getColor(this, R.color.cream))
-                }
-                else if (index == 4) {
-                    binding.tvChoice4ID.text = choice.id
-                    binding.tvChoice4.text = choiceObject.choice
-                    binding.tvIsCorrect4.text = choiceObject.isCorrect.toString()
-                    binding.layoutChoice4.setBackgroundColor(ContextCompat.getColor(this, R.color.cream))
+                    }
+                    3 -> {
+                        binding.tvChoice3ID.text = choice.id
+                        binding.tvChoice3.text = choiceObject.choice
+                        binding.tvIsCorrect3.text = choiceObject.isCorrect.toString()
+                        binding.layoutChoice3.setBackgroundColor(ContextCompat.getColor(this, R.color.cream))
+                    }
+                    4 -> {
+                        binding.tvChoice4ID.text = choice.id
+                        binding.tvChoice4.text = choiceObject.choice
+                        binding.tvIsCorrect4.text = choiceObject.isCorrect.toString()
+                        binding.layoutChoice4.setBackgroundColor(ContextCompat.getColor(this, R.color.cream))
+                    }
                 }
                 index++
             }
@@ -112,6 +129,9 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
     private fun nextQuestion() {
         val sendBundle = Bundle()
         sendBundle.putString("assessmentID", assessmentID)
+        sendBundle.putString("assessmentName", assessmentName)
+        sendBundle.putInt("nNumberOfQuestions", nNumberOfQuestions)
+        sendBundle.putInt("currentNumber", currentNumber+1)
         sendBundle.putString("assessmentAttemptID", assessmentAttemptID)
         sendBundle.putStringArrayList("questionIDArrayList", questionIDArrayList)
         sendBundle.putInt("score", score)
@@ -131,14 +151,12 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
     }
 
     private fun highlightCorrect() {
-        if (correctChoice == 1)
-            binding.layoutChoice1.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
-        else if (correctChoice == 2)
-            binding.layoutChoice2.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
-        else if (correctChoice == 3)
-            binding.layoutChoice3.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
-        else if (correctChoice == 4)
-            binding.layoutChoice4.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+        when (correctChoice) {
+            1 -> binding.layoutChoice1.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+            2 -> binding.layoutChoice2.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+            3 -> binding.layoutChoice3.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+            4 -> binding.layoutChoice4.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
+        }
 
         binding.layoutChoice1.isClickable = false
         binding.layoutChoice2.isClickable = false

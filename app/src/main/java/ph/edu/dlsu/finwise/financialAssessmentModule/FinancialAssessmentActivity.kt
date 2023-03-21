@@ -27,6 +27,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
     private lateinit var assessmentID: String
     private lateinit var assessmentType: String
     private lateinit var assessmentCategory: String
+    private lateinit var assessmentName: String
     private var childID = FirebaseAuth.getInstance().currentUser!!.uid
 
     private var questionIDArrayList = ArrayList<String>()
@@ -73,12 +74,12 @@ class FinancialAssessmentActivity : AppCompatActivity() {
         if (assessmentsDocumentSnapshot != null) {
             val assessment = assessmentsDocumentSnapshot.documents[0]
                 .toObject<FinancialAssessmentDetails>()
-            val name = assessment?.assessmentCategory.toString()
+            assessmentName = assessment?.assessmentCategory.toString()
             var description = assessment?.description.toString()
             if (description == "")
-                description = "This assessment is about testing your $name knowledge and skills"
+                description = "This assessment is about testing your $assessmentName knowledge and skills"
 
-            binding.tvName.text = name
+            binding.tvName.text = assessmentName
             binding.tvDescription.text = description
 
             assessmentID = assessmentsDocumentSnapshot.documents[0].id
@@ -87,6 +88,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
     }
 
     private fun getScore(assessmentID: String) {
+        childID = "4hZAQJXIf4dFN0KyjoSF6NdEyy72"
         firestore.collection("AssessmentAttempts")
             .whereEqualTo("assessmentID" , assessmentID)
             .whereEqualTo("childID", childID)
@@ -167,17 +169,20 @@ class FinancialAssessmentActivity : AppCompatActivity() {
         val bundle = Bundle()
         bundle.putString("assessmentAttemptID", assessmentAttemptID)
         bundle.putString("assessmentID", assessmentID)
+        bundle.putString("assessmentName", assessmentName)
         bundle.putStringArrayList("questionIDArrayList", questionIDArrayList)
+        bundle.putInt("nNumberOfQuestions", questionIDArrayList.size)
+        bundle.putInt("currentNumber", 1)
         bundle.putSerializable("answerHistory", answerHistoryArrayList)
         return bundle
     }
 
     private fun retrieveBundle() {
         val bundle = intent.extras
-        /*assessmentType = "Pre-Activity"
-        assessmentCategory = "Budgeting"*/
-        assessmentType = bundle?.getString("assessmentType").toString()
-        assessmentCategory = bundle?.getString("assessmentCategory").toString()
+        assessmentType = "Pre-Activity"
+        assessmentCategory = "Budgeting"
+       /* assessmentType = bundle?.getString("assessmentType").toString()
+        assessmentCategory = bundle?.getString("assessmentCategory").toString()*/
     }
 
 
