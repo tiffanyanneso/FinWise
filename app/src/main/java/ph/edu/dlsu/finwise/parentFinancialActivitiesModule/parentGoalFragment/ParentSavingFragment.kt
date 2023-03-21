@@ -434,26 +434,9 @@ class ParentSavingFragment : Fragment() {
 
         dialog.window!!.setLayout(1000, 1700)
 
-//        dialogBinding.btnGotIt.setOnClickListener {
-//            dialog.dismiss()
-//        }
-//
-//        dialogBinding.btnReviewGoals.setOnClickListener {
-//            dialog.dismiss()
-//            var goToGoalSetting = Intent(requireContext().applicationContext, FinancialActivity::class.java)
-//            this.startActivity(goToGoalSetting)
-//        }
-//
-//        dialogBinding.btnSetNewGoal.setOnClickListener {
-//            dialog.dismiss()
-//            var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
-//            var bundle = Bundle()
-//            // TODO update source
-//            bundle.putString("source", "childFinancialActivity")
-//            goToNewGoal.putExtras(bundle)
-//            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            this.startActivity(goToNewGoal)
-//        }
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
 
         dialog.show()
     }

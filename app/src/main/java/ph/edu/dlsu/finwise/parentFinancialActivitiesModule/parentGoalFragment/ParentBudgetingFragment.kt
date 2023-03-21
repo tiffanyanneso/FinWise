@@ -264,9 +264,9 @@ class ParentBudgetingFragment : Fragment() {
 
         dialog.window!!.setLayout(1000, 1700)
 
-//        dialogBinding.btnGotIt.setOnClickListener {
-//            dialog.dismiss()
-//        }
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
 
         dialog.show()
     }

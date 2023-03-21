@@ -219,26 +219,26 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvName.text = "Achievable"
             dialogBinding.tvDefinition.text = "Achievable goals are realistic."
             dialogBinding.tvGuideQuestions.text = "1. Is the goal achievable?\n" + "2. Is it possible to save or earn enough money?\n" + "3. Is the timeline realistic?"
-            dialogBinding.tvTips.text = "1. "
+            dialogBinding.tvTips.text = "1. Give them advice on whether or not it is realistic.\n2. Consider their current financial situation.\n3. Break their goals down into smaller ones."
         } else if (SMARTIndividual == "Relevant") {
             dialogBinding.tvName.text = "Relevant"
             dialogBinding.tvDefinition.text = "Relevant goals are important to you and with what you want to do."
             dialogBinding.tvGuideQuestions.text = "1.Is the goal important?\n" + "2. What is the reasoning behind the goal?"
-            //dialogBinding.tvTips.text =
+            dialogBinding.tvTips.text = "1. Guide them in exploring their priorities.\n2. Encourage them to set goals that are meaningful to the."
         } else if (SMARTIndividual == "Time-Bound") {
             dialogBinding.tvName.text = "Time-Bound"
             dialogBinding.tvDefinition.text = "Time-bound goals have a target or end date."
             dialogBinding.tvGuideQuestions.text = "1. How long will it take for the goal to be accomplished?\n" + "2. When does the goal need to be completed?"
-            //dialogBinding.tvTips.text =
+            dialogBinding.tvTips.text = "1. Take into account the child's schedule, energy levels, and experience to see if the timeline is appropriate.\n2. Guide them in setting a reasonable target date."
         }
 
         dialog.setContentView(dialogBinding.getRoot())
 
         dialog.window!!.setLayout(1000, 700)
 
-//        dialogBinding.btnGotIt.setOnClickListener {
-//            dialog.dismiss()
-//        }
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
 
         dialog.show()
     }

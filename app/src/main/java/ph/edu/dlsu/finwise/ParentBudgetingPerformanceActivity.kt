@@ -339,21 +339,6 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
 
         dialog.window!!.setLayout(1000, 1700)
 
-//        dialogBinding.btnGotIt.setOnClickListener {
-//            dialog.dismiss()
-//        }
-
-        dialog.show()
-    }
-
-    private fun showBudgetAccuracyItemsReivewDialog() {
-
-        var dialogBinding= DialogBudgetAccuracyItemsReviewBinding.inflate(getLayoutInflater())
-        var dialog= Dialog(this);
-        dialog.setContentView(dialogBinding.getRoot())
-
-        dialog.window!!.setLayout(1000, 1700)
-
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }
@@ -363,7 +348,7 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
 
     private fun showBudgetAccuracyAmountReivewDialog() {
 
-        var dialogBinding= DialogBudgetAccuracyAmountReviewBinding.inflate(getLayoutInflater())
+        var dialogBinding= DialogParentBudgetAccuracyAmountTipsBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 

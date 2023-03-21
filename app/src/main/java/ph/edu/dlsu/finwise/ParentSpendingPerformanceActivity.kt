@@ -330,9 +330,9 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
 
         dialog.window!!.setLayout(1000, 1400)
 
-//        dialogBinding.btnGotIt.setOnClickListener {
-//            dialog.dismiss()
-//        }
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
 
         dialog.show()
     }
@@ -345,9 +345,9 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
 
         dialog.window!!.setLayout(1000, 1400)
 
-//        dialogBinding.btnGotIt.setOnClickListener {
-//            dialog.dismiss()
-//        }
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
 
         dialog.show()
     }
@@ -360,9 +360,9 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
 
         dialog.window!!.setLayout(1000, 1400)
 
-//        dialogBinding.btnGotIt.setOnClickListener {
-//            dialog.dismiss()
-//        }
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
 
         dialog.show()
     }

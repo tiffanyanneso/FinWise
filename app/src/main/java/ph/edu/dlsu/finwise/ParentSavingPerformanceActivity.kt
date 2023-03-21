@@ -400,26 +400,9 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
 
         dialog.window!!.setLayout(1000, 1700)
 
-//        dialogBinding.btnGotIt.setOnClickListener {
-//            dialog.dismiss()
-//        }
-//
-//        dialogBinding.btnReviewGoals.setOnClickListener {
-//            dialog.dismiss()
-//            var goToGoalSetting = Intent(requireContext().applicationContext, FinancialActivity::class.java)
-//            this.startActivity(goToGoalSetting)
-//        }
-//
-//        dialogBinding.btnSetNewGoal.setOnClickListener {
-//            dialog.dismiss()
-//            var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
-//            var bundle = Bundle()
-//            // TODO update source
-//            bundle.putString("source", "childFinancialActivity")
-//            goToNewGoal.putExtras(bundle)
-//            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            this.startActivity(goToNewGoal)
-//        }
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
 
         dialog.show()
     }
@@ -429,41 +412,41 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         var dialogBinding= DialogParentSavingDurationTipsBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
 
-//        if (specificDuration == "Short") {
-//            dialogBinding.tvTitle.text = "Short Term"
-//            dialogBinding.tvDefinition.text = "1. Can be achieved in a short amount of time and have \n" + "2. Duration: Less than 2 weeks"
-//            dialogBinding.tvExamples.text = "1. Saving for a Fried Chicken Sandwich\n" +
-//                    "2. Saving for a Small Toy\n" +
-//                    "3. Saving for a Book"
-//            dialogBinding.tvTips.text = "1. Set aside money consistently\n" +
-//                    "2. Keep the target date in mind"
-//        }  else if (specificDuration == "Medium") {
-//            dialogBinding.tvTitle.text = "Medium Term"
-//            dialogBinding.tvDefinition.text = "1. Takes a longer time to achieve and usually involves bigger target amounts \n" +
-//                    "2. Duration: 2 to 4 weeks"
-//            dialogBinding.tvExamples.text = "1. Saving for school supplies\n" +
-//                    "2. Saving for a larger toy"
-//            dialogBinding.tvTips.text = "1. Set aside money consistently\n" +
-//                    "2. Earn extra by helping with chores and selling items\n" +
-//                    "3. Keep the target date in mind"
-//        } else if (specificDuration == "Long") {
-//            dialogBinding.tvTitle.text = "Long Term"
-//            dialogBinding.tvDefinition.text = "1. Takes a long time to achieve and involves bigger target amounts \n" +
-//                    "2. Duration: Over a month"
-//            dialogBinding.tvExamples.text = "1. Saving for a trip \n" +
-//                    "2. Saving for a birthday party"
-//            dialogBinding.tvTips.text = "1. SStart saving early. Even if the target date may seem far away, target amounts for long term goals tend to be larger.\n" +
-//                    "2. Set aside money consistently\n" +
-//                    "3. Earn extra by helping with chores and selling items"
-//        }
+        if (specificDuration == "Short") {
+            dialogBinding.tvTitle.text = "Short Term"
+            dialogBinding.tvDefinition.text = "1. Can be achieved in a short amount of time and have \n" + "2. Duration: Less than 2 weeks"
+            dialogBinding.tvExamples.text = "1. Saving for a Fried Chicken Sandwich\n" +
+                    "2. Saving for a Small Toy\n" +
+                    "3. Saving for a Book"
+            dialogBinding.tvTips.text = "1. Encourage your child to consistently set aside money.\n2. Remind them to take note of their target date as it is a short timeline.\n3. Set earning activities such as chores to help them out."
+
+        }  else if (specificDuration == "Medium") {
+            dialogBinding.tvTitle.text = "Medium Term"
+            dialogBinding.tvDefinition.text = "1. Takes a longer time to achieve and usually involves bigger target amounts \n" +
+                    "2. Duration: 2 to 4 weeks"
+            dialogBinding.tvExamples.text = "1. Saving for school supplies\n" +
+                    "2. Saving for a larger toy"
+            dialogBinding.tvTips.text = "1. Encourage them to set aside money consistently\n" +
+                    "2. Set earning activities such as chores to help them out.\n" +
+                    "3. Remind them to take note of their target date as it is a short timeline."
+        } else if (specificDuration == "Long") {
+            dialogBinding.tvTitle.text = "Long Term"
+            dialogBinding.tvDefinition.text = "1. Takes a long time to achieve and involves bigger target amounts \n" +
+                    "2. Duration: Over a month"
+            dialogBinding.tvExamples.text = "1. Saving for a trip \n" +
+                    "2. Saving for a birthday party"
+            dialogBinding.tvTips.text = "1. Encourage them to start saving early. Even if the target date may seem far away, target amounts for long term goals tend to be larger.\n" +
+                    "2. Encourage them to set aside money consistently" +
+                    "3. Set earning activities such as chores to help them out."
+        }
 
         dialog.setContentView(dialogBinding.getRoot())
 
         dialog.window!!.setLayout(1000, 1700)
 
-//        dialogBinding.btnGotIt.setOnClickListener {
-//            dialog.dismiss()
-//        }
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
 
         dialog.show()
     }
@@ -473,54 +456,53 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         var dialogBinding= DialogParentSavingCategoryTipsBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
 
-//        if (specificCategory == "Buying Items") {
-//            dialogBinding.tvTitle.text = "Buying Items"
-//            dialogBinding.tvDefinition.text = "Purchasing things such as goods or services."
-//            dialogBinding.tvExamples.text = "1. Buying a toy\n" +
-//                    "2. Buying a book \n"
-//            dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
-//                    "2. Keep your target date in mind.\n"
-//        } else if (specificCategory == "Planning An Event") {
-//            dialogBinding.tvTitle.text = "Planning An Event"
-//            dialogBinding.tvDefinition.text = "Organizing an event and ensuring that all needed materials or services are accounted for."
-//            dialogBinding.tvExamples.text = "1. Birthday party\n" +
-//                    "2. Out of town trip"
-//            dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
-//                    "2. Start saving early. Goals related to planning events tend to have larger target amounts.\n" +
-//                    "3. Keep your target date in mind."
-//
-//        } else if (specificCategory == "Saving For Emergency Funds") {
-//            dialogBinding.tvTitle.text = "Saving For Emergency Funds"
-//            dialogBinding.tvDefinition.text = "1. Saving money to be used in the future for unexpected situations \n" +
-//                    "2. Important to be prepared for these situations"
-//            dialogBinding.tvExamples.text = "1. Loss of valuables \n" +
-//                    "2. Unexpected expenses"
-//            dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
-//                    "2. Think about your future."
-//        } else if (specificCategory == "Donating To Charity") {
-//            dialogBinding.tvTitle.text = "Donating To Charity"
-//            dialogBinding.tvDefinition.text = "1. Giving money to a non-profit organization to support an advocacy.\n" +
-//                    "2. Important to think about others"
-//            dialogBinding.tvExamples.text = "1. Donating to a church \n" +
-//                    "2. Donating to Red Cross"
-//            dialogBinding.tvTips.text = "1. Donate to an organization that you share an advocacy with \n" +
-//                    "2. Set aside money consistently"
-//        } else if (specificCategory == "Situational Shopping") {
-//            dialogBinding.tvTitle.text = "Situational Shopping"
-//            dialogBinding.tvDefinition.text = "Shopping for a certain event or happening."
-//            dialogBinding.tvExamples.text = "1. Grocery shopping \n" +
-//                    "2. Back to school shopping"
-//            dialogBinding.tvTips.text = "1. Set aside money consistently. \n" +
-//                    "2. Keep your target date in mind."
-//        }
+        if (specificCategory == "Buying Items") {
+            dialogBinding.tvTitle.text = "Buying Items"
+            dialogBinding.tvDefinition.text = "Purchasing things such as goods or services."
+            dialogBinding.tvExamples.text = "1. Buying a toy\n" +
+                    "2. Buying a book"
+            dialogBinding.tvTips.text = "1. Encourage them to set aside money consistently.\n2. Remind them to keep their target date in mind."
+        } else if (specificCategory == "Planning An Event") {
+            dialogBinding.tvTitle.text = "Planning An Event"
+            dialogBinding.tvDefinition.text = "Organizing an event and ensuring that all needed materials or services are accounted for."
+            dialogBinding.tvExamples.text = "1. Birthday party\n" +
+                    "2. Out of town trip"
+            dialogBinding.tvTips.text = "1. Encourage them to set aside money consistently.\n" +
+                    "2. Remind them to start saving early. Goals related to planning events tend to have larger target amounts.\n" +
+                    "3. Remind them to keep their target date in mind."
+
+        } else if (specificCategory == "Saving For Emergency Funds") {
+            dialogBinding.tvTitle.text = "Saving For Emergency Funds"
+            dialogBinding.tvDefinition.text = "1. Saving money to be used in the future for unexpected situations \n" +
+                    "2. Important to be prepared for these situations"
+            dialogBinding.tvExamples.text = "1. Loss of valuables \n" +
+                    "2. Unexpected expenses"
+            dialogBinding.tvTips.text = "1. Encourage them to set aside money consistently.\n" +
+                    "2. Encourage them to think about their future.\n3. Share instances where you have had unexpected expenses with them."
+        } else if (specificCategory == "Donating To Charity") {
+            dialogBinding.tvTitle.text = "Donating To Charity"
+            dialogBinding.tvDefinition.text = "1. Giving money to a non-profit organization to support an advocacy.\n" +
+                    "2. Important to think about others"
+            dialogBinding.tvExamples.text = "1. Donating to a church \n" +
+                    "2. Donating to Red Cross"
+            dialogBinding.tvTips.text = "1. Encourage them to donate to an organization that they share an advocacy with \n" +
+                    "2. Encourage them to set aside money consistently.\n3. Share experiences when you have donated to an organization."
+        } else if (specificCategory == "Situational Shopping") {
+            dialogBinding.tvTitle.text = "Situational Shopping"
+            dialogBinding.tvDefinition.text = "Shopping for a certain event or happening."
+            dialogBinding.tvExamples.text = "1. Grocery shopping \n" +
+                    "2. Back to school shopping"
+            dialogBinding.tvTips.text = "1. Encourage them to set aside money consistently. \n" +
+                    "2. Remind them to keep their target date in mind.\n3. Involve them in household shopping."
+        }
 
         dialog.setContentView(dialogBinding.getRoot())
 
         dialog.window!!.setLayout(1000, 1700)
 
-//        dialogBinding.btnGotIt.setOnClickListener {
-//            dialog.dismiss()
-//        }
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
 
         dialog.show()
     }
