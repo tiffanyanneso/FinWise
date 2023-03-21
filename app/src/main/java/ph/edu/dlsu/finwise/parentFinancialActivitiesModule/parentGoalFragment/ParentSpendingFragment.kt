@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,11 +13,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.ParentSpendingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
+import ph.edu.dlsu.finwise.databinding.DialogParentSpendingTipsBinding
 import ph.edu.dlsu.finwise.databinding.DialogSpendingReviewBinding
 import ph.edu.dlsu.finwise.databinding.FragmentParentSpendingBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.SpendingPerformanceActivity
 import ph.edu.dlsu.finwise.model.*
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -48,6 +52,7 @@ class ParentSpendingFragment : Fragment() {
 
     private lateinit var childID:String
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var bundle = arguments
@@ -73,6 +78,20 @@ class ParentSpendingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.textPerformance.text = "0.00%"
         binding.title.text= "Overall Spending Performance"
+
+        binding.btnSpendingTips.setOnClickListener {
+            showSpendingReivewDialog()
+        }
+
+        binding.btnSeeMore.setOnClickListener {
+            var goToPerformance = Intent(requireContext().applicationContext, ParentSpendingPerformanceActivity::class.java)
+            this.startActivity(goToPerformance)
+        }
+
+        binding.btnSeeMore2.setOnClickListener {
+            var goToPerformance = Intent(requireContext().applicationContext, ParentSpendingPerformanceActivity::class.java)
+            this.startActivity(goToPerformance)
+        }
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
@@ -183,55 +202,74 @@ class ParentSpendingFragment : Fragment() {
             binding.imgFace.setImageResource(R.drawable.excellent)
             binding.textStatus.text = "Excellent"
             binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
-            binding.tvPerformanceText.text = "Keep up the excellent work! Spending wisely is your strong point. Keep it up!"
+            binding.tvPerformanceText.text = "Your child excels at spending wisely. Encourage them to keep it up!"
+            showSeeMoreButton()
         } else if (overallSpending < 96 && overallSpending >= 86) {
             binding.imgFace.setImageResource(R.drawable.amazing)
             binding.textStatus.text = "Amazing"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
-            binding.tvPerformanceText.text = "Amazing job! You are performing well. Spending wisely is your strong point. Keep completing those goals!"
+            binding.tvPerformanceText.text = "Your child is amazing at spending! Encourage them to keep it up!"
+            showSeeMoreButton()
         } else if (overallSpending < 90 && overallSpending >= 80) {
             binding.imgFace.setImageResource(R.drawable.great)
             binding.textStatus.text = "Great"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
-            binding.tvPerformanceText.text = " Great job! You are performing well. Keep spending wisely!"
+            binding.tvPerformanceText.text = "Your child is doing a great job of spending wisely!"
+            showSeeMoreButton()
         } else if (overallSpending < 90 && overallSpending >= 80) {
             binding.imgFace.setImageResource(R.drawable.good)
             binding.textStatus.text = "Good"
             binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
-            binding.tvPerformanceText.text = "Good job! With a bit more planning to detail, you’ll surely up your performance!"
+            binding.tvPerformanceText.text = "Your child is doing a good job of spending wisely!"
+            showSeeMoreButton()
         } else if (overallSpending < 70 && overallSpending >= 60) {
             binding.imgFace.setImageResource(R.drawable.average)
             binding.textStatus.text = "Average"
             binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
-            binding.tvPerformanceText.text = "Nice work! Work on improving your spending performance by always planning ahead. You’ll get there soon!"
+            binding.tvPerformanceText.text = "Your child is doing a nice job of spending! Encourage them to plan ahead."
+            showSeeMoreButton()
         } else if (overallSpending < 56 && overallSpending >= 46) {
             binding.imgFace.setImageResource(R.drawable.nearly_there)
             binding.textStatus.text = "Nearly There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
+            binding.tvPerformanceText.text = "Your child is nearly there! Click the tips button to learn how to help them get there!"
+            showReviewButton()
         }  else if (overallSpending < 46 && overallSpending >= 36) {
             binding.imgFace.setImageResource(R.drawable.almost_there)
             binding.textStatus.text = "Almost There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "Almost there! You need to work on your spending. Click review to learn how!"
+            binding.tvPerformanceText.text = "Your child is almost there! Click the tips button to learn how to help them get there!"
+            showReviewButton()
         } else if (overallSpending < 36 && overallSpending >= 26) {
             binding.imgFace.setImageResource(R.drawable.getting_there)
             binding.textStatus.text = "Getting There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "Getting there! You need to work on your spending. Click review to learn how!"
+            binding.tvPerformanceText.text = "Your child is getting there! Click the tips button to learn how to help them get there!"
+            showReviewButton()
         } else if (overallSpending < 26 && overallSpending >= 16) {
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
             binding.textStatus.text = "Not Quite There Yet"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
+            binding.tvPerformanceText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
+            showReviewButton()
         } else if (overallSpending < 15) {
             binding.imgFace.setImageResource(R.drawable.bad)
             binding.textStatus.text = "Needs Improvement"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
+            binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them improve their spending!"
+            showReviewButton()
         }
     }
 
+    private fun showSeeMoreButton() {
+        binding.btnSeeMore.visibility = View.VISIBLE
+        binding.layoutButtons.visibility = View.GONE
+    }
+
+    private fun showReviewButton() {
+        binding.btnSeeMore.visibility = View.GONE
+        binding.layoutButtons.visibility = View.VISIBLE
+    }
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
         spendingAdapter = FinactSpendingAdapter(requireContext().applicationContext, goalIDArrayList)
         binding.rvViewGoals.adapter = spendingAdapter
@@ -241,15 +279,15 @@ class ParentSpendingFragment : Fragment() {
 
     private fun showSpendingReivewDialog() {
 
-        var dialogBinding= DialogSpendingReviewBinding.inflate(getLayoutInflater())
+        var dialogBinding= DialogParentSpendingTipsBinding.inflate(getLayoutInflater())
         var dialog= Dialog(requireContext().applicationContext);
         dialog.setContentView(dialogBinding.getRoot())
 
         dialog.window!!.setLayout(1000, 1700)
 
-        dialogBinding.btnGotIt.setOnClickListener {
-            dialog.dismiss()
-        }
+//        dialogBinding.btnGotIt.setOnClickListener {
+//            dialog.dismiss()
+//        }
 
         dialog.show()
     }

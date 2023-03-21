@@ -87,6 +87,11 @@ class SpendingFragment : Fragment(){
             var goToPerformance = Intent(requireContext().applicationContext, SpendingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
+
+        binding.btnSeeMore2.setOnClickListener {
+            var goToPerformance = Intent(requireContext().applicationContext, SpendingPerformanceActivity::class.java)
+            this.startActivity(goToPerformance)
+        }
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){

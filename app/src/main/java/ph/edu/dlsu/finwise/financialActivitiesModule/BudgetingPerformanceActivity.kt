@@ -77,12 +77,12 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         setNavigationBar()
         loadBackButton()
 
-        binding.btnReview.setOnClickListener {
-            showBudgetingReivewDialog()
-        }
-
             binding.btnReview.setOnClickListener{
                 showBudgetingReivewDialog()
+            }
+
+            binding.btnBudgetAccuracyReview.setOnClickListener{
+                showBudgetAccuracyAmountReivewDialog()
             }
     }
 
@@ -221,10 +221,60 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
                         totalBudgetAccuracy += (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100)
                     }.continueWith {
                         setOverall()
+                        setBudgetAccuracy()
                     }
                 } else
                     setOverall()
+                    setBudgetAccuracy()
             }
+        }
+    }
+
+    private fun setBudgetAccuracy() {
+        var budgetAccuracy = totalBudgetAccuracy.roundToInt()
+        binding.textViewBudgetAccuracyProgress.text =  DecimalFormat("##0.##").format(totalBudgetAccuracy) + "%"
+        binding.progressBarBudgetAccuracy.progress = totalBudgetAccuracy.roundToInt()
+
+        if (budgetAccuracy >= 96) {
+            binding.textViewBudgetAccuracyPerformanceText.text = "Excellent"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
+            binding.tvPerformanceText.text = "Keep up the excellent work! Your budget is often accurate."
+        } else if (budgetAccuracy < 96 && budgetAccuracy >= 86) {
+            binding.textViewBudgetAccuracyPerformanceText.text = "Amazing"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.green))
+            binding.tvPerformanceText.text = "Amazing job! You are performing well. You are amazing at creating accurate budgets."
+        } else if (budgetAccuracy < 90 && budgetAccuracy >= 80) {
+            binding.textViewBudgetAccuracyPerformanceText.text = "Great"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.green))
+            binding.tvPerformanceText.text = "You are performing well. Keep making those accurate budgets!"
+        } else if (budgetAccuracy < 80 && budgetAccuracy >= 70) {
+            binding.textViewBudgetAccuracyPerformanceText.text = "Good"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
+            binding.tvPerformanceText.text = "Good job! With a bit more attention to detail, you’ll surely up your performance!"
+        } else if (budgetAccuracy < 70 && budgetAccuracy >= 60) {
+            binding.textViewBudgetAccuracyPerformanceText.text = "Average"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
+            binding.tvPerformanceText.text = "Nice work! Work on improving your budget by always doublechecking. You’ll get there soon!"
+        } else if (budgetAccuracy < 56 && budgetAccuracy >= 46) {
+            binding.textViewBudgetAccuracyPerformanceText.text = "Nearly There"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
+        }  else if (budgetAccuracy < 46 && budgetAccuracy >= 36) {
+            binding.textViewBudgetAccuracyPerformanceText.text = "Almost There"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceText.text = "Almost there! You need to work on your budget accuracy. Click review to learn how!"
+        } else if (budgetAccuracy < 36 && budgetAccuracy >= 26) {
+            binding.textViewBudgetAccuracyPerformanceText.text = "Getting There"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceText.text = "Getting there! You need to work on your budget accuracy. Click review to learn how!"
+        } else if (budgetAccuracy < 26 && budgetAccuracy >= 16) {
+            binding.textViewBudgetAccuracyPerformanceText.text = "Not Quite There Yet"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
+        } else if (budgetAccuracy < 15) {
+            binding.textViewBudgetAccuracyPerformanceText.text = "Needs Improvement"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceText.text = "Your budget accuracy needs a lot of improvement. Click review to learn how!"
         }
     }
 
@@ -289,21 +339,6 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     private fun showBudgetingReivewDialog() {
 
         var dialogBinding= DialogBudgetingReviewBinding.inflate(getLayoutInflater())
-        var dialog= Dialog(this);
-        dialog.setContentView(dialogBinding.getRoot())
-
-        dialog.window!!.setLayout(1000, 1700)
-
-        dialogBinding.btnGotIt.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        dialog.show()
-    }
-
-    private fun showBudgetAccuracyItemsReivewDialog() {
-
-        var dialogBinding= DialogBudgetAccuracyItemsReviewBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 

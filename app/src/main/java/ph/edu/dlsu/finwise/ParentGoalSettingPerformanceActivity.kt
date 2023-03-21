@@ -32,7 +32,7 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
     private var nTimeBound = 0.00F
 
     private var SMARTIndividual = "Specific"
-    private lateinit var childID:String
+    private lateinit var childID: String
 
     data class Rating(var name: String? = null, var score: Int = 0)
 
