@@ -224,12 +224,12 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvName.text = "Relevant"
             dialogBinding.tvDefinition.text = "Relevant goals are important to you and with what you want to do."
             dialogBinding.tvGuideQuestions.text = "1.Is the goal important?\n" + "2. What is the reasoning behind the goal?"
-            dialogBinding.tvTips.text =
+            //dialogBinding.tvTips.text =
         } else if (SMARTIndividual == "Time-Bound") {
             dialogBinding.tvName.text = "Time-Bound"
             dialogBinding.tvDefinition.text = "Time-bound goals have a target or end date."
             dialogBinding.tvGuideQuestions.text = "1. How long will it take for the goal to be accomplished?\n" + "2. When does the goal need to be completed?"
-            dialogBinding.tvTips.text =
+            //dialogBinding.tvTips.text =
         }
 
         dialog.setContentView(dialogBinding.getRoot())

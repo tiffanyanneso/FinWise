@@ -69,7 +69,7 @@ class TransactionHistoryExpenseFragment : Fragment() {
                     )
                 }
             }
-            transactionFilterArrayList.sortBy { it.transaction?.date }
+            transactionFilterArrayList.sortByDescending { it.transaction?.date }
             transactionFilterArrayList = sortTransactions()
 
             for (transactionFilter in transactionFilterArrayList)

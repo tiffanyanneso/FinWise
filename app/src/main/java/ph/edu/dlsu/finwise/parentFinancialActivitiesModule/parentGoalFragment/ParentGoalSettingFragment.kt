@@ -23,6 +23,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.GoalRating
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
+import java.text.DecimalFormat
 import java.util.*
 
 class ParentGoalSettingFragment : Fragment() {
@@ -223,7 +224,7 @@ class ParentGoalSettingFragment : Fragment() {
                     showSeeMoreButton()
                 }
                 binding.tvOverallRating.visibility = View.VISIBLE
-                binding.tvOverallRating.text ="${overall}/5"
+                binding.tvOverallRating.text ="${DecimalFormat("0.0").format(overall)}/5.0"
             }
         }
     }
