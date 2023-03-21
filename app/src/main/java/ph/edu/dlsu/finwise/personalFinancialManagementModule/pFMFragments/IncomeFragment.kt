@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.animation.Easing
@@ -20,7 +19,6 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.MPPointF
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -28,13 +26,11 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentIncomeBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
-import ph.edu.dlsu.finwise.parentFinancialManagementModule.ParentFinancialManagementActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
 import java.text.DecimalFormat
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.ZoneId
 import java.util.*
 
 
@@ -197,23 +193,45 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         }
 
         if (user == "child" && total > 0) {
-            binding.tvSummary.text = "You've earned ₱$totalText for this $dateRange! "
+            binding.tvSummary.text = "Good Job!You've earned ₱$totalText for this $dateRange! "
             binding.tvTips.text = "Go to the \"Financial Activities\" to develop your Financial Literacy using your money"
             loadChildFinancialActivitiesButton()
         } else if (user == "child" && total < 0) {
-            binding.tvSummary.text = "You've earned ₱$totalText for this $dateRange"
-            binding.tvTips.text = "Consider reviewing your previous transactions and see which you could lessen"
-            loadTransactionHistory()
+            binding.tvSummary.text = "Uh oh! You've earned ₱$totalText for this $dateRange"
+            binding.tvTips.text = "Consider selling your stuff or doing some chores to earn money"
+            loadEarningChild()
         } else if (user == "parent" && total > 0) {
-            binding.tvSummary.text = "Your child earned ₱$totalText for this $dateRange!"
+            binding.tvSummary.text = "Great! Your child earned ₱$totalText for this $dateRange!"
             binding.tvTips.text = "Go to the \"Financial Activities\" to develop your child's Financial Literacy using their money"
             loadParentFinancialActivitiesButton()
         } else if (user == "parent" && total < 0) {
-            binding.tvSummary.text = "You've child earned ₱$totalText for this $dateRange"
-            binding.tvTips.text = "Consider reviewing your child's previous transactions and see which they could lessen"
-            loadTransactionHistory()
+            binding.tvSummary.text = "Bad news! Your child earned ₱$totalText for this $dateRange"
+            binding.tvTips.text = "Consider giving your child some chores so they can earn some money"
+            loadEarningParent()
         }
 
+    }
+
+    private fun loadEarningChild() {
+        binding.btnAction.setOnClickListener {
+            val goToEarningActivity = Intent(context, EarningMenuActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("childID", childID)
+            bundle.putString("module", "pfm")
+            goToEarningActivity.putExtras(bundle)
+            startActivity(goToEarningActivity)
+        }
+    }
+
+    private fun loadEarningParent() {
+        binding.btnAction.setOnClickListener {
+            val goToHomeRewardsActivity = Intent(context, EarningActivity::class.java)
+            var bundle = Bundle()
+            bundle.putString("childID", childID)
+            bundle.putString("module", "pfm")
+            goToHomeRewardsActivity.putExtras(bundle)
+            startActivity(goToHomeRewardsActivity)
+        }
     }
 
     private fun loadTransactionHistory() {

@@ -176,7 +176,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
     private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
         // Get the current quarter
-        // TODO: double check kung bat hindi kasama april + MAY BUTTON SA TERND TAPO SREDIERECT SA DETAILS LIKE PIE CHART, TOP 3, AT TRANSACTIONS WITHIN GTTHOSE DATES
         val currentQuarter = (Calendar.getInstance().get(Calendar.MONTH) / 3) + 1
 
         // Group the dates by month for the current quarter
@@ -293,15 +292,15 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         /*binding.tvIncomeTotal.text = "₱$incomeText"
         binding.tvExpenseTotal.text = "₱$expenseText"*/
         if (netIncome > 0 && user == "child")
-            binding.tvSummary.text = "You've earned ₱$netIncomeText more than you spent 😄"
+            binding.tvSummary.text = "Good job! You've earned ₱$netIncomeText more than you spent"
         else if (netIncome > 0 && user == "parent") {
-            binding.tvSummary.text = "Your child earned ₱$netIncomeText more than they spent 😄"
+            binding.tvSummary.text = "Great! Your child earned ₱$netIncomeText more than they spent"
         } else if (netIncome < 0 && user == "child") {
             netIncomeText = kotlin.math.abs(netIncome).toString()
-            binding.tvSummary.text = "You've spent ₱$netIncomeText more than you earned 😞"
+            binding.tvSummary.text = "Uh oh! You've spent ₱$netIncomeText more than you earned"
         } else if (netIncome < 0 && user == "parent") {
             netIncomeText = kotlin.math.abs(netIncome).toString()
-            binding.tvSummary.text = "Your child spent ₱$netIncomeText more than they earned 😞"
+            binding.tvSummary.text = "Bad news!Your child spent ₱$netIncomeText more than they earned 😞"
         }
 
     }
@@ -409,7 +408,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
         xAxis.position = XAxis.XAxisPosition.BOTTOM
 
-        // TODO: Fix becuase this only applies when dates of the week are empty
         if (selectedDates.isNotEmpty()) {
             when (selectedDatesSort) {
                 "weekly" -> updateXAxisWeekly(xAxis)

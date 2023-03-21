@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.charts.LineChart
@@ -24,13 +23,8 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentSavingsChartBinding
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.GoalSavingDetailsActivity
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
 import java.lang.Math.round
-import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.ZoneId
 import java.util.*
 
 
@@ -254,13 +248,13 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
         savings = round(savings / 10.0f) * 10.0f
 
         if (savings > 0 && user == "child")
-            binding.tvSummary.text = "You are saving $savings% of your total deposits to your goals 😄"
+            binding.tvSummary.text = "Good job! You are saving $savings% of your total deposits to your goals"
         else if (savings > 0 && user == "parent") {
-            binding.tvSummary.text = "Your child is saving $savings% of their total deposits to your goals 😄"
+            binding.tvSummary.text = "Great! Your child is saving $savings% of their total deposits to your goals"
         } else if (savings < 0 && user == "child") {
-            binding.tvSummary.text = "You are saving $savings% of your total deposits to your goals 😔"
+            binding.tvSummary.text = "Uh oh! You are saving $savings% of your total deposits to your goals"
         } else if (savings < 0 && user == "parent") {
-            binding.tvSummary.text = "Your child is saving $savings% of their total deposits to your goals 😔"
+            binding.tvSummary.text = "Uh oh! Your child is saving $savings% of their total deposits to your goals"
         }
         /*binding.tvDepositTotal.text = "₱$depositText"
         binding.tvWithdrawalTotal.text = "₱$withdrawalText"
@@ -319,7 +313,6 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
 
     private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
         // Get the current quarter
-        // TODO: double check kung bat hindi kasama april + MAY BUTTON SA TERND TAPO SREDIERECT SA DETAILS LIKE PIE CHART, TOP 3, AT TRANSACTIONS WITHIN GTTHOSE DATES
         val currentQuarter = (Calendar.getInstance().get(Calendar.MONTH) / 3) + 1
 
         // Group the dates by month for the current quarter
