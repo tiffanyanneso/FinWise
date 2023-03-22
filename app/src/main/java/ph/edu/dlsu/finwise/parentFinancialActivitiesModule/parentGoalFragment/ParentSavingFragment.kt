@@ -96,8 +96,7 @@ class ParentSavingFragment : Fragment() {
                 binding.btnNewGoal.setOnClickListener {
                     var sendBundle = Bundle()
                     sendBundle.putString("childID", childID)
-                    //TODO update source
-                    sendBundle.putString("source", "childFinancialActivity")
+                    sendBundle.putString("source", "Parent")
                     var newGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
                     newGoal.putExtras(sendBundle)
                     startActivity(newGoal)
@@ -391,8 +390,7 @@ class ParentSavingFragment : Fragment() {
             var newGoal = Intent (requireContext(), NewGoal::class.java)
 
             var bundle = Bundle()
-            //TODO update source
-            bundle.putString("source", "childFinancialActivity")
+            bundle.putString("source", "Parent")
             newGoal.putExtras(bundle)
             newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 

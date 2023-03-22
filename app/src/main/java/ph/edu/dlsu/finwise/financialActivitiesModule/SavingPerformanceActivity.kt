@@ -387,7 +387,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             dialog.dismiss()
             var goToNewGoal = Intent(this, NewGoal::class.java)
             var bundle = Bundle()
-            bundle.putString("source", "childFinancialActivity")
+            bundle.putString("source", "Child")
             goToNewGoal.putExtras(bundle)
             goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(goToNewGoal)

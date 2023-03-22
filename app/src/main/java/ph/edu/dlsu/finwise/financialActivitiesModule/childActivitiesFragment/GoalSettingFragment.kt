@@ -78,7 +78,7 @@ class GoalSettingFragment : Fragment() {
             else {
                 var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
                 var bundle = Bundle()
-                bundle.putString("source", "childFinancialActivity")
+                bundle.putString("source", "Child")
                 goToNewGoal.putExtras(bundle)
                 goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this.startActivity(goToNewGoal)
@@ -248,7 +248,7 @@ class GoalSettingFragment : Fragment() {
             var newGoal = Intent (requireContext().applicationContext, NewGoal::class.java)
 
             var bundle = Bundle()
-            bundle.putString("source", "childFinancialActivity")
+            bundle.putString("source", "Child")
             newGoal.putExtras(bundle)
             newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
@@ -283,7 +283,7 @@ class GoalSettingFragment : Fragment() {
             dialog.dismiss()
             var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
             var bundle = Bundle()
-            bundle.putString("source", "childFinancialActivity")
+            bundle.putString("source", "Child")
             goToNewGoal.putExtras(bundle)
             goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(goToNewGoal)

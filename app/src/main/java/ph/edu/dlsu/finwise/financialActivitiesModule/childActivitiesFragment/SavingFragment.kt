@@ -89,7 +89,7 @@ class SavingFragment : Fragment() {
             else {
                 var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
                 var bundle = Bundle()
-                bundle.putString("source", "childFinancialActivity")
+                bundle.putString("source", "Child")
                 goToNewGoal.putExtras(bundle)
                 goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this.startActivity(goToNewGoal)
@@ -363,7 +363,7 @@ class SavingFragment : Fragment() {
             var newGoal = Intent (requireContext(), NewGoal::class.java)
 
             var bundle = Bundle()
-            bundle.putString("source", "childFinancialActivity")
+            bundle.putString("source", "Child")
             newGoal.putExtras(bundle)
             newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
@@ -424,7 +424,7 @@ class SavingFragment : Fragment() {
             dialog.dismiss()
             var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
             var bundle = Bundle()
-            bundle.putString("source", "childFinancialActivity")
+            bundle.putString("source", "Child")
             goToNewGoal.putExtras(bundle)
             goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(goToNewGoal)

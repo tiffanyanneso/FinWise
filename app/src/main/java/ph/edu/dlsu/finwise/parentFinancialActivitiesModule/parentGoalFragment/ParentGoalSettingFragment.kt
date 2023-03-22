@@ -80,7 +80,7 @@ class ParentGoalSettingFragment : Fragment() {
                 var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
                 var bundle = Bundle()
                 bundle.putString("childID", childID)
-                bundle.putString("source", "childFinancialActivity")
+                bundle.putString("source", "Parent")
                 goToNewGoal.putExtras(bundle)
                 goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this.startActivity(goToNewGoal)
@@ -271,8 +271,7 @@ class ParentGoalSettingFragment : Fragment() {
             var newGoal = Intent (requireContext().applicationContext, NewGoal::class.java)
 
             var bundle = Bundle()
-            // TODO change source
-            bundle.putString("source", "childFinancialActivity")
+            bundle.putString("source", "Parent")
             newGoal.putExtras(bundle)
             newGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
