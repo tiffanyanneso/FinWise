@@ -93,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="For example, if your child receives P20 and spends P10, their income to expense ratio would be 2.0 200% ($20 divided by $10 * 100)."
+            android:text="For example, if your child receives P20 and spends P10, their income to expense ratio would be 2.0 200% (P20 divided by P10 * 100)."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
         

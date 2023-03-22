@@ -25,6 +25,7 @@ import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMayaResult
 import com.paymaya.sdk.android.paywithpaymaya.SinglePaymentResult
 import com.paymaya.sdk.android.paywithpaymaya.models.SinglePaymentRequest
 import org.json.JSONObject
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEarningSendMoneyBinding
@@ -74,7 +75,6 @@ class EarningSendMoneyActivity : AppCompatActivity() {
         loadBackButton()
 
         // Initializes the navbar
-        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
 
         loadEarningActivityText()
         loadSendMoneyButton()
@@ -268,6 +268,21 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             //user is a child
             if (it.toObject<Users>()!!.userType == "Child")
                 binding.btnSendMoney.visibility = View.GONE
+
+            val user = it.toObject<Users>()!!
+            //current user is a child
+            val bottomNavigationViewChild = binding.bottomNav
+            val bottomNavigationViewParent = binding.bottomNavParent
+            if (user.userType == "Child") {
+                bottomNavigationViewChild.visibility = View.VISIBLE
+                bottomNavigationViewParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+                binding.btnSendMoney.visibility = View.GONE
+            } else if (user.userType == "Parent") {
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+            }
         }
     }
 

@@ -88,6 +88,8 @@ class FinancialAssessmentActivity : AppCompatActivity() {
     }
 
     private fun getScore(assessmentID: String) {
+        //TODO: remove chilID
+        //childID = "4hZAQJXIf4dFN0KyjoSF6NdEyy72"
         firestore.collection("AssessmentAttempts")
             .whereEqualTo("assessmentID" , assessmentID)
             .whereEqualTo("childID", childID)
@@ -178,8 +180,9 @@ class FinancialAssessmentActivity : AppCompatActivity() {
 
     private fun retrieveBundle() {
         val bundle = intent.extras
-       /* assessmentType = "Pre-Activity"
-        assessmentCategory = "Budgeting"*/
+        //TODO: fix comments
+        assessmentType = "Pre-Activity"
+        assessmentCategory = "Budgeting"
         assessmentType = bundle?.getString("assessmentType").toString()
         assessmentCategory = bundle?.getString("assessmentCategory").toString()
     }
