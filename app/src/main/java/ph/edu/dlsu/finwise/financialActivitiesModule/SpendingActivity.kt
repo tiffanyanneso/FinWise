@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Build
@@ -12,16 +13,21 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.FragmentManager
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivitySpendingBinding
+import ph.edu.dlsu.finwise.databinding.DialogTakeAssessmentBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.spendingExpenseFragments.SpendingExpenseListFragment
 import ph.edu.dlsu.finwise.financialActivitiesModule.spendingExpenseFragments.SpendingShoppingListFragment
+import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
 import ph.edu.dlsu.finwise.model.BudgetItem
+import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
@@ -52,6 +58,8 @@ class SpendingActivity : AppCompatActivity() {
 
     private lateinit var childID:String
 
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +78,7 @@ class SpendingActivity : AppCompatActivity() {
         spendingActivityID = bundle.getString("spendingActivityID").toString()
         childID = bundle.getString("childID").toString()
 
-        //checkUser()
+        checkUser()
         bundle.putString("source", "viewGoal")
         getInfo()
         initializeFragments()
@@ -134,6 +142,63 @@ class SpendingActivity : AppCompatActivity() {
                 initializeFragments()
             }
         }
+    }
+
+    private fun checkUser() {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            if (it.toObject<Users>()!!.userType == "Child")
+                goToFinancialAssessmentActivity()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun goToFinancialAssessmentActivity() {
+        firestore.collection("Assessments").whereEqualTo("assessmentType", "Pre-Activity").whereEqualTo("assessmentCategory", "Spending").get().addOnSuccessListener {
+            if (it.size()!= 0) {
+                var assessmentID = it.documents[0].id
+                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+                    if (results.size() != 0) {
+                        var assessmentAttemptsObjects = results.toObjects<FinancialAssessmentAttempts>()
+                        assessmentAttemptsObjects.sortedByDescending { it.dateTaken }
+                        var latestAssessmentAttempt = assessmentAttemptsObjects.get(0).dateTaken
+                        val dateFormatter: DateTimeFormatter =
+                            DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                        val lastTakenFormat =
+                            SimpleDateFormat("MM/dd/yyyy").format(latestAssessmentAttempt!!.toDate())
+                        val from = LocalDate.parse(lastTakenFormat.toString(), dateFormatter)
+                        val today = SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate())
+                        val to = LocalDate.parse(today.toString(), dateFormatter)
+                        var difference = Period.between(from, to)
+
+                        if (difference.days >= 7)
+                            buildAssessmentDialog()
+                    } else
+                        buildAssessmentDialog()
+                }
+            }
+        }
+    }
+
+    private fun buildAssessmentDialog() {
+        var dialogBinding= DialogTakeAssessmentBinding.inflate(layoutInflater)
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.root)
+        dialog.window!!.setLayout(950, 900)
+        dialog.setCancelable(false)
+        dialogBinding.btnOk.setOnClickListener { goToAssessment() }
+        dialog.show()
+    }
+
+    private fun goToAssessment() {
+        val bundle = Bundle()
+        val assessmentType = "Pre-Activity" // Change: Pre-Activity, Post-Activity
+        val assessmentCategory = "Spending" // Change: Budgeting, Saving, Spending, Goal Setting
+        bundle.putString("assessmentType", assessmentType)
+        bundle.putString("assessmentCategory", assessmentCategory)
+
+        val assessmentQuiz = Intent(this, FinancialAssessmentActivity::class.java)
+        assessmentQuiz.putExtras(bundle)
+        startActivity(assessmentQuiz)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

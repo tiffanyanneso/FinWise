@@ -11,9 +11,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
 import ph.edu.dlsu.finwise.Navbar
@@ -23,11 +26,10 @@ import ph.edu.dlsu.finwise.adapter.GoalTransactionsAdapater
 import ph.edu.dlsu.finwise.databinding.ActivityViewGoalBinding
 import ph.edu.dlsu.finwise.databinding.DialogActivityLockedBinding
 import ph.edu.dlsu.finwise.databinding.DialogFinishSavingBinding
+import ph.edu.dlsu.finwise.databinding.DialogTakeAssessmentBinding
 import ph.edu.dlsu.finwise.databinding.DialogWarningCannotWtithdrawBinding
-import ph.edu.dlsu.finwise.model.FinancialActivities
-import ph.edu.dlsu.finwise.model.FinancialGoals
-import ph.edu.dlsu.finwise.model.Transactions
-import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
+import ph.edu.dlsu.finwise.model.*
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -318,6 +320,56 @@ class ViewGoalActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun goToFinancialAssessmentActivity() {
+        firestore.collection("Assessments").whereEqualTo("assessmentType", "Pre-Activity").whereEqualTo("assessmentCategory", "Saving").get().addOnSuccessListener {
+            if (it.size()!= 0) {
+                var assessmentID = it.documents[0].id
+                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+                    if (results.size() != 0) {
+                        var assessmentAttemptsObjects = results.toObjects<FinancialAssessmentAttempts>()
+                        assessmentAttemptsObjects.sortedByDescending { it.dateTaken }
+                        var latestAssessmentAttempt = assessmentAttemptsObjects.get(0).dateTaken
+                        val dateFormatter: DateTimeFormatter =
+                            DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                        val lastTakenFormat =
+                            SimpleDateFormat("MM/dd/yyyy").format(latestAssessmentAttempt!!.toDate())
+                        val from = LocalDate.parse(lastTakenFormat.toString(), dateFormatter)
+                        val today = SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate())
+                        val to = LocalDate.parse(today.toString(), dateFormatter)
+                        var difference = Period.between(from, to)
+
+                        if (difference.days >= 7)
+                            buildAssessmentDialog()
+                    } else
+                        buildAssessmentDialog()
+                }
+            }
+        }
+    }
+
+    private fun buildAssessmentDialog() {
+        var dialogBinding= DialogTakeAssessmentBinding.inflate(layoutInflater)
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.root)
+        dialog.window!!.setLayout(950, 900)
+        dialog.setCancelable(false)
+        dialogBinding.btnOk.setOnClickListener { goToAssessment() }
+        dialog.show()
+    }
+
+    private fun goToAssessment() {
+        val bundle = Bundle()
+        val assessmentType = "Pre-Activity" // Change: Pre-Activity, Post-Activity
+        val assessmentCategory = "Saving" // Change: Budgeting, Saving, Spending, Goal Setting
+        bundle.putString("assessmentType", assessmentType)
+        bundle.putString("assessmentCategory", assessmentCategory)
+
+        val assessmentQuiz = Intent(this, FinancialAssessmentActivity::class.java)
+        assessmentQuiz.putExtras(bundle)
+        startActivity(assessmentQuiz)
+    }
+
     private fun loadButtons(){
         loadBackButton()
     }
@@ -378,6 +430,8 @@ class ViewGoalActivity : AppCompatActivity() {
                 binding.btnEditGoal.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_grey))
             }
             else if (it.toObject<Users>()!!.userType == "Child"){
+                goToFinancialAssessmentActivity()
+
                 binding.btnWithdraw.isEnabled = true
                 binding.btnWithdraw.isClickable = true
                 binding.btnWithdraw.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_green))

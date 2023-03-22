@@ -2,23 +2,32 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.app.Dialog
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ActivityGoalAccomplishedBinding
 import ph.edu.dlsu.finwise.databinding.DialogProceedNextActivityBinding
+import ph.edu.dlsu.finwise.databinding.DialogTakeAssessmentBinding
+import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.math.abs
 
@@ -74,6 +83,56 @@ class GoalAccomplishedActivity : AppCompatActivity() {
                 adjustWalletBalances()
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun goToFinancialAssessmentActivity() {
+        firestore.collection("Assessments").whereEqualTo("assessmentType", "Pre-Activity").whereEqualTo("assessmentCategory", "Spending").get().addOnSuccessListener {
+            if (it.size()!= 0) {
+                var assessmentID = it.documents[0].id
+                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+                    if (results.size() != 0) {
+                        var assessmentAttemptsObjects = results.toObjects<FinancialAssessmentAttempts>()
+                        assessmentAttemptsObjects.sortedByDescending { it.dateTaken }
+                        var latestAssessmentAttempt = assessmentAttemptsObjects.get(0).dateTaken
+                        val dateFormatter: DateTimeFormatter =
+                            DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                        val lastTakenFormat =
+                            SimpleDateFormat("MM/dd/yyyy").format(latestAssessmentAttempt!!.toDate())
+                        val from = LocalDate.parse(lastTakenFormat.toString(), dateFormatter)
+                        val today = SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate())
+                        val to = LocalDate.parse(today.toString(), dateFormatter)
+                        var difference = Period.between(from, to)
+
+                        if (difference.days >= 7)
+                            buildAssessmentDialog()
+                    } else
+                        buildAssessmentDialog()
+                }
+            }
+        }
+    }
+
+    private fun buildAssessmentDialog() {
+        var dialogBinding= DialogTakeAssessmentBinding.inflate(layoutInflater)
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.root)
+        dialog.window!!.setLayout(950, 900)
+        dialog.setCancelable(false)
+        dialogBinding.btnOk.setOnClickListener { goToAssessment() }
+        dialog.show()
+    }
+
+    private fun goToAssessment() {
+        val bundle = Bundle()
+        val assessmentType = "Post-Activity" // Change: Pre-Activity, Post-Activity
+        val assessmentCategory = "Saving" // Change: Budgeting, Saving, Spending, Goal Setting
+        bundle.putString("assessmentType", assessmentType)
+        bundle.putString("assessmentCategory", assessmentCategory)
+
+        val assessmentQuiz = Intent(this, FinancialAssessmentActivity::class.java)
+        assessmentQuiz.putExtras(bundle)
+        startActivity(assessmentQuiz)
     }
 
     private fun setText () {

@@ -3,30 +3,33 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
 import ph.edu.dlsu.finwise.adapter.SpendingExpenseAdapter
-import ph.edu.dlsu.finwise.databinding.ActivityBudgetBinding
-import ph.edu.dlsu.finwise.databinding.DialogAdjustBudgetBinding
-import ph.edu.dlsu.finwise.databinding.DialogDoneSettingBudgetBinding
-import ph.edu.dlsu.finwise.databinding.DialogDoneSpendingBinding
-import ph.edu.dlsu.finwise.databinding.DialogFinishBudgetingBinding
-import ph.edu.dlsu.finwise.databinding.DialogNewBudgetCategoryBinding
-import ph.edu.dlsu.finwise.databinding.DialogWarningCannotWtithdrawBinding
+import ph.edu.dlsu.finwise.databinding.*
+import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
 import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -98,6 +101,8 @@ class BudgetActivity : AppCompatActivity() {
                     if (it.toObject<Users>()!!.userType == "Child") {
                         binding.btnDoneSettingBudget.visibility = View.VISIBLE
                         binding.btnDoneSpending.visibility = View.GONE
+                        goToFinancialAssessmentActivity("Pre-Activity", "Budgeting")
+
                     }
                 }
             }
@@ -110,8 +115,14 @@ class BudgetActivity : AppCompatActivity() {
         }.continueWith {
             firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
                 var financialActivity = it.toObject<FinancialActivities>()
-                if (financialActivity?.status != "Completed")
+                if (financialActivity?.status != "Completed") {
                     allCompleted = false
+                    firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+                        if (it.toObject<Users>()!!.userType == "Child")
+                            goToFinancialAssessmentActivity("Pre-Activity", "Spending")
+
+                    }
+                }
                 //spending is done, hide buttons
                 else
                     binding.linearLayoutButtons.visibility = View.GONE
@@ -497,6 +508,7 @@ class BudgetActivity : AppCompatActivity() {
                 isBudgetingCompleted = true
                 dialog.dismiss()
                 firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "In Progress")
+                goToFinancialAssessmentActivity("Post-Activity", "Budgeting")
                 var refresh = Intent(this, BudgetActivity::class.java)
                 var sendBundle = Bundle()
                 sendBundle.putString("savingActivityID", savingActivityID)
@@ -504,6 +516,7 @@ class BudgetActivity : AppCompatActivity() {
                 sendBundle.putString("spendingActivityID", spendingActivityID)
                 refresh.putExtras(sendBundle)
                 startActivity(refresh)
+
             }
         }
 
@@ -521,8 +534,9 @@ class BudgetActivity : AppCompatActivity() {
         dialogBinding.btnOk.setOnClickListener {
             firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "Completed")
             dialog.dismiss()
-            var finact = Intent(this, FinancialActivity::class.java)
-            startActivity(finact)
+            goToFinancialAssessmentActivity("Post-Activity", "Spending")
+//            var finact = Intent(this, FinancialActivity::class.java)
+//            startActivity(finact)
         }
 
         dialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
@@ -541,6 +555,58 @@ class BudgetActivity : AppCompatActivity() {
         }
 
         dialog.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun goToFinancialAssessmentActivity (assessmentType: String, assessmentCategory:String) {
+        firestore.collection("Assessments").whereEqualTo("assessmentType", assessmentType).whereEqualTo("assessmentCategory", assessmentCategory).get().addOnSuccessListener {
+
+            if (it.size()!= 0) {
+                var assessmentID = it.documents[0].id
+                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+                    if (results.size() != 0) {
+                        var assessmentAttemptsObjects = results.toObjects<FinancialAssessmentAttempts>()
+                        assessmentAttemptsObjects.sortedByDescending { it.dateTaken }
+                        var latestAssessmentAttempt = assessmentAttemptsObjects.get(0).dateTaken
+                        val dateFormatter: DateTimeFormatter =
+                            DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                        val lastTakenFormat =
+                            SimpleDateFormat("MM/dd/yyyy").format(latestAssessmentAttempt!!.toDate())
+                        val from = LocalDate.parse(lastTakenFormat.toString(), dateFormatter)
+                        val today = SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate())
+                        val to = LocalDate.parse(today.toString(), dateFormatter)
+                        var difference = Period.between(from, to)
+
+                        if (difference.days >= 7)
+                            buildAssessmentDialog(assessmentType, assessmentCategory)
+                    } else
+                        buildAssessmentDialog(assessmentType, assessmentCategory)
+                }
+            }
+        }
+    }
+
+    private fun buildAssessmentDialog(assessmentType: String, assessmentCategory:String) {
+        var dialogBinding= DialogTakeAssessmentBinding.inflate(layoutInflater)
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.root)
+        dialog.window!!.setLayout(950, 900)
+        dialog.setCancelable(false)
+        dialogBinding.btnOk.setOnClickListener {
+            goToAssessment(assessmentType, assessmentCategory)
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun goToAssessment(assessmentType:String, assessmentCategory:String) {
+        val bundle = Bundle()
+        bundle.putString("assessmentType", assessmentType)
+        bundle.putString("assessmentCategory", assessmentCategory)
+
+        val assessmentQuiz = Intent(this, FinancialAssessmentActivity::class.java)
+        assessmentQuiz.putExtras(bundle)
+        startActivity(assessmentQuiz)
     }
 
 
