@@ -13,6 +13,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.*
 import ph.edu.dlsu.finwise.databinding.ActivityProfileBinding
+import ph.edu.dlsu.finwise.model.Friends
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.profileModule.fragments.ProfileBadgesFragment
 import ph.edu.dlsu.finwise.profileModule.fragments.ProfileCurrentGoalsFragment
@@ -23,6 +24,7 @@ class ProfileActivity : AppCompatActivity(){
     private var firestore = Firebase.firestore
     private lateinit var context: Context
 
+    private var friendsUserIDArrayList = ArrayList<String>()
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private val tabIcons = intArrayOf(
@@ -92,16 +94,37 @@ class ProfileActivity : AppCompatActivity(){
         binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
     }
 
-    fun getProfileData() {
+    private fun getProfileData() {
 
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener { documentSnapshot ->
             var child = documentSnapshot.toObject<Users>()
 
-            //TODO get profile picture
             if (child?.username != null)
                 binding.tvUsername.setText("@" + child?.username.toString())
             if (child?.firstName != null && child?.lastName != null)
                 binding.tvName.setText(child?.firstName.toString() + " " + child?.lastName.toString())
+        }
+
+        countFriends()
+    }
+
+    private fun countFriends() {
+        val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("Friends").whereEqualTo("senderID", currentUser)
+            .whereEqualTo("status", "Accepted").get().addOnSuccessListener { results ->
+            for (friend in results) {
+                var request = friend.toObject<Friends>()
+                friendsUserIDArrayList.add(request.receiverID.toString())
+            }
+        }.continueWith {
+            firestore.collection("Friends").whereEqualTo("receiverID", currentUser)
+                .whereEqualTo("status", "Accepted").get().addOnSuccessListener { results ->
+                for (friend in results) {
+                    var request = friend.toObject<Friends>()
+                    friendsUserIDArrayList.add(request.senderID.toString())
+                }
+                binding.tvFriends.text = "${friendsUserIDArrayList.size} Friends >"
+            }
         }
     }
 

@@ -20,6 +20,8 @@ import ph.edu.dlsu.finwise.adapter.EarningSalesAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityEarningSellingBinding
 import ph.edu.dlsu.finwise.model.SellingItems
 import ph.edu.dlsu.finwise.model.Users
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EarningSellingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityEarningSellingBinding
@@ -57,21 +59,27 @@ class EarningSellingActivity : AppCompatActivity() {
 
     }
 
+    class SaleSort(var saleDate: Date, var saleItem: SellingItems)
+
     private fun getSales() {
+        var salesFilterArrayList = ArrayList<SaleSort>()
         salesArrayList.clear()
         firestore.collection("SellingItems").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
-            for (sale in results)
-                salesArrayList.add(sale.toObject<SellingItems>())
-            setSalesAdapter()
+            for (sale in results) {
+                var saleObject = sale.toObject<SellingItems>()
+                salesFilterArrayList.add(SaleSort(saleObject.date!!.toDate(), saleObject))
+            }
+            salesFilterArrayList.sortedByDescending { it.saleDate }
+
+            for (saleSort in salesFilterArrayList)
+                salesArrayList.add(saleSort.saleItem)
+            salesAdapter = EarningSalesAdapter(this, salesArrayList)
+            binding.rvViewTransactions.adapter = salesAdapter
+            binding.rvViewTransactions.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            salesAdapter.notifyDataSetChanged()
         }
     }
 
-    private fun setSalesAdapter() {
-        salesAdapter = EarningSalesAdapter(this, salesArrayList)
-        binding.rvViewTransactions.adapter = salesAdapter
-        binding.rvViewTransactions.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        salesAdapter.notifyDataSetChanged()
-    }
 
     private fun loadButtons() {
         loadBackButton()

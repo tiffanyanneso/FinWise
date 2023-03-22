@@ -7,8 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemSellingBinding
+import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.SellingItems
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -58,6 +61,16 @@ class EarningSalesAdapter : RecyclerView.Adapter<EarningSalesAdapter.EarningSale
             itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(sale.amount)
             itemBinding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(sale.date!!.toDate())
             itemBinding.tvSource.text = sale.depositTo
+
+            if (sale?.depositTo == "Financial Goal") {
+                firestore.collection("FinancialActivities").document(sale?.savingActivityID!!).get().addOnSuccessListener {
+                    var goalID = it.toObject<FinancialActivities>()!!.financialGoalID
+                    firestore.collection("FinancialGoals").document(goalID!!).get().addOnSuccessListener {
+                        itemBinding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
+                    }
+                }
+            } else
+                itemBinding.tvGoalName.visibility = View.GONE
         }
 
         override fun onClick(p0: View?) {

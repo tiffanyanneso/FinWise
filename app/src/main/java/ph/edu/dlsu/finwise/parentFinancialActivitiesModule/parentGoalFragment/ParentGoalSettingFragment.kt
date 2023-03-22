@@ -20,6 +20,7 @@ import ph.edu.dlsu.finwise.adapter.FinactGoalSettingAdapter
 import ph.edu.dlsu.finwise.databinding.*
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
+import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.SavingFragment
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.GoalRating
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
@@ -125,8 +126,14 @@ class ParentGoalSettingFragment : Fragment() {
         goalIDArrayList.clear()
         firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereIn("status", listOf("For Review", "For Editing")).get().addOnSuccessListener { results ->
             for (goalForReview in results) {
-                goalIDArrayList.add(goalForReview.id)
+                var goalObject = goalForReview.toObject<FinancialGoals>()
+                goalFilterArrayList.add(GoalFilter(goalForReview.id, goalObject.targetDate!!.toDate()))
             }
+            goalFilterArrayList.sortBy { it.goalTargetDate }
+
+            for (goal in goalFilterArrayList)
+                goalIDArrayList.add(goal.financialGoalID.toString())
+
             loadRecyclerView(goalIDArrayList)
         }
     }

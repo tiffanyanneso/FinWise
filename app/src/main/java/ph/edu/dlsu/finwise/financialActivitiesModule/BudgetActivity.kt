@@ -36,7 +36,7 @@ import kotlin.collections.ArrayList
 class BudgetActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityBudgetBinding
-    private lateinit var dialogBinding:DialogNewBudgetCategoryBinding
+    private lateinit var dialogBinding:DialogNewBudgetItemBinding
     private var firestore = Firebase.firestore
     private lateinit var budgetCategoryAdapter: BudgetCategoryAdapter
     private lateinit var expenseAdapter:SpendingExpenseAdapter
@@ -285,7 +285,7 @@ class BudgetActivity : AppCompatActivity() {
 
     fun editBudgetItem(position:Int, budgetItemID:String) {
         var amount = 0
-        var dialogBinding = DialogNewBudgetCategoryBinding.inflate(getLayoutInflater())
+        var dialogBinding = DialogNewBudgetItemBinding.inflate(getLayoutInflater())
         var dialog = Dialog(this);
 
         firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID)
@@ -383,7 +383,7 @@ class BudgetActivity : AppCompatActivity() {
     }
 
     private fun showNewBudgetItemDialog() {
-        dialogBinding= DialogNewBudgetCategoryBinding.inflate(getLayoutInflater())
+        dialogBinding= DialogNewBudgetItemBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 

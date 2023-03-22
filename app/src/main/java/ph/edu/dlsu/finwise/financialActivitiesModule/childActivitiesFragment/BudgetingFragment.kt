@@ -71,7 +71,6 @@ class BudgetingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvPerformancePercentage.text = "0.00%"
         binding.title.text = "Overall Budgeting Performance"
         getBudgeting()
 

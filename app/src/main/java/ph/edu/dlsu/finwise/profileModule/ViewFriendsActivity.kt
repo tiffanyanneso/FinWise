@@ -22,6 +22,7 @@ class ViewFriendsActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private var friendsUserIDArrayList = ArrayList<String>()
+    private var pendingFriendRequestArrayList = ArrayList<String>()
 
     private lateinit var viewFriendsAdapter: ViewFriendsAdapter
 
@@ -55,18 +56,22 @@ class ViewFriendsActivity : AppCompatActivity() {
 
     private fun getFriends() {
         val currentUser  = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("Friends").whereEqualTo("senderID", currentUser).whereEqualTo("status", "Accepted").get().addOnSuccessListener { results ->
+        firestore.collection("Friends").whereEqualTo("senderID", currentUser).get().addOnSuccessListener { results ->
             for (friend in results) {
                 var request = friend.toObject<Friends>()
-                friendsUserIDArrayList.add(request.receiverID.toString())
+                if (request.status == "Accepted")
+                    friendsUserIDArrayList.add(request.receiverID.toString())
             }
         }.continueWith {
-            firestore.collection("Friends").whereEqualTo("receiverID", currentUser).whereEqualTo("status", "Accepted").get().addOnSuccessListener { results ->
+            firestore.collection("Friends").whereEqualTo("receiverID", currentUser).get().addOnSuccessListener { results ->
                 for (friend in results) {
                     var request = friend.toObject<Friends>()
-                    friendsUserIDArrayList.add(request.senderID.toString())
+                    if (request.status == "Pending")
+                        pendingFriendRequestArrayList.add(request.senderID.toString())
+                    else if (request.status == "Accepted")
+                        friendsUserIDArrayList.add(request.receiverID.toString())
                 }
-
+                binding.btnRequests.text = "Requests (${pendingFriendRequestArrayList.size})"
                 viewFriendsAdapter = ViewFriendsAdapter(this, friendsUserIDArrayList)
                 binding.rvViewFriends.adapter = viewFriendsAdapter
                 binding.rvViewFriends.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

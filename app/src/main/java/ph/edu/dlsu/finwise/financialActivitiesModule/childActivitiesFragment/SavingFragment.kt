@@ -83,7 +83,6 @@ class SavingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.title.text = "Overall Saving Performance"
-        binding.tvPerformancePercentage.text = "0.00%"
         binding.btnNewGoal.setOnClickListener {
             if (ongoingGoals >= 5)
                 buildDialog()

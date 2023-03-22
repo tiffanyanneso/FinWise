@@ -76,7 +76,6 @@ class SpendingFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.textPerformance.text = "0.00%"
         binding.title.text= "Overall Spending Performance"
 
         binding.btnSpendingReview.setOnClickListener {

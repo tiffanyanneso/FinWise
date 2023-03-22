@@ -75,7 +75,8 @@ class EarningToDoAdapter : RecyclerView.Adapter<EarningToDoAdapter.EarningToDoVi
                             itemBinding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
                         }
                     }
-                }
+                } else
+                    itemBinding.tvGoalName.visibility = View.GONE
             }
         }
 

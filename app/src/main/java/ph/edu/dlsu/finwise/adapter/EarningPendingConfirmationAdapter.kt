@@ -75,7 +75,8 @@ class EarningPendingConfirmationAdapter : RecyclerView.Adapter<EarningPendingCon
                             itemBinding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
                         }
                     }
-                }
+                } else
+                    itemBinding.tvGoalName.visibility = View.GONE
             }
         }
 

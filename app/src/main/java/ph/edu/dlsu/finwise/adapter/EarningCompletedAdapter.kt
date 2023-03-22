@@ -70,7 +70,8 @@ class EarningCompletedAdapter : RecyclerView.Adapter<EarningCompletedAdapter.Ear
                             itemBinding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
                         }
                     }
-                }
+                } else
+                    itemBinding.tvGoalName.visibility = View.GONE
             }
         }
 
