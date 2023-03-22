@@ -226,7 +226,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     private fun loadEarningParent() {
         binding.btnAction.setOnClickListener {
             val goToHomeRewardsActivity = Intent(context, EarningActivity::class.java)
-            var bundle = Bundle()
+            val bundle = Bundle()
             bundle.putString("childID", childID)
             bundle.putString("module", "pfm")
             goToHomeRewardsActivity.putExtras(bundle)

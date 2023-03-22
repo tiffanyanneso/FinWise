@@ -16,6 +16,7 @@ import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityRecordEarningSaleConfirmationBinding
+import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
@@ -144,7 +145,24 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
         binding.tvAmount.text =  "₱ " + DecimalFormat("#,##0.00").format(bundle.getFloat("saleAmount"))
         binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("saleDate"))
         binding.tvPaymentType.text = bundle.getString("paymentType")
+        setWalletBalance()
     }
+
+    private fun setWalletBalance() {
+        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser)
+            .get().addOnSuccessListener { document ->
+                var walletAmount = 0.00f
+                for (wallets in document) {
+                    val childWallet = wallets.toObject<ChildWallet>()
+                    walletAmount += childWallet.currentBalance!!
+                }
+                var amount = DecimalFormat("#,##0.00").format(walletAmount)
+                if (walletAmount < 0.00F)
+                    amount = "0.00"
+                binding.tvWalletBalance.text = "₱$amount"
+            }
+    }
+
 
     private fun loadButtons() {
         loadBackButton()
@@ -165,7 +183,7 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
             } else if (it.toObject<Users>()!!.userType == "Child")  {
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
-                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
             }
         }
     }

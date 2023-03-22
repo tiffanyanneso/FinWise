@@ -377,14 +377,14 @@ class ParentSavingFragment : Fragment() {
 
     private fun buildDialog() {
 
-        var dialogBinding= DialogNewGoalWarningBinding.inflate(getLayoutInflater())
+        var dialogBinding= DialogNewGoalWarningBinding.inflate(layoutInflater)
         var dialog= Dialog(requireContext());
-        dialog.setContentView(dialogBinding.getRoot())
+        dialog.setContentView(dialogBinding.root)
         // Initialize dialog
 
         dialog.window!!.setLayout(900, 800)
 
-        dialogBinding.tvMessage.text= "You child has $ongoingGoals ongoing goals.\nAre you sure you want to start another one?"
+        dialogBinding.tvMessage.text= "Your child has $ongoingGoals ongoing goals.\nAre you sure you want to start another one?"
 
         dialogBinding.btnOk.setOnClickListener {
             var newGoal = Intent (requireContext(), NewGoal::class.java)
