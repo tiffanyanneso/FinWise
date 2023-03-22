@@ -255,7 +255,7 @@
 
                     <com.github.mikephil.charting.charts.PieChart
                         android:id="@+id/pc_cash_maya"
-                        android:layout_width="370dp"
+                        android:layout_width="350dp"
                         android:layout_height="350dp"
                         android:layout_marginTop="25dp"
                         android:layout_gravity="center_horizontal"/>

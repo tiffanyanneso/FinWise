@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -16,6 +17,8 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityReviewGoalBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartGoalCriteriaParentBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartGoalInfoBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -39,6 +42,7 @@ class ReviewGoalActivity : AppCompatActivity() {
         childID = bundle.getString("childID").toString()
 
         getGoalDetails()
+        loadBackButton()
         NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
 
         // for the dropdown
@@ -59,6 +63,18 @@ class ReviewGoalActivity : AppCompatActivity() {
             binding.imgInfo.setOnClickListener{
                 showGoalDialog()
             }
+
+        binding.btnCancel.setOnClickListener {
+            // Determine the source of the user
+            val source = intent.getStringExtra("source")
+
+            when (source) {
+                else -> {
+                    // If the source is unknown or not specified, just finish the current activity
+                    finish()
+                }
+            }
+        }
     }
 
     private fun getGoalDetails() {
@@ -155,5 +171,11 @@ class ReviewGoalActivity : AppCompatActivity() {
         }
 
         dialog.show()
+    }
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 }

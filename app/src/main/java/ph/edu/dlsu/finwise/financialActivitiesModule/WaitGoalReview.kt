@@ -6,6 +6,8 @@ import android.os.Bundle
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityWaitGoalReviewBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
@@ -21,6 +23,9 @@ class WaitGoalReview : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityWaitGoalReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+
 
         var bundle = intent.extras!!
         var financialGoalID = bundle.getString("financialGoalID").toString()

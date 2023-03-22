@@ -11,6 +11,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentSettingAgoalBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.UpdateGoalActivity
@@ -41,6 +44,7 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
 
         checkUser()
         setInfo()
+        setNavigationBar()
 
         binding.btnReviewGoal.setOnClickListener {
             var goToReviewGoal = Intent(this, ReviewGoalActivity::class.java)
@@ -63,13 +67,33 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
             startActivity(updatedGoal)
         }
 
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
 
-            val goToParentGoalActivity = Intent(applicationContext, ParentGoalActivity::class.java)
-            var bundle = Bundle()
+            // Determine the source of the user
+            val source = intent.getStringExtra("source")
+
+            // Create a bundle with any data you want to pass to the next activity
+            val bundle = Bundle()
             bundle.putString("childID", childID)
-            this.startActivity(goToParentGoalActivity)
+
+            // Depending on the source, navigate to the appropriate activity
+            when (source) {
+                "Child" -> {
+                    val intent = Intent(this, FinancialActivity::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                }
+                "Parent" -> {
+                    val intent = Intent(this, ParentGoalActivity::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                }
+                // Add additional cases for other sources
+                else -> {
+                    // If the source is unknown or not specified, just finish the current activity
+                    finish()
+                }
+            }
         }
     }
 
@@ -99,6 +123,25 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
             else if (it.toObject<Users>()!!.userType == "Child") {
                 binding.btnReviewGoal.visibility = View.GONE
                 binding.btnEditGoal.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun setNavigationBar() {
+        var navUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("Users").document(navUser).get().addOnSuccessListener {
+
+            val bottomNavigationViewChild = binding.bottomNav
+            val bottomNavigationViewParent = binding.bottomNavParent
+
+            if (it.toObject<Users>()!!.userType == "Parent") {
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+            } else if (it.toObject<Users>()!!.userType == "Child") {
+                bottomNavigationViewChild.visibility = View.VISIBLE
+                bottomNavigationViewParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
             }
         }
     }

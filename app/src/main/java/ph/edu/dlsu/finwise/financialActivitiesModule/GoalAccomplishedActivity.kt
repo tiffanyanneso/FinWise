@@ -14,6 +14,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalAccomplishedBinding
 import ph.edu.dlsu.finwise.databinding.DialogProceedNextActivityBinding
 import ph.edu.dlsu.finwise.databinding.DialogTakeAssessmentBinding
@@ -49,6 +51,10 @@ class GoalAccomplishedActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGoalAccomplishedBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+
+
         var bundle: Bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
