@@ -103,7 +103,10 @@ class SpendingActivity : AppCompatActivity() {
     private fun getInfo() {
         firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
             var budgetItem = it.toObject<BudgetItem>()
-            binding.tvBudgetItemName.text = budgetItem?.budgetItemName
+            if (budgetItem?.budgetItemName == "Others")
+                binding.tvBudgetItemName.text = budgetItem?.budgetItemNameOther
+            else
+                binding.tvBudgetItemName.text = budgetItem?.budgetItemName
             //binding.tvCategoryAmount.text = "₱ " + DecimalFormat("#,##0.00").format(budgetItem?.amount)
         }.continueWith { getAvailableBudget() }
     }

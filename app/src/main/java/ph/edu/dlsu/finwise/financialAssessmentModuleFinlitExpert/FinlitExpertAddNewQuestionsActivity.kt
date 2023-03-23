@@ -7,6 +7,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
@@ -27,6 +28,8 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private lateinit var assessmentID:String
+
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,8 +72,8 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
              "answerAccuracy" to 0.00F,
              "dateCreated" to Timestamp.now(),
              "dateModified" to Timestamp.now(),
-             "createdBy" to "fintlitexpertID",
-             "modifiedBy" to "finlitepxertID",
+             "createdBy" to currentUser,
+             "modifiedBy" to currentUser,
              "isUsed" to true,
             "nAssessments" to 0,
             "nAnsweredCorrectly" to 0

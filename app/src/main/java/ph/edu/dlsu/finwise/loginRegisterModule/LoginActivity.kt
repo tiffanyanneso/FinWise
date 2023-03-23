@@ -14,6 +14,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityLoginBinding
 import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
+import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 
@@ -73,7 +74,8 @@ class LoginActivity : AppCompatActivity() {
             goToParentLandingPage()
         } else if (user.userType == "Child") {
             goToChild(isFirstLogin)
-        }
+        } else if (user.userType == "Financial Expert")
+            goToFinLitExpert()
     }
 
     private fun goToChild(isFirstLogin: Boolean) {
@@ -93,6 +95,12 @@ class LoginActivity : AppCompatActivity() {
 
     private fun goToParentLandingPage() {
         val intent = Intent(this, ParentLandingPageActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun goToFinLitExpert() {
+        val intent = Intent (this, FinancialAssessmentFinlitExpertActivity::class.java)
         startActivity(intent)
         finish()
     }

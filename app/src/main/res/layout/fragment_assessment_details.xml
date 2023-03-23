@@ -161,38 +161,38 @@
                     android:textColor="@color/black"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="5dp">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:layout_marginBottom="5dp">-->
 
-                <ImageView
-                    android:src="@drawable/baseline_edit_calendar_24"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    app:tint="@color/dark_green"/>
+<!--                <ImageView-->
+<!--                    android:src="@drawable/baseline_edit_calendar_24"-->
+<!--                    android:layout_width="20dp"-->
+<!--                    android:layout_height="20dp"-->
+<!--                    app:tint="@color/dark_green"/>-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textStyle="bold"
-                    android:text="@string/date_modified"
-                    android:textSize="16sp"
-                    android:textColor="@color/black"
-                    android:paddingLeft="10dp"/>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:text="@string/date_modified"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:paddingLeft="10dp"/>-->
 
-                <TextView
-                    android:id="@+id/tv_date_modified"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="@string/date_modified"
-                    android:gravity="end"
-                    android:textSize="16sp"
-                    android:textColor="@color/black"/>
-            </LinearLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_date_modified"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="2"-->
+<!--                    android:text="@string/date_modified"-->
+<!--                    android:gravity="end"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:textColor="@color/black"/>-->
+<!--            </LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
