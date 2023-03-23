@@ -92,10 +92,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="16sp"
-                                android:text="Bad"
+                                android:text="Not Quite There"
                                 android:textColor="@color/red"
                                 android:textStyle="bold"
-                                android:layout_gravity="center"/>
+                                android:layout_gravity="center"
+                                android:textAlignment="center"/>
                         </LinearLayout>
 
                         <TextView
@@ -173,13 +174,16 @@
                                 <TextView
                                     android:id="@+id/text_overspending_progress"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                                     app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
                                     app:layout_constraintEnd_toEndOf="@+id/progress_bar"
                                     app:layout_constraintStart_toStartOf="@+id/progress_bar"
                                     app:layout_constraintTop_toTopOf="@+id/progress_bar"
-                                    tools:text="35%" />
+                                    tools:text="25.00%" />
 
                                 <TextView
                                     android:id="@+id/text_overspending_text"
@@ -192,8 +196,10 @@
                                     app:layout_constraintStart_toStartOf="@+id/progress_bar"
                                     app:layout_constraintTop_toTopOf="@+id/progress_bar"
                                     app:layout_constraintVertical_bias="0.75"
-                                    tools:text="Poor"
-                                    android:textSize="16dp"/>
+                                    tools:text="Not Quite\nThere"
+                                    android:layout_gravity="center"
+                                    android:textAlignment="center"
+                                    android:textSize="14dp"/>
                             </LinearLayout>
                         </androidx.constraintlayout.widget.ConstraintLayout>
                         <TextView
@@ -408,7 +414,8 @@
                     android:padding="20dp"
                     android:background="@drawable/button_border_white"
                     android:backgroundTint="@color/white"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="10dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -461,7 +468,10 @@
                                     app:layout_constraintEnd_toEndOf="@+id/progress_bar"
                                     app:layout_constraintStart_toStartOf="@+id/progress_bar"
                                     app:layout_constraintTop_toTopOf="@+id/progress_bar"
-                                    tools:text="35%" />
+                                    tools:text="35%"
+                                    android:layout_gravity="center"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"/>
 
                                 <TextView
                                     android:id="@+id/text_purchase_planning_text"
@@ -475,7 +485,9 @@
                                     app:layout_constraintTop_toTopOf="@+id/progress_bar"
                                     app:layout_constraintVertical_bias="0.75"
                                     tools:text="Poor"
-                                    android:textSize="16dp"/>
+                                    android:textSize="14dp"
+                                    android:layout_gravity="center"
+                                    android:textAlignment="center"/>
                             </LinearLayout>
                         </androidx.constraintlayout.widget.ConstraintLayout>
                         <TextView
