@@ -99,12 +99,12 @@
             android:layout_below="@+id/linear_layout_2">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/baseline_check_circle_24"
-                android:text="P"
+                android:layout_width="14dp"
+                android:layout_height="22dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
+                android:src="@drawable/baseline_check_circle_24"
+                android:text="P"
                 app:tint="@color/dark_green" />
 
             <TextView

@@ -5,8 +5,10 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -21,6 +23,7 @@ import ph.edu.dlsu.finwise.databinding.DialogBadgeBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
 import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
+import java.text.SimpleDateFormat
 
 class FinancialAssessmentCompleted : AppCompatActivity() {
 
@@ -50,7 +53,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         getBundles()
         binding.tvTitle.text = "You finished the $assessmentName quiz!"
 
-        updateAnswerCorrectness()
+        updateCollections()
 
     }
 
@@ -63,59 +66,74 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         nQuestions = answerHistoryArrayList.size
     }
 
-    private fun updateAnswerCorrectness() {
-        //TODO: gawing async tapos hiwalay yung mga code sa continue with
+    private fun updateCollections() {
         CoroutineScope(Dispatchers.Main).launch {
             for (answerHistory in answerHistoryArrayList) {
-                val document = firestore.collection("AssessmentQuestions")
-                    .document(answerHistory.questionID).get().await()
-                val assessmentQuestion = document.toObject<FinancialAssessmentQuestions>()
-                val updatedNAssessments = assessmentQuestion?.nAssessments!! + 1
-                var updatedNAnsweredCorrectly = assessmentQuestion.nAnsweredCorrectly
-                if (answerHistory.answeredCorrectly) {
-                    answeredCorrectly++
-                    updatedNAnsweredCorrectly = updatedNAnsweredCorrectly!! + 1
-                }
-
-                val assessments = firestore.collection("AssessmentQuestions")
-                    .document(answerHistory.questionID)
-                    .update("nAssessments", updatedNAssessments,
-                    "nAnsweredCorrectly", updatedNAnsweredCorrectly).await()
+                updateAnsweredCorrectly(answerHistory)
             }
             setScores()
             badges()
-            updateDB()
+            updateAssessmentAttempts()
+            initializeFinishButtonActivity()
         }
-
     }
 
-    private fun badges() {
+    private suspend fun updateAnsweredCorrectly(answerHistory: FinancialAssessmentQuiz.AnswerHistory) {
+        val document = getAssessmentQuestions(answerHistory)
+        val assessmentQuestion = document?.toObject<FinancialAssessmentQuestions>()
+        val updatedNAssessments = assessmentQuestion?.nAssessments!! + 1
+        var updatedNAnsweredCorrectly = assessmentQuestion.nAnsweredCorrectly
+        if (answerHistory.answeredCorrectly) {
+            answeredCorrectly++
+            updatedNAnsweredCorrectly = updatedNAnsweredCorrectly!! + 1
+        }
+
+        updateAssessmentQuestionsDB(answerHistory, updatedNAssessments, updatedNAnsweredCorrectly)
+    }
+
+    private suspend fun updateAssessmentQuestionsDB(
+        answerHistory: FinancialAssessmentQuiz.AnswerHistory,
+        updatedNAssessments: Int,
+        updatedNAnsweredCorrectly: Int?
+    ) {
+        firestore.collection("AssessmentQuestions")
+            .document(answerHistory.questionID)
+            .update("nAssessments", updatedNAssessments,
+                "nAnsweredCorrectly", updatedNAnsweredCorrectly).await()
+    }
+
+    private suspend fun getAssessmentQuestions(answerHistory: FinancialAssessmentQuiz.AnswerHistory)
+    : DocumentSnapshot? {
+        val db =  firestore.collection("AssessmentQuestions")
+            .document(answerHistory.questionID)
+
+        return db.get().await()
+    }
+
+    private suspend fun badges() {
         // Will wait until the firestore function is complete before moving on to the next line of
         // code
-        //TODO: check if pumapasok dito yung functions kasi parang inaasume na emptty yung query
-        // snapshot so check mga weherqequalto fields ddin at yung results
-        CoroutineScope(Dispatchers.Main).launch {
             if (percentage == 100.0) {
                 val querySnapshot = getBadge()
 
                 if (querySnapshot?.isEmpty!!) {
-                    setBadgeName()
                     addBadge()
                     showBadgeDialog()
                     // There is at least one document in the snapshot
                     //checkIfUpdateBadge(querySnapshot)
                 }
             }
-        }
     }
 
     private suspend fun addBadge() {
+        badgeName = "$assessmentName Genius"
         val badge = hashMapOf(
             "badgeName" to badgeName,
-            "badgeDescription" to "$assessmentName Assessment",
-            "badgeScore" to "$percentage",
+            "badgeType" to "$assessmentName Assessment",
+            "badgeDescription" to "Scored 100% of the $assessmentName Assessment",
+            "badgeScore" to percentage,
             "childID"   to childID,
-            "dateEarned" to Timestamp.now()
+            "dateEarned" to SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate())
         )
         firestore.collection("Badges").add(badge).await()
     }
@@ -126,45 +144,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         else if (percentage >= 75 && percentage < 100)
             badgeName = "$assessmentName Silver Scholar"
         else if (percentage == 100.0)*/
-        badgeName = "$assessmentName Genius"
     }
-
-    /*   private suspend fun checkIfUpdateBadge(querySnapshot: QuerySnapshot?) {
-          //TODO: Change badges to userbadges
-          val badge = querySnapshot?.documents?.get(0)?.toObject<Badges>()
-          if (percentage > badge?.badgeScore!!) {
-              if (isUpdateBadge()) {
-                  updateBadge(querySnapshot)
-                  showBadgeDialog()
-              }
-          }
-      }
-
-      private suspend fun updateBadge(querySnapshot: QuerySnapshot) {
-          //TODO: Change badges to userbadges
-          val updatedBadge = hashMapOf(
-              "badgeName" to badgeName,
-              "badgeScore" to "$percentage",
-              "dateEarned" to Timestamp.now()
-          )
-          val badgeID = querySnapshot.documents[0].id
-          firestore.collection("Badges").document(badgeID).update(updatedBadge as Map<String, Any>)
-              .await()
-      }
-
-     private fun isUpdateBadge(): Boolean {
-          //TODO: Hindi na kailangan ng mga silver scholar
-          var updateBadge = false
-          if (percentage >= 75 && percentage < 100) {
-              badgeName = "$assessmentName Silver Scholar"
-              updateBadge = true
-          }
-          else if (percentage == 100.0) {
-              badgeName = "$assessmentName Gold Genius"
-              updateBadge = true
-          }
-          return updateBadge
-      }*/
 
     private suspend fun getBadge(): QuerySnapshot? {
         val usersRef = firestore.collection("Badges")
@@ -195,19 +175,24 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
 
     private fun setViewBindings(dialogBinding: DialogBadgeBinding) {
         val imageView = dialogBinding.ivBadge
-        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
+        var badgeImage = R.drawable.excellent
+
+        when (assessmentName) {
+            "Budgeting" -> badgeImage = R.drawable.badge_brainy_budgeting
+            "Spending" -> badgeImage = R.drawable.badge_brainy_spending
+            "Saving" -> badgeImage = R.drawable.badge_brainy_saving
+            "Goal Setting" -> badgeImage = R.drawable.badge_brainy_goal_setting
+        }
+        val bitmap = BitmapFactory.decodeResource(resources, badgeImage)
+        imageView.setImageBitmap(bitmap)
+        Log.d("zxccc", "setViewBindings: "+badgeImage)
 
         val badgeTitle = "$badgeName Badge Unlocked!"
-
-        imageView.setImageBitmap(bitmap)
         dialogBinding.tvBadgeTitle.text = badgeTitle
-
         val badgeMessage = " You are a Great! That's fantastic! You have shown an excellent " +
                 "understanding of $assessmentName, and your hard work has paid off. Keep it up!"
         dialogBinding.tvMessage.text = badgeMessage
 
-//TODO: change bitmap
-        //TODO: Hindi na kailangan ng mga silver scholar
         /*if (percentage >= 50 && percentage < 75) {
             color = resources.getColor(R.color.bronze)
             badgeMessage = "Congratulations on earning the Bronze Brainiac badge! " +
@@ -230,24 +215,34 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
     }
 
 
-    private fun updateDB() {
+    private suspend fun updateAssessmentAttempts() {
         // compute for percentage
-        firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("nAnsweredCorrectly", answeredCorrectly)
-        firestore.collection("AssessmentAttempts").document(assessmentAttemptID).update("nQuestions", nQuestions)
-        firestore.collection("Assessments").document(assessmentID).get().addOnSuccessListener {
-            val assessment = it.toObject<FinancialAssessmentDetails>()
-            val updatedNTimesAssessmentTaken = assessment?.nTakes!! + 1
-            firestore.collection("Assessments").document(assessmentID).update("nTakes", updatedNTimesAssessmentTaken)
-            goToFinancialActivity()
-        }
-
+        firestore.collection("AssessmentAttempts").document(assessmentAttemptID)
+            .update("nAnsweredCorrectly", answeredCorrectly).await()
+        firestore.collection("AssessmentAttempts").document(assessmentAttemptID)
+            .update("nQuestions", nQuestions).await()
+        val assessmentsDocuments = getAssessmentDocument()
+        val updatedNTimesAssessmentTaken = getUpdatedNTimesAssessmentTaken(assessmentsDocuments)
+        firestore.collection("Assessments").document(assessmentID)
+            .update("nTakes", updatedNTimesAssessmentTaken).await()
         //binding.progressBar.max = nQuestions
     }
 
-    private fun goToFinancialActivity() {
+    private fun getUpdatedNTimesAssessmentTaken(assessmentsDocuments: DocumentSnapshot?): Int {
+        val assessment = assessmentsDocuments?.toObject<FinancialAssessmentDetails>()
+        return assessment?.nTakes!! + 1
+    }
+
+    private suspend fun getAssessmentDocument(): DocumentSnapshot? {
+        val db = firestore.collection("Assessments").document(assessmentID)
+
+        return db.get().await()
+    }
+
+    private fun initializeFinishButtonActivity() {
         binding.btnFinish.setOnClickListener {
             val assessmentTop  = Intent (this, FinancialActivity::class.java)
-            this.startActivity(assessmentTop)
+            startActivity(assessmentTop)
         }
     }
 
@@ -263,4 +258,38 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         repeat(decimals) { multiplier *= 10 }
         return kotlin.math.round(this * multiplier) / multiplier
     }
+
+    /*   private suspend fun checkIfUpdateBadge(querySnapshot: QuerySnapshot?) {
+        val badge = querySnapshot?.documents?.get(0)?.toObject<Badges>()
+        if (percentage > badge?.badgeScore!!) {
+            if (isUpdateBadge()) {
+                updateBadge(querySnapshot)
+                showBadgeDialog()
+            }
+        }
+    }
+
+    private suspend fun updateBadge(querySnapshot: QuerySnapshot) {
+        val updatedBadge = hashMapOf(
+            "badgeName" to badgeName,
+            "badgeScore" to "$percentage",
+            "dateEarned" to Timestamp.now()
+        )
+        val badgeID = querySnapshot.documents[0].id
+        firestore.collection("Badges").document(badgeID).update(updatedBadge as Map<String, Any>)
+            .await()
+    }
+
+   private fun isUpdateBadge(): Boolean {
+        var updateBadge = false
+        if (percentage >= 75 && percentage < 100) {
+            badgeName = "$assessmentName Silver Scholar"
+            updateBadge = true
+        }
+        else if (percentage == 100.0) {
+            badgeName = "$assessmentName Gold Genius"
+            updateBadge = true
+        }
+        return updateBadge
+    }*/
 }

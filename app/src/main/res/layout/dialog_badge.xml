@@ -22,10 +22,9 @@
 
     <ImageView
         android:id="@+id/iv_badge"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:src="@drawable/baseline_gpp_maybe_24"
-        app:tint="@color/red"
         app:layout_constraintTop_toBottomOf="@+id/tv_badge_title"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
@@ -60,7 +59,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="20dp"
         android:paddingTop="20dp">
 
         <androidx.appcompat.widget.AppCompatButton

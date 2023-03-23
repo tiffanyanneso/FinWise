@@ -1,25 +1,18 @@
 package ph.edu.dlsu.finwise.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemLeaderboardRankingBinding
 import ph.edu.dlsu.finwise.financialAssessmentModule.fragment.AssessmentLeaderboardFragment
 
-class LeaderboardRankingAdapter : RecyclerView.Adapter<LeaderboardRankingAdapter.LeaderboardRankingViewHolder> {
+class LeaderboardRankingAdapter(
+    childRanked: List<AssessmentLeaderboardFragment.FriendRanking>
+) : RecyclerView.Adapter<LeaderboardRankingAdapter.LeaderboardRankingViewHolder>() {
 
-    private var childRanked = listOf<AssessmentLeaderboardFragment.FriendRanking?>()
-    private var context: Context
+    private var childRanked = childRanked
 
-
-    constructor(context: Context, childRanked: List<AssessmentLeaderboardFragment.FriendRanking>) {
-        this.context = context
-        this.childRanked = childRanked
-    }
 
     override fun getItemCount(): Int {
         return childRanked.size

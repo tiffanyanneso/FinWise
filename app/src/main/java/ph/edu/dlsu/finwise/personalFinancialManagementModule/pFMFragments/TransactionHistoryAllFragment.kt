@@ -16,7 +16,6 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.TransactionsAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentTransactionHistoryAllBinding
-import ph.edu.dlsu.finwise.databinding.FragmentTransactionHistoryIncomeBinding
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.SimpleDateFormat
 import java.util.*
