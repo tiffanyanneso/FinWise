@@ -71,9 +71,10 @@ class GoalAccomplishedActivity : AppCompatActivity() {
                 .whereEqualTo("badgeType", "Financial Activity Badge").get().await()
             nFinishedActivities = badgesQuerySnapshot.size()
             if (badgesQuerySnapshot?.isEmpty!!) {
-                if (nFinishedActivities == 1)
-                addBadge()
-                showBadgeDialog()
+                if (nFinishedActivities == 1) {
+                    addBadge()
+                    showBadgeDialog()
+                }
             } else {
                 checkIfUpdateBadge(badgesQuerySnapshot)
             }
