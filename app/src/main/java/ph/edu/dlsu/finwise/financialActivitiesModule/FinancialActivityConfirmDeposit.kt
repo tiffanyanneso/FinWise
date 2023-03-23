@@ -125,9 +125,9 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         sendBundle.putString("budgetingActivityID", budgetingActivityID)
         sendBundle.putString("spendingActivityID", spendingActivityID)
         firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
-            var goal = it.toObject<FinancialGoals>()
+            val goal = it.toObject<FinancialGoals>()
             //target amount has already been met, update status of goal and fin activity to completed
-            if (goal?.targetAmount!! <= goal?.currentSavings!!) {
+            if (goal?.targetAmount!! <= goal.currentSavings!!) {
                 firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Completed")
                 firestore.collection("FinancialGoals").document(financialGoalID).update("dateCompleted", Timestamp.now())
                 firestore.collection("FinancialActivities").document(savingActivityID).update("status", "Completed")

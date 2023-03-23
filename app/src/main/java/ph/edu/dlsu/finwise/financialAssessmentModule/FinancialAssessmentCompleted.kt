@@ -138,13 +138,6 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         firestore.collection("Badges").add(badge).await()
     }
 
-    private fun setBadgeName() {
-        /*if (percentage >= 50 && percentage < 75)
-            badgeName = "$assessmentName Bronze Brainiac"
-        else if (percentage >= 75 && percentage < 100)
-            badgeName = "$assessmentName Silver Scholar"
-        else if (percentage == 100.0)*/
-    }
 
     private suspend fun getBadge(): QuerySnapshot? {
         val usersRef = firestore.collection("Badges")
