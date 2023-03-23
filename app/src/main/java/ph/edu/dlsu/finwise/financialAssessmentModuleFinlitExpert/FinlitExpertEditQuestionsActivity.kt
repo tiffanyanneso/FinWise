@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -31,6 +32,8 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
     private var choicesIDArrayList = ArrayList<String>()
     private var choicesArrayList = ArrayList<FinlitExpertAddNewQuestionsActivity.Choice>()
 
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +55,7 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
     private fun updateQuestion(){
         firestore.collection("AssessmentQuestions").document(questionID).update("question", binding.etQuestion.text.toString(),
         "difficulty", binding.dropdownDifficulty.text.toString(), "dateModified", Timestamp.now(),
-                            "modifiedBy", "currentFinLitExpert")
+                            "modifiedBy", currentUser)
 
         firestore.collection("AssessmentChoices").whereEqualTo("questionID", questionID).get().addOnSuccessListener { results ->
             for (choice in results)

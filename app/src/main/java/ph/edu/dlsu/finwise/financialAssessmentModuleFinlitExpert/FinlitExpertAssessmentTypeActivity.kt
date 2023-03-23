@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -28,6 +29,7 @@ class FinlitExpertAssessmentTypeActivity : AppCompatActivity () {
     private lateinit var assessmentType:String
     private lateinit var assessmentID:String
 
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,7 +104,7 @@ class FinlitExpertAssessmentTypeActivity : AppCompatActivity () {
                 "assessmentCategory" to assessmentCategory,
                 "assessmentType" to assessmentType,
                 "createdOn" to Timestamp.now(),
-                "createdBy" to "finlitexpertID",
+                "createdBy" to currentUser,
                 "nTakes" to 0
             )
             firestore.collection("Assessments").add(assessment).addOnSuccessListener {

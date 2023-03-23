@@ -43,6 +43,8 @@ class AssessmentDetailsFragment : Fragment() {
 
             binding.tvCategory.text = assessment?.assessmentCategory
             binding.tvDateCreated.text = SimpleDateFormat("MM/dd/yyyy").format(assessment?.createdOn?.toDate())
+            binding.tvDescription.text = assessment?.description
+            //binding.tvDateModified.text = SimpleDateFormat("MM/dd/yyyy").format(assessment?.mo?.toDate())
             binding.tvNumberOfTakes.text = assessment?.nTakes.toString()
             binding.tvNumberOfQuestions.text = assessment?.nQuestionsInAssessment.toString()
         }
