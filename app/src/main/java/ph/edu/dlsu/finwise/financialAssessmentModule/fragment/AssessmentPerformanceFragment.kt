@@ -1,7 +1,6 @@
 package ph.edu.dlsu.finwise.financialAssessmentModule.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -118,12 +117,8 @@ class AssessmentPerformanceFragment : Fragment() {
     }
 
     private fun getPercentage(assessment: FinancialAssessmentAttempts): Float {
-        val percentage = if (assessment.nAnsweredCorrectly!! > 0) {
-            (assessment.nAnsweredCorrectly!!.toFloat() / assessment.nQuestions!!.toFloat()) * 100
-        } else {
-            0.0
-        }
-        return percentage.toFloat()
+        return (assessment.nAnsweredCorrectly!!.toFloat() /
+                assessment.nQuestions!!.toFloat()) * 100
     }
 
     private fun setRanking() {
