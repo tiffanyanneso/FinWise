@@ -214,13 +214,13 @@ class ParentGoalSettingFragment : Fragment() {
                     showReviewButton()
                 } else if (percentage < 26 && percentage >= 16) {
                     binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
-                    binding.tvPerformanceStatus.text = "Not Quite There Yet"
+                    binding.tvPerformanceStatus.text = "Not Quite\nThere"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
                     showReviewButton()
                 } else if (percentage < 15) {
                     binding.imgFace.setImageResource(R.drawable.bad)
-                    binding.tvPerformanceStatus.text = "Needs Improvement"
+                    binding.tvPerformanceStatus.text = "Needs\nImprovement"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them improve their goal setting!"
                     showReviewButton()

@@ -297,13 +297,13 @@ class SavingFragment : Fragment() {
                     showReviewButton()
                 } else if (overall < 26 && overall >= 16) {
                     binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
-                    binding.tvPerformanceStatus.text = "Not Quite There Yet"
+                    binding.tvPerformanceStatus.text = "Not Quite\nThere"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
                     showReviewButton()
                 } else if (overall < 15) {
                     binding.imgFace.setImageResource(R.drawable.bad)
-                    binding.tvPerformanceStatus.text = "Needs Improvement"
+                    binding.tvPerformanceStatus.text = "Needs\nImprovement"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Uh oh! Your saving performance needs a lot of improvement.  Click review to learn how!"
                     showReviewButton()

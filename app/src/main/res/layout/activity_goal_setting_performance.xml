@@ -61,7 +61,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:background="@drawable/button_border_white"
@@ -93,7 +93,6 @@
                         android:textSize="16sp"
                         android:text="Excellent"
                         android:textColor="@color/dark_green"
-                        android:layout_marginTop="5dp"
                         android:textStyle="bold"
                         android:textAlignment="center"
                         android:layout_gravity="center"/>

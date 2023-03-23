@@ -95,7 +95,8 @@
                                 android:text="Good"
                                 android:textColor="@color/light_green"
                                 android:textStyle="bold"
-                                android:layout_gravity="center"/>
+                                android:layout_gravity="center"
+                                android:textAlignment="center"/>
                         </LinearLayout>
 
                         <TextView
@@ -179,7 +180,10 @@
                                             app:layout_constraintEnd_toEndOf="@+id/progress_bar"
                                             app:layout_constraintStart_toStartOf="@+id/progress_bar"
                                             app:layout_constraintTop_toTopOf="@+id/progress_bar"
-                                            tools:text="35%" />
+                                            tools:text="35%"
+                                            android:layout_gravity="center"
+                                            android:textAlignment="center"
+                                            android:textSize="20sp"/>
 
                                         <TextView
                                             android:id="@+id/text_view_budget_accuracy_performance_text"
@@ -193,7 +197,9 @@
                                             app:layout_constraintTop_toTopOf="@+id/progress_bar"
                                             app:layout_constraintVertical_bias="0.75"
                                             tools:text="Poor"
-                                            android:textSize="16dp"/>
+                                            android:layout_gravity="center"
+                                            android:textAlignment="center"
+                                            android:textSize="14dp"/>
                                     </LinearLayout>
                                 </androidx.constraintlayout.widget.ConstraintLayout>
                                     <TextView
@@ -277,7 +283,10 @@
                                     app:layout_constraintEnd_toEndOf="@+id/progress_bar_parental_involvement"
                                     app:layout_constraintStart_toStartOf="@+id/progress_bar_parental_involvement"
                                     app:layout_constraintTop_toTopOf="@+id/progress_bar_parental_involvement"
-                                    tools:text="35%" />
+                                    tools:text="35%"
+                                    android:layout_gravity="center"
+                                    android:textAlignment="center"
+                                    android:textSize="20sp"/>
 
                                 <TextView
                                     android:id="@+id/text_view_performance_text_parental_involvement"
@@ -291,7 +300,9 @@
                                     app:layout_constraintTop_toTopOf="@+id/progress_bar"
                                     app:layout_constraintVertical_bias="0.75"
                                     tools:text="Poor"
-                                    android:textSize="16dp"/>
+                                    android:layout_gravity="center"
+                                    android:textAlignment="center"
+                                    android:textSize="14sp"/>
                             </LinearLayout>
                         </androidx.constraintlayout.widget.ConstraintLayout>
                         <TextView

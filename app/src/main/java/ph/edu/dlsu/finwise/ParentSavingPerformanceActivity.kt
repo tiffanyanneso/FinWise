@@ -195,12 +195,12 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
                     binding.tvPerformanceText.text = "Your child is getting there! Click the tips button to learn how to help them get there!"
                 } else if (overall < 26 && overall >= 16) {
                     binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
-                    binding.tvPerformanceStatus.text = "Not Quite There Yet"
+                    binding.tvPerformanceStatus.text = "Not Quite\nThere"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
                 } else if (overall < 15) {
                     binding.imgFace.setImageResource(R.drawable.bad)
-                    binding.tvPerformanceStatus.text = "Needs Improvement"
+                    binding.tvPerformanceStatus.text = "Needs\nImprovement"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them improve their saving performance!"
                 }
@@ -271,13 +271,13 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
             var num = i + 1
 
             if (num == 1) {
-                binding.tvTopPerformingDuration.text = durationRatingArray[i].name.toString() + " Term"
+                binding.tvTopPerformingDuration.text = durationRatingArray[i].name.toString()
                 binding.tvTopPerformingRating.text = DecimalFormat("##0.00").format(durationRatingArray[i].score) + "%"
             } else if (num == 2) {
-                binding.tvDuration2nd.text = durationRatingArray[i].name.toString() + " Term"
+                binding.tvDuration2nd.text = durationRatingArray[i].name.toString()
                 binding.tvDuration2Rating.text = DecimalFormat("##0.00").format(durationRatingArray[i].score) + "%"
             } else if (num == 3) {
-                binding.tvDuration3rd.text = durationRatingArray[i].name.toString() + " Term"
+                binding.tvDuration3rd.text = durationRatingArray[i].name.toString()
                 binding.tvDuration3Rating.text = DecimalFormat("##0.00").format(durationRatingArray[i].score) + "%"
                 specificDuration = durationRatingArray[i].name.toString()
             }
@@ -412,7 +412,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         var dialogBinding= DialogParentSavingDurationTipsBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
 
-        if (specificDuration == "Short") {
+        if (specificDuration == "Short Term") {
             dialogBinding.tvTitle.text = "Short Term"
             dialogBinding.tvDefinition.text = "1. Can be achieved in a short amount of time and have \n" + "2. Duration: Less than 2 weeks"
             dialogBinding.tvExamples.text = "1. Saving for a Fried Chicken Sandwich\n" +
@@ -420,7 +420,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
                     "3. Saving for a Book"
             dialogBinding.tvTips.text = "1. Encourage your child to consistently set aside money.\n2. Remind them to take note of their target date as it is a short timeline.\n3. Set earning activities such as chores to help them out."
 
-        }  else if (specificDuration == "Medium") {
+        }  else if (specificDuration == "Medium Term") {
             dialogBinding.tvTitle.text = "Medium Term"
             dialogBinding.tvDefinition.text = "1. Takes a longer time to achieve and usually involves bigger target amounts \n" +
                     "2. Duration: 2 to 4 weeks"
@@ -429,7 +429,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Encourage them to set aside money consistently\n" +
                     "2. Set earning activities such as chores to help them out.\n" +
                     "3. Remind them to take note of their target date as it is a short timeline."
-        } else if (specificDuration == "Long") {
+        } else if (specificDuration == "Long Term") {
             dialogBinding.tvTitle.text = "Long Term"
             dialogBinding.tvDefinition.text = "1. Takes a long time to achieve and involves bigger target amounts \n" +
                     "2. Duration: Over a month"

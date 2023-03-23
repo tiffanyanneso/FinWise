@@ -249,13 +249,13 @@ class SpendingFragment : Fragment(){
             showReviewButton()
         } else if (overallSpending < 26 && overallSpending >= 16) {
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
-            binding.textStatus.text = "Not Quite There Yet"
+            binding.textStatus.text = "Not Quite\nThere"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
             showReviewButton()
         } else if (overallSpending < 15) {
             binding.imgFace.setImageResource(R.drawable.bad)
-            binding.textStatus.text = "Needs Improvement"
+            binding.textStatus.text = "Needs\nImprovement"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
             showReviewButton()
