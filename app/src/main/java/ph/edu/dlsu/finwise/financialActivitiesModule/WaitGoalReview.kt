@@ -24,7 +24,7 @@ class WaitGoalReview : AppCompatActivity() {
         binding = ActivityWaitGoalReviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
 
         var bundle = intent.extras!!

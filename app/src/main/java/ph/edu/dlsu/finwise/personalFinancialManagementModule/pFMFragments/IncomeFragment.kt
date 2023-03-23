@@ -193,7 +193,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         }
 
         if (user == "child" && total > 0) {
-            binding.tvSummary.text = "Good Job!You've earned ₱$totalText for this $dateRange! "
+            binding.tvSummary.text = "Good Job! You've earned ₱$totalText for this $dateRange! "
             binding.tvTips.text = "Go to the \"Financial Activities\" to develop your Financial Literacy using your money"
             loadChildFinancialActivitiesButton()
         } else if (user == "child" && total < 0) {
