@@ -116,15 +116,19 @@ class EditGoal : AppCompatActivity() {
 
     private fun deleteGoal() {
         //mark financial goal as deleted
-        firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Deleted")
-        //mark related activities as deleted
-        firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
-            for (activity in results )
-                firestore.collection("FinancialActivities").document(activity.id).update("status", "Deleted")
+        firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Deleted").addOnSuccessListener {
+            var goalList = Intent(this, FinancialActivity::class.java)
+            this.startActivity(goalList)
+            finish()
+            //mark related activities as deleted
+            firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
+                for (activity in results )
+                    firestore.collection("FinancialActivities").document(activity.id).update("status", "Deleted")
+            }
+
         }
-        var goalList = Intent(this, FinancialActivity::class.java)
-        this.startActivity(goalList)
-        finish()
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

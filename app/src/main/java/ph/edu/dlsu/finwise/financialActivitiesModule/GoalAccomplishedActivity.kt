@@ -237,7 +237,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun goToFinancialAssessmentActivity() {
-        firestore.collection("Assessments").whereEqualTo("assessmentType", "Pre-Activity").whereEqualTo("assessmentCategory", "Spending").get().addOnSuccessListener {
+        firestore.collection("Assessments").whereEqualTo("assessmentType", "Pre-Activity").whereEqualTo("assessmentCategory", "Budgeting").get().addOnSuccessListener {
             if (it.size()!= 0) {
                 val assessmentID = it.documents[0].id
                 firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->

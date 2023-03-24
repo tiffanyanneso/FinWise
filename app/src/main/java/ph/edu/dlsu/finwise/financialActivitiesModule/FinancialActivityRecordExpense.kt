@@ -3,6 +3,8 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -149,24 +151,25 @@ class FinancialActivityRecordExpense : AppCompatActivity() {
             amount = binding.etAmount.text.toString().toFloat()
         var paymentType = binding.dropPaymentType.text.toString()
 
-        //TODO: CHANGE TEXT COLOR FOR WARNING
         if (amount <= (cashBalance+mayaBalance)) {
             if (paymentType == "Cash") {
                 if (amount > cashBalance) {
-                    binding.containerAmount.helperText =
-                        "You do not have enough Cash savings to pay for the item. The remaining amount will be deducted from your Maya savings"
+                    binding.containerAmount.setHelperTextColor(ColorStateList.valueOf((ContextCompat.getColor(this, R.color.almost_there_yellow))))
+                    binding.containerAmount.helperText = "You do not have enough Cash savings to pay for the item. The remaining amount will be deducted from your Maya savings"
                 } else
                     binding.containerAmount.helperText = ""
 
             } else if (paymentType == "Maya") {
-                if (amount > mayaBalance)
-                    binding.containerAmount.helperText =
-                        "You do not have enough Maya savings to pay for the item. The remaining amount will be deducted from your Cash savings"
-                else
+                if (amount > mayaBalance) {
+                    binding.containerAmount.setHelperTextColor(ColorStateList.valueOf((ContextCompat.getColor(this, R.color.almost_there_yellow))))
+                    binding.containerAmount.helperText = "You do not have enough Maya savings to pay for the item. The remaining amount will be deducted from your Cash savings"
+                } else
                     binding.containerAmount.helperText = ""
             }
-        } else
+        } else {
+            binding.containerAmount.setHelperTextColor(ColorStateList.valueOf(Color.RED))
             binding.containerAmount.helperText = "You do not have enough savings to pay for the item"
+        }
     }
 
     private fun getBalances() {
