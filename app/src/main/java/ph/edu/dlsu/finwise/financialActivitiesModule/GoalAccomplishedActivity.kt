@@ -68,21 +68,14 @@ class GoalAccomplishedActivity : AppCompatActivity() {
     private fun badge() {
         CoroutineScope(Dispatchers.Main).launch {
             nFinishedActivities = getNFinishedActivities()
-            if (nFinishedActivities > 0) {
+            if (nFinishedActivities == 1 || nFinishedActivities == 10 || nFinishedActivities == 20 ||
+                nFinishedActivities == 50 || nFinishedActivities == 100) {
                 val badgesQuerySnapshot = firestore.collection("Badges")
                     .whereEqualTo("childID", currentUser)
                     .whereEqualTo("badgeType", "Financial Activity Badge")
                     .get().await()
-                if (badgesQuerySnapshot?.isEmpty!!) {
-                    if (nFinishedActivities == 1) {
-                        addBadge()
-                        showBadgeDialog()
-                    }
-                } else {
-                    checkIfAddBadge(badgesQuerySnapshot)
-                }
+                checkIfAddBadge(badgesQuerySnapshot)
             }
-
         }
     }
 
@@ -124,10 +117,8 @@ class GoalAccomplishedActivity : AppCompatActivity() {
         if (badges != null) {
             val highestBadgeScoreAchieved = getHighestBadgeScore(badges)
             if (nFinishedActivities > highestBadgeScoreAchieved!!) {
-                if (isUpdateBadge()) {
-                    addBadge()
-                    showBadgeDialog()
-                }
+                addBadge()
+                showBadgeDialog()
             }
         }
     }
@@ -140,17 +131,6 @@ class GoalAccomplishedActivity : AppCompatActivity() {
         }
         val highestBadgeAchieved = badgesArrayList.maxByOrNull { it.badgeScore!! }
         return highestBadgeAchieved?.badgeScore
-    }
-
-    private fun isUpdateBadge(): Boolean {
-        var updateBadge = false
-        when (nFinishedActivities) {
-            10 -> updateBadge = true
-            20 -> updateBadge = true
-            50 -> updateBadge = true
-            100 -> updateBadge = true
-        }
-        return updateBadge
     }
 
     private fun showBadgeDialog() {
