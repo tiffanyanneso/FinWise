@@ -53,26 +53,14 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             this.startActivity(assessmentType)
         }
 
-        // Hides actionbar,
         // and initializes the navbar
-        supportActionBar?.hide()
-        NavbarFinlitExpert(
-            findViewById(R.id.bottom_nav_finlit_expert),
-            this,
-            R.id.nav_finlit_assessment
-        )
+        NavbarFinlitExpert(findViewById(R.id.bottom_nav_finlit_expert), this, R.id.nav_finlit_assessment)
     }
 
     private fun addQuestions() {
         goalSettingPrelimQuestions()
         goalSettingPreActivityQuestions()
         goalSettingPostActivityQuestions()
-        typeOfGoalsPreliminaryQuestions()
-        typeOfGoalsPreActivityQuestions()
-        typeOfGoalsPostActivityQuestions()
-        smartGoalsPreliminaryQuestions()
-        smartGoalsPreActivityQuestions()
-        smartGoalsPostActivityQuestions()
         conceptOfBudgetingPreliminaryQuestions()
         conceptOfBudgetingPreActivityQuestions()
         conceptOfBudgetingPostActivityQuestions()
@@ -147,113 +135,8 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         }
     }
 
-    private fun typeOfGoalsPreliminaryQuestions() {
-        var assessment = hashMapOf(
-            "assessmentCategory" to "Type of Goals",
-            "assessmentType" to "Preliminary",
-            "description" to "Preliminary assessment for type of goals",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            typeOfGoalsPreliminaryEasy(assessmentID)
-            typeOfGoalsPreliminaryMedium(assessmentID)
-            typeOfGoalsPreliminaryHard(assessmentID)
-        }
-    }
 
-    private fun typeOfGoalsPreActivityQuestions() {
-        var assessment = hashMapOf(
-            "assessmentCategory" to "Type of Goals",
-            "assessmentType" to "Pre-Activity",
-            "description" to "Pre-Activity assessment for type of goals",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            typeOfGoalsPreActivityEasy(assessmentID)
-            typeOfGoalsPreActivityMedium(assessmentID)
-            typeOfGoalsPreActivityHard(assessmentID)
-        }
-    }
 
-    private fun typeOfGoalsPostActivityQuestions() {
-        var assessment = hashMapOf(
-            "assessmentCategory" to "Type of Goals",
-            "assessmentType" to "Post-Activity",
-            "description" to "Post-Activity assessment for type of goals",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            typeOfGoalsPostActivityEasy(assessmentID)
-            typeOfGoalsPostActivityMedium(assessmentID)
-            typeOfGoalsPostActivityHard(assessmentID)
-        }
-    }
-
-    private fun smartGoalsPreliminaryQuestions() {
-        var assessment = hashMapOf(
-            "assessmentCategory" to "SMART Goals",
-            "assessmentType" to "Preliminary",
-            "description" to "Preliminary assessment for SMART goals",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            smartGoalsPreliminaryEasy(assessmentID)
-            smartGoalsPreliminaryMedium(assessmentID)
-            smartGoalsPreliminaryHard(assessmentID)
-        }
-    }
-
-    private fun smartGoalsPreActivityQuestions() {
-        var assessment = hashMapOf(
-            "assessmentCategory" to "Type of Goals",
-            "assessmentType" to "Pre-Activity",
-            "description" to "Pre-Activity assessment for SMART goals",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            smartGoalsPreActivityEasy(assessmentID)
-            smartGoalsPreActivityMedium(assessmentID)
-            smartGoalsPreActivityHard(assessmentID)
-        }
-    }
-
-    private fun smartGoalsPostActivityQuestions() {
-        var assessment = hashMapOf(
-            "assessmentCategory" to "SMART Goals",
-            "assessmentType" to "Post-Activity",
-            "description" to "Post-Activity assessment for SMART goals",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            smartGoalsPostActivityEasy(assessmentID)
-            smartGoalsPostActivityMedium(assessmentID)
-            smartGoalsPostActivityHard(assessmentID)
-        }
-    }
 
     private fun conceptOfBudgetingPreliminaryQuestions(){
         var assessment = hashMapOf(
@@ -619,6 +502,270 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What is a short-term financial goal?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A goal you want to achieve in 10 years",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A goal you want to achieve in the next few days or weeks",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A goal you want to achieve in 7 months",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "A short-term financial goal is…",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A goal you want to achieve in 10 years",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "It usually takes years to achieve",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "It takes a short amount of time to achieve, a few days or weeks",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "SMART goal stands for…",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Specific, Measurable, Achievable, Relevant, Time-bound",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Specific, Meaningful, Achievable, Relevant, Time-bound",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Sporty, Measurable, Achievable, Relevant, Time-bound",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What is a SMART goal?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A very clear and reasonable goal",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A dumb goal",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A goal that is not attainable",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "A SMART goal is",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Clear, realistic, and focused",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Impossible to achieve",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Nice to look at",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Why should we set SMART goals?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "It makes achieving goals more difficult",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "It increases your chances of achieving the goal",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "It makes your goals sound better",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Why should goals be SMART?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "So that your parents will be proud",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "So that you sound smart",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "So that they are clear and would motivate you",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Why should goals be SMART?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "So that your parents will be proud",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "So that you sound smart",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "So that they are clear and would motivate you",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
     }
 
     private fun addGoalSettingPreActivityEasy(assessmentID: String) {
@@ -703,6 +850,264 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
                 firestore.collection("AssessmentChoices").add(choice)
             }
         }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Short-term financial goals are...",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Goals that have smaller target amounts and take days or weeks to achieve",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Goals that take forever to achieve",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Goals that have bigger target amounts and take years to achieve",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to " Which of these goals is a SMART goal?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "I will save P200 to buy a gift",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "I will save 20 pesos each week",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "I will save P200 in 3 months to buy a gift for Lolo by saving 20 pesos each week",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Is the goal “I want to save money” a SMART one?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes, it’s a perfect goal",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No, because it’s not specific and is not time-bound",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "How can you make your goals specific?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "By answering the questions: Who, What, Where, When, & Why",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "By not including important details",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "By making your goal very long",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Jen is having trouble making a specific goal and asks you for help. Which of the following is a specific goal?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving money",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving money for a Jollibee Yumburger",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving money for a snack",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Manny said that he wants to save money. Is this a specific goal?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes, Manny made a great goal",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No, Manny does not mention what he wants to save for",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Denny wants to save money for a birthday gift for a birthday next month. What is missing from his goal?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A target amount so that the goal can be measured",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A gift so that he does not need to buy one",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A target date because he did not indicate one",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "How can you make your goals achievable?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "By reviewing your target amount and date and reflecting on whether you can really achieve the goal",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "By making sure its impossible to achieve",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "By competing with your friend and making your target amount very high",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "By setting your target date too soon",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
     }
 
     private fun addGoalSettingPostActivityEasy(assessmentID: String) {
@@ -738,7 +1143,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
                 "isCorrect" to false
             )
             firestore.collection("AssessmentChoices").add(choice)
-
+        }
 
             question = hashMapOf(
                 "assessmentID" to assessmentID,
@@ -959,10 +1364,593 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
                     "isCorrect" to false
                 )
                 firestore.collection("AssessmentChoices").add(choice)
-
             }
+            question = hashMapOf(
+                "assessmentID" to assessmentID,
+                "question" to "What are some examples of short-term financial goals?",
+                "difficulty" to "Easy",
+                "dateCreated" to Timestamp.now(),
+                "createdBy" to currentUser,
+                "isUsed" to true,
+                "nAssessments" to 0,
+                "nAnsweredCorrectly" to 0
+            )
+            firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+                var questionID = it.id
+                var choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a new car",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Starting a business",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for college",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a sandwich",
+                    "isCorrect" to true
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+            }
+            question = hashMapOf(
+                "assessmentID" to assessmentID,
+                "question" to "An example of short-term financial goal is",
+                "difficulty" to "Easy",
+                "dateCreated" to Timestamp.now(),
+                "createdBy" to currentUser,
+                "isUsed" to true,
+                "nAssessments" to 0,
+                "nAnsweredCorrectly" to 0
+            )
+            firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+                var questionID = it.id
+                var choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a house",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for fried chicken",
+                    "isCorrect" to true
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for college",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a bike",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+            }
+            question = hashMapOf(
+                "assessmentID" to assessmentID,
+                "question" to "Which of the following is NOT a short-term financial goal?",
+                "difficulty" to "Easy",
+                "dateCreated" to Timestamp.now(),
+                "createdBy" to currentUser,
+                "isUsed" to true,
+                "nAssessments" to 0,
+                "nAnsweredCorrectly" to 0
+            )
+            firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+                var questionID = it.id
+                var choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a corndog",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for fried chicken",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a phone",
+                    "isCorrect" to true
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a corndog",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+            }
+            question = hashMapOf(
+                "assessmentID" to assessmentID,
+                "question" to "Karly wants to buy a small toy which costs P100. What type of goal should they set?",
+                "difficulty" to "Easy",
+                "dateCreated" to Timestamp.now(),
+                "createdBy" to currentUser,
+                "isUsed" to true,
+                "nAssessments" to 0,
+                "nAnsweredCorrectly" to 0
+            )
+            firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+                var questionID = it.id
+                var choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "A short-term goal because it is a small amount",
+                    "isCorrect" to true
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "A short-term goal because Karly is short",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "A long-term goal because it is a huge amount",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+            }
+            question = hashMapOf(
+                "assessmentID" to assessmentID,
+                "question" to "Is saving for college a short-term financial goal?",
+                "difficulty" to "Easy",
+                "dateCreated" to Timestamp.now(),
+                "createdBy" to currentUser,
+                "isUsed" to true,
+                "nAssessments" to 0,
+                "nAnsweredCorrectly" to 0
+            )
+            firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+                var questionID = it.id
+                var choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Yes",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "No",
+                    "isCorrect" to true
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+            }
+            question = hashMapOf(
+                "assessmentID" to assessmentID,
+                "question" to "Miguel set a financial goal so that he could save for a burger. Can this be a short-term financial goal?",
+                "difficulty" to "Easy",
+                "dateCreated" to Timestamp.now(),
+                "createdBy" to currentUser,
+                "isUsed" to true,
+                "nAssessments" to 0,
+                "nAnsweredCorrectly" to 0
+            )
+            firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+                var questionID = it.id
+                var choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Yes",
+                    "isCorrect" to true
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "No",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+            }
+            question = hashMapOf(
+                "assessmentID" to assessmentID,
+                "question" to "Your friend Karl is not sure about what type of goal to set for a P200 book that he wants to buy. What should you advise him to do?",
+                "difficulty" to "Easy",
+                "dateCreated" to Timestamp.now(),
+                "createdBy" to currentUser,
+                "isUsed" to true,
+                "nAssessments" to 0,
+                "nAnsweredCorrectly" to 0
+            )
+            firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+                var questionID = it.id
+                var choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Set a short-term goal",
+                    "isCorrect" to true
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Set a medium-term goal",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Buy the book now",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Ask his mom to buy the book",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+            }
+            question = hashMapOf(
+                "assessmentID" to assessmentID,
+                "question" to "What is NOT an example of a short-term goal?",
+                "difficulty" to "Easy",
+                "dateCreated" to Timestamp.now(),
+                "createdBy" to currentUser,
+                "isUsed" to true,
+                "nAssessments" to 0,
+                "nAnsweredCorrectly" to 0
+            )
+            firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+                var questionID = it.id
+                var choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a book",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a snack",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for retirement",
+                    "isCorrect" to true
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a toy",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+            }
+            question = hashMapOf(
+                "assessmentID" to assessmentID,
+                "question" to "What is NOT an example of a short-term goal?",
+                "difficulty" to "Easy",
+                "dateCreated" to Timestamp.now(),
+                "createdBy" to currentUser,
+                "isUsed" to true,
+                "nAssessments" to 0,
+                "nAnsweredCorrectly" to 0
+            )
+            firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+                var questionID = it.id
+                var choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a guitar",
+                    "isCorrect" to true
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a snack",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for burger",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a toy",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+            }
+            question = hashMapOf(
+                "assessmentID" to assessmentID,
+                "question" to "What is NOT an example of a short-term goal?",
+                "difficulty" to "Easy",
+                "dateCreated" to Timestamp.now(),
+                "createdBy" to currentUser,
+                "isUsed" to true,
+                "nAssessments" to 0,
+                "nAnsweredCorrectly" to 0
+            )
+            firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+                var questionID = it.id
+                var choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for an out-of-town trip",
+                    "isCorrect" to true
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a snack",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for burger",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+
+                choice = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to "Saving for a toy",
+                    "isCorrect" to false
+                )
+                firestore.collection("AssessmentChoices").add(choice)
+            }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Miguel wants to buy a chicken sandwich worth P250 but he only has P10. Is it realistic for him to have saved enough money to buy the sandwich tomorrow?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No, he does not have enough time",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "An item you want to buy",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A way to earn more money",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
         }
-    }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Tracy currently receives an allowance of P500 a week. Will she be able to achieve a goal with a target amount of P100,000?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No, it is not achievable",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes, it is achievable",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "How can you make your goals relevant?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "By thinking about what is important to you",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "By thinking about what is important to your friend",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "By thinking about what is important to your mom",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Penny wants to treat herself to an afternoon snack. The only option she has that is near her is fried chicken which she hates. Should she still set a goal for the chicken?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No, because fried chicken is unhealthy",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No, because it is not relevant to her",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes, because she should just keep setting goals",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "How can you make your goals time-bound?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "By taking your time to accomplish your goal",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "By not setting a target date",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "By setting a target date",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Ben wants to save money for a small toy but he has not set a target date. Is this a SMART goal?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No because it is not time bound",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes because he does not need a target date to be time bound",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Manny set a financial goal of P100 to save money for a toy he wants to buy. However, he did not set a target date. Is this a SMART goal?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        }
 
     private fun addGoalSettingPreliminaryMedium(assessmentID: String) {
         var question = hashMapOf(
@@ -1035,6 +2023,469 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             choice = hashMapOf(
                 "questionID" to questionID,
                 "choice" to "It is not important to set if you have money",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What is a medium-term goal?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A medium-term goal is something that is impossible to achieve",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A medium-term goal is something that you don't really care about",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A medium-term goal is a goal that you want to achieve in the near future, like within a few months or less than a year",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A medium-term goal is something that you want to achieve when you are already in your 40s",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "An example of a medium-term financial goal is",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving up for a big trip around the world",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "To save up for a new toy or game that you really want within the next few months",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "To buy a fancy car when you turn 18",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "To save up for a college education",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Which of the following is a medium-term goal?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for college",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for travel",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for clothes",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "To save up for a college education",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Mark wants to save money for school supplies for the upcoming school year. What should he do?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Set a short-term goal since it’ll be cheap",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Set a medium-term goal since it’ll take a bit longer to save for",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Buy all the things now cause he’s rich",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Borrow money from friends so he can buy the school supplies right away",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Karly wants to buy a large toy which costs P1500. What type of goal should they set?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A short-term goal",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A medium-term goal",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A lonmg-term goal",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Do nothing",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Jessie plans to save up for a ticket to a movie theater. His target date is 2 weeks away. Is this a medium-term goal?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A No",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "All of these are benefits of setting SMART goals EXCEPT",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Provides clarity and focus by defining what, how, and when to achieve",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Gives a clear target to work towards",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "It is not achievable",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Helps you prioritize your time and resources by focusing on what’s important",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What does the S in SMART Goals stand for?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Specific - a goal must be focused",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Simple - a goal must be easy",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Sensible - a goal must be reasonable",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Sample - a goat must be typical",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What does the M in SMART Goals stand for?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Measurable- a goal must have an amount for progress tracking",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Memorable - a goal must be easily remembered",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Minimum- a goal must be very easy to accomplish",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Mental - a goal must be hard to understand",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What does the A in SMART Goals stand for?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Achievable- a goal must be achievable",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Arrogant - a goal must be arrogant",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Aimless - a goal must not have direction",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Address - a goal must have address",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What does the R in SMART Goals stand for?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Range",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Realistic",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Redirection",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Revenge",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What does the T in SMART Goals stand for?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Tall",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Time-Bound",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Tenacious",
                 "isCorrect" to false
             )
             firestore.collection("AssessmentChoices").add(choice)
@@ -1242,6 +2693,326 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "An example of a medium-term financial goal is",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving up for a big trip around the world",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "To save up for a new toy or game that you really want within the next few months",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "To buy a fancy car when you turn 18",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "To save up for a college education",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Which of the following is a medium-term goal?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for college",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for travel",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for clothes",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "To save up for a college education",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Mark wants to save money for school supplies for the upcoming school year. What should he do?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Set a short-term goal since it’ll be cheap",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Set a medium-term goal since it’ll take a bit longer to save for",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Buy all the things now cause he’s rich",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Borrow money from friends so he can buy the school supplies right away",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Karly wants to buy a large toy which costs P1500. What type of goal should they set?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A short-term goal",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A medium-term goal",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A lonmg-term goal",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Do nothing",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Jessie plans to save up for a ticket to a movie theater. His target date is 2 weeks away. Is this a medium-term goal?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A No",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Josh earns P500 from his weekly allowance. Is it realistic for him to buy a toy worth P2,000 next week?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What part of SMART is missing from this goal? I will save until next week for a P1,000 shirt I don’t like.",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Measurable, no target amount",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Time-bound, no duration",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Relevant, not important to you",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Achievable, too difficult",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Wesley will be saving his money to buy a video game within six months. Has he set a good time-bound goal?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What part of SMART is missing from this goal? I will save for a P3,000 Buffet meal.",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Measurable, no target amount",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Time-bound, no duration",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Achievable, too difficult",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Specific, no details",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
     }
 
     private fun addGoalSettingPostActivityMedium(assessmentID: String) {
@@ -1358,7 +3129,286 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "A medium-term goal is",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Something you want to achieve in the near future, but not right away",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
 
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Something you don't really care about, but you have to do anyway",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Something you achieve in more than 10 years",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Something you achieve in one day or less",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What are some examples of medium-term financial goals?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for a new car",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for college",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for school supplies",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Starting a business",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Is saving for school supplies a medium-term financial goal?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Which of the following is NOT a medium-term financial goal?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for a new car",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for clothes",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for school supplies",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for toys",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Josh earns P500 from his weekly allowance. Is it realistic for him to buy a toy worth P2,000 next week?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What part of SMART is missing from this goal? I will save until next week for a P1,000 shirt I don’t like.",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Measurable, no target amount",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Time-bound, no duration",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Relevant, not important to you",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Achievable, too difficult",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Wesley will be saving his money to buy a video game within six months. Has he set a good time-bound goal?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What part of SMART is missing from this goal? I will save for a P3,000 Buffet meal.",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Measurable, no target amount",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Time-bound, no duration",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Achievable, too difficult",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Specific, no details",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
     }
 
     private fun addGoalSettingPreliminaryHard(assessmentID: String) {
@@ -1402,9 +3452,506 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "If you want to save for a daytrip to Tagaytay worth P10,000, is this considered a “Specific” SMART goal?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes, the goal is detailed",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No, the goal is not detailed enough",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
     }
 
     private fun addGoalSettingPreActivityHard(assessmentID: String) {
+      var  question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What is a long-term goal?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "A goal that requires saving money over a longer period of time",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Something that is impossible to achieve",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Something you can achieve in a day",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Something that you can achieve in 2 weeks",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "A long-term goal is",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Something you don't really care about, but you have to do it anyway",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Something that is impossible to achieve",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Something you can achieve in a day",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Something that takes a long time to save up for",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What are some examples of long-term financial goals?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for a new toy or game",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for a burger",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for an instrument",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for a fruit",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "An example of long-term financial goal is",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for a new toy or game",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for a burger",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving money for a future trip with family",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for a fruit",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Is saving money to buy a notebook a long-term financial goal?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving money for a future trip with family",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for a fruit",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Which of the following is NOT a long-term financial goal?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving money to buy a nice toy",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for a burger",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving money to buy uniforms",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "All of the above",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Which of the following is a long-term goal?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for a field trip",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving for a burger",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving money to buy uniforms",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Saving to buy candy",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What part of SMART is missing from this goal? I will save P5,000 in 1 month to buy gifts.",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Measurable, no target amount",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Time bound, no duration",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Achievable, to difficult",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Specific, not enough details like whom the gift is for",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "How can you check if your goal is achievable?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Ask your parents",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Ask you friend",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Do not check",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Reflect on your current situation",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "If you want to save for groceries, is this considered a “Measurable” SMART goal?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No, there is no target amount",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What part of SMART is missing from this goal? I will save for 2 months to treat my mom for her birthday.",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Measurable, no target amount",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Time-bound, no duration",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Achievable, too difficult",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Relevant, not important to you",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What part of SMART is missing from this goal? I will save until next week for a P5,000 toy my friend is telling me to buy.",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Measurable, no target amount",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Time-bound, no duration",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Achievable, too difficult",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Relevant, not important to you",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
     }
 
     private fun addGoalSettingPostActivityHard(assessmentID: String) {
@@ -1768,1341 +4315,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
-    }
-
-    private fun typeOfGoalsPreliminaryEasy(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What is a short-term financial goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A goal you want to achieve in 10 years",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A goal you want to achieve in the next few days or weeks",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A goal you want to achieve in 7 months",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
         question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "A short-term financial goal is…",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A goal you want to achieve in 10 years",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "It usually takes years to achieve",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "It takes a short amount of time to achieve, a few days or weeks",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-    private fun typeOfGoalsPreActivityEasy(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Short-term financial goals are...",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Goals that have smaller target amounts and take days or weeks to achieve",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Goals that take forever to achieve",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Goals that have bigger target amounts and take years to achieve",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-    private fun typeOfGoalsPostActivityEasy(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What are some examples of short-term financial goals?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a new car",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Starting a business",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for college",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a sandwich",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "An example of short-term financial goal is",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a house",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for fried chicken",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for college",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a bike",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Which of the following is NOT a short-term financial goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a corndog",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for fried chicken",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a phone",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a corndog",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Karly wants to buy a small toy which costs P100. What type of goal should they set?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A short-term goal because it is a small amount",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A short-term goal because Karly is short",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A long-term goal because it is a huge amount",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Is saving for college a short-term financial goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Miguel set a financial goal so that he could save for a burger. Can this be a short-term financial goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Your friend Karl is not sure about what type of goal to set for a P200 book that he wants to buy. What should you advise him to do?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Set a short-term goal",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Set a medium-term goal",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Buy the book now",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Ask his mom to buy the book",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What is NOT an example of a short-term goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a book",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a snack",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for retirement",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a toy",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What is NOT an example of a short-term goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a guitar",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a snack",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for burger",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a toy",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What is NOT an example of a short-term goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for an out-of-town trip",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a snack",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for burger",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a toy",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-    private fun typeOfGoalsPreliminaryMedium(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What is a medium-term goal?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A medium-term goal is something that is impossible to achieve",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A medium-term goal is something that you don't really care about",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A medium-term goal is a goal that you want to achieve in the near future, like within a few months or less than a year",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A medium-term goal is something that you want to achieve when you are already in your 40s",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "An example of a medium-term financial goal is",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving up for a big trip around the world",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "To save up for a new toy or game that you really want within the next few months",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "To buy a fancy car when you turn 18",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "To save up for a college education",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Which of the following is a medium-term goal?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for college",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for travel",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for clothes",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "To save up for a college education",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Mark wants to save money for school supplies for the upcoming school year. What should he do?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Set a short-term goal since it’ll be cheap",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Set a medium-term goal since it’ll take a bit longer to save for",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Buy all the things now cause he’s rich",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Borrow money from friends so he can buy the school supplies right away",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Karly wants to buy a large toy which costs P1500. What type of goal should they set?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A short-term goal",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A medium-term goal",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A lonmg-term goal",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Do nothing",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Jessie plans to save up for a ticket to a movie theater. His target date is 2 weeks away. Is this a medium-term goal?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A No",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-    private fun typeOfGoalsPreActivityMedium(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "An example of a medium-term financial goal is",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving up for a big trip around the world",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "To save up for a new toy or game that you really want within the next few months",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "To buy a fancy car when you turn 18",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "To save up for a college education",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Which of the following is a medium-term goal?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for college",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for travel",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for clothes",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "To save up for a college education",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Mark wants to save money for school supplies for the upcoming school year. What should he do?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Set a short-term goal since it’ll be cheap",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Set a medium-term goal since it’ll take a bit longer to save for",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Buy all the things now cause he’s rich",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Borrow money from friends so he can buy the school supplies right away",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Karly wants to buy a large toy which costs P1500. What type of goal should they set?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A short-term goal",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A medium-term goal",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A lonmg-term goal",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Do nothing",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Jessie plans to save up for a ticket to a movie theater. His target date is 2 weeks away. Is this a medium-term goal?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A No",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-    private fun typeOfGoalsPostActivityMedium(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "A medium-term goal is",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something you want to achieve in the near future, but not right away",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something you don't really care about, but you have to do anyway",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something you achieve in more than 10 years",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something you achieve in one day or less",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What are some examples of medium-term financial goals?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a new car",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for college",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for school supplies",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Starting a business",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Is saving for school supplies a medium-term financial goal?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Which of the following is NOT a medium-term financial goal?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a new car",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for clothes",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for school supplies",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for toys",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-    private fun typeOfGoalsPreliminaryHard(assessmentID: String) {
-
-    }
-
-    private fun typeOfGoalsPreActivityHard(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What is a long-term goal?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A goal that requires saving money over a longer period of time",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something that is impossible to achieve",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something you can achieve in a day",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something that you can achieve in 2 weeks",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "A long-term goal is",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something you don't really care about, but you have to do it anyway",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something that is impossible to achieve",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something you can achieve in a day",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something that takes a long time to save up for",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What are some examples of long-term financial goals?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a new toy or game",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a burger",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for an instrument",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a fruit",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "An example of long-term financial goal is",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a new toy or game",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a burger",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving money for a future trip with family",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a fruit",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Is saving money to buy a notebook a long-term financial goal?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving money for a future trip with family",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a fruit",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Which of the following is NOT a long-term financial goal?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving money to buy a nice toy",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a burger",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving money to buy uniforms",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "All of the above",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Which of the following is a long-term goal?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a field trip",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving for a burger",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving money to buy uniforms",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving to buy candy",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-    private fun typeOfGoalsPostActivityHard(assessmentID: String) {
-        var question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "If I want to save for a new guitar, I should set a:",
             "difficulty" to "Hard",
@@ -3215,1435 +4428,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
-    }
-
-    private fun smartGoalsPreliminaryEasy(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "SMART goal stands for…",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Specific, Measurable, Achievable, Relevant, Time-bound",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Specific, Meaningful, Achievable, Relevant, Time-bound",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Sporty, Measurable, Achievable, Relevant, Time-bound",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
         question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What is a SMART goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A very clear and reasonable goal",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A dumb goal",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A goal that is not attainable",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "A SMART goal is",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Clear, realistic, and focused",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Impossible to achieve",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Nice to look at",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Why should we set SMART goals?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "It makes achieving goals more difficult",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "It increases your chances of achieving the goal",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "It makes your goals sound better",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Why should goals be SMART?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "So that your parents will be proud",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "So that you sound smart",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "So that they are clear and would motivate you",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Why should goals be SMART?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "So that your parents will be proud",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "So that you sound smart",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "So that they are clear and would motivate you",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-    private fun smartGoalsPreActivityEasy(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to " Which of these goals is a SMART goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "I will save P200 to buy a gift",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "I will save 20 pesos each week",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "I will save P200 in 3 months to buy a gift for Lolo by saving 20 pesos each week",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Is the goal “I want to save money” a SMART one?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes, it’s a perfect goal",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No, because it’s not specific and is not time-bound",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "How can you make your goals specific?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "By answering the questions: Who, What, Where, When, & Why",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "By not including important details",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "By making your goal very long",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Jen is having trouble making a specific goal and asks you for help. Which of the following is a specific goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving money",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving money for a Jollibee Yumburger",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Saving money for a snack",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Manny said that he wants to save money. Is this a specific goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes, Manny made a great goal",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No, Manny does not mention what he wants to save for",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Denny wants to save money for a birthday gift for a birthday next month. What is missing from his goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A target amount so that the goal can be measured",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A gift so that he does not need to buy one",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A target date because he did not indicate one",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "How can you make your goals achievable?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "By reviewing your target amount and date and reflecting on whether you can really achieve the goal",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "By making sure its impossible to achieve",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "By competing with your friend and making your target amount very high",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "By setting your target date too soon",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-    private fun smartGoalsPostActivityEasy(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Miguel wants to buy a chicken sandwich worth P250 but he only has P10. Is it realistic for him to have saved enough money to buy the sandwich tomorrow?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No, he does not have enough time",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "An item you want to buy",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A way to earn more money",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Tracy currently receives an allowance of P500 a week. Will she be able to achieve a goal with a target amount of P100,000?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No, it is not achievable",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes, it is achievable",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "How can you make your goals relevant?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "By thinking about what is important to you",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "By thinking about what is important to your friend",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "By thinking about what is important to your mom",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Penny wants to treat herself to an afternoon snack. The only option she has that is near her is fried chicken which she hates. Should she still set a goal for the chicken?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No, because fried chicken is unhealthy",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No, because it is not relevant to her",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes, because she should just keep setting goals",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "How can you make your goals time-bound?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "By taking your time to accomplish your goal",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "By not setting a target date",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "By setting a target date",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Ben wants to save money for a small toy but he has not set a target date. Is this a SMART goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No because it is not time bound",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes because he does not need a target date to be time bound",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Manny set a financial goal of P100 to save money for a toy he wants to buy. However, he did not set a target date. Is this a SMART goal?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-
-    private fun smartGoalsPreliminaryMedium(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "All of these are benefits of setting SMART goals EXCEPT",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Provides clarity and focus by defining what, how, and when to achieve",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Gives a clear target to work towards",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "It is not achievable",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Helps you prioritize your time and resources by focusing on what’s important",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What does the S in SMART Goals stand for?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Specific - a goal must be focused",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Simple - a goal must be easy",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Sensible - a goal must be reasonable",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Sample - a goat must be typical",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What does the M in SMART Goals stand for?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Measurable- a goal must have an amount for progress tracking",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Memorable - a goal must be easily remembered",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Minimum- a goal must be very easy to accomplish",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Mental - a goal must be hard to understand",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What does the A in SMART Goals stand for?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Achievable- a goal must be achievable",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Arrogant - a goal must be arrogant",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Aimless - a goal must not have direction",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Address - a goal must have address",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What does the R in SMART Goals stand for?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Range",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Realistic",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Redirection",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Revenge",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What does the T in SMART Goals stand for?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Tall",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Time-Bound",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Tenacious",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-    private fun smartGoalsPreActivityMedium(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "If you want to buy a book entitled “The Little Prince” worth P500, is this considered a “Specific” SMART goal?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What part of SMART is missing from this goal? I will save P500 for 1 month to buy stuff",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Measurable, no target amount",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Time bound, no duration",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Achievable, to difficult",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Specific, no details",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "If you want to save for a toy, is this considered a “Measurable” SMART goal?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No, there is no target amount",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What part of SMART is missing from this goal? I will save for 1 month to buy a bag for mom?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Measurable, no target amount",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Time bound, no duration",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Achievable, to difficult",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Specific, no details",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What part of SMART is missing from this goal? I will save until next week for a P5,000 keyboard",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Measurable, no target amount",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Time bound, no duration",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Achievable, to difficult",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Specific, no details",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-    private fun smartGoalsPostActivityMedium(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Josh earns P500 from his weekly allowance. Is it realistic for him to buy a toy worth P2,000 next week?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What part of SMART is missing from this goal? I will save until next week for a P1,000 shirt I don’t like.",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Measurable, no target amount",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Time-bound, no duration",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Relevant, not important to you",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Achievable, too difficult",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Wesley will be saving his money to buy a video game within six months. Has he set a good time-bound goal?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What part of SMART is missing from this goal? I will save for a P3,000 Buffet meal.",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Measurable, no target amount",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Time-bound, no duration",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Achievable, too difficult",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Specific, no details",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-    private fun smartGoalsPreliminaryHard(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "If you want to save for a daytrip to Tagaytay worth P10,000, is this considered a “Specific” SMART goal?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes, the goal is detailed",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No, the goal is not detailed enough",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-
-    private fun smartGoalsPreActivityHard(assessmentID: String) {
-        var  question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What part of SMART is missing from this goal? I will save P5,000 in 1 month to buy gifts.",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Measurable, no target amount",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Time bound, no duration",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Achievable, to difficult",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Specific, not enough details like whom the gift is for",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "How can you check if your goal is achievable?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Ask your parents",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Ask you friend",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Do not check",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Reflect on your current situation",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "If you want to save for groceries, is this considered a “Measurable” SMART goal?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No, there is no target amount",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What part of SMART is missing from this goal? I will save for 2 months to treat my mom for her birthday.",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Measurable, no target amount",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Time-bound, no duration",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Achievable, too difficult",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Relevant, not important to you",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What part of SMART is missing from this goal? I will save until next week for a P5,000 toy my friend is telling me to buy.",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Measurable, no target amount",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Time-bound, no duration",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Achievable, too difficult",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Relevant, not important to you",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-
-    private fun smartGoalsPostActivityHard(assessmentID: String) {
-        var question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "Harry earns P700 from his weekly allowance. Is it realistic for him to buy a toy worth P5,000 next week?",
             "difficulty" to "Hard",
@@ -4762,7 +4547,6 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             firestore.collection("AssessmentChoices").add(choice)
         }
     }
-
     private fun conceptOfBudgetingPreliminaryEasy(assessmentID: String){
         var question = hashMapOf(
             "assessmentID" to assessmentID,
@@ -5674,7 +5458,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         }
     }
     private fun conceptOfBudgetingPreActivityHard(assessmentID: String){
-      var question = hashMapOf(
+        var question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "The following are the importance of budgeting except",
             "difficulty" to "Hard",

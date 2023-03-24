@@ -5,11 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.NavbarFinlitExpert
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.NewChoicesAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertAddNewQuestionsBinding
@@ -35,6 +37,10 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialAssessmentFinlitExpertAddNewQuestionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        NavbarFinlitExpert(findViewById(R.id.bottom_nav_finlit_expert), this, R.id.nav_finlit_assessment)
+
+        loadBackButton()
 
         var bundle = intent.extras!!
         assessmentID = bundle.getString("assessmentID").toString()
@@ -137,13 +143,17 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
         dialog.show()
     }
 
-
     private fun goToFinlitExpertEditAssessment() {
         binding.btnCancel.setOnClickListener() {
             val goToFinlitExpertEditAssessmentActivity = Intent(applicationContext, FinlitExpertEditAssessmentActivity::class.java)
             startActivity(goToFinlitExpertEditAssessmentActivity)
         }
+    }
 
-
-}
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+    }
 }

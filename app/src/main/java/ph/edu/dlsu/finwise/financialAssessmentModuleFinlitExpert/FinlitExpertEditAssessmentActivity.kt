@@ -3,10 +3,13 @@ package ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.NavbarFinlitExpert
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.EditAssessmentQuestionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertEditAssessmentBinding
 import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
@@ -34,6 +37,10 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
         loadQuestions()
         goToFinlitExpertAddNewQuestions()
         goToFinlitExpertSpecificAssessment()
+        loadBackButton()
+
+        NavbarFinlitExpert(findViewById(R.id.bottom_nav_finlit_expert), this, R.id.nav_finlit_assessment)
+
 
         binding.btnSave.setOnClickListener {
             updateAssessmentDetails()
@@ -100,6 +107,12 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
             sendBundle.putString("assessmentID", assessmentID)
             specificAssessment.putExtras(sendBundle)
             startActivity(specificAssessment)
+        }
+    }
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
         }
     }
 

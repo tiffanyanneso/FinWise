@@ -2,9 +2,12 @@ package ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import ph.edu.dlsu.finwise.NavbarFinlitExpert
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertSpecificAssessmentBinding
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentViewAllQuestionsBinding
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.fragment.QuestionsActiveFragment
@@ -18,6 +21,9 @@ class FinancialAssessmentViewAllQuestions : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialAssessmentViewAllQuestionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        loadBackButton()
+        NavbarFinlitExpert(findViewById(R.id.bottom_nav_finlit_expert), this, R.id.nav_finlit_assessment)
 
         var bundle = intent.extras!!
         assessmentID = bundle.getString("assessmentID").toString()
@@ -52,6 +58,13 @@ class FinancialAssessmentViewAllQuestions : AppCompatActivity() {
         fun addFragment(fragment: Fragment, title:String){
             mFrgmentList.add(fragment)
             mFrgmentTitleList.add(title)
+        }
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
         }
     }
 }

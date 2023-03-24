@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.NavbarFinlitExpert
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.NewChoicesAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertEditQuestionsBinding
@@ -40,8 +42,10 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
         binding = ActivityFinancialAssessmentFinlitExpertEditQuestionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setFields()
+        NavbarFinlitExpert(findViewById(R.id.bottom_nav_finlit_expert), this, R.id.nav_finlit_assessment)
 
+        setFields()
+        loadBackButton()
         binding.btnAddNewChoices.setOnClickListener {
             //TODO: ADD ALERT IF THERE ARE ALREADY 4 CHOICES
             addNewChoice()
@@ -151,6 +155,12 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
             })
             binding.rvViewChoice.adapter = choicesAdapter
             binding.rvViewChoice.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+        }
+    }
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
         }
     }
 }

@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -36,13 +37,10 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
          assessmentID = bundle.getString("assessmentID").toString()
 
 
-
+        loadBackButton()
         initializeFragments()
 
-
-        // Hides actionbar,
         // and initializes the navbar
-        supportActionBar?.hide()
         NavbarFinlitExpert(findViewById(R.id.bottom_nav_finlit_expert), this, R.id.nav_finlit_assessment)
 
         goToFinlitExpertEditAssessment()
@@ -87,7 +85,6 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
         }
     }
 
-
     private fun goToFinlitExpertEditAssessment() {
        binding.btnEdit.setOnClickListener() {
            val goToFinlitExpertEditAssessmentActivity = Intent(applicationContext, FinlitExpertEditAssessmentActivity::class.java)
@@ -95,6 +92,12 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
            bundle.putString("assessmentID", assessmentID)
            goToFinlitExpertEditAssessmentActivity.putExtras(bundle)
            startActivity(goToFinlitExpertEditAssessmentActivity)
+        }
+    }
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
         }
     }
 
