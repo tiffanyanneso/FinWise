@@ -67,18 +67,32 @@ class GoalAccomplishedActivity : AppCompatActivity() {
 
     private fun badge() {
         CoroutineScope(Dispatchers.Main).launch {
-            val badgesQuerySnapshot = firestore.collection("Badges").whereEqualTo("childID", currentUser)
-                .whereEqualTo("badgeType", "Financial Activity Badge").get().await()
-            nFinishedActivities = badgesQuerySnapshot.size()
-            if (badgesQuerySnapshot?.isEmpty!!) {
-                if (nFinishedActivities == 1) {
-                    addBadge()
-                    showBadgeDialog()
+            getNFinishedActivities()
+            if (nFinishedActivities > 0) {
+                val badgesQuerySnapshot = firestore.collection("Badges")
+                    .whereEqualTo("childID", currentUser)
+                    .whereEqualTo("badgeType", "Financial Activity Badge")
+                    .get().await()
+                if (badgesQuerySnapshot?.isEmpty!!) {
+                    if (nFinishedActivities == 1) {
+                        addBadge()
+                        showBadgeDialog()
+                    }
+                } else {
+                    checkIfAddBadge(badgesQuerySnapshot)
                 }
-            } else {
-                checkIfUpdateBadge(badgesQuerySnapshot)
             }
+
         }
+    }
+
+    private suspend fun getNFinishedActivities() {
+        val activities = firestore.collection("FinancialActivities")
+            .whereEqualTo("childID", currentUser)
+            .whereEqualTo("financialActivityName", "Saving")
+            .whereEqualTo("status", "Completed")
+            .get().await()
+        nFinishedActivities = activities.size()
     }
 
     private suspend fun addBadge() {
@@ -106,14 +120,26 @@ class GoalAccomplishedActivity : AppCompatActivity() {
         return "$badgeLevel Financial Achiever"
     }
 
-    private suspend fun checkIfUpdateBadge(querySnapshot: QuerySnapshot?) {
-        val badge = querySnapshot?.documents?.get(0)?.toObject<UserBadges>()
-        if (nFinishedActivities > badge?.badgeScore!!) {
-            if (isUpdateBadge()) {
-                addBadge()
-                showBadgeDialog()
+    private suspend fun checkIfAddBadge(badges: QuerySnapshot?) {
+        if (badges != null) {
+            val highestBadgeAchieved = getHighestBadgeScore(badges)
+            if (nFinishedActivities > highestBadgeAchieved!!) {
+                if (isUpdateBadge()) {
+                    addBadge()
+                    showBadgeDialog()
+                }
             }
         }
+    }
+
+    private fun getHighestBadgeScore(badges: QuerySnapshot): Double? {
+        val badgesArrayList = ArrayList<UserBadges>()
+        for (badge in badges) {
+            val badgeObject = badge.toObject<UserBadges>()
+            badgesArrayList.add(badgeObject)
+        }
+        val highestBadgeAchieved = badgesArrayList.maxByOrNull { it.badgeScore!! }
+        return highestBadgeAchieved?.badgeScore
     }
 
     private fun isUpdateBadge(): Boolean {
