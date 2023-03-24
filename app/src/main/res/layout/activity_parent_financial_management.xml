@@ -445,7 +445,7 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/view_pager_bar_charts"
                 android:layout_width="match_parent"
-                android:layout_height="800dp"
+                android:layout_height="900dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"

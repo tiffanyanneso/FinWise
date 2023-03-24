@@ -28,6 +28,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
 import java.text.DecimalFormat
@@ -37,6 +38,8 @@ import java.util.*
 class IncomeFragment : Fragment(R.layout.fragment_income) {
     private lateinit var binding: FragmentIncomeBinding
     private var firestore = Firebase.firestore
+    private val bundle = Bundle()
+
     private var transactionsArrayList = ArrayList<Transactions>()
     var allowancePercentage = 0.00f
     var giftPercentage = 0.00f
@@ -215,7 +218,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     private fun loadEarningChild() {
         binding.btnAction.setOnClickListener {
             val goToEarningActivity = Intent(context, EarningMenuActivity::class.java)
-            val bundle = Bundle()
             bundle.putString("childID", childID)
             bundle.putString("module", "pfm")
             goToEarningActivity.putExtras(bundle)
@@ -226,7 +228,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     private fun loadEarningParent() {
         binding.btnAction.setOnClickListener {
             val goToHomeRewardsActivity = Intent(context, EarningActivity::class.java)
-            val bundle = Bundle()
             bundle.putString("childID", childID)
             bundle.putString("module", "pfm")
             goToHomeRewardsActivity.putExtras(bundle)
@@ -237,7 +238,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     private fun loadTransactionHistory() {
         binding.btnAction.setOnClickListener {
             val goToTransactionHistory = Intent(context, TransactionHistoryActivity::class.java)
-            val bundle = Bundle()
             bundle.putString("user", user)
             if (user == "parent")
                 bundle.putString("childID", childID)
@@ -251,8 +251,10 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     private fun loadParentFinancialActivitiesButton() {
         //TODO: double chekc kung tama link
         binding.btnAction.setOnClickListener {
-            val goToFinancialActivity = Intent(context, ParentLandingPageActivity::class.java)
-            startActivity(goToFinancialActivity)
+            bundle.putString("childID",  childID)
+            val parentGoal = Intent(context, ParentGoalActivity::class.java)
+            parentGoal.putExtras(bundle)
+            startActivity(parentGoal)
         }
     }
 

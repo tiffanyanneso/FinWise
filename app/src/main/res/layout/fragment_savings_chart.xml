@@ -19,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="20dp"
             android:layout_gravity="center">
 
             <!--<LinearLayout
@@ -207,17 +208,16 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp"
-                android:layout_marginTop="15dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_weight="1">
+                android:layout_gravity="center_horizontal">
 
                 <LinearLayout
                     android:id="@+id/linear_layout_5"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
                     android:background="@drawable/gradient_pfm_detail_card2"
                     android:orientation="vertical">
 
@@ -254,7 +254,7 @@
                             android:gravity="center"
                             android:textSize="16sp"
                             android:textStyle="bold"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginVertical="10dp"
                             android:text="Loading data 🔃 \n Thank you for your patience ☺"
                             android:textColor="@color/white"/>
 
@@ -263,7 +263,7 @@
                             android:layout_height="wrap_content"
                             android:id="@+id/btn_details"
                             android:gravity="center"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginVertical="15dp"
                             android:text="View More"
                             android:textSize="12sp"
                             android:background="@drawable/button_border_white"

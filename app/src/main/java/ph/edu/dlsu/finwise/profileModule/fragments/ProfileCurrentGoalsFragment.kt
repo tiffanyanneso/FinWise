@@ -48,9 +48,11 @@ class ProfileCurrentGoalsFragment : Fragment() {
             for (goal in results)
                 goalIDArrayList.add(goal.id)
 
-            goalsAdapter = ProfileCurrentGoalsAdapter(requireContext().applicationContext, goalIDArrayList)
-            binding.rvCurrentGoals.adapter = goalsAdapter
-            binding.rvCurrentGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
+            if (isAdded) {
+                goalsAdapter = ProfileCurrentGoalsAdapter(requireContext().applicationContext, goalIDArrayList)
+                binding.rvCurrentGoals.adapter = goalsAdapter
+                binding.rvCurrentGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
+            }
         }
     }
 

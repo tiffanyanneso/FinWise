@@ -210,9 +210,13 @@ class CashMayaBalanceBreakdownActivity : AppCompatActivity() {
 
     private fun getBundleFromPFM() {
         val getBundle = intent.extras
-        user = getBundle?.getString("user").toString()
-        if (user == "parent")
-            childID = getBundle?.getString("childID").toString()
+        if (getBundle?.containsKey("user") == true) {
+            user = getBundle.getString("user").toString()
+            if (user == "parent") {
+                childID = getBundle.getString("childID").toString()
+                binding.tvTitle.text = "You Child's Balance Breakdown"
+            }
+        }
     }
 
 

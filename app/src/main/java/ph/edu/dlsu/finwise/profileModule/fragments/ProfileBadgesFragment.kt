@@ -55,11 +55,13 @@ class ProfileBadgesFragment : Fragment() {
     }
 
     private fun loadRecyclerView(badgesArrayList: ArrayList<UserBadges>) {
-        val badgeAdapter = BadgesAdapter(badgesArrayList)
-        binding.rvBadges.adapter = badgeAdapter
-        binding.rvBadges.layoutManager = LinearLayoutManager(requireContext().applicationContext,
-            LinearLayoutManager.VERTICAL,
-            false)
+        if (isAdded) {
+            val badgeAdapter = BadgesAdapter(badgesArrayList)
+            binding.rvBadges.adapter = badgeAdapter
+            binding.rvBadges.layoutManager = LinearLayoutManager(requireContext().applicationContext,
+                LinearLayoutManager.VERTICAL,
+                false)
+        }
     }
 
 
