@@ -320,7 +320,6 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
 
     private fun loadBalance() {
         loadBalanceView()
-        initializeFragments()
     }
 
     private fun loadBalanceView() {
@@ -336,7 +335,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
                     amount = "0.00"
                 balance = walletAmount
                 binding.tvCurrentBalanceOfChild.text = "₱$amount"
-            }.continueWith { goToCashMayaBalanceBreakdown() }
+            }.continueWith { initializeFragments() }
     }
 
 
