@@ -44,21 +44,22 @@ class ParentGoalActivity : AppCompatActivity() {
         ph.edu.dlsu.finwise.R.drawable.baseline_do_not_disturb_24,
     )
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityParentGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context = this
 
-        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
 
-        var bundle = intent.extras!!
-        childID = bundle.getString("childID").toString()
+
+        initializeChildID()
+        initializeParentNavbar()
         checkAge()
 
 
 
-        var sendBundle = Bundle()
+        val sendBundle = Bundle()
         sendBundle.putString("childID", childID)
 
 
@@ -74,6 +75,17 @@ class ParentGoalActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    private fun initializeParentNavbar() {
+        val bundleNavBar = Bundle()
+        bundleNavBar.putString("childID", childID)
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal, bundleNavBar)
+    }
+
+    private fun initializeChildID() {
+            val bundle = intent.extras!!
+            childID = bundle.getString("childID").toString()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -53,16 +53,16 @@ class ParentChildrenAdapter: RecyclerView.Adapter<ParentChildrenAdapter.ChildVie
 
         fun bindTransaction(childID: String) {
             firestore.collection("Users").document(childID).get().addOnSuccessListener {
-                var child = it.toObject<Users>()
+                val child = it.toObject<Users>()
                 itemBinding.tvChildId.text = it.id
                 itemBinding.tvUsername.text = child?.username
             }
         }
 
         override fun onClick(p0: View?) {
-            var bundle = Bundle()
+            val bundle = Bundle()
             bundle.putString("childID", itemBinding.tvChildId.text.toString())
-            var parentGoal = Intent(context, ParentGoalActivity::class.java)
+            val parentGoal = Intent(context, ParentGoalActivity::class.java)
             parentGoal.putExtras(bundle)
             context.startActivity(parentGoal)
         }

@@ -138,10 +138,22 @@ class EarningActivity : AppCompatActivity() {
             } else  if (user.userType == "Parent"){
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
+                val bundle = intent.extras!!
 
-                if (module == "pfm")
-                    NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
-                else NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+                if (module == "pfm") {
+                    //sends the ChildID to the parent navbar
+                    val childID = bundle.getString("childID").toString()
+                    val bundleNavBar = Bundle()
+                    bundleNavBar.putString("childID", childID)
+                    NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance, bundleNavBar)
+                }
+                else {
+                    //sends the ChildID to the parent navbar
+                    val childID = bundle.getString("childID").toString()
+                    val bundleNavBar = Bundle()
+                    bundleNavBar.putString("childID", childID)
+                    NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal, bundleNavBar)
+                }
             }
 
         }

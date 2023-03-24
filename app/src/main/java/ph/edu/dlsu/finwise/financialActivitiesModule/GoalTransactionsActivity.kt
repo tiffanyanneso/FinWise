@@ -115,7 +115,12 @@ class GoalTransactionsActivity : AppCompatActivity() {
             if (user.userType == "Parent") {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
-                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+                //sends the ChildID to the parent navbar
+                val bundle = intent.extras!!
+                val childID = bundle.getString("childID").toString()
+                val bundleNavBar = Bundle()
+                bundleNavBar.putString("childID", childID)
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal, bundleNavBar)
             } else  if (user.userType == "Child"){
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE

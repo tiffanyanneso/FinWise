@@ -245,10 +245,13 @@ class AssessmentPerformanceFragment : Fragment() {
         binding.ivScore.setImageResource(R.drawable.bad)
         binding.textViewProgress.visibility = View.GONE
 
+        //TODO: check if parent user
         binding.textViewPerformanceText.text = "Bad"
         binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.red))
-        binding.tvPerformanceText.text =
+        val message = if (user == "child")
             "You haven't taken any assessments yet!"
+        else "Your child hasn't taken any assessments yet!"
+        binding.tvPerformanceText.text = message
 
         binding.tvTopPerformingConcept.text = "N/A"
 
