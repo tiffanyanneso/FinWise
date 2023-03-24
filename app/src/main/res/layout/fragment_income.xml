@@ -54,7 +54,6 @@
                 android:layout_gravity="center_horizontal">
 
                 <LinearLayout
-                    android:id="@+id/linear_layout_5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/gradient_pfm_detail_card"
@@ -80,7 +79,6 @@
                         android:textColor="@color/white"/>
 
                     <LinearLayout
-                        android:id="@+id/linear_layout_text5"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -99,7 +97,7 @@
 
                         <TextView
                             android:layout_width="300dp"
-                            android:layout_height="15dp"
+                            android:layout_height="40dp"
                             android:id="@+id/tv_tips"
                             android:gravity="center"
                             android:textSize="12sp"
@@ -115,8 +113,7 @@
                             android:layout_height="50dp"
                             android:id="@+id/btn_action"
                             android:gravity="center"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginBottom="15dp"
+                            android:layout_marginVertical="20dp"
                             android:text="Financial Activities"
                             android:textSize="12sp"
                             android:background="@drawable/button_border_white"
@@ -167,7 +164,6 @@
                 android:layout_gravity="center_horizontal">
 
                 <LinearLayout
-                    android:id="@+id/linear_layout_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -188,7 +184,7 @@
                             android:textColor="@color/white"
                             android:textStyle="bold"
                             android:layout_gravity="center"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginStart="15dp"
                             android:layout_weight="1"/>
 
                         <TextView
@@ -219,7 +215,6 @@
                 android:layout_gravity="center_horizontal">
 
                 <LinearLayout
-                    android:id="@+id/linear_layout_3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
@@ -241,7 +236,7 @@
                             android:textColor="@color/white"
                             android:textStyle="bold"
                             android:layout_gravity="center"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginStart="15dp"
                             android:layout_weight="1"/>
 
                         <TextView
@@ -270,7 +265,6 @@
                 android:layout_gravity="center_horizontal">
 
                 <LinearLayout
-                    android:id="@+id/linear_layout_4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
@@ -292,7 +286,7 @@
                             android:textColor="@color/white"
                             android:textStyle="bold"
                             android:layout_gravity="center"
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginStart="15dp"
                             android:layout_weight="1"/>
 
                         <TextView

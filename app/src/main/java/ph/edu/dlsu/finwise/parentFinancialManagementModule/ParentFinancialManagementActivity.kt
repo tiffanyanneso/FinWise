@@ -97,6 +97,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         binding.btnSeeMore.setOnClickListener{
             val goToCashMayaBalanceBreakdown = Intent(applicationContext, CashMayaBalanceBreakdownActivity::class.java)
             bundle.putString("childID", childID)
+            bundle.putString("user", "parent")
             bundle.putFloat("balance", balance)
             goToCashMayaBalanceBreakdown.putExtras(bundle)
             startActivity(goToCashMayaBalanceBreakdown)
@@ -228,13 +229,6 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         }
     }
 
-    private fun goToCashMayaBalanceBreakdown(){
-        binding.btnSeeMore.setOnClickListener{
-            val goToCashMayaBalanceBreakdown = Intent(applicationContext, CashMayaBalanceBreakdownActivity::class.java)
-            goToCashMayaBalanceBreakdown.putExtras(bundle)
-            startActivity(goToCashMayaBalanceBreakdown)
-        }
-    }
 
     private fun computeIncomeExpenseRatio() {
         val ratio = (income / expense * 100).toInt() // convert to percentage and round down to nearest integer

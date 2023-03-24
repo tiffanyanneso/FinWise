@@ -27,6 +27,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalSavingDetailsBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import java.text.DecimalFormat
 import java.time.DayOfWeek
@@ -215,8 +216,11 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
     private fun loadParentFinancialActivitiesButton() {
         //TODO: double chekc kung tama link
         binding.btnAction.setOnClickListener {
-            val goToFinancialActivity = Intent(this, ParentLandingPageActivity::class.java)
-            startActivity(goToFinancialActivity)
+            val bundle = Bundle()
+            bundle.putString("childID",  childID)
+            val parentGoal = Intent(this, ParentGoalActivity::class.java)
+            parentGoal.putExtras(bundle)
+            startActivity(parentGoal)
         }
     }
 

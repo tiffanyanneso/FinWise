@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".personalFinancialManagementModule.pFMFragments.ExpenseFragment">
 
@@ -11,299 +11,301 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_expense_pie_chart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/white"
-        android:padding="20dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="5dp">
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tv_expense_breakdown"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="This Week's Expense"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/dark_green"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"/>
+                android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="350dp"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="5dp"
-                android:layout_gravity="center_horizontal">
-
-                <LinearLayout
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_expense_pie_chart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/gradient_pfm_detail_card2"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:src="@drawable/icon_colored_expense"
-                        android:contentDescription="Profit"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginTop="20dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="5dp"
-                        />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textSize="12sp"
-                        android:layout_marginBottom="10dp"
-                        android:text="EXPENSE"
-                        android:textColor="@color/white"/>
+                    app:cardBackgroundColor="@color/white"
+                    android:padding="20dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="300dp"
+                            android:id="@+id/tv_expense_breakdown"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/tv_summary"
-                            android:gravity="center"
-                            android:textSize="16sp"
+                            android:text="This Week's Expense Categories"
+                            android:textSize="20sp"
+                            android:layout_marginTop="20dp"
+                            android:textStyle="bold"
+                            android:textColor="@color/dark_green"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="10dp"/>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="350dp"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="5dp"
+                            android:layout_gravity="center_horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/gradient_pfm_detail_card"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:src="@drawable/icon_colored_expense"
+                                    android:contentDescription="Profit"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_marginTop="20dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="5dp"
+                                    />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:textSize="12sp"
+                                    android:layout_marginBottom="10dp"
+                                    android:text="EXPENSE"
+                                    android:textColor="@color/white"/>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="center"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="300dp"
+                                        android:layout_height="wrap_content"
+                                        android:id="@+id/tv_summary"
+                                        android:gravity="center"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        android:layout_marginTop="5dp"
+                                        android:text="Loading your data 🔃 \n Thank you for your patience ☺"
+                                        android:textColor="@color/white"/>
+
+                                    <TextView
+                                        android:layout_width="300dp"
+                                        android:layout_height="40dp"
+                                        android:id="@+id/tv_tips"
+                                        android:gravity="center"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold"
+                                        android:layout_marginTop="15dp"
+                                        android:layout_marginBottom="5dp"
+                                        android:text=""
+                                        android:textColor="@color/cream"/>
+
+
+                                    <androidx.appcompat.widget.AppCompatButton
+                                        android:layout_width="180dp"
+                                        android:layout_height="50dp"
+                                        android:id="@+id/btn_action"
+                                        android:gravity="center"
+                                        android:layout_marginVertical="20dp"
+                                        android:text="TRANSACTION HISTORY"
+                                        android:textSize="12sp"
+                                        android:background="@drawable/button_border_white"
+                                        android:backgroundTint="@color/dark_green"
+                                        android:textColor="@color/white"/>
+
+                                    <!--<TextView
+                                        android:id="@+id/tv_difference"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:textSize="16sp"
+                                        android:text="₱XX,XXX.XX"
+                                        android:textColor="@color/white"
+                                        android:textStyle="bold"/>-->
+                                </LinearLayout>
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+
+                        <com.github.mikephil.charting.charts.PieChart
+                            android:id="@+id/pc_expense"
+                            android:layout_width="350dp"
+                            android:layout_height="350dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="15dp"
+                            android:layout_gravity="center_horizontal"/>
+
+                        <TextView
+                            android:id="@+id/tv_top_expense_categories"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Top 3 Expense Categories"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             android:layout_marginTop="5dp"
-                            android:text="Loading your data 🔃 \n Thank you for your patience ☺"
-                            android:textColor="@color/white"/>
+                            android:textColor="@color/dark_green"
+                            android:layout_gravity="center_horizontal"/>
 
-                        <TextView
-                            android:layout_width="300dp"
-                            android:layout_height="15dp"
-                            android:id="@+id/tv_tips"
-                            android:gravity="center"
-                            android:textSize="12sp"
-                            android:textStyle="bold"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginBottom="5dp"
-                            android:text=""
-                            android:textColor="@color/cream"/>
-
-
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:layout_width="180dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/btn_action"
-                            android:gravity="center"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginBottom="15dp"
-                            android:text="Transaction History"
-                            android:textSize="12sp"
-                            android:background="@drawable/button_border_white"
-                            android:backgroundTint="@color/dark_green"
-                            android:textColor="@color/white"/>
-
-                        <!--<TextView
-                            android:id="@+id/tv_difference"
+                        <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:text="₱XX,XXX.XX"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"/>-->
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="5dp"
+                            app:cardBackgroundColor="@color/dark_green"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginVertical="10dp"
+                            android:layout_gravity="center_horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:padding="20dp">
+
+                                <ImageView
+                                    android:src="@drawable/one"
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
+                                    android:layout_gravity="center"/>
+
+                                <TextView
+                                    android:id="@+id/tv_top_expense"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16sp"
+                                    android:text="None"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_weight="1"/>
+
+                                <TextView
+                                    android:id="@+id/tv_expense_total"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="₱ XXXX.XX"
+                                    android:textColor="@color/white"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:layout_weight="1"
+                                    android:textAlignment="textEnd"
+                                    android:layout_gravity="center_vertical"
+                                    tools:ignore="RtlCompat" />
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="5dp"
+                            app:cardBackgroundColor="@color/white"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_gravity="center_horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:background="@color/light_green"
+                                android:padding="20dp">
+
+                                <ImageView
+                                    android:src="@drawable/two"
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
+                                    android:layout_gravity="center"/>
+
+                                <TextView
+                                    android:id="@+id/tv_top_expense_2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16sp"
+                                    android:text="None"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_weight="1"/>
+
+                                <TextView
+                                    android:id="@+id/tv_top_expense_total_2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:textAlignment="textEnd"
+                                    android:text="₱ XXXX.XX"
+                                    android:textColor="@color/white"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:layout_weight="1"
+                                    tools:ignore="RtlCompat" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="5dp"
+                            app:cardBackgroundColor="@color/white"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginBottom="10dp"
+                            android:layout_gravity="center_horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:background="@color/light_green"
+                                android:padding="20dp">
+
+                                <ImageView
+                                    android:src="@drawable/three"
+                                    android:layout_width="60dp"
+                                    android:layout_height="60dp"
+                                    android:layout_gravity="center"/>
+
+                                <TextView
+                                    android:id="@+id/tv_top_expense_3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16sp"
+                                    android:text="None"
+                                    android:textColor="@color/white"
+                                    android:textStyle="bold"
+                                    android:layout_gravity="center"
+                                    android:layout_marginStart="15dp"
+                                    android:layout_weight="1"/>
+
+                                <TextView
+                                    android:id="@+id/tv_top_expense_total_3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:textAlignment="textEnd"
+                                    android:text="₱ XXXX.XX"
+                                    android:textColor="@color/white"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    android:layout_weight="1"
+                                    tools:ignore="RtlCompat" />
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
                     </LinearLayout>
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <com.github.mikephil.charting.charts.PieChart
-                android:id="@+id/pc_expense"
-                android:layout_width="350dp"
-                android:layout_height="350dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="15dp" />
-
-            <TextView
-                android:id="@+id/tv_top_expense_categories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Top 3 Expense Categories"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/dark_green"
-                android:layout_gravity="center_horizontal"/>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="5dp"
-                app:cardBackgroundColor="@color/dark_green"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginVertical="10dp">
-
-                <LinearLayout
-                    android:id="@+id/linear_layout_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:padding="20dp">
-
-                    <ImageView
-                        android:src="@drawable/one"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"/>
-
-                        <TextView
-                            android:id="@+id/tv_top_expense"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="15sp"
-                            android:text="None"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:layout_weight="1"
-                            android:layout_marginLeft="15dp"
-                            android:layout_gravity="center"/>
-
-                        <TextView
-                            android:id="@+id/tv_expense_total"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:text="₱ XXXX.XX"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:layout_weight="1"
-                            android:textAlignment="textEnd"
-                            android:layout_gravity="center"
-                            tools:ignore="RtlCompat" />
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="5dp"
-                app:cardBackgroundColor="@color/white"
-                android:layout_marginBottom="10dp"
-                android:layout_gravity="center_horizontal">
-
-                <LinearLayout
-                    android:id="@+id/linear_layout_3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:background="@color/light_green"
-                    android:padding="20dp">
-
-                    <ImageView
-                        android:src="@drawable/two"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"/>
-
-                        <TextView
-                            android:id="@+id/tv_top_expense_2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:text="None"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:layout_marginLeft="15dp"/>
-
-                        <TextView
-                            android:id="@+id/tv_top_expense_total_2"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="₱ XXXX.XXX"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:layout_gravity="center"
-                            android:textAlignment="textEnd"
-                            android:layout_weight="1"
-                            tools:ignore="RtlCompat" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="5dp"
-                app:cardBackgroundColor="@color/white"
-                android:layout_marginBottom="20dp"
-                android:layout_gravity="center_horizontal">
-
-                <LinearLayout
-                    android:id="@+id/linear_layout_4"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/light_green"
-                    android:orientation="horizontal"
-                    android:padding="20dp">
-
-                    <ImageView
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center"
-                        android:src="@drawable/three" />
-
-                        <TextView
-                            android:id="@+id/tv_top_expense_3"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="None"
-                            android:textColor="@color/white"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
-                            android:layout_weight="1"
-                            android:layout_marginLeft="15dp"
-                            android:layout_gravity="center"/>
-
-                        <TextView
-                            android:id="@+id/tv_top_expense_total_3"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="₱ XXXXX.XXX"
-                            android:textColor="@color/white"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:layout_weight="1"
-                            android:textAlignment="textEnd"
-                            android:layout_gravity="center"
-                            tools:ignore="RtlCompat" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-    </LinearLayout>
-    </ScrollView>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 </FrameLayout>
