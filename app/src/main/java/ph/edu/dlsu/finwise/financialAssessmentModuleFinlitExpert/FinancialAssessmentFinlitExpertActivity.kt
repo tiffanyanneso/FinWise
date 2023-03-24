@@ -58,30 +58,21 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
     }
 
     private fun addQuestions() {
-        goalSettingPrelimQuestions()
+        goalSettingPreliminaryQuestions()
         goalSettingPreActivityQuestions()
         goalSettingPostActivityQuestions()
-        conceptOfBudgetingPreliminaryQuestions()
-        conceptOfBudgetingPreActivityQuestions()
-        conceptOfBudgetingPostActivityQuestions()
-        creatingABudgetPreliminaryQuestions()
-        creatingABudgetPreActivityQuestions()
-        creatingABudgetPostActivityQuestions()
-        conceptOfSavingPreliminaryQuestions()
-        conceptOfSavingPreActivityQuestions()
-        conceptOfSavingPostActivityQuestions()
-        savingStrategiesPreliminaryQuestions()
-        savingStrategiesPreActivityQuestions()
-        savingStrategiesPostActivityQuestions()
-        earningPreliminaryQuestions()
-        earningPreActivityQuestions()
-        earningPostActivityQuestions()
-        delayedGratificationPreliminaryQuestions()
-        delayedGratificationPreActivityQuestions()
-        delayedGratificationPostActivityQuestions()
+        budgetingPreliminaryQuestions()
+        budgetingPreActivityQuestions()
+        budgetingPostActivityQuestions()
+        savingPreliminaryQuestions()
+        savingPreActivityQuestions()
+        savingPostActivityQuestions()
+        spendingPreliminaryQuestions()
+        spendingPreActivityQuestions()
+        spendingPostActivityQuestions()
     }
 
-    private fun goalSettingPrelimQuestions() {
+    private fun goalSettingPreliminaryQuestions() {
         var assessment = hashMapOf(
             "assessmentCategory" to "Goal Setting",
             "assessmentType" to "Preliminary",
@@ -135,10 +126,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         }
     }
 
-
-
-
-    private fun conceptOfBudgetingPreliminaryQuestions(){
+    private fun budgetingPreliminaryQuestions(){
         var assessment = hashMapOf(
             "assessmentCategory" to "Concept of Budgeting",
             "assessmentType" to "Preliminary",
@@ -150,13 +138,13 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         )
         firestore.collection("Assessments").add(assessment).addOnSuccessListener {
             var assessmentID = it.id
-            conceptOfBudgetingPreliminaryEasy(assessmentID)
-            conceptOfBudgetingPreliminaryMedium(assessmentID)
-            conceptOfBudgetingPreliminaryHard(assessmentID)
+            addBudgetingPreliminaryEasy(assessmentID)
+            addBudgetingPreliminaryMedium(assessmentID)
+            addBudgetingPreliminaryHard(assessmentID)
         }
     }
 
-    private fun conceptOfBudgetingPreActivityQuestions(){
+    private fun budgetingPreActivityQuestions(){
         var assessment = hashMapOf(
             "assessmentCategory" to "Concept of Budgeting",
             "assessmentType" to "Pre-Activity",
@@ -168,12 +156,12 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         )
         firestore.collection("Assessments").add(assessment).addOnSuccessListener {
             var assessmentID = it.id
-            conceptOfBudgetingPreActivityEasy(assessmentID)
-            conceptOfBudgetingPreActivityMedium(assessmentID)
-            conceptOfBudgetingPreActivityHard(assessmentID)
+            addBudgetingPreActivityEasy(assessmentID)
+            addBudgetingPreActivityMedium(assessmentID)
+            addBudgetingPreActivityHard(assessmentID)
         }
     }
-    private fun conceptOfBudgetingPostActivityQuestions(){
+    private fun budgetingPostActivityQuestions(){
         var assessment = hashMapOf(
             "assessmentCategory" to "Concept of Budgeting",
             "assessmentType" to "Post-Activity",
@@ -185,67 +173,13 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         )
         firestore.collection("Assessments").add(assessment).addOnSuccessListener {
             var assessmentID = it.id
-            conceptOfBudgetingPostActivityEasy(assessmentID)
-            conceptOfBudgetingPostActivityMedium(assessmentID)
-            conceptOfBudgetingPostActivityHard(assessmentID)
+            addBudgetingPostActivityEasy(assessmentID)
+            addBudgetingPostActivityMedium(assessmentID)
+            addBudgetingPostActivityHard(assessmentID)
         }
     }
 
-    private fun creatingABudgetPreliminaryQuestions(){
-        var assessment = hashMapOf(
-            "assessmentCategory" to "Creating a Budget",
-            "assessmentType" to "Preliminary",
-            "description" to "Preliminary assessment for creating a budget",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            creatingABudgetPreliminaryEasy(assessmentID)
-            creatingABudgetPreliminaryMedium(assessmentID)
-            creatingABudgetPreliminaryHard(assessmentID)
-        }
-    }
-
-    private fun creatingABudgetPreActivityQuestions(){
-        var assessment = hashMapOf(
-            "assessmentCategory" to "Creating a Budget",
-            "assessmentType" to "Pre-Activity",
-            "description" to "Pre-Activity assessment for creating a budget",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            creatingABudgetPreActivityEasy(assessmentID)
-            creatingABudgetPreActivityMedium(assessmentID)
-            creatingABudgetPreActivityHard(assessmentID)
-        }
-    }
-
-    private fun creatingABudgetPostActivityQuestions(){
-        var assessment = hashMapOf(
-            "assessmentCategory" to "Creating a Budget",
-            "assessmentType" to "Post-Activity",
-            "description" to "Post-Activity assessment for creating a budget",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            creatingABudgetPostActivityEasy(assessmentID)
-            creatingABudgetPostActivityMedium(assessmentID)
-            creatingABudgetPostActivityHard(assessmentID)
-        }
-    }
-
-    private fun conceptOfSavingPreliminaryQuestions(){
+    private fun savingPreliminaryQuestions(){
         var assessment = hashMapOf(
             "assessmentCategory" to "Concept of Saving",
             "assessmentType" to "Preliminary",
@@ -257,12 +191,12 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         )
         firestore.collection("Assessments").add(assessment).addOnSuccessListener {
             var assessmentID = it.id
-            conceptOfSavingPreliminaryEasy(assessmentID)
-            conceptOfSavingPreliminaryMedium(assessmentID)
-            conceptOfSavingPreliminaryHard(assessmentID)
+            addSavingPreliminaryEasy(assessmentID)
+            addSavingPreliminaryMedium(assessmentID)
+            addSavingPreliminaryHard(assessmentID)
         }
     }
-    private fun conceptOfSavingPreActivityQuestions(){
+    private fun savingPreActivityQuestions(){
         var assessment = hashMapOf(
             "assessmentCategory" to "Concept of Saving",
             "assessmentType" to "Pre-Activity",
@@ -274,13 +208,13 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         )
         firestore.collection("Assessments").add(assessment).addOnSuccessListener {
             var assessmentID = it.id
-            conceptOfSavingPreActivityEasy(assessmentID)
-            conceptOfSavingPreActivityMedium(assessmentID)
-            conceptOfSavingPreActivityHard(assessmentID)
+            addSavingPreActivityEasy(assessmentID)
+            addSavingPreActivityMedium(assessmentID)
+            addSavingPreActivityHard(assessmentID)
         }
     }
 
-    private fun conceptOfSavingPostActivityQuestions(){
+    private fun savingPostActivityQuestions(){
         var assessment = hashMapOf(
             "assessmentCategory" to "Concept of Saving",
             "assessmentType" to "Post-Activity",
@@ -292,17 +226,16 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         )
         firestore.collection("Assessments").add(assessment).addOnSuccessListener {
             var assessmentID = it.id
-            conceptOfSavingPostActivityEasy(assessmentID)
-            conceptOfSavingPostActivityMedium(assessmentID)
-            conceptOfSavingPostActivityHard(assessmentID)
+            addSavingPostActivityEasy(assessmentID)
+            addSavingPostActivityMedium(assessmentID)
+            addSavingPostActivityHard(assessmentID)
         }
     }
-
-    private fun savingStrategiesPreliminaryQuestions(){
+    private fun spendingPreliminaryQuestions(){
         var assessment = hashMapOf(
-            "assessmentCategory" to "Saving Strategies",
+            "assessmentCategory" to "Concept of Spending",
             "assessmentType" to "Preliminary",
-            "description" to "Preliminary assessment for saving strategies",
+            "description" to "Preliminary assessment for concept of spending",
             "createdOn" to Timestamp.now(),
             "createdBy" to currentUser,
             "nTakes" to 0,
@@ -310,17 +243,16 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         )
         firestore.collection("Assessments").add(assessment).addOnSuccessListener {
             var assessmentID = it.id
-            savingStrategiesPreliminaryEasy(assessmentID)
-            savingStrategiesPreliminaryMedium(assessmentID)
-            savingStrategiesPreliminaryHard(assessmentID)
+            addSpendingPreliminaryEasy(assessmentID)
+            addSpendingPreliminaryMedium(assessmentID)
+            addSpendingPreliminaryHard(assessmentID)
         }
     }
-
-    private fun savingStrategiesPreActivityQuestions(){
+    private fun spendingPreActivityQuestions(){
         var assessment = hashMapOf(
-            "assessmentCategory" to "Saving Strategies",
+            "assessmentCategory" to "Concept of Spending",
             "assessmentType" to "Pre-Activity",
-            "description" to "Pre-Activity assessment for saving strategies",
+            "description" to "Pre-Activity assessment for concept of spending",
             "createdOn" to Timestamp.now(),
             "createdBy" to currentUser,
             "nTakes" to 0,
@@ -328,17 +260,16 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         )
         firestore.collection("Assessments").add(assessment).addOnSuccessListener {
             var assessmentID = it.id
-            savingStrategiesPreActivityEasy(assessmentID)
-            savingStrategiesPreActivityMedium(assessmentID)
-            savingStrategiesPreActivityHard(assessmentID)
+            addSpendingPreActivityEasy(assessmentID)
+            addSpendingPreActivityMedium(assessmentID)
+            addSpendingPreActivityHard(assessmentID)
         }
     }
-
-    private fun savingStrategiesPostActivityQuestions(){
+    private fun spendingPostActivityQuestions(){
         var assessment = hashMapOf(
-            "assessmentCategory" to "Saving Strategies",
+            "assessmentCategory" to "Concept of Spending",
             "assessmentType" to "Post-Activity",
-            "description" to "Post-Activity assessment for saving strategies",
+            "description" to "Post-Activity assessment for concept of spending",
             "createdOn" to Timestamp.now(),
             "createdBy" to currentUser,
             "nTakes" to 0,
@@ -346,120 +277,11 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         )
         firestore.collection("Assessments").add(assessment).addOnSuccessListener {
             var assessmentID = it.id
-            savingStrategiesPostActivityEasy(assessmentID)
-            savingStrategiesPostActivityMedium(assessmentID)
-            savingStrategiesPostActivityHard(assessmentID)
+            addSpendingPostActivityEasy(assessmentID)
+            addSpendingPostActivityMedium(assessmentID)
+            addSpendingPostActivityHard(assessmentID)
         }
     }
-
-    private fun earningPreliminaryQuestions(){
-        var assessment = hashMapOf(
-            "assessmentCategory" to "Earning",
-            "assessmentType" to "Preliminary",
-            "description" to "Preliminary assessment for earning",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            earningPreliminaryEasy(assessmentID)
-            earningPreliminaryMedium(assessmentID)
-            earningPreliminaryHard(assessmentID)
-        }
-    }
-
-    private fun earningPreActivityQuestions(){
-        var assessment = hashMapOf(
-            "assessmentCategory" to "Earning",
-            "assessmentType" to "Pre-Activity",
-            "description" to "Pre-Activity assessment for earning",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            earningPreActivityEasy(assessmentID)
-            earningPreActivityMedium(assessmentID)
-            earningPreActivityHard(assessmentID)
-        }
-    }
-
-    private fun earningPostActivityQuestions(){
-        var assessment = hashMapOf(
-            "assessmentCategory" to "Earning",
-            "assessmentType" to "Post-Activity",
-            "description" to "Post-Activity assessment for earning",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            earningPostActivityEasy(assessmentID)
-            earningPostActivityMedium(assessmentID)
-            earningPostActivityHard(assessmentID)
-        }
-    }
-
-    private fun delayedGratificationPreliminaryQuestions(){
-        var assessment = hashMapOf(
-            "assessmentCategory" to "Delayed Gratification",
-            "assessmentType" to "Preliminary",
-            "description" to "Preliminary assessment for delayed gratification",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            delayedGratificationPreliminaryEasy(assessmentID)
-            delayedGratificationPreliminaryMedium(assessmentID)
-            delayedGratificationPreliminaryHard(assessmentID)
-        }
-    }
-
-    private fun delayedGratificationPreActivityQuestions(){
-        var assessment = hashMapOf(
-            "assessmentCategory" to "Delayed Gratification",
-            "assessmentType" to "Pre-Activity",
-            "description" to "Pre-Activity assessment for delayed gratification",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            delayedGratificationPreActivityEasy(assessmentID)
-            delayedGratificationPreActivityMedium(assessmentID)
-            delayedGratificationPreActivityHard(assessmentID)
-        }
-    }
-
-    private fun delayedGratificationPostActivityQuestions(){
-        var assessment = hashMapOf(
-            "assessmentCategory" to "Delayed Gratification",
-            "assessmentType" to "Post-Activity",
-            "description" to "Post-Activity assessment for delayed gratification",
-            "createdOn" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "nTakes" to 0,
-            "nQuestionsInAssessment" to 3
-        )
-        firestore.collection("Assessments").add(assessment).addOnSuccessListener {
-            var assessmentID = it.id
-            delayedGratificationPostActivityEasy(assessmentID)
-            delayedGratificationPostActivityMedium(assessmentID)
-            delayedGratificationPostActivityHard(assessmentID)
-        }
-    }
-
 
     private fun addGoalSettingPreliminaryEasy(assessmentID: String) {
         var question = hashMapOf(
@@ -808,47 +630,6 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
                 "isCorrect" to false
             )
             firestore.collection("AssessmentChoices").add(choice)
-
-            question = hashMapOf(
-                "assessmentID" to assessmentID,
-                "question" to "Why is it important to set financial goals?",
-                "difficulty" to "Easy",
-                "dateCreated" to Timestamp.now(),
-                "createdBy" to currentUser,
-                "isUsed" to true,
-                "nAssessments" to 0,
-                "nAnsweredCorrectly" to 0
-            )
-            firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-                var questionID = it.id
-                var choice = hashMapOf(
-                    "questionID" to questionID,
-                    "choice" to "So that you have a direction to follow",
-                    "isCorrect" to true
-                )
-                firestore.collection("AssessmentChoices").add(choice)
-
-                choice = hashMapOf(
-                    "questionID" to questionID,
-                    "choice" to "They are only for fun",
-                    "isCorrect" to false
-                )
-                firestore.collection("AssessmentChoices").add(choice)
-
-                choice = hashMapOf(
-                    "questionID" to questionID,
-                    "choice" to "It will decrease your motivation",
-                    "isCorrect" to false
-                )
-                firestore.collection("AssessmentChoices").add(choice)
-
-                choice = hashMapOf(
-                    "questionID" to questionID,
-                    "choice" to "It is not important, you will always have enough money",
-                    "isCorrect" to false
-                )
-                firestore.collection("AssessmentChoices").add(choice)
-            }
         }
         question = hashMapOf(
             "assessmentID" to assessmentID,
@@ -3412,47 +3193,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
     }
 
     private fun addGoalSettingPreliminaryHard(assessmentID: String) {
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What is a financial goal?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A way to spend your money",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A target you have to improve your financial situation",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "An item you want to buy",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A way to earn more money",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
+        var question= hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "If you want to save for a daytrip to Tagaytay worth P10,000, is this considered a “Specific” SMART goal?",
             "difficulty" to "Hard",
@@ -3481,47 +3222,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
     }
 
     private fun addGoalSettingPreActivityHard(assessmentID: String) {
-      var  question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What is a long-term goal?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A goal that requires saving money over a longer period of time",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something that is impossible to achieve",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something you can achieve in a day",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Something that you can achieve in 2 weeks",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
+       var question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "A long-term goal is",
             "difficulty" to "Hard",
@@ -4547,7 +4248,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             firestore.collection("AssessmentChoices").add(choice)
         }
     }
-    private fun conceptOfBudgetingPreliminaryEasy(assessmentID: String){
+    private fun addBudgetingPreliminaryEasy(assessmentID: String){
         var question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "What is a budget?",
@@ -4581,8 +4282,75 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What should you do after creating your budget?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Never look at it again",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Review it to see if you missed anything",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Delete your budget",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "After creating your budget, remember to",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Review and adjust your budget items and amounts if needed",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Not look at the budget anymore",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Show your friends your budget",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
     }
-    private fun conceptOfBudgetingPreActivityEasy(assessmentID: String){
+    private fun addBudgetingPreActivityEasy(assessmentID: String){
         var question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "What is a budget when it comes to spending money?",
@@ -4689,9 +4457,195 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "When creating a budget, it is important to",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "List down some budget items",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "List down ALL possible budget items",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Only list down a few budget items",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "If you want to have 2 budget items, food, and entertainment. How should you divide your money between these 2?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Put all the money into the food item",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Put all the money into the drinks item",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Divide the money between the two items",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "You want to buy a small toy. What budget item should you create to include the toy?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Food",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Toys & Games",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Transportation",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Entertainment",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "You are planning to buy your mom a gift for her birthday. What budget item should you create?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Gifts",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Toys & Games",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Transportation",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Personal Care",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Tim wants to buy a new shirt. What budget item should he create?",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Clothes",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Food & Drinks",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Transportation",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Personal Care",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
     }
-    private fun conceptOfBudgetingPostActivityEasy(assessmentID: String){
-       var question = hashMapOf(
+    private fun addBudgetingPostActivityEasy(assessmentID: String){
+        var question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "How can you make sure you have enough money to buy the things you need?",
             "difficulty" to "Easy",
@@ -4889,8 +4843,170 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "These are important to do when creating a budget EXCEPT:",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "List down budget items like Snacks” and Entertainment",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Allot an amount for each budget item based on your money",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Review your budget items and their amounts",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Budget more than the money you have",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "When creating a budget keep these in mind EXCEPT:",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Allot an amount for each budget item based on your money",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Review your budget items and their amounts",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Adjust your budget if needed",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Do not add any budget items to your budget",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "These are important to do when creating a budget EXCEPT:",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "List down budget items like Snacks” and Entertainment",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Allot an amount for each budget item based on your money",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Review your budget items and their amounts",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Budget more than the money you have",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "When creating a budget keep these in mind EXCEPT:",
+            "difficulty" to "Easy",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Allot an amount for each budget item based on your money",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Review your budget items and their amounts",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Adjust your budget if needed",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Do not add any budget items to your budget",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
     }
-    private fun conceptOfBudgetingPreliminaryMedium(assessmentID: String){
+    private fun addBudgetingPreliminaryMedium(assessmentID: String){
         var question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "Why is it important to set a budget for your money?",
@@ -4971,9 +5087,49 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What do you think about creating a budgeting plan?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "It is a waste of time and effort, better to just spend money",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "It is only for adults, and it's not something that kids need to worry about",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Can help you manage your money better and achieve your financial goals",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Creating a budgeting plan is too complicated and requires too much math, which is boring",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
     }
-    private fun conceptOfBudgetingPreActivityMedium(assessmentID: String){
-       var question = hashMapOf(
+    private fun addBudgetingPreActivityMedium(assessmentID: String){
+        var question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "A budget is..",
             "difficulty" to "Medium",
@@ -5159,971 +5315,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
-    }
-    private fun conceptOfBudgetingPostActivityMedium(assessmentID: String){
-       var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Your friends tell you to not budget anymore and instead to just spend your money. Do you think you should follow their advice? Why or why not?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Yes",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No, budgeting and planning is important",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
         question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What are some things you might include in a budget?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "No budget items",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Your favorite TV shows and movies to buy or rent",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Any money you find on the street",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Budget items like “Food & Drinks” and “Toys",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Dave’s mom told him that it is important to budget so he would have enough money to buy the things he needs. Do you think this is true? Why or why not?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "True",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "false",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-    private fun conceptOfBudgetingPreliminaryHard(assessmentID: String){
-       var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What are the benefits of budgeting for your money?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Being able to buy everything you want",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Knowing where your money is going",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Making sure you always have the latest items",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Showing off to others how much money you have",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Which of the following is a correct concept of budgeting?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Helps you manage your money",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Allows you to plan for your expenses",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Helps you make informed choices",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "All of the above",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Which of the following is a wrong concept of budgeting?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Helps you manage your money",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Helps you save money for your planned expensees",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Helps you make informed choices",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "None of the above",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "How does budgeting help you for your future?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Helps you manage your money effectively",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Makes you a boring person",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Only for rich people and doesn't help regular kids like me",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "It is too complicated and kids can't understand it",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What do you think is the reason why it is necessary to understand the concept of budgeting?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Helps you make sure you have enough money to spend",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Allows you to spend all your money on toys and candy",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "So that you can buy the expensive things without worrying",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "It is boring and unnecessary",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-    private fun conceptOfBudgetingPreActivityHard(assessmentID: String){
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "The following are the importance of budgeting except",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Helps manage your money",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Help save money for the future",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Help you make informed spending choices",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Not important since your parents can do it for you",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What is the purpose of budgeting when you want to plan a trip for vacation?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "To buy as many souvenirs as possible during the trip",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "To make sure you spend all of your money on the trip",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "To plan an expensive trip, regardless of the cost",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "To make sure you have enough money for everything you need and want",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "The following are good budgeting plans except..",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Allows me to spend all my money right away",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Makes me want to give my money to my friends",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Allows me to plan for where my money is going",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "None of the above",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "You noticed that you are frequently going over the amounts you set for your budget items. What should you NOT do?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Take note of the budget items you are struggling with and be more mindful when spending",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Budget more money towards those specific budget items",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Do nothing and always overspend",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Review your budget and think about where you will need the money",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "These are the steps of budgeting except",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Think about budget items you will spend for",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "List all budget items down",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Think about how much money you will be needed for each item",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Spend without making a budget",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-    private fun conceptOfBudgetingPostActivityHard(assessmentID: String){
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What did you learn about the benefits of budgeting from this activity?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Budgeting is a waste of time and doesn't help you save money",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Budgeting helps you manage your money, make informed spending choices, and save money for the future",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Budgeting only benefits rich people, not ordinary people",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "The only benefit of budgeting is that it helps you show off to others how much money you have",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "How do you plan to apply what you learned about budgeting to your own finances?",
-            "difficulty" to "Hard",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "I don't plan to apply what I learned because budgeting is too complicated",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Apply what I learned by creating a budget and tracking my expenses to make sure I have enough money for everything I need and want",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "I plan to use what I learned to buy more expensive things",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "I don't need to apply what I learned because my parents manage my finances for me",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-    private fun creatingABudgetPreliminaryEasy(assessmentID: String){
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What should you do after creating your budget?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Never look at it again",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Review it to see if you missed anything",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Delete your budget",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "After creating your budget, remember to",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Review and adjust your budget items and amounts if needed",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Not look at the budget anymore",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Show your friends your budget",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-    private fun creatingABudgetPreActivityEasy(assessmentID: String){
-       var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "When creating a budget, it is important to",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "List down some budget items",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "List down ALL possible budget items",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Only list down a few budget items",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "If you want to have 2 budget items, food, and entertainment. How should you divide your money between these 2?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Put all the money into the food item",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Put all the money into the drinks item",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Divide the money between the two items",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "You want to buy a small toy. What budget item should you create to include the toy?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Food",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Toys & Games",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Transportation",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Entertainment",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "You are planning to buy your mom a gift for her birthday. What budget item should you create?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Gifts",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Toys & Games",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Transportation",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Personal Care",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "Tim wants to buy a new shirt. What budget item should he create?",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Clothes",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Food & Drinks",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Transportation",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Personal Care",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-    private fun creatingABudgetPostActivityEasy(assessmentID: String){
-        var  question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "These are important to do when creating a budget EXCEPT:",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "List down budget items like Snacks” and Entertainment",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Allot an amount for each budget item based on your money",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Review your budget items and their amounts",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Budget more than the money you have",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-
-        question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "When creating a budget keep these in mind EXCEPT:",
-            "difficulty" to "Easy",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Allot an amount for each budget item based on your money",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Review your budget items and their amounts",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Adjust your budget if needed",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Do not add any budget items to your budget",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-    private fun creatingABudgetPreliminaryMedium(assessmentID: String){
-        var question = hashMapOf(
-            "assessmentID" to assessmentID,
-            "question" to "What do you think about creating a budgeting plan?",
-            "difficulty" to "Medium",
-            "dateCreated" to Timestamp.now(),
-            "createdBy" to currentUser,
-            "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
-            var questionID = it.id
-            var choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "It is a waste of time and effort, better to just spend money",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "It is only for adults, and it's not something that kids need to worry about",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Can help you manage your money better and achieve your financial goals",
-                "isCorrect" to true
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "Creating a budgeting plan is too complicated and requires too much math, which is boring",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-        }
-    }
-    private fun creatingABudgetPreActivityMedium(assessmentID: String){
-        var question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "Your mom asked you to create a budget for grocery shopping next week. She wants to make a meal containing pork, apples, and pepper. What budget items should you set?",
             "difficulty" to "Medium",
@@ -6324,8 +5516,100 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             firestore.collection("AssessmentChoices").add(choice)
         }
     }
-    private fun creatingABudgetPostActivityMedium(assessmentID: String){
-        var  question = hashMapOf(
+    private fun addBudgetingPostActivityMedium(assessmentID: String){
+        var question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Your friends tell you to not budget anymore and instead to just spend your money. Do you think you should follow their advice? Why or why not?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Yes",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No, budgeting and planning is important",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What are some things you might include in a budget?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "No budget items",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Your favorite TV shows and movies to buy or rent",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Any money you find on the street",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Budget items like “Food & Drinks” and “Toys",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Dave’s mom told him that it is important to budget so he would have enough money to buy the things he needs. Do you think this is true? Why or why not?",
+            "difficulty" to "Medium",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "True",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "false",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "What do you think about unplanned expenses in budgeting?",
             "difficulty" to "Medium",
@@ -6472,8 +5756,209 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             firestore.collection("AssessmentChoices").add(choice)
         }
     }
-    private fun creatingABudgetPreliminaryHard(assessmentID: String){
+    private fun addBudgetingPreliminaryHard(assessmentID: String){
         var question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What are the benefits of budgeting for your money?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Being able to buy everything you want",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Knowing where your money is going",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Making sure you always have the latest items",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Showing off to others how much money you have",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Which of the following is a correct concept of budgeting?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Helps you manage your money",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Allows you to plan for your expenses",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Helps you make informed choices",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "All of the above",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "Which of the following is a wrong concept of budgeting?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Helps you manage your money",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Helps you save money for your planned expensees",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Helps you make informed choices",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "None of the above",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "How does budgeting help you for your future?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Helps you manage your money effectively",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Makes you a boring person",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Only for rich people and doesn't help regular kids like me",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "It is too complicated and kids can't understand it",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What do you think is the reason why it is necessary to understand the concept of budgeting?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Helps you make sure you have enough money to spend",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Allows you to spend all your money on toys and candy",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "So that you can buy the expensive things without worrying",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "It is boring and unnecessary",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "Why is it important to account for unexpected expenses when creating a budget?",
             "difficulty" to "Hard",
@@ -6514,8 +5999,208 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             firestore.collection("AssessmentChoices").add(choice)
         }
     }
-    private fun creatingABudgetPreActivityHard(assessmentID: String){
+    private fun addBudgetingPreActivityHard(assessmentID: String){
         var question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "The following are the importance of budgeting except",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Helps manage your money",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Help save money for the future",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Help you make informed spending choices",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Not important since your parents can do it for you",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What is the purpose of budgeting when you want to plan a trip for vacation?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "To buy as many souvenirs as possible during the trip",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "To make sure you spend all of your money on the trip",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "To plan an expensive trip, regardless of the cost",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "To make sure you have enough money for everything you need and want",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "The following are good budgeting plans except..",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Allows me to spend all my money right away",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Makes me want to give my money to my friends",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Allows me to plan for where my money is going",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "None of the above",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "You noticed that you are frequently going over the amounts you set for your budget items. What should you NOT do?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Take note of the budget items you are struggling with and be more mindful when spending",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Budget more money towards those specific budget items",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Do nothing and always overspend",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Review your budget and think about where you will need the money",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "These are the steps of budgeting except",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Think about budget items you will spend for",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "List all budget items down",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Think about how much money you will be needed for each item",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Spend without making a budget",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "If you are planning to throw a birthday party out of town, which budget items should you anticipate? Select the most complete.",
             "difficulty" to "Hard",
@@ -6862,8 +6547,88 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             firestore.collection("AssessmentChoices").add(choice)
         }
     }
-    private fun creatingABudgetPostActivityHard(assessmentID: String){
-         var question = hashMapOf(
+    private fun addBudgetingPostActivityHard(assessmentID: String){
+        var question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "What did you learn about the benefits of budgeting from this activity?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Budgeting is a waste of time and doesn't help you save money",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Budgeting helps you manage your money, make informed spending choices, and save money for the future",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Budgeting only benefits rich people, not ordinary people",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "The only benefit of budgeting is that it helps you show off to others how much money you have",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
+            "assessmentID" to assessmentID,
+            "question" to "How do you plan to apply what you learned about budgeting to your own finances?",
+            "difficulty" to "Hard",
+            "dateCreated" to Timestamp.now(),
+            "createdBy" to currentUser,
+            "isUsed" to true,
+            "nAssessments" to 0,
+            "nAnsweredCorrectly" to 0
+        )
+        firestore.collection("AssessmentQuestions").add(question).addOnSuccessListener {
+            var questionID = it.id
+            var choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "I don't plan to apply what I learned because budgeting is too complicated",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "Apply what I learned by creating a budget and tracking my expenses to make sure I have enough money for everything I need and want",
+                "isCorrect" to true
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "I plan to use what I learned to buy more expensive things",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+
+            choice = hashMapOf(
+                "questionID" to questionID,
+                "choice" to "I don't need to apply what I learned because my parents manage my finances for me",
+                "isCorrect" to false
+            )
+            firestore.collection("AssessmentChoices").add(choice)
+        }
+        question = hashMapOf(
             "assessmentID" to assessmentID,
             "question" to "An example of an emergency fund are the following..",
             "difficulty" to "Hard",
@@ -6904,76 +6669,40 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             firestore.collection("AssessmentChoices").add(choice)
         }
     }
-    private fun conceptOfSavingPreliminaryEasy(assessmentID: String){
+    private fun addSavingPreliminaryEasy(assessmentID: String){
     }
-    private fun conceptOfSavingPreActivityEasy(assessmentID: String){
+    private fun addSavingPreActivityEasy(assessmentID: String){
     }
-    private fun conceptOfSavingPostActivityEasy(assessmentID: String){
+    private fun addSavingPostActivityEasy(assessmentID: String){
     }
-    private fun conceptOfSavingPreliminaryMedium(assessmentID: String){
+    private fun addSavingPreliminaryMedium(assessmentID: String){
     }
-    private fun conceptOfSavingPreActivityMedium(assessmentID: String){
+    private fun addSavingPreActivityMedium(assessmentID: String){
     }
-    private fun conceptOfSavingPostActivityMedium(assessmentID: String){
+    private fun addSavingPostActivityMedium(assessmentID: String){
     }
-    private fun conceptOfSavingPreliminaryHard(assessmentID: String){
+    private fun addSavingPreliminaryHard(assessmentID: String){
     }
-    private fun conceptOfSavingPreActivityHard(assessmentID: String){
+    private fun addSavingPreActivityHard(assessmentID: String){
     }
-    private fun conceptOfSavingPostActivityHard(assessmentID: String){
+    private fun addSavingPostActivityHard(assessmentID: String) {
     }
-    private fun savingStrategiesPreliminaryEasy(assessmentID: String){
+    private fun addSpendingPreliminaryEasy(assessmentID: String){
     }
-    private fun savingStrategiesPreActivityEasy(assessmentID: String){
+    private fun addSpendingPreActivityEasy(assessmentID: String){
     }
-    private fun savingStrategiesPostActivityEasy(assessmentID: String){
+    private fun addSpendingPostActivityEasy(assessmentID: String){
     }
-    private fun savingStrategiesPreliminaryMedium(assessmentID: String){
+    private fun addSpendingPreliminaryMedium(assessmentID: String){
     }
-    private fun savingStrategiesPreActivityMedium(assessmentID: String){
+    private fun addSpendingPreActivityMedium(assessmentID: String){
     }
-    private fun savingStrategiesPostActivityMedium(assessmentID: String){
+    private fun addSpendingPostActivityMedium(assessmentID: String){
     }
-    private fun savingStrategiesPreliminaryHard(assessmentID: String){
+    private fun addSpendingPreliminaryHard(assessmentID: String){
     }
-    private fun savingStrategiesPreActivityHard(assessmentID: String){
+    private fun addSpendingPreActivityHard(assessmentID: String){
     }
-    private fun savingStrategiesPostActivityHard(assessmentID: String){
-    }
-    private fun earningPreliminaryEasy(assessmentID: String){
-    }
-    private fun earningPreActivityEasy(assessmentID: String){
-    }
-    private fun earningPostActivityEasy(assessmentID: String){
-    }
-    private fun earningPreliminaryMedium(assessmentID: String){
-    }
-    private fun earningPreActivityMedium(assessmentID: String){
-    }
-    private fun earningPostActivityMedium(assessmentID: String){
-    }
-    private fun earningPreliminaryHard(assessmentID: String){
-    }
-    private fun earningPreActivityHard(assessmentID: String){
-    }
-    private fun earningPostActivityHard(assessmentID: String){
-    }
-    private fun delayedGratificationPreliminaryEasy(assessmentID: String){
-    }
-    private fun delayedGratificationPreActivityEasy(assessmentID: String){
-    }
-    private fun delayedGratificationPostActivityEasy(assessmentID: String){
-    }
-    private fun delayedGratificationPreliminaryMedium(assessmentID: String){
-    }
-    private fun delayedGratificationPreActivityMedium(assessmentID: String){
-    }
-    private fun delayedGratificationPostActivityMedium(assessmentID: String){
-    }
-    private fun delayedGratificationPreliminaryHard(assessmentID: String){
-    }
-    private fun delayedGratificationPreActivityHard(assessmentID: String){
-    }
-    private fun delayedGratificationPostActivityHard(assessmentID: String){
+    private fun addSpendingPostActivityHard(assessmentID: String) {
     }
 }
