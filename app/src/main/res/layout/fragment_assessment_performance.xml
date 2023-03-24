@@ -127,12 +127,12 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Your Performance by Concept"
+            android:text="Performance by Concept"
             android:textSize="18sp"
             android:layout_marginBottom="10dp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:gravity="center_vertical" />
+            android:layout_gravity="center" />
 
 
         <LinearLayout

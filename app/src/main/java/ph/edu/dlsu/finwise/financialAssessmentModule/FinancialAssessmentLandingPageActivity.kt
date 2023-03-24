@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.financialAssessmentModule
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -19,6 +20,7 @@ import ph.edu.dlsu.finwise.model.Users
 class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
 
     private var childID = FirebaseAuth.getInstance().currentUser!!.uid
+    private lateinit var userType: String
     private var firestore = Firebase.firestore
     private lateinit var binding: ActivityFinancialAssessmentLandingPageBinding
     private val setBundle = Bundle()
@@ -39,12 +41,11 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
         checkUser()
     }
 
-    private fun setBundle(user: String?) {
-        val getBundle = intent.extras
-        //TODO: receive user bundle pero hindi ko alam ujng saan so hard code muna
+    private fun setBundle() {
         // sending of friendchildID
         setBundle.putString("childID", childID)
-        setBundle.putString("user", user)
+        setBundle.putString("user", userType)
+
         /*if (getBundle?.containsKey("childID") == true) {
             childID = getBundle.getString("childID").toString()
             if (getBundle?.containsKey("friendChildID") == true) {
@@ -62,6 +63,7 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
         val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
             val user = it.toObject<Users>()!!
+            userType = user.userType.toString()
             //current user is a child
             val bottomNavigationViewChild = binding.bottomNav
             val bottomNavigationViewParent = binding.bottomNavParent
@@ -73,20 +75,18 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
                 //sends the ChildID to the parent navbar
-                val bundle = intent.extras!!
-                val childID = bundle.getString("childID").toString()
                 val bundleNavBar = Bundle()
                 bundleNavBar.putString("childID", childID)
                 NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_assessment, bundleNavBar)
             }
 
-            setUpChartTabs(it.id)
+            setUpChartTabs()
         }
     }
 
 
-    private fun setUpChartTabs(user: String?) {
-        setBundle(user)
+    private fun setUpChartTabs() {
+        setBundle()
 
         val adapter = PFMAdapter(supportFragmentManager)
         val assessmentLeaderboardFragment = AssessmentLeaderboardFragment()

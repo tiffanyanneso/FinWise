@@ -205,9 +205,14 @@ class AssessmentLeaderboardFragment : Fragment() {
     }
 
     private fun setRankOfChildUser(rankedFriends: List<FriendRanking>) {
-        val result = rankedFriends.find { it.childUsers.id == childID }
-        val rankNumber = result?.rank
-        binding.tvRank.text = "You are rank $rankNumber!"
+        lateinit var message: String
+        if (rankedFriends.size == 1)
+            message = ""
+        else {
+            val result = rankedFriends.find { it.childUsers.id == childID }
+            message = "You are rank ${result?.rank}!"
+        }
+        binding.tvRank.text = message
     }
 
     private fun loadRecyclerView(rankedFriends: List<FriendRanking>) {

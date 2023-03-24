@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.childDashboardModule
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -93,7 +94,10 @@ class childDashboardActivity : AppCompatActivity(){
                 else if (transactionObject.transactionType == "Expense")
                     expense += transactionObject.amount!!}
         }.continueWith {
-            personalFinancePerformance = income/expense * 100
+            var personalFinancePerformancePercent = income/expense * 100
+            if (personalFinancePerformancePercent > 200)
+                personalFinancePerformancePercent = 200F
+            personalFinancePerformance = personalFinancePerformancePercent / 2
             binding.tvPersonalFinancePercent.text = DecimalFormat("##0.00").format(personalFinancePerformance) + "%"
             println("print age " + age)
             if (age == 10 || age == 11)
@@ -110,7 +114,7 @@ class childDashboardActivity : AppCompatActivity(){
             nGoalSettingCompleted = results.size()
             nRatings = results.size()
             for (rating in results) {
-                var ratingObject = rating.toObject<GoalRating>()
+                val ratingObject = rating.toObject<GoalRating>()
                 overallRating += ratingObject.overallRating!!
             }
             if (nRatings != 0)
@@ -145,6 +149,7 @@ class childDashboardActivity : AppCompatActivity(){
         }
     }
 
+    @SuppressLint("NewApi")
     private fun getBudgetingPerformanceScore() {
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             nBudgetingCompleted = results.size()
@@ -202,6 +207,7 @@ class childDashboardActivity : AppCompatActivity(){
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getSpendingPerformance() {
         println("print in spending")
         //get budgeting items to see if they overspent for a specific budget item
