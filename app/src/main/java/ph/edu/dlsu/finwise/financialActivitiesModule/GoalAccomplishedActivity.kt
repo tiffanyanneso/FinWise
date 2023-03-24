@@ -67,7 +67,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
 
     private fun badge() {
         CoroutineScope(Dispatchers.Main).launch {
-            getNFinishedActivities()
+            nFinishedActivities = getNFinishedActivities()
             if (nFinishedActivities > 0) {
                 val badgesQuerySnapshot = firestore.collection("Badges")
                     .whereEqualTo("childID", currentUser)
@@ -86,13 +86,13 @@ class GoalAccomplishedActivity : AppCompatActivity() {
         }
     }
 
-    private suspend fun getNFinishedActivities() {
+    private suspend fun getNFinishedActivities(): Int {
         val activities = firestore.collection("FinancialActivities")
             .whereEqualTo("childID", currentUser)
             .whereEqualTo("financialActivityName", "Saving")
             .whereEqualTo("status", "Completed")
             .get().await()
-        nFinishedActivities = activities.size()
+        return activities.size()
     }
 
     private suspend fun addBadge() {
@@ -122,8 +122,8 @@ class GoalAccomplishedActivity : AppCompatActivity() {
 
     private suspend fun checkIfAddBadge(badges: QuerySnapshot?) {
         if (badges != null) {
-            val highestBadgeAchieved = getHighestBadgeScore(badges)
-            if (nFinishedActivities > highestBadgeAchieved!!) {
+            val highestBadgeScoreAchieved = getHighestBadgeScore(badges)
+            if (nFinishedActivities > highestBadgeScoreAchieved!!) {
                 if (isUpdateBadge()) {
                     addBadge()
                     showBadgeDialog()
