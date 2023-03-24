@@ -128,9 +128,9 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
 
     private fun budgetingPreliminaryQuestions(){
         var assessment = hashMapOf(
-            "assessmentCategory" to "Concept of Budgeting",
+            "assessmentCategory" to "Budgeting",
             "assessmentType" to "Preliminary",
-            "description" to "Preliminary assessment for concept of budgeting",
+            "description" to "Preliminary assessment for budgeting",
             "createdOn" to Timestamp.now(),
             "createdBy" to currentUser,
             "nTakes" to 0,
@@ -146,9 +146,9 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
 
     private fun budgetingPreActivityQuestions(){
         var assessment = hashMapOf(
-            "assessmentCategory" to "Concept of Budgeting",
+            "assessmentCategory" to "Budgeting",
             "assessmentType" to "Pre-Activity",
-            "description" to "Pre-Activity assessment for concept of budgeting",
+            "description" to "Pre-Activity assessment for budgeting",
             "createdOn" to Timestamp.now(),
             "createdBy" to currentUser,
             "nTakes" to 0,
@@ -163,9 +163,9 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
     }
     private fun budgetingPostActivityQuestions(){
         var assessment = hashMapOf(
-            "assessmentCategory" to "Concept of Budgeting",
+            "assessmentCategory" to "Budgeting",
             "assessmentType" to "Post-Activity",
-            "description" to "Post-Activity assessment for concept of budgeting",
+            "description" to "Post-Activity assessment for budgeting",
             "createdOn" to Timestamp.now(),
             "createdBy" to currentUser,
             "nTakes" to 0,
@@ -181,9 +181,9 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
 
     private fun savingPreliminaryQuestions(){
         var assessment = hashMapOf(
-            "assessmentCategory" to "Concept of Saving",
+            "assessmentCategory" to "Saving",
             "assessmentType" to "Preliminary",
-            "description" to "Preliminary assessment for concept of saving",
+            "description" to "Preliminary assessment for saving",
             "createdOn" to Timestamp.now(),
             "createdBy" to currentUser,
             "nTakes" to 0,
@@ -198,9 +198,9 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
     }
     private fun savingPreActivityQuestions(){
         var assessment = hashMapOf(
-            "assessmentCategory" to "Concept of Saving",
+            "assessmentCategory" to "Saving",
             "assessmentType" to "Pre-Activity",
-            "description" to "Pre-Activity assessment for concept of saving",
+            "description" to "Pre-Activity assessment for saving",
             "createdOn" to Timestamp.now(),
             "createdBy" to currentUser,
             "nTakes" to 0,
@@ -216,9 +216,9 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
 
     private fun savingPostActivityQuestions(){
         var assessment = hashMapOf(
-            "assessmentCategory" to "Concept of Saving",
+            "assessmentCategory" to "Saving",
             "assessmentType" to "Post-Activity",
-            "description" to "Post-Activity assessment for concept of saving",
+            "description" to "Post-Activity assessment for saving",
             "createdOn" to Timestamp.now(),
             "createdBy" to currentUser,
             "nTakes" to 0,
@@ -233,9 +233,9 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
     }
     private fun spendingPreliminaryQuestions(){
         var assessment = hashMapOf(
-            "assessmentCategory" to "Concept of Spending",
+            "assessmentCategory" to "Spending",
             "assessmentType" to "Preliminary",
-            "description" to "Preliminary assessment for concept of spending",
+            "description" to "Preliminary assessment for spending",
             "createdOn" to Timestamp.now(),
             "createdBy" to currentUser,
             "nTakes" to 0,
@@ -250,9 +250,9 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
     }
     private fun spendingPreActivityQuestions(){
         var assessment = hashMapOf(
-            "assessmentCategory" to "Concept of Spending",
+            "assessmentCategory" to "Spending",
             "assessmentType" to "Pre-Activity",
-            "description" to "Pre-Activity assessment for concept of spending",
+            "description" to "Pre-Activity assessment for spending",
             "createdOn" to Timestamp.now(),
             "createdBy" to currentUser,
             "nTakes" to 0,
@@ -267,9 +267,9 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
     }
     private fun spendingPostActivityQuestions(){
         var assessment = hashMapOf(
-            "assessmentCategory" to "Concept of Spending",
+            "assessmentCategory" to "Spending",
             "assessmentType" to "Post-Activity",
-            "description" to "Post-Activity assessment for concept of spending",
+            "description" to "Post-Activity assessment for spending",
             "createdOn" to Timestamp.now(),
             "createdBy" to currentUser,
             "nTakes" to 0,
