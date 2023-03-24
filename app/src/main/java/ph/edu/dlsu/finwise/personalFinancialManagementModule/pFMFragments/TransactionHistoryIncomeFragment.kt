@@ -52,11 +52,13 @@ class TransactionHistoryIncomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun sortTransactions(): ArrayList<TransactionFilter> {
         checkedBoxes = arguments?.getString("checkedBoxes").toString()
+        getBundleValues()
+        transactionFilterArrayList = checkSort()
 
-        if (checkedBoxes == "both" || checkedBoxes == "income") {
+       /* if (checkedBoxes == "both" || checkedBoxes == "income") {
             getBundleValues()
             transactionFilterArrayList = checkSort()
-        } else if (checkedBoxes == "expense") transactionFilterArrayList.clear()
+        } else if (checkedBoxes == "expense") transactionFilterArrayList.clear()*/
         return transactionFilterArrayList
     }
 

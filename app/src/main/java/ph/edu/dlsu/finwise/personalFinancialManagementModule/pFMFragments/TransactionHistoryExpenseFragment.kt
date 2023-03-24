@@ -86,11 +86,13 @@ class TransactionHistoryExpenseFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun sortTransactions(): java.util.ArrayList<TransactionFilter> {
         checkedBoxes = arguments?.getString("checkedBoxes").toString()
+        getBundleValues()
+        transactionFilterArrayList = checkSort()
 
-        if (checkedBoxes == "both" || checkedBoxes == "expense") {
+        /*if (checkedBoxes == "both" || checkedBoxes == "expense") {
             getBundleValues()
             transactionFilterArrayList = checkSort()
-        } else if (checkedBoxes == "income") transactionFilterArrayList.clear()
+        } else if (checkedBoxes == "income") transactionFilterArrayList.clear()*/
         return transactionFilterArrayList
     }
 

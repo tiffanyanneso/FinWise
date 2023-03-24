@@ -149,15 +149,18 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
 
     private fun setSummary() {
         val dec = DecimalFormat("#,###.00")
-        val totalText = dec.format(total)
+        var totalText = dec.format(total)
+        if (total == 0.0f)
+            totalText = "0"
         var dateRange = "week"
         when (selectedDatesSort) {
             "monthly" -> dateRange = "month"
             "yearly" -> dateRange = "quarter"
         }
 
+
         if (user == "child") {
-            binding.tvSummary.text = "You've earned ₱$totalText for this $dateRange"
+            binding.tvSummary.text = "You've spent ₱$totalText for this $dateRange"
             binding.tvTips.text =
                 "Consider reviewing your Top Expenses below or your previous transactions and see which you could lessen"
         } else if (user == "parent") {

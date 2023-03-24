@@ -44,7 +44,6 @@ class TransactionSortFragment : DialogFragment() {
         initializeDatePicker(binding.etEndDate, "endDate")
         initializeBack()
         sortTransactions()
-
     }
 
     private fun initializeBack() {

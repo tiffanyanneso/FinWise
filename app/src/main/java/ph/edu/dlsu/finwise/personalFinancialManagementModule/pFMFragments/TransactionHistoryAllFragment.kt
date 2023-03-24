@@ -1,8 +1,8 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 
-import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +30,7 @@ class TransactionHistoryAllFragment : Fragment() {
     private var maxAmount: String? = null
     private var startDate: String? = null
     private var endDate: String? = null
-    private val incomeIDArrayList = ArrayList<String>()
+    private val transactionIDArrayList = ArrayList<String>()
     private var transactionFilterArrayList = ArrayList<TransactionFilter>()
 
     override fun onCreateView(
@@ -52,11 +52,12 @@ class TransactionHistoryAllFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun sortTransactions(): ArrayList<TransactionFilter> {
         checkedBoxes = arguments?.getString("checkedBoxes").toString()
-
-        if (checkedBoxes == "both" || checkedBoxes == "income") {
+        getBundleValues()
+        transactionFilterArrayList = checkSort()
+        /*if (checkedBoxes == "both" || checkedBoxes == "income" || checkedBoxes == "expense" ) {
             getBundleValues()
             transactionFilterArrayList = checkSort()
-        } else if (checkedBoxes == "expense") transactionFilterArrayList.clear()
+        }*/
         return transactionFilterArrayList
     }
 
@@ -159,9 +160,9 @@ class TransactionHistoryAllFragment : Fragment() {
             transactionFilterArrayList = sortTransactions()
 
             for (transactionFilter in transactionFilterArrayList)
-                incomeIDArrayList.add(transactionFilter.transactionID!!)
+                transactionIDArrayList.add(transactionFilter.transactionID!!)
 
-            loadRecyclerView(incomeIDArrayList)
+           loadRecyclerView(transactionIDArrayList)
         }
     }
 
@@ -171,13 +172,13 @@ class TransactionHistoryAllFragment : Fragment() {
 
     class TransactionFilter(var transactionID: String?=null, var transaction: Transactions?=null)
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun loadRecyclerView(transactionIDArrayList: ArrayList<String>) {
-        transactionAdapter = TransactionsAdapter(requireActivity(), transactionIDArrayList)
-        binding.rvViewTransactions.adapter = transactionAdapter
-        binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireContext().applicationContext,
-            LinearLayoutManager.VERTICAL,
-            false)
-        transactionAdapter.notifyDataSetChanged()
+        if (isAdded) {
+            transactionAdapter = TransactionsAdapter(requireActivity(), transactionIDArrayList)
+            binding.rvViewTransactions.adapter = transactionAdapter
+            binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireContext().applicationContext,
+                LinearLayoutManager.VERTICAL,
+                false)
+        }
     }
 }

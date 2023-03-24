@@ -65,7 +65,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
         val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
         val firestore = Firebase.firestore
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-            var user  = it.toObject<Users>()!!
+            val user  = it.toObject<Users>()!!
             //current user is a child
             val bottomNavigationViewChild = binding.bottomNav
             val bottomNavigationViewParent = binding.bottomNavParent
@@ -102,13 +102,13 @@ class TransactionHistoryActivity : AppCompatActivity() {
     }
 
     private fun getBundle() {
-        minAmount = getBundle!!.getFloat("minAmount").toString()
-        maxAmount = getBundle!!.getFloat("maxAmount").toString()
-        startDate = getBundle!!.getSerializable("startDate").toString()
-        endDate = getBundle!!.getSerializable("endDate").toString()
-        checkedBoxes = getBundle!!.getString("checkedBoxes").toString()
-        isExpense = getBundle!!.getString("isExpense").toString()
-        user = getBundle!!.getString("user").toString()
+        minAmount = getBundle?.getFloat("minAmount").toString()
+        maxAmount = getBundle?.getFloat("maxAmount").toString()
+        startDate = getBundle?.getSerializable("startDate").toString()
+        endDate = getBundle?.getSerializable("endDate").toString()
+        checkedBoxes = getBundle?.getString("checkedBoxes").toString()
+        isExpense = getBundle?.getString("isExpense").toString()
+        user = getBundle?.getString("user").toString()
         //Toast.makeText(this, ""+user, Toast.LENGTH_SHORT).show()
         if (user == "parent") {
             childID = getBundle?.getString("childID").toString()

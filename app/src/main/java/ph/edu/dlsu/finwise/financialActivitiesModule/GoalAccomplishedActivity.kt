@@ -110,23 +110,10 @@ class GoalAccomplishedActivity : AppCompatActivity() {
         val badge = querySnapshot?.documents?.get(0)?.toObject<UserBadges>()
         if (nFinishedActivities > badge?.badgeScore!!) {
             if (isUpdateBadge()) {
-                updateBadge(querySnapshot)
+                addBadge()
                 showBadgeDialog()
             }
         }
-    }
-
-    private suspend fun updateBadge(querySnapshot: QuerySnapshot) {
-        val badgeName = getBadgeName()
-        val updatedBadge = hashMapOf(
-            "badgeName" to badgeName,
-            "badgeScore" to nFinishedActivities,
-            "badgeDescription" to "Finished $nFinishedActivities Activities",
-            "dateEarned" to SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate())
-        )
-        val badgeID = querySnapshot.documents[0].id
-        firestore.collection("Badges").document(badgeID).update(updatedBadge as Map<String, Any>)
-            .await()
     }
 
     private fun isUpdateBadge(): Boolean {
