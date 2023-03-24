@@ -62,7 +62,7 @@ class EditGoal : AppCompatActivity() {
             confirmDeleteGoal()
         }
 
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             val goToGoal = Intent(applicationContext, ViewGoalActivity::class.java)
             goToGoal.putExtras(bundle)
@@ -158,7 +158,12 @@ class EditGoal : AppCompatActivity() {
             } else  if (user.userType == "Parent"){
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
-                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+                //sends the ChildID to the parent navbar
+                val bundle = intent.extras!!
+                val childID = bundle.getString("childID").toString()
+                val bundleNavBar = Bundle()
+                bundleNavBar.putString("childID", childID)
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal, bundleNavBar)
             }
 
         }

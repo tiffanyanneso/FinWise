@@ -54,7 +54,8 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         setContentView(binding.root)
         context = this
         //Initializes the navbar
-        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
+        initializeChildID()
+        initializeParentNavbar()
         loadBalance()
 
         binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
@@ -69,6 +70,17 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    private fun initializeChildID() {
+        val bundle = intent.extras!!
+        childID = bundle.getString("childID").toString()
+    }
+
+    private fun initializeParentNavbar() {
+        val bundleNavBar = Bundle()
+        bundleNavBar.putString("childID", childID)
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance, bundleNavBar)
     }
 
     private fun initializeFragments() {
@@ -307,14 +319,8 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
 
 
     private fun loadBalance() {
-        val parentID = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("Users").whereEqualTo("parentID", parentID)
-            .get().addOnSuccessListener { document ->
-                //check which child
-                childID = document.documents[0].id
-                loadBalanceView()
-                initializeFragments()
-            }
+        loadBalanceView()
+        initializeFragments()
     }
 
     private fun loadBalanceView() {

@@ -209,7 +209,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     private fun getBudgetAccuracy(budgetingActivityID:String, budgetItemID:String, budgetItemObject:BudgetItem) {
         firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
             firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", it.toObject<FinancialActivities>()!!.financialGoalID!!).whereEqualTo("financialActivityName", "Spending").get().addOnSuccessListener { spending ->
-                var spendingActivity = spending.documents[0].toObject<FinancialActivities>()
+                val spendingActivity = spending.documents[0].toObject<FinancialActivities>()
                 if (spendingActivity?.status == "Completed") {
                     //budget accuracy
                     purchasedBudgetItemCount++
@@ -223,9 +223,10 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
                         setOverall()
                         setBudgetAccuracy()
                     }
-                } else
+                } else {
                     setOverall()
                     setBudgetAccuracy()
+                }
             }
         }
     }
@@ -376,7 +377,12 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
             if (it.toObject<Users>()!!.userType == "Parent") {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
-                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal)
+                //sends the ChildID to the parent navbar
+                val bundle = intent.extras!!
+                val childID = bundle.getString("childID").toString()
+                val bundleNavBar = Bundle()
+                bundleNavBar.putString("childID", childID)
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal, bundleNavBar)
             } else if (it.toObject<Users>()!!.userType == "Child") {
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
