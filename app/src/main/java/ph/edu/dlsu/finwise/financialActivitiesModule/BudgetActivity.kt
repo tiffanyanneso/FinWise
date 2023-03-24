@@ -91,9 +91,11 @@ class BudgetActivity : AppCompatActivity() {
                         binding.btnDoneSpending.visibility = View.VISIBLE
                     }
                 }
+                binding.topAppBar.title = "Spending"
 
             }
             else if (budgetingActivity?.status != "Completed"){
+                binding.topAppBar.title = "Budgeting"
                 binding.tvAvailable.text = "Savings available to budget"
                 allCompleted = false
                 binding.layoutExpenses.visibility = View.GONE
