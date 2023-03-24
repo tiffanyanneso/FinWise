@@ -111,7 +111,6 @@ class SpendingFragment : Fragment(){
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getBudgeting() {
-        var budgetingActivityIDArrayList = ArrayList<String>()
         //get completed spending activities
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             for (spending in results) {
@@ -125,8 +124,6 @@ class SpendingFragment : Fragment(){
 
                             var budgetItemObject = budgetItem.toObject<BudgetItem>()
                             checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
-//                        budgetItemsIDArrayList.add(BudgetItemAmount(budgetItem.id, budgetItemObject.amount!!))
-//                        println("print add item in budgetItems array list")
                         }
                     }
                 }

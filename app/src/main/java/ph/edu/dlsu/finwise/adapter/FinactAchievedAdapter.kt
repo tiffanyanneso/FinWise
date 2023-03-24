@@ -72,18 +72,7 @@ class FinactAchievedAdapter : RecyclerView.Adapter<FinactAchievedAdapter.FinactA
                 // convert timestamp to date
                 val date = SimpleDateFormat("MM/dd/yyyy").format(goal?.dateCompleted?.toDate())
                 itemBinding.tvDateAchieved.text = "Date Achieved: " + date.toString()
-
-                var savedAmount = 0.00F
-                firestore.collection("Transactions").whereEqualTo("financialGoalID", goalID).get().addOnSuccessListener { results ->
-                    for (transaction in results) {
-                        var transactionObject = transaction.toObject<Transactions>()
-                        if (transactionObject.transactionType == "Deposit")
-                            savedAmount += transactionObject.amount!!
-                        else if (transactionObject.transactionType == "Withdrawal")
-                            savedAmount-= transactionObject.amount!!
-                    }
-                    itemBinding.tvTargetAmount.text = "₱ " + DecimalFormat("#,##0.00").format(savedAmount)
-                }
+                itemBinding.tvTargetAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.currentSavings)
 
 
             }

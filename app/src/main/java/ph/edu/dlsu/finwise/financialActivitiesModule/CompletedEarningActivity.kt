@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -15,7 +16,7 @@ class CompletedEarningActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCompletedEarningBinding
 
     private var firestore = Firebase.firestore
-
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +38,10 @@ class CompletedEarningActivity : AppCompatActivity() {
 
         firestore.collection("EarningActivities").document(earningActivityID).update("status", "Pending")
        // firestore.collection("EarningActivities").document(earningActivityID).update("dateCompleted", Timestamp.now())
+
+        firestore.collection("EarningActivities").whereEqualTo("childID", currentUser).whereEqualTo("status", "Ongoing").get().addOnSuccessListener {
+            binding.tvChoresLeft.text = "In the mean time, you can proceed to complete your other chores\nYou still have ${it.size()} pending chore"
+        }
 
 
         binding.btnFinish.setOnClickListener {

@@ -76,7 +76,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        tools:text="12%"
+                        tools:text=""
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_gravity="center"
@@ -87,7 +87,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:text="Good"
+                        android:text=""
                         android:textColor="@color/light_green"
                         android:textStyle="bold"
                         android:layout_gravity="center"/>
@@ -98,7 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="Good job! With a bit more dedication and effort, you’ll surely up your performance!"
+                    android:text="You will know your overall financial health once you start keeping track of your personal finance, do your financial activies, and begin to take financial assessments."
                     android:textColor="@color/white"
                     android:layout_gravity="center"
                     android:layout_marginLeft="15dp"/>
@@ -156,7 +156,7 @@
                     app:layout_constraintVertical_bias="0.5">
 
                     <TextView
-                        android:id="@+id/text_view_progress_personal_finance"
+                        android:id="@+id/tv_personal_finance_percent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -244,7 +244,7 @@
                         app:layout_constraintVertical_bias="0.5">
 
                         <TextView
-                            android:id="@+id/text_view_progress_financial_activities"
+                            android:id="@+id/tv_finact_percent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -332,7 +332,7 @@
                         app:layout_constraintVertical_bias="0.5">
 
                         <TextView
-                            android:id="@+id/text_view_progress_financial_assessments"
+                            android:id="@+id/tv_financial_assessment_percentage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"

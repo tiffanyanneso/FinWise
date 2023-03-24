@@ -172,10 +172,11 @@
         android:backgroundTint="@color/white">
 
         <TextView
+            android:id="@+id/tv_chores_left"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="You have completed x/x of your chores!"
+            android:text="You still have n chores to complete"
             android:gravity="center"
             android:textColor="@color/black"
             />
