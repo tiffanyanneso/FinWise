@@ -1,10 +1,10 @@
 package ph.edu.dlsu.finwise.financialAssessmentModule.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -14,7 +14,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentAssessmentPerformanceBinding
-import ph.edu.dlsu.finwise.model.*
+import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
+import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
 
 class AssessmentPerformanceFragment : Fragment() {
     private lateinit var binding: FragmentAssessmentPerformanceBinding
@@ -53,6 +54,7 @@ class AssessmentPerformanceFragment : Fragment() {
     private fun getBundles() {
         childID = arguments?.getString("childID").toString()
         user = arguments?.getString("user").toString()
+
     }
 
     private fun getAssessments() {
@@ -157,7 +159,7 @@ class AssessmentPerformanceFragment : Fragment() {
 
         binding.textViewProgress.text = String.format("%.1f%%", percentage)
 
-        if (user == "child")
+        if (user == "Child")
             setTextPerformanceChild(percentage)
         else setTextPerformanceParent(percentage)
 
@@ -248,7 +250,7 @@ class AssessmentPerformanceFragment : Fragment() {
         //TODO: check if parent user
         binding.textViewPerformanceText.text = "Bad"
         binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.red))
-        val message = if (user == "child")
+        val message = if (user == "Child")
             "You haven't taken any assessments yet!"
         else "Your child hasn't taken any assessments yet!"
         binding.tvPerformanceText.text = message
