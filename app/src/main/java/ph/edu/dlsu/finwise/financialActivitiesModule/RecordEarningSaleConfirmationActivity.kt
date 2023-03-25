@@ -156,7 +156,7 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
                     val childWallet = wallets.toObject<ChildWallet>()
                     walletAmount += childWallet.currentBalance!!
                 }
-                var amount = DecimalFormat("#,##0.00").format(walletAmount)
+                var amount = DecimalFormat("#,##0.00").format(walletAmount + bundle.getFloat("saleAmount"))
                 if (walletAmount < 0.00F)
                     amount = "0.00"
                 binding.tvWalletBalance.text = "₱$amount"

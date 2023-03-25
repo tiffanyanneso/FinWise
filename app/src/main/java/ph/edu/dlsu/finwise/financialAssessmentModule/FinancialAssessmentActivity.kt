@@ -1,7 +1,9 @@
 package ph.edu.dlsu.finwise.financialAssessmentModule
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -18,7 +20,14 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentBinding
 import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
+import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 class FinancialAssessmentActivity : AppCompatActivity() {
 
@@ -29,6 +38,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
     private lateinit var assessmentCategory: String
     private lateinit var assessmentName: String
     private var childID = FirebaseAuth.getInstance().currentUser!!.uid
+    private var age = 0
 
     private var questionIDArrayList = ArrayList<String>()
     private var answerHistoryArrayList = ArrayList<FinancialAssessmentQuiz.AnswerHistory>()
@@ -51,7 +61,6 @@ class FinancialAssessmentActivity : AppCompatActivity() {
 
     private fun loadAssessmentAttemptButton() {
         binding.btnTakeAssessment.setOnClickListener {
-            println("print btn take assessment")
             val assessmentAttempt = makeAssessmentAttempt()
             firestore.collection("AssessmentAttempts").add(assessmentAttempt)
                 .addOnSuccessListener {
@@ -67,6 +76,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             val assessmentsDocumentSnapshot = getAssessmentDocument()
             loadTextViewsBinding(assessmentsDocumentSnapshot)
+            getChildAge()
             getAssessmentQuestions(assessmentsDocumentSnapshot)
         }
     }
@@ -89,8 +99,6 @@ class FinancialAssessmentActivity : AppCompatActivity() {
     }
 
     private fun getScore(assessmentID: String) {
-        //TODO: remove chilID
-       // childID = "4hZAQJXIf4dFN0KyjoSF6NdEyy72"
         firestore.collection("AssessmentAttempts")
             .whereEqualTo("assessmentID" , assessmentID)
             .whereEqualTo("childID", childID)
@@ -125,6 +133,21 @@ class FinancialAssessmentActivity : AppCompatActivity() {
             }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private suspend fun getChildAge() {
+        firestore.collection("Users").document(childID).get().addOnSuccessListener {
+            var child = it.toObject<Users>()
+            //compute age
+            val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            var difference = Period.between(to, from)
+
+            age = difference.years
+        }
+    }
+
     private fun makeAssessmentAttempt(): Any {
         val assessmentAttempt = hashMapOf(
             "childID" to childID,
@@ -148,8 +171,15 @@ class FinancialAssessmentActivity : AppCompatActivity() {
     }
 
     private suspend fun getAssessmentQuestionsCollection(assessmentID: String): QuerySnapshot? {
+        var difficultyQuery =  Arrays.asList("Easy")
+        if (age == 10 || age == 11)
+            difficultyQuery = Arrays.asList("Easy", "Medium")
+        else if (age == 12)
+            difficultyQuery = Arrays.asList("Easy", "Medium", "Hard")
+
         val docRef = firestore.collection("AssessmentQuestions")
             .whereEqualTo("assessmentID", assessmentID)
+            .whereEqualTo("difficulty", difficultyQuery)
         return docRef.get().await()
     }
 
