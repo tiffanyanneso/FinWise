@@ -19,15 +19,10 @@ class NavbarFinlitExpert (bottomNavigationView: BottomNavigationView, appCon: Co
                     appCon.startActivity(intent)
                 }
 
-         /*       R.id.nav_finlit_question -> {
-                    val intent = Intent(appCon, FinlitExpertQuestionsActivity::class.java)
-                    appCon.startActivity(intent)
-                }*/
-
-                R.id.nav_finlit_profile -> {
+      /*          R.id.nav_finlit_profile -> {
                     val intent = Intent(appCon, FinlitExpertProfileActivity::class.java)
                     appCon.startActivity(intent)
-                }
+                }*/
             }
             true
         }

@@ -7,6 +7,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.MainActivity
 import ph.edu.dlsu.finwise.NavbarFinlitExpert
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertBinding
@@ -55,6 +56,19 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
 
         // and initializes the navbar
         NavbarFinlitExpert(findViewById(R.id.bottom_nav_finlit_expert), this, R.id.nav_finlit_assessment)
+
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId) {
+                R.id.btn_logout -> {
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent (this, MainActivity::class.java)
+                    startActivity (intent)
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun addQuestions() {

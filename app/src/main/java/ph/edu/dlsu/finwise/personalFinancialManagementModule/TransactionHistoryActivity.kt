@@ -44,6 +44,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
     private var startDate: String? = null
     private var endDate: String? = null
     private val tabIcons = intArrayOf(
+        R.drawable.baseline_grid_view_24,
         R.drawable.baseline_wallet_24,
         R.drawable.baseline_shopping_cart_checkout_24
     )
@@ -169,8 +170,9 @@ class TransactionHistoryActivity : AppCompatActivity() {
     }
 
     private fun setupTabIcons() {
-        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[0])
-        binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[1])
+        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
+        binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[2])
 
     }
 

@@ -36,6 +36,6 @@ class FinlitExpertProfileActivity : AppCompatActivity() {
             // Hides actionbar,
             // and initializes the navbar
             supportActionBar?.hide()
-            NavbarFinlitExpert(findViewById(R.id.bottom_nav_finlit_expert), this, R.id.nav_finlit_profile)
+            //NavbarFinlitExpert(findViewById(R.id.bottom_nav_finlit_expert), this, R.id.nav_finlit_profile)
         }
 }

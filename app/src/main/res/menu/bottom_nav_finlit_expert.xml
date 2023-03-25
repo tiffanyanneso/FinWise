@@ -8,8 +8,8 @@
 <!--    <item android:title=""
         android:icon="@drawable/question_mark"
         android:id="@+id/nav_finlit_question"/>-->
-    <item android:title=""
+<!--    <item android:title=""
         android:icon="@drawable/baseline_profile_24"
-        android:id="@+id/nav_finlit_profile"/>
+        android:id="@+id/nav_finlit_profile"/>-->
 
 </menu>
