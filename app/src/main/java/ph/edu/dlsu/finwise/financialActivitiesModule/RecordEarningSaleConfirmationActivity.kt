@@ -145,22 +145,36 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
         binding.tvAmount.text =  "₱ " + DecimalFormat("#,##0.00").format(bundle.getFloat("saleAmount"))
         binding.tvDate.text = SimpleDateFormat("MM/dd/yyyy").format(bundle.getSerializable("saleDate"))
         binding.tvPaymentType.text = bundle.getString("paymentType")
-        setWalletBalance()
+        binding.tvDepositTo.text = bundle.getString("depositTo")
+        setBalance()
     }
 
-    private fun setWalletBalance() {
-        firestore.collection("ChildWallet").whereEqualTo("childID", currentUser)
-            .get().addOnSuccessListener { document ->
-                var walletAmount = 0.00f
-                for (wallets in document) {
-                    val childWallet = wallets.toObject<ChildWallet>()
-                    walletAmount += childWallet.currentBalance!!
+    private fun setBalance() {
+        if (depositTo == "Personal Finance") {
+            firestore.collection("ChildWallet").whereEqualTo("childID", currentUser)
+                .get().addOnSuccessListener { document ->
+                    var walletAmount = 0.00f
+                    for (wallets in document) {
+                        val childWallet = wallets.toObject<ChildWallet>()
+                        walletAmount += childWallet.currentBalance!!
+                    }
+                    var amount = DecimalFormat("#,##0.00").format(walletAmount + bundle.getFloat("saleAmount"))
+                    if (walletAmount < 0.00F)
+                        amount = "0.00"
+                    binding.tvWalletBalance.text = "₱$amount"
                 }
-                var amount = DecimalFormat("#,##0.00").format(walletAmount + bundle.getFloat("saleAmount"))
-                if (walletAmount < 0.00F)
-                    amount = "0.00"
-                binding.tvWalletBalance.text = "₱$amount"
+            binding.layoutGoal.visibility = View.GONE
+        } else if (depositTo  == "Financial Goal") {
+            binding.layoutGoal.visibility = View.VISIBLE
+            savingActivityID = bundle.getString("savingActivityID")
+            firestore.collection("FinancialActivities").document(savingActivityID!!).get().addOnSuccessListener {
+                firestore.collection("FinancialGoals").document(it.toObject<FinancialActivities>()!!.financialGoalID!!).get().addOnSuccessListener { goal ->
+                    var goalObject = goal.toObject<FinancialGoals>()
+                    binding.tvGoalName.text = goalObject?.goalName
+                    binding.tvWalletBalance.text = "₱${ DecimalFormat("#,##0.00").format(goalObject?.currentSavings!! + bundle.getFloat("saleAmount"))}"
+                }
             }
+        }
     }
 
 
