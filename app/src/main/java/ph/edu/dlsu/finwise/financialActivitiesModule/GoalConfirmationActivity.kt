@@ -21,7 +21,7 @@ import ph.edu.dlsu.finwise.databinding.DialogSmartGoalInfoBinding
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.Users
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -120,7 +120,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
                             finish()
                         }
                     } else {
-                        var parentGoal = Intent(this, ParentGoalActivity::class.java)
+                        var parentGoal = Intent(this, ParentFinancialActivity::class.java)
                         var bundle = Bundle()
                         bundle.putString("childID", childID)
                         parentGoal.putExtras(bundle)

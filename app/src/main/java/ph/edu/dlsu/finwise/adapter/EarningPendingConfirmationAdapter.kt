@@ -16,6 +16,7 @@ import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningSendMoneyActivity
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 
 class EarningPendingConfirmationAdapter : RecyclerView.Adapter<EarningPendingConfirmationAdapter.EarningCompletedViewHolder>{
 
@@ -61,12 +62,12 @@ class EarningPendingConfirmationAdapter : RecyclerView.Adapter<EarningPendingCon
                 var earning = it.toObject<EarningActivityModel>()
                 itemBinding.tvActivity.text = earning?.activityName
                 itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
-                itemBinding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
+                // itemBinding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
                 itemBinding.tvSource.text = earning?.depositTo
                 itemBinding.tvEarningActivityId.text = earningID
                 itemBinding.tvChildId.text = earning?.childID
                 itemBinding.tvPaymentType.text = earning?.paymentType
-                //itemBinding.tvFinishDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.dateCompleted!!.toDate())
+                itemBinding.tvDateCompleted.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.dateCompleted!!.toDate())
 
                 if (earning?.depositTo == "Financial Goal") {
                     firestore.collection("FinancialActivities").document(earning?.savingActivityID!!).get().addOnSuccessListener {

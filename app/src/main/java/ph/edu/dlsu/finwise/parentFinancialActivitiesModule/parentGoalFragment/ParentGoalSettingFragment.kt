@@ -9,21 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.ParentGoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactGoalSettingAdapter
 import ph.edu.dlsu.finwise.databinding.*
-import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
-import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.SavingFragment
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.GoalRating
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import java.text.DecimalFormat
 import java.util.*
 
@@ -298,7 +294,7 @@ class ParentGoalSettingFragment : Fragment() {
 
         dialogBinding.btnReviewGoals.setOnClickListener {
             dialog.dismiss()
-            var goToGoalSetting = Intent(requireContext().applicationContext, ParentGoalActivity::class.java)
+            var goToGoalSetting = Intent(requireContext().applicationContext, ParentFinancialActivity::class.java)
             this.startActivity(goToGoalSetting)
         }
 

@@ -6,7 +6,6 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -27,12 +26,8 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalSavingDetailsBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.Transactions
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import java.text.DecimalFormat
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.ZoneId
 import java.util.*
 
 class GoalSavingDetailsActivity : AppCompatActivity() {
@@ -218,7 +213,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
         binding.btnAction.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("childID",  childID)
-            val parentGoal = Intent(this, ParentGoalActivity::class.java)
+            val parentGoal = Intent(this, ParentFinancialActivity::class.java)
             parentGoal.putExtras(bundle)
             startActivity(parentGoal)
         }

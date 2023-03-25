@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import ph.edu.dlsu.finwise.databinding.ItemChildBinding
 import ph.edu.dlsu.finwise.model.Users
 
@@ -62,7 +62,7 @@ class ParentChildrenAdapter: RecyclerView.Adapter<ParentChildrenAdapter.ChildVie
         override fun onClick(p0: View?) {
             val bundle = Bundle()
             bundle.putString("childID", itemBinding.tvChildId.text.toString())
-            val parentGoal = Intent(context, ParentGoalActivity::class.java)
+            val parentGoal = Intent(context, ParentFinancialActivity::class.java)
             parentGoal.putExtras(bundle)
             context.startActivity(parentGoal)
         }

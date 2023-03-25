@@ -7,7 +7,7 @@ import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentLandingPageActivity
 import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import ph.edu.dlsu.finwise.parentFinancialManagementModule.ParentFinancialManagementActivity
 
 
@@ -28,7 +28,7 @@ class NavbarParent (bottomNavigationView: BottomNavigationView, appCon: Context,
                 }
 
                 R.id.nav_parent_goal -> {
-                    val intent = Intent(appCon, ParentGoalActivity::class.java)
+                    val intent = Intent(appCon, ParentFinancialActivity::class.java)
                     if (bundle != null) {
                         intent.putExtras(sendBundle)
                     }

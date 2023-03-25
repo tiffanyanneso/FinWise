@@ -16,9 +16,6 @@ import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityReviewGoalBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartGoalCriteriaParentBinding
-import ph.edu.dlsu.finwise.databinding.DialogSmartGoalInfoBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
-import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -153,7 +150,7 @@ class ReviewGoalActivity : AppCompatActivity() {
                     firestore.collection("FinancialActivities").document(finactID).update("status", activityStatus)
                 }
                 Toast.makeText(this, "Rating saved", Toast.LENGTH_SHORT).show()
-                var viewGoal = Intent(this, ParentGoalActivity::class.java)
+                var viewGoal = Intent(this, ParentFinancialActivity::class.java)
                 var bundle = Bundle()
                 bundle.putString("childID", childID)
                 viewGoal.putExtras(bundle)

@@ -19,7 +19,7 @@ import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityNewGoalBinding
 import ph.edu.dlsu.finwise.model.Users
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -97,7 +97,7 @@ class NewGoal : AppCompatActivity() {
                     startActivity(intent)
                 }
                 "Parent" -> {
-                    val intent = Intent(this, ParentGoalActivity::class.java)
+                    val intent = Intent(this, ParentFinancialActivity::class.java)
                     intent.putExtras(bundle)
                     startActivity(intent)
                 }
@@ -124,7 +124,7 @@ class NewGoal : AppCompatActivity() {
                     startActivity(intent)
                 }
                 "Parent" -> {
-                    val intent = Intent(this, ParentGoalActivity::class.java)
+                    val intent = Intent(this, ParentFinancialActivity::class.java)
                     intent.putExtras(bundle)
                     startActivity(intent)
                 }

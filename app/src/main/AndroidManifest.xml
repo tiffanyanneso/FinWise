@@ -145,7 +145,7 @@
             android:name=".financialActivitiesModule.ViewGoalDetails"
             android:exported="false" />
         <activity
-            android:name=".parentFinancialActivitiesModule.ParentGoalActivity"
+            android:name=".parentFinancialActivitiesModule.ParentFinancialActivity"
             android:exported="true" />
         <activity
             android:name=".parentDashboardModule.ParentDashboardActivity"

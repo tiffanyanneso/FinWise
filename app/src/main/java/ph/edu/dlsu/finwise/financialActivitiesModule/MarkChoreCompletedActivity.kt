@@ -55,6 +55,7 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
             val earning = it.toObject<ph.edu.dlsu.finwise.model.EarningActivityModel>()
             binding.tvActivity.text = earning?.activityName
             binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(earning?.targetDate!!.toDate()).toString()
+            binding.tvPaymentType.text = earning?.paymentType
             binding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
             binding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
             binding.tvSource.text = earning?.depositTo
