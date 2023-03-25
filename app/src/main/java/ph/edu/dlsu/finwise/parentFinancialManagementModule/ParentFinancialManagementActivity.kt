@@ -21,6 +21,7 @@ import ph.edu.dlsu.finwise.adapter.PFMAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityParentFinancialManagementBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import ph.edu.dlsu.finwise.parentFinancialManagementModule.pFMFragments.ExplanationParentFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.CashMayaBalanceBreakdownActivity
@@ -77,6 +78,12 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         childID = bundle.getString("childID").toString()
     }
 
+    private fun initializeChildName(){
+        firestore.collection("Users").document(childID).get().addOnSuccessListener {
+            binding.currentBalanceOfChildText.text = "Balance of ${it.toObject<Users>()!!.firstName}"
+        }
+    }
+
     private fun initializeParentNavbar() {
         val bundleNavBar = Bundle()
         bundleNavBar.putString("childID", childID)
@@ -84,6 +91,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
     }
 
     private fun initializeFragments() {
+        initializeChildName()
         setUpChartTabs()
         goToSendMoney()
         loadFinancialHealth()

@@ -28,8 +28,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
 import java.text.DecimalFormat
 import java.util.*
@@ -252,7 +251,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         //TODO: double chekc kung tama link
         binding.btnAction.setOnClickListener {
             bundle.putString("childID",  childID)
-            val parentGoal = Intent(context, ParentGoalActivity::class.java)
+            val parentGoal = Intent(context, ParentFinancialActivity::class.java)
             parentGoal.putExtras(bundle)
             startActivity(parentGoal)
         }

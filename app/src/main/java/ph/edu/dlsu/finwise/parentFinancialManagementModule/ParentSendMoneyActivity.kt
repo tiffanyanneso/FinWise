@@ -188,7 +188,6 @@ class ParentSendMoneyActivity :AppCompatActivity () {
 
 
     private fun initializeDropdown() {
-        // TODO: set parent user id curent session
         val parentID = FirebaseAuth.getInstance().currentUser!!.uid
         firestore.collection("Users").whereEqualTo("parentID", parentID).get()
             .addOnSuccessListener {documents ->
@@ -219,6 +218,11 @@ class ParentSendMoneyActivity :AppCompatActivity () {
             selectedValue = adapterPaymentTypeItems.getItem(position).toString()
             if (selectedValue == "Maya") {
                 binding.phoneContainer.visibility = View.VISIBLE
+                name = binding.etChildName.text.toString().trim()
+                getChildID()
+                firestore.collection("Users").document(childID).get().addOnSuccessListener {
+                    binding.etPhone.setText(it.toObject<Users>()!!.number.toString())
+                }
             }
             else if (selectedValue == "Cash") {
                 binding.phoneContainer.visibility = View.GONE

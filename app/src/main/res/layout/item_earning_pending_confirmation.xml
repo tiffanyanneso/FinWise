@@ -120,14 +120,14 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:contentDescription="Peso logo"
-                android:src="@drawable/goal"
+                android:src="@drawable/baseline_check_circle_24"
                 android:text="P"
                 android:layout_gravity="center"
                 android:layout_marginRight="10dp"
-                app:tint="@color/red" />
+                app:tint="@color/green" />
 
             <TextView
-                android:id="@+id/tv_target_date"
+                android:id="@+id/tv_date_completed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/linear_layout"
@@ -136,23 +136,23 @@
                 android:textSize="16sp"
                 android:text="Target Date"/>
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/baseline_access_time_24"
-                android:layout_gravity="center"
-                android:layout_marginRight="10dp"
-                app:tint="@color/dark_green" />
+<!--            <ImageView-->
+<!--                android:layout_width="20dp"-->
+<!--                android:layout_height="20dp"-->
+<!--                android:src="@drawable/baseline_access_time_24"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginRight="10dp"-->
+<!--                app:tint="@color/dark_green" />-->
 
-            <TextView
-                android:id="@+id/tv_duration"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/linear_layout"
-                android:layout_weight="1"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:text="X Minutes"/>
+<!--            <TextView-->
+<!--                android:id="@+id/tv_duration"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@id/linear_layout"-->
+<!--                android:layout_weight="1"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textSize="16sp"-->
+<!--                android:text="X Minutes"/>-->
         </LinearLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

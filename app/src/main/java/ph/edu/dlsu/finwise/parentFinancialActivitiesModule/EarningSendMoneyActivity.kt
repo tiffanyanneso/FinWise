@@ -200,7 +200,9 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             val id = document.documents[0].id
             val adjustedBalance = amount.toDouble()
 
-            firestore.collection("ChildWallet").document(id).update("currentBalance", FieldValue.increment(adjustedBalance))
+            firestore.collection("ChildWallet").document(id).update("currentBalance", FieldValue.increment(adjustedBalance)).addOnSuccessListener {
+                Toast.makeText(this, "Successfully sent reward", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -251,6 +253,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
                 firestore.collection("FinancialActivities").document(savingActivityID).get().addOnSuccessListener {
                     var activity = it.toObject<FinancialActivities>()
                     firestore.collection("FinancialGoals").document(activity?.financialGoalID!!).update("currentSavings", FieldValue.increment(amount.toLong())).addOnSuccessListener {
+                        Toast.makeText(this, "Successfully sent reward", Toast.LENGTH_SHORT).show()
                         var earning = Intent(this, EarningActivity::class.java)
                         var bundle = Bundle()
                         bundle.putString("savingActivityID", savingActivityID)

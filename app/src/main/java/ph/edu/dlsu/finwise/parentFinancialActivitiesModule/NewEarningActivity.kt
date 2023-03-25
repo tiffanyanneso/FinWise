@@ -63,8 +63,6 @@ class NewEarningActivity : AppCompatActivity() {
 
         // Initializes the navbar
         //sends the ChildID to the parent navbar
-        val getNavbarBundle = Bundle()
-        val childID = getNavbarBundle.getString("childID").toString()
         val bundleNavBar = Bundle()
         bundleNavBar.putString("childID", childID)
         NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal, bundleNavBar)

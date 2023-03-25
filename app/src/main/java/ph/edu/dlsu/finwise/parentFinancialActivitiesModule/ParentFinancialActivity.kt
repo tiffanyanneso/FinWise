@@ -16,7 +16,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.MainActivity
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.databinding.ActivityParentGoalBinding
+import ph.edu.dlsu.finwise.databinding.ActivityParentFinancialActivitiesBinding
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment.*
 import java.text.SimpleDateFormat
@@ -24,9 +24,9 @@ import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
 
-class ParentGoalActivity : AppCompatActivity() {
+class ParentFinancialActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityParentGoalBinding
+    private lateinit var binding: ActivityParentFinancialActivitiesBinding
     private var firestore = Firebase.firestore
     private lateinit var context: Context
 
@@ -47,7 +47,7 @@ class ParentGoalActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityParentGoalBinding.inflate(layoutInflater)
+        binding = ActivityParentFinancialActivitiesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context = this
 

@@ -1,12 +1,9 @@
 package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -84,7 +81,7 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 "Parent" -> {
-                    val intent = Intent(this, ParentGoalActivity::class.java)
+                    val intent = Intent(this, ParentFinancialActivity::class.java)
                     intent.putExtras(bundle)
                     startActivity(intent)
                 }

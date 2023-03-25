@@ -5,20 +5,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.databinding.ActivityGoalSettingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.ActivityParentGoalSettingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSmartConceptTipBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSmartTipBinding
-import ph.edu.dlsu.finwise.databinding.DialogSmartIndividualBinding
-import ph.edu.dlsu.finwise.databinding.DialogSmartReviewBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
-import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.GoalRating
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentGoalActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import kotlin.math.roundToInt
 
 class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
@@ -193,7 +187,7 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
 
         dialogBinding.btnReviewGoals.setOnClickListener {
             dialog.dismiss()
-            var goToGoalSetting = Intent(this, ParentGoalActivity::class.java)
+            var goToGoalSetting = Intent(this, ParentFinancialActivity::class.java)
             this.startActivity(goToGoalSetting)
         }
 

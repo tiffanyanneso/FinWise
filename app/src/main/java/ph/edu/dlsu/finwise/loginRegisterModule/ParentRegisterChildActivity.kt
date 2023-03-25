@@ -69,6 +69,7 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                             "birthday" to SimpleDateFormat("MM/dd/yyyy").parse(birthday),
                             "parentID" to parentuserID,
                             "userType" to "Child",
+                            "number" to contactNumber,
                             "lastLogin" to Timestamp.now(),
                             "lastShown" to Timestamp.now())
 
