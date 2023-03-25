@@ -54,7 +54,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center">
 
                 <LinearLayout
                     android:layout_width="100dp"
@@ -62,7 +64,9 @@
                     android:orientation="vertical"
                     android:background="@drawable/button_border_white"
                     android:backgroundTint="@color/white"
-                    android:padding="10dp">
+                    android:padding="10dp"
+                    android:layout_gravity="center"
+                    android:gravity="center">
 
                     <ImageView
                         android:src="@drawable/good"
@@ -93,15 +97,15 @@
                         android:layout_gravity="center"/>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_performance_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:text="You will know your overall financial health once you start keeping track of your personal finance, do your financial activies, and begin to take financial assessments."
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="15dp"/>
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_performance_text"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:text="You will know your overall financial health once you start keeping track of your personal finance, do your financial activies, and begin to take financial assessments."-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"/>-->
             </LinearLayout>
         </LinearLayout>
     <LinearLayout
@@ -125,7 +129,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
@@ -178,18 +184,19 @@
                         app:layout_constraintTop_toTopOf="@+id/progress_bar"
                         app:layout_constraintVertical_bias="0.75"
                         tools:text="Poor"
-                        android:textSize="16dp"/>
+                        android:textSize="16dp"
+                        />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-            <TextView
-                android:id="@+id/tv_personal_finance_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="Text about involvement here"
-                android:textColor="@color/black"
-                android:layout_gravity="center"
-                android:layout_marginLeft="15dp"/>
+<!--            <TextView-->
+<!--                android:id="@+id/tv_personal_finance_text"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textSize="16sp"-->
+<!--                android:text="Text about involvement here"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginLeft="15dp"/>-->
         </LinearLayout>
     </LinearLayout>
         <LinearLayout
@@ -213,7 +220,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
@@ -269,15 +278,15 @@
                             android:textSize="16dp"/>
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-                <TextView
-                    android:id="@+id/tv_financial_activities_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:text="Text about involvement here"
-                    android:textColor="@color/black"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="15dp"/>
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_financial_activities_text"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:text="Text about involvement here"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"/>-->
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -287,7 +296,8 @@
             android:padding="20dp"
             android:background="@drawable/button_border_white"
             android:backgroundTint="@color/white"
-            android:layout_marginBottom="10dp">
+            android:layout_marginBottom="10dp"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -301,7 +311,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                android:gravity="center">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="wrap_content"
@@ -357,15 +369,15 @@
                             android:textSize="16dp"/>
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-                <TextView
-                    android:id="@+id/tv_financial_assessments_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:text="Text about involvement here"
-                    android:textColor="@color/black"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="15dp"/>
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_financial_assessments_text"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:text="Text about involvement here"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginLeft="15dp"/>-->
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
