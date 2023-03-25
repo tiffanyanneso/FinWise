@@ -2,10 +2,13 @@ package ph.edu.dlsu.finwise.loginRegisterModule
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
@@ -38,33 +41,55 @@ class LoginActivity : AppCompatActivity() {
     private fun login() {
         binding.btnLogin.setOnClickListener {
             if (validateAndSetUserInput()) {
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val currentUser: String = FirebaseAuth.getInstance().currentUser!!.uid
-                        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-                            if (it.exists()) {
+                        Log.d("xxcxcxcxc", "login: "+currentUser)
+
+                        firestore.collection("Users").document(currentUser).get()
+                            .addOnSuccessListener { documentSnapshot ->
+                            if (documentSnapshot.exists()) {
                                 // User information already exists in the database
-                                if (it.contains("lastLogin")) {
+                                if (documentSnapshot.contains("lastLogin")) {
                                     firestore.collection("Users").document(currentUser)
                                         .update("lastLogin", Timestamp.now())
-                                    initializeRedirect(it, false)
+                                    initializeRedirect(documentSnapshot, false)
                                 } else {
                                     firestore.collection("Users").document(currentUser)
                                         .update("lastLogin", Timestamp.now())
                                     // User is logging in for the first time
-                                    initializeRedirect(it, true)
+                                    initializeRedirect(documentSnapshot, true)
                                 }
                             }
                         }
-                    }
+                    } else noAccountFound(task)
                 }
             } else {
                 Toast.makeText(
-                    baseContext, "Account not found.",
+                    baseContext, "Please fill up all the fields.",
                     Toast.LENGTH_SHORT
                 ).show()
             }
         }
+
+    }
+
+    private fun noAccountFound(task: Task<AuthResult>) {
+        Toast.makeText(
+            baseContext, "No account found.",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        Log.d("xzcxcxz", "noAccountFound: "+task.exception?.message)
+
+        binding.etPassword.error = "Please enter your correct password."
+        binding.etPassword.requestFocus()
+
+        binding.etEmail.error = "Please enter your correct email address."
+        binding.etEmail.requestFocus()
+
+
 
     }
 

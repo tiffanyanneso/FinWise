@@ -74,8 +74,8 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
     }
 
     private fun initializeChildID() {
-        val bundle = intent.extras!!
-        childID = bundle.getString("childID").toString()
+        val bundle = intent.extras
+        childID = bundle?.getString("childID").toString()
     }
 
     private fun initializeChildName(){
@@ -345,6 +345,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         binding.btnSendMoney.setOnClickListener {
             val goToSendMoney = Intent(applicationContext, ParentSendMoneyActivity::class.java)
             bundle.putFloat("balance", balance)
+            bundle.putString("childID", childID)
             goToSendMoney.putExtras(bundle)
             startActivity(goToSendMoney)
         }

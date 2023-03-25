@@ -16,6 +16,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentSendMoneyBinding
 import ph.edu.dlsu.finwise.model.Users
@@ -29,6 +30,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     private var firestore = Firebase.firestore
     private var bundle = Bundle()
     private lateinit var name: String
+    private lateinit var selectedChildID: String
     private lateinit var childID: String
     private lateinit var amount: String
     private lateinit var adapterPaymentTypeItems: ArrayAdapter<String>
@@ -49,7 +51,11 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         context = this
 
         // Initializes the navbar
-        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
+        val bundle = intent.extras!!
+        val childID = bundle.getString("childID").toString()
+        val bundleNavBar = Bundle()
+        bundleNavBar.putString("childID", childID)
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_dashboard, bundleNavBar)
         initializeDropdown()
         goToConfirmPayment()
         cancel()
@@ -85,16 +91,18 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     private fun setBundle() {
         //getCurrentTime()
 //        val goal = binding.spinnerGoal.selectedItem.toString()
+        getBalance()
+
         bundle.putString("name", name)
         bundle.putFloat("amount", amount.toFloat())
         bundle.putString("phone", phone)
         bundle.putString("paymentType", paymentType)
+        bundle.putString("selectedChildID", selectedChildID)
         bundle.putString("childID", childID)
         bundle.putFloat("balance", balance)
 //        bundle.putString("goal", goal)
         bundle.putSerializable("date", date)
 
-        getBalance()
 
 
 
@@ -108,6 +116,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     private fun getBalance() {
         val bundle2 = intent.extras!!
         balance = bundle2.getFloat("balance")
+        childID = bundle2.getString("childID").toString()
     }
 
 
@@ -175,7 +184,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
 
     private fun getChildID() {
         val index = childrenArray.indexOf(name)
-        childID = childrenIDArray[index]
+        selectedChildID = childrenIDArray[index]
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -184,8 +193,6 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         val currentDate = Date()
         date = dateFormat.parse(dateFormat.format(currentDate)) as Date
     }
-
-
 
     private fun initializeDropdown() {
         val parentID = FirebaseAuth.getInstance().currentUser!!.uid
@@ -220,7 +227,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
                 binding.phoneContainer.visibility = View.VISIBLE
                 name = binding.etChildName.text.toString().trim()
                 getChildID()
-                firestore.collection("Users").document(childID).get().addOnSuccessListener {
+                firestore.collection("Users").document(selectedChildID).get().addOnSuccessListener {
                     binding.etPhone.setText(it.toObject<Users>()!!.number.toString())
                 }
             }
