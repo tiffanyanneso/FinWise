@@ -23,7 +23,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialAssessmentFinlitExpertBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        addQuestions()
+        //addQuestions()
 
         var bundle = Bundle()
         var assessmentType = Intent(this, FinlitExpertAssessmentTypeActivity::class.java)

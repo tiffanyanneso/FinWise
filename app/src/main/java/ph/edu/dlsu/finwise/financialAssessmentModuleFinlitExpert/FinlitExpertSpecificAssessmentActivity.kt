@@ -35,6 +35,9 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
          assessmentID = bundle.getString("assessmentID").toString()
+        var assessmentCategory = bundle.getString("assessmentCategory")
+        var assessmentType = bundle.getString("assessmentType")
+        binding.tvAssessmentName.text = "$assessmentCategory - $assessmentType"
 
 
         loadBackButton()

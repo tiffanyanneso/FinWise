@@ -60,7 +60,10 @@ class AssessmentQuestionsAdapter : RecyclerView.Adapter<AssessmentQuestionsAdapt
                 println("print " + question?.nAssessments)
                 var answeredCorrectly  = question?.nAnsweredCorrectly?.toFloat()
                 var nAssessment =  question?.nAssessments!!?.toFloat()
-                itemBinding.tvCorrectPercentage.text = "Correct percentage: " + DecimalFormat ("#,##0.00").format((answeredCorrectly!! / nAssessment!!) * 100) + "%"
+                var correctPercentage = 0.00F
+                if (nAssessment!=0.00F)
+                    correctPercentage = (answeredCorrectly!! / nAssessment!!) * 100
+                itemBinding.tvCorrectPercentage.text = "Correct percentage: " + DecimalFormat ("#,##0.00").format(correctPercentage) + "%"
             }
         }
 

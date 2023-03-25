@@ -51,6 +51,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
 
     private fun loadAssessmentAttemptButton() {
         binding.btnTakeAssessment.setOnClickListener {
+            println("print btn take assessment")
             val assessmentAttempt = makeAssessmentAttempt()
             firestore.collection("AssessmentAttempts").add(assessmentAttempt)
                 .addOnSuccessListener {
@@ -105,8 +106,8 @@ class FinancialAssessmentActivity : AppCompatActivity() {
 
                     val percentage = (nAnsweredCorrectly?.toDouble()?.div(nQuestions?.toDouble()!!))
                         ?.times(100.0)
-                    val decimalFormat = DecimalFormat("#.#")
-                    val formattedValue = decimalFormat.format(percentage?.toFloat())
+                    println("print " +  percentage)
+                    val formattedValue = DecimalFormat("##0.#").format(percentage)
                     progressPercent = "$formattedValue%"
                     scoreBreakdown = "You got $nAnsweredCorrectly / $nQuestions"
                     progressInt = if (percentage != null) {

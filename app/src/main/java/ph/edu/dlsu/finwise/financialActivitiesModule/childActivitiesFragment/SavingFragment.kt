@@ -120,6 +120,7 @@ class SavingFragment : Fragment() {
 
     private fun getSavingActivities() {
         goalIDArrayList.clear()
+        goalFilterArrayList.clear()
         //saving activities that are in progress means that there the goal is also in progress because they are connected
         firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
             binding.tvTitleInProgress.text = "My Goals (" + results.size().toString() + ")"

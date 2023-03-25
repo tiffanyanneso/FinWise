@@ -12,6 +12,7 @@ import ph.edu.dlsu.finwise.NavbarFinlitExpert
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.EditAssessmentQuestionsAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertEditAssessmentBinding
+import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
 import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
 
 
@@ -34,6 +35,7 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
         var bundle = intent.extras!!
         assessmentID = bundle.getString("assessmentID").toString()
 
+        loadAssessmentDetails()
         loadQuestions()
         goToFinlitExpertAddNewQuestions()
         goToFinlitExpertSpecificAssessment()
@@ -49,6 +51,14 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
             bundle.putString("assessmentID", assessmentID)
             specificAssessment.putExtras(bundle)
             this.startActivity(specificAssessment)
+        }
+    }
+
+    private fun loadAssessmentDetails() {
+        firestore.collection("Assessments").document(assessmentID).get().addOnSuccessListener {
+            var assessment = it.toObject<FinancialAssessmentDetails>()
+            binding.etNumberOfQuestions.setText(assessment?.nQuestionsInAssessment!!.toString())
+            binding.etDescription.setText(assessment?.description)
         }
     }
 

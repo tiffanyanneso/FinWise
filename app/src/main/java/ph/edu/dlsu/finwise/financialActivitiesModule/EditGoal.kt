@@ -39,6 +39,7 @@ class EditGoal : AppCompatActivity() {
         binding = ActivityEditGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        println("print edit goal")
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         getFinancialGoal()
@@ -87,14 +88,16 @@ class EditGoal : AppCompatActivity() {
     private fun updateGoal() {
         var targetDate = SimpleDateFormat("MM/dd/yyyy").parse(binding.etTargetDate.text.toString())
         firestore.collection("FinancialGoals").document(financialGoalID).update("goalName", binding.etGoal.text.toString(),
-            "targetAmount", binding.etAmount.text.toString().toFloat(), "targetDate", targetDate)
-        Toast.makeText(this, "Goal has been updated", Toast.LENGTH_LONG).show()
-        var goalDetails = Intent(this, ViewGoalActivity::class.java)
-        var sendBundle = Bundle()
-        sendBundle.putString("financialGoalID", financialGoalID)
-        goalDetails.putExtras(sendBundle)
-        startActivity(goalDetails)
-        finish()
+            "targetAmount", binding.etAmount.text.toString().toFloat(), "targetDate", targetDate).addOnSuccessListener {
+            Toast.makeText(this, "Goal has been updated", Toast.LENGTH_LONG).show()
+            var goalDetails = Intent(this, ViewGoalActivity::class.java)
+            var sendBundle = Bundle()
+            sendBundle.putString("financialGoalID", financialGoalID)
+            goalDetails.putExtras(sendBundle)
+            startActivity(goalDetails)
+            finish()
+        }
+
     }
 
     private fun confirmDeleteGoal() {
@@ -105,7 +108,8 @@ class EditGoal : AppCompatActivity() {
         dialog.window!!.setLayout(800, 1000)
 
         dialogBinding.btnOk.setOnClickListener {
-           deleteGoal()
+            deleteGoal()
+            dialog.dismiss()
         }
 
         dialogBinding.btnCancel.setOnClickListener {
@@ -117,18 +121,18 @@ class EditGoal : AppCompatActivity() {
     private fun deleteGoal() {
         //mark financial goal as deleted
         firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Deleted").addOnSuccessListener {
-            var goalList = Intent(this, FinancialActivity::class.java)
-            this.startActivity(goalList)
-            finish()
             //mark related activities as deleted
             firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
-                for (activity in results )
-                    firestore.collection("FinancialActivities").document(activity.id).update("status", "Deleted")
+                for (activity in results ) {
+                    firestore.collection("FinancialActivities").document(activity.id)
+                        .update("status", "Deleted")
+                    println("print update activity")
+                }
+                var goalList = Intent(this, FinancialActivity::class.java)
+                startActivity(goalList)
+                finish()
             }
-
         }
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

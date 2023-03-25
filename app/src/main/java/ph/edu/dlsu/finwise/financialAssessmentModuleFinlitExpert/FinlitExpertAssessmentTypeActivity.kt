@@ -82,9 +82,11 @@ class FinlitExpertAssessmentTypeActivity : AppCompatActivity () {
                     assessmentID = results.documents[0].id
                     var specificAssessment = Intent(this, FinlitExpertSpecificAssessmentActivity::class.java)
                     var dataBundle = Bundle()
+                    dataBundle.putString("assessmentCategory", assessmentCategory)
+                    dataBundle.putString("assessmentType", assessmentType)
                     dataBundle.putString("assessmentID", assessmentID)
                     specificAssessment.putExtras(dataBundle)
-                    this.startActivity(specificAssessment)
+                    startActivity(specificAssessment)
                 } else
                     createNewAssessmentDialog()
             }
