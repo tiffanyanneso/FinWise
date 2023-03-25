@@ -17,7 +17,7 @@ import ph.edu.dlsu.finwise.NavbarFinlitExpert
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.NewChoicesAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertEditQuestionsBinding
-import ph.edu.dlsu.finwise.databinding.DialogueAddNewChoiceBinding
+import ph.edu.dlsu.finwise.databinding.DialogAddNewChoiceBinding
 import ph.edu.dlsu.finwise.model.FinancialAssessmentChoices
 import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
 
@@ -57,8 +57,11 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
     }
 
     private fun updateQuestion(){
+        var isUsed = true
+        if (binding.dropdownStatus.text.toString() == "Inactive")
+            isUsed = false
         firestore.collection("AssessmentQuestions").document(questionID).update("question", binding.etQuestion.text.toString(),
-        "difficulty", binding.dropdownDifficulty.text.toString(), "dateModified", Timestamp.now(),
+        "difficulty", binding.dropdownDifficulty.text.toString(), "isUsed", isUsed, "dateModified", Timestamp.now(),
                             "modifiedBy", currentUser)
 
         firestore.collection("AssessmentChoices").whereEqualTo("questionID", questionID).get().addOnSuccessListener { results ->
@@ -84,7 +87,7 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
     }
 
     private fun addNewChoice() {
-        var dialogBinding= DialogueAddNewChoiceBinding.inflate(getLayoutInflater())
+        var dialogBinding= DialogAddNewChoiceBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
@@ -104,7 +107,7 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
     }
 
     private fun editChoiceDialog(position:Int, choice:String, isCorrect:Boolean) {
-        var dialogBinding= DialogueAddNewChoiceBinding.inflate(getLayoutInflater())
+        var dialogBinding= DialogAddNewChoiceBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
         dialogBinding.dialogEtNewChoice.setText(choice)
@@ -137,9 +140,17 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
             binding.dropdownDifficulty.setText(question?.difficulty)
 
             // for the dropdown
-            val items = resources.getStringArray(R.array.assessment_question_difficulty)
-            val adapter = ArrayAdapter(this, R.layout.list_item, items)
+            var items = resources.getStringArray(R.array.assessment_question_difficulty)
+            var adapter = ArrayAdapter(this, R.layout.list_item, items)
             binding.dropdownDifficulty.setAdapter(adapter)
+
+            if (question?.isUsed == true)
+                binding.dropdownStatus.setText("Active")
+            else
+                binding.dropdownStatus.setText("Inactive")
+             items = resources.getStringArray(R.array.assessment_question_status)
+             adapter = ArrayAdapter(this, R.layout.list_item, items)
+            binding.dropdownStatus.setAdapter(adapter)
         }
 
         firestore.collection("AssessmentChoices").whereEqualTo("questionID", questionID).get().addOnSuccessListener { results ->

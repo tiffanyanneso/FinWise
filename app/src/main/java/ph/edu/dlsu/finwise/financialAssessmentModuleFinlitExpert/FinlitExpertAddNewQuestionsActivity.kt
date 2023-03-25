@@ -15,7 +15,7 @@ import ph.edu.dlsu.finwise.NavbarFinlitExpert
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.NewChoicesAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertAddNewQuestionsBinding
-import ph.edu.dlsu.finwise.databinding.DialogueAddNewChoiceBinding
+import ph.edu.dlsu.finwise.databinding.DialogAddNewChoiceBinding
 
 class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
 
@@ -70,7 +70,6 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
     }
 
     private fun saveQuestionAndChoices() {
-        //TODO: updatefin lit expert user ID
         var questionObject = hashMapOf(
              "assessmentID" to assessmentID,
              "question" to binding.etQuestion.text.toString(),
@@ -104,7 +103,7 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
     }
 
     private fun addNewChoice() {
-        var dialogBinding= DialogueAddNewChoiceBinding.inflate(getLayoutInflater())
+        var dialogBinding= DialogAddNewChoiceBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
@@ -123,7 +122,7 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
     }
 
     private fun editChoiceDialog(position:Int, choice:String, isCorrect:Boolean) {
-        var dialogBinding= DialogueAddNewChoiceBinding.inflate(getLayoutInflater())
+        var dialogBinding= DialogAddNewChoiceBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
         dialogBinding.dialogEtNewChoice.setText(choice)

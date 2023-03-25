@@ -6,17 +6,25 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.firestoreSettings
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.NavbarFinlitExpert
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertSpecificAssessmentBinding
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentViewAllQuestionsBinding
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.fragment.QuestionsActiveFragment
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.fragment.QuestionsInactiveFragment
+import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
 
 class FinancialAssessmentViewAllQuestions : AppCompatActivity() {
 
     private lateinit var binding:ActivityFinancialAssessmentViewAllQuestionsBinding
     private lateinit var assessmentID:String
+
+    private var firestore = Firebase.firestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialAssessmentViewAllQuestionsBinding.inflate(layoutInflater)
@@ -44,6 +52,11 @@ class FinancialAssessmentViewAllQuestions : AppCompatActivity() {
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
 
+        //assessment name
+        firestore.collection("Assessments").document(assessmentID).get().addOnSuccessListener {
+            var assessment = it.toObject<FinancialAssessmentDetails>()
+            binding.tvAssessmentName.text = "${assessment?.assessmentCategory} - ${assessment?.assessmentType}"
+        }
 
     }
 

@@ -126,6 +126,25 @@
                     android:backgroundTint="@color/white"/>
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/container_active"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Status"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:paddingBottom="10dp"
+                app:startIconDrawable="@drawable/baseline_check_24">
+
+                <AutoCompleteTextView
+                    android:id="@+id/dropdown_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none"
+                    android:background="@drawable/border_grey_bg_white"
+                    android:backgroundTint="@color/white"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
             <TextView
