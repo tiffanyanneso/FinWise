@@ -31,14 +31,13 @@ import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialMa
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import kotlin.math.abs
 
-class ParentMayaConfirmPayment : AppCompatActivity() {
+class ParentConfirmPayment : AppCompatActivity() {
     private lateinit var binding: ActivityParentMayaConfirmPaymentBinding
     private lateinit var context: Context
     private var firestore = Firebase.firestore
-    var bundle: Bundle? = null
-    val parentID = FirebaseAuth.getInstance().currentUser!!.uid
+    private var bundle: Bundle? = null
+    private val parentID = FirebaseAuth.getInstance().currentUser!!.uid
     lateinit var name : String
     lateinit var phone : String
     lateinit var amount : String
@@ -143,6 +142,7 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
     }
 
     private fun addTransaction() {
+        adjustUserBalance()
         val transaction = hashMapOf(
             "childName" to name,
             "transactionName" to "Sending Money",
@@ -154,8 +154,6 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
             "amount" to amount.toFloat(),
             "phoneNumber" to phone
         )
-        adjustUserBalance()
-        //TODO: fix transaction
         firestore.collection("Transactions").add(transaction).addOnSuccessListener {
             goToPFM()
         }
@@ -163,7 +161,6 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
     }
 
     private fun adjustUserBalance() {
-        //TODO: Change user based on who is logged in
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
         firestore.collection("ChildWallet").whereEqualTo("childID", childID)
             .whereEqualTo("type", paymentType)
@@ -176,10 +173,7 @@ class ParentMayaConfirmPayment : AppCompatActivity() {
                 } else {
                     createWallet()
                 }
-
             }
-
-
     }
 
     private fun updateChildWallet(id: String, adjustedBalance: Double) {

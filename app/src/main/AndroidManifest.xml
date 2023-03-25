@@ -163,7 +163,7 @@
             android:name=".profileModule.EditProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".parentFinancialManagementModule.ParentMayaConfirmPayment"
+            android:name=".parentFinancialManagementModule.ParentConfirmPayment"
             android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.FinancialActivityConfirmExpense"

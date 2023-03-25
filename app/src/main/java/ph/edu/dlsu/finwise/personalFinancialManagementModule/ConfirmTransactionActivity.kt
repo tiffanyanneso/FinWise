@@ -135,8 +135,9 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         binding.btnConfirm.setOnClickListener {
             if (paymentType == "Maya" && transactionType == "Expense")
                 payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
-            else if (paymentType == "Cash" || transactionType == "Income")
+            else if (paymentType == "Cash") {
                 adjustUserBalance()
+            }
         }
     }
 
@@ -210,6 +211,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         firestore.collection("ChildWallet").whereEqualTo("childID", childID)
             .whereEqualTo("type", paymentType)
             .get().addOnSuccessListener   { documents ->
+
                 if (!documents.isEmpty) {
                     var adjustedBalance = amount.toDouble()
                     if (transactionType == "Expense")
@@ -245,7 +247,9 @@ class ConfirmTransactionActivity : AppCompatActivity() {
             "merchant" to merchant,
             "phoneNumber" to phone
         )
+
         firestore.collection("Transactions").add(transaction).addOnSuccessListener {
+            Log.d("xcvvvv", "updateChildWallet: loobfirestore"+ it.id)
             goToPFM()
         }
             .addOnFailureListener {
