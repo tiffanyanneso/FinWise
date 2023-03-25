@@ -25,13 +25,13 @@ class AssessmentPerformanceFragment : Fragment() {
 
     private val assessmentsTaken = ArrayList<FinancialAssessmentAttempts>()
     private var financialGoalsPercentage = 0.00F
-    private var financialGoalsScores = ArrayList<Float>()
+    private var financialGoalsScores = ArrayList<Double?>()
     private var savingPercentage = 0.00F
-    private var savingScores = ArrayList<Float>()
+    private var savingScores = ArrayList<Double?>()
     private var budgetingPercentage = 0.00F
-    private var budgetingScores = ArrayList<Float>()
+    private var budgetingScores = ArrayList<Double?>()
     private var spendingPercentage = 0.00F
-    private var spendingScores = ArrayList<Float>()
+    private var spendingScores = ArrayList<Double?>()
 
 
     override fun onCreateView(
@@ -58,7 +58,6 @@ class AssessmentPerformanceFragment : Fragment() {
     }
 
     private fun getAssessments() {
-        //TODO: change id when we can pass childid through navigation , intent.extras!! causes crash
         firestore.collection("AssessmentAttempts").whereEqualTo("childID", childID)
             .get().addOnSuccessListener { documents ->
                 for (assessments in documents) {
@@ -73,9 +72,8 @@ class AssessmentPerformanceFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             if (assessmentsTaken.isNotEmpty()) {
                 for (assessment in assessmentsTaken) {
-                    val docRef = firestore.collection("Assessments")
-                        .document(assessment.assessmentID!!)
-                    val assessmentDocument = docRef.get().await()
+                    val assessmentDocument = firestore.collection("Assessments")
+                        .document(assessment.assessmentID!!).get().await()
                     val assessmentObject = assessmentDocument.toObject<FinancialAssessmentDetails>()
                     val percentage = getPercentage(assessment)
                     when (assessmentObject?.assessmentCategory) {
@@ -93,10 +91,14 @@ class AssessmentPerformanceFragment : Fragment() {
 
     private fun computeForPercentages() {
         val maxScore = 100
-        savingPercentage = (savingScores.sum() / (maxScore * savingScores.size)) * 100
-        spendingPercentage = (spendingScores.sum() / (maxScore * spendingScores.size)) * 100
-        budgetingPercentage = (budgetingScores.sum() / (maxScore * budgetingScores.size)) * 100
-        financialGoalsPercentage = (financialGoalsScores.sum() / (maxScore * financialGoalsScores.size)) * 100
+        val savingPercentageSum = savingScores.sumOf { it ?: 0.0 }
+        savingPercentage = ((savingPercentageSum / (maxScore * savingScores.size)) * 100).toFloat()
+        val spendingPercentageSum = savingScores.sumOf { it ?: 0.0 }
+        spendingPercentage = ((spendingPercentageSum / (maxScore * spendingScores.size)) * 100).toFloat()
+        val budgetingPercentageSum = savingScores.sumOf { it ?: 0.0 }
+        budgetingPercentage = ((budgetingPercentageSum / (maxScore * budgetingScores.size)) * 100).toFloat()
+        val financialGoalsPercentageSum = savingScores.sumOf { it ?: 0.0 }
+        financialGoalsPercentage = ((financialGoalsPercentageSum / (maxScore * financialGoalsScores.size)) * 100).toFloat()
         checkIfNaN()
         setPerformanceView()
         setRanking()
@@ -118,9 +120,16 @@ class AssessmentPerformanceFragment : Fragment() {
         }
     }
 
-    private fun getPercentage(assessment: FinancialAssessmentAttempts): Float {
-        return (assessment.nAnsweredCorrectly!!.toFloat() /
-                assessment.nQuestions!!.toFloat()) * 100
+    private fun getPercentage(assessment: FinancialAssessmentAttempts): Double? {
+        val totalAnswers: Int? = assessment.nAnsweredCorrectly
+        val correctAnswers: Int? = assessment.nQuestions
+
+        val percentage: Double? = if(totalAnswers != null && correctAnswers != null && totalAnswers != 0) {
+            (correctAnswers.toDouble() / totalAnswers.toDouble()) * 100
+        } else {
+            0.0
+        }
+        return percentage
     }
 
     private fun setRanking() {
@@ -247,7 +256,6 @@ class AssessmentPerformanceFragment : Fragment() {
         binding.ivScore.setImageResource(R.drawable.bad)
         binding.textViewProgress.visibility = View.GONE
 
-        //TODO: check if parent user
         binding.textViewPerformanceText.text = "Bad"
         binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.red))
         val message = if (user == "Child")
