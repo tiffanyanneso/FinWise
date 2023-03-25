@@ -24,6 +24,7 @@ import com.paymaya.sdk.android.paywithpaymaya.SinglePaymentResult
 import com.paymaya.sdk.android.paywithpaymaya.models.SinglePaymentRequest
 import org.json.JSONObject
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentMayaConfirmPaymentBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
@@ -43,6 +44,7 @@ class ParentConfirmPayment : AppCompatActivity() {
     lateinit var amount : String
     lateinit var paymentType : String
     lateinit var date : String
+    lateinit var selectedChildID : String
     lateinit var childID : String
 
     // For Pay With PayMaya API: This is instantiating the Pay With PayMaya API.
@@ -59,7 +61,11 @@ class ParentConfirmPayment : AppCompatActivity() {
         setContentView(binding.root)
         context = this
 
-        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance)
+        val bundle = intent.extras!!
+        val childID = bundle.getString("childID").toString()
+        val bundleNavBar = Bundle()
+        bundleNavBar.putString("childID", childID)
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_dashboard, bundleNavBar)
         setText()
         payMaya()
         loadBackButton()
@@ -162,7 +168,7 @@ class ParentConfirmPayment : AppCompatActivity() {
 
     private fun adjustUserBalance() {
         /*val currentUser = FirebaseAuth.getInstance().currentUser!!.uid*/
-        firestore.collection("ChildWallet").whereEqualTo("childID", childID)
+        firestore.collection("ChildWallet").whereEqualTo("childID", selectedChildID)
             .whereEqualTo("type", paymentType)
             .get().addOnSuccessListener   { documents ->
                 if (!documents.isEmpty) {
@@ -187,7 +193,7 @@ class ParentConfirmPayment : AppCompatActivity() {
 
     private fun createWallet() {
         val childWallet = hashMapOf(
-            "childID" to childID,
+            "childID" to selectedChildID,
             "currentBalance" to amount,
             "lastUpdated" to com.google.firebase.Timestamp.now(),
             "type" to paymentType
@@ -207,6 +213,9 @@ class ParentConfirmPayment : AppCompatActivity() {
 
     private fun goToPFM() {
         val goToSuccessPayment = Intent(applicationContext, ParentFinancialManagementActivity::class.java)
+        val bundle = Bundle()
+        bundle.putString("childID", childID)
+        goToSuccessPayment.putExtras(bundle)
         startActivity(goToSuccessPayment)
     }
 
@@ -227,11 +236,7 @@ class ParentConfirmPayment : AppCompatActivity() {
         binding.tvDate.text = dateText
 
         checkIfMaya()
-
-
         getBalanceChild()
-
-
     }
 
     private fun checkIfMaya() {
@@ -242,7 +247,7 @@ class ParentConfirmPayment : AppCompatActivity() {
     }
 
     private fun getBalanceChild() {
-        firestore.collection("ChildWallet").whereEqualTo("childID", childID)
+        firestore.collection("ChildWallet").whereEqualTo("childID", selectedChildID)
             .get().addOnSuccessListener { document ->
                 val childWallet = document.documents[0].toObject<ChildWallet>()
                 val balance = childWallet?.currentBalance!!
@@ -266,6 +271,7 @@ class ParentConfirmPayment : AppCompatActivity() {
         paymentType = bundle!!.getString("paymentType").toString()
         /*balance = bundle!!.getFloat("balance")*/
         phone = bundle!!.getString("phone").toString()
+        selectedChildID = bundle!!.getString("selectedChildID").toString()
         childID = bundle!!.getString("childID").toString()
         date = bundle!!.getSerializable("date").toString()
     }

@@ -54,7 +54,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
     var nSituational =0
     var nEarning = 0
 
-    private var specificDuration = "Short"
+    private var specificDuration = "Short Term"
     private var specificCategory = "Buying Items"
 
     data class DurationRating(var name: String? = null, var score: Float)
@@ -316,19 +316,19 @@ class SavingPerformanceActivity : AppCompatActivity() {
             var num = i + 1
 
             if (num == 1) {
-                binding.tvTopPerformingActivity.text = categoryRatingArray[i].name
+                binding.tvTopPerformingActivity.text = categoryRatingArray[i].name.toString()
                 binding.tvTopPerformingActivityPercentage.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
             } else if (num == 2) {
-                binding.tvActivity2nd.text = categoryRatingArray[i].name
+                binding.tvActivity2nd.text = categoryRatingArray[i].name.toString()
                 binding.tvConcept2Activity.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
             } else if (num == 3) {
-                binding.tvActivity3rd.text = categoryRatingArray[i].name
+                binding.tvActivity3rd.text = categoryRatingArray[i].name.toString()
                 binding.tvActivity3Rating.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
             } else if (num == 4) {
-                binding.tvActivity4th.text = categoryRatingArray[i].name
+                binding.tvActivity4th.text = categoryRatingArray[i].name.toString()
                 binding.tvActivity4Rating.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
             } else if (num == 5) {
-                binding.tvActivity5th.text = categoryRatingArray[i].name
+                binding.tvActivity5th.text = categoryRatingArray[i].name.toString()
                 binding.tvActivity5Rating.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
                 specificCategory = categoryRatingArray[i].name.toString()
             }

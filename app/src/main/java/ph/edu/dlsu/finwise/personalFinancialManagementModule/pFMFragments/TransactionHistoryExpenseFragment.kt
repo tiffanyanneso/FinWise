@@ -182,12 +182,14 @@ class TransactionHistoryExpenseFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun loadRecyclerView(transactionIDArrayList: ArrayList<String>) {
-        transactionAdapter = TransactionsAdapter(requireActivity(), transactionIDArrayList)
-        binding.rvViewTransactions.adapter = transactionAdapter
-        binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireContext().applicationContext,
-            LinearLayoutManager.VERTICAL,
-            false)
-        transactionAdapter.notifyDataSetChanged()
+        if (isAdded) {
+            transactionAdapter = TransactionsAdapter(requireActivity(), transactionIDArrayList)
+            binding.rvViewTransactions.adapter = transactionAdapter
+            binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireContext().applicationContext,
+                LinearLayoutManager.VERTICAL,
+                false)
+            transactionAdapter.notifyDataSetChanged()
+        }
     }
 
 

@@ -248,7 +248,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
 
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 700)
+        dialog.window!!.setLayout(1000, 1400)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
