@@ -44,7 +44,7 @@ class TransactionHistoryActivity : AppCompatActivity() {
     private var startDate: String? = null
     private var endDate: String? = null
     private val tabIcons = intArrayOf(
-        R.drawable.baseline_grid_view_24,
+        R.drawable.baseline_receipt_long_24,
         R.drawable.baseline_wallet_24,
         R.drawable.baseline_shopping_cart_checkout_24
     )

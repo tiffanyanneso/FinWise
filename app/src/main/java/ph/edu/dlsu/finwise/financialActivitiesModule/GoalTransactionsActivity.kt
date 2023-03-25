@@ -84,9 +84,9 @@ class GoalTransactionsActivity : AppCompatActivity() {
     }
 
     private fun setupTabIcons() {
-        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[0])
-        binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[1])
-        binding.tabLayout.getTabAt(3)?.setIcon(tabIcons[2])
+        binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
+        binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
+        binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[2])
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){
