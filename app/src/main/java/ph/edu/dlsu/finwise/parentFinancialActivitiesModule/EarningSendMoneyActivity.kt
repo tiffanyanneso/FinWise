@@ -209,7 +209,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
     private fun makeTransactionsPersonalFinance() {
         val income = hashMapOf(
             "userID" to childID,
-            "transactionName" to binding.tvActivity.text.toString(),
+            "transactionName" to "Income from ${binding.tvActivity.text.toString()}",
             "transactionType" to "Income",
             "category" to "Rewards",
             "date" to Timestamp.now(),
@@ -229,7 +229,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
     private fun makeTransactionsGoal() {
         val income = hashMapOf(
             "createdBy" to childID,
-            "transactionName" to binding.tvActivity.text.toString(),
+            "transactionName" to "Income from ${binding.tvActivity.text}",
             "transactionType" to "Income",
             "category" to "Rewards",
             "date" to Timestamp.now(),
@@ -241,7 +241,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
         firestore.collection("Transactions").add(income).addOnSuccessListener {
             var deposit = hashMapOf(
                 "userID" to childID,
-                "transactionName" to binding.tvActivity.text.toString(),
+                "transactionName" to "Deposit income from ${binding.tvActivity.text}",
                 "transactionType" to "Deposit",
                 "category" to "Goal",
                 "date" to Timestamp.now(),

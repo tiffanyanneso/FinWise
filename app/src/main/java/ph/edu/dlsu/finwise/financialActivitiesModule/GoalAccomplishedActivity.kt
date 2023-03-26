@@ -44,7 +44,6 @@ class GoalAccomplishedActivity : AppCompatActivity() {
     private lateinit var savingActivityID:String
     private lateinit var budgetingActivityID:String
     private lateinit var spendingActivityID:String
-    private lateinit var sendBundle: Bundle
     private var nFinishedActivities = 0
 
 
@@ -60,7 +59,6 @@ class GoalAccomplishedActivity : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         getBundles()
-        sendBundles()
         badge()
         setText()
         initializeFinishButton()
@@ -234,14 +232,6 @@ class GoalAccomplishedActivity : AppCompatActivity() {
 
     }
 
-    private fun sendBundles() {
-        val sendBundle = Bundle()
-        sendBundle.putString("financialGoalID", financialGoalID)
-        sendBundle.putString("savingActivityID", savingActivityID)
-        sendBundle.putString("budgetingActivityID", budgetingActivityID)
-        sendBundle.putString("spendingActivityID", spendingActivityID)
-    }
-
     private fun getBundles() {
         val bundle: Bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
@@ -271,6 +261,16 @@ class GoalAccomplishedActivity : AppCompatActivity() {
 
                         if (difference.days >= 7)
                             buildAssessmentDialog()
+                        else {
+                            val budgetActivity = Intent(this, BudgetActivity::class.java)
+                            var sendBundle = Bundle()
+                            sendBundle.putString("financialGoalID", financialGoalID)
+                            sendBundle.putString("savingActivityID", savingActivityID)
+                            sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                            sendBundle.putString("spendingActivityID", spendingActivityID)
+                            budgetActivity.putExtras(sendBundle)
+                            startActivity(budgetActivity)
+                        }
                     } else
                         buildAssessmentDialog()
                 }

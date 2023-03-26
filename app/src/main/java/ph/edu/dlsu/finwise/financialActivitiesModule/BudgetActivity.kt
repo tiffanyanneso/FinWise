@@ -104,7 +104,6 @@ class BudgetActivity : AppCompatActivity() {
                         binding.btnDoneSettingBudget.visibility = View.VISIBLE
                         binding.btnDoneSpending.visibility = View.GONE
                         goToFinancialAssessmentActivity("Pre-Activity", "Budgeting")
-
                     }
                 }
             }
@@ -120,7 +119,7 @@ class BudgetActivity : AppCompatActivity() {
                 if (financialActivity?.status != "Completed") {
                     allCompleted = false
                     firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-                        if (it.toObject<Users>()!!.userType == "Child")
+                        if (it.toObject<Users>()!!.userType == "Child" && financialActivity?.status == "In Progress")
                             goToFinancialAssessmentActivity("Pre-Activity", "Spending")
 
                     }
@@ -219,7 +218,7 @@ class BudgetActivity : AppCompatActivity() {
 
     private fun getAvailableToBudget () {
         availableToBudget = balance
-        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).get().addOnSuccessListener { results ->
+        firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
             for (item in results) {
                 var budgetItem = item.toObject<BudgetItem>()
                 availableToBudget -= budgetItem.amount!!
@@ -382,6 +381,8 @@ class BudgetActivity : AppCompatActivity() {
             firestore.collection("BudgetItems").document(budgetItemID).update("status", "Edited")
         else
             firestore.collection("BudgetItems").document(budgetItemID).update("status", "Deleted")
+
+        getAvailableToBudget()
     }
 
     private fun showNewBudgetItemDialog() {
@@ -589,6 +590,7 @@ class BudgetActivity : AppCompatActivity() {
     }
 
     private fun buildAssessmentDialog(assessmentType: String, assessmentCategory:String) {
+        println("print type " + assessmentType +   " category " + assessmentCategory)
         var dialogBinding= DialogTakeAssessmentBinding.inflate(layoutInflater)
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.root)

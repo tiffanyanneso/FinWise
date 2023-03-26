@@ -135,7 +135,7 @@ class ConfirmTransactionActivity : AppCompatActivity() {
         binding.btnConfirm.setOnClickListener {
             if (paymentType == "Maya" && transactionType == "Expense")
                 payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
-            else if (paymentType == "Cash") {
+            else if (paymentType == "Cash" || transactionType == "Income") {
                 adjustUserBalance()
             }
         }
