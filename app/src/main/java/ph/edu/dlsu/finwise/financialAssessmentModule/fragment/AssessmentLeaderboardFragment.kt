@@ -179,10 +179,10 @@ class AssessmentLeaderboardFragment : Fragment() {
     }
 
     private fun getPercentage(assessment: FinancialAssessmentAttempts): Double? {
-        val totalAnswers: Int? = assessment.nAnsweredCorrectly
-        val correctAnswers: Int? = assessment.nQuestions
+        val correctAnswers: Int? = assessment.nAnsweredCorrectly
+        val totalAnswers: Int? = assessment.nQuestions
 
-        val percentage: Double? = if(totalAnswers != null && correctAnswers != null && totalAnswers != 0) {
+        val percentage = if(totalAnswers != null && correctAnswers != null && totalAnswers != 0) {
             (correctAnswers.toDouble() / totalAnswers.toDouble()) * 100
         } else {
             0.0
