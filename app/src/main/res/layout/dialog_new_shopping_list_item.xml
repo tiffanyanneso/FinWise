@@ -39,7 +39,6 @@
             android:hint="Item Name"
             android:inputType="text"
             android:lines="1"
-            android:text="Stuffed toy"
             android:textSize="16dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
