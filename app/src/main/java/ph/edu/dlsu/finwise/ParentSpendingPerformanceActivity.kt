@@ -261,7 +261,7 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                         }
 
                         overallSpending = (overspendingPercentage + ((nPlanned/nTotalPurchased)*100)) /2
-                        binding.tvPerformancePercentage.text ="${overallSpending}%"
+                        binding.tvPerformancePercentage.text ="${DecimalFormat("0.0").format(overallSpending)}%"
 
                         overallPercentage()
                     }

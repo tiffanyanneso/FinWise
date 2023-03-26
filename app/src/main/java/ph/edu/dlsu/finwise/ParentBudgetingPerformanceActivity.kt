@@ -118,55 +118,46 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
                             var parentalPercentage = nParent.toFloat()/budgetItemCount.toFloat()*100
 
                             if (parentalPercentage < 5) {
-                                binding.imgFace.setImageResource(R.drawable.excellent)
-                                binding.textStatus.text = "Excellent"
-                                binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
-                                binding.tvPerformanceText.text = "Your child is doing excellent at budgeting independently."
+                                binding.textViewPerformanceTextParentalInvolvement.text = "Excellent"
+                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.dark_green))
+                                binding.tvParentalInvolvementText.text = "Your child is doing excellent at budgeting independently."
                             } else if (parentalPercentage < 15 && parentalPercentage >= 5) {
-                                binding.imgFace.setImageResource(R.drawable.amazing)
-                                binding.textStatus.text = "Amazing"
-                                binding.textStatus.setTextColor(getResources().getColor(R.color.green))
-                                binding.tvPerformanceText.text = "Your child is doing an amazing job at creating their budgets independently!"
+                                binding.textViewPerformanceTextParentalInvolvement.text = "Amazing"
+                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.green))
+                                binding.tvParentalInvolvementText.text = "Your child is doing an amazing job at creating their budgets independently!"
                             } else if (parentalPercentage < 25 && parentalPercentage >= 15) {
-                                binding.imgFace.setImageResource(R.drawable.great)
-                                binding.textStatus.text = "Great"
-                                binding.textStatus.setTextColor(getResources().getColor(R.color.green))
-                                binding.tvPerformanceText.text = "Your child is doing great at creating their budgets independently."
+                                binding.textViewPerformanceTextParentalInvolvement.text = "Great"
+                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.green))
+                                binding.tvParentalInvolvementText.text = "Your child is doing great at creating their budgets independently."
                             } else if (parentalPercentage < 35 && parentalPercentage >= 25) {
-                                binding.imgFace.setImageResource(R.drawable.good)
-                                binding.textStatus.text = "Good"
-                                binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
-                                binding.tvPerformanceText.text = "Your child is doing good at budgeting independently!"
+                                binding.textViewPerformanceTextParentalInvolvement.text = "Good"
+                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.light_green))
+                                binding.tvParentalInvolvementText.text = "Your child is doing good at budgeting independently!"
                             } else if (parentalPercentage < 45 && parentalPercentage >= 35) {
                                 binding.imgFace.setImageResource(R.drawable.average)
-                                binding.textStatus.text = "Average"
-                                binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
-                                binding.tvPerformanceText.text = "Your child is doing well. Encourage them to create their budget more independently!"
+                                binding.textViewPerformanceTextParentalInvolvement.text = "Average"
+                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.yellow))
+                                binding.tvParentalInvolvementText.text = "Your child is doing well. Encourage them to create their budget more independently!"
                             } else if (parentalPercentage < 55 && parentalPercentage >= 45) {
-                                binding.imgFace.setImageResource(R.drawable.nearly_there)
-                                binding.textStatus.text = "Nearly There"
-                                binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-                                binding.tvPerformanceText.text = "Your child is nearly there! Encourage them to budget more independently."
+                                binding.textViewPerformanceTextParentalInvolvement.text = "Nearly There"
+                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.red))
+                                binding.tvParentalInvolvementText.text = "Your child is nearly there! Encourage them to budget more independently."
                             }  else if (parentalPercentage < 65 && parentalPercentage >= 55) {
-                                binding.imgFace.setImageResource(R.drawable.almost_there)
-                                binding.textStatus.text = "Almost There"
-                                binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-                                binding.tvPerformanceText.text = "Your child is almost there! Encourage them to budget more independently."
+                                binding.textViewPerformanceTextParentalInvolvement.text = "Almost There"
+                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.red))
+                                binding.tvParentalInvolvementText.text = "Your child is almost there! Encourage them to budget more independently."
                             } else if (parentalPercentage < 75 && parentalPercentage >= 65) {
-                                binding.imgFace.setImageResource(R.drawable.getting_there)
-                                binding.textStatus.text = "Getting There"
-                                binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-                                binding.tvPerformanceText.text = "Your child is getting there! Click on the tips button to learn how to get them there."
+                                binding.textViewPerformanceTextParentalInvolvement.text = "Getting There"
+                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.red))
+                                binding.tvParentalInvolvementText.text = "Your child is getting there! Click on the tips button to learn how to get them there."
                             } else if (parentalPercentage < 85 && parentalPercentage >= 75) {
-                                binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
-                                binding.textStatus.text = "Not Quite\nThere"
-                                binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-                                binding.tvPerformanceText.text = "Your child is not quite there yet! Click on the tips button to learn how to get them there."
+                                binding.textViewPerformanceTextParentalInvolvement.text = "Not Quite\nThere"
+                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.red))
+                                binding.tvParentalInvolvementText.text = "Your child is not quite there yet! Click on the tips button to learn how to get them there."
                             } else if (parentalPercentage > 84) {
-                                binding.imgFace.setImageResource(R.drawable.bad)
-                                binding.textStatus.text = "Needs\nImprovement"
-                                binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-                                binding.tvPerformanceText.text = "Your parental involvement is quite high. Allow your child to budget more independently."
+                                binding.textViewPerformanceTextParentalInvolvement.text = "Needs\nImprovement"
+                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.red))
+                                binding.tvParentalInvolvementText.text = "Your parental involvement is quite high. Allow your child to budget more independently."
                             }
                         }
                     }
@@ -233,43 +224,43 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
         if (budgetAccuracy >= 96) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Excellent"
             binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
-            binding.tvPerformanceText.text = "Your child is doing excellent! Their budget is often accurate."
+            binding.tvBudgetAccuracyText.text = "Your child is doing excellent! Their budget is often accurate."
         } else if (budgetAccuracy < 96 && budgetAccuracy >= 86) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Amazing"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
-            binding.tvPerformanceText.text = "Your child is doing an amazing job! They create accurate budgets."
+            binding.tvBudgetAccuracyText.text = "Your child is doing an amazing job! They create accurate budgets."
         } else if (budgetAccuracy < 90 && budgetAccuracy >= 80) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Great"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
-            binding.tvPerformanceText.text = "Your child is performing well. They create accurate budgets."
+            binding.tvBudgetAccuracyText.text = "Your child is performing well. They create accurate budgets."
         } else if (budgetAccuracy < 80 && budgetAccuracy >= 70) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Good"
             binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
-            binding.tvPerformanceText.text = "Your child is doing a good job! Encourage them to double check their budgets."
+            binding.tvBudgetAccuracyText.text = "Your child is doing a good job! Encourage them to double check their budgets."
         } else if (budgetAccuracy < 70 && budgetAccuracy >= 60) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Average"
             binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
-            binding.tvPerformanceText.text = "Your child is doing well! Encourage them to doublecheck their budget items and amoounts."
+            binding.tvBudgetAccuracyText.text = "Your child is doing well! Encourage them to doublecheck their budget items and amoounts."
         } else if (budgetAccuracy < 56 && budgetAccuracy >= 46) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Nearly There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "You child is nearly there! Click on the tips button to learn how to help them get there!"
+            binding.tvBudgetAccuracyText.text = "You child is nearly there! Click on the tips button to learn how to help them get there!"
         }  else if (budgetAccuracy < 46 && budgetAccuracy >= 36) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Almost There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "Your child is almost there! They need to work on their budget accuracy. Click tips to learn how to help!"
+            binding.tvBudgetAccuracyText.text = "Your child is almost there! They need to work on their budget accuracy. Click tips to learn how to help!"
         } else if (budgetAccuracy < 36 && budgetAccuracy >= 26) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Getting There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "Your child is getting there!  Click tips to learn how to help!"
+            binding.tvBudgetAccuracyText.text = "Your child is getting there!  Click tips to learn how to help!"
         } else if (budgetAccuracy < 26 && budgetAccuracy >= 16) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Not Quite\nThere"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "Your child is not quite there yet!  Click tips to learn how to help!"
+            binding.tvBudgetAccuracyText.text = "Your child is not quite there yet!  Click tips to learn how to help!"
         } else if (budgetAccuracy < 15) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Needs\nImprovement"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "Your child's budget accuracy needs a lot of improvement. Click tips to learn how to help!"
+            binding.tvBudgetAccuracyText.text = "Your child's budget accuracy needs a lot of improvement. Click tips to learn how to help!"
         }
     }
 
@@ -337,7 +328,7 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1700)
+        dialog.window!!.setLayout(1000, 1400)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
@@ -352,7 +343,7 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1700)
+        dialog.window!!.setLayout(1000, 1000)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()

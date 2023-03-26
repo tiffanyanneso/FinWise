@@ -13,6 +13,7 @@ import ph.edu.dlsu.finwise.databinding.DialogParentSmartConceptTipBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSmartTipBinding
 import ph.edu.dlsu.finwise.model.GoalRating
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
+import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
 class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
@@ -84,7 +85,7 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
             }
         }.continueWith {
             val overall = nOverall/nRatings
-            binding.tvOverallRating.text ="${overall}/5"
+            binding.tvOverallRating.text ="${DecimalFormat("0.0").format(overall)}/5.0"
             var percentage = (overall / 5) * 100
 
             if (percentage >= 96) {
@@ -228,7 +229,7 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
 
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1400)
+        dialog.window!!.setLayout(1000, 1000)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()

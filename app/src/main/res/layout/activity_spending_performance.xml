@@ -95,7 +95,8 @@
                                 android:text="Bad"
                                 android:textColor="@color/red"
                                 android:textStyle="bold"
-                                android:layout_gravity="center"/>
+                                android:layout_gravity="center"
+                                android:textAlignment="center"/>
                         </LinearLayout>
 
                         <TextView
