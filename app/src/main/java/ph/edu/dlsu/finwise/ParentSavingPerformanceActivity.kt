@@ -456,6 +456,8 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         var dialogBinding= DialogParentSavingCategoryTipsBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
 
+        print("CATEgoRY " + specificCategory)
+
         if (specificCategory == "Buying Items") {
             dialogBinding.tvTitle.text = "Buying Items"
             dialogBinding.tvDefinition.text = "Purchasing things such as goods or services."
