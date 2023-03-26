@@ -24,6 +24,7 @@
         android:id="@+id/iv_badge"
         android:layout_width="130dp"
         android:layout_height="130dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/baseline_gpp_maybe_24"
         app:layout_constraintTop_toBottomOf="@+id/tv_badge_title"
         app:layout_constraintRight_toRightOf="parent"
@@ -41,7 +42,7 @@
         <TextView
             android:id="@+id/tv_message"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="80dp"
             android:layout_marginTop="10dp"
             android:text="Loading..."
             android:textColor="@color/white"

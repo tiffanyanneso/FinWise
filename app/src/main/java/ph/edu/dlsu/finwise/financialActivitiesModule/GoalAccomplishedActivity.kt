@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -68,8 +69,11 @@ class GoalAccomplishedActivity : AppCompatActivity() {
     private fun badge() {
         CoroutineScope(Dispatchers.Main).launch {
             nFinishedActivities = getNFinishedActivities()
-            if (nFinishedActivities == 1 || nFinishedActivities == 10 || nFinishedActivities == 20 ||
-                nFinishedActivities == 50 || nFinishedActivities == 100) {
+            Log.d("ccxvxvcv", "badge: "+nFinishedActivities)
+
+            // check if the child is eligible for a badge
+            if (nFinishedActivities == 1 || nFinishedActivities == 10 || nFinishedActivities == 20
+                || nFinishedActivities == 50 || nFinishedActivities == 100) {
                 val badgesQuerySnapshot = firestore.collection("Badges")
                     .whereEqualTo("childID", currentUser)
                     .whereEqualTo("badgeType", "Financial Activity Badge")
@@ -80,20 +84,24 @@ class GoalAccomplishedActivity : AppCompatActivity() {
     }
 
     private suspend fun getNFinishedActivities(): Int {
-        val activities = firestore.collection("FinancialActivities")
+        val activities = firestore.collection("FinancialGoals")
             .whereEqualTo("childID", currentUser)
-            .whereEqualTo("financialActivityName", "Saving")
             .whereEqualTo("status", "Completed")
             .get().await()
+
         return activities.size()
     }
 
     private suspend fun addBadge() {
         val badgeName = getBadgeName()
+        val badgeDescription = if (nFinishedActivities == 1)
+            "Finished 1 Activity"
+        else "Finished $nFinishedActivities Activities"
+
         val badge = hashMapOf(
             "badgeName" to badgeName,
-            "badgeType" to "Financial Activity Badge",
-            "badgeDescription" to "Finished $nFinishedActivities Activities",
+            "badgeType" to "Finished Financial Goal Badge",
+            "badgeDescription" to badgeDescription,
             "badgeScore" to nFinishedActivities,
             "childID"   to currentUser,
             "dateEarned" to SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate())
@@ -114,12 +122,17 @@ class GoalAccomplishedActivity : AppCompatActivity() {
     }
 
     private suspend fun checkIfAddBadge(badges: QuerySnapshot?) {
-        if (badges != null) {
+        if (badges?.isEmpty == false) {
+            // if there are badges present in the firestore
             val highestBadgeScoreAchieved = getHighestBadgeScore(badges)
             if (nFinishedActivities > highestBadgeScoreAchieved!!) {
                 addBadge()
                 showBadgeDialog()
             }
+        } else {
+            // if there are no badges present in the firestore
+            addBadge()
+            showBadgeDialog()
         }
     }
 
@@ -324,7 +337,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
     }
 
     private fun goToFinancialActivities() {
-        val finact = Intent(this, FinancialActivities::class.java)
+        val finact = Intent(this, FinancialActivity::class.java)
         startActivity(finact)
     }
 
