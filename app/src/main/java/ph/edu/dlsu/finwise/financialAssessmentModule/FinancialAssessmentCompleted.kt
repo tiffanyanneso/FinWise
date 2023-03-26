@@ -23,6 +23,7 @@ import ph.edu.dlsu.finwise.databinding.DialogBadgeBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
 import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
 class FinancialAssessmentCompleted : AppCompatActivity() {
@@ -243,7 +244,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         binding.tvScore.text = "Your score is $answeredCorrectly out of $nQuestions"
         percentage = (answeredCorrectly.toDouble() / nQuestions.toDouble()) * 100
         binding.progressBar.progress = percentage.round(1).toInt()
-        binding.textViewProgress.text = "$percentage%"
+        binding.textViewProgress.text = "${DecimalFormat("##0.00").format(percentage)}%"
     }
 
     private fun Double.round(decimals: Int): Double {

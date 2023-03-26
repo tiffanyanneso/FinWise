@@ -3,28 +3,35 @@ package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactGoalSettingAdapter
-import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
-import ph.edu.dlsu.finwise.databinding.DialogSmartGoalCriteriaParentBinding
-import ph.edu.dlsu.finwise.databinding.DialogSmartReviewBinding
-import ph.edu.dlsu.finwise.databinding.FragmentGoalSettingBinding
+import ph.edu.dlsu.finwise.databinding.*
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
+import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
+import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.GoalRating
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -46,6 +53,8 @@ class GoalSettingFragment : Fragment() {
 
     private var ongoingGoals = 0
 
+    private var assessmentTaken = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         nRatings = 0
@@ -55,6 +64,7 @@ class GoalSettingFragment : Fragment() {
         nAchievable = 0.00F
         nRelevant = 0.00F
         nTimeBound = 0.00F
+        assessmentTaken = true
     }
 
     override fun onCreateView(
@@ -69,21 +79,11 @@ class GoalSettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.title.text = "Overall Goal Setting Performance"
+        getAssessmentStatus()
         getForReviewGoals()
         getOnGoingGoals()
         initializeRating()
-        binding.btnNewGoal.setOnClickListener {
-            if (ongoingGoals >= 5)
-                buildDialog()
-            else {
-                var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
-                var bundle = Bundle()
-                bundle.putString("source", "Child")
-                goToNewGoal.putExtras(bundle)
-                goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                this.startActivity(goToNewGoal)
-            }
-        }
+
 
         binding.btnViewSMARTGoalsInfo.setOnClickListener{
             showGoalDialog()
@@ -119,6 +119,70 @@ class GoalSettingFragment : Fragment() {
                 goalIDArrayList.add(goal.financialGoalID.toString())
             loadRecyclerView(goalIDArrayList)
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getAssessmentStatus() {
+        firestore.collection("Assessments").whereEqualTo("assessmentType", "Pre-Activity").whereEqualTo("assessmentCategory", "Goal Setting").get().addOnSuccessListener {
+            if (it.size() != 0) {
+                var assessmentID = it.documents[0].id
+                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+                    if (results.size() != 0) {
+                        var assessmentAttemptsObjects = results.toObjects<FinancialAssessmentAttempts>()
+                        assessmentAttemptsObjects.sortedByDescending { it.dateTaken }
+                        var latestAssessmentAttempt = assessmentAttemptsObjects.get(0).dateTaken
+                        val dateFormatter: DateTimeFormatter =
+                            DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                        val lastTakenFormat =
+                            SimpleDateFormat("MM/dd/yyyy").format(latestAssessmentAttempt!!.toDate())
+                        val from = LocalDate.parse(lastTakenFormat.toString(), dateFormatter)
+                        val today = SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate())
+                        val to = LocalDate.parse(today.toString(), dateFormatter)
+                        var difference = Period.between(from, to)
+
+                        if (difference.days >= 7)
+                            assessmentTaken = false
+                        else
+                            assessmentTaken = true
+                    } else
+                        assessmentTaken = false
+                }.continueWith {
+                    binding.btnNewGoal.setOnClickListener {
+                        if (!assessmentTaken)
+                            buildAssessmentDialog()
+                        else if (ongoingGoals >= 5)
+                            buildDialog()
+                        else {
+                            var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
+                            var bundle = Bundle()
+                            bundle.putString("source", "Child")
+                            goToNewGoal.putExtras(bundle)
+                            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            this.startActivity(goToNewGoal)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun buildAssessmentDialog() {
+        var dialogBinding= DialogTakeAssessmentBinding.inflate(layoutInflater)
+        var dialog= Dialog(requireContext());
+        dialog.setContentView(dialogBinding.root)
+        dialog.window!!.setLayout(950, 900)
+        dialog.setCancelable(false)
+        dialogBinding.btnOk.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("assessmentType", "Pre-Activity")
+            bundle.putString("assessmentCategory", "Goal Setting")
+
+            val assessmentQuiz = Intent(requireContext(), FinancialAssessmentActivity::class.java)
+            assessmentQuiz.putExtras(bundle)
+            startActivity(assessmentQuiz)
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun getOnGoingGoals() {

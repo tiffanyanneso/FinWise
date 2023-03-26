@@ -64,172 +64,181 @@
             android:layout_gravity="end"
             android:textStyle="bold"/>
 
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:padding="50dp"
-            android:background="@drawable/button_border_white"
-            android:backgroundTint="@color/very_light_green"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tv_question"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="Question"
-                android:textSize="24sp"
-                android:textColor="@color/black"
-                android:layout_gravity="center"/>
-        </LinearLayout>
+                android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/layout_choice1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginTop="10dp"
-            android:padding="30dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="30dp"
+                    android:background="@drawable/button_border_white"
+                    android:backgroundTint="@color/very_light_green"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp">
 
-            <TextView
-                android:id="@+id/tv_choice1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="Choice 1"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:layout_gravity="center" />
+                    <TextView
+                        android:id="@+id/tv_question"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:text="Question"
+                        android:textSize="22sp"
+                        android:textColor="@color/black"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_choice1ID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                <LinearLayout
+                    android:id="@+id/layout_choice1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:padding="20dp">
 
-            <TextView
-                android:id="@+id/tv_isCorrect1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                    <TextView
+                        android:id="@+id/tv_choice1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:text="Choice 1"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:layout_gravity="center" />
+
+                    <TextView
+                        android:id="@+id/tv_choice1ID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tv_isCorrect1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"/>
 
 
-        </LinearLayout>
+                </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/layout_choice2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:padding="30dp"
-            android:layout_marginTop="10dp">
+                <LinearLayout
+                    android:id="@+id/layout_choice2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="20dp"
+                    android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/tv_choice2ID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                    <TextView
+                        android:id="@+id/tv_choice2ID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/tv_isCorrect2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                    <TextView
+                        android:id="@+id/tv_isCorrect2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/tv_choice2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="Choice 2"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:layout_gravity="center"/>
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_choice2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:text="Choice 2"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/layout_choice3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:padding="30dp"
-            android:layout_marginTop="10dp">
+                <LinearLayout
+                    android:id="@+id/layout_choice3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="20dp"
+                    android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/tv_choice3ID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                    <TextView
+                        android:id="@+id/tv_choice3ID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/tv_isCorrect3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                    <TextView
+                        android:id="@+id/tv_isCorrect3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/tv_choice3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="Choice 3"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:layout_gravity="center"/>
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_choice3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:text="Choice 3"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/layout_choice4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            android:padding="30dp"
-            android:layout_marginTop="10dp">
+                <LinearLayout
+                    android:id="@+id/layout_choice4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    android:padding="20dp"
+                    android:layout_marginTop="10dp">
 
-            <TextView
-                android:id="@+id/tv_choice4ID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                    <TextView
+                        android:id="@+id/tv_choice4ID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/tv_isCorrect4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"/>
+                    <TextView
+                        android:id="@+id/tv_isCorrect4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"/>
 
-            <TextView
-                android:id="@+id/tv_choice4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:text="Choice 4"
-                android:textSize="20sp"
-                android:textColor="@color/black"
-                android:layout_gravity="center"/>
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_choice4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:text="Choice 4"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_next"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Next"
-            android:visibility="invisible"/>
+                <Button
+                    android:id="@+id/btn_next"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Next"
+                    android:visibility="invisible"/>
 
+            </LinearLayout>
+
+        </ScrollView>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

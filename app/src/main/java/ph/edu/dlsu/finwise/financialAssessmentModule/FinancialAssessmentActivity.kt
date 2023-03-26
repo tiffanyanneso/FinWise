@@ -37,6 +37,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
     private lateinit var assessmentType: String
     private lateinit var assessmentCategory: String
     private lateinit var assessmentName: String
+    private var nQuestionsInAssessment = 0
     private var childID = FirebaseAuth.getInstance().currentUser!!.uid
     private var age = 0
 
@@ -78,6 +79,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
             loadTextViewsBinding(assessmentsDocumentSnapshot)
             getChildAge()
             getAssessmentQuestions(assessmentsDocumentSnapshot)
+            println("print assessment question size " +  questionIDArrayList.size)
         }
     }
 
@@ -86,6 +88,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
             val assessment = assessmentsDocumentSnapshot.documents[0]
                 .toObject<FinancialAssessmentDetails>()
             assessmentName = assessment?.assessmentCategory.toString()
+            nQuestionsInAssessment = assessment?.nQuestionsInAssessment!!
             var description = assessment?.description.toString()
             if (description == "")
                 description = "This assessment is about testing your $assessmentName knowledge and skills"
@@ -160,6 +163,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
     private suspend fun getAssessmentQuestions(assessmentsIDArray: QuerySnapshot?) {
         if (assessmentsIDArray != null) {
             for (assessmentID in assessmentsIDArray) {
+                println("print assessment id " + assessmentID.id)
                 val questions = getAssessmentQuestionsCollection(assessmentID.id)
                 if (questions != null) {
                     for (question in questions) {
@@ -179,7 +183,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
 
         val docRef = firestore.collection("AssessmentQuestions")
             .whereEqualTo("assessmentID", assessmentID)
-            .whereEqualTo("difficulty", difficultyQuery)
+            .whereIn("difficulty", difficultyQuery)
         return docRef.get().await()
     }
 
@@ -203,7 +207,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
         bundle.putString("assessmentID", assessmentID)
         bundle.putString("assessmentName", assessmentName)
         bundle.putStringArrayList("questionIDArrayList", questionIDArrayList)
-        bundle.putInt("nNumberOfQuestions", questionIDArrayList.size)
+        bundle.putInt("nNumberOfQuestions", nQuestionsInAssessment)
         bundle.putInt("currentNumber", 1)
         bundle.putSerializable("answerHistory", answerHistoryArrayList)
         return bundle

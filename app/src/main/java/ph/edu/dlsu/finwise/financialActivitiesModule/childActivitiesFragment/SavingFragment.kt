@@ -17,16 +17,15 @@ import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
-import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
-import ph.edu.dlsu.finwise.databinding.DialogSavingReviewBinding
-import ph.edu.dlsu.finwise.databinding.DialogSmartReviewBinding
-import ph.edu.dlsu.finwise.databinding.FragmentFinactSavingBinding
+import ph.edu.dlsu.finwise.databinding.*
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
+import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
 import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -52,13 +51,7 @@ class SavingFragment : Fragment() {
 
     private var setOwnGoals = false
 
-    //vars for activity types for pie chart
-    var nBuyingItem = 0
-    var nEvent = 0
-    var nEmergency = 0
-    var nCharity = 0
-    var nSituational =0
-    var nEarning = 0
+    private var assessmentTaken = true
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -82,19 +75,8 @@ class SavingFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        getAssessmentStatus()
         binding.title.text = "Overall Saving Performance"
-        binding.btnNewGoal.setOnClickListener {
-            if (ongoingGoals >= 5)
-                buildDialog()
-            else {
-                var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
-                var bundle = Bundle()
-                bundle.putString("source", "Child")
-                goToNewGoal.putExtras(bundle)
-                goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                this.startActivity(goToNewGoal)
-            }
-        }
 
         binding.btnReviewSaving.setOnClickListener{
             showGoalDialog()
@@ -114,6 +96,70 @@ class SavingFragment : Fragment() {
         getGoals()
         getSavingActivities()
         computeOverallScore()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getAssessmentStatus() {
+        firestore.collection("Assessments").whereEqualTo("assessmentType", "Pre-Activity").whereEqualTo("assessmentCategory", "Saving").get().addOnSuccessListener {
+            if (it.size() != 0) {
+                var assessmentID = it.documents[0].id
+                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+                    if (results.size() != 0) {
+                        var assessmentAttemptsObjects = results.toObjects<FinancialAssessmentAttempts>()
+                        assessmentAttemptsObjects.sortedByDescending { it.dateTaken }
+                        var latestAssessmentAttempt = assessmentAttemptsObjects.get(0).dateTaken
+                        val dateFormatter: DateTimeFormatter =
+                            DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                        val lastTakenFormat =
+                            SimpleDateFormat("MM/dd/yyyy").format(latestAssessmentAttempt!!.toDate())
+                        val from = LocalDate.parse(lastTakenFormat.toString(), dateFormatter)
+                        val today = SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate())
+                        val to = LocalDate.parse(today.toString(), dateFormatter)
+                        var difference = Period.between(from, to)
+
+                        if (difference.days >= 7)
+                            assessmentTaken = false
+                        else
+                            assessmentTaken = true
+                    } else
+                        assessmentTaken = false
+                }.continueWith {
+                    binding.btnNewGoal.setOnClickListener {
+                        if (!assessmentTaken)
+                            buildAssessmentDialog()
+                        else if (ongoingGoals >= 5)
+                            buildDialog()
+                        else {
+                            var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
+                            var bundle = Bundle()
+                            bundle.putString("source", "Child")
+                            goToNewGoal.putExtras(bundle)
+                            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            this.startActivity(goToNewGoal)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun buildAssessmentDialog() {
+        var dialogBinding= DialogTakeAssessmentBinding.inflate(layoutInflater)
+        var dialog= Dialog(requireContext());
+        dialog.setContentView(dialogBinding.root)
+        dialog.window!!.setLayout(950, 900)
+        dialog.setCancelable(false)
+        dialogBinding.btnOk.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putString("assessmentType", "Pre-Activity")
+            bundle.putString("assessmentCategory", "Saving")
+
+            val assessmentQuiz = Intent(requireContext(), FinancialAssessmentActivity::class.java)
+            assessmentQuiz.putExtras(bundle)
+            startActivity(assessmentQuiz)
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){ }
@@ -334,17 +380,7 @@ class SavingFragment : Fragment() {
                 var goal = goalSnapshot.toObject<FinancialGoals>()
                 if (goal.status == "In Progress")
                     ongoingGoals++
-
-                when (goal.financialActivity) {
-                    "Buying Items" -> nBuyingItem++
-                    "Planning An Event" -> nEvent++
-                    "Saving For Emergency Funds" -> nEmergency++
-                    "Donating To Charity" -> nCharity++
-                    "Situational Shopping" -> nSituational++
-                    "Earning Money" -> nEarning++
-                }
             }
-
         }
     }
 

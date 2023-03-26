@@ -219,15 +219,17 @@ class GoalAccomplishedActivity : AppCompatActivity() {
         dialogBinding.btnNo.setOnClickListener {
             //withdrawal transaction from goal to wallet
             adjustWalletBalances()
+            goToFinancialAssessmentActivity()
         }
     }
 
     private fun initializeProceedButton(dialogBinding: DialogProceedNextActivityBinding) {
         dialogBinding.btnProceed.setOnClickListener {
             firestore.collection("FinancialActivities").document(budgetingActivityID).update("status", "In Progress")
-            val budgetActivity = Intent(this, BudgetActivity::class.java)
-            budgetActivity.putExtras(sendBundle)
-            startActivity(budgetActivity)
+            goToFinancialAssessmentActivity()
+//            val budgetActivity = Intent(this, BudgetActivity::class.java)
+//            budgetActivity.putExtras(sendBundle)
+//            startActivity(budgetActivity)
         }
 
     }
@@ -250,7 +252,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun goToFinancialAssessmentActivity() {
-        firestore.collection("Assessments").whereEqualTo("assessmentType", "Pre-Activity").whereEqualTo("assessmentCategory", "Budgeting").get().addOnSuccessListener {
+        firestore.collection("Assessments").whereEqualTo("assessmentType", "Post-Activity").whereEqualTo("assessmentCategory", "Saving").get().addOnSuccessListener {
             if (it.size()!= 0) {
                 val assessmentID = it.documents[0].id
                 firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->

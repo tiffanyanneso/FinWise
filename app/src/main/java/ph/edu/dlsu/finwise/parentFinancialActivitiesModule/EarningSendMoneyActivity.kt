@@ -240,7 +240,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
         )
         firestore.collection("Transactions").add(income).addOnSuccessListener {
             var deposit = hashMapOf(
-                "createdBy" to childID,
+                "userID" to childID,
                 "transactionName" to binding.tvActivity.text.toString(),
                 "transactionType" to "Deposit",
                 "category" to "Goal",

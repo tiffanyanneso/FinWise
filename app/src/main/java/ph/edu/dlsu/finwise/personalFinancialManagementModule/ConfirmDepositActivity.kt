@@ -116,7 +116,7 @@ class ConfirmDepositActivity : AppCompatActivity() {
     private fun addTransaction() {
         val goalName = "Deposit to '$goal'"
         val transaction = hashMapOf(
-            "transactionName" to "Deposit to \'$goalName\'",
+            "transactionName" to "'$goalName' Deposit",
             "transactionType" to "Deposit",
             "date" to date ,
             "category" to "Goal",

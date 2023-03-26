@@ -138,7 +138,7 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
         sendBundle.putParcelableArrayList("answerHistory", answerHistoryArrayList)
 
         //if there are still questions, go to the next
-        if (currentNumber+1 > nNumberOfQuestions) {
+        if (currentNumber+1 <= nNumberOfQuestions) {
             val nextQuestion = Intent(this, FinancialAssessmentQuiz::class.java)
             nextQuestion.putExtras(sendBundle)
             this.startActivity(nextQuestion)
