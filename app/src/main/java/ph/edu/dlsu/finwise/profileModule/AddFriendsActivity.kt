@@ -23,6 +23,7 @@ class AddFriendsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddFriendsBinding
 
     private var firestore = Firebase.firestore
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private lateinit var addFriendsAdapter: AddFriendsAdapter
 
@@ -31,6 +32,7 @@ class AddFriendsActivity : AppCompatActivity() {
         binding = ActivityAddFriendsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        fillRecyclerView()
         binding.etSearch.addTextChangedListener{ textInput ->
             searchFriends(textInput.toString())}
 
@@ -45,11 +47,32 @@ class AddFriendsActivity : AppCompatActivity() {
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_profile)
     }
 
-    private fun searchFriends(textInput:String){
-        var usernameQuery = ArrayList<String>()
-        firestore.collection("Users").whereGreaterThanOrEqualTo("username", textInput).whereLessThanOrEqualTo("username", textInput + "\uf8ff").get().addOnSuccessListener { results ->
+    private fun fillRecyclerView() {
+        var userIDs = ArrayList<String>()
+        firestore.collection("Users").whereEqualTo("userType", "Child").get().addOnSuccessListener { results ->
             //TODO: WAY TO CHECK IF USERS ARE ALREADY FRIENDS
             for (child in results) {
+                if (child.id != currentUser)
+                    userIDs.add(child.id)
+            }
+
+            addFriendsAdapter = AddFriendsAdapter(this, userIDs, object:AddFriendsAdapter.AddFriendClick{
+                override fun addFriend(childID: String) {
+                    sendFriendRequest(childID)
+                }
+            })
+            binding.rvViewUsers.adapter = addFriendsAdapter
+            binding.rvViewUsers.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            addFriendsAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun searchFriends(textInput:String){
+        var usernameQuery = ArrayList<String>()
+        firestore.collection("Users").whereGreaterThanOrEqualTo("username", textInput).whereLessThanOrEqualTo("username", textInput + "\uf8ff").whereEqualTo("userType", "Child").get().addOnSuccessListener { results ->
+            //TODO: WAY TO CHECK IF USERS ARE ALREADY FRIENDS
+            for (child in results) {
+                if (child.id != currentUser)
                 usernameQuery.add(child.id)
             }
 
