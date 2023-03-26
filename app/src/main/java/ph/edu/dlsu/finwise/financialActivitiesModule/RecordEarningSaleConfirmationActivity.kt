@@ -78,7 +78,7 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
 
     private fun addTransactions() {
         var incomeTransaction = hashMapOf(
-            "childID" to currentUser,
+            "userID" to currentUser,
             "transactionType" to "Income",
             "transactionName" to bundle.getString("saleName") + " Sale",
             "amount" to bundle.getFloat("saleAmount"),
@@ -99,7 +99,7 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
                     var goal = goalResult.toObject<FinancialGoals>()
 
                     var depositTransaction = hashMapOf(
-                        "childID" to currentUser,
+                        "userID" to currentUser,
                         "transactionType" to "Deposit",
                         "transactionName" to goal?.goalName + " Deposit",
                         "amount" to bundle.getFloat("saleAmount"),
