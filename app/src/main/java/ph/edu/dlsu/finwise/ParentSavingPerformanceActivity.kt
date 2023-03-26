@@ -161,7 +161,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
                 } else if (overall < 96 && overall >= 86) {
                     binding.imgFace.setImageResource(R.drawable.amazing)
                     binding.tvPerformanceStatus.text = "Amazing"
-                    binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
+                    binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.amazing_green))
                     binding.tvPerformanceText.text = "Your child is amazing at goal setting! Encourage them to keep completing those goals!"
                 } else if (overall < 86 && overall >= 76) {
                     binding.imgFace.setImageResource(R.drawable.great)
@@ -181,22 +181,22 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
                 } else if (overall < 56 && overall >= 46) {
                     binding.imgFace.setImageResource(R.drawable.nearly_there)
                     binding.tvPerformanceStatus.text = "Nearly There"
-                    binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                    binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
                     binding.tvPerformanceText.text = "Your child is nearly there! Click the tips button to learn how to help them get there!"
                 }  else if (overall < 46 && overall >= 36) {
                     binding.imgFace.setImageResource(R.drawable.almost_there)
                     binding.tvPerformanceStatus.text = "Almost There"
-                    binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                    binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
                     binding.tvPerformanceText.text = "Your child is almost there! Click the tips button to learn how to help them get there!"
                 } else if (overall < 36 && overall >= 26) {
                     binding.imgFace.setImageResource(R.drawable.getting_there)
                     binding.tvPerformanceStatus.text = "Getting There"
-                    binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                    binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
                     binding.tvPerformanceText.text = "Your child is getting there! Click the tips button to learn how to help them get there!"
                 } else if (overall < 26 && overall >= 16) {
                     binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                     binding.tvPerformanceStatus.text = "Not Quite\nThere"
-                    binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                    binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
                     binding.tvPerformanceText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
                 } else if (overall < 15) {
                     binding.imgFace.setImageResource(R.drawable.bad)
@@ -344,13 +344,13 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         )
         categoryRatingArray.add(
             SavingPerformanceActivity.DurationRating(
-                "Planning an Event",
+                "Planning An Event",
                 percentageEvent
             )
         )
         categoryRatingArray.add(
             SavingPerformanceActivity.DurationRating(
-                "Saving for Emergency Funds",
+                "Saving For Emergency Funds",
                 percentageEmergency
             )
         )
@@ -362,7 +362,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         )
         categoryRatingArray.add(
             SavingPerformanceActivity.DurationRating(
-                "Donating to Charity",
+                "Donating To Charity",
                 percentageDonating
             )
         )

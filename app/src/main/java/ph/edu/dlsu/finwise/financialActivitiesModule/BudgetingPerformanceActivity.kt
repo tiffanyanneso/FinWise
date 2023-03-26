@@ -116,11 +116,14 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
                                 nParent++
 
                         }.continueWith {
-                            parentalInvolvementPercentage = nParent.toFloat()/budgetItemCount.toFloat()*100
-                            binding.textViewProgressParentalInvolvement.text = DecimalFormat("##0.##").format((nParent.toFloat()/budgetItemCount.toFloat())*100)+ "%"
+//                            parentalInvolvementPercentage = nParent.toFloat()/budgetItemCount.toFloat()*100
+                            parentalInvolvementPercentage = (1 - (nParent.toFloat()/budgetItemCount)) * 100
+                            binding.textViewProgressParentalInvolvement.text = DecimalFormat("##0.##").format(parentalInvolvementPercentage)+ "%"
                             binding.progressBarParentalInvolvement.progress = ((nParent.toFloat()/budgetItemCount.toFloat())*100).roundToInt()
 
                             var parentalPercentage = nParent.toFloat()/budgetItemCount.toFloat()*100
+
+                            print("parental " + parentalPercentage)
 
                             if (parentalPercentage < 5) {
                                 binding.textViewPerformanceTextParentalInvolvement.text = "Excellent"
@@ -228,44 +231,44 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
 
         if (budgetAccuracy >= 96) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Excellent"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
-            binding.tvPerformanceText.text = "Keep up the excellent work! Your budget is often accurate."
+            binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.dark_green))
+            binding.tvBudgetAccuracyText.text = "Keep up the excellent work! Your budget is often accurate."
         } else if (budgetAccuracy < 96 && budgetAccuracy >= 86) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Amazing"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.green))
-            binding.tvPerformanceText.text = "Amazing job! You are performing well. You are amazing at creating accurate budgets."
+            binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.amazing_green))
+            binding.tvBudgetAccuracyText.text = "Amazing job! You are performing well. You are amazing at creating accurate budgets."
         } else if (budgetAccuracy < 90 && budgetAccuracy >= 80) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Great"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.green))
-            binding.tvPerformanceText.text = "You are performing well. Keep making those accurate budgets!"
+            binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.green))
+            binding.tvBudgetAccuracyText.text = "You are performing well. Keep making those accurate budgets!"
         } else if (budgetAccuracy < 80 && budgetAccuracy >= 70) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Good"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
-            binding.tvPerformanceText.text = "Good job! With a bit more attention to detail, you’ll surely up your performance!"
+            binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.light_green))
+            binding.tvBudgetAccuracyText.text = "Good job! With a bit more attention to detail, you’ll surely up your performance!"
         } else if (budgetAccuracy < 70 && budgetAccuracy >= 60) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Average"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
-            binding.tvPerformanceText.text = "Nice work! Work on improving your budget by always doublechecking. You’ll get there soon!"
+            binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.yellow))
+            binding.tvBudgetAccuracyText.text = "Nice work! Work on improving your budget by always doublechecking. You’ll get there soon!"
         } else if (budgetAccuracy < 56 && budgetAccuracy >= 46) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Nearly There"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
+            binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
+            binding.tvBudgetAccuracyText.text = "You're nearly there! Click review to learn how to get there!"
         }  else if (budgetAccuracy < 46 && budgetAccuracy >= 36) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Almost There"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "Almost there! You need to work on your budget accuracy. Click review to learn how!"
+            binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.almost_there_yellow))
+            binding.tvBudgetAccuracyText.text = "Almost there! You need to work on your budget accuracy. Click review to learn how!"
         } else if (budgetAccuracy < 36 && budgetAccuracy >= 26) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Getting There"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "Getting there! You need to work on your budget accuracy. Click review to learn how!"
+            binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.getting_there_orange))
+            binding.tvBudgetAccuracyText.text = "Getting there! You need to work on your budget accuracy. Click review to learn how!"
         } else if (budgetAccuracy < 26 && budgetAccuracy >= 16) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Not Quite\nThere"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
+            binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.not_quite_there_red))
+            binding.tvBudgetAccuracyText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
         } else if (budgetAccuracy < 15) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Needs\nImprovement"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "Your budget accuracy needs a lot of improvement. Click review to learn how!"
+            binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.red))
+            binding.tvBudgetAccuracyText.text = "Your budget accuracy needs a lot of improvement. Click review to learn how!"
         }
     }
 
@@ -282,7 +285,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         } else if (overall < 96 && overall >= 86) {
             binding.imgFace.setImageResource(R.drawable.amazing)
             binding.textStatus.text = "Amazing"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.green))
+            binding.textStatus.setTextColor(getResources().getColor(R.color.amazing_green))
             binding.tvPerformanceText.text = "Amazing job! You are performing well. Budgeting is your strong point. Keep making those budgets!"
         } else if (overall < 90 && overall >= 80) {
             binding.imgFace.setImageResource(R.drawable.great)
@@ -302,22 +305,22 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         } else if (overall < 56 && overall >= 46) {
             binding.imgFace.setImageResource(R.drawable.nearly_there)
             binding.textStatus.text = "Nearly There"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.textStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
             binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
         }  else if (overall < 46 && overall >= 36) {
             binding.imgFace.setImageResource(R.drawable.almost_there)
             binding.textStatus.text = "Almost There"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.textStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
             binding.tvPerformanceText.text = "Almost there! You need to work on your budgeting. Click review to learn how!"
         } else if (overall < 36 && overall >= 26) {
             binding.imgFace.setImageResource(R.drawable.getting_there)
             binding.textStatus.text = "Getting There"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.textStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
             binding.tvPerformanceText.text = "Getting there! You need to work on your budgeting. Click review to learn how!"
         } else if (overall < 26 && overall >= 16) {
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
             binding.textStatus.text = "Not Quite\nThere"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.textStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
             binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
         } else if (overall < 15) {
             binding.imgFace.setImageResource(R.drawable.bad)

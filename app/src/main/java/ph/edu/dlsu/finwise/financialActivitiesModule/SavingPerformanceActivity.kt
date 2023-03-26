@@ -65,6 +65,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
         binding = ActivitySavingPerformanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.title.text = "Overall Saving Performance"
         // Hides actionbar,
         // and initializes the navbar
         supportActionBar?.hide()
@@ -149,7 +150,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             } else if (overall < 96 && overall >= 86) {
                 binding.imgFace.setImageResource(R.drawable.amazing)
                 binding.tvPerformanceStatus.text = "Amazing"
-                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.amazing_green))
                 binding.tvPerformanceText.text = "Amazing job! You are performing well. Saving is your strong point. Keep completing those goals!"
             } else if (overall < 86 && overall >= 76) {
                 binding.imgFace.setImageResource(R.drawable.great)
@@ -169,22 +170,22 @@ class SavingPerformanceActivity : AppCompatActivity() {
             } else if (overall < 56 && overall >= 46) {
                 binding.imgFace.setImageResource(R.drawable.nearly_there)
                 binding.tvPerformanceStatus.text = "Nearly There"
-                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
                 binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
             }  else if (overall < 46 && overall >= 36) {
                 binding.imgFace.setImageResource(R.drawable.almost_there)
                 binding.tvPerformanceStatus.text = "Almost There"
-                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
                 binding.tvPerformanceText.text = "Almost there! You need to work on your saving. Click review to learn how!"
             } else if (overall < 36 && overall >= 26) {
                 binding.imgFace.setImageResource(R.drawable.getting_there)
                 binding.tvPerformanceStatus.text = "Getting There"
-                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
                 binding.tvPerformanceText.text = "Getting there! You need to work on your saving. Click review to learn how!"
             } else if (overall < 26 && overall >= 16) {
                 binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                 binding.tvPerformanceStatus.text = "Not Quite\nThere"
-                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
                 binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
             } else if (overall < 15) {
                 binding.imgFace.setImageResource(R.drawable.bad)
@@ -306,7 +307,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
         categoryRatingArray.add(DurationRating("Buying Items", percentageBuying))
         categoryRatingArray.add(DurationRating("Planning An Event", percentageEvent))
-        categoryRatingArray.add(DurationRating("Saving for Emergency Funds", percentageEmergency))
+        categoryRatingArray.add(DurationRating("Saving For Emergency Funds", percentageEmergency))
         categoryRatingArray.add(DurationRating("Situational Shopping", percentageSituational))
         categoryRatingArray.add(DurationRating("Donating To Charity", percentageDonating))
 

@@ -82,7 +82,7 @@
                             android:padding="10dp">
 
                             <ImageView
-                                android:src="@drawable/good"
+                                android:src="@drawable/loading"
                                 android:id="@+id/img_face"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
@@ -93,7 +93,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                                tools:text="12%"
+                                tools:text="..."
                                 android:textSize="20sp"
                                 android:textStyle="bold"
                                 android:layout_gravity="center"
@@ -104,7 +104,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="16sp"
-                                android:text="Good"
+                                android:text="..."
                                 android:textColor="@color/light_green"
                                 android:textStyle="bold"
                                 android:layout_gravity="center"/>
@@ -115,7 +115,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:text="Good job! With a bit more dedication and effort, you’ll surely up your performance!"
+                            android:text="Loading..."
                             android:textColor="@color/white"
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"/>
