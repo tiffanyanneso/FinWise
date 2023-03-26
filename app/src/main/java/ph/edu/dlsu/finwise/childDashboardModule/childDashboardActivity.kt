@@ -99,7 +99,6 @@ class childDashboardActivity : AppCompatActivity(){
                 personalFinancePerformancePercent = 200F
             personalFinancePerformance = personalFinancePerformancePercent / 2
             binding.tvPersonalFinancePercent.text = DecimalFormat("##0.00").format(personalFinancePerformance) + "%"
-            println("print age " + age)
             if (age == 10 || age == 11)
                 getGoalSettingPerformance()
             else
@@ -209,7 +208,6 @@ class childDashboardActivity : AppCompatActivity(){
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getSpendingPerformance() {
-        println("print in spending")
         //get budgeting items to see if they overspent for a specific budget item
         //get completed spending activities
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->

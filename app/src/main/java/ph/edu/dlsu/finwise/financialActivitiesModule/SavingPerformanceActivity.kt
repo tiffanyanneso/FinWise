@@ -305,10 +305,10 @@ class SavingPerformanceActivity : AppCompatActivity() {
         val categoryRatingArray = ArrayList<DurationRating>()
 
         categoryRatingArray.add(DurationRating("Buying Items", percentageBuying))
-        categoryRatingArray.add(DurationRating("Planning an Event", percentageEvent))
+        categoryRatingArray.add(DurationRating("Planning An Event", percentageEvent))
         categoryRatingArray.add(DurationRating("Saving for Emergency Funds", percentageEmergency))
         categoryRatingArray.add(DurationRating("Situational Shopping", percentageSituational))
-        categoryRatingArray.add(DurationRating("Donating to Charity", percentageDonating))
+        categoryRatingArray.add(DurationRating("Donating To Charity", percentageDonating))
 
         categoryRatingArray.sortByDescending{it.score}
 
@@ -443,7 +443,6 @@ class SavingPerformanceActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         var dialogBinding= DialogSavingCategoryReviewBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
-
         if (specificCategory == "Buying Items") {
             dialogBinding.tvTitle.text = "Buying Items"
             dialogBinding.tvDefinition.text = "Purchasing things such as goods or services."
@@ -469,6 +468,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
                     "2. Think about your future."
         } else if (specificCategory == "Donating To Charity") {
+            println("print in donating to charity")
             dialogBinding.tvTitle.text = "Donating To Charity"
             dialogBinding.tvDefinition.text = "1. Giving money to a non-profit organization to support an advocacy.\n" +
                     "2. Important to think about others"

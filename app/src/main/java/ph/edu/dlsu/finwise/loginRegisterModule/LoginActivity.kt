@@ -76,11 +76,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun noAccountFound(task: Task<AuthResult>) {
-        Toast.makeText(
-            baseContext, "No account found.",
-            Toast.LENGTH_SHORT
-        ).show()
-
         Log.d("xzcxcxz", "noAccountFound: "+task.exception?.message)
 
         binding.etPassword.error = "Please enter your correct password."
@@ -88,9 +83,6 @@ class LoginActivity : AppCompatActivity() {
 
         binding.etEmail.error = "Please enter your correct email address."
         binding.etEmail.requestFocus()
-
-
-
     }
 
     private fun initializeRedirect(documentSnapshot: DocumentSnapshot, isFirstLogin: Boolean) {

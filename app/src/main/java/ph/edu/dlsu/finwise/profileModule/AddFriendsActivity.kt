@@ -69,7 +69,7 @@ class AddFriendsActivity : AppCompatActivity() {
 
     private fun searchFriends(textInput:String){
         var usernameQuery = ArrayList<String>()
-        firestore.collection("Users").whereGreaterThanOrEqualTo("username", textInput).whereLessThanOrEqualTo("username", textInput + "\uf8ff").whereEqualTo("userType", "Child")get().addOnSuccessListener { results ->
+        firestore.collection("Users").whereGreaterThanOrEqualTo("username", textInput).whereLessThanOrEqualTo("username", textInput + "\uf8ff").whereEqualTo("userType", "Child").get().addOnSuccessListener { results ->
             //TODO: WAY TO CHECK IF USERS ARE ALREADY FRIENDS
             for (child in results) {
                 if (child.id != currentUser)
