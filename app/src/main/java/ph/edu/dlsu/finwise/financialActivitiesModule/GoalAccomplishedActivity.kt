@@ -167,7 +167,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
             }
             50 -> {
                 badgeImage = R.drawable.badge_achiever_50
-                badgeMessage = "Congratulations! You've reached the Advanced level of financial goal achievement. You're doing great and your hard work is paying off. Keep it up and see how much more you can accomplish!."
+                badgeMessage = "Congratulations! You've reached the Advanced level of financial goal achievement. You're doing great and your hard work is paying off."
             }
             100 -> {
                 badgeImage = R.drawable.badge_achiever_100
