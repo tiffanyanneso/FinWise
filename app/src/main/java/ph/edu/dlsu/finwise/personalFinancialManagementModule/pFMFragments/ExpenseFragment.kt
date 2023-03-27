@@ -5,22 +5,19 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.MPPointF
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -28,13 +25,8 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentExpenseBinding
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
-import java.math.BigDecimal
 import java.text.DecimalFormat
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.ZoneId
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class ExpenseFragment : Fragment(R.layout.fragment_expense) {
@@ -133,7 +125,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             .get().addOnSuccessListener { transactionsSnapshot ->
                 for (document in transactionsSnapshot) {
                     val transaction = document.toObject<Transactions>()
-                    if (transaction.transactionType == "Expense" || transaction.transactionType == "Expense (Maya")
+                    if (transaction.transactionType == "Expense")
                         transactionsArrayList.add(transaction)
                 }
                 sortedDate = getDatesOfTransactions()
@@ -275,23 +267,21 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
 
 
     private fun addWeeklyData(selectedDates: List<Date>) {
-        /*TODO: Might have to seperate this function para magroup yung days sa week, weeks
-                sa month, at months sa year*/
         //get deposit for a specific date
         for (date in selectedDates) {
             for (transaction in transactionsArrayList) {
                 //comparing the dates if they are equal
                 if (date.compareTo(transaction.date?.toDate()) == 0) {
                     when (transaction.category) {
-                        "Clothes" -> clothes += transaction.amount!!.toFloat()
-                        "Food" -> food += transaction.amount!!.toFloat()
+                        "Clothing" -> clothes += transaction.amount!!.toFloat()
+                        "Food & Drinks" -> food += transaction.amount!!.toFloat()
                         "Gift" -> gift += transaction.amount!!.toFloat()
                         "Toys & Games" -> toysAndGames += transaction.amount!!.toFloat()
                         "Transportation" -> transportation += transaction.amount!!.toFloat()
                         "Entertainment" -> entertainment += transaction.amount!!.toFloat()
                         "Personal Care" -> personalCare += transaction.amount!!.toFloat()
                         "Decorations" -> decorations += transaction.amount!!.toFloat()
-                        "Rent" -> rent += transaction.amount!!.toFloat()
+                        "Rental" -> rent += transaction.amount!!.toFloat()
                         "Party Favors" -> partyFavors += transaction.amount!!.toFloat()
                         "Miscellaneous" -> miscellaneous += transaction.amount!!.toFloat()
                         "Other" -> other += transaction.amount!!.toFloat()
@@ -503,8 +493,10 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         // setting animation for our pie chart
         pieChart.animateY(1400, Easing.EaseInOutQuad)
 
+        pieChart.legend.isEnabled = false
+
         // configure legend
-        val legend = pieChart.legend
+        /*val legend = pieChart.legend
         legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
         legend.orientation = Legend.LegendOrientation.VERTICAL
@@ -512,7 +504,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         legend.xEntrySpace = 10f
         legend.yEntrySpace = 0f
         legend.yOffset = 10f
-        legend.textSize = 12f
+        legend.textSize = 12f*/
 
         // set legend
         /*var legend = pieChart.legend

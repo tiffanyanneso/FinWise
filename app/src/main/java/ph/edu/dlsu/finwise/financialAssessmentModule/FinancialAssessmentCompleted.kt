@@ -179,7 +179,6 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         }
         val bitmap = BitmapFactory.decodeResource(resources, badgeImage)
         imageView.setImageBitmap(bitmap)
-        Log.d("zxccc", "setViewBindings: "+badgeImage)
 
         val badgeTitle = "$badgeName Badge Unlocked!"
         dialogBinding.tvBadgeTitle.text = badgeTitle

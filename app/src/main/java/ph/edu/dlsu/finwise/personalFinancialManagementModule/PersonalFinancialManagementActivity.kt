@@ -249,23 +249,23 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun setUpChartTabs() {
         val adapter = PFMAdapter(supportFragmentManager)
         val balanceFragment = BalanceFragment()
-        val savingsFragment = SavingsFragment()
+        //val savingsFragment = SavingsFragment()
         Log.d("sdfsfsdf", "getArgumentsFromPFM: "+bundle)
 
         balanceFragment.arguments = bundle
-        savingsFragment.arguments = bundle
+        //savingsFragment.arguments = bundle
         adapter.addFragment(balanceFragment, "Balance")
-        adapter.addFragment(savingsFragment, "Goal Savings")
+        //adapter.addFragment(savingsFragment, "Goal Savings")
         binding.viewPagerBarCharts.adapter = adapter
         binding.tabsBarCharts.setupWithViewPager(binding.viewPagerBarCharts)
 
         binding.tabsBarCharts.getTabAt(0)?.text = "Balance"
-        binding.tabsBarCharts.getTabAt(1)?.text = "Goal Savings"
+        //binding.tabsBarCharts.getTabAt(1)?.text = "Goal Savings"
         setupTabIcons2()
     }
     private fun setupTabIcons2() {
         binding.tabsBarCharts.getTabAt(0)?.setIcon(tabIcons2[0])
-        binding.tabsBarCharts.getTabAt(1)?.setIcon(tabIcons2[1])
+        //binding.tabsBarCharts.getTabAt(1)?.setIcon(tabIcons2[1])
     }
 
    /* private fun setupTabIcons1() {

@@ -67,7 +67,6 @@ class GoalAccomplishedActivity : AppCompatActivity() {
     private fun badge() {
         CoroutineScope(Dispatchers.Main).launch {
             nFinishedActivities = getNFinishedActivities()
-            Log.d("ccxvxvcv", "badge: "+nFinishedActivities)
 
             // check if the child is eligible for a badge
             if (nFinishedActivities == 1 || nFinishedActivities == 10 || nFinishedActivities == 20

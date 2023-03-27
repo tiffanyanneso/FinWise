@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
@@ -458,7 +457,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
         data.setValueTypeface(Typeface.DEFAULT_BOLD)
         data.setValueTextColor(Color.WHITE)
         chart.data = data
-        chart.legend.textSize = 14f
+        //chart.legend.textSize = 14f
 
         // undo all highlights
         chart.highlightValues(null)
@@ -497,7 +496,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
         chart.animateY(1400, Easing.EaseInOutQuad)
 
         // configure legend
-        val legend = chart.legend
+        /*val legend = chart.legend
         legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
         legend.horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
         legend.orientation = Legend.LegendOrientation.VERTICAL
@@ -505,7 +504,7 @@ class GoalSavingDetailsActivity : AppCompatActivity() {
         legend.xEntrySpace = 10f
         legend.yEntrySpace = 0f
         legend.yOffset = 10f
-        legend.textSize = 12f
+        legend.textSize = 12f*/
         /* val yAxis = chart.axisLeft
         yAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {

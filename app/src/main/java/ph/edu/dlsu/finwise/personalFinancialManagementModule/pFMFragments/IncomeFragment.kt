@@ -489,6 +489,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         // setting animation for our pie chart
         pieChart.animateY(1400, Easing.EaseInOutQuad)
 
+        pieChart.legend.isEnabled = false
         // set legend
         /*var legend = pieChart.legend
         legend.verticalAlignment = Legend.LegendVerticalAlignment.CENTER
@@ -537,7 +538,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         data.setValueTypeface(Typeface.DEFAULT_BOLD)
         data.setValueTextColor(Color.WHITE)
         pieChart.data = data
-        pieChart.legend.textSize = 14f
+        //pieChart.legend.textSize = 14f
 
         // undo all highlights
         pieChart.highlightValues(null)
