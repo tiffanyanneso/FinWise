@@ -207,9 +207,8 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                         nTotalPurchased += expenseTransactions.size().toFloat()
                     }.continueWith {
                         val purchasePlanningPercentage = (nPlanned/nTotalPurchased)*100
-
                         binding.progressBarPurchasePlanning.progress = purchasePlanningPercentage.toInt()
-                        binding.textPurchasePlanning.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
+                        binding.textPurchasePlanning.text  = DecimalFormat("##0.00").format(purchasePlanningPercentage) + "%"
 
                         if (purchasePlanningPercentage >= 96) {
                             binding.textPurchasePlanningText.text = "Excellent"
@@ -253,7 +252,8 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                             binding.tvPurchasePlanningText.text = "Uh oh! Seems like you haven’t really been planning your expenses by putting them in your shopping list. Try this out next time!"
                         }
 
-                        overallSpending = ((overspendingPercentage*100) + ((nPlanned/nTotalPurchased)*100)) /2
+
+                        overallSpending = (((1-overspendingPercentage)*100) + purchasePlanningPercentage) /2
                         binding.tvPerformancePercentage.text ="${DecimalFormat("0.0").format(overallSpending)}%"
 
 
