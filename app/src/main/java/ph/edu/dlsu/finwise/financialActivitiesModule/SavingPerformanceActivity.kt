@@ -122,7 +122,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
     private fun computeOverallScore() {
         var nTotal = 0.00F
         var nOnTime =0.00F
-        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
 
             if (results.size()!=0) {
                 nTotal = results.size().toFloat()
