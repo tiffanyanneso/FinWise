@@ -15,17 +15,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.ParentSavingPerformanceActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPerformance.ParentSavingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSavingTipsBinding
-import ph.edu.dlsu.finwise.databinding.DialogSavingReviewBinding
 import ph.edu.dlsu.finwise.databinding.FragmentParentSavingBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
-import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
-import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.SavingFragment
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
@@ -108,14 +104,12 @@ class ParentSavingFragment : Fragment() {
         }
 
         binding.btnSeeMore.setOnClickListener {
+            var sendBundle = Bundle()
+            sendBundle.putString("childID", childID)
+
             var goToPerformance = Intent(requireContext().applicationContext, ParentSavingPerformanceActivity::class.java)
-
-            var bundle = Bundle()
-
-            bundle.putString("childID", childID)
-            goToPerformance.putExtras(bundle)
-            goToPerformance.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-
+            goToPerformance.putExtras(sendBundle)
+//            goToPerformance.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(goToPerformance)
         }
 

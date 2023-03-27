@@ -1,7 +1,6 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPerformance
 
 import android.app.Dialog
-import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,17 +9,15 @@ import androidx.core.content.res.ResourcesCompat
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentSavingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSavingCategoryTipsBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSavingDurationTipsBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSavingTipsBinding
-import ph.edu.dlsu.finwise.databinding.DialogSavingCategoryReviewBinding
-import ph.edu.dlsu.finwise.databinding.DialogSavingDurationReviewBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
@@ -65,20 +62,23 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         binding = ActivityParentSavingPerformanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var bundle = Bundle()
+        var bundle: Bundle = intent.extras!!
         childID = bundle?.getString("childID").toString()
+
         ongoingGoals = 0
         totalGoals = 0
         goalIDArrayList.clear()
         savingsArrayList.clear()
 
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        supportActionBar?.hide()
+        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_goal)
+
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
+            R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             onBackPressed()
         }
 
-        binding.title.text = "Overall Saving Performance"
-        binding.tvPerformancePercentage.text = "0.00%"
         binding.btnTips.setOnClickListener{
             showGoalDialog()
         }
@@ -98,11 +98,10 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
     }
 
     private fun getGoals() {
-        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             totalGoals = results.size()
             for (goal in results) {
                 var goalObject = goal.toObject<FinancialGoals>()
-
 
                 when (goalObject.goalLength) {
                     "Short" -> nShort++
@@ -150,6 +149,8 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
                     overall = (nOnTime/nTotal) * 100
 
                 val overallRoundedNumber = "%.1f".format(overall).toFloat()
+
+                print("print saving overall " + overallRoundedNumber)
 
                 binding.tvPerformancePercentage.text ="${overallRoundedNumber}%"
 
@@ -233,7 +234,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
 
         val colors: ArrayList<Int> = ArrayList()
         colors.add(resources.getColor(R.color.purple_200))
-        colors.add(resources.getColor( R.color.yellow))
+        colors.add(resources.getColor(R.color.yellow))
         colors.add(resources.getColor(R.color.red))
 
         // setting colors.
@@ -319,11 +320,11 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
 
         val colors: ArrayList<Int> = ArrayList()
         colors.add(resources.getColor(R.color.purple_200))
-        colors.add(resources.getColor( R.color.yellow))
+        colors.add(resources.getColor(R.color.yellow))
         colors.add(resources.getColor(R.color.red))
-        colors.add(resources.getColor( R.color.dark_green))
-        colors.add(resources.getColor( R.color.teal_200))
-        colors.add(resources.getColor( R.color.black))
+        colors.add(resources.getColor(R.color.dark_green))
+        colors.add(resources.getColor(R.color.teal_200))
+        colors.add(resources.getColor(R.color.black))
 
 
         // setting colors.

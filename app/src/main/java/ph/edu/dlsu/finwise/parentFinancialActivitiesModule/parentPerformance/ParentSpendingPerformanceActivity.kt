@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPerformance
 
 import android.app.Dialog
 import android.os.Build
@@ -7,20 +7,17 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentSpendingPerformanceBinding
-import ph.edu.dlsu.finwise.databinding.ActivitySpendingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentOverspendingTipsBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentPurchasePlanningTipsBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSpendingTipsBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.SpendingFragment
-import ph.edu.dlsu.finwise.model.BudgetItem
-import ph.edu.dlsu.finwise.model.ShoppingListItem
-import ph.edu.dlsu.finwise.model.Transactions
-import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -49,13 +46,14 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
         binding = ActivityParentSpendingPerformanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var bundle = Bundle()
+        var bundle: Bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
 
         budgetItemsIDArrayList.clear()
         getBudgeting()
 
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
+            R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -82,20 +80,22 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
     private fun getBudgeting() {
         val budgetingActivityIDArrayList = ArrayList<String>()
         //get only completed budgeting activities because they should complete budgeting first before they are able to spend
-        firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
-            for (activity in results)
-                budgetingActivityIDArrayList.add(activity.id)
-            println("print number of budgeting activity " + budgetingActivityIDArrayList.size)
+        firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
+            for (spending in results) {
+                var spendingActivity = spending.toObject<FinancialActivities>()
+    //                budgetingActivityIDArrayList.add(activity.id)
+                println("print number of budgeting activity " + budgetingActivityIDArrayList.size)
 
-            for (budgetingID in budgetingActivityIDArrayList) {
-                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
-                    nBudgetItems += results.size()
-                    for (budgetItem in results) {
+                firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", spendingActivity.financialGoalID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { budgeting ->
+                    var budgetingID = budgeting.documents[0].id
+                    firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingID)
+                        .whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
+                        nBudgetItems += results.size()
+                        for (budgetItem in results) {
 
-                        val budgetItemObject = budgetItem.toObject<BudgetItem>()
-                        checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
-//                        budgetItemsIDArrayList.add(BudgetItemAmount(budgetItem.id, budgetItemObject.amount!!))
-//                        println("print add item in budgetItems array list")
+                            var budgetItemObject = budgetItem.toObject<BudgetItem>()
+                            checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
+                        }
                     }
                 }
             }
@@ -115,6 +115,7 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                 overSpending++
 
         }.continueWith {
+            overspendingPercentage = (overSpending/nBudgetItems)
 
             firestore.collection("Users").document(childID).get().addOnSuccessListener {
                 var child = it.toObject<Users>()
@@ -132,14 +133,14 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                     purchasePlanning()
                 }
                 else {
-                    overallSpending = overspendingPercentage
+                    overallSpending = (1-overspendingPercentage)*100
+                    binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
                     overallPercentage()
-                    binding.linearLayoutOverspending.visibility = View.GONE
+                    binding.linearLayoutOverspending.visibility = View.VISIBLE
                     binding.linearLayoutPurchasePlanning.visibility = View.GONE
                 }
             }
 
-            overspendingPercentage = (overSpending/nBudgetItems)*100
             binding.progressBarOverspending.progress = overspendingPercentage.toInt()
             binding.textOverspendingProgress.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
 
@@ -204,9 +205,8 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                         nTotalPurchased += expenseTransactions.size().toFloat()
                     }.continueWith {
                         val purchasePlanningPercentage = (nPlanned/nTotalPurchased)*100
-
                         binding.progressBarPurchasePlanning.progress = purchasePlanningPercentage.toInt()
-                        binding.textPurchasePlanning.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
+                        binding.textPurchasePlanning.text  = DecimalFormat("##0.00").format(purchasePlanningPercentage) + "%"
 
                         if (purchasePlanningPercentage >= 96) {
                             binding.textPurchasePlanningText.text = "Excellent"
@@ -250,8 +250,8 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                             binding.tvPurchasePlanningText.text = "Uh oh! Click the tips button to learn how to help them improve their expense planning!"
                         }
 
-                        overallSpending = (overspendingPercentage + ((nPlanned/nTotalPurchased)*100)) /2
-                        binding.tvPerformancePercentage.text ="${DecimalFormat("0.0").format(overallSpending)}%"
+                        overallSpending = (((1-overspendingPercentage)*100) + ((nPlanned/nTotalPurchased)*100)) /2
+                        binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
 
                         overallPercentage()
                     }
