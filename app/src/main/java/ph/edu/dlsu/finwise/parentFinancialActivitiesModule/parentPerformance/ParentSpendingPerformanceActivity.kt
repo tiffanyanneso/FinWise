@@ -99,18 +99,6 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                     }
                 }
             }
-//            for (budgetingID in budgetingActivityIDArrayList) {
-//                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
-//                    nBudgetItems += results.size()
-//                    for (budgetItem in results) {
-//
-//                        val budgetItemObject = budgetItem.toObject<BudgetItem>()
-//                        checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
-////                        budgetItemsIDArrayList.add(BudgetItemAmount(budgetItem.id, budgetItemObject.amount!!))
-////                        println("print add item in budgetItems array list")
-//                    }
-//                }
-//            }
         }
     }
 
@@ -127,6 +115,7 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                 overSpending++
 
         }.continueWith {
+            overspendingPercentage = (overSpending/nBudgetItems)
 
             firestore.collection("Users").document(childID).get().addOnSuccessListener {
                 var child = it.toObject<Users>()
@@ -145,14 +134,13 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                 }
                 else {
                     overallSpending = (1-overspendingPercentage)*100
-                    binding.tvPerformancePercentage.text ="${DecimalFormat("0.0").format(overallSpending)}%"
+                    binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
                     overallPercentage()
                     binding.linearLayoutOverspending.visibility = View.VISIBLE
                     binding.linearLayoutPurchasePlanning.visibility = View.GONE
                 }
             }
 
-//            overspendingPercentage = (overSpending/nBudgetItems)*100
             binding.progressBarOverspending.progress = overspendingPercentage.toInt()
             binding.textOverspendingProgress.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
 
@@ -217,9 +205,8 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                         nTotalPurchased += expenseTransactions.size().toFloat()
                     }.continueWith {
                         val purchasePlanningPercentage = (nPlanned/nTotalPurchased)*100
-
                         binding.progressBarPurchasePlanning.progress = purchasePlanningPercentage.toInt()
-                        binding.textPurchasePlanning.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
+                        binding.textPurchasePlanning.text  = DecimalFormat("##0.00").format(purchasePlanningPercentage) + "%"
 
                         if (purchasePlanningPercentage >= 96) {
                             binding.textPurchasePlanningText.text = "Excellent"
@@ -263,8 +250,8 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                             binding.tvPurchasePlanningText.text = "Uh oh! Click the tips button to learn how to help them improve their expense planning!"
                         }
 
-                        overallSpending = (overspendingPercentage + ((nPlanned/nTotalPurchased)*100)) /2
-                        binding.tvPerformancePercentage.text ="${DecimalFormat("0.0").format(overallSpending)}%"
+                        overallSpending = (((1-overspendingPercentage)*100) + ((nPlanned/nTotalPurchased)*100)) /2
+                        binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
 
                         overallPercentage()
                     }

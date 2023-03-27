@@ -38,9 +38,6 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBudgetingPerformanceBinding
     private var firestore = Firebase.firestore
 
-    //contains only going budgeting activities for the recycler view
-    var goalIDArrayList = ArrayList<String>()
-
     //used to get all budgeting activities to count parent involvement
     var budgetingArrayList = ArrayList<FinancialActivities>()
     var goalFilterArrayList = ArrayList<BudgetingFragment.GoalFilter>()
@@ -77,7 +74,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         binding = ActivityBudgetingPerformanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        getBudgeting()
+        getOverallBudgeting()
         setNavigationBar()
         loadBackButton()
 
@@ -89,23 +86,6 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
             showBudgetAccuracyAmountReivewDialog()
         }
     }
-
-    private fun getBudgeting() {
-        goalIDArrayList.clear()
-        //saving activities that are in progress means that there the goal is also in progress because they are connected
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser)
-            .whereEqualTo("financialActivityName", "Budgeting")
-            .whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
-            for (activity in results) {
-                //add id to arraylit to load in recycler view
-                var activityObject = activity.toObject<FinancialActivities>()
-                goalIDArrayList.add(activityObject?.financialGoalID.toString())
-            }
-            getOverallBudgeting()
-            //getParentalInvolvement()
-        }
-    }
-
 
     private fun getOverallBudgeting() {
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
@@ -145,14 +125,14 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
                                     println("print budget accuracy " + (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100))
                                     totalBudgetAccuracy += (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100)
                                 }.continueWith {
-                                setOverall()
-                                setParentalInvolvement()
                                 setBudgetAccuracy()
+                                setParentalInvolvement()
+                                setOverall()
                             }
                         } else {
-                            setOverall()
-                            setParentalInvolvement()
                             setBudgetAccuracy()
+                            setParentalInvolvement()
+                            setOverall()
                         }
                     }
             }

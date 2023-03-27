@@ -98,11 +98,10 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
     }
 
     private fun getGoals() {
-        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             totalGoals = results.size()
             for (goal in results) {
                 var goalObject = goal.toObject<FinancialGoals>()
-
 
                 when (goalObject.goalLength) {
                     "Short" -> nShort++

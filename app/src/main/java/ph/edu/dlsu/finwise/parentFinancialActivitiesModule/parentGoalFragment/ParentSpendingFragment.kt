@@ -58,9 +58,7 @@ class ParentSpendingFragment : Fragment() {
         goalIDArrayList.clear()
         budgetingArrayList.clear()
         spendingActivityIDArrayList.clear()
-        getSpending()
-        //need to get the budgeting activities to be able to get the budget items
-        getBudgeting()
+
     }
 
     override fun onCreateView(
@@ -76,6 +74,9 @@ class ParentSpendingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.textPerformance.text = "0.00%"
         binding.title.text= "Overall Spending Performance"
+        getSpending()
+        //need to get the budgeting activities to be able to get the budget items
+        getBudgeting()
 
         binding.btnSpendingTips.setOnClickListener {
             showSpendingReivewDialog()
@@ -124,7 +125,6 @@ class ParentSpendingFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getBudgeting() {
-        var budgetingActivityIDArrayList = ArrayList<String>()
         //get completed spending activities
         firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             for (spending in results) {
@@ -135,11 +135,8 @@ class ParentSpendingFragment : Fragment() {
                     firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
                         nBudgetItems += results.size()
                         for (budgetItem in results) {
-
                             var budgetItemObject = budgetItem.toObject<BudgetItem>()
                             checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
-//                        budgetItemsIDArrayList.add(BudgetItemAmount(budgetItem.id, budgetItemObject.amount!!))
-//                        println("print add item in budgetItems array list")
                         }
                     }
                 }
@@ -208,7 +205,7 @@ class ParentSpendingFragment : Fragment() {
     }
 
     private fun setOverall() {
-        binding.tvPerformanceText.text ="${DecimalFormat("##0.00").format(overallSpending)}%"
+        binding.textPerformance.text ="${DecimalFormat("##0.00").format(overallSpending)}%"
 
         if (overallSpending >= 96) {
             binding.imgFace.setImageResource(R.drawable.excellent)
