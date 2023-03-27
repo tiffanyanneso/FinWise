@@ -51,16 +51,14 @@ class LoginActivity : AppCompatActivity() {
                             .addOnSuccessListener { documentSnapshot ->
                             if (documentSnapshot.exists()) {
                                 // User information already exists in the database
-                                if (documentSnapshot.contains("lastLogin")) {
-                                    firestore.collection("Users").document(currentUser)
-                                        .update("lastLogin", Timestamp.now())
-                                    initializeRedirect(documentSnapshot, false)
-                                } else {
-                                    firestore.collection("Users").document(currentUser)
-                                        .update("lastLogin", Timestamp.now())
-                                    // User is logging in for the first time
-                                    initializeRedirect(documentSnapshot, true)
-                                }
+                                var isFirstLogin = true
+                                firestore.collection("Users").document(currentUser)
+                                    .update("lastLogin", Timestamp.now())
+                                if (documentSnapshot.contains("lastLogin"))
+                                    isFirstLogin = false
+                                Log.d("zxcvzxcvvc", "login: "+isFirstLogin)
+                                initializeRedirect(documentSnapshot, isFirstLogin)
+
                             }
                         }
                     } else noAccountFound(task)
@@ -87,12 +85,15 @@ class LoginActivity : AppCompatActivity() {
 
     private fun initializeRedirect(documentSnapshot: DocumentSnapshot, isFirstLogin: Boolean) {
         val user = documentSnapshot.toObject<Users>()!!
-        if (user.userType == "Parent") {
-            goToParentLandingPage()
-        } else if (user.userType == "Child") {
-            goToChild(isFirstLogin)
-        } else if (user.userType == "Financial Expert")
-            goToFinLitExpert()
+        when (user.userType) {
+            "Parent" -> {
+                goToParentLandingPage()
+            }
+            "Child" -> {
+                goToChild(isFirstLogin)
+            }
+            "Financial Expert" -> goToFinLitExpert()
+        }
     }
 
     private fun goToChild(isFirstLogin: Boolean) {

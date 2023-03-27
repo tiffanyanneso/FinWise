@@ -38,9 +38,6 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityBudgetingPerformanceBinding
     private var firestore = Firebase.firestore
 
-    //contains only going budgeting activities for the recycler view
-    var goalIDArrayList = ArrayList<String>()
-
     //used to get all budgeting activities to count parent involvement
     var budgetingArrayList = ArrayList<FinancialActivities>()
     var goalFilterArrayList = ArrayList<BudgetingFragment.GoalFilter>()
@@ -77,7 +74,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         binding = ActivityBudgetingPerformanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        getBudgeting()
+        getOverallBudgeting()
         setNavigationBar()
         loadBackButton()
 
@@ -90,27 +87,10 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         }
     }
 
-    private fun getBudgeting() {
-        goalIDArrayList.clear()
-        //saving activities that are in progress means that there the goal is also in progress because they are connected
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser)
-            .whereEqualTo("financialActivityName", "Budgeting")
-            .whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
-            for (activity in results) {
-                //add id to arraylit to load in recycler view
-                var activityObject = activity.toObject<FinancialActivities>()
-                goalIDArrayList.add(activityObject?.financialGoalID.toString())
-            }
-            getOverallBudgeting()
-            //getParentalInvolvement()
-        }
-    }
-
-
     private fun getOverallBudgeting() {
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             for (activity in results) {
-                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).get().addOnSuccessListener { budgetItems ->
+                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).whereEqualTo("status", "Active").get().addOnSuccessListener { budgetItems ->
                     for (budgetItem in budgetItems) {
                         budgetItemCount++
                         var budgetItemObject = budgetItem.toObject<BudgetItem>()
@@ -145,14 +125,14 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
                                     println("print budget accuracy " + (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100))
                                     totalBudgetAccuracy += (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100)
                                 }.continueWith {
-                                setOverall()
-                                setParentalInvolvement()
                                 setBudgetAccuracy()
+                                setParentalInvolvement()
+                                setOverall()
                             }
                         } else {
-                            setOverall()
-                            setParentalInvolvement()
                             setBudgetAccuracy()
+                            setParentalInvolvement()
+                            setOverall()
                         }
                     }
             }
@@ -206,8 +186,8 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     }
 
     private fun setBudgetAccuracy() {
-        var budgetAccuracy = totalBudgetAccuracy.roundToInt()
-        binding.textViewBudgetAccuracyProgress.text = DecimalFormat("##0.##").format(totalBudgetAccuracy) + "%"
+        var budgetAccuracy = (totalBudgetAccuracy/ purchasedBudgetItemCount).roundToInt()
+        binding.textViewBudgetAccuracyProgress.text = DecimalFormat("##0.##").format(totalBudgetAccuracy/ purchasedBudgetItemCount) + "%"
         binding.progressBarBudgetAccuracy.progress = totalBudgetAccuracy.roundToInt()
 
         if (budgetAccuracy >= 96) {
@@ -263,7 +243,8 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     }
 
     private fun setOverall() {
-        var overall = (totalBudgetAccuracy  + ((1 - (nParent.toFloat() / budgetItemCount)) * 100)) / 2
+
+        var overall = (  (totalBudgetAccuracy/budgetItemCount)  + ( (1 - (nParent.toFloat() / budgetItemCount) ) * 100)) / 2
 
         binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(overall)}%"
 

@@ -13,6 +13,7 @@
         android:padding="25dp">
 
         <LinearLayout
+            android:id="@+id/linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -78,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="26sp"
-                android:text="Your score is"
+                android:text="Your score is being calculated. Hold on tight!"
                 android:textColor="@color/black"
                 android:layout_marginBottom="20dp"
                 android:gravity="center"/>
@@ -86,10 +87,14 @@
 
         <Button
             android:id="@+id/btn_finish"
+            app:layout_constraintTop_toBottomOf="@id/linear_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Finish"
-            android:layout_marginTop="175dp"/>
+            android:layout_marginTop="120dp"/>
     </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

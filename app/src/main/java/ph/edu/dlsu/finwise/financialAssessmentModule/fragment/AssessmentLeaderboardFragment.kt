@@ -139,11 +139,11 @@ class AssessmentLeaderboardFragment : Fragment() {
         val maxScore = 100
         val savingPercentageSum = savingScores.sumOf { it ?: 0.0 }
         savingPercentage = ((savingPercentageSum / (maxScore * savingScores.size)) * 100).toFloat()
-        val spendingPercentageSum = savingScores.sumOf { it ?: 0.0 }
+        val spendingPercentageSum = spendingScores.sumOf { it ?: 0.0 }
         spendingPercentage = ((spendingPercentageSum / (maxScore * spendingScores.size)) * 100).toFloat()
-        val budgetingPercentageSum = savingScores.sumOf { it ?: 0.0 }
+        val budgetingPercentageSum = budgetingScores.sumOf { it ?: 0.0 }
         budgetingPercentage = ((budgetingPercentageSum / (maxScore * budgetingScores.size)) * 100).toFloat()
-        val financialGoalsPercentageSum = savingScores.sumOf { it ?: 0.0 }
+        val financialGoalsPercentageSum = financialGoalsScores.sumOf { it ?: 0.0 }
         financialGoalsPercentage = ((financialGoalsPercentageSum / (maxScore * financialGoalsScores.size)) * 100).toFloat()
         checkIfNaN()
         computePerformance()

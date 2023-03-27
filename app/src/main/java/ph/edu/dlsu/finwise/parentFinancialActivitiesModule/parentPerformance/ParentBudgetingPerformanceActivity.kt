@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.parentFinancialManagementModule.parentPerformance
+package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPerformance
 
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
@@ -24,8 +24,6 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityParentBudgetingPerformanceBinding
     private var firestore = Firebase.firestore
 
-    //contains only going budgeting activities for the recycler view
-    var goalIDArrayList = ArrayList<String>()
     //used to get all budgeting activities to count parent involvement
     var budgetingArrayList = ArrayList<FinancialActivities>()
     var goalFilterArrayList = ArrayList<BudgetingFragment.GoalFilter>()
@@ -67,7 +65,8 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
 
-        getBudgeting()
+        getOverallBudgeting()
+
 
         binding.btnTips.setOnClickListener {
             showBudgetingReivewDialog()
@@ -84,91 +83,6 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
         }
     }
 
-    private fun getBudgeting() {
-        goalIDArrayList.clear()
-        //saving activities that are in progress means that there the goal is also in progress because they are connected
-        firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
-            for (activity in results) {
-                //add id to arraylit to load in recycler view
-                var activityObject = activity.toObject<FinancialActivities>()
-                goalIDArrayList.add(activityObject?.financialGoalID.toString())
-            }
-            getOverallBudgeting()
-//            getParentalInvolvement()
-        }
-    }
-
-//    private fun getParentalInvolvement() {
-//        nParent = 0
-//        budgetItemCount = 0.00F
-//        for (budgetID in budgetingActivityIDArrayList) {
-//            firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetID).get().addOnSuccessListener { results ->
-//                for (budgetItemID in results) {
-//                    firestore.collection("BudgetItems").document(budgetItemID.id).get().addOnSuccessListener {
-//                        var budgetItemObject = it.toObject<BudgetItem>()
-//                        budgetItemCount++
-//
-//                        firestore.collection("Users").document(budgetItemObject?.createdBy.toString()).get().addOnSuccessListener { user ->
-//                            //parent is the one who added the budget item
-//                            if (it.toObject<Users>()!!.userType == "Parent")
-//                                nParent++
-//
-//                        }.continueWith {
-//                            parentalInvolvementPercentage = nParent.toFloat()/budgetItemCount.toFloat()*100
-//                            binding.textViewProgressParentalInvolvement.text = DecimalFormat("##0.##").format((nParent.toFloat()/budgetItemCount.toFloat())*100)+ "%"
-//                            binding.progressBarParentalInvolvement.progress = ((nParent.toFloat()/budgetItemCount.toFloat())*100).roundToInt()
-//
-//                            var parentalPercentage = nParent.toFloat()/budgetItemCount.toFloat()*100
-//
-//                            if (parentalPercentage < 5) {
-//                                binding.textViewPerformanceTextParentalInvolvement.text = "Excellent"
-//                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.dark_green))
-//                                binding.tvParentalInvolvementText.text = "Your child is doing excellent at budgeting independently."
-//                            } else if (parentalPercentage < 15 && parentalPercentage >= 5) {
-//                                binding.textViewPerformanceTextParentalInvolvement.text = "Amazing"
-//                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.amazing_green))
-//                                binding.tvParentalInvolvementText.text = "Your child is doing an amazing job at creating their budgets independently!"
-//                            } else if (parentalPercentage < 25 && parentalPercentage >= 15) {
-//                                binding.textViewPerformanceTextParentalInvolvement.text = "Great"
-//                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.green))
-//                                binding.tvParentalInvolvementText.text = "Your child is doing great at creating their budgets independently."
-//                            } else if (parentalPercentage < 35 && parentalPercentage >= 25) {
-//                                binding.textViewPerformanceTextParentalInvolvement.text = "Good"
-//                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.light_green))
-//                                binding.tvParentalInvolvementText.text = "Your child is doing good at budgeting independently!"
-//                            } else if (parentalPercentage < 45 && parentalPercentage >= 35) {
-//                                binding.imgFace.setImageResource(R.drawable.average)
-//                                binding.textViewPerformanceTextParentalInvolvement.text = "Average"
-//                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.yellow))
-//                                binding.tvParentalInvolvementText.text = "Your child is doing well. Encourage them to create their budget more independently!"
-//                            } else if (parentalPercentage < 55 && parentalPercentage >= 45) {
-//                                binding.textViewPerformanceTextParentalInvolvement.text = "Nearly There"
-//                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
-//                                binding.tvParentalInvolvementText.text = "Your child is nearly there! Encourage them to budget more independently."
-//                            }  else if (parentalPercentage < 65 && parentalPercentage >= 55) {
-//                                binding.textViewPerformanceTextParentalInvolvement.text = "Almost There"
-//                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.almost_there_yellow))
-//                                binding.tvParentalInvolvementText.text = "Your child is almost there! Encourage them to budget more independently."
-//                            } else if (parentalPercentage < 75 && parentalPercentage >= 65) {
-//                                binding.textViewPerformanceTextParentalInvolvement.text = "Getting There"
-//                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.getting_there_orange))
-//                                binding.tvParentalInvolvementText.text = "Your child is getting there! Click on the tips button to learn how to get them there."
-//                            } else if (parentalPercentage < 85 && parentalPercentage >= 75) {
-//                                binding.textViewPerformanceTextParentalInvolvement.text = "Not Quite\nThere"
-//                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.not_quite_there_red))
-//                                binding.tvParentalInvolvementText.text = "Your child is not quite there yet! Click on the tips button to learn how to get them there."
-//                            } else if (parentalPercentage > 84) {
-//                                binding.textViewPerformanceTextParentalInvolvement.text = "Needs\nImprovement"
-//                                binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.red))
-//                                binding.tvParentalInvolvementText.text = "Your parental involvement is quite high. Allow your child to budget more independently."
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     private fun getOverallBudgeting() {
         firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             for (activity in results) {
@@ -178,8 +92,6 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
                         var budgetItemObject = budgetItem.toObject<BudgetItem>()
                         if (budgetItemObject.status == "Edited")
                             nUpdates++
-//                        binding.tvAverageUpdates.text = (nUpdates / budgetItemCount).roundToInt().toString()
-
 
                         //parental involvement
                         firestore.collection("Users").document(budgetItemObject.createdBy.toString()).get().addOnSuccessListener { user ->
@@ -289,9 +201,9 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
     }
 
     private fun setBudgetAccuracy() {
-        var budgetAccuracy = totalBudgetAccuracy.roundToInt()
-        binding.textViewBudgetAccuracyProgress.text =  DecimalFormat("##0.##").format(totalBudgetAccuracy) + "%"
-        binding.progressBarBudgetAccuracy.progress = totalBudgetAccuracy.roundToInt()
+        var budgetAccuracy = (totalBudgetAccuracy/ purchasedBudgetItemCount).roundToInt()
+        binding.textViewBudgetAccuracyProgress.text =  DecimalFormat("##0.##").format(totalBudgetAccuracy/ purchasedBudgetItemCount) + "%"
+        binding.progressBarBudgetAccuracy.progress = budgetAccuracy
 
         if (budgetAccuracy >= 96) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Excellent"

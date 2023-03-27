@@ -126,7 +126,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                 }
                 else {
                     overallSpending = (1-overspendingPercentage)*100
-                    binding.tvPerformancePercentage.text ="${DecimalFormat("0.0").format(overallSpending)}%"
+                    binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
                     overallPercentage()
                     binding.linearLayoutOverspending.visibility = View.VISIBLE
                     binding.linearLayoutPurchasePlanning.visibility = View.GONE
@@ -183,10 +183,6 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.red))
                 binding.tvOverspendingText.text = "Uh oh! Your spending performance needs a lot of improvement. Click review to learn how!"
             }
-
-//            if (overSpending )
-//            binding.tvOverspendingPercentage.setTextColor(getResources().getColor(R.color.red))
-//            binding.tvOverspendingStatus.setTextColor(getResources().getColor(R.color.red))
         }
     }
 
@@ -254,7 +250,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
 
 
                         overallSpending = (((1-overspendingPercentage)*100) + purchasePlanningPercentage) /2
-                        binding.tvPerformancePercentage.text ="${DecimalFormat("0.0").format(overallSpending)}%"
+                        binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
 
 
                         overallPercentage()

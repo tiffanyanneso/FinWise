@@ -70,7 +70,6 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                             "parentID" to parentuserID,
                             "userType" to "Child",
                             "number" to contactNumber,
-                            "lastLogin" to Timestamp.now(),
                             "lastShown" to Timestamp.now())
 
                         println("current/child user   " + FirebaseAuth.getInstance().currentUser!!.uid.toString())

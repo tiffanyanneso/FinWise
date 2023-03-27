@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.parentFinancialManagementModule.parentPerformance
+package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPerformance
 
 import android.app.Dialog
 import android.os.Build
@@ -12,6 +12,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentSavingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSavingCategoryTipsBinding
@@ -69,6 +70,9 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         goalIDArrayList.clear()
         savingsArrayList.clear()
 
+        supportActionBar?.hide()
+        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_goal)
+
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
             R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
@@ -94,11 +98,10 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
     }
 
     private fun getGoals() {
-        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             totalGoals = results.size()
             for (goal in results) {
                 var goalObject = goal.toObject<FinancialGoals>()
-
 
                 when (goalObject.goalLength) {
                     "Short" -> nShort++

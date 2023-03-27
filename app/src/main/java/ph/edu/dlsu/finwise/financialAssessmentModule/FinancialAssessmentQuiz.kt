@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentQuizBinding
 import ph.edu.dlsu.finwise.model.FinancialAssessmentChoices
@@ -21,8 +22,8 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
 
     private var firestore = Firebase.firestore
 
-    private lateinit var assessmentID:String
-    private lateinit var assessmentAttemptID:String
+    private var assessmentIDArrayList = ArrayList<String>()
+    //private var assessmentAttemptIDArrayList = ArrayList<String>()
     private lateinit var assessmentName:String
     private var nNumberOfQuestions: Int = 0
     private var currentNumber: Int = 0
@@ -42,10 +43,11 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
         setContentView(binding.root)
 
         val bundle = intent.extras!!
-        assessmentID = bundle.getString("assessmentID").toString()
+        assessmentIDArrayList = bundle.getStringArrayList("assessmentIDArrayList") as ArrayList<String>
         nNumberOfQuestions = bundle.getInt("nNumberOfQuestions")
         currentNumber = bundle.getInt("currentNumber")
-        assessmentAttemptID = bundle.getString("assessmentAttemptID").toString()
+        /*assessmentAttemptIDArrayList = bundle.getStringArrayList("assessmentAttemptIDArrayList")
+                as ArrayList<String>*/
         assessmentName = bundle.getString("assessmentName").toString()
         score = bundle.getInt("score")
         questionIDArrayList = bundle.getStringArrayList("questionIDArrayList")!!
@@ -66,6 +68,8 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
 
         binding.questionsLeft.text = "$currentNumber / $nNumberOfQuestions"
     }
+
+
 
     private fun getQuestion() {
         val questionIndex = Random.nextInt(questionIDArrayList.size)
@@ -128,11 +132,11 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
 
     private fun nextQuestion() {
         val sendBundle = Bundle()
-        sendBundle.putString("assessmentID", assessmentID)
+        sendBundle.putStringArrayList("assessmentIDArrayList", assessmentIDArrayList)
         sendBundle.putString("assessmentName", assessmentName)
         sendBundle.putInt("nNumberOfQuestions", nNumberOfQuestions)
         sendBundle.putInt("currentNumber", currentNumber+1)
-        sendBundle.putString("assessmentAttemptID", assessmentAttemptID)
+        //sendBundle.putStringArrayList("assessmentAttemptIDArrayList", assessmentAttemptIDArrayList)
         sendBundle.putStringArrayList("questionIDArrayList", questionIDArrayList)
         sendBundle.putInt("score", score)
         sendBundle.putParcelableArrayList("answerHistory", answerHistoryArrayList)
@@ -220,7 +224,7 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
         constructor(parcel: Parcel) : this(
             parcel.readString().toString(),
             parcel.readByte() != 0.toByte()
-        ) {}
+        )
 
         override fun writeToParcel(parcel: Parcel, flags: Int) {
             parcel.writeString(questionID)
