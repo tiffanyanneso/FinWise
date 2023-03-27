@@ -13,15 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.ParentSpendingPerformanceActivity
+import ph.edu.dlsu.finwise.parentFinancialManagementModule.parentPerformance.ParentSpendingPerformanceActivity
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogParentSpendingTipsBinding
-import ph.edu.dlsu.finwise.databinding.DialogSpendingReviewBinding
 import ph.edu.dlsu.finwise.databinding.FragmentParentSpendingBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.SpendingPerformanceActivity
 import ph.edu.dlsu.finwise.model.*
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
@@ -162,7 +160,7 @@ class ParentSpendingFragment : Fragment() {
                 overSpending++
 
         }.continueWith {
-            overspendingPercentage = (overSpending/nBudgetItems)*100
+//            overspendingPercentage = (overSpending/nBudgetItems)
 
             firestore.collection("Users").document(childID).get().addOnSuccessListener {
                 var child = it.toObject<Users>()
@@ -178,7 +176,7 @@ class ParentSpendingFragment : Fragment() {
                     purchasePlanning()
                 }
                 else {
-                    overallSpending = overspendingPercentage
+                    overallSpending = (1-overspendingPercentage)*100
                     setOverall()
                 }
             }
@@ -201,7 +199,7 @@ class ParentSpendingFragment : Fragment() {
                     firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID.id).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { expenseTransactions ->
                         nTotalPurchased += expenseTransactions.size().toFloat()
                     }.continueWith {
-                        overallSpending = (overspendingPercentage + ((nPlanned/nTotalPurchased)*100)) /2
+                        overallSpending = (((1-overspendingPercentage)*100) + ((nPlanned/nTotalPurchased)*100)) /2
                         setOverall()
                     }
                 }
@@ -210,7 +208,7 @@ class ParentSpendingFragment : Fragment() {
     }
 
     private fun setOverall() {
-        binding.tvPerformanceText.text ="${overallSpending}%"
+        binding.tvPerformanceText.text ="${DecimalFormat("##0.00").format(overallSpending)}%"
 
         if (overallSpending >= 96) {
             binding.imgFace.setImageResource(R.drawable.excellent)

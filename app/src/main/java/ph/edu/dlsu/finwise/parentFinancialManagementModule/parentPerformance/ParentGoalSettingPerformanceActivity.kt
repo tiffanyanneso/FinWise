@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.parentFinancialManagementModule.parentPerformance
 
 import android.app.Dialog
 import android.content.Intent
@@ -8,6 +8,9 @@ import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentGoalSettingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSmartConceptTipBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSmartTipBinding
@@ -38,7 +41,7 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
         binding = ActivityParentGoalSettingPerformanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var bundle = Bundle()
+        var bundle: Bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
 
         print("print child ID " + childID)
@@ -48,7 +51,8 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_goal)
 
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
+            R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             onBackPressed()
         }

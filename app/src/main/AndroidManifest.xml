@@ -13,16 +13,16 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
-            android:name=".ParentSpendingPerformanceActivity"
+            android:name=".parentFinancialManagementModule.parentPerformance.ParentSpendingPerformanceActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentBudgetingPerformanceActivity"
+            android:name=".parentFinancialManagementModule.parentPerformance.ParentBudgetingPerformanceActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentSavingPerformanceActivity"
+            android:name=".parentFinancialManagementModule.parentPerformance.ParentSavingPerformanceActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentGoalSettingPerformanceActivity"
+            android:name=".parentFinancialManagementModule.parentPerformance.ParentGoalSettingPerformanceActivity"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.WaitGoalReview"

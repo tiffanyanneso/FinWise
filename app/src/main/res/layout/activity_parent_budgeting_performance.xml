@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ParentBudgetingPerformanceActivity"
+    tools:context=".parentFinancialManagementModule.parentPerformance.ParentBudgetingPerformanceActivity"
     android:background="@color/very_light_green">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -70,7 +70,7 @@
                             android:padding="10dp">
 
                             <ImageView
-                                android:src="@drawable/good"
+                                android:src="@drawable/loading"
                                 android:id="@+id/img_face"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
@@ -85,15 +85,15 @@
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
-                                tools:text="12%" />
+                                tools:text="..." />
 
                             <TextView
                                 android:id="@+id/text_status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="16sp"
-                                android:text="Good"
-                                android:textColor="@color/light_green"
+                                android:text="..."
+                                android:textColor="@color/black"
                                 android:textStyle="bold"
                                 android:layout_gravity="center"
                                 android:textAlignment="center"/>
@@ -104,7 +104,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:text="Good job! With a bit more dedication and effort, you’ll surely up your performance!"
+                            android:text="Loading..."
                             android:textColor="@color/white"
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"/>
@@ -158,7 +158,7 @@
                                         app:layout_constraintRight_toRightOf="parent"
                                         app:layout_constraintTop_toTopOf="parent"
                                         app:layout_constraintVertical_bias="0.0"
-                                        tools:progress="35" />
+                                        tools:progress="0" />
 
                                     <LinearLayout
                                         android:layout_width="wrap_content"
@@ -180,7 +180,7 @@
                                             app:layout_constraintEnd_toEndOf="@+id/progress_bar"
                                             app:layout_constraintStart_toStartOf="@+id/progress_bar"
                                             app:layout_constraintTop_toTopOf="@+id/progress_bar"
-                                            tools:text="35%"
+                                            tools:text="..."
                                             android:layout_gravity="center"
                                             android:textAlignment="center"
                                             android:textSize="20sp"/>
@@ -196,7 +196,7 @@
                                             app:layout_constraintStart_toStartOf="@+id/progress_bar"
                                             app:layout_constraintTop_toTopOf="@+id/progress_bar"
                                             app:layout_constraintVertical_bias="0.75"
-                                            tools:text="Poor"
+                                            tools:text="..."
                                             android:layout_gravity="center"
                                             android:textAlignment="center"
                                             android:textSize="14dp"/>
@@ -207,7 +207,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:textSize="16sp"
-                                        android:text="Text about performance here"
+                                        android:text="Loading..."
                                         android:textColor="@color/black"
                                         android:layout_gravity="center"
                                         android:layout_marginLeft="15dp"/>
@@ -261,7 +261,7 @@
                                 app:layout_constraintRight_toRightOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintVertical_bias="0.0"
-                                tools:progress="35" />
+                                tools:progress="0" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -283,7 +283,7 @@
                                     app:layout_constraintEnd_toEndOf="@+id/progress_bar_parental_involvement"
                                     app:layout_constraintStart_toStartOf="@+id/progress_bar_parental_involvement"
                                     app:layout_constraintTop_toTopOf="@+id/progress_bar_parental_involvement"
-                                    tools:text="35%"
+                                    tools:text="..."
                                     android:layout_gravity="center"
                                     android:textAlignment="center"
                                     android:textSize="20sp"/>
@@ -299,7 +299,7 @@
                                     app:layout_constraintStart_toStartOf="@+id/progress_bar"
                                     app:layout_constraintTop_toTopOf="@+id/progress_bar"
                                     app:layout_constraintVertical_bias="0.75"
-                                    tools:text="Poor"
+                                    tools:text="..."
                                     android:layout_gravity="center"
                                     android:textAlignment="center"
                                     android:textSize="14sp"/>
@@ -310,7 +310,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:text="Text about involvement here"
+                            android:text="Loading..."
                             android:textColor="@color/black"
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"/>

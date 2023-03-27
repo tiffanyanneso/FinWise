@@ -38,13 +38,15 @@
         app:startIconDrawable="@drawable/baseline_directions_run_24"
         app:helperTextEnabled="true"
         app:helperText=""
-        app:helperTextTextColor="@color/red">
+        app:helperTextTextColor="@color/red"
+        >
 
         <AutoCompleteTextView
             android:id="@+id/dropdown_chore"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none" />
+            android:inputType="none"
+            android:layout_marginBottom="5dp"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,7 +74,8 @@
             android:lines="1"
             android:inputType="number"
             android:textSize="16sp"
-            android:hint="Duration (Minutes)" />
+            android:hint="Duration (Minutes)"
+            android:layout_marginBottom="5dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -97,7 +100,8 @@
             android:inputType="numberDecimal"
             android:textSize="16sp"
             android:enabled="true"
-            android:focusable="false" />
+            android:focusable="false"
+            android:layout_marginBottom="5dp"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -117,7 +121,8 @@
             android:id="@+id/dropdown_destination"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none" />
+            android:inputType="none"
+            android:layout_marginBottom="5dp"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -139,7 +144,8 @@
             android:id="@+id/dropdown_type_of_payment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none" />
+            android:inputType="none"
+            android:layout_marginBottom="5dp"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -225,7 +231,8 @@
             android:digits="0123456789."
             android:inputType="numberDecimal"
             android:textSize="16sp"
-            android:hint="@string/amount" />
+            android:hint="@string/amount"
+            />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
