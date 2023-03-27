@@ -176,37 +176,74 @@ class AssessmentPerformanceFragment : Fragment() {
     }
 
     private fun setTextPerformanceParent(percentage: Double) {
-        if (percentage >= 90) {
+        if (percentage >= 96) {
             binding.ivScore.setImageResource(R.drawable.excellent)
             binding.textViewPerformanceText.text = "Excellent"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.dark_green))
             binding.tvPerformanceText.text =
                 "Excellent! Your child consistently makes informed financial decisions and demonstrates a good understanding of key financial concepts.!"
             //showSeeMoreButton()
-        } else if (percentage < 90 && percentage >= 80) {
+        } else if (percentage < 96 && percentage >= 86) {
+            binding.ivScore.setImageResource(R.drawable.amazing)
+            binding.textViewPerformanceText.text = "Amazing"
+            binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.amazing_green))
+            binding.tvPerformanceText.text =
+                "Great! Your child generally makes sound financial decisions and has a solid grasp of important financial concepts, but may make occasional mistakes or need some guidance in certain areas.!"
+            //showSeeMoreButton()
+        } else if (percentage < 86 && percentage >= 76) {
             binding.ivScore.setImageResource(R.drawable.great)
             binding.textViewPerformanceText.text = "Great"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.green))
             binding.tvPerformanceText.text =
                 "Great! Your child generally makes sound financial decisions and has a solid grasp of important financial concepts, but may make occasional mistakes or need some guidance in certain areas.!"
             //showSeeMoreButton()
-        } else if (percentage < 80 && percentage >= 70) {
+        } else if (percentage < 76 && percentage >= 66) {
             binding.ivScore.setImageResource(R.drawable.good)
             binding.textViewPerformanceText.text = "Good"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.light_green))
             binding.tvPerformanceText.text =
                 "Good! Your child has some understanding of basic financial concepts and can make simple financial decisions, but may need significant guidance and education in more complex financial matters."
             //showSeeMoreButton()
-        } else if (percentage < 70 && percentage >= 60) {
+        } else if (percentage < 66 && percentage >= 56) {
             binding.ivScore.setImageResource(R.drawable.average)
             binding.textViewPerformanceText.text = "Average"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.yellow))
             binding.tvPerformanceText.text =
                 "Okay! Your child has limited financial knowledge and struggles to make good financial decisions without significant guidance and education."
             //showReviewButton()
-        } else if (percentage < 60) {
+        } else if (percentage < 56 && percentage >= 46) {
+            binding.ivScore.setImageResource(R.drawable.nearly_there)
+            binding.textViewPerformanceText.text = "Nearly There"
+            binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.nearly_there_yellow))
+            binding.tvPerformanceText.text =
+                "Uh oh! Your child lacks basic financial literacy and requires immediate education and guidance to improve their financial decision-making."
+            //showReviewButton()
+        }  else if (percentage < 46 && percentage >= 36) {
+            binding.ivScore.setImageResource(R.drawable.almost_there)
+            binding.textViewPerformanceText.text = "Almost There"
+            binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.almost_there_yellow))
+            binding.tvPerformanceText.text =
+                "Uh oh! Your child lacks basic financial literacy and requires immediate education and guidance to improve their financial decision-making."
+            //showReviewButton()
+        } else if (percentage < 36 && percentage >= 26) {
+            binding.ivScore.setImageResource(R.drawable.getting_there)
+            binding.textViewPerformanceText.text = "Getting There"
+            binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.getting_there_orange))
+            binding.tvPerformanceText.text =
+                "Uh oh! Your child lacks basic financial literacy and requires immediate education and guidance to improve their financial decision-making."
+            //showReviewButton()
+        } else if (percentage < 26 && percentage >= 16) {
+            binding.ivScore.setImageResource(R.drawable.not_quite_there_yet)
+            binding.textViewPerformanceText.text = "Not Quite\n" +
+                    "There"
+            binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.not_quite_there_red))
+            binding.tvPerformanceText.text =
+                "Uh oh! Your child lacks basic financial literacy and requires immediate education and guidance to improve their financial decision-making."
+            //showReviewButton()
+        } else if (percentage < 15) {
             binding.ivScore.setImageResource(R.drawable.bad)
-            binding.textViewPerformanceText.text = "Bad"
+            binding.textViewPerformanceText.text = "Needs\n" +
+                    "Improvement"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.red))
             binding.tvPerformanceText.text =
                 "Uh oh! Your child lacks basic financial literacy and requires immediate education and guidance to improve their financial decision-making."
@@ -222,30 +259,66 @@ class AssessmentPerformanceFragment : Fragment() {
             binding.tvPerformanceText.text =
                 "Keep up the excellent work! You have a strong understanding of financial concepts and are making smart choices with money!"
             //showSeeMoreButton()
-        } else if (percentage < 90 && percentage >= 80) {
+        } else if (percentage < 96 && percentage >= 86) {
+            binding.ivScore.setImageResource(R.drawable.amazing)
+            binding.textViewPerformanceText.text = "Amazing"
+            binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.amazing_green))
+            binding.tvPerformanceText.text =
+                "Great job! You have a good grasp of financial concepts and are starting to make smart choices with your money!"
+            //showSeeMoreButton()
+        } else if (percentage < 86 && percentage >= 76) {
             binding.ivScore.setImageResource(R.drawable.great)
             binding.textViewPerformanceText.text = "Great"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.green))
             binding.tvPerformanceText.text =
-                "Great job! You have a good grasp of financial concepts and are starting to make smart choices with your money!"
-            //showSeeMoreButton()
-        } else if (percentage < 80 && percentage >= 70) {
+                "Uh oh! You have limited knowledge of financial concepts and there are many areas where you need to improve!"
+            //showReviewButton()
+        } else if (percentage < 76 && percentage >= 66) {
             binding.ivScore.setImageResource(R.drawable.good)
             binding.textViewPerformanceText.text = "Good"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.light_green))
             binding.tvPerformanceText.text =
                 "Great! You have an average understanding of financial concepts and are making some smart choices with your money, but there is room for improvement!"
             //showSeeMoreButton()
-        } else if (percentage < 70 && percentage >= 60) {
+        } else if (percentage < 56 && percentage >= 46) {
             binding.ivScore.setImageResource(R.drawable.average)
             binding.textViewPerformanceText.text = "Average"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.yellow))
             binding.tvPerformanceText.text =
                 "Nice work! You have some basic knowledge of financial concepts, but there are many areas where you could improve!"
             //showReviewButton()
-        } else if (percentage < 60 ) {
+        } else if (percentage < 46 && percentage >= 36) {
+            binding.ivScore.setImageResource(R.drawable.nearly_there)
+            binding.textViewPerformanceText.text = "Nearly There"
+            binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.nearly_there_yellow))
+            binding.tvPerformanceText.text =
+                "Uh oh! You have limited knowledge of financial concepts and there are many areas where you need to improve!"
+            //showReviewButton()
+        }  else if (percentage < 36 && percentage >= 26) {
+            binding.ivScore.setImageResource(R.drawable.almost_there)
+            binding.textViewPerformanceText.text = "Almost There"
+            binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.almost_there_yellow))
+            binding.tvPerformanceText.text =
+                "Uh oh! You have limited knowledge of financial concepts and there are many areas where you need to improve!"
+            //showReviewButton()
+        } else if (percentage < 26 && percentage >= 16) {
+            binding.ivScore.setImageResource(R.drawable.getting_there)
+            binding.textViewPerformanceText.text = "Getting There"
+            binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.getting_there_orange))
+            binding.tvPerformanceText.text =
+                "Uh oh! You have limited knowledge of financial concepts and there are many areas where you need to improve!"
+            //showReviewButton()
+        } else if (percentage < 26 && percentage >= 16) {
+            binding.ivScore.setImageResource(R.drawable.not_quite_there_yet)
+            binding.textViewPerformanceText.text = "Not Quite\n" +
+                    "There"
+            binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.not_quite_there_red))
+            binding.tvPerformanceText.text =
+                "Uh oh! You have limited knowledge of financial concepts and there are many areas where you need to improve!"
+            //showReviewButton()
+        } else if (percentage < 15 ) {
             binding.ivScore.setImageResource(R.drawable.bad)
-            binding.textViewPerformanceText.text = "Bad"
+            binding.textViewPerformanceText.text = "Needs\nImprovement"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.red))
             binding.tvPerformanceText.text =
                 "Uh oh! You have limited knowledge of financial concepts and there are many areas where you need to improve!"

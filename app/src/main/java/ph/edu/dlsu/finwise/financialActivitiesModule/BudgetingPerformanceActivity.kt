@@ -161,7 +161,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     private fun setParentalInvolvement() {
         var parentalPercentage = nParent.toFloat()/budgetItemCount.toFloat()*100
         binding.textViewProgressParentalInvolvement.text = DecimalFormat("##0.##").format(parentalPercentage)+ "%"
-        binding.progressBarParentalInvolvement.progress = ((nParent.toFloat()/budgetItemCount)*100).roundToInt()
+        binding.progressBarParentalInvolvement.progress = parentalPercentage.toInt()
         if (parentalPercentage < 5) {
             binding.textViewPerformanceTextParentalInvolvement.text = "Excellent"
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.dark_green))
