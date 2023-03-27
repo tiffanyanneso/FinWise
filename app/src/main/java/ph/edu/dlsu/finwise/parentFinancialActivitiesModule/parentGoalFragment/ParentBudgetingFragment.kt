@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.parentFinancialManagementModule.parentPerformance.ParentBudgetingPerformanceActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPerformance.ParentBudgetingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactBudgetingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogParentBudgetingTipsBinding

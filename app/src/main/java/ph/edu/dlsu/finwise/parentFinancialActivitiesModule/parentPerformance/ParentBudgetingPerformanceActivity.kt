@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.parentFinancialManagementModule.parentPerformance
+package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPerformance
 
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
