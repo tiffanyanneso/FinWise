@@ -107,6 +107,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                 overSpending++
 
         }.continueWith {
+            overspendingPercentage = (1-(overSpending/nBudgetItems))*100
 
             firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
                 var child = it.toObject<Users>()
@@ -126,12 +127,11 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                 else {
                     overallSpending = overspendingPercentage
                     overallPercentage()
-                    binding.linearLayoutOverspending.visibility = View.GONE
+                    binding.linearLayoutOverspending.visibility = View.VISIBLE
                     binding.linearLayoutPurchasePlanning.visibility = View.GONE
                 }
             }
 
-            overspendingPercentage = (overSpending/nBudgetItems)*100
             binding.progressBarOverspending.progress = overspendingPercentage.toInt()
             binding.textOverspendingProgress.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
 

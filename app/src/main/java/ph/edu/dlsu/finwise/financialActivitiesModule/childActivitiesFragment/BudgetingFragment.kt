@@ -156,7 +156,7 @@ class BudgetingFragment : Fragment() {
     }
 
     private fun setOverall() {
-        var overall = ((totalBudgetAccuracy/purchasedBudgetItemCount) + ((1 - (nParent.toFloat()/budgetItemCount)) * 100)) /2
+        var overall = (totalBudgetAccuracy + ((1 - (nParent.toFloat()/budgetItemCount)) * 100)) /2
 
         binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(overall)}%"
 

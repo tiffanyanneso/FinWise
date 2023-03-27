@@ -144,9 +144,7 @@ class SpendingFragment : Fragment(){
                 overSpending++
 
         }.continueWith {
-            println("print oberspending" + overallSpending)
-            println("print nbudgetitems" + nBudgetItems)
-            overspendingPercentage = (overSpending/nBudgetItems)*100
+            overspendingPercentage = (1-(overSpending/nBudgetItems))*100
 
             firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
                 var child = it.toObject<Users>()
