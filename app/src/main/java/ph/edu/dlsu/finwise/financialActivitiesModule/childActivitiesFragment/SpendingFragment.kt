@@ -144,7 +144,7 @@ class SpendingFragment : Fragment(){
                 overSpending++
 
         }.continueWith {
-            overspendingPercentage = (1-(overSpending/nBudgetItems))*100
+            overspendingPercentage = (overSpending/nBudgetItems)
 
             firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
                 var child = it.toObject<Users>()
@@ -160,7 +160,7 @@ class SpendingFragment : Fragment(){
                     purchasePlanning()
                 }
                 else {
-                    overallSpending = overspendingPercentage
+                    overallSpending = (1-overspendingPercentage)*100
                     setOverall()
                 }
             }
@@ -183,7 +183,7 @@ class SpendingFragment : Fragment(){
                     firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID.id).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { expenseTransactions ->
                         nTotalPurchased += expenseTransactions.size().toFloat()
                     }.continueWith {
-                        overallSpending = (overspendingPercentage + ((nPlanned/nTotalPurchased)*100)) /2
+                        overallSpending = (((1-overspendingPercentage)*100) + ((nPlanned/nTotalPurchased)*100)) /2
                         setOverall()
                     }
                 }
