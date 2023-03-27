@@ -171,19 +171,19 @@ class BudgetingFragment : Fragment() {
             binding.textStatus.text = "Amazing"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "Amazing job! You are performing well. Budgeting is your strong point. Keep making those budgets!"
-        } else if (overall < 90 && overall >= 80) {
+        } else if (overall < 86 && overall >= 76) {
             binding.imgFace.setImageResource(R.drawable.great)
             binding.textStatus.text = "Great"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "You are performing well. Keep making those budgets!"
             showSeeMoreButton()
-        } else if (overall < 80 && overall >= 70) {
+        } else if (overall < 76 && overall >= 66) {
             binding.imgFace.setImageResource(R.drawable.good)
             binding.textStatus.text = "Good"
             binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
             binding.tvPerformanceText.text = "Good job! With a bit more attention to detail, you’ll surely up your performance!"
             showSeeMoreButton()
-        } else if (overall < 70 && overall >= 60) {
+        } else if (overall < 66 && overall >= 56) {
             binding.imgFace.setImageResource(R.drawable.average)
             binding.textStatus.text = "Average"
             binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))

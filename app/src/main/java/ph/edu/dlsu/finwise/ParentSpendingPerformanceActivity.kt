@@ -143,43 +143,43 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
             binding.progressBarOverspending.progress = overspendingPercentage.toInt()
             binding.textOverspendingProgress.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
 
-            if (overspendingPercentage >= 96) {
+            if (overspendingPercentage < 5) {
                 binding.textOverspendingText.text = "Excellent"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.dark_green))
                 binding.tvOverspendingText.text = "Your child is excellent at spending within their budget!"
-            } else if (overspendingPercentage < 96 && overspendingPercentage >= 86) {
+            } else if (overspendingPercentage < 15 && overspendingPercentage >= 5) {
                 binding.textOverspendingText.text = "Amazing"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.amazing_green))
                 binding.tvOverspendingText.text = "Your child is amazing at spending within their budget!"
-            } else if (overspendingPercentage < 90 && overspendingPercentage >= 80) {
+            } else if (overspendingPercentage < 25 && overspendingPercentage >= 15) {
                 binding.textOverspendingText.text = "Great"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.green))
                 binding.tvOverspendingText.text = "Great! Your child often spends within their budget."
-            } else if (overspendingPercentage < 90 && overspendingPercentage >= 80) {
+            } else if (overspendingPercentage < 35 && overspendingPercentage >= 25) {
                 binding.textOverspendingText.text = "Good"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.light_green))
                 binding.tvOverspendingText.text = "Good! Remind your child to keep their budget in mind when spending."
-            } else if (overspendingPercentage < 70 && overspendingPercentage >= 60) {
+            } else if (overspendingPercentage < 45 && overspendingPercentage >= 35) {
                 binding.textOverspendingText.text = "Average"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.yellow))
                 binding.tvOverspendingText.text = "Nice work! Remind your child to keep their budget in mind when spending."
-            } else if (overspendingPercentage < 56 && overspendingPercentage >= 46) {
+            } else if (overspendingPercentage < 55 && overspendingPercentage >= 45) {
                 binding.textOverspendingText.text = "Nearly There"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
                 binding.tvOverspendingText.text = "Your child is nearly there! Click the tips button to learn how to help them there!"
-            }  else if (overspendingPercentage < 46 && overspendingPercentage >= 36) {
+            }  else if (overspendingPercentage < 65 && overspendingPercentage >= 55) {
                 binding.textOverspendingText.text = "Almost There"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.almost_there_yellow))
                 binding.tvOverspendingText.text = "Your child is almost there! Click the tips button to learn how to help them there!"
-            } else if (overspendingPercentage < 36 && overspendingPercentage >= 26) {
+            } else if (overspendingPercentage < 75 && overspendingPercentage >= 65) {
                 binding.textOverspendingText.text = "Getting There"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.getting_there_orange))
                 binding.tvOverspendingText.text = "Your child is getting there! Encourage them to always refer to their budget. Click the tips button to learn how to help them get there!"
-            } else if (overspendingPercentage < 26 && overspendingPercentage >= 16) {
+            } else if (overspendingPercentage < 85 && overspendingPercentage >= 75) {
                 binding.textOverspendingText.text  = "Not Quite\nThere"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.not_quite_there_red))
                 binding.tvOverspendingText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
-            } else if (overspendingPercentage < 15) {
+            } else if (overspendingPercentage > 84) {
                 binding.textOverspendingText.text = "Needs\nImprovement"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.red))
                 binding.tvOverspendingText.text = "Uh oh! Click the tips button to learn how to help them get there!"
@@ -208,7 +208,7 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                         binding.progressBarPurchasePlanning.progress = purchasePlanningPercentage.toInt()
                         binding.textPurchasePlanning.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
 
-                        if (purchasePlanningPercentage >= 90) {
+                        if (purchasePlanningPercentage >= 96) {
                             binding.textPurchasePlanningText.text = "Excellent"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.dark_green))
                             binding.tvPurchasePlanningText.text = "Excellent! Your child always plans for their expenses."
@@ -216,15 +216,15 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                             binding.textPurchasePlanningText.text = "Amazing"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.amazing_green))
                             binding.tvPurchasePlanningText.text = "Your child is doing an amazing job! They always plan for your expenses."
-                        } else if (purchasePlanningPercentage < 90 && purchasePlanningPercentage >= 80) {
+                        } else if (purchasePlanningPercentage < 86 && purchasePlanningPercentage >= 76) {
                             binding.textPurchasePlanningText.text = "Great"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.green))
                             binding.tvPurchasePlanningText.text = "Your child is doing a great job planning their purchases."
-                        } else if (purchasePlanningPercentage < 80 && purchasePlanningPercentage >= 70) {
+                        } else if (purchasePlanningPercentage < 76 && purchasePlanningPercentage >= 66) {
                             binding.textPurchasePlanningText.text = "Good"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.light_green))
                             binding.tvPurchasePlanningText.text = "Your child is doing a good job! Encourage them to list down the items they wanna buy in their shopping list."
-                        } else if (purchasePlanningPercentage < 70 && purchasePlanningPercentage >= 60) {
+                        } else if (purchasePlanningPercentage < 66 && purchasePlanningPercentage >= 56) {
                             binding.textPurchasePlanningText.text = "Average"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.yellow))
                             binding.tvPurchasePlanningText.text = "Nice Work! To help your child improve, encourage them to plan thei expenses more via the shopping list."
@@ -244,7 +244,7 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                             binding.textPurchasePlanningText.text  = "Not Quite\nThere"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.not_quite_there_red))
                             binding.tvPurchasePlanningText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
-                        } else if (purchasePlanningPercentage < 60) {
+                        } else if (purchasePlanningPercentage < 15) {
                             binding.textPurchasePlanningText.text = "Needs\nImprovement"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.red))
                             binding.tvPurchasePlanningText.text = "Uh oh! Click the tips button to learn how to help them improve their expense planning!"
@@ -266,21 +266,22 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
             binding.tvPerformanceStatus.text = "Excellent"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.dark_green))
             binding.tvPerformanceText.text = "Your child excels at spending wisely. Encourage them to keep it up!"
+        } else if (overallSpending < 96 && overallSpending >= 86) {
             binding.imgFace.setImageResource(R.drawable.amazing)
             binding.tvPerformanceStatus.text = "Amazing"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.amazing_green))
             binding.tvPerformanceText.text = "Your child is doing an amazing job at spending wisely. Encourage them to keep it up!"
-        } else if (overallSpending < 90 && overallSpending >= 80) {
+        } else if (overallSpending < 86 && overallSpending >= 76) {
             binding.imgFace.setImageResource(R.drawable.great)
             binding.tvPerformanceStatus.text = "Great"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.green))
             binding.tvPerformanceText.text = "Your child is doing a great job of spending!"
-        } else if (overallSpending < 80 && overallSpending >= 70) {
+        } else if (overallSpending < 76 && overallSpending >= 66) {
             binding.imgFace.setImageResource(R.drawable.good)
             binding.tvPerformanceStatus.text = "Good"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.light_green))
             binding.tvPerformanceText.text = "Your child is doing a good job of spending wisely!"
-        } else if (overallSpending < 70 && overallSpending >= 60) {
+        } else if (overallSpending < 66 && overallSpending >= 56) {
             binding.imgFace.setImageResource(R.drawable.average)
             binding.tvPerformanceStatus.text = "Average"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
