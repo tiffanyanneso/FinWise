@@ -82,7 +82,7 @@ class FinactAchievedAdapter : RecyclerView.Adapter<FinactAchievedAdapter.FinactA
             var bundle = Bundle()
             var financialGoalID = itemBinding.tvGoalId.text.toString()
             bundle.putString ("financialGoalID", financialGoalID)
-            //bundle.putString ("childID", childID)
+            bundle.putString ("childID", childID)
             var viewGoal = Intent(context, ViewGoalActivity::class.java)
             viewGoal.putExtras(bundle)
             viewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

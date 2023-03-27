@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.adapter.FinactAchievedAdapter
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentParentAchievedBinding
 
@@ -15,7 +16,7 @@ class ParentAchievedFragment : Fragment() {
 
     private lateinit var binding: FragmentParentAchievedBinding
     private var firestore = Firebase.firestore
-    private lateinit var goalAdapter: FinactSavingAdapter
+    private lateinit var goalAdapter: FinactAchievedAdapter
 
     private lateinit var childID:String
 
@@ -41,7 +42,7 @@ class ParentAchievedFragment : Fragment() {
         goalIDArrayList.clear()
 
 
-        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "Achieved").get().addOnSuccessListener { documents ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "Completed").get().addOnSuccessListener { documents ->
             for (goalSnapshot in documents) {
                 //creating the object from list retrieved in db
                 val goalID = goalSnapshot.id
@@ -52,7 +53,7 @@ class ParentAchievedFragment : Fragment() {
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        goalAdapter = FinactSavingAdapter(requireContext().applicationContext, goalIDArrayList)
+        goalAdapter = FinactAchievedAdapter(requireContext().applicationContext, goalIDArrayList)
         binding.rvViewGoals.adapter = goalAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
         goalAdapter.notifyDataSetChanged()

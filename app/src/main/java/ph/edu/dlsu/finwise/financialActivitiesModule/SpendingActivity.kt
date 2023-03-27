@@ -149,8 +149,10 @@ class SpendingActivity : AppCompatActivity() {
 
     private fun checkUser() {
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-            if (it.toObject<Users>()!!.userType == "Child")
+            if (it.toObject<Users>()!!.userType == "Child") {
+                childID = currentUser
                 goToFinancialAssessmentActivity()
+            }
         }
     }
 
@@ -216,29 +218,31 @@ class SpendingActivity : AppCompatActivity() {
         fragmentBundle.putFloat("remainingBudget", remainingBudget)
 
 
+        println("print " + childID)
         firestore.collection("Users").document(childID).get().addOnSuccessListener {
-            var child = it.toObject<Users>()
-            //compute age
-            val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
-            val from = LocalDate.now()
-            val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
-            val to = LocalDate.parse(date.toString(), dateFormatter)
-            var difference = Period.between(to, from)
+            var user = it.toObject<Users>()
+            if (user?.userType == "Child") {
+                //compute age
+                val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                val from = LocalDate.now()
+                val date =  SimpleDateFormat("MM/dd/yyyy").format(user?.birthday?.toDate())
+                val to = LocalDate.parse(date.toString(), dateFormatter)
+                var difference = Period.between(to, from)
 
-            var age = difference.years
-            if (age  > 9 ) {
-                var spendingShoppingListFragment = SpendingShoppingListFragment()
-                spendingShoppingListFragment.arguments = fragmentBundle
-                adapter.addFragment(spendingShoppingListFragment,"Shopping List")
+                var age = difference.years
+                if (age  > 9 ) {
+                    var spendingShoppingListFragment = SpendingShoppingListFragment()
+                    spendingShoppingListFragment.arguments = fragmentBundle
+                    adapter.addFragment(spendingShoppingListFragment,"Shopping List")
+                }
+
+                var spendingExpenseFragment = SpendingExpenseListFragment()
+                spendingExpenseFragment.arguments = fragmentBundle
+                adapter.addFragment(spendingExpenseFragment,"Expenses")
+                binding.viewPager.adapter = adapter
+                binding.tabLayout.setupWithViewPager(binding.viewPager)
+                adapter.notifyDataSetChanged()
             }
-
-            var spendingExpenseFragment = SpendingExpenseListFragment()
-            spendingExpenseFragment.arguments = fragmentBundle
-            adapter.addFragment(spendingExpenseFragment,"Expenses")
-            binding.viewPager.adapter = adapter
-            binding.tabLayout.setupWithViewPager(binding.viewPager)
-            adapter.notifyDataSetChanged()
-
         }
     }
 
