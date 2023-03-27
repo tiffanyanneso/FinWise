@@ -107,7 +107,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                 overSpending++
 
         }.continueWith {
-            overspendingPercentage = (1-(overSpending/nBudgetItems))*100
+            overspendingPercentage = (overSpending/nBudgetItems)
 
             firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
                 var child = it.toObject<Users>()
@@ -125,7 +125,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                     purchasePlanning()
                 }
                 else {
-                    overallSpending = overspendingPercentage
+                    overallSpending = (1-overspendingPercentage)*100
                     overallPercentage()
                     binding.linearLayoutOverspending.visibility = View.VISIBLE
                     binding.linearLayoutPurchasePlanning.visibility = View.GONE
@@ -135,7 +135,6 @@ class SpendingPerformanceActivity : AppCompatActivity() {
             binding.progressBarOverspending.progress = overspendingPercentage.toInt()
             binding.textOverspendingProgress.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
 
-            println("print overspending " + overspendingPercentage)
 
             if (overspendingPercentage < 5) {
                 binding.textOverspendingText.text = "Excellent"
@@ -253,7 +252,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                             binding.tvPurchasePlanningText.text = "Uh oh! Seems like you haven’t really been planning your expenses by putting them in your shopping list. Try this out next time!"
                         }
 
-                        overallSpending = (overspendingPercentage + ((nPlanned/nTotalPurchased)*100)) /2
+                        overallSpending = ((overspendingPercentage*100) + ((nPlanned/nTotalPurchased)*100)) /2
                         binding.tvPerformancePercentage.text ="${DecimalFormat("0.0").format(overallSpending)}%"
 
 

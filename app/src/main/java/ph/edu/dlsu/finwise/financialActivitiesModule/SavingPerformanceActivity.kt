@@ -141,8 +141,6 @@ class SavingPerformanceActivity : AppCompatActivity() {
             }
 
             var overall = 0.00F
-//            var overall = (nOnTime/nTotal) * 100
-
             if (nTotal != 0.00F)
                 overall = (nOnTime/nTotal) * 100
 
