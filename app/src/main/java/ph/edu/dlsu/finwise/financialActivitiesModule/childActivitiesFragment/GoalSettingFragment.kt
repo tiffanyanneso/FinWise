@@ -251,37 +251,37 @@ class GoalSettingFragment : Fragment() {
                     binding.tvPerformanceStatus.text = "Average"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
                     binding.tvPerformanceText.text = "Nice work! Work on improving your goal setting performance. Review SMART Goals!"
-                    showReviewButton()
+                    showSeeMoreButton()
                 } else if (percentage < 56 && percentage >= 46) {
                     binding.imgFace.setImageResource(R.drawable.nearly_there)
                     binding.tvPerformanceStatus.text = "Nearly There"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
-                    showReviewButton()
+                    showSeeMoreButton()
                 } else if (percentage < 46 && percentage >= 36) {
                     binding.imgFace.setImageResource(R.drawable.almost_there)
                     binding.tvPerformanceStatus.text = "Almost There"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Almost there! You need to work on your goal setting. Click review to learn how!"
-                    showReviewButton()
+                    showSeeMoreButton()
                 } else if (percentage < 36 && percentage >= 26) {
                     binding.imgFace.setImageResource(R.drawable.getting_there)
                     binding.tvPerformanceStatus.text = "Getting There"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Getting there! You need to work on your goal setting. Click review to learn how!"
-                    showReviewButton()
+                    showSeeMoreButton()
                 } else if (percentage < 26 && percentage >= 16) {
                     binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                     binding.tvPerformanceStatus.text = "Not Quite\nThere"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
-                    showReviewButton()
+                    showSeeMoreButton()
                 } else if (percentage < 15) {
                     binding.imgFace.setImageResource(R.drawable.bad)
                     binding.tvPerformanceStatus.text = "Needs\nImprovement"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Uh oh! You need to work on your goal setting. Click review to learn how!"
-                    showReviewButton()
+                    showSeeMoreButton()
                 }
                 binding.tvOverallRating.visibility = View.VISIBLE
                 binding.tvOverallRating.text ="${DecimalFormat("0.0").format(overall)}/5.0"
