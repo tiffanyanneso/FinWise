@@ -126,6 +126,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                 }
                 else {
                     overallSpending = overspendingPercentage
+                    binding.tvPerformancePercentage.text ="${DecimalFormat("0.0").format(overallSpending)}%"
                     overallPercentage()
                     binding.linearLayoutOverspending.visibility = View.VISIBLE
                     binding.linearLayoutPurchasePlanning.visibility = View.GONE
@@ -315,7 +316,11 @@ class SpendingPerformanceActivity : AppCompatActivity() {
             binding.tvPerformanceStatus.text = "Needs\nImprovement"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
             binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
-        }
+        }  else {
+        binding.imgFace.setImageResource(R.drawable.good)
+        binding.tvPerformanceStatus.text = ""
+        binding.tvPerformanceText.text = "Finish spending to see your performance"
+    }
     }
     private fun showSpendingReivewDialog() {
 

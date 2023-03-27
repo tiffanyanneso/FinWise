@@ -138,7 +138,6 @@ class SavingPerformanceActivity : AppCompatActivity() {
                         }
                     }
                 }
-            }
 
             var overall = 0.00F
 //            var overall = (nOnTime/nTotal) * 100
@@ -200,6 +199,11 @@ class SavingPerformanceActivity : AppCompatActivity() {
                 binding.tvPerformanceStatus.text = "Needs\nImprovement"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "Uh oh! Your saving performance needs a lot of improvement.  Click review to learn how!"
+            }
+            } else {
+                binding.imgFace.setImageResource(R.drawable.good)
+                binding.tvPerformanceStatus.text = ""
+                binding.tvPerformanceText.text = "Child has yet to complete goals."
             }
         }
     }

@@ -98,7 +98,9 @@
                 android:textColor="@color/off_white"
                 android:backgroundTint="@color/dark_green"
                 android:background="@drawable/button_border"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                />
             <LinearLayout
                 android:id="@+id/layout_buttons"
                 android:layout_width="match_parent"
