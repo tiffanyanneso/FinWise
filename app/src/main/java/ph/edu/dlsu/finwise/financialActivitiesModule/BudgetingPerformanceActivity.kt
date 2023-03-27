@@ -215,42 +215,41 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.dark_green))
             binding.tvBudgetAccuracyText.text =
                 "Keep up the excellent work! Your budget is often accurate."
-        } else if (budgetAccuracy < 96 && budgetAccuracy >= 86) {
+        } else if (budgetAccuracy in 86..95) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Amazing"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.amazing_green))
             binding.tvBudgetAccuracyText.text =
                 "Amazing job! You are performing well. You are amazing at creating accurate budgets."
-        } else if (budgetAccuracy < 90 && budgetAccuracy >= 80) {
+        } else if (budgetAccuracy in 76..85) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Great"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.green))
             binding.tvBudgetAccuracyText.text =
                 "You are performing well. Keep making those accurate budgets!"
-        } else if (budgetAccuracy < 80 && budgetAccuracy >= 70) {
+        } else if (budgetAccuracy in 66..75) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Good"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.light_green))
-            binding.tvBudgetAccuracyText.text =
-                "Good job! With a bit more attention to detail, you’ll surely up your performance!"
-        } else if (budgetAccuracy < 70 && budgetAccuracy >= 60) {
+            binding.tvBudgetAccuracyText.text = "Good job! With a bit more attention to detail, you’ll surely up your performance!"
+        } else if (budgetAccuracy in 56..65) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Average"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.yellow))
             binding.tvBudgetAccuracyText.text =
                 "Nice work! Work on improving your budget by always doublechecking. You’ll get there soon!"
-        } else if (budgetAccuracy < 56 && budgetAccuracy >= 46) {
+        } else if (budgetAccuracy in 46..55) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Nearly There"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
             binding.tvBudgetAccuracyText.text =
                 "You're nearly there! Click review to learn how to get there!"
-        } else if (budgetAccuracy < 46 && budgetAccuracy >= 36) {
+        } else if (budgetAccuracy in 36..45) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Almost There"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.almost_there_yellow))
             binding.tvBudgetAccuracyText.text =
                 "Almost there! You need to work on your budget accuracy. Click review to learn how!"
-        } else if (budgetAccuracy < 36 && budgetAccuracy >= 26) {
+        } else if (budgetAccuracy in 26..35) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Getting There"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.getting_there_orange))
             binding.tvBudgetAccuracyText.text =
                 "Getting there! You need to work on your budget accuracy. Click review to learn how!"
-        } else if (budgetAccuracy < 26 && budgetAccuracy >= 16) {
+        } else if (budgetAccuracy in 16..25) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Not Quite\nThere"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.not_quite_there_red))
             binding.tvBudgetAccuracyText.text =
@@ -264,8 +263,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     }
 
     private fun setOverall() {
-        var overall =
-            ((totalBudgetAccuracy / purchasedBudgetItemCount) + ((1 - (nParent.toFloat() / budgetItemCount)) * 100)) / 2
+        var overall = (totalBudgetAccuracy  + ((1 - (nParent.toFloat() / budgetItemCount)) * 100)) / 2
 
         binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(overall)}%"
 
@@ -279,20 +277,17 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
             binding.imgFace.setImageResource(R.drawable.amazing)
             binding.textStatus.text = "Amazing"
             binding.textStatus.setTextColor(getResources().getColor(R.color.amazing_green))
-            binding.tvPerformanceText.text =
-                "Amazing job! You are performing well. Budgeting is your strong point. Keep making those budgets!"
-        } else if (overall < 90 && overall >= 80) {
+            binding.tvPerformanceText.text = "Amazing job! You are performing well. Budgeting is your strong point. Keep making those budgets!"
+        } else if (overall < 86 && overall >= 76) {
             binding.imgFace.setImageResource(R.drawable.great)
             binding.textStatus.text = "Great"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "You are performing well. Keep making those budgets!"
-        } else if (overall < 80 && overall >= 70) {
+        } else if (overall < 76 && overall >= 66) {
             binding.imgFace.setImageResource(R.drawable.good)
             binding.textStatus.text = "Good"
             binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
-            binding.tvPerformanceText.text =
-                "Good job! With a bit more attention to detail, you’ll surely up your performance!"
-        } else if (overall < 70 && overall >= 60) {
+        } else if (overall < 66 && overall >= 56) {
             binding.imgFace.setImageResource(R.drawable.average)
             binding.textStatus.text = "Average"
             binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
