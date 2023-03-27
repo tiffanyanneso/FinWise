@@ -231,31 +231,31 @@ class SpendingFragment : Fragment(){
             binding.textStatus.text = "Nearly There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
-            showReviewButton()
+            showSeeMoreButton()
         }  else if (overallSpending < 46 && overallSpending >= 36) {
             binding.imgFace.setImageResource(R.drawable.almost_there)
             binding.textStatus.text = "Almost There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Almost there! You need to work on your spending. Click review to learn how!"
-            showReviewButton()
+            showSeeMoreButton()
         } else if (overallSpending < 36 && overallSpending >= 26) {
             binding.imgFace.setImageResource(R.drawable.getting_there)
             binding.textStatus.text = "Getting There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Getting there! You need to work on your spending. Click review to learn how!"
-            showReviewButton()
+            showSeeMoreButton()
         } else if (overallSpending < 26 && overallSpending >= 16) {
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
             binding.textStatus.text = "Not Quite\nThere"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
-            showReviewButton()
+            showSeeMoreButton()
         } else if (overallSpending < 15) {
             binding.imgFace.setImageResource(R.drawable.bad)
             binding.textStatus.text = "Needs\nImprovement"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
-            showReviewButton()
+            showSeeMoreButton()
         }
     }
 

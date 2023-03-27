@@ -123,21 +123,29 @@ class SavingPerformanceActivity : AppCompatActivity() {
         var nTotal = 0.00F
         var nOnTime =0.00F
         firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
-            nTotal = results.size().toFloat()
-            for (goal in results) {
-                var goalObject = goal.toObject<FinancialGoals>()
-                if (goalObject.dateCompleted != null) {
-                    var targetDate = goalObject?.targetDate!!.toDate()
-                    var completedDate = goalObject?.dateCompleted!!.toDate()
 
-                    //goal was completed before the target date, meaning it was completed on time
-                    if (completedDate.before(targetDate) || completedDate.equals(targetDate)) {
-                        nOnTime++
+            if (results.size()!=0) {
+                nTotal = results.size().toFloat()
+                for (goal in results) {
+                    var goalObject = goal.toObject<FinancialGoals>()
+                    if (goalObject.dateCompleted != null) {
+                        var targetDate = goalObject?.targetDate!!.toDate()
+                        var completedDate = goalObject?.dateCompleted!!.toDate()
+
+                        //goal was completed before the target date, meaning it was completed on time
+                        if (completedDate.before(targetDate) || completedDate.equals(targetDate)) {
+                            nOnTime++
+                        }
                     }
                 }
             }
 
-            val overall = (nOnTime/nTotal) * 100
+            var overall = 0.00F
+//            var overall = (nOnTime/nTotal) * 100
+
+            if (nTotal != 0.00F)
+                overall = (nOnTime/nTotal) * 100
+
             val overallRoundedNumber = "%.1f".format(overall).toFloat()
 
             binding.tvPerformancePercentage.text ="${overallRoundedNumber}%"

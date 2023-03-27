@@ -247,31 +247,31 @@ class ParentSpendingFragment : Fragment() {
             binding.textStatus.text = "Nearly There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your child is nearly there! Click the tips button to learn how to help them get there!"
-            showReviewButton()
+            showSeeMoreButton()
         }  else if (overallSpending < 46 && overallSpending >= 36) {
             binding.imgFace.setImageResource(R.drawable.almost_there)
             binding.textStatus.text = "Almost There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your child is almost there! Click the tips button to learn how to help them get there!"
-            showReviewButton()
+            showSeeMoreButton()
         } else if (overallSpending < 36 && overallSpending >= 26) {
             binding.imgFace.setImageResource(R.drawable.getting_there)
             binding.textStatus.text = "Getting There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your child is getting there! Click the tips button to learn how to help them get there!"
-            showReviewButton()
+            showSeeMoreButton()
         } else if (overallSpending < 26 && overallSpending >= 16) {
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
             binding.textStatus.text = "Not Quite\nThere"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
-            showReviewButton()
+            showSeeMoreButton()
         } else if (overallSpending < 15) {
             binding.imgFace.setImageResource(R.drawable.bad)
             binding.textStatus.text = "Needs\nImprovement"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them improve their spending!"
-            showReviewButton()
+            showSeeMoreButton()
         }
     }
 
