@@ -3,6 +3,8 @@ package ph.edu.dlsu.finwise.financialAssessmentModule
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Timestamp
@@ -33,7 +35,8 @@ class FinancialAssessmentActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityFinancialAssessmentBinding
 
-    private lateinit var assessmentID: String
+    private var assessmentIDArrayList = ArrayList<String>()
+    //private var assessmentAttemptIDArrayList = ArrayList<String>()
     private lateinit var assessmentType: String
     private lateinit var assessmentCategory: String
     private lateinit var assessmentName: String
@@ -46,6 +49,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
 
 
     private var firestore = Firebase.firestore
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialAssessmentBinding.inflate(layoutInflater)
@@ -57,61 +61,105 @@ class FinancialAssessmentActivity : AppCompatActivity() {
 
         retrieveBundle()
         loadAssessments()
-        loadAssessmentAttemptButton()
     }
 
-    private fun loadAssessmentAttemptButton() {
+    private suspend fun getPreliminaryAssessmentDocuments(): QuerySnapshot? {
+        val docRef = firestore.collection("Assessments")
+            .whereEqualTo("assessmentType", assessmentType)
+        return docRef.get().await()
+    }
+
+    private suspend fun loadAssessmentAttemptButton() {
         binding.btnTakeAssessment.setOnClickListener {
-            val assessmentAttempt = makeAssessmentAttempt()
-            firestore.collection("AssessmentAttempts").add(assessmentAttempt)
-                .addOnSuccessListener {
-                    val assessmentAttemptID = it.id
-                    goToFinancialAssessmentQuiz(assessmentAttemptID)
-                }
+            CoroutineScope(Dispatchers.Main).launch {
+                /*for (assessment in assessmentIDArrayList) {
+                    val attempt = makeAssessmentAttempt(assessment)
+                    val assessmentAttempt = firestore.collection("AssessmentAttempts")
+                        .add(attempt).await()
+                    assessmentAttemptIDArrayList.add(assessmentAttempt.id)
+                }*/
+                goToFinancialAssessmentQuiz()
+            }
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun loadAssessments() {
         // Makes firestore functions async --> Firestore functions will finish first
         // before going to next line (must implement suspend in function to use .async())
         CoroutineScope(Dispatchers.Main).launch {
-            val assessmentsDocumentSnapshot = getAssessmentDocument()
-            loadTextViewsBinding(assessmentsDocumentSnapshot)
+            val assessmentsDocumentSnapshot: QuerySnapshot? = if (assessmentType == "Preliminary")
+                getPreliminaryAssessmentDocuments()
+            else getAssessmentDocument()
+
             getChildAge()
+            loadTextViewsBinding(assessmentsDocumentSnapshot, assessmentType)
             getAssessmentQuestions(assessmentsDocumentSnapshot)
-            println("print assessment question size " +  questionIDArrayList.size)
+            Log.d("questionsccxcxc", "loadAssessments: "+questionIDArrayList)
+            loadAssessmentAttemptButton()
         }
     }
 
-    private fun loadTextViewsBinding(assessmentsDocumentSnapshot: QuerySnapshot?) {
+    private suspend fun loadTextViewsBinding(assessmentsDocumentSnapshot: QuerySnapshot?, assessmentType: String) {
         if (assessmentsDocumentSnapshot != null) {
-            val assessment = assessmentsDocumentSnapshot.documents[0]
-                .toObject<FinancialAssessmentDetails>()
-            assessmentName = assessment?.assessmentCategory.toString()
-            nQuestionsInAssessment = assessment?.nQuestionsInAssessment!!
-            var description = assessment?.description.toString()
-            if (description == "")
-                description = "This assessment is about testing your $assessmentName knowledge and skills"
+            lateinit var description: String
+            if (assessmentType == "Preliminary") {
+                addNQuestions(assessmentsDocumentSnapshot)
+                addAssessmentIDArrayList(assessmentsDocumentSnapshot)
+                assessmentName = "Preliminary Quiz"
 
-            binding.tvName.text = assessmentName
+
+                description = "Hey there! Before we start our journey towards financial literacy, " +
+                        "let's gauge your current knowledge. Please take a few moments to complete " +
+                        "this preliminary quiz. Good luck!"
+                binding.tvPreviousScore.visibility = View.GONE
+                binding.tvName.visibility = View.GONE
+                binding.textViewProgress.visibility = View.GONE
+                binding.tvBreakdown.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
+            } else {
+                val assessment = assessmentsDocumentSnapshot.documents[0]
+                    .toObject<FinancialAssessmentDetails>()
+                assessmentName = assessment?.assessmentCategory.toString()
+                nQuestionsInAssessment = assessment?.nQuestionsInAssessment!!
+                description = assessment.description.toString()
+                if (description == "")
+                    description = "\"Hey there! Before we start our journey towards financial literacy, " +
+                            "let's gauge your current knowledge. Please take a few moments " +
+                            "to complete this preliminary quiz. Good luck!"
+
+                binding.tvName.text = assessmentName
+                val assessmentID = assessmentsDocumentSnapshot.documents[0].id
+                assessmentIDArrayList.add(assessmentID)
+                getScore()
+            }
             binding.tvDescription.text = description
-
-            assessmentID = assessmentsDocumentSnapshot.documents[0].id
-            getScore(assessmentID)
         }
     }
 
-    private fun getScore(assessmentID: String) {
-        firestore.collection("AssessmentAttempts")
-            .whereEqualTo("assessmentID" , assessmentID)
+    private fun addAssessmentIDArrayList(assessmentsDocumentSnapshot: QuerySnapshot) {
+        for (assessments in assessmentsDocumentSnapshot)
+            assessmentIDArrayList.add(assessments.id)
+    }
+
+    private fun addNQuestions(assessmentsDocumentSnapshot: QuerySnapshot) {
+        for (assessment in assessmentsDocumentSnapshot){
+            val assessmentObject = assessment.toObject<FinancialAssessmentDetails>()
+            nQuestionsInAssessment += assessmentObject.nQuestionsInAssessment!!
+        }
+    }
+
+    private suspend fun getScore() {
+        val assessmentAttempt = firestore.collection("AssessmentAttempts")
+            .whereEqualTo("assessmentID" , assessmentIDArrayList[0])
             .whereEqualTo("childID", childID)
-            .get().addOnSuccessListener { querySnapshot ->
+            .get().await()
                 lateinit var progressPercent: String
                 lateinit var scoreBreakdown: String
                 val progressInt: Int
-                if (querySnapshot.documents.isNotEmpty()) {
+                if (assessmentAttempt.documents.isNotEmpty()) {
                     // Documents exist
-                    val assessmentAttempt = querySnapshot.documents[0].toObject<FinancialAssessmentAttempts>()
+                    val assessmentAttempt = assessmentAttempt.documents[0].toObject<FinancialAssessmentAttempts>()
                     val nAnsweredCorrectly = assessmentAttempt?.nAnsweredCorrectly
                     val nQuestions = assessmentAttempt?.nQuestions
 
@@ -133,28 +181,27 @@ class FinancialAssessmentActivity : AppCompatActivity() {
                 binding.textViewProgress.text = progressPercent
                 binding.tvBreakdown.text = scoreBreakdown
                 binding.progressBar.progress = progressInt
-            }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getChildAge() {
-        firestore.collection("Users").document(childID).get().addOnSuccessListener {
-            var child = it.toObject<Users>()
+        val user = firestore.collection("Users").document(childID).get().await()
+            val child = user.toObject<Users>()
             //compute age
             val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
             val from = LocalDate.now()
-            val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+            val date = child?.birthday?.toDate()?.let { SimpleDateFormat("MM/dd/yyyy").format(it) }
             val to = LocalDate.parse(date.toString(), dateFormatter)
-            var difference = Period.between(to, from)
+            val difference = Period.between(to, from)
 
             age = difference.years
-        }
     }
 
-    private fun makeAssessmentAttempt(): Any {
+    private fun makeAssessmentAttempt(assessment: String): Any {
         val assessmentAttempt = hashMapOf(
             "childID" to childID,
-            "assessmentID" to assessmentID,
+            "assessmentID" to assessment,
             "dateTaken" to Timestamp.now()
         )
         return assessmentAttempt
@@ -163,7 +210,6 @@ class FinancialAssessmentActivity : AppCompatActivity() {
     private suspend fun getAssessmentQuestions(assessmentsIDArray: QuerySnapshot?) {
         if (assessmentsIDArray != null) {
             for (assessmentID in assessmentsIDArray) {
-                println("print assessment id " + assessmentID.id)
                 val questions = getAssessmentQuestionsCollection(assessmentID.id)
                 if (questions != null) {
                     for (question in questions) {
@@ -175,11 +221,11 @@ class FinancialAssessmentActivity : AppCompatActivity() {
     }
 
     private suspend fun getAssessmentQuestionsCollection(assessmentID: String): QuerySnapshot? {
-        var difficultyQuery =  Arrays.asList("Easy")
+        var difficultyQuery =  listOf("Easy")
         if (age == 10 || age == 11)
-            difficultyQuery = Arrays.asList("Easy", "Medium")
+            difficultyQuery = listOf("Easy", "Medium")
         else if (age == 12)
-            difficultyQuery = Arrays.asList("Easy", "Medium", "Hard")
+            difficultyQuery = listOf("Easy", "Medium", "Hard")
 
         val docRef = firestore.collection("AssessmentQuestions")
             .whereEqualTo("assessmentID", assessmentID)
@@ -194,17 +240,17 @@ class FinancialAssessmentActivity : AppCompatActivity() {
         return docRef.get().await()
     }
 
-    private fun goToFinancialAssessmentQuiz(assessmentAttemptID: String) {
+    private fun goToFinancialAssessmentQuiz() {
         val assessmentQuiz = Intent(this, FinancialAssessmentQuiz::class.java)
-        val bundle = setBundles(assessmentAttemptID)
+        val bundle = setBundles()
         assessmentQuiz.putExtras(bundle)
         startActivity(assessmentQuiz)
     }
 
-    private fun setBundles(assessmentAttemptID: String): Bundle {
+    private fun setBundles(): Bundle {
         val bundle = Bundle()
-        bundle.putString("assessmentAttemptID", assessmentAttemptID)
-        bundle.putString("assessmentID", assessmentID)
+        //bundle.putStringArrayList("assessmentAttemptIDArrayList", assessmentAttemptIDArrayList)
+        bundle.putStringArrayList("assessmentIDArrayList", assessmentIDArrayList)
         bundle.putString("assessmentName", assessmentName)
         bundle.putStringArrayList("questionIDArrayList", questionIDArrayList)
         bundle.putInt("nNumberOfQuestions", nQuestionsInAssessment)

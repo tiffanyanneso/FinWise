@@ -6,9 +6,12 @@ import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -21,7 +24,6 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentCompletedBinding
 import ph.edu.dlsu.finwise.databinding.DialogBadgeBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
-import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
 import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -33,8 +35,8 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
     private var firestore = Firebase.firestore
     private var childID = FirebaseAuth.getInstance().currentUser!!.uid
 
-    private lateinit var assessmentID:String
-    private lateinit var assessmentAttemptID:String
+    private var assessmentIDArrayList = ArrayList<String>()
+    //private var assessmentAttemptIDArrayList = ArrayList<String>()
     private lateinit var assessmentName:String
     private lateinit var badgeName: String
 
@@ -59,11 +61,14 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
     }
 
     private fun getBundles() {
-        val bundle = intent.extras!!
-        assessmentID = bundle.getString("assessmentID").toString()
-        assessmentAttemptID = bundle.getString("assessmentAttemptID").toString()
+        val bundle = intent.extras
+        assessmentIDArrayList = bundle?.getStringArrayList("assessmentIDArrayList")
+                as ArrayList<String>
+        /*assessmentAttemptIDArrayList = bundle.getStringArrayList("assessmentAttemptIDArrayList")
+                as ArrayList<String>*/
         assessmentName = bundle.getString("assessmentName").toString()
-        answerHistoryArrayList = bundle.getSerializable("answerHistory") as ArrayList<FinancialAssessmentQuiz.AnswerHistory>
+        answerHistoryArrayList = bundle.getSerializable("answerHistory")
+                as ArrayList<FinancialAssessmentQuiz.AnswerHistory>
         nQuestions = answerHistoryArrayList.size
     }
 
@@ -82,26 +87,71 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
     private suspend fun updateAnsweredCorrectly(answerHistory: FinancialAssessmentQuiz.AnswerHistory) {
         val document = getAssessmentQuestions(answerHistory)
         val assessmentQuestion = document?.toObject<FinancialAssessmentQuestions>()
-        val updatedNAssessments = assessmentQuestion?.nAssessments!! + 1
-        var updatedNAnsweredCorrectly = assessmentQuestion.nAnsweredCorrectly
+        var updatedNAnsweredCorrectly = assessmentQuestion?.nAnsweredCorrectly
         if (answerHistory.answeredCorrectly) {
             answeredCorrectly++
             updatedNAnsweredCorrectly = updatedNAnsweredCorrectly!! + 1
         }
 
-        updateAssessmentQuestionsDB(answerHistory, updatedNAssessments, updatedNAnsweredCorrectly)
+        if (updatedNAnsweredCorrectly != null) {
+            updateAssessmentQuestionsDB(answerHistory, updatedNAnsweredCorrectly)
+        }
     }
 
     private suspend fun updateAssessmentQuestionsDB(
-        answerHistory: FinancialAssessmentQuiz.AnswerHistory,
-        updatedNAssessments: Int,
+        answerHistory: FinancialAssessmentQuiz.AnswerHistory, updatedNAnsweredCorrectly: Int?) {
+        val data = hashMapOf(
+            "nAssessments" to FieldValue.increment(1),
+            "nAnsweredCorrectly" to updatedNAnsweredCorrectly
+        )
+        val assessmentQuestion = firestore.collection("AssessmentQuestions")
+            .document(answerHistory.questionID)
+        assessmentQuestion.update(data as Map<String, Any>).await()
+
+        Log.d("sdfsdfdsfdd", "updateAssessmentQuestionsDB: "+updatedNAnsweredCorrectly+"  "
+                +answerHistory.questionID)
+
+        updateAssessmentAttemptsFields(assessmentQuestion, updatedNAnsweredCorrectly)
+    }
+
+    private suspend fun updateAssessmentAttemptsFields(
+        assessmentQuestion: DocumentReference,
         updatedNAnsweredCorrectly: Int?
     ) {
-        firestore.collection("AssessmentQuestions")
-            .document(answerHistory.questionID)
-            .update("nAssessments", updatedNAssessments,
-                "nAnsweredCorrectly", updatedNAnsweredCorrectly).await()
+        assessmentQuestion
+        val assessmentQuestionObject = assessmentQuestion.get().await().toObject<FinancialAssessmentQuestions>()
+        val assessmentID = assessmentQuestionObject?.assessmentID
+
+        if (assessmentID != null) {
+            val data = hashMapOf(
+                "nAnsweredCorrectly" to updatedNAnsweredCorrectly,
+                "nQuestions" to FieldValue.increment(1)
+            )
+            val assessmentAttemptDocRef = firestore.collection("AssessmentAttempts")
+                .document(assessmentID)
+            val assessmentAttemptDocument = assessmentAttemptDocRef.get().await()
+            if (assessmentAttemptDocument.exists()) {
+                assessmentAttemptDocRef.update(data as Map<String, Any>).await()
+            } else {
+                createAssessmentAttempt(assessmentID, updatedNAnsweredCorrectly)
+            }
+        } else Toast.makeText(this, "null assessmentID", Toast.LENGTH_SHORT).show()
     }
+
+    private suspend fun createAssessmentAttempt(
+        assessmentID: String,
+        updatedNAnsweredCorrectly: Int?
+    ) {
+        val assessmentAttempt = hashMapOf(
+            "childID" to childID,
+            "assessmentID" to assessmentID,
+            "nAnsweredCorrectly" to updatedNAnsweredCorrectly,
+            "nQuestions" to FieldValue.increment(1),
+            "dateTaken" to Timestamp.now()
+        )
+        firestore.collection("AssessmentAttempts").add(assessmentAttempt).await()
+    }
+
 
     private suspend fun getAssessmentQuestions(answerHistory: FinancialAssessmentQuiz.AnswerHistory)
     : DocumentSnapshot? {
@@ -149,7 +199,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
 
     private fun showBadgeDialog() {
         val dialogBinding= DialogBadgeBinding.inflate(layoutInflater)
-        val dialog= Dialog(this);
+        val dialog= Dialog(this)
         dialog.setContentView(dialogBinding.root)
         // Initialize dialog
 
@@ -210,27 +260,20 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
 
     private suspend fun updateAssessmentAttempts() {
         // compute for percentage
-        firestore.collection("AssessmentAttempts").document(assessmentAttemptID)
-            .update("nAnsweredCorrectly", answeredCorrectly).await()
-        firestore.collection("AssessmentAttempts").document(assessmentAttemptID)
-            .update("nQuestions", nQuestions).await()
-        val assessmentsDocuments = getAssessmentDocument()
-        val updatedNTimesAssessmentTaken = getUpdatedNTimesAssessmentTaken(assessmentsDocuments)
-        firestore.collection("Assessments").document(assessmentID)
-            .update("nTakes", updatedNTimesAssessmentTaken).await()
+        /*for (attempt in assessmentAttemptIDArrayList) {
+            firestore.collection("AssessmentAttempts").document(attempt)
+                .update("nAnsweredCorrectly", answeredCorrectly).await()
+            firestore.collection("AssessmentAttempts").document(attempt)
+                .update("nQuestions", nQuestions).await()
+        }*/
+
+        for (assessmentID in assessmentIDArrayList) {
+            firestore.collection("Assessments").document(assessmentID)
+                .update("nTakes", FieldValue.increment(1)).await()
+        }
         //binding.progressBar.max = nQuestions
     }
 
-    private fun getUpdatedNTimesAssessmentTaken(assessmentsDocuments: DocumentSnapshot?): Int {
-        val assessment = assessmentsDocuments?.toObject<FinancialAssessmentDetails>()
-        return assessment?.nTakes!! + 1
-    }
-
-    private suspend fun getAssessmentDocument(): DocumentSnapshot? {
-        val db = firestore.collection("Assessments").document(assessmentID)
-
-        return db.get().await()
-    }
 
     private fun initializeFinishButtonActivity() {
         binding.btnFinish.setOnClickListener {
