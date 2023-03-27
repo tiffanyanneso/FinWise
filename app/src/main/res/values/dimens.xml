@@ -10,5 +10,5 @@
     <dimen name="sort_popup_width">390dp</dimen>
     <dimen name="sort_popup_height">640dp</dimen>
     <dimen name="explanation_popup_width">400dp</dimen>
-    <dimen name="explanation_popup_height">830dp</dimen>
+    <dimen name="explanation_popup_height">600dp</dimen>
 </resources>
