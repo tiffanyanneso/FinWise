@@ -92,7 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="Specific- Include important details (What, Who)"
+            android:text="Specific- Include important details"
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
 
@@ -100,7 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="Measurable- Quantify goals through a target amount"
+            android:text="Measurable- Quantify goals"
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
 
@@ -116,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="Relevant- Think about the goal's importance"
+            android:text="Relevant- Think about importance"
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
 
@@ -156,7 +156,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Review: Encourage them to review their goals before setting them"
+            android:text="1. Review: Encourage them to review their goals "
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
 
@@ -164,17 +164,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="2. Start Small: Encourage your child to start with small or simple financial goals"
+            android:text="2. Start Small: Encourage them to start with small goals"
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="16dp"
-            android:text="3. Be Present: Support your child and answer their questions"
-            android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="16dp"-->
+<!--            android:text="3. Be Present: Support your child and answer their questions"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:layout_gravity="center_vertical"/>-->
 
         <LinearLayout
             android:layout_width="match_parent"
