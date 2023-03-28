@@ -261,12 +261,6 @@ class SavingPerformanceActivity : AppCompatActivity() {
                 specificDuration = durationRatingArray[i].name.toString()
             }
         }
-//        binding.progressBarShortTerm.progress = percentageShort.toInt()
-//        binding.percentageShortTerm.text = DecimalFormat("###0.00").format(percentageShort) + "%"
-//        binding.progressBarMediumTerm.progress = percentageMedium.toInt()
-//        binding.percentageMediumTerm.text = DecimalFormat("###0.00").format(percentageMedium) + "%"
-//        binding.progressBarLongTerm.progress = percentageLong.toInt()
-//        binding.percentageLongTerm.text =DecimalFormat("###0.00").format(percentageLong) + "%"
     }
 
     private fun setReasonPieChart() {
