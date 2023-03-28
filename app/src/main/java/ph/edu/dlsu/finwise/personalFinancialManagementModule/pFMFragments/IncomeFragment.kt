@@ -195,7 +195,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         }
 
         if (user == "child" && total > 0) {
-            binding.tvSummary.text = "Good Job! You've earned ₱$totalText for this $dateRange! "
+            binding.tvSummary.text = "You've earned ₱$totalText for this $dateRange! "
             binding.tvTips.text = "Go to the \"Financial Activities\" to develop your Financial Literacy using your money"
             loadChildFinancialActivitiesButton()
         } else if (user == "child" && total < 0) {
@@ -203,7 +203,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
             binding.tvTips.text = "Consider selling your stuff or doing some chores to earn money"
             loadEarningChild()
         } else if (user == "parent" && total > 0) {
-            binding.tvSummary.text = "Great! Your child earned ₱$totalText for this $dateRange!"
+            binding.tvSummary.text = "Your child earned ₱$totalText for this $dateRange!"
             binding.tvTips.text = "Go to the \"Financial Activities\" to develop your child's Financial Literacy using their money"
             loadParentFinancialActivitiesButton()
         } else if (user == "parent" && total < 0) {

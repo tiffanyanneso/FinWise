@@ -195,7 +195,6 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
      //   adapter.addFragment(savingsFragment, "Goal Savings")
         binding.viewPagerBarCharts.adapter = adapter
         binding.tabsBarCharts.setupWithViewPager(binding.viewPagerBarCharts)
-
         binding.tabsBarCharts.getTabAt(0)?.text = "Balance"
        // binding.tabsBarCharts.getTabAt(1)?.text = "Goal Savings"
         setupTabIcons2()
