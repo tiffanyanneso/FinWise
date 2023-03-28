@@ -18,7 +18,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityParentSavingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSavingCategoryTipsBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSavingDurationTipsBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSavingTipsBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.performance.SavingPerformanceActivity
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment.ParentSavingFragment

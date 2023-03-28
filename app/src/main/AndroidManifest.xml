@@ -41,7 +41,7 @@
             android:name=".financialActivitiesModule.UpdateGoalActivity"
             android:exported="false" />
         <activity
-            android:name=".GoalSettingPerformanceActivity"
+            android:name=".financialActivitiesModule.performance.GoalSettingPerformanceActivity"
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.GoalSavingDetailsActivity"
@@ -86,13 +86,13 @@
             android:name=".ViewShoppingListItem"
             android:exported="false" />
         <activity
-            android:name=".financialActivitiesModule.SavingPerformanceActivity"
+            android:name=".financialActivitiesModule.performance.SavingPerformanceActivity"
             android:exported="true" />
         <activity
-            android:name=".financialActivitiesModule.BudgetingPerformanceActivity"
+            android:name=".financialActivitiesModule.performance.BudgetingPerformanceActivity"
             android:exported="true" />
         <activity
-            android:name=".financialActivitiesModule.SpendingPerformanceActivity"
+            android:name=".financialActivitiesModule.performance.SpendingPerformanceActivity"
             android:exported="true" />
         <activity
             android:name=".LeaderboardActivity"

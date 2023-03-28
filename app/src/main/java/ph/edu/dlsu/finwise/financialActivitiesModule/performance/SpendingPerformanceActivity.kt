@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.financialActivitiesModule
+package ph.edu.dlsu.finwise.financialActivitiesModule.performance
 
 import android.app.Dialog
 import android.os.Build
@@ -14,7 +14,6 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
 import ph.edu.dlsu.finwise.databinding.ActivitySpendingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.DialogOverspendingReviewBinding
 import ph.edu.dlsu.finwise.databinding.DialogPurchasePlanningReviewBinding

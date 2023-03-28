@@ -1,4 +1,4 @@
-package ph.edu.dlsu.finwise.financialActivitiesModule
+package ph.edu.dlsu.finwise.financialActivitiesModule.performance
 
 import android.app.Dialog
 import android.content.Intent
@@ -15,11 +15,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.GoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.*
 import ph.edu.dlsu.finwise.databinding.ActivitySavingPerformanceBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
@@ -27,7 +28,6 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
-import kotlin.math.roundToInt
 
 class SavingPerformanceActivity : AppCompatActivity() {
 

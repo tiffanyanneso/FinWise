@@ -1,18 +1,17 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.financialActivitiesModule.performance
 
 import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalSettingPerformanceBinding
-import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordDepositBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartIndividualBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartReviewBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
@@ -183,7 +182,8 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
     }
 
     private fun loadBackButton() {
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
+            R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             onBackPressed()
         }

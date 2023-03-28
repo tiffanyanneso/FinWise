@@ -16,10 +16,9 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
-import ph.edu.dlsu.finwise.databinding.DialogBudgetingReviewBinding
 import ph.edu.dlsu.finwise.databinding.DialogSpendingReviewBinding
 import ph.edu.dlsu.finwise.databinding.FragmentFinactSpendingBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.SpendingPerformanceActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.performance.SpendingPerformanceActivity
 import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -28,7 +27,6 @@ import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.sign
 
 class SpendingFragment : Fragment(){
 

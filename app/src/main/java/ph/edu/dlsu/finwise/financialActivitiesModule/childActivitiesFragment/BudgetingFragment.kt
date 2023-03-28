@@ -15,10 +15,8 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactBudgetingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogBudgetingReviewBinding
-import ph.edu.dlsu.finwise.databinding.DialogSavingReviewBinding
 import ph.edu.dlsu.finwise.databinding.FragmentFinactBudgetingBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.BudgetingPerformanceActivity
-import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.performance.BudgetingPerformanceActivity
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.Transactions

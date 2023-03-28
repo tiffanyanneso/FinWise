@@ -10,9 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.github.mikephil.charting.data.PieData
-import com.github.mikephil.charting.data.PieDataSet
-import com.github.mikephil.charting.data.PieEntry
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -24,7 +21,7 @@ import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.*
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
-import ph.edu.dlsu.finwise.financialActivitiesModule.SavingPerformanceActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.performance.SavingPerformanceActivity
 import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
 import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
