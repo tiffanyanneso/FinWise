@@ -18,6 +18,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.GoalRating
 import java.text.DecimalFormat
+import kotlin.concurrent.timer
 import kotlin.math.roundToInt
 
 class GoalSettingPerformanceActivity : AppCompatActivity() {
@@ -35,7 +36,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
     private var SMARTIndividual = "Specific"
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-    data class Rating(var name: String? = null, var score: Int = 0)
+    data class Rating(var name: String? = null, var score: Float = 0.00F)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +60,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
             showIndividualDialog()
         }
     }
-    private fun RatingObject(name: String, score: Int): Rating {
+    private fun RatingObject(name: String, score: Float): Rating {
         val rating = Rating()
 
         rating.name = name
@@ -138,11 +139,11 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
 
             val ratingArray = ArrayList<Rating>()
 
-            ratingArray.add(RatingObject("Specific", (nSpecific/nRatings).roundToInt()))
-            ratingArray.add(RatingObject("Measurable", (nMeasurable/nRatings).roundToInt()))
-            ratingArray.add(RatingObject("Achievable", (nAchievable/nRatings).roundToInt()))
-            ratingArray.add(RatingObject("Relevant", (nRelevant/nRatings).roundToInt()))
-            ratingArray.add(RatingObject("Time Bound", (nTimeBound/nRatings).roundToInt()))
+            ratingArray.add(RatingObject("Specific", (nSpecific/nRatings.toFloat())))
+            ratingArray.add(RatingObject("Measurable", (nMeasurable/nRatings.toFloat())))
+            ratingArray.add(RatingObject("Achievable", (nAchievable/nRatings.toFloat())))
+            ratingArray.add(RatingObject("Relevant", (nRelevant/nRatings.toFloat())))
+            ratingArray.add(RatingObject("Time Bound", (nTimeBound/nRatings.toFloat())))
 
             ratingArray.sortByDescending{it.score}
 
@@ -151,19 +152,19 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
 
                 if (num == 1) {
                     binding.tvTopPerformingSMART.text = ratingArray[i].name
-                    binding.tvTopPerformingRating.text = ratingArray[i].score.toString() + "/5"
+                    binding.tvTopPerformingRating.text = DecimalFormat("#.0").format(ratingArray[i].score) + "/5.0"
                 } else if (num == 2) {
                     binding.tvSMART2nd.text = ratingArray[i].name
-                    binding.tvConcept2Rating.text = ratingArray[i].score.toString() + "/5"
+                    binding.tvConcept2Rating.text = DecimalFormat("#.0").format(ratingArray[i].score) + "/5.0"
                 } else if (num == 3) {
                     binding.tvSMART3rd.text = ratingArray[i].name
-                    binding.tvSMART3Rating.text = ratingArray[i].score.toString() + "/5"
+                    binding.tvSMART3Rating.text = DecimalFormat("#.0").format(ratingArray[i].score) + "/5.0"
                 } else if (num == 4) {
                     binding.tvSMART4th.text = ratingArray[i].name
-                    binding.tvSMART4Rating.text = ratingArray[i].score.toString() + "/5"
+                    binding.tvSMART4Rating.text = DecimalFormat("#.0").format(ratingArray[i].score) + "/5.0"
                 } else if (num == 5) {
                     binding.tvSMART5th.text = ratingArray[i].name
-                    binding.tvSMART5Rating.text = ratingArray[i].score.toString() + "/5"
+                    binding.tvSMART5Rating.text = DecimalFormat("#.0").format(ratingArray[i].score) + "/5.0"
                     SMARTIndividual =  ratingArray[i].name.toString()
                 }
             }
