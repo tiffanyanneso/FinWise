@@ -108,7 +108,8 @@ class BudgetingFragment : Fragment() {
     private fun getOverallBudgeting() {
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             for (activity in results) {
-                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).get().addOnSuccessListener { budgetItems ->
+                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).whereEqualTo("status", "Active").get().addOnSuccessListener { budgetItems ->
+                    println("print number of budget items" + budgetItems.size())
                     for (budgetItem in budgetItems) {
                         budgetItemCount++
                         var budgetItemObject = budgetItem.toObject<BudgetItem>()
