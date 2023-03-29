@@ -74,7 +74,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         binding.btnConfirm.setOnClickListener {
             if (validateAndSetUserInput()) {
                 setBundle()
-                Toast.makeText(this, ""+paymentType, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, ""+paymentType, Toast.LENGTH_SHORT).show()
                 val goToMayaConfirmPayment = Intent(applicationContext, ParentConfirmPayment::class.java)
                 goToMayaConfirmPayment.putExtras(bundle)
                 goToMayaConfirmPayment.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
