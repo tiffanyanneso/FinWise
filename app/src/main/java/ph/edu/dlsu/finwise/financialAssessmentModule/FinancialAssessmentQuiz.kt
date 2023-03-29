@@ -146,6 +146,7 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
             val nextQuestion = Intent(this, FinancialAssessmentQuiz::class.java)
             nextQuestion.putExtras(sendBundle)
             this.startActivity(nextQuestion)
+            finish()
         }
         else{
             val assessmentCompleted = Intent(this, FinancialAssessmentCompleted::class.java)
