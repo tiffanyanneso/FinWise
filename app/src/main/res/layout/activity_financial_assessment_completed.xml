@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:text="Finish"
             android:visibility="gone"
-            android:layout_marginTop="120dp"/>
+            android:layout_marginTop="20dp"/>
     </LinearLayout>
 
 

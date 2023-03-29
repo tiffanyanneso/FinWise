@@ -5,8 +5,7 @@
     android:layout_height="70dp"
     card_view:cardCornerRadius="10dp"
     android:foreground="@drawable/border"
-    android:layout_marginBottom="10dp"
-    android:backgroundTint="@color/very_light_green">
+    android:layout_marginBottom="10dp">
 
     <TextView
         android:id="@+id/tv_shopping_list_item_id"
