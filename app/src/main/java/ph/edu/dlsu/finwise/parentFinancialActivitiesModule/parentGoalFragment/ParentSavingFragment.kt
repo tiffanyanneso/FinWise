@@ -125,7 +125,6 @@ class ParentSavingFragment : Fragment() {
             startActivity(goToPerformance)
         }
 
-        checkAge()
         getGoals()
         getSavingActivities()
         computeOverallScore()
@@ -396,27 +395,6 @@ class ParentSavingFragment : Fragment() {
             dialog.dismiss()
         }
         dialog.show()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun checkAge() {
-        firestore.collection("Users").document(childID).get().addOnSuccessListener {
-            var child = it.toObject<Users>()
-            //compute age
-            val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
-            val from = LocalDate.now()
-            val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
-            val to = LocalDate.parse(date.toString(), dateFormatter)
-            var difference = Period.between(to, from)
-
-            var age = difference.years
-            if (age == 9)
-                binding.btnNewGoal.visibility = View.GONE
-            else {
-                binding.btnNewGoal.visibility = View.VISIBLE
-                setOwnGoals = true
-            }
-        }
     }
 
     private fun showGoalDialog() {
