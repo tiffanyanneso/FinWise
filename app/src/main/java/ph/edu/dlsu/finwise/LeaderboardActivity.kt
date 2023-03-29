@@ -58,8 +58,8 @@ class LeaderboardActivity : AppCompatActivity() {
             firestore.collection("AssessmentAttempts").whereEqualTo("childID", friendUserID).get().addOnSuccessListener { results ->
                 for (assessmentAttempt in results) {
                     var assessmentAttemptObject = assessmentAttempt.toObject<FinancialAssessmentAttempts>()
-                    totalCorrect += assessmentAttemptObject?.nAnsweredCorrectly!!
-                    totalQuestions += assessmentAttemptObject?.nQuestions!!
+                    totalCorrect += assessmentAttemptObject.nAnsweredCorrectly!!
+                    totalQuestions += assessmentAttemptObject.nQuestions!!
                 }
             }.continueWith {
                 friendRankingArrayList.add(Ranking(0, friendUserID, totalCorrect.toFloat().div(totalQuestions.toFloat())))

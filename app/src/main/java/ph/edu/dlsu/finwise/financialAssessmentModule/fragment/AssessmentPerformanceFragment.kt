@@ -94,8 +94,13 @@ class AssessmentPerformanceFragment : Fragment() {
 
     private fun computeForPercentages() {
         val maxScore = 100
+// check SAVINGSCORES LANG kung may over 100%, saving percentage sunm, savinscore size, and saving percentage kung tama calculation
+        //backup lang, make percentage funciton above to cap out at 100%
         val savingPercentageSum = savingScores.sumOf { it ?: 0.0 }
         savingPercentage = ((savingPercentageSum / (maxScore * savingScores.size)) * 100).toFloat()
+        Log.d("fdsfsdsdss", "savingScores: "+ savingScores)
+        Log.d("fdsfsdsdss", "savingPercentageSum: "+ savingPercentageSum)
+        Log.d("fdsfsdsdss", "savingPercentage: "+ savingPercentage)
         val spendingPercentageSum = spendingScores.sumOf { it ?: 0.0 }
         spendingPercentage = ((spendingPercentageSum / (maxScore * spendingScores.size)) * 100).toFloat()
         val budgetingPercentageSum = budgetingScores.sumOf { it ?: 0.0 }
@@ -132,7 +137,8 @@ class AssessmentPerformanceFragment : Fragment() {
         } else {
             0.0
         }
-        return percentage
+
+        return percentage.coerceAtMost(100.0)
     }
 
     private fun setRanking() {

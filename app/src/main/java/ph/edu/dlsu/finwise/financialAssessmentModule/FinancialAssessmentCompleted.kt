@@ -88,18 +88,25 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         val document = getAssessmentQuestions(answerHistory)
         val assessmentQuestion = document?.toObject<FinancialAssessmentQuestions>()
         var updatedNAnsweredCorrectly = assessmentQuestion?.nAnsweredCorrectly
+        //ito yung kung kahit sinong nakasagot ng question na to kasi kinukuha sa assesmentquestion
+        // gawa bagong var
+        var isAnsweredCorrectly = false
         if (answerHistory.answeredCorrectly) {
             answeredCorrectly++
             updatedNAnsweredCorrectly = updatedNAnsweredCorrectly!! + 1
+            isAnsweredCorrectly = true
         }
 
         if (updatedNAnsweredCorrectly != null) {
-            updateAssessmentQuestionsDB(answerHistory, updatedNAnsweredCorrectly)
+            updateAssessmentQuestionsDB(answerHistory, updatedNAnsweredCorrectly, isAnsweredCorrectly)
         }
     }
 
     private suspend fun updateAssessmentQuestionsDB(
-        answerHistory: FinancialAssessmentQuiz.AnswerHistory, updatedNAnsweredCorrectly: Int?) {
+        answerHistory: FinancialAssessmentQuiz.AnswerHistory,
+        updatedNAnsweredCorrectly: Int?,
+        isAnsweredCorrectly: Boolean
+    ) {
         val data = hashMapOf(
             "nAssessments" to FieldValue.increment(1),
             "nAnsweredCorrectly" to updatedNAnsweredCorrectly
@@ -108,45 +115,49 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
             .document(answerHistory.questionID)
         assessmentQuestion.update(data as Map<String, Any>).await()
 
-        Log.d("sdfsdfdsfdd", "updateAssessmentQuestionsDB: "+updatedNAnsweredCorrectly+"  "
-                +answerHistory.questionID)
-
-        updateAssessmentAttemptsFields(assessmentQuestion, updatedNAnsweredCorrectly)
+        updateAssessmentAttemptsFields(assessmentQuestion, isAnsweredCorrectly)
     }
 
     private suspend fun updateAssessmentAttemptsFields(
         assessmentQuestion: DocumentReference,
-        updatedNAnsweredCorrectly: Int?
+        isAnsweredCorrectly: Boolean
     ) {
         assessmentQuestion
         val assessmentQuestionObject = assessmentQuestion.get().await().toObject<FinancialAssessmentQuestions>()
         val assessmentID = assessmentQuestionObject?.assessmentID
 
         if (assessmentID != null) {
-            val data = hashMapOf(
-                "nAnsweredCorrectly" to updatedNAnsweredCorrectly,
-                "nQuestions" to FieldValue.increment(1)
-            )
-            val assessmentAttemptDocRef = firestore.collection("AssessmentAttempts")
-                .document(assessmentID)
-            val assessmentAttemptDocument = assessmentAttemptDocRef.get().await()
-            if (assessmentAttemptDocument.exists()) {
-                assessmentAttemptDocRef.update(data as Map<String, Any>).await()
+            val data = if (isAnsweredCorrectly) {
+                hashMapOf(
+                    "nAnsweredCorrectly" to FieldValue.increment(1),
+                    "nQuestions" to FieldValue.increment(1)
+                )
             } else {
-                createAssessmentAttempt(assessmentID, updatedNAnsweredCorrectly)
+                hashMapOf(
+                    "nQuestions" to FieldValue.increment(1)
+                )
+            }
+
+            val assessmentAttemptDocRef = firestore.collection("AssessmentAttempts")
+                .whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID",childID)
+            val assessmentAttemptDocument = assessmentAttemptDocRef.get().await()
+            if (!assessmentAttemptDocument.isEmpty) {
+                Log.d("cccxxxxxxzz", "merong laman: "+data)
+                assessmentAttemptDocument.documents[0].reference.update(data as Map<String, Any>).await()
+            } else {
+                Log.d("cccxxxxxxzz", "empty: "+data)
+                createAssessmentAttempt(assessmentID)
             }
         } else Toast.makeText(this, "null assessmentID", Toast.LENGTH_SHORT).show()
     }
 
     private suspend fun createAssessmentAttempt(
-        assessmentID: String,
-        updatedNAnsweredCorrectly: Int?
-    ) {
+        assessmentID: String) {
         val assessmentAttempt = hashMapOf(
             "childID" to childID,
             "assessmentID" to assessmentID,
-            "nAnsweredCorrectly" to updatedNAnsweredCorrectly,
-            "nQuestions" to FieldValue.increment(1),
+            "nAnsweredCorrectly" to 1,
+            "nQuestions" to 1,
             "dateTaken" to Timestamp.now()
         )
         firestore.collection("AssessmentAttempts").add(assessmentAttempt).await()
