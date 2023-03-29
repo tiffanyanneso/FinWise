@@ -125,8 +125,8 @@ class FinancialAssessmentActivity : AppCompatActivity() {
                 nQuestionsInAssessment = assessment?.nQuestionsInAssessment!!
                 description = assessment.description.toString()
                 if (description == "")
-                    description = "\"Hey there! Before we start our journey towards financial literacy, " +
-                            "let's gauge your current knowledge. Please take a few moments " +
+                    description = "\"Hey there! Before we start our journey towards financial literacy," +
+                            "let's gauge your current knowledge. Please take a few moments" +
                             "to complete this preliminary quiz. Good luck!"
 
                 binding.tvName.text = assessmentName

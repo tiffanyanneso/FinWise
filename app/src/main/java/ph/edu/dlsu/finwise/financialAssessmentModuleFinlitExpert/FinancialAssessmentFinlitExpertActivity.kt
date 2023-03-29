@@ -8421,7 +8421,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             choice = hashMapOf(
                 "questionID" to questionID,
                 "choice" to "Allows you to buy everything immediately",
-                "isCorrect" to true
+                "isCorrect" to false
             )
             firestore.collection("AssessmentChoices").add(choice)
 
