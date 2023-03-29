@@ -14370,7 +14370,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             choice = hashMapOf(
                 "questionID" to questionID,
                 "choice" to "Compare prices at different stores",
-                "isCorrect" to false
+                "isCorrect" to true
             )
             firestore.collection("AssessmentChoices").add(choice)
 
@@ -14384,7 +14384,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             choice = hashMapOf(
                 "questionID" to questionID,
                 "choice" to "Borrow money from a friend so I can buy more school supplies",
-                "isCorrect" to true
+                "isCorrect" to false
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
@@ -14410,7 +14410,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             choice = hashMapOf(
                 "questionID" to questionID,
                 "choice" to "Compare prices at different stores",
-                "isCorrect" to false
+                "isCorrect" to true
             )
             firestore.collection("AssessmentChoices").add(choice)
 
@@ -14424,7 +14424,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             choice = hashMapOf(
                 "questionID" to questionID,
                 "choice" to "Borrow money from a friend so I can buy more school supplies",
-                "isCorrect" to true
+                "isCorrect" to false
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
