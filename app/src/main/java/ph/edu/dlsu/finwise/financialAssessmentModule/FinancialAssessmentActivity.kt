@@ -117,6 +117,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
                 binding.textViewProgress.visibility = View.GONE
                 binding.tvBreakdown.visibility = View.GONE
                 binding.progressBar.visibility = View.GONE
+                binding.bottomNav.visibility = View.GONE
             } else {
                 val assessment = assessmentsDocumentSnapshot.documents[0]
                     .toObject<FinancialAssessmentDetails>()
