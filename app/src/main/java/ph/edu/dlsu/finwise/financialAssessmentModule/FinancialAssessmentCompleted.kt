@@ -5,7 +5,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -122,7 +122,6 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         assessmentQuestion: DocumentReference,
         isAnsweredCorrectly: Boolean
     ) {
-        assessmentQuestion
         val assessmentQuestionObject = assessmentQuestion.get().await().toObject<FinancialAssessmentQuestions>()
         val assessmentID = assessmentQuestionObject?.assessmentID
 
@@ -142,21 +141,25 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
                 .whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID",childID)
             val assessmentAttemptDocument = assessmentAttemptDocRef.get().await()
             if (!assessmentAttemptDocument.isEmpty) {
-                Log.d("cccxxxxxxzz", "merong laman: "+data)
                 assessmentAttemptDocument.documents[0].reference.update(data as Map<String, Any>).await()
             } else {
-                Log.d("cccxxxxxxzz", "empty: "+data)
-                createAssessmentAttempt(assessmentID)
+                createAssessmentAttempt(assessmentID, isAnsweredCorrectly)
             }
         } else Toast.makeText(this, "null assessmentID", Toast.LENGTH_SHORT).show()
     }
 
     private suspend fun createAssessmentAttempt(
-        assessmentID: String) {
+        assessmentID: String,
+        isAnsweredCorrectly: Boolean
+    ) {
+        var nAnsweredCorrectly = 0
+        if (isAnsweredCorrectly)
+            nAnsweredCorrectly = 1
+
         val assessmentAttempt = hashMapOf(
             "childID" to childID,
             "assessmentID" to assessmentID,
-            "nAnsweredCorrectly" to 1,
+            "nAnsweredCorrectly" to nAnsweredCorrectly,
             "nQuestions" to 1,
             "dateTaken" to Timestamp.now()
         )
@@ -287,7 +290,9 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
 
 
     private fun initializeFinishButtonActivity() {
-        binding.btnFinish.setOnClickListener {
+        val btnFinish = binding.btnFinish
+        btnFinish.visibility = View.VISIBLE
+        btnFinish.setOnClickListener {
             val assessmentTop  = Intent (this, FinancialActivity::class.java)
             startActivity(assessmentTop)
         }
