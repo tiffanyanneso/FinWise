@@ -94,13 +94,8 @@ class AssessmentPerformanceFragment : Fragment() {
 
     private fun computeForPercentages() {
         val maxScore = 100
-// check SAVINGSCORES LANG kung may over 100%, saving percentage sunm, savinscore size, and saving percentage kung tama calculation
-        //backup lang, make percentage funciton above to cap out at 100%
         val savingPercentageSum = savingScores.sumOf { it ?: 0.0 }
         savingPercentage = ((savingPercentageSum / (maxScore * savingScores.size)) * 100).toFloat()
-        Log.d("fdsfsdsdss", "savingScores: "+ savingScores)
-        Log.d("fdsfsdsdss", "savingPercentageSum: "+ savingPercentageSum)
-        Log.d("fdsfsdsdss", "savingPercentage: "+ savingPercentage)
         val spendingPercentageSum = spendingScores.sumOf { it ?: 0.0 }
         spendingPercentage = ((spendingPercentageSum / (maxScore * spendingScores.size)) * 100).toFloat()
         val budgetingPercentageSum = budgetingScores.sumOf { it ?: 0.0 }
@@ -260,6 +255,7 @@ class AssessmentPerformanceFragment : Fragment() {
     }
 
     private fun setTextPerformanceChild(percentage: Double) {
+        Log.d("xcvxcvxcxz", "setTextPerformanceChild: "+percentage)
         if (percentage >= 90) {
             binding.ivScore.setImageResource(R.drawable.excellent)
             binding.textViewPerformanceText.text = "Excellent"
@@ -288,28 +284,28 @@ class AssessmentPerformanceFragment : Fragment() {
             binding.tvPerformanceText.text =
                 "Great! You have an average understanding of financial concepts and are making some smart choices with your money, but there is room for improvement!"
             //showSeeMoreButton()
-        } else if (percentage < 56 && percentage >= 46) {
+        } else if (percentage < 66 && percentage >= 56) {
             binding.ivScore.setImageResource(R.drawable.average)
             binding.textViewPerformanceText.text = "Average"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.yellow))
             binding.tvPerformanceText.text =
                 "Nice work! You have some basic knowledge of financial concepts, but there are many areas where you could improve!"
             //showReviewButton()
-        } else if (percentage < 46 && percentage >= 36) {
+        } else if (percentage < 56 && percentage >= 46) {
             binding.ivScore.setImageResource(R.drawable.nearly_there)
             binding.textViewPerformanceText.text = "Nearly There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.nearly_there_yellow))
             binding.tvPerformanceText.text =
                 "Uh oh! You have limited knowledge of financial concepts and there are many areas where you need to improve!"
             //showReviewButton()
-        }  else if (percentage < 36 && percentage >= 26) {
+        }  else if (percentage < 46 && percentage >= 36) {
             binding.ivScore.setImageResource(R.drawable.almost_there)
             binding.textViewPerformanceText.text = "Almost There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.almost_there_yellow))
             binding.tvPerformanceText.text =
                 "Uh oh! You have limited knowledge of financial concepts and there are many areas where you need to improve!"
             //showReviewButton()
-        } else if (percentage < 26 && percentage >= 16) {
+        } else if (percentage < 36 && percentage >= 26) {
             binding.ivScore.setImageResource(R.drawable.getting_there)
             binding.textViewPerformanceText.text = "Getting There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.getting_there_orange))
@@ -318,8 +314,7 @@ class AssessmentPerformanceFragment : Fragment() {
             //showReviewButton()
         } else if (percentage < 26 && percentage >= 16) {
             binding.ivScore.setImageResource(R.drawable.not_quite_there_yet)
-            binding.textViewPerformanceText.text = "Not Quite\n" +
-                    "There"
+            binding.textViewPerformanceText.text = "Not Quite\n There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.not_quite_there_red))
             binding.tvPerformanceText.text =
                 "Uh oh! You have limited knowledge of financial concepts and there are many areas where you need to improve!"

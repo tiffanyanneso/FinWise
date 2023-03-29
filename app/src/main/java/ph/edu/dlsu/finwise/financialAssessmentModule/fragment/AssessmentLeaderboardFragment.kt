@@ -212,12 +212,11 @@ class AssessmentLeaderboardFragment : Fragment() {
     }
 
     private fun setRankOfChildUser(rankedFriends: List<FriendRanking>) {
-        lateinit var message: String
-        if (rankedFriends.size == 1)
-            message = ""
+        val message = if (rankedFriends.size == 1)
+            "Add friends to see where you rank among them"
         else {
             val result = rankedFriends.find { it.childUsers.id == childID }
-            message = "You are rank ${result?.rank}!"
+            "You are rank ${result?.rank}!"
         }
         binding.tvRank.text = message
     }
