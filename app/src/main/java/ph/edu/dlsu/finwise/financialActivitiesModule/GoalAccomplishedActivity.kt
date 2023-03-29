@@ -207,29 +207,25 @@ class GoalAccomplishedActivity : AppCompatActivity() {
             dialog.window!!.setLayout(900, 800)
             dialog.show()
 
-            initializeProceedButton(dialogBinding)
-            initializeNoButton(dialogBinding)
-        }
-    }
-
-    private fun initializeNoButton(dialogBinding: DialogProceedNextActivityBinding) {
-        dialogBinding.btnNo.setOnClickListener {
-            //withdrawal transaction from goal to wallet
-            adjustWalletBalances()
-            goToFinancialAssessmentActivity()
-        }
-    }
-
-    private fun initializeProceedButton(dialogBinding: DialogProceedNextActivityBinding) {
-        dialogBinding.btnProceed.setOnClickListener {
-            firestore.collection("FinancialActivities").document(budgetingActivityID).update("status", "In Progress")
-            goToFinancialAssessmentActivity()
+            dialogBinding.btnProceed.setOnClickListener {
+                firestore.collection("FinancialActivities").document(budgetingActivityID).update("status", "In Progress").addOnSuccessListener {
+                    dialog.dismiss()
+                    goToFinancialAssessmentActivity()
+                }
 //            val budgetActivity = Intent(this, BudgetActivity::class.java)
 //            budgetActivity.putExtras(sendBundle)
 //            startActivity(budgetActivity)
-        }
+            }
 
+            dialogBinding.btnNo.setOnClickListener {
+                //withdrawal transaction from goal to wallet
+                adjustWalletBalances()
+                goToFinancialAssessmentActivity()
+                dialog.dismiss()
+            }
+        }
     }
+
 
     private fun getBundles() {
         val bundle: Bundle = intent.extras!!

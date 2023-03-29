@@ -574,6 +574,20 @@ class BudgetActivity : AppCompatActivity() {
 
                         if (difference.days >= 7)
                             buildAssessmentDialog(assessmentType, assessmentCategory)
+                        else {
+                            if (assessmentType == "Post-Activity" && assessmentCategory == "Budgeting") {
+                                var refresh = Intent(this, BudgetActivity::class.java)
+                                var sendBundle = Bundle()
+                                sendBundle.putString("savingActivityID", savingActivityID)
+                                sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                                sendBundle.putString("spendingActivityID", spendingActivityID)
+                                refresh.putExtras(sendBundle)
+                                startActivity(refresh)
+                            } else if (assessmentType == "Post-Activity" && assessmentCategory == "Spending") {
+                                var finact = Intent(this, FinancialActivity::class.java)
+                                startActivity(finact)
+                            }
+                        }
                     } else
                         buildAssessmentDialog(assessmentType, assessmentCategory)
                 }

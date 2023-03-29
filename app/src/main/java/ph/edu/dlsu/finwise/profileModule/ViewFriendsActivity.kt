@@ -31,6 +31,7 @@ class ViewFriendsActivity : AppCompatActivity() {
         binding = ActivityViewFriendsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        friendsUserIDArrayList.clear()
         getFriends()
 
         binding.btnRequests.setOnClickListener {
