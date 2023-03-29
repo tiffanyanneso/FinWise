@@ -155,7 +155,7 @@ class childDashboardActivity : AppCompatActivity(){
             nBudgetingCompleted = results.size()
             if (results.size()!=0) {
                 for (activity in results) {
-                    firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).get().addOnSuccessListener { budgetItems ->
+                    firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).whereEqualTo("status", "Active").get().addOnSuccessListener { budgetItems ->
                         for (budgetItem in budgetItems) {
                             budgetItemCount++
                             var budgetItemObject = budgetItem.toObject<BudgetItem>()
@@ -254,17 +254,15 @@ class childDashboardActivity : AppCompatActivity(){
             }
             else {
                 spendingPercentage = (1-overspendingPercentage)*100
-                println("print goal  setting " + goalSettingPercentage)
-                println("print savings " +  savingPercentage)
-                println("print budgeting " +  budgetingPercentage)
-                println("print spending " + spendingPercentage)
+//                println("print goal  setting " + goalSettingPercentage)
+//                println("print savings " +  savingPercentage)
+//                println("print budgeting " +  budgetingPercentage)
+//                println("print spending " + spendingPercentage)
                 financialActivitiesPerformance = ((savingPercentage + budgetingPercentage + spendingPercentage) / 3)
                 binding.tvFinactPercent.text = DecimalFormat("##0.00").format(financialActivitiesPerformance) + "%"
                 println("print finact performance " + financialActivitiesPerformance)
                 getFinancialAssessmentScore()
             }
-
-            println("print spending performance" + spendingPercentage)
         }
     }
 
@@ -286,10 +284,10 @@ class childDashboardActivity : AppCompatActivity(){
                     }.continueWith {
                         spendingPercentage = ((1-overspendingPercentage)*100 + ((nPlanned/nTotalPurchased)*100)) /2
 
-//                        println("print goal setting " + goalSettingPercentage)
-//                        println("print saving " + savingPercentage)
-//                        println("print budgeting " + budgetingPercentage)
-//                        println("print spending " + spendingPercentage)
+                        println("print goal setting " + goalSettingPercentage)
+                        println("print saving " + savingPercentage)
+                        println("print budgeting " + budgetingPercentage)
+                        println("print spending " + spendingPercentage)
                         if (age == 9 || age == 12)
                             financialActivitiesPerformance = ((savingPercentage + budgetingPercentage + spendingPercentage) / 3)
                         else if (age == 10 || age == 11)
@@ -319,6 +317,8 @@ class childDashboardActivity : AppCompatActivity(){
                         nQuestions += assessmentAttempt.nQuestions!!
                     }
                 }
+                println("print correct " + nCorrect)
+                println("print nquestions"  + nQuestions)
                 financialAssessmentPerformance = (nCorrect.toFloat() / nQuestions.toFloat()) * 100
                 binding.progressBarFinancialAssessments.progress = financialAssessmentPerformance.toInt()
                 binding.tvFinancialAssessmentPercentage.text = DecimalFormat("##0.00").format(financialAssessmentPerformance) + "%"

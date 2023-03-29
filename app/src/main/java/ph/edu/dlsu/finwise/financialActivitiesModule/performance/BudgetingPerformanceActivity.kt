@@ -104,29 +104,29 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
 
     private fun getBudgetAccuracy(budgetingActivityID: String, budgetItemID: String, budgetItemObject: BudgetItem) {
         firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
-                firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", it.toObject<FinancialActivities>()!!.financialGoalID!!).whereEqualTo("financialActivityName", "Spending").get().addOnSuccessListener { spending ->
-                        val spendingActivity = spending.documents[0].toObject<FinancialActivities>()
-                        if (spendingActivity?.status == "Completed") {
-                            //budget accuracy
-                            purchasedBudgetItemCount++
-                            firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).get().addOnSuccessListener { transactions ->
-                                    var spent = 0.00F
-                                    for (transaction in transactions)
-                                        spent += transaction.toObject<Transactions>()!!.amount!!
-                                    println("print budget accuracy " + (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100))
-                                    totalBudgetAccuracy += (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100)
-                                }.continueWith {
-                                setBudgetAccuracy()
-                                setParentalInvolvement()
-                                setOverall()
-                            }
-                        } else {
-                            setBudgetAccuracy()
-                            setParentalInvolvement()
-                            setOverall()
-                        }
+            firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", it.toObject<FinancialActivities>()!!.financialGoalID!!).whereEqualTo("financialActivityName", "Spending").get().addOnSuccessListener { spending ->
+                val spendingActivity = spending.documents[0].toObject<FinancialActivities>()
+                if (spendingActivity?.status == "Completed") {
+                    //budget accuracy
+                    purchasedBudgetItemCount++
+                    firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).get().addOnSuccessListener { transactions ->
+                        var spent = 0.00F
+                        for (transaction in transactions)
+                            spent += transaction.toObject<Transactions>()!!.amount!!
+                        println("print budget accuracy " + (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100))
+                        totalBudgetAccuracy += (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100)
+                    }.continueWith {
+                        setBudgetAccuracy()
+                        setParentalInvolvement()
+                        setOverall()
                     }
+                } else {
+                    setBudgetAccuracy()
+                    setParentalInvolvement()
+                    setOverall()
+                }
             }
+        }
     }
 
     private fun setParentalInvolvement() {
@@ -258,6 +258,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
             binding.imgFace.setImageResource(R.drawable.good)
             binding.textStatus.text = "Good"
             binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
+            binding.tvPerformanceText.text = "You are performing well. Keep making those budgets!"
         } else if (overall < 66 && overall >= 56) {
             binding.imgFace.setImageResource(R.drawable.average)
             binding.textStatus.text = "Average"

@@ -512,14 +512,6 @@ class BudgetActivity : AppCompatActivity() {
                 dialog.dismiss()
                 firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "In Progress")
                 goToFinancialAssessmentActivity("Post-Activity", "Budgeting")
-                var refresh = Intent(this, BudgetActivity::class.java)
-                var sendBundle = Bundle()
-                sendBundle.putString("savingActivityID", savingActivityID)
-                sendBundle.putString("budgetingActivityID", budgetingActivityID)
-                sendBundle.putString("spendingActivityID", spendingActivityID)
-                refresh.putExtras(sendBundle)
-                startActivity(refresh)
-
             }
         }
 
@@ -584,6 +576,19 @@ class BudgetActivity : AppCompatActivity() {
                             buildAssessmentDialog(assessmentType, assessmentCategory)
                     } else
                         buildAssessmentDialog(assessmentType, assessmentCategory)
+                }
+            } else {
+                if (assessmentType == "Post-Activity" && assessmentCategory == "Budgeting") {
+                    var refresh = Intent(this, BudgetActivity::class.java)
+                    var sendBundle = Bundle()
+                    sendBundle.putString("savingActivityID", savingActivityID)
+                    sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                    sendBundle.putString("spendingActivityID", spendingActivityID)
+                    refresh.putExtras(sendBundle)
+                    startActivity(refresh)
+                } else if (assessmentType == "Post-Activity" && assessmentCategory == "Spending") {
+                    var finact = Intent(this, FinancialActivity::class.java)
+                    startActivity(finact)
                 }
             }
         }
