@@ -146,6 +146,7 @@ class TransactionHistoryIncomeFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getIncomeTransactions() {
+        incomeIDArrayList.clear()
         transactionFilterArrayList.clear()
 
         getChildID()

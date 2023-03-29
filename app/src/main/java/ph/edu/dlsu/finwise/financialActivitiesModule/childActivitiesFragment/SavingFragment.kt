@@ -422,7 +422,7 @@ class SavingFragment : Fragment() {
             var difference = Period.between(to, from)
 
             var age = difference.years
-            if (age == 9)
+            if (age < 12 )
                 binding.btnNewGoal.visibility = View.GONE
             else {
                 binding.btnNewGoal.visibility = View.VISIBLE

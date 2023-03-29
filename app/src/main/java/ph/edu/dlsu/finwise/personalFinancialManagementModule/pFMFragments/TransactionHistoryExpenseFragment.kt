@@ -51,6 +51,7 @@ class TransactionHistoryExpenseFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getExpenseTransactions() {
+        expenseIDArrayList.clear()
         transactionFilterArrayList.clear()
         getChildID()
         firestore.collection("Transactions").whereEqualTo("userID", childID)

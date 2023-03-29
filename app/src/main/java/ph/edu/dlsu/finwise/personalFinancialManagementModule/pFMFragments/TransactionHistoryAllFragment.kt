@@ -145,6 +145,7 @@ class TransactionHistoryAllFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getIncomeTransactions() {
+        transactionIDArrayList.clear()
         transactionFilterArrayList.clear()
         getChildID()
         firestore.collection("Transactions").whereEqualTo("userID", childID)
