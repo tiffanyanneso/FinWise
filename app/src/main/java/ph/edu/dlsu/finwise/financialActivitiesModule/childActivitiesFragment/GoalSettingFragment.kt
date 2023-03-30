@@ -168,8 +168,8 @@ class GoalSettingFragment : Fragment() {
     }
 
     private fun buildAssessmentDialog() {
-        var dialogBinding= DialogTakeAssessmentBinding.inflate(layoutInflater)
-        var dialog= Dialog(requireContext());
+        val dialogBinding= DialogTakeAssessmentBinding.inflate(layoutInflater)
+        val dialog= Dialog(requireContext())
         dialog.setContentView(dialogBinding.root)
         dialog.window!!.setLayout(950, 900)
         dialog.setCancelable(false)
