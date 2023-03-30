@@ -69,11 +69,14 @@ class DisapprovedFragment : Fragment() {
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        goalAdapter = FinactDisapprovedAdapter(requireContext().applicationContext, goalIDArrayList)
-        binding.rvViewGoals.adapter = goalAdapter
-        binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
-            LinearLayoutManager.VERTICAL,
-            false)
-        goalAdapter.notifyDataSetChanged()
+        if (isAdded) {
+            goalAdapter = FinactDisapprovedAdapter(requireActivity(), goalIDArrayList)
+            binding.rvViewGoals.adapter = goalAdapter
+            binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext,
+                LinearLayoutManager.VERTICAL,
+                false)
+            goalAdapter.notifyDataSetChanged()
+        }
+
     }
 }
