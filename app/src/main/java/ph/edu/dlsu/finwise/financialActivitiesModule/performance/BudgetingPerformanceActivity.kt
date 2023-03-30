@@ -114,7 +114,8 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
                         for (transaction in transactions)
                             spent += transaction.toObject<Transactions>()!!.amount!!
                         println("print budget accuracy " + (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100))
-                        totalBudgetAccuracy += (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100)
+                        if (budgetItemObject.amount!! !=0.00F)
+                            totalBudgetAccuracy += (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100)
                     }.continueWith {
                         setBudgetAccuracy()
                         setParentalInvolvement()

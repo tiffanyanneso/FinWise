@@ -125,7 +125,7 @@ class SpendingShoppingListFragment : Fragment() {
         var dialogBinding= DialogNewShoppingListItemBinding.inflate(layoutInflater)
         var dialog= Dialog(requireContext())
         dialog.setContentView(dialogBinding.root)
-        dialog.window!!.setLayout(850, 900)
+        dialog.window!!.setLayout(850, 680)
 
         dialogBinding.btnSave.setOnClickListener {
             var currentUser = FirebaseAuth.getInstance().currentUser!!.uid

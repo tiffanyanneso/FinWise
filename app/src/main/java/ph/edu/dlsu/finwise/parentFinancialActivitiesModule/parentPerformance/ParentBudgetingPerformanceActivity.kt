@@ -86,7 +86,7 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
     private fun getOverallBudgeting() {
         firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             for (activity in results) {
-                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).get().addOnSuccessListener { budgetItems ->
+                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).whereEqualTo("status", "Active").get().addOnSuccessListener { budgetItems ->
                     for (budgetItem in budgetItems) {
                         budgetItemCount++
                         var budgetItemObject = budgetItem.toObject<BudgetItem>()
@@ -119,7 +119,8 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
                         for (transaction in transactions)
                             spent += transaction.toObject<Transactions>()!!.amount!!
                         println("print budget accuracy " +  (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100))
-                        totalBudgetAccuracy += (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100)
+                        if (budgetItemObject.amount!! !=0.00F)
+                            totalBudgetAccuracy += (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100)
                     }.continueWith {
                         setBudgetAccuracy()
                         setParentalInvolvement()

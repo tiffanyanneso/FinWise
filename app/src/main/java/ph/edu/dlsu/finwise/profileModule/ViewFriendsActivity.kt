@@ -60,7 +60,9 @@ class ViewFriendsActivity : AppCompatActivity() {
         firestore.collection("Friends").whereEqualTo("senderID", currentUser).get().addOnSuccessListener { results ->
             for (friend in results) {
                 var request = friend.toObject<Friends>()
-                if (request.status == "Accepted")
+                if (request.status == "Pending")
+                    pendingFriendRequestArrayList.add(request.receiverID.toString())
+                else if (request.status == "Accepted")
                     friendsUserIDArrayList.add(request.receiverID.toString())
             }
         }.continueWith {
@@ -70,7 +72,7 @@ class ViewFriendsActivity : AppCompatActivity() {
                     if (request.status == "Pending")
                         pendingFriendRequestArrayList.add(request.senderID.toString())
                     else if (request.status == "Accepted")
-                        friendsUserIDArrayList.add(request.receiverID.toString())
+                        friendsUserIDArrayList.add(request.senderID.toString())
                 }
                 binding.btnRequests.text = "Requests (${pendingFriendRequestArrayList.size})"
                 viewFriendsAdapter = ViewFriendsAdapter(this, friendsUserIDArrayList)

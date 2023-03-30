@@ -88,13 +88,14 @@ class SpendingActivity : AppCompatActivity() {
         binding.topAppBar.setNavigationOnClickListener {
             val goToBudgetActivity = Intent(applicationContext, BudgetActivity::class.java)
 
-//            var bundle = Bundle()
-//            bundle.putString("financialGoalID", binding.tv)
-//            bundle.putString("budgetItemID", budgetItemID)
-//            bundle.putFloat("remainingBudget", remainingBudget)
+            var bundle = Bundle()
+            bundle.putString("savingActivityID", savingActivityID)
+            bundle.putString("budgetingActivityID", budgetingActivityID)
+            bundle.putString("spendingActivityID", spendingActivityID)
+            bundle.putString("childID", childID)
 
-//            goToBudgetActivity.putExtras(bundle)
-//            goToBudgetActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            goToBudgetActivity.putExtras(bundle)
+            goToBudgetActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(goToBudgetActivity)
         }
     }
