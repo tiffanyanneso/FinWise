@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.MainActivity
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.ParentChildrenAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityParentLandingPageBinding
 import ph.edu.dlsu.finwise.loginRegisterModule.ParentRegisterChildActivity
@@ -32,6 +34,19 @@ class ParentLandingPageActivity : AppCompatActivity() {
         binding.btnAddChild.setOnClickListener {
             val goToChildRegister = Intent(this, ParentRegisterChildActivity::class.java)
             startActivity(goToChildRegister)
+        }
+
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId) {
+                R.id.btn_logout -> {
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent (this, MainActivity::class.java)
+                    startActivity (intent)
+                    finish()
+                    true
+                }
+                else -> false
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityGoalConfirmationBinding
 import ph.edu.dlsu.finwise.databinding.DialogSmartGoalInfoBinding
@@ -56,10 +58,6 @@ class GoalConfirmationActivity : AppCompatActivity() {
         setContentView(binding.root)
         context= this
 
-        // Hides actionbar,
-        // and initializes the navbar
-        supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         var bundle: Bundle = intent.extras!!
         binding.tvGoalName.text = bundle.getString("goalName")
@@ -71,7 +69,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
             binding.tvIsForChild.text = "No"
 
         getCurrentUserType()
-
+        setNavigationBar()
 
         var targetDate = bundle.getSerializable("targetDate")
         var formattedDate = SimpleDateFormat("MM/dd/yyyy").format(targetDate)
@@ -268,5 +266,30 @@ class GoalConfirmationActivity : AppCompatActivity() {
         }
 
         dialog.show()
+    }
+
+    private fun setNavigationBar() {
+
+        var navUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("Users").document(navUser).get().addOnSuccessListener {
+
+            val bottomNavigationViewChild = binding.bottomNav
+            val bottomNavigationViewParent = binding.bottomNavParent
+
+            if (it.toObject<Users>()!!.userType == "Parent") {
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                //sends the ChildID to the parent navbar
+                val bundle = intent.extras!!
+                val childID = bundle.getString("childID").toString()
+                val bundleNavBar = Bundle()
+                bundleNavBar.putString("childID", childID)
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal, bundleNavBar)
+            } else if (it.toObject<Users>()!!.userType == "Child") {
+                bottomNavigationViewChild.visibility = View.VISIBLE
+                bottomNavigationViewParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+            }
+        }
     }
 }
