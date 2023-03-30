@@ -3,10 +3,13 @@ package ph.edu.dlsu.finwise.financialAssessmentModule
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
@@ -24,9 +27,14 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentCompletedBinding
 import ph.edu.dlsu.finwise.databinding.DialogBadgeBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
+import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.*
+import java.util.*
+import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
 
 class FinancialAssessmentCompleted : AppCompatActivity() {
 
@@ -88,8 +96,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         val document = getAssessmentQuestions(answerHistory)
         val assessmentQuestion = document?.toObject<FinancialAssessmentQuestions>()
         var updatedNAnsweredCorrectly = assessmentQuestion?.nAnsweredCorrectly
-        //ito yung kung kahit sinong nakasagot ng question na to kasi kinukuha sa assesmentquestion
-        // gawa bagong var
+
         var isAnsweredCorrectly = false
         if (answerHistory.answeredCorrectly) {
             answeredCorrectly++
@@ -102,6 +109,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun updateAssessmentQuestionsDB(
         answerHistory: FinancialAssessmentQuiz.AnswerHistory,
         updatedNAnsweredCorrectly: Int?,
@@ -118,6 +126,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         updateAssessmentAttemptsFields(assessmentQuestion, isAnsweredCorrectly)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun updateAssessmentAttemptsFields(
         assessmentQuestion: DocumentReference,
         isAnsweredCorrectly: Boolean
@@ -141,11 +150,29 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
                 .whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID",childID)
             val assessmentAttemptDocument = assessmentAttemptDocRef.get().await()
             if (!assessmentAttemptDocument.isEmpty) {
-                assessmentAttemptDocument.documents[0].reference.update(data as Map<String, Any>).await()
+                val isSameDay = isSameDayAssessment(assessmentAttemptDocument)
+                if (isSameDay)
+                    // There is an assessment Attempt already
+                    assessmentAttemptDocument.documents[0].reference.update(data as Map<String, Any>).await()
             } else {
+                // No Assessment Attempt yet
                 createAssessmentAttempt(assessmentID, isAnsweredCorrectly)
             }
         } else Toast.makeText(this, "null assessmentID", Toast.LENGTH_SHORT).show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun isSameDayAssessment(assessmentAttemptDocument: QuerySnapshot): Boolean {
+        val assessmentAttemptObject = assessmentAttemptDocument.documents[0]
+            .toObject<FinancialAssessmentAttempts>()
+        val assessmentAttemptDate = assessmentAttemptObject?.dateTaken
+        val localDateTime = assessmentAttemptDate?.toDate()?.toInstant()
+            ?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
+        val now = LocalDateTime.now()
+
+        val diff = Duration.between(localDateTime, now)
+
+        return localDateTime?.toLocalDate() == now.toLocalDate() && diff.seconds < 60
     }
 
     private suspend fun createAssessmentAttempt(

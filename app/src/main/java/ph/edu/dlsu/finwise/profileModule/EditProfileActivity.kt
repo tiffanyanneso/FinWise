@@ -87,8 +87,8 @@ class EditProfileActivity : AppCompatActivity() {
         val firstName = binding.etFirstName.text.toString()
         val lastName = binding.etLastName.text.toString()
         val birthday = binding.etBirthday.toString()
-        //val currentUser:String = FirebaseAuth.getInstance().currentUser!!.uid
-        val currentUser:String = "JoCGIUSVMWTQ2IB7Rf41ropAv3S2"
+        val currentUser:String = FirebaseAuth.getInstance().currentUser!!.uid
+        //val currentUser:String = "JoCGIUSVMWTQ2IB7Rf41ropAv3S2"
 
         val child = mapOf<String, String>(
             "firstName" to firstName,

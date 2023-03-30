@@ -88,11 +88,11 @@ class FinancialAssessmentActivity : AppCompatActivity() {
         // Makes firestore functions async --> Firestore functions will finish first
         // before going to next line (must implement suspend in function to use .async())
         CoroutineScope(Dispatchers.Main).launch {
+            getChildAge()
             val assessmentsDocumentSnapshot: QuerySnapshot? = if (assessmentType == "Preliminary")
                 getPreliminaryAssessmentDocuments()
             else getAssessmentDocument()
 
-            getChildAge()
             loadTextViewsBinding(assessmentsDocumentSnapshot, assessmentType)
             getAssessmentQuestions(assessmentsDocumentSnapshot)
             Log.d("questionsccxcxc", "loadAssessments: "+questionIDArrayList)
