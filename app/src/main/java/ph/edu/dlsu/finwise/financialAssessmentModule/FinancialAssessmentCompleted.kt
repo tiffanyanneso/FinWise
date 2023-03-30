@@ -12,10 +12,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -148,12 +145,15 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
 
             val assessmentAttemptDocRef = firestore.collection("AssessmentAttempts")
                 .whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID",childID)
+                .orderBy("dateTaken", Query.Direction.DESCENDING)
+                .limit(1)
             val assessmentAttemptDocument = assessmentAttemptDocRef.get().await()
             if (!assessmentAttemptDocument.isEmpty) {
                 val isSameDay = isSameDayAssessment(assessmentAttemptDocument)
                 if (isSameDay)
                     // There is an assessment Attempt already
                     assessmentAttemptDocument.documents[0].reference.update(data as Map<String, Any>).await()
+                else createAssessmentAttempt(assessmentID, isAnsweredCorrectly)
             } else {
                 // No Assessment Attempt yet
                 createAssessmentAttempt(assessmentID, isAnsweredCorrectly)
