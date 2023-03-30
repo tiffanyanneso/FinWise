@@ -322,7 +322,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1400)
+        dialog.window!!.setLayout(1000, 1700)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
@@ -337,7 +337,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1400)
+        dialog.window!!.setLayout(1000, 1700)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
@@ -352,7 +352,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1400)
+        dialog.window!!.setLayout(1000, 1700)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()

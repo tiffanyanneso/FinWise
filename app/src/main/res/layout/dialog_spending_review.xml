@@ -5,6 +5,13 @@
     android:padding="20dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -119,19 +126,29 @@
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
-        <LinearLayout
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Review your ongoing spending activities and be more mindful of your spending."
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_review_spending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="10dp">
+            android:text="Review Spending"
+            android:textColor="@color/off_white"
+            android:backgroundTint="@color/dark_green"
+            android:background="@drawable/button_border"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_got_it"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -139,21 +156,8 @@
                 android:background="@drawable/button_border"
                 android:backgroundTint="@color/light_grey"
                 android:text="Got it!"
-                android:textColor="@color/black"
-                android:layout_weight="1"
-                android:layout_marginRight="10dp" />
+                android:textColor="@color/black"/>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_review_spending"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="Review Spending"
-                android:textColor="@color/off_white"
-                android:backgroundTint="@color/dark_green"
-                android:background="@drawable/button_border"
-                android:layout_weight="1" />
-
-        </LinearLayout>
     </LinearLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

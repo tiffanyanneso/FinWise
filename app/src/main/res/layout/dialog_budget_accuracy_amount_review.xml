@@ -54,12 +54,14 @@
                 android:textStyle="bold"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
             android:text="1. Think about all the things you need to buy and divide them into budget items\n 2. Always thoroughly review your budget"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,19 +86,28 @@
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="Improve your budget accuracy by reviewing your existing budget items and amounts."
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_review_budgets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_border"
+            android:backgroundTint="@color/dark_green"
+            android:text="Review Budget"
+            android:textColor="@color/off_white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_got_it"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -104,20 +115,6 @@
                 android:background="@drawable/button_border"
                 android:backgroundTint="@color/light_grey"
                 android:text="Got it!"
-                android:textColor="@color/black"
-                android:layout_weight="1"
-                android:layout_marginRight="10dp" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_review_budgets"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:text="Review Budget Items"
-                android:textColor="@color/off_white"
-                android:backgroundTint="@color/dark_green"
-                android:background="@drawable/button_border"
-                android:layout_weight="1" />
-        </LinearLayout>
+                android:textColor="@color/black"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

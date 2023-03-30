@@ -399,7 +399,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1700)
+        dialog.window!!.setLayout(1000, 1500)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()

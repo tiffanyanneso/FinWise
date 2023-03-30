@@ -92,8 +92,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Set a bit of money aside from your income\n 2. Earn money by helping with chores or selling items!
-"
+            android:text="1. Set a bit of money aside from your income\n 2. Earn money by helping with chores or selling items!"
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
 
@@ -120,6 +119,14 @@
                 android:textStyle="bold"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="1. Practice your saving by making a new goal.\n2. Review your existing goals and continue saving for them."
+            android:textColor="@color/black"
+            android:layout_gravity="center_vertical"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -150,7 +157,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="review goals"
+                android:text="View goals"
                 android:textColor="@color/off_white"
                 android:backgroundTint="@color/dark_green"
                 android:background="@drawable/button_border"

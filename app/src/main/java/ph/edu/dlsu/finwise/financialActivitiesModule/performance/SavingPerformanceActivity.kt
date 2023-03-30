@@ -429,7 +429,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
                     "2. Duration: Over a month"
             dialogBinding.tvExamples.text = "1. Saving for a trip \n" +
                     "2. Saving for a birthday party"
-            dialogBinding.tvTips.text = "1. SStart saving early. Even if the target date may seem far away, target amounts for long term goals tend to be larger.\n" +
+            dialogBinding.tvTips.text = "1. Start saving early. Even if the target date may seem far away, target amounts for long term goals tend to be larger.\n" +
                     "2. Set aside money consistently\n" +
                     "3. Earn extra by helping with chores and selling items"
         }
@@ -490,7 +490,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
                     "2. Keep your target date in mind."
         }
 
-        dialog.window!!.setLayout(1000, 1700)
+        dialog.window!!.setLayout(1000, 1500)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()

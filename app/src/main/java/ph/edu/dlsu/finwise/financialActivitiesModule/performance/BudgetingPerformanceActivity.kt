@@ -179,7 +179,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     private fun setBudgetAccuracy() {
         var budgetAccuracy = (totalBudgetAccuracy/ purchasedBudgetItemCount).roundToInt()
         binding.textViewBudgetAccuracyProgress.text = DecimalFormat("##0.##").format(totalBudgetAccuracy/ purchasedBudgetItemCount) + "%"
-        binding.progressBarBudgetAccuracy.progress = totalBudgetAccuracy.roundToInt()
+        binding.progressBarBudgetAccuracy.progress = budgetAccuracy
 
         if (budgetAccuracy >= 96) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Excellent"
@@ -304,7 +304,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         var dialog = Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1700)
+        dialog.window!!.setLayout(1000, 1600)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
@@ -319,7 +319,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         var dialog = Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1700)
+        dialog.window!!.setLayout(1000, 1300)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()

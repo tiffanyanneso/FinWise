@@ -332,7 +332,6 @@ class ParentSavingFragment : Fragment() {
                 binding.imgFace.setImageResource(R.drawable.good)
                 binding.tvPerformanceStatus.text = ""
                 binding.tvPerformanceText.text = "Child has yet to complete goals."
-                showSeeMoreButton()
             }
         }
     }
