@@ -8821,7 +8821,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             choice = hashMapOf(
                 "questionID" to questionID,
                 "choice" to "Do household chores",
-                "isCorrect" to false
+                "isCorrect" to true
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
@@ -9002,7 +9002,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
 
             choice = hashMapOf(
                 "questionID" to questionID,
-                "choice" to "It’s mportant to listen to her and consider her advice since it gives you more time to think about it carefully",
+                "choice" to "It’s important to listen to her and consider her advice since it gives you more time to think about it carefully",
                 "isCorrect" to true
             )
             firestore.collection("AssessmentChoices").add(choice)
