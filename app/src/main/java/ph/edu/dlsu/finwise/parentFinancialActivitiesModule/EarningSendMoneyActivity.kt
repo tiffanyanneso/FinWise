@@ -228,7 +228,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
 
     private fun makeTransactionsGoal() {
         val income = hashMapOf(
-            "createdBy" to childID,
+            "userID" to childID,
             "transactionName" to "Income from ${binding.tvActivity.text}",
             "transactionType" to "Income",
             "category" to "Rewards",
