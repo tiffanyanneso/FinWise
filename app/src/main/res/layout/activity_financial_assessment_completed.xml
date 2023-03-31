@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="26sp"
-                android:text="Your score is being calculated. Hold on tight!"
+                android:text="Your score is being calculated and saved. Hold on tight!"
                 android:textColor="@color/black"
                 android:layout_marginBottom="20dp"
                 android:gravity="center"/>
