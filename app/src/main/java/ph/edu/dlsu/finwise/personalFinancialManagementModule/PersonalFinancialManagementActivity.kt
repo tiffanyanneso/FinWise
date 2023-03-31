@@ -112,44 +112,44 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (ratio in 160..180) {
             performance = "Amazing!"
-            binding.tvPerformance.setTextColor(resources.getColor(R.color.green))
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.amazing_green))
             grade = "Your income is significantly more than your expenses, and you're saving a substantial amount of money. Keep it up and look for ways to invest your money wisely."
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
         } else if (ratio in 140..159) {
             performance = "Great!"
-            binding.tvPerformance.setTextColor(resources.getColor(R.color.light_green))
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.green))
             grade = "Your income is much more than your expenses, and you're saving a good amount of money. You're on the right track!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (ratio in 120..139) {
-            binding.tvPerformance.setTextColor(resources.getColor(R.color.yellow))
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.light_green))
             performance = "Good!"
             grade = "Your income is more than your expenses, and you're saving a decent amount of money. Keep it up!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
         } else if (ratio in 100..119) {
             performance = "Average"
-            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.yellow))
             grade = "Your income is slightly more than your expenses, and you're saving a small amount of money. Keep it up and look for ways to increase your income and savings."
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else if (ratio in 80..99) {
             performance = "Nearly There"
-            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.nearly_there_yellow))
             grade = "Your income and expenses are about the same, and you're not saving much money. You need to look for ways to increase your income and reduce your expenses."
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
         } else if (ratio in 60..79) {
             performance = "Almost There"
-            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.almost_there_yellow))
             grade = "Your expenses are slightly more than your income, and you're saving a little bit of money. Try to reduce your expenses further to save more money."
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
         } else if (ratio in 40..59) {
             performance = "Getting There"
-            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.getting_there_orange))
             grade = "Your expenses are more than your income, and you're barely saving any money. You need to cut down on your expenses to start saving money."
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
         } else if (ratio in 20..39) {
             performance = "Not Quite There"
-            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.not_quite_there_red))
             grade = "Your expenses are much more than your income, and you're not saving any money. You need to make some changes to your spending habits."
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
         } else if (ratio in 1..19) {
             performance = "Need Improvement"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
