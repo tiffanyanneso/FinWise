@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.financialAssessmentModule
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -76,7 +77,8 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
                 bottomNavigationViewParent.visibility = View.VISIBLE
                 //sends the ChildID to the parent navbar
                 val bundle = intent.extras!!
-                val childID = bundle.getString("childID").toString()
+                childID = bundle.getString("childID").toString()
+
                 val bundleNavBar = Bundle()
                 bundleNavBar.putString("childID", childID)
                 NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_assessment, bundleNavBar)
@@ -89,6 +91,7 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
 
     private fun setUpChartTabs() {
         setBundle()
+        Toast.makeText(this, "childnavbar"+childID, Toast.LENGTH_SHORT).show()
 
         val adapter = PFMAdapter(supportFragmentManager)
         val assessmentLeaderboardFragment = AssessmentLeaderboardFragment()
