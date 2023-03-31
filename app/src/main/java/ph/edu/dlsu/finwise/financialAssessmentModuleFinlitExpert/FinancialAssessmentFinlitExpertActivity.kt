@@ -10367,7 +10367,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             choice = hashMapOf(
                 "questionID" to questionID,
                 "choice" to "Spend all your money",
-                "isCorrect" to false
+                "isCorrect" to true
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
