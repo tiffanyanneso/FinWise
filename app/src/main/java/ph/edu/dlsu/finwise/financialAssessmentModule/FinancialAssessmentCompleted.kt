@@ -166,13 +166,21 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         val assessmentAttemptObject = assessmentAttemptDocument.documents[0]
             .toObject<FinancialAssessmentAttempts>()
         val assessmentAttemptDate = assessmentAttemptObject?.dateTaken
-        val localDateTime = assessmentAttemptDate?.toDate()?.toInstant()
-            ?.atZone(ZoneId.systemDefault())?.toLocalDateTime()
-        val now = LocalDateTime.now()
 
-        val diff = Duration.between(localDateTime, now)
+        val date: Date = assessmentAttemptDate!!.toDate()
 
-        return localDateTime?.toLocalDate() == now.toLocalDate() && diff.seconds < 60
+        // get today's date
+        val cal = Calendar.getInstance()
+        val today = cal.time
+
+        // set calendar to the date of the timestamp
+        cal.time = date
+
+        // compare the year, month, and day of the two dates
+        return cal.get(Calendar.YEAR) == cal.get(Calendar.YEAR) &&
+                cal.get(Calendar.MONTH) == cal.get(Calendar.MONTH) &&
+                cal.get(Calendar.DAY_OF_MONTH) == cal.get(Calendar.DAY_OF_MONTH)
+
     }
 
     private suspend fun createAssessmentAttempt(
