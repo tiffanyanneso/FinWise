@@ -5,6 +5,10 @@ plugins {
 }
 
 android {
+    lintOptions{
+        checkReleaseBuilds false
+}
+
     namespace 'ph.edu.dlsu.finwise'
     compileSdk 32
 
