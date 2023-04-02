@@ -8,6 +8,13 @@ android {
     lintOptions{
         checkReleaseBuilds false
 }
+    android{
+        buildTypes {
+            release {
+                signingConfig signingConfigs.debug
+            }
+        }
+    }
 
     namespace 'ph.edu.dlsu.finwise'
     compileSdk 32
