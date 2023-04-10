@@ -8,6 +8,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -93,7 +94,8 @@ class AddFriendsActivity : AppCompatActivity() {
         val friendRequest = hashMapOf(
             "senderID" to childID,
             "receiverID" to receiverUserID,
-            "status" to "Pending"
+            "status" to "Pending",
+            "dateSent" to Timestamp.now()
         )
         firestore.collection("Friends").add(friendRequest).addOnSuccessListener {
             Toast.makeText(this, "Friend Request Sent", Toast.LENGTH_SHORT).show()

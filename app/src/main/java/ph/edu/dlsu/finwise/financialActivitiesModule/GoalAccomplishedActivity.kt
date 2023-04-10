@@ -208,7 +208,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
             dialog.show()
 
             dialogBinding.btnProceed.setOnClickListener {
-                firestore.collection("FinancialActivities").document(budgetingActivityID).update("status", "In Progress").addOnSuccessListener {
+                firestore.collection("FinancialActivities").document(budgetingActivityID).update("status", "In Progress", "dateStarted", Timestamp.now()).addOnSuccessListener {
                     dialog.dismiss()
                     goToFinancialAssessmentActivity()
                 }

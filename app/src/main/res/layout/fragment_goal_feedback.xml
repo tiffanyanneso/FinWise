@@ -142,6 +142,7 @@
                     android:layout_gravity="right"
                     android:progressTint="@color/yellow"
                     android:progressBackgroundTint="@color/light_grey"
+                    android:isIndicator="true"
                     />
 
 <!--                <TextView-->
@@ -181,7 +182,8 @@
                     android:progressTint="@color/yellow"
                     android:scaleX="0.5"
                     android:scaleY="0.5"
-                    android:stepSize="0.5" />
+                    android:stepSize="0.5"
+                    android:isIndicator="true"/>
 <!--    -->
 <!--                <TextView-->
 <!--                    android:id="@+id/tv_score_measurable"-->
@@ -222,6 +224,7 @@
                     android:layout_gravity="right"
                     android:progressTint="@color/yellow"
                     android:progressBackgroundTint="@color/light_grey"
+                    android:isIndicator="true"
                     />
 
 <!--                <TextView-->
@@ -262,6 +265,7 @@
                     android:layout_gravity="right"
                     android:progressTint="@color/yellow"
                     android:progressBackgroundTint="@color/light_grey"
+                    android:isIndicator="true"
                     />
 
 <!--                <TextView-->
@@ -302,6 +306,7 @@
                     android:layout_gravity="right"
                     android:progressTint="@color/yellow"
                     android:progressBackgroundTint="@color/light_grey"
+                    android:isIndicator="true"
                     />
 
 <!--                <TextView-->

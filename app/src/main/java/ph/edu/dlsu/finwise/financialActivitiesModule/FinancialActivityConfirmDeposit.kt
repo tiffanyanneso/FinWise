@@ -131,6 +131,7 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
                 firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Completed")
                 firestore.collection("FinancialGoals").document(financialGoalID).update("dateCompleted", Timestamp.now())
                 firestore.collection("FinancialActivities").document(savingActivityID).update("status", "Completed")
+                firestore.collection("FinancialActivities").document(savingActivityID).update("dateCompleted", Timestamp.now())
                 val goalAccomplished = Intent(this, GoalAccomplishedActivity::class.java)
                 goalAccomplished.putExtras(sendBundle)
                 goalAccomplished.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

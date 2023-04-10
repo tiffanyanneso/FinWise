@@ -28,6 +28,10 @@ class ViewGoalDetailsTabbedActivity : AppCompatActivity() {
 
     private var firestore = Firebase.firestore
 
+    private lateinit var savingActivityID:String
+    private var cashBalance = 0.00F
+    private var mayaBalance = 0.00F
+
     //if the goal was reviewed by the parent or not
     private var hasFeedback = false
 
@@ -48,6 +52,9 @@ class ViewGoalDetailsTabbedActivity : AppCompatActivity() {
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         childID = bundle.getString("childID").toString()
+        savingActivityID = bundle.getString("savingActivityID").toString()
+        cashBalance = bundle.getFloat("cashBalance")
+        mayaBalance = bundle.getFloat("mayaBalance")
 
         firestore.collection("GoalRating").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener {
             //this goal was reviewed by the parent, add fragment to show feedback
@@ -78,6 +85,9 @@ class ViewGoalDetailsTabbedActivity : AppCompatActivity() {
 
         val fragmentBundle = Bundle()
         fragmentBundle.putString("financialGoalID", financialGoalID)
+        fragmentBundle.putString("savingActivityID", savingActivityID)
+        fragmentBundle.putFloat("cashBalance", cashBalance)
+        fragmentBundle.putFloat("mayaBalance", mayaBalance)
 
         var goalDetails = GoalDetailsFragment()
         goalDetails.arguments = fragmentBundle

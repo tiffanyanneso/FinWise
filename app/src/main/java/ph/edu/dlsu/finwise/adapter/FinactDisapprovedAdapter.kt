@@ -24,7 +24,7 @@ import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
-class FinactDisapprovedAdapter : RecyclerView.Adapter<FinactDisapprovedAdapter.FinactSpendingViewHolder>{
+class FinactDisapprovedAdapter : RecyclerView.Adapter<FinactDisapprovedAdapter.FinactDisapprovedViewHolder>{
 
     private var goalsIDArrayList = ArrayList<String>()
     private var context: Context
@@ -46,20 +46,20 @@ class FinactDisapprovedAdapter : RecyclerView.Adapter<FinactDisapprovedAdapter.F
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): FinactDisapprovedAdapter.FinactSpendingViewHolder {
+    ): FinactDisapprovedAdapter.FinactDisapprovedViewHolder {
         val itemBinding = ItemFinactDisapprovedBinding
             .inflate(
                 LayoutInflater.from(parent.context),
                 parent, false)
-        return FinactSpendingViewHolder(itemBinding)
+        return FinactDisapprovedViewHolder(itemBinding)
     }
 
-    override fun onBindViewHolder(holder: FinactDisapprovedAdapter.FinactSpendingViewHolder,
+    override fun onBindViewHolder(holder: FinactDisapprovedAdapter.FinactDisapprovedViewHolder,
                                   position: Int) {
         holder.bindGoal(goalsIDArrayList[position])
     }
 
-    inner class FinactSpendingViewHolder(private val itemBinding: ItemFinactDisapprovedBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
+    inner class FinactDisapprovedViewHolder(private val itemBinding: ItemFinactDisapprovedBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {
         var goal  = FinancialGoals()
 
         init {

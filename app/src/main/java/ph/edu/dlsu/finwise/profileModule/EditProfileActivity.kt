@@ -15,6 +15,7 @@ import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.google.firestore.v1.FirestoreGrpc.FirestoreBlockingStub
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEditProfileBinding
@@ -26,6 +27,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditProfileBinding
     private var firestore = Firebase.firestore
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
     private lateinit var context: Context
     lateinit var birthday: Date
 
@@ -43,7 +45,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         binding.btnSave.setOnClickListener{
-            updateInternProfile()
+            updateProfile()
             var goToProfile = Intent(this, ProfileActivity::class.java)
             context.startActivity(goToProfile)
         }
@@ -66,41 +68,30 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     fun getProfileData() {
-        //val currentUser:String = FirebaseAuth.getInstance().currentUser!!.uid
-        val currentUser  = FirebaseAuth.getInstance().currentUser!!.uid
-
-
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener { documentSnapshot ->
             var child = documentSnapshot.toObject<Users>()
             if (child?.firstName != null)
                 binding.etFirstName.setText(child?.firstName.toString())
-            if (child?.lastName != null && child?.lastName != null)
+            if (child?.lastName != null)
                 binding.etLastName.setText(child?.lastName.toString())
-            if (child?.birthday != null && child?.birthday != null) {
-                binding.etBirthday.setText(child?.birthday.toString())
-            }
+            if (child?.birthday != null)
+                binding.etBirthday.setText(SimpleDateFormat("MM/dd/yyyy").format(child?.birthday!!.toDate()))
+            if (child?.number!= null)
+                binding.etContactNumber.setText(child.number.toString())
         }
     }
 
-    private fun updateInternProfile() {
-        //TODO update profile picture
+    private fun updateProfile() {
         val firstName = binding.etFirstName.text.toString()
         val lastName = binding.etLastName.text.toString()
-        val birthday = binding.etBirthday.toString()
-        val currentUser:String = FirebaseAuth.getInstance().currentUser!!.uid
-        //val currentUser:String = "JoCGIUSVMWTQ2IB7Rf41ropAv3S2"
+        val birthday = SimpleDateFormat("MM/dd/yyyy").parse(binding.etBirthday.text.toString())
+        val number = binding.etContactNumber.text.toString()
 
-        val child = mapOf<String, String>(
-            "firstName" to firstName,
-            "lastName" to lastName,
-            "birthday" to birthday
-        )
-
-        firestore.collection("Users").document(currentUser).set(child, SetOptions.merge()).addOnSuccessListener {
+        firestore.collection("Users").document(currentUser).update("firstName", firstName, "lastName", lastName, "birthday", birthday, "number", number).addOnSuccessListener {
             Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT)
+            finish()
             val intent = Intent (this, ProfileActivity::class.java)
             startActivity (intent)
-            finish()
         }.addOnFailureListener{
             Toast.makeText(this, "Profile Update Failed", Toast.LENGTH_SHORT)
         }

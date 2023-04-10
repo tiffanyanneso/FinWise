@@ -188,7 +188,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
         if (goalStatus == "For Review")
              savingActivity = FinancialActivities (goalID, childID, "Saving", "Locked")
         else
-            savingActivity = FinancialActivities (goalID, childID, "Saving", "In Progress")
+            savingActivity = FinancialActivities (goalID, childID, "Saving", "In Progress", Timestamp.now())
         firestore.collection("FinancialActivities").add(savingActivity)
         if (financialActivity == "Buying Items" ||financialActivity == "Planning An Event" || financialActivity == "Situational Shopping") {
             var budgetingActivity = FinancialActivities(goalID, childID, "Budgeting", "Locked")

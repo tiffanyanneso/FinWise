@@ -147,7 +147,7 @@ class ReviewGoalActivity : AppCompatActivity() {
             firestore.collection("FinancialGoals").document(financialGoalID).update("status", status).addOnSuccessListener {
                 firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("financialActivityName", "Saving").get().addOnSuccessListener { result ->
                     var finactID = result.documents[0].id
-                    firestore.collection("FinancialActivities").document(finactID).update("status", activityStatus)
+                    firestore.collection("FinancialActivities").document(finactID).update("status", activityStatus, "dateStarted", Timestamp.now())
                 }
                 Toast.makeText(this, "Rating saved", Toast.LENGTH_SHORT).show()
                 var viewGoal = Intent(this, ParentFinancialActivity::class.java)

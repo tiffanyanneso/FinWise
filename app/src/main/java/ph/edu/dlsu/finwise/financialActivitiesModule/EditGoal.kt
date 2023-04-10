@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -21,7 +22,9 @@ import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEditGoalBinding
 import ph.edu.dlsu.finwise.databinding.DialogDeleteGoalWarningBinding
+import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.model.Users
 import java.text.SimpleDateFormat
 import java.util.*
@@ -29,9 +32,14 @@ import java.util.*
 class EditGoal : AppCompatActivity() {
     private lateinit var binding : ActivityEditGoalBinding
     private var firestore = Firebase.firestore
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private lateinit var financialGoalID:String
+    private lateinit var savingActivityID:String
     private lateinit var targetDate: Date
+
+    private var cashBalance = 0.00F
+    private var mayaBalance = 0.00F
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,9 +47,11 @@ class EditGoal : AppCompatActivity() {
         binding = ActivityEditGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        println("print edit goal")
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
+        savingActivityID = bundle.getString("savingActivityID").toString()
+        cashBalance = bundle.getFloat("cashBalance")
+        mayaBalance = bundle.getFloat("mayaBalance")
         getFinancialGoal()
         checkUser()
 
@@ -120,17 +130,59 @@ class EditGoal : AppCompatActivity() {
 
     private fun deleteGoal() {
         //mark financial goal as deleted
-        firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Deleted").addOnSuccessListener {
+        firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Deleted", "currentSavings", 0).addOnSuccessListener {
             //mark related activities as deleted
             firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
-                for (activity in results ) {
-                    firestore.collection("FinancialActivities").document(activity.id)
-                        .update("status", "Deleted")
-                    println("print update activity")
-                }
+                for (activity in results )
+                    firestore.collection("FinancialActivities").document(activity.id).update("status", "Deleted")
+
+                returnSavings()
                 var goalList = Intent(this, FinancialActivity::class.java)
                 startActivity(goalList)
                 finish()
+            }
+        }
+    }
+
+    private fun returnSavings() {
+        if (cashBalance > 0.00F) {
+            var cashWithdrawal = hashMapOf(
+                "transactionName" to binding.etGoal.text.toString() + " Withdrawal",
+                "transactionType" to "Withdrawal",
+                "category" to "Goal",
+                "date" to Timestamp.now(),
+                "userID" to currentUser,
+                "amount" to cashBalance,
+                "financialActivityID" to savingActivityID,
+                "paymentType" to "Cash"
+            )
+            firestore.collection("Transactions").add(cashWithdrawal)
+            firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", "Cash").get().addOnSuccessListener {
+                var walletID = it.documents[0].id
+                firestore.collection("ChildWallet").document(walletID).get().addOnSuccessListener {
+                    var updatedBalance = it.toObject<ChildWallet>()?.currentBalance!! + cashBalance
+                    firestore.collection("ChildWallet").document(walletID).update("currentBalance", updatedBalance)
+                }
+            }
+        }
+        if (mayaBalance > 0.00F) {
+            var mayaWithdrawal = hashMapOf(
+                "transactionName" to binding.etGoal.text.toString() + " Withdrawal",
+                "transactionType" to "Withdrawal",
+                "category" to "Goal",
+                "date" to Timestamp.now(),
+                "userID" to currentUser,
+                "amount" to mayaBalance,
+                "financialActivityID" to savingActivityID,
+                "paymentType" to "Maya"
+            )
+            firestore.collection("Transactions").add(mayaWithdrawal)
+            firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", "Maya").get().addOnSuccessListener {
+                var walletID = it.documents[0].id
+                firestore.collection("ChildWallet").document(walletID).get().addOnSuccessListener {
+                    var updatedBalance = it.toObject<ChildWallet>()?.currentBalance!! + mayaBalance
+                    firestore.collection("ChildWallet").document(walletID).update("currentBalance", updatedBalance)
+                }
             }
         }
     }

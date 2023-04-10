@@ -50,6 +50,8 @@ class BudgetActivity : AppCompatActivity() {
     private var budgetCategoryIDArrayList = ArrayList<String>()
 
     private var balance = 0.00F
+    private var cashBalance = 0.00F
+    private var mayaBalance = 0.00F
     private var availableToBudget = 0.00F
 
     private var isBudgetingCompleted = false
@@ -183,28 +185,26 @@ class BudgetActivity : AppCompatActivity() {
     }
 
     private fun getBalance() {
-        var cashBalance = 0.00F
-        var mayaBalance = 0.00F
         firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
             for (transaction in results) {
                 var transactionObject = transaction.toObject<Transactions>()
-                if (transactionObject.transactionType == "Deposit")
-                    balance += transactionObject.amount!!
-                else if (transactionObject.transactionType == "Withdrawal")
-                    balance-= transactionObject.amount!!
 
-                if (transactionObject.paymentType == "Cash") {
-                    if (transactionObject?.transactionType == "Deposit")
-                        cashBalance += transactionObject.amount!!
-                    else if (transactionObject.transactionType == "Withdrawal")
-                        cashBalance -= transactionObject.amount!!
+                if (transactionObject.transactionType == "Deposit") {
+                    balance += transactionObject.amount!!
+
+                    if (transactionObject.paymentType == "Cash")
+                        cashBalance += transactionObject?.amount!!
+                    else if (transactionObject.paymentType == "Maya")
+                        mayaBalance += transactionObject?.amount!!
                 }
 
-                else if (transactionObject.paymentType == "Maya") {
-                    if (transactionObject?.transactionType == "Deposit")
-                        mayaBalance += transactionObject.amount!!
-                    else if (transactionObject.transactionType == "Withdrawal")
-                        mayaBalance -= transactionObject.amount!!
+                else if (transactionObject.transactionType == "Withdrawal") {
+                    balance -= transactionObject.amount!!
+
+                    if (transactionObject.paymentType == "Cash")
+                        cashBalance -= transactionObject?.amount!!
+                    else if (transactionObject.paymentType == "Maya")
+                        mayaBalance -= transactionObject?.amount!!
                 }
             }
         }.continueWith {
@@ -505,12 +505,12 @@ class BudgetActivity : AppCompatActivity() {
         dialog.window!!.setLayout(900, 800)
 
         dialogBinding.btnOk.setOnClickListener {
-            firestore.collection("FinancialActivities").document(budgetingActivityID).update("status", "Completed").addOnSuccessListener {
+            firestore.collection("FinancialActivities").document(budgetingActivityID).update("status", "Completed", "dateCompleted", Timestamp.now()).addOnSuccessListener {
                 binding.btnDoneSettingBudget.visibility = View.GONE
                 //binding.linearLayoutText.visibility = View.GONE
                 isBudgetingCompleted = true
                 dialog.dismiss()
-                firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "In Progress")
+                firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "In Progress", "dateStarted", Timestamp.now())
                 goToFinancialAssessmentActivity("Post-Activity", "Budgeting")
             }
         }
@@ -527,7 +527,8 @@ class BudgetActivity : AppCompatActivity() {
         dialog.window!!.setLayout(900, 800)
 
         dialogBinding.btnOk.setOnClickListener {
-            firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "Completed")
+            firestore.collection("FinancialActivities").document(spendingActivityID).update("status", "Completed", "dateCompleted", Timestamp.now())
+            returnRemainingSavings()
             dialog.dismiss()
             goToFinancialAssessmentActivity("Post-Activity", "Spending")
 //            var finact = Intent(this, FinancialActivity::class.java)
@@ -537,6 +538,49 @@ class BudgetActivity : AppCompatActivity() {
         dialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
 
         dialog.show()
+    }
+
+    private fun returnRemainingSavings() {
+        if (cashBalance > 0.00F) {
+            var cashWithdrawal = hashMapOf(
+                "transactionName" to "Excess savings from " + binding.tvGoalName.text.toString(),
+                "transactionType" to "Withdrawal",
+                "category" to "Goal",
+                "date" to Timestamp.now(),
+                "userID" to currentUser,
+                "amount" to cashBalance,
+                "financialActivityID" to savingActivityID,
+                "paymentType" to "Cash"
+            )
+            firestore.collection("Transactions").add(cashWithdrawal)
+            firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", "Cash").get().addOnSuccessListener {
+                var walletID = it.documents[0].id
+                firestore.collection("ChildWallet").document(walletID).get().addOnSuccessListener {
+                    var updatedBalance = it.toObject<ChildWallet>()?.currentBalance!! + cashBalance
+                    firestore.collection("ChildWallet").document(walletID).update("currentBalance", updatedBalance)
+                }
+            }
+        }
+        if (mayaBalance > 0.00F) {
+            var mayaWithdrawal = hashMapOf(
+                "transactionName" to "Excess savings from " + binding.tvGoalName.text.toString(),
+                "transactionType" to "Withdrawal",
+                "category" to "Goal",
+                "date" to Timestamp.now(),
+                "userID" to currentUser,
+                "amount" to mayaBalance,
+                "financialActivityID" to savingActivityID,
+                "paymentType" to "Maya"
+            )
+            firestore.collection("Transactions").add(mayaWithdrawal)
+            firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", "Maya").get().addOnSuccessListener {
+                var walletID = it.documents[0].id
+                firestore.collection("ChildWallet").document(walletID).get().addOnSuccessListener {
+                    var updatedBalance = it.toObject<ChildWallet>()?.currentBalance!! + mayaBalance
+                    firestore.collection("ChildWallet").document(walletID).update("currentBalance", updatedBalance)
+                }
+            }
+        }
     }
 
     private fun cannotWithdrawDialog() {

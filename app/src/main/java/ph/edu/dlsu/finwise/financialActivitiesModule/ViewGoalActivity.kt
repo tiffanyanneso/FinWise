@@ -57,6 +57,9 @@ class ViewGoalActivity : AppCompatActivity() {
     private var savedAmount = 0.00F
     private var targetAmount = 0.00F
 
+    private var cashBalance = 0.00F
+    private var mayaBalance = 0.00F
+
     private lateinit var goalTransactionsAdapter:GoalTransactionsAdapater
     var transactionsArrayList = ArrayList<String>()
 
@@ -94,6 +97,9 @@ class ViewGoalActivity : AppCompatActivity() {
 
         binding.btnEditGoal.setOnClickListener {
             var goToEditGoal = Intent(this, EditGoal::class.java)
+            sendBundle.putString("savingActivityID", savingActivityID)
+            sendBundle.putFloat("cashBalance", cashBalance)
+            sendBundle.putFloat("mayaBalance", mayaBalance)
             goToEditGoal.putExtras(sendBundle)
             this.startActivity(goToEditGoal)
         }
@@ -149,6 +155,9 @@ class ViewGoalActivity : AppCompatActivity() {
 
         binding.btnGoalDetails.setOnClickListener {
             var goalDetails = Intent(this, ViewGoalDetailsTabbedActivity::class.java)
+            sendBundle.putString("savingActivityID", savingActivityID)
+            sendBundle.putFloat("cashBalance", cashBalance)
+            sendBundle.putFloat("mayaBalance", mayaBalance)
             goalDetails.putExtras(sendBundle)
             this.startActivity(goalDetails)
         }
@@ -238,8 +247,6 @@ class ViewGoalActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getTransactions() {
-        var cashBalance = 0.00F
-        var mayaBalance = 0.00F
         var transactionFilterArrayList = ArrayList<TransactionFilter>()
         //TODO: INCLUDE IN QUERY SPENDING ACTIVITY ID
         firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
@@ -247,26 +254,23 @@ class ViewGoalActivity : AppCompatActivity() {
                 var transactionObject = transaction.toObject<Transactions>()
                 transactionFilterArrayList.add(TransactionFilter(transaction.id,transactionObject.date!!.toDate()))
 
-                if (transactionObject.transactionType == "Deposit")
+                if (transactionObject.transactionType == "Deposit") {
                     currentBalance += transactionObject.amount!!
 
-                else if (transactionObject.transactionType == "Withdrawal")
+                    if (transactionObject.paymentType == "Cash")
+                        cashBalance += transactionObject?.amount!!
+                    else if (transactionObject.paymentType == "Maya")
+                        mayaBalance += transactionObject?.amount!!
+                }
+
+                else if (transactionObject.transactionType == "Withdrawal") {
                     currentBalance -= transactionObject.amount!!
 
-                if (transactionObject.paymentType == "Cash") {
-                    if (transactionObject?.transactionType == "Deposit")
-                        cashBalance += transactionObject?.amount!!
-                    else if (transactionObject.transactionType == "Withdrawal")
+                    if (transactionObject.paymentType == "Cash")
                         cashBalance -= transactionObject?.amount!!
-                }
-
-                else if (transactionObject.paymentType == "Maya") {
-                    if (transactionObject?.transactionType == "Deposit")
-                        mayaBalance += transactionObject?.amount!!
-                    else if (transactionObject.transactionType == "Withdrawal")
+                    else if (transactionObject.paymentType == "Maya")
                         mayaBalance -= transactionObject?.amount!!
                 }
-
             }
 
             transactionFilterArrayList.sortByDescending { it.date }
