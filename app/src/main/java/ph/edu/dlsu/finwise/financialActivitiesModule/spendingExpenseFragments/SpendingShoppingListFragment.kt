@@ -37,9 +37,11 @@ class SpendingShoppingListFragment : Fragment() {
 
     private lateinit var shoppingListAdapter: ShoppingListAdapter
 
-    private var shoppingListArrayList = ArrayList<String>()
+    private var shoppingListArrayList = ArrayList<ShoppingListAdapterItem>()
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
+    class ShoppingListAdapterItem(var shoppingListItemID:String, var name:String, var isChecked:Boolean)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,8 +78,14 @@ class SpendingShoppingListFragment : Fragment() {
     private fun getShoppingListItems() {
         shoppingListArrayList.clear()
         firestore.collection("ShoppingListItems").whereEqualTo("budgetCategory", budgetItemID).whereIn("status", Arrays.asList("In List", "Purchased")).get().addOnSuccessListener { results ->
-            for (item in results)
-                shoppingListArrayList.add(item.id)
+            for (item in results){
+                var shoppingList = item.toObject<ShoppingListItem>()
+                var checked = false
+                if (shoppingList.status == "Purchased")
+                    checked = true
+                shoppingListArrayList.add(ShoppingListAdapterItem(item.id, shoppingList.itemName.toString(), checked))
+            }
+
         }.continueWith {
             shoppingListAdapter = ShoppingListAdapter(requireActivity().applicationContext, shoppingListArrayList, savingActivityID, object:ShoppingListAdapter.ShoppingListSetting{
                 override fun editShoppingListItem(shoppingListItemID: String) {
@@ -89,7 +97,7 @@ class SpendingShoppingListFragment : Fragment() {
                 }
 
             }, object:ShoppingListAdapter.CheckShoppingList{
-                override fun checkShoppingListItem(shoppingListItemID:String) {
+                override fun checkShoppingListItem(shoppingListItemID:String, position: Int) {
                         var dialogBinding= DialogShoppingListRecordExpenseBinding.inflate(layoutInflater)
                         var dialog= Dialog(view!!.context);
                         dialog.setContentView(dialogBinding.root)
@@ -110,6 +118,8 @@ class SpendingShoppingListFragment : Fragment() {
                         }
 
                         dialogBinding.btnNo.setOnClickListener {
+                            shoppingListArrayList[position].isChecked = false
+                            shoppingListAdapter.notifyItemChanged(position)
                             dialog.dismiss()
                         }
                         dialog.show()
@@ -117,7 +127,6 @@ class SpendingShoppingListFragment : Fragment() {
             })
             binding.rvViewItems.adapter = shoppingListAdapter
             binding.rvViewItems.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
-            shoppingListAdapter.notifyDataSetChanged()
         }
     }
 
@@ -132,8 +141,7 @@ class SpendingShoppingListFragment : Fragment() {
             var shoppingListItem = ShoppingListItem(dialogBinding.etShoppingListItemName.text.toString(), budgetItemID, currentUser, "In List", spendingActivityID)
             firestore.collection("ShoppingListItems").add(shoppingListItem).addOnSuccessListener { newItem ->
                 dialog.dismiss()
-                shoppingListArrayList.add(newItem.id)
-                shoppingListAdapter.notifyDataSetChanged()
+                shoppingListArrayList.add(ShoppingListAdapterItem(newItem.id, dialogBinding.etShoppingListItemName.text.toString(), false))
             }
         }
 

@@ -12,11 +12,12 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ItemShoppingListBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.spendingExpenseFragments.SpendingShoppingListFragment
 import ph.edu.dlsu.finwise.model.ShoppingListItem
 
 class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingListViewHolder>{
 
-    private var shoppingListIDArrayList = ArrayList<String>()
+    private var shoppingListIDArrayList = ArrayList<SpendingShoppingListFragment.ShoppingListAdapterItem>()
     private var context: Context
 
     private var firestore = Firebase.firestore
@@ -26,7 +27,7 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingLis
     private var checkShoppingListItem:CheckShoppingList
 
 
-    constructor(context: Context, shoppingListIDArrayList:ArrayList<String>, savingActivityID:String, shoppingListSetting: ShoppingListSetting, checkShoppingListItem: CheckShoppingList) {
+    constructor(context: Context, shoppingListIDArrayList:ArrayList<SpendingShoppingListFragment.ShoppingListAdapterItem>, savingActivityID:String, shoppingListSetting: ShoppingListSetting, checkShoppingListItem: CheckShoppingList) {
         this.context = context
         this.shoppingListIDArrayList = shoppingListIDArrayList
         this.savingActivityID = savingActivityID
@@ -60,19 +61,21 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingLis
             itemView.setOnClickListener(this)
         }
 
-        fun bindItem(shoppingListItemID: String){
-           firestore.collection("ShoppingListItems").document(shoppingListItemID).get().addOnSuccessListener {
-               var shoppingListItem = it.toObject<ShoppingListItem>()
-               itemBinding.tvShoppingListItemId.text = shoppingListItemID
-               itemBinding.tvShoppingListItemName.text = shoppingListItem?.itemName
-               itemBinding.tvSpendingActivityId.text = shoppingListItem?.spendingActivityID
+        fun bindItem(shoppingListItem: SpendingShoppingListFragment.ShoppingListAdapterItem){
+           firestore.collection("ShoppingListItems").document(shoppingListItem.shoppingListItemID).get().addOnSuccessListener {
+               var shoppingListItemObjet = it.toObject<ShoppingListItem>()
+               itemBinding.tvShoppingListItemId.text = shoppingListItem.shoppingListItemID
+               itemBinding.tvShoppingListItemName.text = shoppingListItemObjet?.itemName
+               itemBinding.tvSpendingActivityId.text = shoppingListItemObjet?.spendingActivityID
                //item has already been bought, do not allow them to record expense again
-               if (shoppingListItem?.status =="Purchased") {
+               if (shoppingListItemObjet?.status =="Purchased") {
                    itemBinding.cbBought.isChecked = true
                    itemBinding.cbBought.isClickable = false
+                   itemBinding.btnSettings.visibility = View.GONE
                }
-               else if (shoppingListItem?.status == "In List") {
+               else if (shoppingListItemObjet?.status == "In List") {
                    itemBinding.cbBought.isChecked = false
+                   itemBinding.btnSettings.visibility = View.VISIBLE
                    itemBinding.btnSettings.setOnClickListener {
                        val popup = PopupMenu(context, it)
                        popup.inflate(R.menu.menu_shopping_list)
@@ -92,8 +95,8 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingLis
                        })
                        popup.show()
                    }
-                   itemBinding.cbBought.setOnCheckedChangeListener { compoundButton, b ->
-                       checkShoppingListItem.checkShoppingListItem(itemBinding.tvShoppingListItemId.text.toString())
+                   itemBinding.cbBought.setOnClickListener {
+                       checkShoppingListItem.checkShoppingListItem(itemBinding.tvShoppingListItemId.text.toString(), position)
                    }
                }
 
@@ -104,7 +107,7 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingLis
         override fun onClick(p0: View?) {
             //if item is not yet crossed out, allow them to record expense for the shopping list item
             if (!itemBinding.cbBought.isChecked)
-                checkShoppingListItem.checkShoppingListItem(itemBinding.tvShoppingListItemId.text.toString())
+                checkShoppingListItem.checkShoppingListItem(itemBinding.tvShoppingListItemId.text.toString(), position)
         }
 
     }
@@ -115,6 +118,6 @@ class ShoppingListAdapter : RecyclerView.Adapter<ShoppingListAdapter.ShoppingLis
     }
 
     interface CheckShoppingList {
-        fun checkShoppingListItem(shoppingListItemID:String)
+        fun checkShoppingListItem(shoppingListItemID:String, position: Int)
     }
 }
