@@ -13,12 +13,15 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityNewEarningBinding
+import ph.edu.dlsu.finwise.databinding.DialogNewCustomChoreBinding
+import ph.edu.dlsu.finwise.model.Chores
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
@@ -38,11 +41,16 @@ class NewEarningActivity : AppCompatActivity() {
     private lateinit var childID:String
 
     private var firestore = Firebase.firestore
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private var maxAmount = 0.00F
 
     private var goalDropDownArrayList = ArrayList<GoalDropDown>()
     private lateinit var goalAdapter: ArrayAdapter<String>
+
+    private var dropdownChores = ArrayList<String>()
+    private lateinit var choresAdapter:ArrayAdapter<String>
+
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -50,6 +58,7 @@ class NewEarningActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityNewEarningBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        choresAdapter = ArrayAdapter(this, R.layout.list_item, dropdownChores)
 
         var bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
@@ -69,10 +78,9 @@ class NewEarningActivity : AppCompatActivity() {
 
         binding.etDate.setOnClickListener { showCalendar() }
 
-        binding.dropdownChore.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id ->
-                changeDuration()
-            }
+        binding.dropdownChore.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            changeDuration()
+        }
 
         binding.dropdownDestination.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -223,75 +231,162 @@ class NewEarningActivity : AppCompatActivity() {
             binding.etDuration.setText("15")
         else if (chore == "Clean Bathroom" || chore == "Wash Car" || chore == "Prepare Meal" || chore == "Take Care Of Younger Sibling")
             binding.etDuration.setText("30")
-
+        else if (chore=="+ Add Custom Chore")
+            addCustomChore()
+        //the chore is custom, query to db to get duration
+        else {
+            firestore.collection("Chores").whereEqualTo("createdBy", currentUser).whereEqualTo("choreName", chore).get().addOnSuccessListener {
+                binding.etDuration.setText(it.documents[0].toObject<Chores>()?.duration.toString())
+            }
+        }
     }
+
+
+    private fun addCustomChore() {
+        var dialogBinding= DialogNewCustomChoreBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(800, 1000)
+
+        dialogBinding.btnSave.setOnClickListener {
+            var choreName  = dialogBinding.etChoreName.text.toString()
+            var duration  = dialogBinding.etDuration.text.toString().toInt()
+            var chore = hashMapOf(
+               "choreName" to choreName,
+               "duration" to duration,
+               "createdBy" to currentUser
+            )
+            firestore.collection("Chores").add(chore).addOnSuccessListener {
+                dialog.dismiss()
+                binding.dropdownChore.setText(choreName)
+                binding.etDuration.setText(duration.toString())
+                dropdownChores.add(choreName)
+                binding.dropdownChore.setAdapter(choresAdapter)
+            }
+        }
+
+        dialogBinding.btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private class ChoreObject(var choreName:String, var duration:Int?=null)
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initializeDropDowns() {
         val paymentTypeItems = resources.getStringArray(R.array.payment_type)
-        val adapterPaymentTypeItems = ArrayAdapter (this, R.layout.list_item, paymentTypeItems)
+        val adapterPaymentTypeItems = ArrayAdapter(this, R.layout.list_item, paymentTypeItems)
         binding.dropdownTypeOfPayment.setAdapter(adapterPaymentTypeItems)
 
-        val dropdownContent = ArrayList<String>()
+
         firestore.collection("Users").document(childID).get().addOnSuccessListener {
             var child = it.toObject<Users>()
 
             //compute age
-            val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
             val from = LocalDate.now()
-            val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+            val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
             val to = LocalDate.parse(date.toString(), dateFormatter)
             var difference = Period.between(to, from)
 
+//            //chores for age 9-12
+//            choreObjectArrayList.add(ChoreObject("Put Away Groceries", 10))
+//            choreObjectArrayList.add(ChoreObject("Put Away Laundry", 5))
+//            choreObjectArrayList.add(ChoreObject("Clean Floor", 10))
+//            choreObjectArrayList.add(ChoreObject("Set Table", 5))
+//
+//            if (age == 10 || age == 11 || age == 12) {
+//                maxAmount = 300F
+//
+//                choreObjectArrayList.add(ChoreObject("Fold Laundry", 10))
+//                choreObjectArrayList.add(ChoreObject("Help Parent Prepare Meal", 15))
+//                choreObjectArrayList.add(ChoreObject("Prepare Snack", 15))
+//                choreObjectArrayList.add(ChoreObject("Change Bed Sheets", 10))
+//                choreObjectArrayList.add(ChoreObject("Feed Pets", 10))
+//
+//                if (age == 12) {
+//                    maxAmount = 500F
+//
+//                    choreObjectArrayList.add(ChoreObject("Mop Floor", 10))
+//                    choreObjectArrayList.add(ChoreObject("Clean Bathroom", 30))
+//                    choreObjectArrayList.add(ChoreObject("Wash Dishes", 15))
+//                    choreObjectArrayList.add(ChoreObject("Wash Car", 30))
+//                    choreObjectArrayList.add(ChoreObject("Prepare Meal", 30))
+//                    choreObjectArrayList.add(ChoreObject("Take Care Of Younger Sibling", 30))
+//                }
+//
+//                firestore.collection("Chores").whereEqualTo("createdBy", currentUser).get().addOnSuccessListener { chores ->
+//                    for (chore in chores) {
+//                        var dbChore = chore.toObject<Chores>()
+//                        choreObjectArrayList.add(ChoreObject(dbChore.choreName.toString(), dbChore.duration!!.toInt()))
+//                    }
+//                }
+//            }
+//
+//            choreObjectArrayList.add(ChoreObject("+ Add Custom Chore", null))
 
             var age = difference.years
             if (age == 9) {
                 maxAmount = 100F
             }
             //chores for age 9-12
-            dropdownContent.add("Put Away Groceries")
-            dropdownContent.add("Put Away Laundry")
-            dropdownContent.add("Clean Floor")
-            dropdownContent.add("Set Table")
+            dropdownChores.add("Put Away Groceries")
+            dropdownChores.add("Put Away Laundry")
+            dropdownChores.add("Clean Floor")
+            dropdownChores.add("Set Table")
 
             if (age == 10 || age == 11 || age == 12) {
                 maxAmount = 300F
 
-                dropdownContent.add("Fold Laundry")
-                dropdownContent.add("Help Parent Prepare Meal")
-                dropdownContent.add("Prepare Snack")
-                dropdownContent.add("Change Bed Sheets")
-                dropdownContent.add("Feed Pets")
+                dropdownChores.add("Fold Laundry")
+                dropdownChores.add("Help Parent Prepare Meal")
+                dropdownChores.add("Prepare Snack")
+                dropdownChores.add("Change Bed Sheets")
+                dropdownChores.add("Feed Pets")
 
                 if (age == 12) {
                     maxAmount = 500F
 
-                    dropdownContent.add("Mop Floor")
-                    dropdownContent.add("Clean Bathroom")
-                    dropdownContent.add("Wash Dishes")
-                    dropdownContent.add("Wash Car")
-                    dropdownContent.add("Prepare Meal")
-                    dropdownContent.add("Take Care Of Younger Sibling")}
+                    dropdownChores.add("Mop Floor")
+                    dropdownChores.add("Clean Bathroom")
+                    dropdownChores.add("Wash Dishes")
+                    dropdownChores.add("Wash Car")
+                    dropdownChores.add("Prepare Meal")
+                    dropdownChores.add("Take Care Of Younger Sibling")}
             }
+
+            firestore.collection("Chores").whereEqualTo("createdBy", currentUser).get().addOnSuccessListener { chores ->
+                for (chore in chores) {
+                    var dbChore = chore.toObject<Chores>()
+                    dropdownChores.add(dbChore.choreName.toString())
+                }
+            }.continueWith {
+                dropdownChores.add("+ Add Custom Chore")
+
+            }
+
             binding.tvMaxAmount.text = "The max amount that can be given is ₱${DecimalFormat("#0.00").format(maxAmount)}"
         }
 
         // for the dropdown
-        val choresAdapter = ArrayAdapter(this, R.layout.list_item, dropdownContent)
         binding.dropdownChore.setAdapter(choresAdapter)
 
         val incomeDestinationAdapter = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.income_destination))
         binding.dropdownDestination.setAdapter(incomeDestinationAdapter)
 
         firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { activityResults ->
-            for (saving in activityResults) {
-                firestore.collection("FinancialGoals").document(saving.toObject<FinancialActivities>().financialGoalID!!).get().addOnSuccessListener { goal ->
-                    goalDropDownArrayList.add(GoalDropDown(saving.id, goal.toObject<FinancialGoals>()?.goalName!!))
-                }.continueWith {
-                    goalAdapter = ArrayAdapter(this, R.layout.list_item, goalDropDownArrayList.map { it.goalName })
-                    binding.dropdownGoal.setAdapter(goalAdapter)
+                for (saving in activityResults) {
+                    firestore.collection("FinancialGoals")
+                        .document(saving.toObject<FinancialActivities>().financialGoalID!!)
+                        .get().addOnSuccessListener { goal ->
+                        goalDropDownArrayList.add(GoalDropDown(saving.id, goal.toObject<FinancialGoals>()?.goalName!!))
+                    }.continueWith {
+                        goalAdapter = ArrayAdapter(this, R.layout.list_item, goalDropDownArrayList.map { it.goalName })
+                        binding.dropdownGoal.setAdapter(goalAdapter)
+                    }
                 }
-            }
         }
     }
 
