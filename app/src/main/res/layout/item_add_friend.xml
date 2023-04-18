@@ -44,6 +44,24 @@
                 android:text="@string/username"/>
 
             <ImageView
+                android:id="@+id/img_already_friends"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_check_circle_24"
+                android:layout_gravity="center"
+                card_view:tint="@color/dark_green"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:id="@+id/img_request_sent"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/baseline_check_24"
+                android:layout_gravity="center"
+                card_view:tint="@color/dark_green"
+                android:visibility="gone"/>
+
+            <ImageView
                 android:id="@+id/btn_add_friend"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.profileModule
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -26,6 +27,7 @@ class ProfileActivity : AppCompatActivity(){
 
     private var friendsUserIDArrayList = ArrayList<String>()
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+    private lateinit var childID:String
 
     private val tabIcons = intArrayOf(
         R.drawable.baseline_star_24,
@@ -37,6 +39,23 @@ class ProfileActivity : AppCompatActivity(){
         setContentView(binding.root)
         context= this
 
+        var bundle = intent.extras
+        //different user is coming to view the profile
+        if (bundle != null) {
+            if (bundle?.containsKey("childID")!!) {
+                childID = bundle.getString("childID").toString()
+                binding.btnEditProfile.visibility = View.GONE
+            }
+        }
+        //user is viewing their own profile
+        else {
+            childID = currentUser
+            binding.tvFriends.setOnClickListener {
+                val goToViewFriends = Intent(this, ViewFriendsActivity::class.java)
+                context.startActivity(goToViewFriends)
+            }
+            binding.btnEditProfile.visibility = View.VISIBLE
+        }
         setupFragments()
         getProfileData()
 
@@ -45,10 +64,7 @@ class ProfileActivity : AppCompatActivity(){
             context.startActivity(gotoEditProfile)
         }
 
-        binding.tvFriends.setOnClickListener {
-            val goToViewFriends = Intent(this, ViewFriendsActivity::class.java)
-            context.startActivity(goToViewFriends)
-        }
+
 
         binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
             when (menuItem.itemId) {
@@ -72,7 +88,7 @@ class ProfileActivity : AppCompatActivity(){
         val adapter = ViewPagerAdapter(supportFragmentManager)
 
         var fragmentBundle = Bundle()
-        fragmentBundle.putString("childID", currentUser)
+        fragmentBundle.putString("childID", childID)
 
         var profileCurrentGoalsFragment = ProfileCurrentGoalsFragment()
         profileCurrentGoalsFragment.arguments = fragmentBundle
@@ -96,7 +112,7 @@ class ProfileActivity : AppCompatActivity(){
 
     private fun getProfileData() {
 
-        firestore.collection("Users").document(currentUser).get().addOnSuccessListener { documentSnapshot ->
+        firestore.collection("Users").document(childID).get().addOnSuccessListener { documentSnapshot ->
             var child = documentSnapshot.toObject<Users>()
 
             if (child?.username != null)
@@ -109,15 +125,14 @@ class ProfileActivity : AppCompatActivity(){
     }
 
     private fun countFriends() {
-        val currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("Friends").whereEqualTo("senderID", currentUser)
+        firestore.collection("Friends").whereEqualTo("senderID", childID)
             .whereEqualTo("status", "Accepted").get().addOnSuccessListener { results ->
             for (friend in results) {
                 var request = friend.toObject<Friends>()
                 friendsUserIDArrayList.add(request.receiverID.toString())
             }
         }.continueWith {
-            firestore.collection("Friends").whereEqualTo("receiverID", currentUser)
+            firestore.collection("Friends").whereEqualTo("receiverID", childID)
                 .whereEqualTo("status", "Accepted").get().addOnSuccessListener { results ->
                 for (friend in results) {
                     var request = friend.toObject<Friends>()

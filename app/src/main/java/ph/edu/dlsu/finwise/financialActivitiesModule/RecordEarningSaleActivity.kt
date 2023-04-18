@@ -69,6 +69,7 @@ class RecordEarningSaleActivity : AppCompatActivity() {
                 firestore.collection("FinancialGoals").document(saving.toObject<FinancialActivities>()?.financialGoalID!!).get().addOnSuccessListener { goal ->
                     binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal.toObject<FinancialGoals>()?.currentSavings)!! +
                             " / ₱ " + DecimalFormat("#,##0.00").format(goal.toObject<FinancialGoals>()?.targetAmount!!)
+                    binding.pbProgress.progress = ((goal.toObject<FinancialGoals>()?.currentSavings!! / goal.toObject<FinancialGoals>()?.targetAmount!!)*100).toInt()
                 }
             }
         }

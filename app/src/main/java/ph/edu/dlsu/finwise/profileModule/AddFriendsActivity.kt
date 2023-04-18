@@ -51,13 +51,12 @@ class AddFriendsActivity : AppCompatActivity() {
     private fun fillRecyclerView() {
         var userIDs = ArrayList<String>()
         firestore.collection("Users").whereEqualTo("userType", "Child").get().addOnSuccessListener { results ->
-            //TODO: WAY TO CHECK IF USERS ARE ALREADY FRIENDS
             for (child in results) {
                 if (child.id != currentUser)
                     userIDs.add(child.id)
             }
 
-            addFriendsAdapter = AddFriendsAdapter(this, userIDs, object:AddFriendsAdapter.AddFriendClick{
+            addFriendsAdapter = AddFriendsAdapter(this, userIDs, currentUser, object:AddFriendsAdapter.AddFriendClick{
                 override fun addFriend(childID: String) {
                     sendFriendRequest(childID)
                 }
@@ -71,13 +70,12 @@ class AddFriendsActivity : AppCompatActivity() {
     private fun searchFriends(textInput:String){
         var usernameQuery = ArrayList<String>()
         firestore.collection("Users").whereGreaterThanOrEqualTo("username", textInput).whereLessThanOrEqualTo("username", textInput + "\uf8ff").whereEqualTo("userType", "Child").get().addOnSuccessListener { results ->
-            //TODO: WAY TO CHECK IF USERS ARE ALREADY FRIENDS
             for (child in results) {
                 if (child.id != currentUser)
-                usernameQuery.add(child.id)
+                    usernameQuery.add(child.id)
             }
 
-            addFriendsAdapter = AddFriendsAdapter(this, usernameQuery, object:AddFriendsAdapter.AddFriendClick{
+            addFriendsAdapter = AddFriendsAdapter(this, usernameQuery, currentUser, object:AddFriendsAdapter.AddFriendClick{
                 override fun addFriend(childID: String) {
                     sendFriendRequest(childID)
                 }

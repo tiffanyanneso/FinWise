@@ -1,6 +1,8 @@
 package ph.edu.dlsu.finwise.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +12,10 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemAddFriendBinding
 import ph.edu.dlsu.finwise.databinding.ItemFriendRequestBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 import ph.edu.dlsu.finwise.model.Friends
 import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.profileModule.ProfileActivity
 
 class FriendRequestAdapter : RecyclerView.Adapter<FriendRequestAdapter.FriendRequestViewHolder>{
 
@@ -60,6 +64,7 @@ class FriendRequestAdapter : RecyclerView.Adapter<FriendRequestAdapter.FriendReq
                 firestore.collection("Users").document(request?.senderID.toString()).get().addOnSuccessListener {
                     var child = it.toObject<Users>()
                     itemBinding.tvUsername.text = child?.username
+                    itemBinding.tvChildId.text = request?.senderID
                 }
             }
 
@@ -73,7 +78,13 @@ class FriendRequestAdapter : RecyclerView.Adapter<FriendRequestAdapter.FriendReq
         }
 
         override fun onClick(p0: View?) {
-
+            var bundle = Bundle()
+            var childID = itemBinding.tvChildId.text.toString()
+            bundle.putString("childID", childID)
+            var profile = Intent(context, ProfileActivity::class.java)
+            profile.putExtras(bundle)
+            profile.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(profile)
         }
     }
 

@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:hint="Destination"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_marginTop="10dp"
+        android:layout_marginVertical="10dp"
         android:layout_marginHorizontal="20dp"
         app:startIconDrawable="@drawable/baseline_wallet_24"
         app:helperTextEnabled="true"
@@ -117,6 +117,7 @@
             android:layout_height="wrap_content"
             android:hint="Goal"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_marginVertical="10dp"
             android:layout_marginHorizontal="20dp"
             app:startIconDrawable="@drawable/baseline_star_24"
             app:helperTextEnabled="true"
@@ -154,6 +155,19 @@
             android:textColor="@color/black"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="10dp"/>
+
+        <ProgressBar
+            android:id="@+id/pb_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="370dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_progress_amount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginHorizontal="20dp"
+            android:scaleY="4"
+            android:max="100"
+            />
 
     </LinearLayout>
 
