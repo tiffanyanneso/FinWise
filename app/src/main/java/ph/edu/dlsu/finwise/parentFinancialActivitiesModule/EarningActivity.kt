@@ -19,6 +19,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEarningBinding
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningCompletedFragment
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningOverdueFragment
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningPendingConfirmationFragment
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningToDoFragment
 
@@ -87,6 +88,9 @@ class EarningActivity : AppCompatActivity() {
         var earningCompletedFragment = EarningCompletedFragment()
         earningCompletedFragment.arguments = fragmentBundle
 
+        var earningOverdueFragment = EarningOverdueFragment()
+        earningOverdueFragment.arguments = fragmentBundle
+
 
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
             var user  = it.toObject<Users>()!!
@@ -94,11 +98,13 @@ class EarningActivity : AppCompatActivity() {
             if (user.userType == "Child") {
                 adapter.addFragment(earningToDoFragment,"To Do")
                 adapter.addFragment(earningPendingFragment,"Pending")
+                adapter.addFragment(earningOverdueFragment,"Overdue")
                 adapter.addFragment(earningCompletedFragment,"Completed")
                 setupTabIconsChild()
             } else  if (user.userType == "Parent"){
                 adapter.addFragment(earningPendingFragment,"Pending")
                 adapter.addFragment(earningToDoFragment,"To Do")
+                adapter.addFragment(earningOverdueFragment,"Overdue")
                 adapter.addFragment(earningCompletedFragment,"Completed")
                 setupTabIconsParent()
             }

@@ -153,7 +153,7 @@ class NewEarningActivity : AppCompatActivity() {
 
     private fun validAmount():Boolean {
         if (binding.etAmount.text.toString().toFloat() > maxAmount) {
-            binding.amountContainer.helperText = "You cannot deposit more than your current balance"
+            binding.amountContainer.helperText = "You cannot set an amount greater than the maximum"
             return false
         }
         else
@@ -290,42 +290,6 @@ class NewEarningActivity : AppCompatActivity() {
             val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
             val to = LocalDate.parse(date.toString(), dateFormatter)
             var difference = Period.between(to, from)
-
-//            //chores for age 9-12
-//            choreObjectArrayList.add(ChoreObject("Put Away Groceries", 10))
-//            choreObjectArrayList.add(ChoreObject("Put Away Laundry", 5))
-//            choreObjectArrayList.add(ChoreObject("Clean Floor", 10))
-//            choreObjectArrayList.add(ChoreObject("Set Table", 5))
-//
-//            if (age == 10 || age == 11 || age == 12) {
-//                maxAmount = 300F
-//
-//                choreObjectArrayList.add(ChoreObject("Fold Laundry", 10))
-//                choreObjectArrayList.add(ChoreObject("Help Parent Prepare Meal", 15))
-//                choreObjectArrayList.add(ChoreObject("Prepare Snack", 15))
-//                choreObjectArrayList.add(ChoreObject("Change Bed Sheets", 10))
-//                choreObjectArrayList.add(ChoreObject("Feed Pets", 10))
-//
-//                if (age == 12) {
-//                    maxAmount = 500F
-//
-//                    choreObjectArrayList.add(ChoreObject("Mop Floor", 10))
-//                    choreObjectArrayList.add(ChoreObject("Clean Bathroom", 30))
-//                    choreObjectArrayList.add(ChoreObject("Wash Dishes", 15))
-//                    choreObjectArrayList.add(ChoreObject("Wash Car", 30))
-//                    choreObjectArrayList.add(ChoreObject("Prepare Meal", 30))
-//                    choreObjectArrayList.add(ChoreObject("Take Care Of Younger Sibling", 30))
-//                }
-//
-//                firestore.collection("Chores").whereEqualTo("createdBy", currentUser).get().addOnSuccessListener { chores ->
-//                    for (chore in chores) {
-//                        var dbChore = chore.toObject<Chores>()
-//                        choreObjectArrayList.add(ChoreObject(dbChore.choreName.toString(), dbChore.duration!!.toInt()))
-//                    }
-//                }
-//            }
-//
-//            choreObjectArrayList.add(ChoreObject("+ Add Custom Chore", null))
 
             var age = difference.years
             if (age == 9) {

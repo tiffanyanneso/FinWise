@@ -7,20 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.EarningCompletedAdapter
-import ph.edu.dlsu.finwise.adapter.EarningToDoAdapter
+import ph.edu.dlsu.finwise.adapter.EarningOverdueAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentEarningCompletedBinding
-import ph.edu.dlsu.finwise.databinding.FragmentEarningToDoBinding
+import ph.edu.dlsu.finwise.databinding.FragmentEarningOverdueBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
+import java.sql.Timestamp
 import java.util.*
 import kotlin.collections.ArrayList
 
-class EarningToDoFragment : Fragment() {
+class EarningOverdueFragment : Fragment() {
 
-    private lateinit var binding:FragmentEarningToDoBinding
-    private lateinit var earningToDoAdapter: EarningToDoAdapter
+    private lateinit var binding: FragmentEarningOverdueBinding
+    private lateinit var earningOverdueAdapter:EarningOverdueAdapter
+
     private lateinit var childID:String
 
     private var firestore = Firebase.firestore
@@ -37,29 +40,30 @@ class EarningToDoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentEarningToDoBinding.inflate(inflater, container, false)
-        return binding.root
+        binding = FragmentEarningOverdueBinding.inflate(inflater, container, false)
+        return binding .root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getToDoEarning()
+        getOverdueEarning()
     }
 
-    private fun getToDoEarning() {
-        var earningToDoArrayList = ArrayList<String>()
+    private fun getOverdueEarning() {
+        var earningOverdueArrayList = ArrayList<String>()
         firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("status", "Ongoing").get().addOnSuccessListener { results ->
             var dateToday = Date()
             for (earning in results){
                 var earningObject = earning.toObject<EarningActivityModel>()
-                if (dateToday.before(earningObject.targetDate!!.toDate()))
-                    earningToDoArrayList.add(earning.id)
+                if (dateToday.after(earningObject.targetDate!!.toDate()))
+                    earningOverdueArrayList.add(earning.id)
             }
 
-            earningToDoAdapter = EarningToDoAdapter(requireActivity().applicationContext, earningToDoArrayList)
-            binding.rvViewActivitiesToDo.adapter = earningToDoAdapter
-            binding.rvViewActivitiesToDo.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
-            earningToDoAdapter.notifyDataSetChanged()
+            earningOverdueAdapter = EarningOverdueAdapter(requireActivity().applicationContext, earningOverdueArrayList)
+            binding.rvViewActivitiesCompleted.adapter = earningOverdueAdapter
+            binding.rvViewActivitiesCompleted.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
+            earningOverdueAdapter.notifyDataSetChanged()
         }
     }
+
 }
