@@ -114,7 +114,7 @@
                                         android:id="@+id/peso_balance"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:text="Peso Balance"
+                                        android:text="Cash Balance"
                                         android:textAllCaps="true"
                                         android:textColor="@color/white"
                                         android:textSize="16sp" />
@@ -145,7 +145,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cv_peso_balance"
                 app:cardCornerRadius="10dp"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="10dp">
 
                 <LinearLayout
                     android:id="@+id/linear_layout_1_maya"
@@ -228,18 +228,20 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:elevation="5dp"
-                android:layout_height="500dp"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/cv_maya_balance"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:cardCornerRadius="10dp"
-                android:layout_marginTop="20dp">
+                android:layout_marginTop="20dp"
+                android:paddingBottom="20dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="@color/white">
+                    android:background="@color/white"
+                    android:paddingBottom="20dp">
 
                     <TextView
                         android:id="@+id/tv_title"
@@ -248,7 +250,6 @@
                         android:text="Your Balance Breakdown"
                         android:textSize="20sp"
                         android:layout_marginTop="20dp"
-                        android:layout_marginStart="20dp"
                         android:textStyle="bold"
                         android:textColor="@color/dark_green"
                         android:layout_gravity="center_horizontal"
@@ -258,14 +259,17 @@
                         android:id="@+id/pc_cash_maya"
                         android:layout_width="350dp"
                         android:layout_height="350dp"
-                        android:layout_marginTop="25dp"
+                        android:layout_marginTop="10dp"
                         android:layout_gravity="center_horizontal"/>
-
-
-
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/cv_pie_chart">
+            </LinearLayout>
 
 
 

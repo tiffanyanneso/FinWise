@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".parentFinancialActivitiesModule.EarningSellingActivity">
+    tools:context=".parentFinancialActivitiesModule.EarningSellingActivity"
+    android:backgroundTint="@color/very_light_green"
+    android:background="@color/very_light_green">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/topbar"
@@ -34,7 +36,7 @@
         app:layout_constraintTop_toBottomOf="@id/topbar"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:text="+ Add"
+        android:text="+ Add Sale"
         android:textColor="@color/off_white"
         android:backgroundTint="@color/dark_green"
         android:background="@drawable/button_border"/>

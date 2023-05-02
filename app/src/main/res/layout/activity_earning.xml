@@ -30,7 +30,7 @@
         android:id="@+id/btn_add_earning_activity"
         android:layout_width="100dp"
         android:layout_height="40dp"
-        android:text="+ Add"
+        android:text="+ New"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="20dp"
         android:textColor="@color/off_white"

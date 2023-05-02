@@ -90,7 +90,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="Loading your data 🔃 \n Thank you for your patience ☺"
+                    android:text="Loading your data..."
                     android:textColor="@color/white"
                     android:layout_gravity="center"
                     android:layout_marginLeft="15dp"/>
