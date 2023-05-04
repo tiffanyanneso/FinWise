@@ -57,7 +57,6 @@ class SavingsWithdrawActivity : AppCompatActivity() {
 
         binding.dropPaymentType.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             changeDisplayedBalance()
-
         }
 
         binding.btnNext.setOnClickListener {
@@ -124,6 +123,7 @@ class SavingsWithdrawActivity : AppCompatActivity() {
             if (cashBalance == 0.00F) {
                 binding.tvCashBalance.visibility = View.GONE
                 binding.dropPaymentType.setText("Maya")
+                selectedWalletBalance = mayaBalance
                 //disable them to select other fund source
                 binding.dropPaymentType.isEnabled = false
                 binding.dropPaymentType.isClickable = false
@@ -131,6 +131,7 @@ class SavingsWithdrawActivity : AppCompatActivity() {
             else if (mayaBalance == 0.00F) {
                 binding.tvMayaBalance.visibility = View.GONE
                 binding.dropPaymentType.setText("Cash")
+                selectedWalletBalance = cashBalance
                 //disable them to select other fund source
                 binding.dropPaymentType.isEnabled = false
                 binding.dropPaymentType.isClickable = false

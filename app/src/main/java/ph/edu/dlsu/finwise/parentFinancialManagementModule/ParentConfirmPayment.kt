@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
@@ -160,7 +161,19 @@ class ParentConfirmPayment : AppCompatActivity() {
             "amount" to amount.toFloat(),
             "phoneNumber" to phone
         )
-        firestore.collection("Transactions").add(transaction).addOnSuccessListener {
+        firestore.collection("Transactions").add(transaction)
+
+        val incomeChild = hashMapOf(
+            "userID" to childID,
+            "transactionName" to "Received money from parent",
+            "transactionType" to "Income",
+            "category" to "Gift",
+            "date" to bundle!!.getSerializable("date"),
+            "amount" to amount.toFloat(),
+            "paymentType" to paymentType
+        )
+
+        firestore.collection("Transactions").add(incomeChild).continueWith {
             goToPFM()
         }
 
