@@ -162,6 +162,8 @@ class EditEarningActivity : AppCompatActivity() {
                 maxAmount = 300.0
             else
                 maxAmount = 500.0
+
+            binding.tvMaxAmount.text = "The max amount that can be given is ₱${DecimalFormat("#0.00").format(maxAmount)}"
         }
     }
 
@@ -184,8 +186,6 @@ class EditEarningActivity : AppCompatActivity() {
     }
 
     private fun validAmount():Boolean {
-        println("print " + binding.etAmount.text.toString().toFloat())
-        println("print " + maxAmount)
         if (binding.etAmount.text.toString().toFloat() > maxAmount) {
             binding.amountContainer.helperText = "You cannot set an amount greater than the maximum"
             return false

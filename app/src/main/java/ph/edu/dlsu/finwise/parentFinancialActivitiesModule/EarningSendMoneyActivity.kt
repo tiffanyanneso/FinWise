@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,7 @@ import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEarningSendMoneyBinding
+import ph.edu.dlsu.finwise.databinding.DialogEditChoreRewardBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
@@ -36,6 +38,9 @@ import ph.edu.dlsu.finwise.model.Users
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 class EarningSendMoneyActivity : AppCompatActivity() {
 
@@ -48,11 +53,14 @@ class EarningSendMoneyActivity : AppCompatActivity() {
     private lateinit var earningActivityID:String
     private lateinit var savingActivityID:String
     private lateinit var childID:String
+    private var maxAmount = 0.0
     private lateinit var paymentType:String
 
     private lateinit var source:String
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
+    private lateinit var dialogBinding:DialogEditChoreRewardBinding
 
     // For Pay With PayMaya API: This is instantiating the Pay With PayMaya API.
     private val payWithPayMayaClient = PayWithPayMaya.newBuilder()
@@ -78,6 +86,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
 
         loadEarningActivityText()
         loadSendMoneyButton()
+        loadEditAmountButton()
     }
 
     private fun loadEarningActivityText() {
@@ -127,6 +136,54 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             redirectUrl,
             null as JSONObject?
         )
+    }
+
+    private fun loadEditAmountButton() {
+        binding.btnEditAmount.setOnClickListener {
+            checkAge()
+            dialogBinding = DialogEditChoreRewardBinding.inflate(getLayoutInflater())
+            var dialog = Dialog(this);
+            dialog.setContentView(dialogBinding.getRoot())
+            dialog.window!!.setLayout(900, 800)
+
+            dialogBinding.btnSave.setOnClickListener {
+                amount = dialogBinding.etAmount.text.toString().toFloat()
+                firestore.collection("EarningActivities").document(earningActivityID).update("amount", amount)
+
+                if (paymentType == "Maya")
+                    payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
+                else if (paymentType == "Cash")
+                    logTransactions()
+            }
+
+            dialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }
+
+            dialog.show()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun checkAge() {
+        firestore.collection("Users").document(childID).get().addOnSuccessListener {
+            var child = it.toObject<Users>()
+
+            //compute age
+            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            var difference = Period.between(to, from)
+
+            var age = difference.years
+            if (age == 9)
+                maxAmount = 100.0
+            else if (age == 10 || age == 11)
+                maxAmount = 300.0
+            else
+                maxAmount = 500.0
+
+            dialogBinding.tvMaxAmount.text = "The max amount that can be given is ₱${DecimalFormat("#0.00").format(maxAmount)}"
+        }
     }
 
 
@@ -300,5 +357,4 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             onBackPressed()
         }
     }
-
 }
