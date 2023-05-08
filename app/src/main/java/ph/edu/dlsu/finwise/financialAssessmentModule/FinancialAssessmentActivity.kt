@@ -22,6 +22,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentBinding
 import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
+import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
 import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -212,12 +213,17 @@ class FinancialAssessmentActivity : AppCompatActivity() {
         if (assessmentsIDArray != null) {
             for (assessmentID in assessmentsIDArray) {
                 val questions = getAssessmentQuestionsCollection(assessmentID.id)
+                Log.d("tagheur", "questions: "+questions?.count())
+                Log.d("tagheur", "assessmentID: "+assessmentID)
                 if (questions != null) {
                     for (question in questions) {
                         questionIDArrayList.add(question.id)
                     }
                 }
             }
+            Log.d("tagheur", "questionIDArrayList: "+questionIDArrayList)
+            Log.d("tagheur", "questionIDArrayList.count: "+questionIDArrayList.count())
+            Log.d("tagheur", "age: "+age)
         }
     }
 
@@ -231,6 +237,8 @@ class FinancialAssessmentActivity : AppCompatActivity() {
         val docRef = firestore.collection("AssessmentQuestions")
             .whereEqualTo("assessmentID", assessmentID)
             .whereIn("difficulty", difficultyQuery)
+            .limit(5)
+
         return docRef.get().await()
     }
 
@@ -265,7 +273,8 @@ class FinancialAssessmentActivity : AppCompatActivity() {
         //TODO: fix comments
         /*assessmentType = "Pre-Activity"
         assessmentCategory = "Budgeting"*/
-        assessmentType = bundle?.getString("assessmentType").toString()
+        //assessmentType = bundle?.getString("assessmentType").toString()
+        assessmentType = "Preliminary"
         assessmentCategory = bundle?.getString("assessmentCategory").toString()
     }
 
