@@ -298,7 +298,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         }
         else {
             performance = "Bad...!"
-            binding.tvPerformance.setTextColor(resources.getColor(R.color.yellow))
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
             grade = "Your child has 0 balance. You can give them money through Maya by clicking the button above"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         }
