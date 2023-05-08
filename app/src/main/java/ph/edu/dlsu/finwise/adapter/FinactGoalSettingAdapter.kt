@@ -12,6 +12,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.databinding.ItemFinactGoalSettingBinding
 import ph.edu.dlsu.finwise.databinding.ItemFinactSavingBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.GoalSettingForEditingActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentSettingAGoalActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalDetailsTabbedActivity
@@ -83,17 +84,21 @@ class FinactGoalSettingAdapter : RecyclerView.Adapter<FinactGoalSettingAdapter.F
             bundle.putString ("childID", childID)
 
             var status = itemBinding.tvStatus.text.toString()
-            if (status == "For Review") {
-                var reviewGoal = Intent(context, ParentSettingAGoalActivity::class.java)
-                reviewGoal.putExtras(bundle)
-                reviewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(reviewGoal)
-            } else if (status == "For Editing") {
-                var reviewGoal = Intent(context, ViewGoalDetailsTabbedActivity::class.java)
-                reviewGoal.putExtras(bundle)
-                reviewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                context.startActivity(reviewGoal)
-            }
+            var reviewGoal = Intent(context, GoalSettingForEditingActivity::class.java)
+            reviewGoal.putExtras(bundle)
+            reviewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(reviewGoal)
+//            if (status == "For Review") {
+//                var reviewGoal = Intent(context, ParentSettingAGoalActivity::class.java)
+//                reviewGoal.putExtras(bundle)
+//                reviewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                context.startActivity(reviewGoal)
+//            } else if (status == "For Editing") {
+//                var reviewGoal = Intent(context, GoalSettingForEditingActivity::class.java)
+//                reviewGoal.putExtras(bundle)
+//                reviewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//                context.startActivity(reviewGoal)
+//            }
 
         }
     }

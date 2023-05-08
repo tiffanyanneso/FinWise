@@ -21,6 +21,7 @@ import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEditGoalBinding
+import ph.edu.dlsu.finwise.databinding.ActivityGoalSettingEditGoalBinding
 import ph.edu.dlsu.finwise.databinding.DialogDeleteGoalWarningBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.FinancialGoals
@@ -33,8 +34,8 @@ import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class EditGoal : AppCompatActivity() {
-    private lateinit var binding : ActivityEditGoalBinding
+class GoalSettingEditGoalActivity : AppCompatActivity() {
+    private lateinit var binding : ActivityGoalSettingEditGoalBinding
     private var firestore = Firebase.firestore
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
@@ -42,22 +43,17 @@ class EditGoal : AppCompatActivity() {
     private lateinit var savingActivityID:String
     private lateinit var targetDate: Date
 
-    private var cashBalance = 0.00F
-    private var mayaBalance = 0.00F
-
     private var maxAmount = 0.00F
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityEditGoalBinding.inflate(layoutInflater)
+        binding = ActivityGoalSettingEditGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
-        cashBalance = bundle.getFloat("cashBalance")
-        mayaBalance = bundle.getFloat("mayaBalance")
         checkAge()
         getFinancialGoal()
         checkUser()
@@ -105,13 +101,13 @@ class EditGoal : AppCompatActivity() {
     private fun updateGoal() {
         var targetDate = SimpleDateFormat("MM/dd/yyyy").parse(binding.etTargetDate.text.toString())
         firestore.collection("FinancialGoals").document(financialGoalID).update("goalName", binding.etGoal.text.toString(),
-            "targetAmount", binding.etAmount.text.toString().toFloat(), "targetDate", targetDate).addOnSuccessListener {
+            "targetAmount", binding.etAmount.text.toString().toFloat(), "targetDate", targetDate, "status", "For Review").addOnSuccessListener {
             Toast.makeText(this, "Goal has been updated", Toast.LENGTH_LONG).show()
-            var goalDetails = Intent(this, ViewGoalActivity::class.java)
+            var goalList = Intent(this, WaitGoalReview::class.java)
             var sendBundle = Bundle()
             sendBundle.putString("financialGoalID", financialGoalID)
-            goalDetails.putExtras(sendBundle)
-            startActivity(goalDetails)
+            goalList.putExtras(sendBundle)
+            startActivity(goalList)
             finish()
         }
 
@@ -142,54 +138,9 @@ class EditGoal : AppCompatActivity() {
             firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { results ->
                 for (activity in results )
                     firestore.collection("FinancialActivities").document(activity.id).update("status", "Deleted")
-
-                returnSavings()
                 var goalList = Intent(this, FinancialActivity::class.java)
                 startActivity(goalList)
                 finish()
-            }
-        }
-    }
-
-    private fun returnSavings() {
-        if (cashBalance > 0.00F) {
-            var cashWithdrawal = hashMapOf(
-                "transactionName" to binding.etGoal.text.toString() + " Withdrawal",
-                "transactionType" to "Withdrawal",
-                "category" to "Goal",
-                "date" to Timestamp.now(),
-                "userID" to currentUser,
-                "amount" to cashBalance,
-                "financialActivityID" to savingActivityID,
-                "paymentType" to "Cash"
-            )
-            firestore.collection("Transactions").add(cashWithdrawal)
-            firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", "Cash").get().addOnSuccessListener {
-                var walletID = it.documents[0].id
-                firestore.collection("ChildWallet").document(walletID).get().addOnSuccessListener {
-                    var updatedBalance = it.toObject<ChildWallet>()?.currentBalance!! + cashBalance
-                    firestore.collection("ChildWallet").document(walletID).update("currentBalance", updatedBalance)
-                }
-            }
-        }
-        if (mayaBalance > 0.00F) {
-            var mayaWithdrawal = hashMapOf(
-                "transactionName" to binding.etGoal.text.toString() + " Withdrawal",
-                "transactionType" to "Withdrawal",
-                "category" to "Goal",
-                "date" to Timestamp.now(),
-                "userID" to currentUser,
-                "amount" to mayaBalance,
-                "financialActivityID" to savingActivityID,
-                "paymentType" to "Maya"
-            )
-            firestore.collection("Transactions").add(mayaWithdrawal)
-            firestore.collection("ChildWallet").whereEqualTo("childID", currentUser).whereEqualTo("type", "Maya").get().addOnSuccessListener {
-                var walletID = it.documents[0].id
-                firestore.collection("ChildWallet").document(walletID).get().addOnSuccessListener {
-                    var updatedBalance = it.toObject<ChildWallet>()?.currentBalance!! + mayaBalance
-                    firestore.collection("ChildWallet").document(walletID).update("currentBalance", updatedBalance)
-                }
             }
         }
     }
