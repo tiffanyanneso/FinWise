@@ -273,8 +273,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
         //TODO: fix comments
         /*assessmentType = "Pre-Activity"
         assessmentCategory = "Budgeting"*/
-        //assessmentType = bundle?.getString("assessmentType").toString()
-        assessmentType = "Preliminary"
+        assessmentType = bundle?.getString("assessmentType").toString()
         assessmentCategory = bundle?.getString("assessmentCategory").toString()
     }
 
