@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -156,6 +157,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
         val assessmentAttempt = firestore.collection("AssessmentAttempts")
             .whereEqualTo("assessmentID" , assessmentIDArrayList[0])
             .whereEqualTo("childID", childID)
+            .orderBy("dateTaken", Query.Direction.DESCENDING)
             .get().await()
                 lateinit var progressPercent: String
                 lateinit var scoreBreakdown: String
