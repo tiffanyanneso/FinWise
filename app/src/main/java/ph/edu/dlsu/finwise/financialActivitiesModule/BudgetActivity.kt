@@ -267,6 +267,9 @@ class BudgetActivity : AppCompatActivity() {
                 })
             binding.rvViewCategories.adapter = budgetCategoryAdapter
             binding.rvViewCategories.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
+            binding.rvViewCategories.visibility = View.VISIBLE
         }
     }
 

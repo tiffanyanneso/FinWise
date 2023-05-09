@@ -61,7 +61,9 @@ class GoalDepositFragment : Fragment() {
             goalTransactionsAdapter = GoalTransactionsHistoryAdapater(requireActivity().applicationContext, transactionsIDArrayList)
             binding.rvViewTransactions.adapter = goalTransactionsAdapter
             binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
-            goalTransactionsAdapter.notifyDataSetChanged()
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
+            binding.rvViewTransactions.visibility = View.VISIBLE
         }
     }
 

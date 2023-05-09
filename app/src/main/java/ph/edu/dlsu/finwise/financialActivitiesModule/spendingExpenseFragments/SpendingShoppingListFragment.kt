@@ -86,7 +86,6 @@ class SpendingShoppingListFragment : Fragment() {
                 shoppingListArrayList.add(ShoppingListAdapterItem(item.id, shoppingList.itemName.toString(), checked))
             }
 
-        }.continueWith {
             shoppingListAdapter = ShoppingListAdapter(requireActivity().applicationContext, shoppingListArrayList, savingActivityID, object:ShoppingListAdapter.ShoppingListSetting{
                 override fun editShoppingListItem(shoppingListItemID: String) {
                     funEditShoppingListItem(shoppingListItemID)
@@ -98,35 +97,38 @@ class SpendingShoppingListFragment : Fragment() {
 
             }, object:ShoppingListAdapter.CheckShoppingList{
                 override fun checkShoppingListItem(shoppingListItemID:String, position: Int) {
-                        var dialogBinding= DialogShoppingListRecordExpenseBinding.inflate(layoutInflater)
-                        var dialog= Dialog(view!!.context);
-                        dialog.setContentView(dialogBinding.root)
-                        dialog.window!!.setLayout(900, 600)
+                    var dialogBinding= DialogShoppingListRecordExpenseBinding.inflate(layoutInflater)
+                    var dialog= Dialog(view!!.context);
+                    dialog.setContentView(dialogBinding.root)
+                    dialog.window!!.setLayout(900, 600)
 
-                        dialogBinding.btnYes.setOnClickListener {
-                            var recordExpense = Intent(context, FinancialActivityRecordExpense::class.java)
-                            var bundle = Bundle()
-                            bundle.putString("budgetItemID", budgetItemID)
-                            bundle.putString("savingActivityID", savingActivityID)
-                            bundle.putString("budgetingActivityID", budgetingActivityID)
-                            bundle.putString("spendingActivityID", spendingActivityID)
-                            bundle.putString("shoppingListItem", shoppingListItemID)
-                            bundle.putFloat("remainingBudget", remainingBudget)
-                            recordExpense.putExtras(bundle)
-                            recordExpense.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(recordExpense)
-                        }
+                    dialogBinding.btnYes.setOnClickListener {
+                        var recordExpense = Intent(context, FinancialActivityRecordExpense::class.java)
+                        var bundle = Bundle()
+                        bundle.putString("budgetItemID", budgetItemID)
+                        bundle.putString("savingActivityID", savingActivityID)
+                        bundle.putString("budgetingActivityID", budgetingActivityID)
+                        bundle.putString("spendingActivityID", spendingActivityID)
+                        bundle.putString("shoppingListItem", shoppingListItemID)
+                        bundle.putFloat("remainingBudget", remainingBudget)
+                        recordExpense.putExtras(bundle)
+                        recordExpense.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(recordExpense)
+                    }
 
-                        dialogBinding.btnNo.setOnClickListener {
-                            shoppingListArrayList[position].isChecked = false
-                            shoppingListAdapter.notifyItemChanged(position)
-                            dialog.dismiss()
-                        }
-                        dialog.show()
+                    dialogBinding.btnNo.setOnClickListener {
+                        shoppingListArrayList[position].isChecked = false
+                        shoppingListAdapter.notifyItemChanged(position)
+                        dialog.dismiss()
+                    }
+                    dialog.show()
                 }
             })
             binding.rvViewItems.adapter = shoppingListAdapter
             binding.rvViewItems.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
+            binding.rvViewItems.visibility = View.VISIBLE
         }
     }
 

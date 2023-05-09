@@ -120,7 +120,12 @@ class ParentSpendingFragment : Fragment() {
                 spendingActivityIDArrayList.add(activityObject?.financialGoalID.toString())
             }
             loadRecyclerView(spendingActivityIDArrayList)
-        }.continueWith { binding.tvTitleInProgress.text = "Spending Activities (" + spendingActivityIDArrayList.size.toString() + ")" }
+        }.continueWith {
+            binding.rvViewGoals.visibility = View.VISIBLE
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
+            binding.tvTitleInProgress.text = "Spending Activities (" + spendingActivityIDArrayList.size.toString() + ")"
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

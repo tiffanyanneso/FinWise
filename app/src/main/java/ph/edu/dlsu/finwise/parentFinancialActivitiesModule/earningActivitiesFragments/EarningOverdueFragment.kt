@@ -63,6 +63,9 @@ class EarningOverdueFragment : Fragment() {
             binding.rvViewActivitiesCompleted.adapter = earningOverdueAdapter
             binding.rvViewActivitiesCompleted.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
             earningOverdueAdapter.notifyDataSetChanged()
+            binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
         }
     }
 

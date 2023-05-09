@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="10dp"
+    android:layout_marginBottom="10dp"
+    card_view:cardBackgroundColor="@color/loading_grey">
+
+    <TextView
+        android:id="@+id/tv_goal_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_gravity="center_vertical">
+
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_goal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:layout_weight="@integer/material_motion_duration_short_1"
+                android:background="@color/loading_grey"
+                />
+
+            <TextView
+                android:id="@+id/tv_progress_percent"
+                android:textSize="20sp"
+                android:textColor="@color/dark_green"
+                android:textStyle="bold"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/loading_grey"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/linear_layout">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="Peso logo"
+                android:background="@color/loading_grey"
+                android:text="P"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                card_view:tint="@color/red" />
+
+            <TextView
+                android:id="@+id/tv_target_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/linear_layout"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:background="@color/loading_grey"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_progress_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linear_layout_2"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:background="@color/loading_grey"
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"/>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/tv_progress_amount">
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:scaleY="4"
+                android:max="100"
+                android:background="@color/loading_grey"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/linear_layout_3"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:background="@color/loading_grey" />
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>

@@ -60,6 +60,9 @@ class EarningToDoFragment : Fragment() {
             binding.rvViewActivitiesToDo.adapter = earningToDoAdapter
             binding.rvViewActivitiesToDo.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
             earningToDoAdapter.notifyDataSetChanged()
+            binding.rvViewActivitiesToDo.visibility = View.VISIBLE
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
         }
     }
 }

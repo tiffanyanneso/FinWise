@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Build
@@ -18,6 +19,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
@@ -74,13 +79,11 @@ class ViewGoalActivity : AppCompatActivity() {
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityViewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         var bundle: Bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         childID = bundle.getString("childID").toString()
@@ -302,10 +305,13 @@ class ViewGoalActivity : AppCompatActivity() {
                         binding.progressBar.progress = progress
                     else
                         binding.progressBar.progress = 100
-
+                    
                     goalTransactionsAdapter = GoalTransactionsAdapater(this, transactionsArrayList)
                     binding.rvSavingsDeposit.adapter = goalTransactionsAdapter
                     binding.rvSavingsDeposit.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+                    binding.loadingItems.stopShimmer()
+                    binding.loadingItems.visibility = View.GONE
+                    binding.rvSavingsDeposit.visibility = View.VISIBLE
 
                     //compute remaining days
                     val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")

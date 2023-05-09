@@ -76,6 +76,9 @@ class DisapprovedFragment : Fragment() {
                 LinearLayoutManager.VERTICAL,
                 false)
             goalAdapter.notifyDataSetChanged()
+            binding.rvViewGoals.visibility = View.VISIBLE
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
         }
 
     }

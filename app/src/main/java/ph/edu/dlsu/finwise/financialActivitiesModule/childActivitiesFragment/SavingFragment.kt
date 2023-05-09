@@ -178,6 +178,10 @@ class SavingFragment : Fragment() {
 
             loadRecyclerView(goalIDArrayList)
         }.continueWith {
+            binding.rvViewGoals.visibility = View.VISIBLE
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
+
             getTotalSavings()
             setGoalCount()} 
     }
