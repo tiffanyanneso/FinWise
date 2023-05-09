@@ -63,7 +63,7 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
     }
 
     private fun initializeTitleAndNumber() {
-        val assessmentTitle = "$assessmentName Quiz"
+        val assessmentTitle = "$assessmentName"
         binding.assessmentTitle.text = assessmentTitle
 
         binding.questionsLeft.text = "$currentNumber / $nNumberOfQuestions"

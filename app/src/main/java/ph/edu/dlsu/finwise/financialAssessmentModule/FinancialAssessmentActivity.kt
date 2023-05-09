@@ -115,6 +115,7 @@ class FinancialAssessmentActivity : AppCompatActivity() {
                         "this preliminary quiz. Good luck!"
                 binding.tvPreviousScore.visibility = View.GONE
                 binding.tvName.visibility = View.GONE
+                binding.tvWhat.visibility = View.GONE
                 binding.textViewProgress.visibility = View.GONE
                 binding.tvBreakdown.visibility = View.GONE
                 binding.progressBar.visibility = View.GONE
