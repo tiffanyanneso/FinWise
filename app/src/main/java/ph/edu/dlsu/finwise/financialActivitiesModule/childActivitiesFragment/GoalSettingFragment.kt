@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
@@ -129,19 +130,24 @@ class GoalSettingFragment : Fragment() {
         firestore.collection("Assessments").whereEqualTo("assessmentType", "Pre-Activity").whereEqualTo("assessmentCategory", "Goal Setting").get().addOnSuccessListener {
             if (it.size() != 0) {
                 var assessmentID = it.documents[0].id
-                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+                firestore.collection("AssessmentAttempts")
+                    .whereEqualTo("assessmentID", assessmentID)
+                    .whereEqualTo("childID", currentUser)
+                    .orderBy("dateTaken", Query.Direction.DESCENDING)
+                    .get().addOnSuccessListener { results ->
                     if (results.size() != 0) {
-                        var assessmentAttemptsObjects = results.toObjects<FinancialAssessmentAttempts>()
-                        assessmentAttemptsObjects.sortedByDescending { it.dateTaken }
+                        val assessmentAttemptsObjects = results.toObjects<FinancialAssessmentAttempts>()
                         val latestAssessmentAttempt = assessmentAttemptsObjects[0].dateTaken
                         val lastTakenFormat = SimpleDateFormat("MM/dd/yyyy").format(latestAssessmentAttempt!!.toDate())
                         val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
                         val from = LocalDate.parse(lastTakenFormat, dateFormatter)
                         val today = LocalDate.now()
-                        val difference = Period.between(from, today)
                         // includes the month difference as well instead of just the day difference
                         val daysDifference = ChronoUnit.DAYS.between(from, today)
                         assessmentTaken = daysDifference < 7
+                        Log.d("seiko", "daysDifference: "+ daysDifference)
+                        Log.d("seiko", "from: "+ from)
+                        Log.d("seiko", "today: "+ today)
                         /*val from = LocalDate.parse(lastTakenFormat.toString(), dateFormatter)
                         val today = SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate())
                         val to = LocalDate.parse(today.toString(), dateFormatter)
