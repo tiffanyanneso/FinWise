@@ -346,13 +346,37 @@
                     android:textColor="@color/off_white" />
             </LinearLayout>
 
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/loading_items"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/item_budget_category_loading" />
+                        <include layout="@layout/item_budget_category_loading" />
+                        <include layout="@layout/item_budget_category_loading" />
+                        <include layout="@layout/item_budget_category_loading" />
+                        <include layout="@layout/item_budget_category_loading" />
+                        <include layout="@layout/item_budget_category_loading" />
+                        <include layout="@layout/item_budget_category_loading" />
+                        <include layout="@layout/item_budget_category_loading" />
+                        <include layout="@layout/item_budget_category_loading" />
+                        <include layout="@layout/item_budget_category_loading" />
+                    </LinearLayout>
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="gone"
                     android:id="@+id/rv_view_categories"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="8"
                     android:layout_marginTop="10dp"
-                    tools:listitem="@layout/item_budget_category"/>
+                    android:layout_weight="8"
+                    tools:listitem="@layout/item_budget_category" />
             </LinearLayout>
 
             <LinearLayout

@@ -235,7 +235,11 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
     }
 
     private fun setOverall() {
-        var overall = (  (totalBudgetAccuracy/purchasedBudgetItemCount)  + ( (1 - (nParent.toFloat() / budgetItemCount) ) * 100)) / 2
+        var overall = 0.00F
+        if (purchasedBudgetItemCount != 0.00F)
+            overall = (  (totalBudgetAccuracy/purchasedBudgetItemCount) + ((1 - (nParent.toFloat()/budgetItemCount)) * 100)) /2
+        else
+            overall = (1 - (nParent.toFloat()/budgetItemCount)) * 100
 
         binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(overall)}%"
 

@@ -57,5 +57,8 @@ class ParentAchievedFragment : Fragment() {
         binding.rvViewGoals.adapter = goalAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
         goalAdapter.notifyDataSetChanged()
+        binding.rvViewGoals.visibility = View.VISIBLE
+        binding.loadingItems.stopShimmer()
+        binding.loadingItems.visibility = View.GONE
     }
 }

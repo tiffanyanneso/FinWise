@@ -239,6 +239,9 @@ class ParentGoalSettingFragment : Fragment() {
             LinearLayoutManager.VERTICAL,
             false)
         goalSettingAdapter.notifyDataSetChanged()
+        binding.rvViewGoals.visibility = View.VISIBLE
+        binding.loadingItems.stopShimmer()
+        binding.loadingItems.visibility = View.GONE
     }
 
     private fun showSeeMoreButton() {

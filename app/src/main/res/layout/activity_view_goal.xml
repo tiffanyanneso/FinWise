@@ -566,13 +566,46 @@
                         android:layout_weight="1"/>
                 </LinearLayout>
 
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/loading_items"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical">
+
+                            <include layout="@layout/item_transaction_loading" />
+
+                            <include layout="@layout/item_transaction_loading" />
+
+                            <include layout="@layout/item_transaction_loading" />
+
+                            <include layout="@layout/item_transaction_loading" />
+
+                            <include layout="@layout/item_transaction_loading" />
+
+                            <include layout="@layout/item_transaction_loading" />
+
+                            <include layout="@layout/item_transaction_loading" />
+
+                            <include layout="@layout/item_transaction_loading" />
+
+                            <include layout="@layout/item_transaction_loading" />
+
+                            <include layout="@layout/item_transaction_loading" />
+                        </LinearLayout>
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_savings_deposit"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="8"
                     android:layout_marginTop="10dp"
-                    tools:listitem="@layout/item_transaction"/>
+                    tools:listitem="@layout/item_transaction"
+                    android:visibility="gone"/>
             </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"

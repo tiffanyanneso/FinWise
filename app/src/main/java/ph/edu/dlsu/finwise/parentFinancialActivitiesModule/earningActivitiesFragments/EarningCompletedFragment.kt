@@ -52,6 +52,9 @@ class EarningCompletedFragment : Fragment() {
             binding.rvViewActivitiesCompleted.adapter = earningCompletedAdapter
             binding.rvViewActivitiesCompleted.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
             earningCompletedAdapter.notifyDataSetChanged()
+            binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
         }
     }
 

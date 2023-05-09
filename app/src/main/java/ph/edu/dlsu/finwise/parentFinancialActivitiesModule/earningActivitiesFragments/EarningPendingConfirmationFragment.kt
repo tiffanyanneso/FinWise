@@ -54,6 +54,9 @@ class EarningPendingConfirmationFragment : Fragment() {
             binding.rvViewActivitiesCompleted.adapter = earningPendingConfirmationAdapter
             binding.rvViewActivitiesCompleted.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
             earningPendingConfirmationAdapter.notifyDataSetChanged()
+            binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
         }
     }
 

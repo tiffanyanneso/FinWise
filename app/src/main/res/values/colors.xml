@@ -14,6 +14,7 @@
     <color name="off_white">#FFFAF6</color>
     <color name="cream">#FDF8F5</color>
     <color name="very_light_green">#E1F6BF</color>
+    <color name="loading_grey">#DDDDDD</color>
 
     <color name="dark_green">#058B47</color>
     <color name="amazing_green">#40AD62</color>
