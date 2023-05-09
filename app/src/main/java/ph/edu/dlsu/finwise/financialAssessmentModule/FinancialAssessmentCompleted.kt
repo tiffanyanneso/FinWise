@@ -1,10 +1,12 @@
 package ph.edu.dlsu.finwise.financialAssessmentModule
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -28,6 +30,7 @@ import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.*
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class FinancialAssessmentCompleted : AppCompatActivity() {
@@ -86,6 +89,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NewApi")
     private suspend fun updateAnsweredCorrectly(answerHistory: FinancialAssessmentQuiz.AnswerHistory) {
         val document = getAssessmentQuestions(answerHistory)
         val assessmentQuestion = document?.toObject<FinancialAssessmentQuestions>()
@@ -132,11 +136,13 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
             val data = if (isAnsweredCorrectly) {
                 hashMapOf(
                     "nAnsweredCorrectly" to FieldValue.increment(1),
-                    "nQuestions" to FieldValue.increment(1)
+                    "nQuestions" to FieldValue.increment(1),
+                    "dateTaken" to Timestamp.now()
                 )
             } else {
                 hashMapOf(
-                    "nQuestions" to FieldValue.increment(1)
+                    "nQuestions" to FieldValue.increment(1),
+                    "dateTaken" to Timestamp.now()
                 )
             }
 
@@ -147,6 +153,7 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
             val assessmentAttemptDocument = assessmentAttemptDocRef.get().await()
             if (!assessmentAttemptDocument.isEmpty) {
                 val isSameDay = isSameDayAssessment(assessmentAttemptDocument)
+                Log.d("seiko", "isSameDay?: "+isSameDay)
                 if (isSameDay)
                     // There is an assessment Attempt already
                     assessmentAttemptDocument.documents[0].reference.update(data as Map<String, Any>).await()
@@ -162,22 +169,11 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
     private fun isSameDayAssessment(assessmentAttemptDocument: QuerySnapshot): Boolean {
         val assessmentAttemptObject = assessmentAttemptDocument.documents[0]
             .toObject<FinancialAssessmentAttempts>()
-        val assessmentAttemptDate = assessmentAttemptObject?.dateTaken
+        val assessmentAttemptTimestamp = assessmentAttemptObject?.dateTaken?.seconds ?: 0
+        val assessmentAttemptDate = SimpleDateFormat("dd/MM/yyyy").format(Date(assessmentAttemptTimestamp * 1000))
+        val currentDate = SimpleDateFormat("dd/MM/yyyy").format(Date())
 
-        val date: Date = assessmentAttemptDate!!.toDate()
-
-        // get today's date
-        val cal = Calendar.getInstance()
-        val today = cal.time
-
-        // set calendar to the date of the timestamp
-        cal.time = date
-
-        // compare the year, month, and day of the two dates
-        return cal.get(Calendar.YEAR) == cal.get(Calendar.YEAR) &&
-                cal.get(Calendar.MONTH) == cal.get(Calendar.MONTH) &&
-                cal.get(Calendar.DAY_OF_MONTH) == cal.get(Calendar.DAY_OF_MONTH)
-
+        return assessmentAttemptDate == currentDate
     }
 
     private suspend fun createAssessmentAttempt(

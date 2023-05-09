@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,7 @@ import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -131,20 +133,24 @@ class GoalSettingFragment : Fragment() {
                     if (results.size() != 0) {
                         var assessmentAttemptsObjects = results.toObjects<FinancialAssessmentAttempts>()
                         assessmentAttemptsObjects.sortedByDescending { it.dateTaken }
-                        var latestAssessmentAttempt = assessmentAttemptsObjects.get(0).dateTaken
-                        val dateFormatter: DateTimeFormatter =
-                            DateTimeFormatter.ofPattern("MM/dd/yyyy")
-                        val lastTakenFormat =
-                            SimpleDateFormat("MM/dd/yyyy").format(latestAssessmentAttempt!!.toDate())
-                        val from = LocalDate.parse(lastTakenFormat.toString(), dateFormatter)
+                        val latestAssessmentAttempt = assessmentAttemptsObjects[0].dateTaken
+                        val lastTakenFormat = SimpleDateFormat("MM/dd/yyyy").format(latestAssessmentAttempt!!.toDate())
+                        val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                        val from = LocalDate.parse(lastTakenFormat, dateFormatter)
+                        val today = LocalDate.now()
+                        val difference = Period.between(from, today)
+                        // includes the month difference as well instead of just the day difference
+                        val daysDifference = ChronoUnit.DAYS.between(from, today)
+                        assessmentTaken = daysDifference < 7
+                        /*val from = LocalDate.parse(lastTakenFormat.toString(), dateFormatter)
                         val today = SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate())
                         val to = LocalDate.parse(today.toString(), dateFormatter)
-                        var difference = Period.between(from, to)
+                        val difference = Period.between(from, to)*/
+                        /*Log.d("seiko", "latestAssessmentAttempt: "
+                                +SimpleDateFormat("MM/dd/yyyy")
+                            .format(latestAssessmentAttempt.toDate()))
+                        Log.d("seiko", "today: "+today)*/
 
-                        if (difference.days >= 7)
-                            assessmentTaken = false
-                        else
-                            assessmentTaken = true
                     } else
                         assessmentTaken = false
                 }.continueWith {
