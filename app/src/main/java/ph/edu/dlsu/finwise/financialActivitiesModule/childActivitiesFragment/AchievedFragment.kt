@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.FinactAchievedAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentAchievedBinding
+import ph.edu.dlsu.finwise.model.FinancialActivities
 
 class AchievedFragment : Fragment() {
 
@@ -37,9 +39,11 @@ class AchievedFragment : Fragment() {
     private fun getAchievedGoals() {
         var goalIDArrayList = ArrayList<String>()
         goalIDArrayList.clear()
-        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "Completed").get().addOnSuccessListener { documents ->
-            for (goalSnapshot in documents)
-                goalIDArrayList.add(goalSnapshot.id)
+        firestore.collection("FinancialActivities").whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { documents ->
+            for (financialActivity in documents) {
+                var finactObject = financialActivity.toObject<FinancialActivities>()
+                goalIDArrayList.add(finactObject.financialGoalID!!)
+            }
 
             loadRecyclerView(goalIDArrayList)
         }

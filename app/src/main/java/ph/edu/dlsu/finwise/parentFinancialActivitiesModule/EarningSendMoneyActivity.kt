@@ -338,6 +338,8 @@ class EarningSendMoneyActivity : AppCompatActivity() {
                 bottomNavigationViewParent.visibility = View.GONE
                 Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
                 binding.btnSendMoney.visibility = View.GONE
+                binding.linearLayout2.visibility = View.GONE
+                binding.btnEditAmount.visibility = View.GONE
             } else if (user.userType == "Parent") {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE

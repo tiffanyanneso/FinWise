@@ -74,6 +74,7 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
             itemBinding.btnSettings.setOnClickListener {
                 val popup = PopupMenu(context, it)
                 popup.inflate(R.menu.menu_budget_category)
+
                 popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
 
                     var budgetActivity = BudgetActivity()
@@ -93,7 +94,14 @@ class BudgetCategoryAdapter : RecyclerView.Adapter<BudgetCategoryAdapter.BudgetC
                     }
                     true
                 })
-                popup.show()
+
+                firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).get().addOnSuccessListener { results ->
+                    if (!results.isEmpty)
+                        popup.menu.removeItem(R.id.tv_delete_budget_item)
+                }.continueWith {
+                    popup.show()
+                }
+
             }
 
             firestore.collection("BudgetItems").document(budgetItemID).get().addOnSuccessListener {
