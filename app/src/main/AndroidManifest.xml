@@ -12,13 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
-
+        <activity
+            android:name=".ParentSettingsActivity"
+            android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.GoalSettingEditGoalActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.GoalSettingForEditingActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.EditEarningActivity"
             android:exported="false" />
@@ -256,12 +258,14 @@
         </activity>
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
-            android:exported="false" >
-            <!--<intent-filter>
+            android:exported="false">
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
--->
+            -->
         </activity>
         <activity
             android:name=".profileModule.ProfileActivity"
