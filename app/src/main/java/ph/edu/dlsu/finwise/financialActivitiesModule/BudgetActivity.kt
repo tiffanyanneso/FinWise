@@ -144,6 +144,21 @@ class BudgetActivity : AppCompatActivity() {
             this.startActivity(goToTransactions)
         }
 
+        binding.btnDeposit.setOnClickListener {
+            var deposit = Intent (this, SavingsDepositActivity::class.java)
+            var sendBundle = Bundle()
+            firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
+                var activity = it.toObject<FinancialActivities>()
+                sendBundle.putString("source", "budgeting")
+                sendBundle.putString("financialGoalID", activity?.financialGoalID)
+                sendBundle.putString("savingActivityID", savingActivityID)
+                sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                sendBundle.putString("spendingActivityID", spendingActivityID)
+                deposit.putExtras(sendBundle)
+                startActivity(deposit)
+            }
+        }
+
         binding.btnWithdraw.setOnClickListener {
             if (balance == 0.00F) {
                 cannotWithdrawDialog()
@@ -152,6 +167,7 @@ class BudgetActivity : AppCompatActivity() {
                 var sendBundle = Bundle()
                 firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
                     var activity = it.toObject<FinancialActivities>()
+                    sendBundle.putString("source", "budgeting")
                     sendBundle.putString("savingActivityID", savingActivityID)
                     sendBundle.putString("financialGoalID", activity?.financialGoalID)
                     withdraw.putExtras(sendBundle)

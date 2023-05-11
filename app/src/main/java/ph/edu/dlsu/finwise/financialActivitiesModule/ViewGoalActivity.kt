@@ -123,11 +123,10 @@ class ViewGoalActivity : AppCompatActivity() {
 
         binding.btnDeposit.setOnClickListener {
             var goalDeposit = Intent(this, SavingsDepositActivity::class.java)
-            sendBundle.putFloat("savedAmount", savedAmount)
+            sendBundle.putString("source", "saving")
             sendBundle.putString("savingActivityID", savingActivityID)
             sendBundle.putString("budgetingActivityID", budgetingActivityID)
             sendBundle.putString("spendingActivityID", spendingActivityID)
-            sendBundle.putInt("progress", binding.progressBar.progress)
             goalDeposit.putExtras(sendBundle)
             this.startActivity(goalDeposit)
         }
@@ -137,6 +136,7 @@ class ViewGoalActivity : AppCompatActivity() {
                 cannotWithdrawDialog()
             } else {
                 var goalWithdraw = Intent(this, SavingsWithdrawActivity::class.java)
+                sendBundle.putString("source", "saving")
                 sendBundle.putString("savingActivityID", savingActivityID)
                 sendBundle.putString("budgetingActivityID", budgetingActivityID)
                 sendBundle.putString("spendingActivityID", spendingActivityID)
@@ -305,7 +305,7 @@ class ViewGoalActivity : AppCompatActivity() {
                         binding.progressBar.progress = progress
                     else
                         binding.progressBar.progress = 100
-                    
+
                     goalTransactionsAdapter = GoalTransactionsAdapater(this, transactionsArrayList)
                     binding.rvSavingsDeposit.adapter = goalTransactionsAdapter
                     binding.rvSavingsDeposit.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)

@@ -32,6 +32,7 @@ class FinancialActivityConfirmWithdraw : AppCompatActivity() {
     private lateinit var spendingActivityID:String
 
     private lateinit var paymentType:String
+    private lateinit var source:String
 
     private var savedAmount = 0.00F
 

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
@@ -46,6 +47,8 @@ class SavingsDepositActivity : AppCompatActivity() {
     private var cashBalance = 0.00F
     private var mayaBalance = 0.00F
 
+    private lateinit var source:String
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +79,7 @@ class SavingsDepositActivity : AppCompatActivity() {
                 sendBundle.putString("budgetingActivityID", budgetingActivityID)
                 sendBundle.putString("spendingActivityID", spendingActivityID)
                 sendBundle.putString("paymentType", binding.dropPaymentType.text.toString())
+                sendBundle.putString("source", source)
 
                 var goToDepositConfirmation = Intent(context, FinancialActivityConfirmDeposit::class.java)
                 goToDepositConfirmation.putExtras(sendBundle)
@@ -99,9 +103,12 @@ class SavingsDepositActivity : AppCompatActivity() {
         savingActivityID = bundle.getString("savingActivityID").toString()
         budgetingActivityID = bundle.getString("budgetingActivityID").toString()
         spendingActivityID = bundle.getString("spendingActivityID").toString()
-        savedAmount = bundle.getFloat("savedAmount")
-        binding.pbProgress.progress = bundle.getInt("progress")
+        source = bundle.getString("source").toString()
+        if(source == "budgeting")
+            binding.layoutProgress.visibility = View.GONE
+
         binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+
 
         val paymentTypeDropdown = ArrayAdapter (this, R.layout.list_item, resources.getStringArray(R.array.payment_type))
         binding.dropPaymentType.setAdapter(paymentTypeDropdown)
@@ -115,7 +122,6 @@ class SavingsDepositActivity : AppCompatActivity() {
                     mayaBalance = walletObject.currentBalance!!
                 else if (walletObject.type == "Cash")
                     cashBalance = walletObject.currentBalance!!
-
             }
 
             binding.tvBalance.text = "You currently have ₱${DecimalFormat("#,##0.00").format(totalBalance)}"
@@ -124,8 +130,10 @@ class SavingsDepositActivity : AppCompatActivity() {
         firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var financialGoal = it.toObject<FinancialGoals>()
             binding.tvGoalName.text = financialGoal?.goalName
-            binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(bundle.getFloat("savedAmount")) +
+            binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(financialGoal?.currentSavings) +
                     " / ₱ " + DecimalFormat("#,##0.00").format(financialGoal?.targetAmount)
+            binding.pbProgress.progress = ((financialGoal?.currentSavings!!/financialGoal?.targetAmount!!)*100).toInt()
+
         }
     }
 

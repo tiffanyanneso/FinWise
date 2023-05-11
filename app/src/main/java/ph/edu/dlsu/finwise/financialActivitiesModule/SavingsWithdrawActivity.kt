@@ -43,6 +43,7 @@ class SavingsWithdrawActivity : AppCompatActivity() {
     private var mayaBalance = 0.00F
     private var selectedWalletBalance = 0.00F
 
+    private lateinit var source:String
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +74,7 @@ class SavingsWithdrawActivity : AppCompatActivity() {
                 sendBundle.putString("spendingActivityID", spendingActivityID)
                 sendBundle.putFloat("savedAmount", savedAmount)
                 sendBundle.putString("paymentType", binding.dropPaymentType.text.toString())
+                sendBundle.putString("source", source)
 
                 var confirmWithdraw = Intent (this, FinancialActivityConfirmWithdraw::class.java)
                 confirmWithdraw.putExtras(sendBundle)
@@ -211,6 +213,10 @@ class SavingsWithdrawActivity : AppCompatActivity() {
         budgetingActivityID = bundle.getString("budgetingActivityID").toString()
         spendingActivityID = bundle.getString("spendingActivityID").toString()
         binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+
+        source = bundle.getString("source").toString()
+        if (source == "budgeting")
+            binding.layoutProgress.visibility = View.GONE
 
         //savedAmount = bundle.getFloat("savedAmount")
         //binding.pbProgress.progress = bundle.getInt("progress")

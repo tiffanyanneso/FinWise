@@ -165,14 +165,8 @@ class GoalSettingFragment : Fragment() {
                             buildAssessmentDialog()
                         else if (ongoingGoals >= 5)
                             buildDialog()
-                        else {
-                            var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
-                            var bundle = Bundle()
-                            bundle.putString("source", "Child")
-                            goToNewGoal.putExtras(bundle)
-                            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            this.startActivity(goToNewGoal)
-                        }
+                        else
+                            showSMARTGoalsDialog()
                     }
                 }
             }
@@ -338,6 +332,25 @@ class GoalSettingFragment : Fragment() {
         dialogBinding.btnCancel.setOnClickListener {
             dialog.dismiss()
         }
+        dialog.show()
+    }
+
+    private fun showSMARTGoalsDialog() {
+        var dialogBinding= DialogSmartGoalInfoBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(requireContext());
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
+            var bundle = Bundle()
+            bundle.putString("source", "Child")
+            goToNewGoal.putExtras(bundle)
+            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(goToNewGoal)
+        }
+
         dialog.show()
     }
 

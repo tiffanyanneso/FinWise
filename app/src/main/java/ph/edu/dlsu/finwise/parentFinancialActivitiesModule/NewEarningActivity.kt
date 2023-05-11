@@ -117,7 +117,8 @@ class NewEarningActivity : AppCompatActivity() {
                         "childID" to childID,
                         "status" to "Ongoing",
                         "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
-                        "depositTo" to binding.dropdownDestination.text.toString()
+                        "depositTo" to binding.dropdownDestination.text.toString(),
+                        "dateAdded" to Timestamp.now()
                     )
                     firestore.collection("EarningActivities").add(earningActivity)
                         .addOnSuccessListener {
@@ -134,7 +135,8 @@ class NewEarningActivity : AppCompatActivity() {
                         "savingActivityID" to savingActivityID,
                         "status" to "Ongoing",
                         "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
-                        "depositTo" to binding.dropdownDestination.text.toString()
+                        "depositTo" to binding.dropdownDestination.text.toString(),
+                        "dateAdded" to Timestamp.now()
                     )
                     firestore.collection("EarningActivities").add(earningActivity)
                         .addOnSuccessListener {

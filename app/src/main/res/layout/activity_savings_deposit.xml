@@ -81,107 +81,60 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/date_container"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tv_goal_name"-->
-<!--        style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"-->
-<!--        android:layout_marginHorizontal="20dp"-->
-<!--        app:helperTextEnabled="true"-->
-<!--        app:endIconMode="custom"-->
-<!--        app:startIconDrawable="@drawable/baseline_calendar_today_24"-->
-<!--        android:hint="Date">-->
 
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/et_transaction_date"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:lines="1"-->
-<!--            android:inputType="numberDecimal"-->
-<!--            android:textSize="16dp"-->
-<!--            android:enabled="true"-->
-<!--            android:focusable="false"-->
-<!--            />-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
-
-    <TextView
-        android:id="@+id/tv_progress"
+    <LinearLayout
+        android:id="@+id/layout_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/date_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="16dp"
-        android:layout_marginTop="10dp"
-        android:textAllCaps = "true"
-        android:text="Goal Progress"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"/>
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_progress_amount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_progress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textSize="16dp"
-        android:layout_marginTop="5dp"
-        android:text="₱0.00 /₱ 0.00"
-        android:textColor="@color/black"
-        android:layout_marginStart="20dp"/>
+        <TextView
+            android:id="@+id/tv_progress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:layout_marginTop="10dp"
+            android:textAllCaps = "true"
+            android:text="Goal Progress"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginStart="20dp"/>
 
-    <ProgressBar
-        android:id="@+id/pb_progress"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="370dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_progress_amount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="10dp"
-        android:scaleY="4"
-        android:max="100"
-        />
+        <TextView
+            android:id="@+id/tv_progress_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_progress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="16dp"
+            android:layout_marginTop="5dp"
+            android:text="₱0.00 /₱ 0.00"
+            android:textColor="@color/black"
+            android:layout_marginStart="20dp"/>
 
+        <ProgressBar
+            android:id="@+id/pb_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="370dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_progress_amount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
+            android:scaleY="4"
+            android:max="100"
+            android:layout_marginStart="20dp"
+            />
+    </LinearLayout>
 
-
-<!--    <TextView-->
-<!--        android:id="@+id/tv_amount"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/pb_progress"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:textSize="14dp"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:textAllCaps = "true"-->
-<!--        android:text="@string/amount"-->
-<!--        android:textStyle="bold"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        />-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/et_amount"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tv_amount"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        android:hint="@string/amount"-->
-<!--        android:ems="10"-->
-<!--        android:inputType="numberDecimal"-->
-<!--        android:textSize="14dp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:layout_marginEnd="20dp"-->
-<!--        />-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/container_payment_type"
-        app:layout_constraintTop_toBottomOf="@+id/pb_progress"
+        app:layout_constraintTop_toBottomOf="@+id/layout_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Fund Source"

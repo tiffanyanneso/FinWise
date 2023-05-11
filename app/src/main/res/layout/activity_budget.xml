@@ -194,6 +194,75 @@
                     android:orientation="horizontal"
                     android:layout_marginVertical="15dp">
 
+
+
+                    <LinearLayout
+                        android:id="@+id/layout_deposit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/btn_deposit"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:textColor="@color/white"
+                            android:backgroundTint="@color/light_green"
+                            app:cardCornerRadius="10dp"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:src="@drawable/baseline_star_24"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_gravity="center"
+                                app:tint="#FFFFFF" />
+                        </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:id="@+id/tv_deposit"
+                            android:text="Deposit"
+                            android:textSize="16sp"
+                            android:textColor="@color/black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/layout_withdraw"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:gravity="center">
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/btn_withdraw"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:textColor="@color/white"
+                            android:backgroundTint="@color/light_green"
+                            app:cardCornerRadius="10dp"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:src="@drawable/baseline_wallet_24"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_gravity="center"
+                                app:tint="#FFFFFF" />
+                        </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:text="Withdraw"
+                            android:textSize="16sp"
+                            android:textColor="@color/black"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"/>
+                    </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -227,38 +296,6 @@
                             android:gravity="center">
                         </TextView>
 
-                    </LinearLayout>
-                    <LinearLayout
-                        android:id="@+id/layout_withdraw"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        android:gravity="center">
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/btn_withdraw"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:textColor="@color/white"
-                            android:backgroundTint="@color/light_green"
-                            app:cardCornerRadius="10dp"
-                            android:gravity="center">
-
-                            <ImageView
-                                android:src="@drawable/baseline_wallet_24"
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
-                                android:layout_gravity="center"
-                                app:tint="#FFFFFF" />
-                        </androidx.cardview.widget.CardView>
-                        <TextView
-                            android:text="Withdraw"
-                            android:textSize="16sp"
-                            android:textColor="@color/black"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
