@@ -72,7 +72,7 @@
                             app:layout_constraintStart_toStartOf="@+id/progress_bar"
                             app:layout_constraintTop_toTopOf="@+id/progress_bar"
                             app:layout_constraintVertical_bias="0.75"
-                            tools:text="Poor"
+                            tools:text="Loading"
                             android:textSize="16dp"
                             />
 
