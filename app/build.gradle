@@ -4,15 +4,22 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
-android {
+    android {
     lintOptions{
         checkReleaseBuilds false
-}
+    }
+
     android{
         buildTypes {
             release {
                 signingConfig signingConfigs.debug
             }
+        }
+    }
+
+    android {
+        defaultConfig {
+            multiDexEnabled true
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -14,6 +15,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityParentProfileBinding
 import ph.edu.dlsu.finwise.databinding.ActivityProfileBinding
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.profileModule.EditProfileActivity
+import ph.edu.dlsu.finwise.NavbarParent
 
 class ParentProfileActivity : AppCompatActivity() {
 
@@ -32,6 +34,13 @@ class ParentProfileActivity : AppCompatActivity() {
 
         loadChildren()
         getProfileData()
+        //Initializes the navbar
+        //sends the ChildID to the parent navbar
+        val bundle = intent.extras!!
+        val childID = bundle.getString("childID").toString()
+        val bundleNavBar = Bundle()
+        bundleNavBar.putString("childID", childID)
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_profile, bundleNavBar)
 
         binding.btnEditProfile.setOnClickListener {
             val gotoParentEditProfile = Intent(this, ParentEditProfileActivity::class.java)
