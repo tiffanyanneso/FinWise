@@ -13,4 +13,7 @@
     <item android:title=""
         android:icon="@drawable/baseline_assessment_24"
         android:id="@+id/nav_parent_assessment"/>
+    <item android:title=""
+        android:icon="@drawable/baseline_profile_24"
+        android:id="@+id/nav_parent_profile"/>
 </menu>
