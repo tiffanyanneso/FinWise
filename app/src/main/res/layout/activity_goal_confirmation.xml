@@ -244,7 +244,7 @@
             android:id="@+id/btn_SMART_goal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="What's a SMART Goal?"
+            android:text="Review what makes a SMART Goal"
             android:textColor="@color/off_white"
             android:layout_gravity="center"
             android:backgroundTint="@color/dark_green"

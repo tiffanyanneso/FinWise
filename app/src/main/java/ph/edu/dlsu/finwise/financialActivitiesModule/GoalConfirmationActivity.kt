@@ -150,39 +150,6 @@ class GoalConfirmationActivity : AppCompatActivity() {
         }
     }
 
-    private fun createBudgetTemplates(activity:String, financialGoalID:String) {
-        if (activity == "Buying Items") {
-            var food = BudgetItem("Food & Drinks", null, financialGoalID, 0.00F, "Active", "Before", childID)
-            firestore.collection("BudgetItems").add(food)
-            var toys = BudgetItem("Toys & Games",null, financialGoalID, 0.00F,  "Active", "Before", childID)
-            firestore.collection("BudgetItems").add(toys)
-            var gift = BudgetItem("Gift",null, financialGoalID, 0.00F,  "Active", "Before", childID)
-            firestore.collection("BudgetItems").add(gift)
-        }
-
-        else if (activity == "Planning An Event") {
-            var food = BudgetItem("Food & Drinks",null, financialGoalID, 0.00F, "Active", "Before", childID)
-            firestore.collection("BudgetItems").add(food)
-            var decoration = BudgetItem("Decorations", null,financialGoalID, 0.00F,  "Active", "Before", childID)
-            firestore.collection("BudgetItems").add(decoration)
-            var gift = BudgetItem("Gift", null,financialGoalID, 0.00F,  "Active", "Before", childID)
-            firestore.collection("BudgetItems").add(gift)
-            var rental = BudgetItem("Rental", null,financialGoalID, 0.00F,  "Active", "Before", childID)
-            firestore.collection("BudgetItems").add(rental)
-            var transportation = BudgetItem("Transportation", null,financialGoalID, 0.00F,  "Active", "Before", childID)
-            firestore.collection("BudgetItems").add(transportation)
-            var partyFavors = BudgetItem("Party Favors", null,financialGoalID, 0.00F,  "Active", "Before", childID)
-            firestore.collection("BudgetItems").add(partyFavors)
-        }
-
-        else if (activity == "Situational Shopping") {
-            var food = BudgetItem("Food & Drinks", null, financialGoalID, 0.00F, "Active", "Before", childID)
-            firestore.collection("BudgetItems").add(food)
-            var clothes = BudgetItem("Clothing",null, financialGoalID, 0.00F,  "Active", "Before", childID)
-            firestore.collection("BudgetItems").add(clothes)
-        }
-    }
-
     private fun saveFinancialActivities(financialActivity:String, goalID:String) {
         lateinit var savingActivity: FinancialActivities
         if (goalStatus == "For Review")
@@ -194,7 +161,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
             var budgetingActivity = FinancialActivities(goalID, childID, "Budgeting", "Locked")
             var spendingActivity = FinancialActivities(goalID, childID, "Spending", "Locked")
             firestore.collection("FinancialActivities").add(budgetingActivity).addOnSuccessListener {
-                createBudgetTemplates(financialActivity, it.id)
+                //createBudgetTemplates(financialActivity, it.id)
             }
             firestore.collection("FinancialActivities").add(spendingActivity)
         }

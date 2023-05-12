@@ -21,6 +21,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
+import ph.edu.dlsu.finwise.adapter.BudgetCategoryTemplateAdapter
 import ph.edu.dlsu.finwise.adapter.SpendingExpenseAdapter
 import ph.edu.dlsu.finwise.databinding.*
 import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
@@ -39,6 +40,7 @@ class BudgetActivity : AppCompatActivity() {
     private lateinit var dialogBinding:DialogNewBudgetItemBinding
     private var firestore = Firebase.firestore
     private lateinit var budgetCategoryAdapter: BudgetCategoryAdapter
+    private lateinit var budgetCategorySelectAdapter: BudgetCategoryTemplateAdapter
     private lateinit var expenseAdapter:SpendingExpenseAdapter
     lateinit var context:Context
     lateinit var bundle: Bundle
@@ -245,22 +247,24 @@ class BudgetActivity : AppCompatActivity() {
 
     private fun getBudgetItems() {
         firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).whereEqualTo("status", "Active").get().addOnSuccessListener { budgetItems ->
-            for (item in budgetItems)
-                budgetCategoryIDArrayList.add(item.id)
+            if (budgetItems.isEmpty)
+                createBudgetTemplate()
+            else {
+                for (item in budgetItems)
+                    budgetCategoryIDArrayList.add(item.id)
 
-
-            //set on click listener for menu item
-            budgetCategoryAdapter = BudgetCategoryAdapter(
-                this,
-                budgetCategoryIDArrayList,
-                spendingActivityID,
-                object : BudgetCategoryAdapter.MenuClick {
-                    override fun clickMenuItem(position: Int, menuOption: String, budgetItemID: String) {
-                        if (menuOption == "Edit")
-                            editBudgetItem(position, budgetItemID)
-                        else
-                            deleteBudgetItem(position, budgetItemID)
-                    }},
+                //set on click listener for menu item
+                budgetCategoryAdapter = BudgetCategoryAdapter(
+                    this,
+                    budgetCategoryIDArrayList,
+                    spendingActivityID,
+                    object : BudgetCategoryAdapter.MenuClick {
+                        override fun clickMenuItem(position: Int, menuOption: String, budgetItemID: String) {
+                            if (menuOption == "Edit")
+                                editBudgetItem(position, budgetItemID)
+                            else
+                                deleteBudgetItem(position, budgetItemID)
+                        }},
                     object : BudgetCategoryAdapter.ItemClick {
                         override fun clickItem(budgetItemID: String, budgetingActivityID: String) {
                             //"done setting budget" already clicked, they can access expense
@@ -280,13 +284,69 @@ class BudgetActivity : AppCompatActivity() {
                                 finishBudgeting()
                             }
                         }
-                })
-            binding.rvViewCategories.adapter = budgetCategoryAdapter
-            binding.rvViewCategories.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-            binding.loadingItems.stopShimmer()
-            binding.loadingItems.visibility = View.GONE
-            binding.rvViewCategories.visibility = View.VISIBLE
+                    })
+                binding.rvViewCategories.adapter = budgetCategoryAdapter
+                binding.rvViewCategories.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+                binding.loadingItems.stopShimmer()
+                binding.loadingItems.visibility = View.GONE
+                binding.rvViewCategories.visibility = View.VISIBLE
+            }
         }
+    }
+
+    private fun createBudgetTemplate() {
+       firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
+           firestore.collection("FinancialGoals").document(it.toObject<FinancialActivities>()?.financialGoalID!!).get().addOnSuccessListener { goalResult ->
+               var budgetItemsList = ArrayList<String>()
+
+               var goal = goalResult.toObject<FinancialGoals>()
+               if (goal?.financialActivity == "Buying Items") {
+                   budgetItemsList.add("Food & Drinks")
+                   budgetItemsList.add("Toys & Games")
+                   budgetItemsList.add("Gift")
+               } else if (goal?.financialActivity == "Planning An Event") {
+                   budgetItemsList.add("Food & Drinks")
+                   budgetItemsList.add("Gift")
+                   budgetItemsList.add("Decorations")
+                   budgetItemsList.add("Rental")
+                   budgetItemsList.add("Transportation")
+                   budgetItemsList.add("Party Favors")
+               } else if (goal?.financialActivity == "Situational Shopping") {
+                   budgetItemsList.add("Food & Drinks")
+                   budgetItemsList.add("Clothing")
+               }
+
+               var budgetTemplateDialogBinding = DialogBudgetItemTemplateBinding.inflate(getLayoutInflater())
+               var budgetTemplateDialog= Dialog(this);
+               budgetTemplateDialog.setContentView(budgetTemplateDialogBinding.getRoot())
+               budgetTemplateDialog.window!!.setLayout(1000, 1300)
+
+               budgetCategorySelectAdapter = BudgetCategoryTemplateAdapter(this, budgetItemsList, budgetTemplateDialogBinding.rvBudgetItemTemplate)
+               budgetTemplateDialogBinding.rvBudgetItemTemplate.adapter = budgetCategorySelectAdapter
+               budgetTemplateDialogBinding.rvBudgetItemTemplate.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+               budgetCategorySelectAdapter.notifyDataSetChanged()
+
+               budgetTemplateDialogBinding.btnSaveBudgetItems.setOnClickListener {
+                   saveBudgetItems()
+                   budgetTemplateDialog.hide()
+               }
+
+               budgetTemplateDialog.setCancelable(false)
+               budgetTemplateDialog.show()
+
+           }
+       }
+    }
+
+    private fun saveBudgetItems() {
+        var checkedBudgetItems : ArrayList<BudgetCategoryTemplateAdapter.CheckedItem> = budgetCategorySelectAdapter.returnCheckedBudgetItems()
+        println("print save budget item " + checkedBudgetItems.size)
+        for (budgetItem in checkedBudgetItems) {
+            var budgetItem = BudgetItem(budgetItem.itemName, null,budgetingActivityID, budgetItem.amount,  "Active", "Before", childID)
+            firestore.collection("BudgetItems").add(budgetItem)
+        }
+
+        getBudgetItems()
     }
 
     private fun getExpenses() {
@@ -353,7 +413,6 @@ class BudgetActivity : AppCompatActivity() {
 
                         budgetCategoryIDArrayList.removeAt(position)
                         budgetCategoryAdapter.notifyDataSetChanged()
-
                         firestore.collection("BudgetItems").add(budgetItem)
                             .addOnSuccessListener { newBudgetItem ->
                                 budgetCategoryIDArrayList.add(position, newBudgetItem.id)
