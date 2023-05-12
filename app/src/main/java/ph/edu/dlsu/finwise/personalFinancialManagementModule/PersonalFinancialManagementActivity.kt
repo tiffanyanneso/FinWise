@@ -157,10 +157,10 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
         }
         else {
-            performance = "Bad...!"
-            binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
+            performance = "Get Started!"
+            binding.tvPerformance.setTextColor(resources.getColor(R.color.dark_green))
             grade = "You have 0 balance. Click the income button above to add your money "
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         }
 
         imageView.setImageBitmap(bitmap)
