@@ -236,8 +236,6 @@
                 android:gravity="center"
                 />
 
-
-
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/balance_chart"
                 android:layout_width="330dp"

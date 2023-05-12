@@ -81,11 +81,12 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
 
     private fun getArgumentsFromPFM() {
         val args = arguments
+        val child = args?.getString("childID")
+
         val date = args?.getString("date")
 
         val currUser = args?.getString("user")
 
-        val child = args?.getString("childID")
 
         if (child != null) {
             childID = child

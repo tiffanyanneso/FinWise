@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".childDashboardModule.childDashboardActivity"
+    tools:context=".childDashboardModule.ChildDashboardActivity"
     android:background="@color/very_light_green">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -51,12 +51,22 @@
             android:backgroundTint="@color/teal"
             android:layout_marginBottom="10dp">
 
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Overall Financial Literacy Score"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textAlignment="center"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="center"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_gravity="center"
-                android:gravity="center">
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="100dp"
@@ -64,13 +74,11 @@
                     android:orientation="vertical"
                     android:background="@drawable/button_border_white"
                     android:backgroundTint="@color/white"
-                    android:padding="10dp"
-                    android:layout_gravity="center"
-                    android:gravity="center">
+                    android:padding="10dp">
 
                     <ImageView
                         android:src="@drawable/good"
-                        android:id="@+id/iv_score"
+                        android:id="@+id/img_face"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:layout_gravity="center"/>
@@ -79,12 +87,12 @@
                         android:id="@+id/tv_performance_percentage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:textAlignment="center"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        tools:text=""
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        android:layout_gravity="center"
-                        android:textAlignment="center"/>
+                        tools:text="" />
 
                     <TextView
                         android:id="@+id/tv_performance_status"
@@ -97,18 +105,126 @@
                         android:layout_gravity="center"/>
                 </LinearLayout>
 
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_performance_text"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textSize="16sp"-->
-<!--                    android:text="You will know your overall financial health once you start keeping track of your personal finance, do your financial activies, and begin to take financial assessments."-->
-<!--                    android:textColor="@color/white"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_marginLeft="15dp"/>-->
+                <TextView
+                    android:id="@+id/tv_performance_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:text="You will see here your total financial score combined from the other modules."
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"/>
             </LinearLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_see_more"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="See more"
+                android:textColor="@color/off_white"
+                android:backgroundTint="@color/dark_green"
+                android:background="@drawable/button_border"
+                android:layout_marginTop="10dp"
+                />
+            <!--<LinearLayout
+                android:id="@+id/layout_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="10dp">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_review_saving"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Review"
+                    android:textColor="@color/off_white"
+                    android:backgroundTint="@color/dark_green"
+                    android:background="@drawable/button_border_grey"
+                    android:layout_marginEnd="10dp"
+                    android:layout_weight="1" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_see_more2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="See More"
+                    android:textColor="@color/off_white"
+                    android:backgroundTint="@color/dark_green"
+                    android:background="@drawable/button_border"
+                    android:layout_weight="1" />
+
+            </LinearLayout>-->
+
         </LinearLayout>
-    <LinearLayout
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/cv_score"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/ll_sort_dates"
+            android:gravity="center">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_weekly"
+                app:cornerRadius="5dp"
+                android:textSize="12sp"
+                android:backgroundTint="@color/light_green"
+                android:textColor="@color/black"
+                android:layout_margin="5dp"
+                android:text="WEEKLY"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                app:cornerRadius="5dp"
+                android:textSize="12sp"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/black"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_monthly"
+                android:text="monthly"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                app:cornerRadius="5dp"
+                android:textSize="12sp"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/black"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_quarterly"
+                android:text="quarterly"/>
+
+        </LinearLayout>
+
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabGravity="fill"
+            android:layout_marginTop="10dp"
+            app:tabIndicatorColor="@color/dark_green"
+            app:tabMode="scrollable"
+            app:tabSelectedTextColor="@color/dark_green" />
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="800dp"
+            />
+
+
+
+        <!--<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -148,7 +264,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
-                    tools:progress="35" />
+                    tools:progress="0" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -170,7 +286,7 @@
                         app:layout_constraintEnd_toEndOf="@+id/progress_bar_parental_involvement"
                         app:layout_constraintStart_toStartOf="@+id/progress_bar_parental_involvement"
                         app:layout_constraintTop_toTopOf="@+id/progress_bar_parental_involvement"
-                        tools:text="35%" />
+                        tools:text="Loading" />
 
                     <TextView
                         android:id="@+id/text_view_performance_text_personal_finance"
@@ -188,15 +304,15 @@
                         />
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
-<!--            <TextView-->
-<!--                android:id="@+id/tv_personal_finance_text"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:textSize="16sp"-->
-<!--                android:text="Text about involvement here"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_marginLeft="15dp"/>-->
+&lt;!&ndash;            <TextView&ndash;&gt;
+&lt;!&ndash;                android:id="@+id/tv_personal_finance_text"&ndash;&gt;
+&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;
+&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;
+&lt;!&ndash;                android:textSize="16sp"&ndash;&gt;
+&lt;!&ndash;                android:text="Text about involvement here"&ndash;&gt;
+&lt;!&ndash;                android:textColor="@color/black"&ndash;&gt;
+&lt;!&ndash;                android:layout_gravity="center"&ndash;&gt;
+&lt;!&ndash;                android:layout_marginLeft="15dp"/>&ndash;&gt;
         </LinearLayout>
     </LinearLayout>
         <LinearLayout
@@ -239,7 +355,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.0"
-                        tools:progress="35" />
+                        tools:progress="0" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -261,7 +377,7 @@
                             app:layout_constraintEnd_toEndOf="@+id/progress_bar_parental_involvement"
                             app:layout_constraintStart_toStartOf="@+id/progress_bar_parental_involvement"
                             app:layout_constraintTop_toTopOf="@+id/progress_bar_parental_involvement"
-                            tools:text="35%" />
+                            tools:text="Loading" />
 
                         <TextView
                             android:id="@+id/text_view_performance_text_financial_activities"
@@ -278,15 +394,15 @@
                             android:textSize="16dp"/>
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_financial_activities_text"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textSize="16sp"-->
-<!--                    android:text="Text about involvement here"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_marginLeft="15dp"/>-->
+&lt;!&ndash;                <TextView&ndash;&gt;
+&lt;!&ndash;                    android:id="@+id/tv_financial_activities_text"&ndash;&gt;
+&lt;!&ndash;                    android:layout_width="match_parent"&ndash;&gt;
+&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;
+&lt;!&ndash;                    android:textSize="16sp"&ndash;&gt;
+&lt;!&ndash;                    android:text="Text about involvement here"&ndash;&gt;
+&lt;!&ndash;                    android:textColor="@color/black"&ndash;&gt;
+&lt;!&ndash;                    android:layout_gravity="center"&ndash;&gt;
+&lt;!&ndash;                    android:layout_marginLeft="15dp"/>&ndash;&gt;
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -330,7 +446,7 @@
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.0"
-                        tools:progress="35" />
+                        tools:progress="0" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -352,7 +468,7 @@
                             app:layout_constraintEnd_toEndOf="@+id/progress_bar_parental_involvement"
                             app:layout_constraintStart_toStartOf="@+id/progress_bar_parental_involvement"
                             app:layout_constraintTop_toTopOf="@+id/progress_bar_parental_involvement"
-                            tools:text="35%" />
+                            tools:text="Loading" />
 
                         <TextView
                             android:id="@+id/text_view_performance_text_financial_assessments"
@@ -369,15 +485,15 @@
                             android:textSize="16dp"/>
                     </LinearLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
-<!--                <TextView-->
-<!--                    android:id="@+id/tv_financial_assessments_text"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textSize="16sp"-->
-<!--                    android:text="Text about involvement here"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_marginLeft="15dp"/>-->
+&lt;!&ndash;                <TextView&ndash;&gt;
+&lt;!&ndash;                    android:id="@+id/tv_financial_assessments_text"&ndash;&gt;
+&lt;!&ndash;                    android:layout_width="match_parent"&ndash;&gt;
+&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;
+&lt;!&ndash;                    android:textSize="16sp"&ndash;&gt;
+&lt;!&ndash;                    android:text="Text about involvement here"&ndash;&gt;
+&lt;!&ndash;                    android:textColor="@color/black"&ndash;&gt;
+&lt;!&ndash;                    android:layout_gravity="center"&ndash;&gt;
+&lt;!&ndash;                    android:layout_marginLeft="15dp"/>&ndash;&gt;
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
@@ -385,7 +501,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginBottom="50dp">
-        </LinearLayout>
+        </LinearLayout>-->
     </LinearLayout>
     </ScrollView>
     </LinearLayout>

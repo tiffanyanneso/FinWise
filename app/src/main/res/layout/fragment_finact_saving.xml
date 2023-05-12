@@ -121,7 +121,7 @@
                             android:textColor="@color/off_white"
                             android:backgroundTint="@color/dark_green"
                             android:background="@drawable/button_border_grey"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginEnd="10dp"
                             android:layout_weight="1" />
 
                         <androidx.appcompat.widget.AppCompatButton
@@ -512,6 +512,9 @@
                         android:background="@drawable/button_border"/>
                 </LinearLayout>
 
+                <!--Class referenced in the layout file,
+                com.facebook.shimmer.ShimmerFrameLayout,
+                was not found in the project or the libraries-->
                 <com.facebook.shimmer.ShimmerFrameLayout
                     android:id="@+id/loading_items"
                     android:layout_width="match_parent"

@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
@@ -25,12 +24,8 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentBalanceChartBinding
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
-import java.security.Timestamp
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.ZoneId
 import java.util.*
 
 
@@ -64,8 +59,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         binding = FragmentBalanceChartBinding.bind(view)
         getArgumentsFromPFM()
         initializeBalanceLineGraph()
-        initializeDetails()
-
+        initializeDetailsButton()
     }
 
 
@@ -91,7 +85,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
 
     }
 
-    private fun initializeDetails() {
+    private fun initializeDetailsButton() {
         binding.btnDetails.setOnClickListener{
             val goToDetails = Intent(context, TrendDetailsActivity::class.java)
             bundle.putString("date", selectedDatesSort)
