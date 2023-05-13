@@ -1,10 +1,17 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import android.app.Dialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -23,6 +30,7 @@ import ph.edu.dlsu.finwise.databinding.DialogNearingDeadlineBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.*
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
@@ -57,7 +65,9 @@ class FinancialActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        
+        createNotificationChannel()
+        
         firestore.collection("Users").document(childID).get().addOnSuccessListener {
             var lastLogin = it.toObject<Users>()!!.lastLogin!!.toDate()
             var lastShown = it.toObject<Users>()!!.lastShown!!.toDate()
@@ -79,6 +89,41 @@ class FinancialActivity : AppCompatActivity() {
         // and initializes the navbar
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+
+//        binding.btnNotification.setOnClickListener { sendNotif() }
+    }
+
+    private fun sendNotif() {
+        var intent = Intent(this, PersonalFinancialManagementActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        var pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        var builder = NotificationCompat.Builder(this, "finwise")
+            .setSmallIcon(R.drawable.peso_coin)
+            .setContentTitle("Finwise Notif")
+            .setContentText("Your goal is nearing its deadline")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+
+        with (NotificationManagerCompat.from(this)) {
+            notify(100, builder.build())
+        }
+    }
+    
+    
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            var name = "Finwise Notification"
+            var description = "Notification for goals nearing deadline"
+            var importance = NotificationManager.IMPORTANCE_DEFAULT
+            var channel  = NotificationChannel("finwise", name, importance).apply {
+                description = description
+            }
+            var notificationManager:NotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
