@@ -118,7 +118,7 @@
                             android:id="@+id/btn_view_SMART_goals_info"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Review"
+                            android:text="Improve"
                             android:textColor="@color/off_white"
                             android:backgroundTint="@color/dark_green"
                             android:background="@drawable/button_border_grey"

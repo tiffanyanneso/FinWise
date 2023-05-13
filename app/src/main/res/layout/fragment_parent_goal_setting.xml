@@ -58,7 +58,7 @@
                             android:padding="10dp">
 
                             <ImageView
-                                android:src="@drawable/good"
+                                android:src="@drawable/peso_coin"
                                 android:id="@+id/img_face"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
@@ -69,10 +69,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                                tools:text=""
+                                tools:text="Get Started!"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
                                 android:layout_gravity="center"
+                                android:textColor="@color/dark_green"
                                 android:textAlignment="center"/>
 
                             <TextView
@@ -91,7 +92,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:text="Your child hasn't received any feedback for their goals yet. Check back again!"
+                            android:text="Your child hasn't set goals yet. Encourage them to do so!"
                             android:textColor="@color/white"
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"/>
