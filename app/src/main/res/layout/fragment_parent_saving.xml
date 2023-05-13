@@ -52,7 +52,7 @@
                     android:padding="10dp">
 
                     <ImageView
-                        android:src="@drawable/good"
+                        android:src="@drawable/peso_coin"
                         android:id="@+id/img_face"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
@@ -67,7 +67,9 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        tools:text="" />
+                        tools:text="Get Started!"
+                        android:textColor="@color/dark_green"
+                        />
 
                     <TextView
                         android:id="@+id/tv_performance_status"
@@ -85,7 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="Your child has yet to complete any goals. Check back again!"
+                    android:text="Your child has yet to complete any goals. Come back soon!"
                     android:textColor="@color/white"
                     android:layout_gravity="center"
                     android:layout_marginLeft="15dp"/>

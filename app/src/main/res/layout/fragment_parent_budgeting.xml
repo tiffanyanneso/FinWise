@@ -55,7 +55,7 @@
                             android:padding="10dp">
 
                             <ImageView
-                                android:src="@drawable/good"
+                                android:src="@drawable/peso_coin"
                                 android:id="@+id/img_face"
                                 android:layout_width="50dp"
                                 android:layout_height="50dp"
@@ -66,8 +66,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                                tools:text=""
-                                android:textSize="20sp"
+                                tools:text="Get Started!"
+                                android:textColor="@color/dark_green"                                android:textSize="20sp"
                                 android:textStyle="bold"
                                 android:layout_gravity="center"
                                 android:textAlignment="center"/>
@@ -88,7 +88,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
-                            android:text="Your child hasn't completed any budgeting activities as of the moment. Check back again!"
+                            android:text="Your child hasn't completed any budgeting activities. Come back soon!"
                             android:textColor="@color/white"
                             android:layout_gravity="center"
                             android:layout_marginLeft="15dp"/>
@@ -146,45 +146,45 @@
                         android:orientation="horizontal"
                         android:layout_gravity="center">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            android:layout_weight="1"
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="match_parent"-->
+<!--                            android:orientation="vertical"-->
+<!--                            android:layout_weight="1"-->
 
-                            android:layout_marginRight="5dp">
+<!--                            android:layout_marginRight="5dp">-->
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:background="@drawable/button_border_white"
-                                android:backgroundTint="@color/light_green"
-                                android:paddingVertical="10dp"
-                                android:layout_gravity="center"
-                                android:layout_marginHorizontal="2.5dp">
+<!--                            <LinearLayout-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:orientation="vertical"-->
+<!--                                android:background="@drawable/button_border_white"-->
+<!--                                android:backgroundTint="@color/light_green"-->
+<!--                                android:paddingVertical="10dp"-->
+<!--                                android:layout_gravity="center"-->
+<!--                                android:layout_marginHorizontal="2.5dp">-->
 
-                                <TextView
-                                    android:id="@+id/tv_average_updates"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="0"
-                                    android:textColor="@color/black"
-                                    android:textSize="20dp"
-                                    android:textStyle="bold"
-                                    android:textAlignment="center"
-                                    android:gravity="center"/>
+<!--                                <TextView-->
+<!--                                    android:id="@+id/tv_average_updates"-->
+<!--                                    android:layout_width="match_parent"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="0"-->
+<!--                                    android:textColor="@color/black"-->
+<!--                                    android:textSize="20dp"-->
+<!--                                    android:textStyle="bold"-->
+<!--                                    android:textAlignment="center"-->
+<!--                                    android:gravity="center"/>-->
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Average\nUpdates"
-                                    android:textSize="14dp"
-                                    android:textColor="@color/black"
-                                    android:layout_gravity="center"
-                                    android:textAlignment="center"/>
-                            </LinearLayout>
-                        </LinearLayout>
+<!--                                <TextView-->
+<!--                                    android:layout_width="wrap_content"-->
+<!--                                    android:layout_height="wrap_content"-->
+<!--                                    android:text="Average\nUpdates"-->
+<!--                                    android:textSize="14dp"-->
+<!--                                    android:textColor="@color/black"-->
+<!--                                    android:layout_gravity="center"-->
+<!--                                    android:textAlignment="center"/>-->
+<!--                            </LinearLayout>-->
+<!--                        </LinearLayout>-->
                         <!--                        <LinearLayout-->
                         <!--                            android:layout_width="match_parent"-->
                         <!--                            android:layout_height="match_parent"-->
@@ -306,7 +306,7 @@
                     android:textSize="20sp"
                     android:textColor="@color/black"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginTop="20dp"/>
+                    android:layout_marginTop="10dp"/>
 
                 <com.facebook.shimmer.ShimmerFrameLayout
                     android:id="@+id/loading_items"
