@@ -72,15 +72,8 @@ class ParentGoalSettingFragment : Fragment() {
         binding.btnNewGoal.setOnClickListener {
             if (ongoingGoals >= 5)
                 buildDialog()
-            else {
-                var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
-                var bundle = Bundle()
-                bundle.putString("childID", childID)
-                bundle.putString("source", "Parent")
-                goToNewGoal.putExtras(bundle)
-                goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                this.startActivity(goToNewGoal)
-            }
+            else
+               showSMARTGoalsDialog()
         }
 
         binding.btnViewSMARTGoalsInfo.setOnClickListener{
@@ -252,6 +245,27 @@ class ParentGoalSettingFragment : Fragment() {
     private fun showReviewButton() {
         binding.btnSeeMore.visibility = View.GONE
         binding.layoutButtons.visibility = View.VISIBLE
+    }
+
+    private fun showSMARTGoalsDialog() {
+        var dialogBinding= DialogSmartGoalInfoBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(requireContext());
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            var goToNewGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
+            var bundle = Bundle()
+            bundle.putString("childID", childID)
+            bundle.putString("source", "Parent")
+            goToNewGoal.putExtras(bundle)
+            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            this.startActivity(goToNewGoal)
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
 

@@ -349,6 +349,7 @@ class GoalSettingFragment : Fragment() {
             goToNewGoal.putExtras(bundle)
             goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(goToNewGoal)
+            dialog.dismiss()
         }
 
         dialog.show()

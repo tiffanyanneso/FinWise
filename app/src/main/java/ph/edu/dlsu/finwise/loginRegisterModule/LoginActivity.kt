@@ -16,6 +16,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityLoginBinding
 import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
@@ -60,6 +61,7 @@ class LoginActivity : AppCompatActivity() {
                                 if (documentSnapshot.contains("lastLogin"))
                                     isFirstLogin = false
                                 Log.d("zxcvzxcvvc", "login: "+isFirstLogin)
+                                updateToken(currentUser)
                                 initializeRedirect(documentSnapshot, isFirstLogin)
 
                             }
@@ -73,7 +75,18 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             }
         }
+    }
 
+    private fun updateToken(userID:String) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@addOnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+            firestore.collection("Users").document(userID).update("userToken", token)
+        }
     }
 
     private fun noAccountFound(task: Task<AuthResult>) {

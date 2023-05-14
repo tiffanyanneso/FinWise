@@ -89,8 +89,6 @@ class FinancialActivity : AppCompatActivity() {
         // and initializes the navbar
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
-
-//        binding.btnNotification.setOnClickListener { sendNotif() }
     }
 
     private fun sendNotif() {

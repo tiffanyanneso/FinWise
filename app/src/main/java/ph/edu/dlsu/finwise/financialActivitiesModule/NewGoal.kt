@@ -14,10 +14,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityNewGoalBinding
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import java.text.DecimalFormat
@@ -34,9 +39,9 @@ class NewGoal : AppCompatActivity() {
 
     private lateinit var currentUserType:String
     private lateinit var childID:String
+    private var currentChildAge = 0
 
     private var maxAmount = 0.00F
-    private var age = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -145,14 +150,89 @@ class NewGoal : AppCompatActivity() {
                 currentUserType = "Parent"
                 var childIDBundle = intent.extras!!
                 childID = childIDBundle.getString("childID").toString()
+                binding.layoutCommonGoalsChild.visibility = View.GONE
             }
             else if (it.toObject<Users>()!!.userType == "Child"){
                 currentUserType = "Child"
                 childID = currentUser
+                binding.layoutCommonGoalsParents.visibility = View.GONE
+            }
+
+            CoroutineScope(Dispatchers.Main).launch {
+                getCommonGoals()
             }
         }.continueWith {
             initializeDropDownForReasons()
         }
+    }
+
+    private suspend fun getCommonGoals() {
+        var goalArrayList = ArrayList<String>()
+        var goalCount = hashMapOf<String, Int>()
+
+        var goals = firestore.collection("FinancialGoals").get().await()
+        if (!goals.isEmpty) {
+            for (goal in goals) {
+                var goalCreatedBy = goal.toObject<FinancialGoals>().createdBy
+                var goalChildID = goal.toObject<FinancialGoals>().childID
+                //get the user type of the user who created the goal
+                var userType = firestore.collection("Users").document(goalCreatedBy!!).get().await().toObject<Users>()!!.userType
+
+                if (currentUserType == userType) {
+                    //check if the age of the child and the child id in the goal is the same
+                    var childObject = firestore.collection("Users").document(goalChildID!!).get().await().toObject<Users>()
+
+                    //compute age
+                    val date = SimpleDateFormat("MM/dd/yyyy").format(childObject?.birthday?.toDate())
+                    val to = LocalDate.parse(date.toString(), DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+                    var difference = Period.between(to, LocalDate.now())
+                    var age = difference.years
+
+                    if (currentChildAge == age)
+                        goalArrayList.add(goal.toObject<FinancialGoals>().financialActivity!!)
+                }
+
+                if (!goalArrayList.isEmpty()) {
+                    //count how many times the chore appear in the array list
+                    for (goal in goalArrayList) {
+                        if (goalCount.containsKey(goal))
+                            goalCount[goal] = goalCount[goal]!! + 1
+                        else
+                            goalCount[goal] = 1
+                    }
+
+                    // Sort the HashMap by value in descending order
+                    var sortedList = goalCount.entries.sortedByDescending { it.value }
+
+                    if (sortedList.size > 3)
+                        sortedList = sortedList.take(3)
+
+                    var commonChoreText = ""
+                    sortedList.forEachIndexed { index, (goal, count) ->
+                        commonChoreText += "${index+1}. ${goal}"
+                        if (!(index == sortedList.size - 1))
+                            commonChoreText += "\n"
+                    }
+
+                    if (currentUserType == "Parent")
+                        binding.tvCommonChoresParent.text = commonChoreText
+                    else if (currentUserType == "Child")
+                        binding.tvCommonChoresKids.text = commonChoreText
+                } else {
+                    binding.layoutCommonGoalsParents.visibility = View.GONE
+                    binding.layoutCommonGoalsChild.visibility = View.GONE
+                }
+
+            }
+        } else {
+            binding.layoutCommonGoalsParents.visibility = View.GONE
+            binding.layoutCommonGoalsChild.visibility = View.GONE
+        }
+
+    }
+
+    private suspend fun getCommonGoalsChild() {
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -169,21 +249,21 @@ class NewGoal : AppCompatActivity() {
             val to = LocalDate.parse(date.toString(), dateFormatter)
             var difference = Period.between(to, from)
 
-            var age = difference.years
-            if (age == 9) {
+            currentChildAge = difference.years
+            if (currentChildAge == 9) {
                 maxAmount = 3000F
                 binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#0.00").format(maxAmount)}"
             }
             dropdownContent.add("Buying Items")
 
-            if (age == 10 || age == 11 || age == 12) {
+            if (currentChildAge == 10 || currentChildAge == 11 || currentChildAge == 12) {
                 maxAmount = 5000F
                 binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#0.00").format(maxAmount)}"
 
                 dropdownContent.add("Situational Shopping")
                 dropdownContent.add("Donating To Charity")
 
-                if (age == 12) {
+                if (currentChildAge == 12) {
                     maxAmount = 10000F
                     binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#0.00").format(maxAmount)}"
 
@@ -208,9 +288,9 @@ class NewGoal : AppCompatActivity() {
             binding.goalContainer.helperText = ""
 
       if (binding.dropdownActivity.text.toString().trim().isEmpty()) {
-            binding.containerActivity.helperText = "Input goal name."
-            valid = false
-        } else
+        binding.containerActivity.helperText = "Input goal name."
+        valid = false
+      } else
             binding.containerActivity.helperText = ""
 
         if (binding.etAmount.text.toString().trim().isEmpty()) {
