@@ -31,6 +31,8 @@ class ChildDashboardActivity : AppCompatActivity(){
 
     private var firestore = Firebase.firestore
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+    private lateinit var userType: String
+
     private lateinit var binding: ActivityChildDashboardBinding
     private var bundle = Bundle()
 
@@ -85,12 +87,12 @@ class ChildDashboardActivity : AppCompatActivity(){
     }
 
     private fun initializeDateButtons() {
-        initializeWeeklyButton()
+        //initializeWeeklyButton()
         initializeMonthlyButton()
         initializeQuarterlyButton()
     }
 
-    private fun initializeWeeklyButton() {
+    /*private fun initializeWeeklyButton() {
         val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
         val yearlyButton = binding.btnQuarterly
@@ -102,14 +104,14 @@ class ChildDashboardActivity : AppCompatActivity(){
             initializeFragments()
             //setUpBreakdownTabs()
         }
-    }
+    }*/
 
     private fun initializeMonthlyButton() {
-        val weeklyButton = binding.btnWeekly
+        //val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
         val yearlyButton = binding.btnQuarterly
         monthlyButton.setOnClickListener {
-            weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            //weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
             yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             bundle.putString("date", "monthly")
@@ -119,11 +121,11 @@ class ChildDashboardActivity : AppCompatActivity(){
     }
 
     private fun initializeQuarterlyButton() {
-        val weeklyButton = binding.btnWeekly
+        //val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
         val quarterlyButton = binding.btnQuarterly
         quarterlyButton.setOnClickListener {
-            weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            //weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             quarterlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
             bundle.putString("date", "quarterly")
@@ -133,11 +135,11 @@ class ChildDashboardActivity : AppCompatActivity(){
     }
 
     private fun initializeFragments() {
+        setBundle()
         val adapter = FinancialActivity.ViewPagerAdapter(supportFragmentManager)
         val dashboardPersonalFinanceFragment = DashboardPersonalFinanceFragment()
         val dashboardFinancialActivitiesFragment = DashboardFinancialActivitiesFragment()
         val dashboardFinancialAssessmentsFragment = DashboardFinancialAssessmentsFragment()
-        bundle.putString("userID", currentUser)
         dashboardPersonalFinanceFragment.arguments = bundle
         dashboardFinancialActivitiesFragment.arguments = bundle
         dashboardFinancialAssessmentsFragment.arguments = bundle
@@ -150,6 +152,15 @@ class ChildDashboardActivity : AppCompatActivity(){
         binding.tabLayout.setupWithViewPager(binding.viewPager)
         setupTabIcons()
     }
+
+    private fun setBundle() {
+        // sending of friendchildID
+        bundle.putString("childID", currentUser)
+        //TODO: change
+        userType = "child"
+        bundle.putString("user", userType)
+    }
+
 
     private fun setupTabIcons() {
         binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])

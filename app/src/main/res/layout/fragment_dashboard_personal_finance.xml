@@ -116,7 +116,7 @@
             android:id="@+id/tv_balance_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="This Week's Balance Trend"
+            android:text="This Week's Personal Financial Score Trend"
             android:textStyle="bold"
             android:textColor="@color/dark_green"
             android:textSize="20sp"

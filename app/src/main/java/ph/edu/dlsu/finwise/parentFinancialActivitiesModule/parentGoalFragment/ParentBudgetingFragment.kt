@@ -132,7 +132,8 @@ class ParentBudgetingFragment : Fragment() {
                         var budgetItemObject = budgetItem.toObject<BudgetItem>()
                         if (budgetItemObject.status == "Edited")
                             nUpdates++
-                        binding.tvAverageUpdates.text = (nUpdates / budgetItemCount).roundToInt().toString()
+                        //TODO: can't find this
+                        // binding.tvAverageUpdates.text = (nUpdates / budgetItemCount).roundToInt().toString()
 
 
                         //parental involvement

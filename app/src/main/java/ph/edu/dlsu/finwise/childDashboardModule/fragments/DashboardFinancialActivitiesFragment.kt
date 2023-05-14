@@ -83,14 +83,14 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getFinancialActivitiesPerformance() {
         CoroutineScope(Dispatchers.Main).launch {
-            getChildAge()
+            /*getChildAge()
             if (age == 10 || age == 11)
                 getGoalSettingPerformance()
             else
                 getSavingPerformanceScore()
 
             getBudgetingPerformanceScore()
-            getSpendingPerformance()
+            getSpendingPerformance()*/
         }
     }
 

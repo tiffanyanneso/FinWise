@@ -6,20 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import com.jjoe64.graphview.series.DataPoint
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardPersonalFinanceBinding
 import ph.edu.dlsu.finwise.model.Transactions
@@ -38,10 +35,10 @@ class DashboardPersonalFinanceFragment : Fragment() {
 
     val transactionsArrayList = ArrayList<Transactions>()
     private lateinit var sortedDate: List<Date>
-    private lateinit var selectedDates: List<Date>
+    //private lateinit var days: List<Date>
     private var weeks: Map<Int, List<Date>>? = null
     private var months: Map<Int, List<Date>>? = null
-    private var selectedDatesSort = "weekly"
+    private var selectedDatesSort = "monthly"
     private lateinit var chart: LineChart
     var graphData = mutableListOf<Entry>()
 
@@ -103,24 +100,25 @@ class DashboardPersonalFinanceFragment : Fragment() {
     private fun  setData(): MutableList<Entry> {
 
         when (selectedDatesSort) {
-            "weekly" -> {
+            /*"weekly" -> {
                 selectedDates = getDaysOfWeek(sortedDate)
                 graphData = addWeeklyData(selectedDates)
-                binding.tvBalanceTitle.text = "This Week's Balance Trend"
-            }
+                binding.tvBalanceTitle.text = "This Week's Personal Financial Score Trend"
+            }*/
             "monthly" -> {
                 weeks = getWeeksOfCurrentMonth(sortedDate)
+                Log.d("agustus", "weeks: "+weeks)
                 graphData = iterateWeeksOfCurrentMonth(weeks!!)
 
                 /*val group = groupDates(sortedDate, "month")
                 iterateDatesByQuarter(group)*/
-                binding.tvBalanceTitle.text = "This Month's Balance Trend"
+                binding.tvBalanceTitle.text = "This Month's Personal Financial Score Trend"
             }
             "quarterly" -> {
                 months = getMonthsOfQuarter(sortedDate)
                 graphData =  forEachDateInMonths(months!!)
                 Log.d("zaza", "QUARTER: "+graphData)
-                binding.tvBalanceTitle.text = "This Quarter's Balance Trend"
+                binding.tvBalanceTitle.text = "This Quarter's Personal Financial Score Trend"
             }
         }
         return graphData
@@ -348,11 +346,16 @@ class DashboardPersonalFinanceFragment : Fragment() {
     }
 
     private fun setTotals(totalPersonalFinancePerformance: Float) {
+        var personalFinancePerformance = totalPersonalFinancePerformance
+        if (totalPersonalFinancePerformance.isNaN())
+            personalFinancePerformance = 0.00F
+
         val df = DecimalFormat("#.#")
         df.roundingMode = java.math.RoundingMode.UP
-        val roundedValue = df.format(totalPersonalFinancePerformance)
+        val roundedValue = df.format(personalFinancePerformance)
 
         binding.tvPersonalFinancePercent.text = "${roundedValue}%"
+        binding.progressBarPersonalFinance.progress = personalFinancePerformance.toInt()
         /*if (personalFinancePerformanceDecimalFormat > 0 && user == "child")
             binding.tvSummary.text = "Good job! You've earned ₱$netIncomeText more than you spent"
             binding.tvPersonalFinanceText.text = ""
@@ -378,19 +381,16 @@ class DashboardPersonalFinanceFragment : Fragment() {
         Log.d("sabong", "selectedDatesSort: "+ selectedDatesSort)
 
         when (selectedDatesSort) {
-            "weekly" -> updateXAxisWeekly(xAxis)
+            //"weekly" -> updateXAxisWeekly(xAxis)
             "monthly" -> updateXAxisMonthly(xAxis)
             "quarterly" -> updateXAxisQuarterly(xAxis)
         }
-
-
-
 
         val yAxis = chart.axisLeft
         yAxis.setDrawLabels(true) // Show X axis labels
         yAxis.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return "${"%.0f".format(value)}%"
+                return "${"%.1f".format(value)}%"
             }
         }
         yAxis.axisMaximum = 100f // set maximum y-value to 100%
@@ -419,7 +419,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
         // Add a Peso sign in the data points in the graph
         dataSet.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                val formattedValue = String.format("%.0f", value)
+                val formattedValue = String.format("%.1f", value)
 
                 // Add a percent sign to the formatted value and return it
                 return "$formattedValue%"
@@ -427,7 +427,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
         }
     }
 
-    private fun updateXAxisWeekly(xAxis: XAxis?) {
+    /*private fun updateXAxisWeekly(xAxis: XAxis?) {
         val dateFormatter = SimpleDateFormat("EEE")
         val dates = selectedDates.distinct()
 
@@ -436,7 +436,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
             graphData = graphData.take(dates.size) as MutableList<Entry>
         }
         xAxis?.valueFormatter = IndexAxisValueFormatter(dates.map { dateFormatter.format(it) }.toTypedArray())
-    }
+    }*/
 
     private fun updateXAxisMonthly(xAxis: XAxis) {
         xAxis.valueFormatter = object : ValueFormatter() {

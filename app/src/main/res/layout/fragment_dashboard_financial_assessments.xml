@@ -11,91 +11,140 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp"
-        android:background="@drawable/button_border_white"
-        android:backgroundTint="@color/white"
         android:layout_marginBottom="10dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="Financial Assessment"
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:paddingBottom="5dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center"
-        android:gravity="center">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <ProgressBar
-                android:id="@+id/progress_bar_financial_assessments"
-                style="@style/CircularDeterminateProgressBar"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                tools:progress="0" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="@+id/progress_bar_personal_finance"
-                app:layout_constraintEnd_toEndOf="@+id/progress_bar_personal_finance"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="@+id/progress_bar_personal_finance"
-                app:layout_constraintTop_toTopOf="@+id/progress_bar_personal_finance"
-                app:layout_constraintVertical_bias="0.5">
-
-                <TextView
-                    android:id="@+id/tv_financial_assessment_percenage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    app:layout_constraintBottom_toBottomOf="@+id/progress_bar_parental_involvement"
-                    app:layout_constraintEnd_toEndOf="@+id/progress_bar_parental_involvement"
-                    app:layout_constraintStart_toStartOf="@+id/progress_bar_parental_involvement"
-                    app:layout_constraintTop_toTopOf="@+id/progress_bar_parental_involvement"
-                    tools:text="Loading" />
-
-                <TextView
-                    android:id="@+id/text_view_performance_text_personal_finance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
-                    app:layout_constraintEnd_toEndOf="@+id/progress_bar"
-                    app:layout_constraintHorizontal_bias="0.50"
-                    app:layout_constraintStart_toStartOf="@+id/progress_bar"
-                    app:layout_constraintTop_toTopOf="@+id/progress_bar"
-                    app:layout_constraintVertical_bias="0.75"
-                    tools:text="Poor"
-                    android:textSize="16dp"
-                    />
-            </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <TextView
-            android:id="@+id/tv_personal_finance_text"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp"
+            android:layout_gravity="center_horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/gradient_pfm_card"
+                android:layout_gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="Financial Assessments"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:padding="10dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <ProgressBar
+                            android:id="@+id/progress_bar"
+                            style="@style/CircularDeterminateProgressBar"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0"
+                            tools:progress="0" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
+                            app:layout_constraintEnd_toEndOf="@+id/progress_bar"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="@+id/progress_bar"
+                            app:layout_constraintTop_toTopOf="@+id/progress_bar"
+                            app:layout_constraintVertical_bias="0.5">
+
+                            <TextView
+                                android:id="@+id/tv_financial_assessment_percent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                                app:layout_constraintBottom_toBottomOf="@+id/progress_bar_parental_involvement"
+                                app:layout_constraintEnd_toEndOf="@+id/progress_bar_parental_involvement"
+                                app:layout_constraintStart_toStartOf="@+id/progress_bar_parental_involvement"
+                                app:layout_constraintTop_toTopOf="@+id/progress_bar_parental_involvement"
+                                tools:text="Loading"/>
+
+                            <TextView
+                                android:id="@+id/text_view_performance_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                                app:layout_constraintBottom_toBottomOf="@+id/progress_bar"
+                                app:layout_constraintEnd_toEndOf="@+id/progress_bar"
+                                app:layout_constraintStart_toStartOf="@+id/progress_bar"
+                                app:layout_constraintTop_toBottomOf="@+id/tv_financial_assessment_percent"
+                                tools:text="Poor"
+                                android:textSize="16sp"
+                                />
+                        </LinearLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/tv_financial_assessment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="Text about involvement here"
+                        android:textColor="@color/black"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="15dp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
+
+        <TextView
+            android:id="@+id/tv_balance_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="This Week's Financial Assessment's Trend"
+            android:textStyle="bold"
+            android:textColor="@color/dark_green"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="(Click the empty space below to see the graph) "
+            android:textStyle="bold"
+            android:textColor="@color/light_green"
             android:textSize="16sp"
-            android:text="Text about involvement here"
-            android:textColor="@color/black"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/financial_assessment_score_chart"
+            android:layout_width="330dp"
+            android:layout_height="430dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="15dp"/>
+            android:background="@color/white"
+            android:layout_marginBottom="20dp"/>
     </LinearLayout>
-    </LinearLayout>
+
 
 </FrameLayout>
