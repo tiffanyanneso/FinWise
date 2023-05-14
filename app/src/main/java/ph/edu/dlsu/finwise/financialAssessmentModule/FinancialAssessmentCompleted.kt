@@ -327,8 +327,10 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
     }
 
     private fun setScores() {
+        binding.pbLoading.visibility = View.GONE
         binding.tvScore.text = "Your score is $answeredCorrectly out of $nQuestions"
         percentage = (answeredCorrectly.toDouble() / nQuestions.toDouble()) * 100
+        binding.progressBar.visibility = View.VISIBLE
         binding.progressBar.progress = percentage.round(1).toInt()
         binding.textViewProgress.text = "${DecimalFormat("##0.00").format(percentage)}%"
     }

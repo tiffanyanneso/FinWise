@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -219,7 +220,6 @@ class GoalAccomplishedActivity : AppCompatActivity() {
 
             dialogBinding.btnNo.setOnClickListener {
                 //withdrawal transaction from goal to wallet
-                adjustWalletBalances()
                 goToFinancialAssessmentActivity()
                 dialog.dismiss()
             }
@@ -240,18 +240,15 @@ class GoalAccomplishedActivity : AppCompatActivity() {
         firestore.collection("Assessments").whereEqualTo("assessmentType", "Post-Activity").whereEqualTo("assessmentCategory", "Saving").get().addOnSuccessListener {
             if (it.size()!= 0) {
                 val assessmentID = it.documents[0].id
-                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).orderBy("dateTaken", Query.Direction.DESCENDING).get().addOnSuccessListener { results ->
                     if (results.size() != 0) {
                         val assessmentAttemptsObjects = results.toObjects<FinancialAssessmentAttempts>()
-                        assessmentAttemptsObjects.sortedByDescending { it.dateTaken }
                         val latestAssessmentAttempt = assessmentAttemptsObjects[0].dateTaken
-                        val dateFormatter: DateTimeFormatter =
-                            DateTimeFormatter.ofPattern("MM/dd/yyyy")
                         val lastTakenFormat =
                             SimpleDateFormat("MM/dd/yyyy").format(latestAssessmentAttempt!!.toDate())
-                        val from = LocalDate.parse(lastTakenFormat.toString(), dateFormatter)
+                        val from = LocalDate.parse(lastTakenFormat.toString(),  DateTimeFormatter.ofPattern("MM/dd/yyyy"))
                         val today = SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate())
-                        val to = LocalDate.parse(today.toString(), dateFormatter)
+                        val to = LocalDate.parse(today.toString(), DateTimeFormatter.ofPattern("MM/dd/yyyy"))
                         val difference = Period.between(from, to)
 
                         if (difference.days >= 7)
@@ -329,13 +326,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
             }
             adjustCashBalance(cashBalance)
             adjustMayaBalance(mayaBalance)
-            goToFinancialActivities()
         }
-    }
-
-    private fun goToFinancialActivities() {
-        val finact = Intent(this, FinancialActivity::class.java)
-        startActivity(finact)
     }
 
     private fun adjustCashBalance(cashBalance:Float) {

@@ -49,6 +49,14 @@
                 android:layout_marginBottom="20dp">
 
                 <ProgressBar
+                    android:id="@+id/pb_loading"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <ProgressBar
                     android:id="@+id/progress_bar"
                     style="@style/CircularDeterminateProgressBar"
                     android:layout_width="150dp"
@@ -59,7 +67,8 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
-                    tools:progress="60" />
+                    tools:progress="60"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/text_view_progress"

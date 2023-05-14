@@ -14,6 +14,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
@@ -680,11 +681,13 @@ class BudgetActivity : AppCompatActivity() {
 
             if (it.size()!= 0) {
                 var assessmentID = it.documents[0].id
-                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).orderBy("dateTaken", Query.Direction.DESCENDING).get().addOnSuccessListener { results ->
                     if (results.size() != 0) {
                         var assessmentAttemptsObjects = results.toObjects<FinancialAssessmentAttempts>()
-                        assessmentAttemptsObjects.sortedByDescending { it.dateTaken }
-                        var latestAssessmentAttempt = assessmentAttemptsObjects.get(0).dateTaken
+                        var latestAssessmentAttempt = assessmentAttemptsObjects[0].dateTaken
+
+                        println("print assessment attempt" + SimpleDateFormat("MM/dd/yyyy").format(assessmentAttemptsObjects[0].dateTaken!!.toDate()))
+
                         val dateFormatter: DateTimeFormatter =
                             DateTimeFormatter.ofPattern("MM/dd/yyyy")
                         val lastTakenFormat =
@@ -694,6 +697,9 @@ class BudgetActivity : AppCompatActivity() {
                         val to = LocalDate.parse(today.toString(), dateFormatter)
                         var difference = Period.between(from, to)
 
+
+                        println("print from " + from)
+                        println("print difference " + difference)
                         if (difference.days >= 7)
                             buildAssessmentDialog(assessmentType, assessmentCategory)
                         else {

@@ -39,7 +39,7 @@ class AchievedFragment : Fragment() {
     private fun getAchievedGoals() {
         var goalIDArrayList = ArrayList<String>()
         goalIDArrayList.clear()
-        firestore.collection("FinancialActivities").whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { documents ->
+        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { documents ->
             for (financialActivity in documents) {
                 var finactObject = financialActivity.toObject<FinancialActivities>()
                 goalIDArrayList.add(finactObject.financialGoalID!!)

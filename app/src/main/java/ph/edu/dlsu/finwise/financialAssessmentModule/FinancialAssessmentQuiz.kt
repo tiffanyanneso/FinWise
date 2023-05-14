@@ -127,6 +127,10 @@ class FinancialAssessmentQuiz : AppCompatActivity() {
             }
             if (index ==4 )
                 binding.layoutChoice4.visibility = View.GONE
+        }.continueWith {
+            binding.pbLoading.visibility = View.GONE
+            binding.layoutQuestion.visibility = View.VISIBLE
+            binding.layoutChoices.visibility = View.VISIBLE
         }
     }
 

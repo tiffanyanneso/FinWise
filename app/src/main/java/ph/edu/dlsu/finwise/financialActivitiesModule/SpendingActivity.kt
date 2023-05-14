@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.fragment.app.FragmentManager
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
@@ -162,10 +163,9 @@ class SpendingActivity : AppCompatActivity() {
         firestore.collection("Assessments").whereEqualTo("assessmentType", "Pre-Activity").whereEqualTo("assessmentCategory", "Spending").get().addOnSuccessListener {
             if (it.size()!= 0) {
                 var assessmentID = it.documents[0].id
-                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
+                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).orderBy("dateTaken", Query.Direction.DESCENDING).get().addOnSuccessListener { results ->
                     if (results.size() != 0) {
                         var assessmentAttemptsObjects = results.toObjects<FinancialAssessmentAttempts>()
-                        assessmentAttemptsObjects.sortedByDescending { it.dateTaken }
                         var latestAssessmentAttempt = assessmentAttemptsObjects.get(0).dateTaken
                         val dateFormatter: DateTimeFormatter =
                             DateTimeFormatter.ofPattern("MM/dd/yyyy")
