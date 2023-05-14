@@ -17,14 +17,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityNewEarningBinding
 import ph.edu.dlsu.finwise.databinding.DialogNewCustomChoreBinding
-import ph.edu.dlsu.finwise.model.Chores
-import ph.edu.dlsu.finwise.model.FinancialActivities
-import ph.edu.dlsu.finwise.model.FinancialGoals
-import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -39,6 +40,7 @@ class NewEarningActivity : AppCompatActivity() {
     private var savingActivityID:String?=null
     private lateinit var module:String
     private lateinit var childID:String
+    private var currentChildAge = 0
 
     private var firestore = Firebase.firestore
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
@@ -66,7 +68,10 @@ class NewEarningActivity : AppCompatActivity() {
 
         fillUpFields()
 
-        initializeDropDowns()
+        CoroutineScope(Dispatchers.Main).launch {
+            initializeDropDowns()
+            getCommonChores()
+        }
         loadBackButton()
         cancel()
 
@@ -274,67 +279,111 @@ class NewEarningActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private class ChoreObject(var choreName:String, var duration:Int?=null)
+    private suspend fun getCommonChores() {
+        var choreArrayList = ArrayList<String>()
+        var choreCount = hashMapOf<String, Int>()
+
+        var chores = firestore.collection("EarningActivities").get().await()
+        if (!chores.isEmpty) {
+            binding.layoutCommonChores.visibility = View.VISIBLE
+            for (chore in chores) {
+                var choreObject = chore.toObject<EarningActivityModel>()
+                var childObject = firestore.collection("Users").document(choreObject.childID!!).get().await().toObject<Users>()
+
+                //compute age
+                val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                val from = LocalDate.now()
+                val date = SimpleDateFormat("MM/dd/yyyy").format(childObject?.birthday?.toDate())
+                val to = LocalDate.parse(date.toString(), dateFormatter)
+                var difference = Period.between(to, from)
+                var age = difference.years
+
+                //check if the age of the child who did the chore is the same age as the current child
+                if (currentChildAge == age)
+                    choreArrayList.add(choreObject.activityName!!)
+            }
+
+            if (!choreArrayList.isEmpty()) {
+                //count how many times the chore appear in the array list
+                for (chore in choreArrayList) {
+                    if (choreCount.containsKey(chore))
+                        choreCount[chore] = choreCount[chore]!! + 1
+                    else
+                        choreCount[chore] = 1
+                }
+
+                // Sort the HashMap by value in descending order
+                val sortedList = choreCount.entries.sortedByDescending { it.value }
+                val topThree = sortedList.take(3)
+
+                var commonChoreText = ""
+                topThree.forEachIndexed { index, (chore, count) ->
+                    commonChoreText += "${index+1}. ${chore}"
+                    if (!(index == topThree.size - 1))
+                        commonChoreText += "\n"
+                }
+                binding.tvCommonChores.text = commonChoreText
+            }
+            else
+                binding.layoutCommonChores.visibility = View.GONE
+        } else
+            binding.layoutCommonChores.visibility = View.GONE
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun initializeDropDowns() {
+    private suspend fun initializeDropDowns() {
         val paymentTypeItems = resources.getStringArray(R.array.payment_type)
         val adapterPaymentTypeItems = ArrayAdapter(this, R.layout.list_item, paymentTypeItems)
         binding.dropdownTypeOfPayment.setAdapter(adapterPaymentTypeItems)
 
+        var child =  firestore.collection("Users").document(childID).get().await().toObject<Users>()
 
-        firestore.collection("Users").document(childID).get().addOnSuccessListener {
-            var child = it.toObject<Users>()
+        //compute age
+        val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+        val from = LocalDate.now()
+        val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+        val to = LocalDate.parse(date.toString(), dateFormatter)
+        var difference = Period.between(to, from)
 
-            //compute age
-            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
-            val from = LocalDate.now()
-            val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
-            val to = LocalDate.parse(date.toString(), dateFormatter)
-            var difference = Period.between(to, from)
-
-            var age = difference.years
-            if (age == 9) {
-                maxAmount = 100F
-            }
-            //chores for age 9-12
-            dropdownChores.add("Put Away Groceries")
-            dropdownChores.add("Put Away Laundry")
-            dropdownChores.add("Clean Floor")
-            dropdownChores.add("Set Table")
-
-            if (age == 10 || age == 11 || age == 12) {
-                maxAmount = 300F
-
-                dropdownChores.add("Fold Laundry")
-                dropdownChores.add("Help Parent Prepare Meal")
-                dropdownChores.add("Prepare Snack")
-                dropdownChores.add("Change Bed Sheets")
-                dropdownChores.add("Feed Pets")
-
-                if (age == 12) {
-                    maxAmount = 500F
-
-                    dropdownChores.add("Mop Floor")
-                    dropdownChores.add("Clean Bathroom")
-                    dropdownChores.add("Wash Dishes")
-                    dropdownChores.add("Wash Car")
-                    dropdownChores.add("Prepare Meal")
-                    dropdownChores.add("Take Care Of Younger Sibling")}
-            }
-
-            firestore.collection("Chores").whereEqualTo("createdBy", currentUser).get().addOnSuccessListener { chores ->
-                for (chore in chores) {
-                    var dbChore = chore.toObject<Chores>()
-                    dropdownChores.add(dbChore.choreName.toString())
-                }
-            }.continueWith {
-                dropdownChores.add("+ Add Custom Chore")
-
-            }
-
-            binding.tvMaxAmount.text = "The max amount that can be given is ₱${DecimalFormat("#0.00").format(maxAmount)}"
+        currentChildAge = difference.years
+        if (currentChildAge == 9) {
+            maxAmount = 100F
         }
+        //chores for age 9-12
+        dropdownChores.add("Put Away Groceries")
+        dropdownChores.add("Put Away Laundry")
+        dropdownChores.add("Clean Floor")
+        dropdownChores.add("Set Table")
+
+        if (currentChildAge == 10 || currentChildAge == 11 || currentChildAge == 12) {
+            maxAmount = 300F
+
+            dropdownChores.add("Fold Laundry")
+            dropdownChores.add("Help Parent Prepare Meal")
+            dropdownChores.add("Prepare Snack")
+            dropdownChores.add("Change Bed Sheets")
+
+            if (currentChildAge == 12) {
+                maxAmount = 500F
+
+                dropdownChores.add("Mop Floor")
+                dropdownChores.add("Clean Bathroom")
+                dropdownChores.add("Wash Dishes")
+                dropdownChores.add("Wash Car")
+                dropdownChores.add("Prepare Meal") }
+        }
+
+        firestore.collection("Chores").whereEqualTo("createdBy", currentUser).get().addOnSuccessListener { chores ->
+            for (chore in chores) {
+                var dbChore = chore.toObject<Chores>()
+                dropdownChores.add(dbChore.choreName.toString())
+            }
+        }.continueWith {
+            dropdownChores.add("+ Add Custom Chore")
+        }
+
+        binding.tvMaxAmount.text = "The max amount that can be given is ₱${DecimalFormat("#0.00").format(maxAmount)}"
+
 
         // for the dropdown
         binding.dropdownChore.setAdapter(choresAdapter)

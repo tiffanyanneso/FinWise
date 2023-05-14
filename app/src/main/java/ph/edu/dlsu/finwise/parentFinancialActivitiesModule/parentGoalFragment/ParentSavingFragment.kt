@@ -20,6 +20,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSavingTipsBinding
+import ph.edu.dlsu.finwise.databinding.DialogSmartGoalInfoBinding
 import ph.edu.dlsu.finwise.databinding.FragmentParentSavingBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.NewGoal
 import ph.edu.dlsu.finwise.model.FinancialActivities
@@ -87,17 +88,8 @@ class ParentSavingFragment : Fragment() {
         binding.btnNewGoal.setOnClickListener {
             if (ongoingGoals >= 5)
                 buildDialog()
-            else {
-
-                binding.btnNewGoal.setOnClickListener {
-                    var sendBundle = Bundle()
-                    sendBundle.putString("childID", childID)
-                    sendBundle.putString("source", "Parent")
-                    var newGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
-                    newGoal.putExtras(sendBundle)
-                    startActivity(newGoal)
-                }
-            }
+            else
+                showSMARTGoalsDialog()
         }
         binding.btnTips.setOnClickListener{
             showGoalDialog()
@@ -128,6 +120,26 @@ class ParentSavingFragment : Fragment() {
         getGoals()
         getSavingActivities()
         computeOverallScore()
+    }
+
+    private fun showSMARTGoalsDialog() {
+        var dialogBinding= DialogSmartGoalInfoBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(requireContext());
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            var sendBundle = Bundle()
+            sendBundle.putString("childID", childID)
+            sendBundle.putString("source", "Parent")
+            var newGoal = Intent(requireContext().applicationContext, NewGoal::class.java)
+            newGoal.putExtras(sendBundle)
+            startActivity(newGoal)
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){ }
