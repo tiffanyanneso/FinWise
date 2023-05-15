@@ -29,6 +29,7 @@ import ph.edu.dlsu.finwise.childDashboardModule.FinancialAssessmentsDetailsActiv
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardFinancialAssessmentsBinding
 import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.util.*
@@ -79,6 +80,16 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         getArgumentsBundle()
         getFinancialAssessmentScore()
         initializeDetailsButton()
+        loadFinancialAssessmentScore()
+    }
+
+    private fun loadFinancialAssessmentScore() {
+        val df = DecimalFormat("#.#")
+        df.roundingMode = java.math.RoundingMode.UP
+        val roundedValue = df.format(financialAssessmentTotalPercentage)
+
+        binding.tvFinancialAssessmentPercent.text = "${roundedValue}%"
+        binding.progressBar.progress = financialAssessmentTotalPercentage.toInt()
     }
 
     private fun initializeDetailsButton() {
@@ -371,11 +382,11 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                                 "Budgeting" -> budgetingScores.add(percentage)
                                 "Spending" -> spendingScores.add(percentage)
                             }
-                            computeForPercentages()
                         }
                     }
                 }
             }
+            computeForPercentages()
         }
     }
 

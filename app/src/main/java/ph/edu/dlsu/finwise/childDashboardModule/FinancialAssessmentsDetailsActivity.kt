@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -207,7 +206,7 @@ class FinancialAssessmentsDetailsActivity : AppCompatActivity() {
             }*/
             "monthly" -> {
                 weeks = getWeeksOfCurrentMonth(sortedDate)
-                iterateWeeksOfCurrentMonth(weeks!!)
+                getDataOfWeeksOfCurrentMonth(weeks!!)
                 /*val group = groupDates(sortedDate, "month")
                 iterateDatesByQuarter(group)*/
                 binding.tvGoalSettingTitle.text = "This Month's Goal Setting Assessments Score Trend"
@@ -217,7 +216,7 @@ class FinancialAssessmentsDetailsActivity : AppCompatActivity() {
             }
             "quarterly" -> {
                 months = getMonthsOfQuarter(sortedDate)
-                forEachDateInMonths(months!!)
+                getDataOfMonthsOfCurrentQuarter(months!!)
                 binding.tvGoalSettingTitle.text = "This Quarter's Goal Setting Assessments Score Trend"
                 binding.tvSavingTitle.text = "This Quarter's Saving Assessments Score Trend"
                 binding.tvSpendingTitle.text = "This Quarter's Spending Assessments Score Trend"
@@ -253,7 +252,7 @@ class FinancialAssessmentsDetailsActivity : AppCompatActivity() {
     }
 
     @SuppressLint("NewApi")
-    private suspend fun forEachDateInMonths(months: Map<Int, List<Date>>) {
+    private suspend fun getDataOfMonthsOfCurrentQuarter(months: Map<Int, List<Date>>) {
         for ((month, datesInMonth) in months) {
             //var totalAmount = 0.00F
             for (date in datesInMonth) {
@@ -276,11 +275,11 @@ class FinancialAssessmentsDetailsActivity : AppCompatActivity() {
                                 "Budgeting" -> budgetingScores.add(percentage)
                                 "Spending" -> spendingScores.add(percentage)
                             }
-                            computeForPercentages()
                         }
                     }
                 }
             }
+            computeForPercentages()
         }
     }
 
@@ -308,7 +307,7 @@ class FinancialAssessmentsDetailsActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun iterateWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>) {
+    private suspend fun getDataOfWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>) {
         weeks.forEach { (weekNumber, datesInWeek) ->
             //var totalAmount = 0.00F
             datesInWeek.forEach { date ->
@@ -332,11 +331,11 @@ class FinancialAssessmentsDetailsActivity : AppCompatActivity() {
                                 "Budgeting" -> budgetingScores.add(percentage)
                                 "Spending" -> spendingScores.add(percentage)
                             }
-                            computeForPercentages()
                         }
                     }
                 }
             }
+            computeForPercentages()
         }
     }
 

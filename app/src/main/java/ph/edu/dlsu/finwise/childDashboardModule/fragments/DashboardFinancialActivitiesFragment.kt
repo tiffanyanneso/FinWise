@@ -101,27 +101,27 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             .whereEqualTo("childID", userID)
             .whereEqualTo("financialActivityName", "Spending")
             .whereEqualTo("status", "Completed").get().await()
-            if (financialActivitiesDocuments.size() != 0) {
-                nSpendingCompleted = financialActivitiesDocuments.size()
-                for (spending in financialActivitiesDocuments) {
-                    val spendingActivity = spending.toObject<FinancialActivities>()
-                    println("print " + spendingActivity.financialGoalID)
-                    val financialActivityDocuments = firestore.collection("FinancialActivities")
-                        .whereEqualTo("financialGoalID", spendingActivity.financialGoalID)
-                        .whereEqualTo("financialActivityName", "Budgeting")
-                        .whereEqualTo("status", "Completed").get().await()
-                        val budgetingID = financialActivityDocuments.documents[0].id
-                        val budgetItemsDocuments = firestore.collection("BudgetItems")
-                            .whereEqualTo("financialActivityID", budgetingID)
-                            .whereEqualTo("status", "Active").get().await()
-                            nBudgetItems += budgetItemsDocuments.size()
-                            for (budgetItem in budgetItemsDocuments) {
+        if (financialActivitiesDocuments.size() != 0) {
+            nSpendingCompleted = financialActivitiesDocuments.size()
+            for (spending in financialActivitiesDocuments) {
+                val spendingActivity = spending.toObject<FinancialActivities>()
+                println("print " + spendingActivity.financialGoalID)
+                val financialActivityDocuments = firestore.collection("FinancialActivities")
+                    .whereEqualTo("financialGoalID", spendingActivity.financialGoalID)
+                    .whereEqualTo("financialActivityName", "Budgeting")
+                    .whereEqualTo("status", "Completed").get().await()
+                    val budgetingID = financialActivityDocuments.documents[0].id
+                    val budgetItemsDocuments = firestore.collection("BudgetItems")
+                        .whereEqualTo("financialActivityID", budgetingID)
+                        .whereEqualTo("status", "Active").get().await()
+                        nBudgetItems += budgetItemsDocuments.size()
+                        for (budgetItem in budgetItemsDocuments) {
 
-                                val budgetItemObject = budgetItem.toObject<BudgetItem>()
-                                checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
-                            }
-                }
+                            val budgetItemObject = budgetItem.toObject<BudgetItem>()
+                            checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
+                        }
             }
+        }
     }
 
     private suspend fun checkOverSpending(budgetItemID:String, budgetItemAmount:Float){

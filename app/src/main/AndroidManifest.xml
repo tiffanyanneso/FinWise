@@ -17,7 +17,7 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
-            android:name=".FinancialAssessmentsDetailsActivity"
+            android:name=".childDashboardModule.FinancialAssessmentsDetailsActivity"
             android:exported="false" />
 
         <service
