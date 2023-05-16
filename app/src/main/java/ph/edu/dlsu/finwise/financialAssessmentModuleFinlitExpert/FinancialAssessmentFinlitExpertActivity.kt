@@ -4530,7 +4530,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             var choice = hashMapOf(
                 "questionID" to questionID,
                 "choice" to "Over your budget",
-                "isCorrect" to false
+                "isCorrect" to true
             )
             firestore.collection("AssessmentChoices").add(choice)
 
@@ -4544,7 +4544,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
             choice = hashMapOf(
                 "questionID" to questionID,
                 "choice" to "Under your budget",
-                "isCorrect" to true
+                "isCorrect" to false
             )
             firestore.collection("AssessmentChoices").add(choice)
         }
