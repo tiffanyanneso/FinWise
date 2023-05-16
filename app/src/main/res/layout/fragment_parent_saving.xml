@@ -67,9 +67,7 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textSize="20sp"
                         android:textStyle="bold"
-                        tools:text="Get Started!"
-                        android:textColor="@color/dark_green"
-                        />
+                        tools:text="Get Started!" />
 
                     <TextView
                         android:id="@+id/tv_performance_status"

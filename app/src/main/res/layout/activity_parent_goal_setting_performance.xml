@@ -114,7 +114,7 @@
                             android:id="@+id/btn_view_SMART_goals_tip"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:text="Tips for SMART Goals"
+                            android:text="How can i help child improve?"
                             android:textColor="@color/off_white"
                             android:backgroundTint="@color/dark_green"
                             android:background="@drawable/button_border"
@@ -409,7 +409,7 @@
                                 android:layout_marginTop="10dp"
                                 android:background="@drawable/button_border"
                                 android:backgroundTint="@color/dark_green"
-                                android:text="Tip"
+                                android:text="Tips to help child"
                                 android:textColor="@color/off_white" />
                         </LinearLayout>
                     </LinearLayout>

@@ -161,26 +161,26 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                 binding.imgFace.setImageResource(R.drawable.nearly_there)
                 binding.textOverspendingText.text = "Nearly There"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
-                binding.tvOverspendingText.text = "You're nearly there! Click review to learn how to get there!"
+                binding.tvOverspendingText.text = "You're nearly there! Work on improving your performance by using your budget as a guide and thinking before your buy."
             }  else if (overspendingPercentage < 65 && overspendingPercentage >= 55) {
                 binding.imgFace.setImageResource(R.drawable.almost_there)
                 binding.textOverspendingText.text = "Almost There"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.almost_there_yellow))
-                binding.tvOverspendingText.text = "Almost there! You need to work on your spending. Click review to learn how!"
+                binding.tvOverspendingText.text = "Almost there! Work on improving your performance by using your budget as a guide and thinking before your buy."
             } else if (overspendingPercentage < 75 && overspendingPercentage >= 65) {
                 binding.imgFace.setImageResource(R.drawable.getting_there)
                 binding.textOverspendingText.text = "Getting There"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.getting_there_orange))
-                binding.tvOverspendingText.text = "Getting there! You need to work on your spending. Click review to learn how!"
+                binding.tvOverspendingText.text = "Getting there! Work on improving your performance by using your budget as a guide and thinking before your buy."
             } else if (overspendingPercentage < 85 && overspendingPercentage >= 75) {
                 binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                 binding.textOverspendingText.text  = "Not Quite\nThere"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.not_quite_there_red))
-                binding.tvOverspendingText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
+                binding.tvOverspendingText.text = "Not quite there yet! Don't give up. Work on improving your performance by using your budget as a guide and thinking before your buy."
             } else if (overspendingPercentage > 84) {
                 binding.textOverspendingText.text = "Needs\nImprovement"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.red))
-                binding.tvOverspendingText.text = "Uh oh! Your spending performance needs a lot of improvement. Click review to learn how!"
+                binding.tvOverspendingText.text = "Don't give up! Work on improving your performance by using your budget as a guide and thinking before your buy."
             }
         }
     }

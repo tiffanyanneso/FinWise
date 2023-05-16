@@ -206,7 +206,6 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
                     binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them improve their saving performance!"
                 }
             } else {
-                binding.imgFace.setImageResource(R.drawable.good)
                 binding.tvPerformanceStatus.text = ""
                 binding.tvPerformanceText.text = "Child has yet to complete goals."
             }

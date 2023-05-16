@@ -70,7 +70,6 @@
                                 tools:text="Get Started!"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/dark_green"
                                 android:layout_gravity="center"
                                 android:textAlignment="center"/>
 

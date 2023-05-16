@@ -113,7 +113,7 @@
                 android:id="@+id/btn_view_SMART_goals_info"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:text="Review SMART Goals"
+                android:text="How Can I Improve?"
                 android:textColor="@color/off_white"
                 android:backgroundTint="@color/dark_green"
                 android:background="@drawable/button_border"
@@ -408,7 +408,7 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/button_border"
                     android:backgroundTint="@color/dark_green"
-                    android:text="Review"
+                    android:text="Tips to Improve"
                     android:textColor="@color/off_white" />
             </LinearLayout>
         </LinearLayout>
