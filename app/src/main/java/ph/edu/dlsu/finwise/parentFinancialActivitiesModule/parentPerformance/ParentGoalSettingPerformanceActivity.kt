@@ -99,22 +99,22 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
                 binding.imgFace.setImageResource(R.drawable.excellent)
                 binding.tvPerformanceStatus.text = "Excellent"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
-                binding.tvPerformanceText.text = "Your child excels at goal setting. Encourage them to continue."
+                binding.tvPerformanceText.text = "Your child excels at goal setting. Encourage them to continue setting goals!"
             } else if (percentage < 96 && percentage >= 86) {
                 binding.imgFace.setImageResource(R.drawable.amazing)
                 binding.tvPerformanceStatus.text = "Amazing"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.amazing_green))
-                binding.tvPerformanceText.text = "Your child is amazing at goal setting! Encourage them to keep setting those goals!"
+                binding.tvPerformanceText.text = "Your child is amazing at goal setting! Encourage them to keep setting goals!"
             } else if (percentage < 86 && percentage >= 76) {
                 binding.imgFace.setImageResource(R.drawable.great)
                 binding.tvPerformanceStatus.text = "Great"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
-                binding.tvPerformanceText.text = "Your child is doing a great job of setting goals!"
+                binding.tvPerformanceText.text = "Your child is doing a great job of setting goals! Encourage them to keep at it!"
             } else if (percentage < 76 && percentage >= 66) {
                 binding.imgFace.setImageResource(R.drawable.good)
                 binding.tvPerformanceStatus.text = "Good"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
-                binding.tvPerformanceText.text = "Your child is doing a good job of setting goals! Encourage them to follow the SMART framework."
+                binding.tvPerformanceText.text = "Your child is doing a good job of setting goals! Encourage them to continue following the SMART framework."
             } else if (percentage < 66 && percentage >= 56) {
                 binding.imgFace.setImageResource(R.drawable.average)
                 binding.tvPerformanceStatus.text = "Average"
@@ -124,27 +124,27 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
                 binding.imgFace.setImageResource(R.drawable.nearly_there)
                 binding.tvPerformanceStatus.text = "Nearly There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
-                binding.tvPerformanceText.text = "Your child is nearly there! Click the tips button to learn how to help them get there!"
+                binding.tvPerformanceText.text = "Your child is nearly there! Encourage them to follow the SMART framework!"
             } else if (percentage < 46 && percentage >= 36) {
                 binding.imgFace.setImageResource(R.drawable.almost_there)
                 binding.tvPerformanceStatus.text = "Almost There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
-                binding.tvPerformanceText.text = "Your child is almost there! Click the tips button to learn how to help them get there!"
+                binding.tvPerformanceText.text = "Your child is almost there! Encourage them to follow the SMART framework! "
             } else if (percentage < 36 && percentage >= 26) {
                 binding.imgFace.setImageResource(R.drawable.getting_there)
                 binding.tvPerformanceStatus.text = "Getting There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
-                binding.tvPerformanceText.text = "Your child is getting there! Click the tips button to learn how to help them get there!"
+                binding.tvPerformanceText.text = "Your child is getting there! Encourage them to follow the SMART framework!"
             } else if (percentage < 26 && percentage >= 16) {
                 binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                 binding.tvPerformanceStatus.text = "Not Quite\nThere"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
-                binding.tvPerformanceText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
+                binding.tvPerformanceText.text = "Your child is not quite there yet! Encourage them to follow the SMART framework!"
             } else if (percentage < 15) {
                 binding.imgFace.setImageResource(R.drawable.bad)
                 binding.tvPerformanceStatus.text = "Needs\nImprovement"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
-                binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them improve their goal setting!"
+                binding.tvPerformanceText.text = "Uh oh! Encourage your child to follow the SMART framework!"
             }
 
             val ratingArray = ArrayList<GoalSettingPerformanceActivity.Rating>()

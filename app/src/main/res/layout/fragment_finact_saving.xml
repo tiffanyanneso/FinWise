@@ -70,7 +70,6 @@
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
-                                android:textColor="@color/dark_green"
                                 tools:text="Get Started!" />
 
                             <TextView

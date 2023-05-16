@@ -151,57 +151,56 @@ class SavingPerformanceActivity : AppCompatActivity() {
                 binding.imgFace.setImageResource(R.drawable.excellent)
                 binding.tvPerformanceStatus.text = "Excellent"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
-                binding.tvPerformanceText.text = "Keep up the excellent work! Saving is your strong point. Keep completing those goals!"
+                binding.tvPerformanceText.text = "Keep up the excellent work! You are good at saving. Keep completing your goals!"
             } else if (overall < 96 && overall >= 86) {
                 binding.imgFace.setImageResource(R.drawable.amazing)
                 binding.tvPerformanceStatus.text = "Amazing"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.amazing_green))
-                binding.tvPerformanceText.text = "Amazing job! You are performing well. Saving is your strong point. Keep completing those goals!"
+                binding.tvPerformanceText.text = "Amazing job! Saving is your strong point. Keep completing your goals!"
             } else if (overall < 86 && overall >= 76) {
                 binding.imgFace.setImageResource(R.drawable.great)
                 binding.tvPerformanceStatus.text = "Great"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
-                binding.tvPerformanceText.text = "Great job! You are performing well. Keep completing those goals!"
+                binding.tvPerformanceText.text = "Great job! You are performing well. Keep completing your goals!"
             } else if (overall < 76 && overall >= 66) {
                 binding.imgFace.setImageResource(R.drawable.good)
                 binding.tvPerformanceStatus.text = "Good"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
-                binding.tvPerformanceText.text = "Good job! With a bit more dedication and effort, you’ll surely up your performance!"
+                binding.tvPerformanceText.text = "Good job! Up your performance by keeping your goals in mind!"
             } else if (overall < 66 && overall >= 56) {
                 binding.imgFace.setImageResource(R.drawable.average)
                 binding.tvPerformanceStatus.text = "Average"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
-                binding.tvPerformanceText.text = "Nice work! Work on improving your saving performance through time and effort. You’ll get there soon!"
+                binding.tvPerformanceText.text = "Nice work! Up your performance by consistently setting money aside!"
             } else if (overall < 56 && overall >= 46) {
                 binding.imgFace.setImageResource(R.drawable.nearly_there)
                 binding.tvPerformanceStatus.text = "Nearly There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
-                binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
+                binding.tvPerformanceText.text = "You're nearly there! Up your performance by setting money aside and earning through activities."
             }  else if (overall < 46 && overall >= 36) {
                 binding.imgFace.setImageResource(R.drawable.almost_there)
                 binding.tvPerformanceStatus.text = "Almost There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
-                binding.tvPerformanceText.text = "Almost there! You need to work on your saving. Click review to learn how!"
+                binding.tvPerformanceText.text = "Almost there! Up your performance by setting money aside and earning through activities."
             } else if (overall < 36 && overall >= 26) {
                 binding.imgFace.setImageResource(R.drawable.getting_there)
                 binding.tvPerformanceStatus.text = "Getting There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
-                binding.tvPerformanceText.text = "Getting there! You need to work on your saving. Click review to learn how!"
+                binding.tvPerformanceText.text = "Getting there! Up your performance by setting money aside and earning through activities."
             } else if (overall < 26 && overall >= 16) {
                 binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                 binding.tvPerformanceStatus.text = "Not Quite\nThere"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
-                binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
+                binding.tvPerformanceText.text = "Not quite there yet! Up your performance by setting money aside and earning through activities. Don't give up!"
             } else if (overall < 15) {
                 binding.imgFace.setImageResource(R.drawable.bad)
                 binding.tvPerformanceStatus.text = "Needs\nImprovement"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
-                binding.tvPerformanceText.text = "Uh oh! Your saving performance needs a lot of improvement.  Click review to learn how!"
+                binding.tvPerformanceText.text = "Don't worry! Up your performance by setting money aside and earning through activities. You can do it!"
             }
             } else {
-                binding.imgFace.setImageResource(R.drawable.good)
-                binding.tvPerformanceStatus.text = ""
-                binding.tvPerformanceText.text = "Child has yet to complete goals."
+                binding.tvPerformanceStatus.text = "Get Started!"
+                binding.tvPerformanceText.text = "Complete goals to see your performance!"
             }
         }
     }
@@ -408,15 +407,15 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
         if (specificDuration == "Short Term") {
             dialogBinding.tvTitle.text = "Short Term"
-            dialogBinding.tvDefinition.text = "1. Can be achieved in a short amount of time and have \n" + "2. Duration: Less than 2 weeks"
+            dialogBinding.tvDefinition.text = "1. Can be achieved in a short amount of time\n" + "2. Duration: Less than 2 weeks\n" + "3. Focused on immediate wants or needs"
             dialogBinding.tvExamples.text = "1. Saving for a Fried Chicken Sandwich\n" +
                     "2. Saving for a Small Toy\n" +
                     "3. Saving for a Book"
             dialogBinding.tvTips.text = "1. Set aside money consistently\n" +
-                    "2. Keep the target date in mind"
+                    "2. Keep the target date in mind\n" + "3. Accomplish chores or sell items for extra money"
         }  else if (specificDuration == "Medium Term") {
             dialogBinding.tvTitle.text = "Medium Term"
-            dialogBinding.tvDefinition.text = "1. Takes a longer time to achieve and usually involves bigger target amounts \n" +
+            dialogBinding.tvDefinition.text = "1. Takes a longer time to achieve and involves bigger target amounts \n" +
                     "2. Duration: 2 to 4 weeks"
             dialogBinding.tvExamples.text = "1. Saving for school supplies\n" +
                     "2. Saving for a larger toy"
@@ -429,7 +428,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
                     "2. Duration: Over a month"
             dialogBinding.tvExamples.text = "1. Saving for a trip \n" +
                     "2. Saving for a birthday party"
-            dialogBinding.tvTips.text = "1. Start saving early. Even if the target date may seem far away, target amounts for long term goals tend to be larger.\n" +
+            dialogBinding.tvTips.text = "1. Start saving early. Even if the target date may seem far away, target amounts for long term goals tend to be larger\n" +
                     "2. Set aside money consistently\n" +
                     "3. Earn extra by helping with chores and selling items"
         }
@@ -454,7 +453,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvExamples.text = "1. Buying a toy\n" +
             "2. Buying a book \n"
             dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
-                    "2. Keep your target date in mind.\n"
+                    "2. Keep your target date in mind.\n" + "3. Accomplish chores or sell items for extra money."
         } else if (specificCategory == "Planning An Event") {
             dialogBinding.tvTitle.text = "Planning An Event"
             dialogBinding.tvDefinition.text = "Organizing an event and ensuring that all needed materials or services are accounted for."
@@ -462,32 +461,31 @@ class SavingPerformanceActivity : AppCompatActivity() {
                     "2. Out of town trip"
             dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
             "2. Start saving early. Goals related to planning events tend to have larger target amounts.\n" +
-            "3. Keep your target date in mind."
+            "3. Accomplish chores or sell items for extra money."
 
         } else if (specificCategory == "Saving For Emergency Funds") {
             dialogBinding.tvTitle.text = "Saving For Emergency Funds"
-            dialogBinding.tvDefinition.text = "1. Saving money to be used in the future for unexpected situations \n" +
-                    "2. Important to be prepared for these situations"
+            dialogBinding.tvDefinition.text = "1. Saving money to be used in the future for unexpected situations.\n" +
+                    "2. Important to be prepared for these situations."
             dialogBinding.tvExamples.text = "1. Loss of valuables \n" +
                     "2. Unexpected expenses"
             dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
-                    "2. Think about your future."
+                    "2. Keep your future in mind.\n" + "3. Accomplish chores or sell items for extra money."
         } else if (specificCategory == "Donating To Charity") {
             println("print in donating to charity")
             dialogBinding.tvTitle.text = "Donating To Charity"
-            dialogBinding.tvDefinition.text = "1. Giving money to a non-profit organization to support an advocacy.\n" +
-                    "2. Important to think about others"
-            dialogBinding.tvExamples.text = "1. Donating to a church \n" +
+            dialogBinding.tvDefinition.text = "Giving money to a non-profit organization to support an advocacy."
+            dialogBinding.tvExamples.text = "1. Donating to a church\n" +
                     "2. Donating to Red Cross"
-            dialogBinding.tvTips.text = "1. Donate to an organization that you share an advocacy with \n" +
-                    "2. Set aside money consistently"
+            dialogBinding.tvTips.text = "1. Donate to an organization that you share an advocacy with.\n" +
+                    "2. Set aside money consistently.\n" + "3. Accomplish chores or sell items for extra money."
         } else if (specificCategory == "Situational Shopping") {
             dialogBinding.tvTitle.text = "Situational Shopping"
             dialogBinding.tvDefinition.text = "Shopping for a certain event or happening."
             dialogBinding.tvExamples.text = "1. Grocery shopping \n" +
                     "2. Back to school shopping"
-            dialogBinding.tvTips.text = "1. Set aside money consistently. \n" +
-                    "2. Keep your target date in mind."
+            dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
+                    "2. Keep your target date in mind.\n" + "3. Accomplish chores or sell items for extra money."
         }
 
         dialog.window!!.setLayout(1000, 1500)

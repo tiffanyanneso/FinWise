@@ -67,7 +67,6 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         tools:text="Get Started!"
-                        android:textColor="@color/dark_green"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_gravity="center"

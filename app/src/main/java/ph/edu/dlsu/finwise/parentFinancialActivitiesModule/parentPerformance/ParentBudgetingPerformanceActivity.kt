@@ -143,61 +143,61 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(
                 R.color.dark_green
             ))
-            binding.tvParentalInvolvementText.text = "Keep up the excellent work! You are able to budget independently."
+            binding.tvParentalInvolvementText.text = "Keep up the excellent work! Your child is able to budget independently."
         } else if (parentalPercentage < 15 && parentalPercentage >= 5) {
             binding.textViewPerformanceTextParentalInvolvement.text = "Amazing"
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(
                 R.color.green
             ))
-            binding.tvParentalInvolvementText.text = "Amazing job! Keep up making those budget independently."
+            binding.tvParentalInvolvementText.text = "Amazing job! Your child is able to budget independently."
         } else if (parentalPercentage < 25 && parentalPercentage >= 15) {
             binding.textViewPerformanceTextParentalInvolvement.text = "Great"
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(
                 R.color.green
             ))
-            binding.tvParentalInvolvementText.text = "You are performing well! Keep up making those budget independently."
+            binding.tvParentalInvolvementText.text = "Good! Your child is able to budget independently."
         } else if (parentalPercentage < 35 && parentalPercentage >= 25) {
             binding.textViewPerformanceTextParentalInvolvement.text = "Good"
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(
                 R.color.light_green
             ))
-            binding.tvParentalInvolvementText.text = "Good job! With a bit more attention to detail and independence, you’ll surely up your performance!"
+            binding.tvParentalInvolvementText.text = "Good job! Your child only occasionally asks for help budgeting."
         } else if (parentalPercentage < 45 && parentalPercentage >= 35) {
             binding.textViewPerformanceTextParentalInvolvement.text = "Average"
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(
                 R.color.yellow
             ))
-            binding.tvParentalInvolvementText.text = "Nice work! Work on improving your budget by always doublechecking. You’ll get there soon!"
+            binding.tvParentalInvolvementText.text = "Nice work! Encourage your child to try budgeting more independently."
         } else if (parentalPercentage < 55 && parentalPercentage >= 45) {
             binding.textViewPerformanceTextParentalInvolvement.text = "Nearly There"
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(
                 R.color.red
             ))
-            binding.tvParentalInvolvementText.text = "You're nearly there! Try budgeting more independently."
+            binding.tvParentalInvolvementText.text = "You're nearly there! You may give your child guidance, but try to encourage them to budget more independently."
         } else if (parentalPercentage < 65 && parentalPercentage >= 55) {
             binding.textViewPerformanceTextParentalInvolvement.text = "Almost There"
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(
                 R.color.red
             ))
-            binding.tvParentalInvolvementText.text = "Almost there! You need to work on your budgeting. Try budgeting more independently."
+            binding.tvParentalInvolvementText.text = "Almost there! You may give your child guidance, but try to encourage them to budget more independently."
         } else if (parentalPercentage < 75 && parentalPercentage >= 65) {
             binding.textViewPerformanceTextParentalInvolvement.text = "Getting There"
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(
                 R.color.red
             ))
-            binding.tvParentalInvolvementText.text = "Getting there! You need to work on your budgeting. Try budgeting more independently."
+            binding.tvParentalInvolvementText.text = "Getting there! You may give your child guidance, but try to encourage them to budget more independently."
         } else if (parentalPercentage < 85 && parentalPercentage >= 75) {
             binding.textViewPerformanceTextParentalInvolvement.text = "Not Quite\nThere"
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(
                 R.color.red
             ))
-            binding.tvParentalInvolvementText.text = "Not quite there yet! Don't give up. Try budgeting more independently."
+            binding.tvParentalInvolvementText.text = "Not quite there yet! You may give your child guidance, but try to encourage them to budget more independently."
         } else if (parentalPercentage > 84) {
             binding.textViewPerformanceTextParentalInvolvement.text = "Needs\nImprovement"
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(
                 R.color.red
             ))
-            binding.tvParentalInvolvementText.text = "Your budgeting performance needs a lot of improvement. Try budgeting more independently."
+            binding.tvParentalInvolvementText.text = "Uh Oh! Guide your child so that they can eventually budget independently!"
         }
     }
 
@@ -237,7 +237,7 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
         } else if (budgetAccuracy in 26..35) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Getting There"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.getting_there_orange))
-            binding.tvBudgetAccuracyText.text = "Your child is getting there!  Click tips to learn how to help!"
+            binding.tvBudgetAccuracyText.text = "Your child is getting there! Click tips to learn how to help!"
         } else if (budgetAccuracy in 16..25) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Not Quite\nThere"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.not_quite_there_red))
