@@ -40,7 +40,6 @@ class GoalSettingEditGoalActivity : AppCompatActivity() {
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private lateinit var financialGoalID:String
-    private lateinit var savingActivityID:String
     private lateinit var targetDate: Date
 
     private var maxAmount = 0.00F
@@ -53,7 +52,6 @@ class GoalSettingEditGoalActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
-        savingActivityID = bundle.getString("savingActivityID").toString()
         checkAge()
         getFinancialGoal()
         checkUser()

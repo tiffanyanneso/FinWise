@@ -32,10 +32,7 @@ class GoalSettingForEditingActivity : AppCompatActivity() {
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private lateinit var financialGoalID:String
-    private lateinit var savingActivityID:String
 
-    private var cashBalance = 0.00F
-    private var mayaBalance = 0.00F
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +43,6 @@ class GoalSettingForEditingActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
-        savingActivityID = bundle.getString("savingActivityID").toString()
         getGoal()
         getParentFeedback()
         checkUser()
@@ -75,7 +71,6 @@ class GoalSettingForEditingActivity : AppCompatActivity() {
             var editGoal = Intent(this, GoalSettingEditGoalActivity::class.java)
             var sendBundle  = Bundle()
             sendBundle.putString("financialGoalID", financialGoalID)
-            sendBundle.putString("savingActivityID", savingActivityID)
             editGoal.putExtras(sendBundle)
             startActivity(editGoal)
         }
@@ -126,16 +121,18 @@ class GoalSettingForEditingActivity : AppCompatActivity() {
 
     private fun getParentFeedback() {
         firestore.collection("GoalRating").whereEqualTo("financialGoalID", financialGoalID).get().addOnSuccessListener { result ->
-            var goalReviewObjects= result.toObjects<GoalRating>()
-            goalReviewObjects = goalReviewObjects.sortedByDescending { it.lastUpdated }
-            var goalReview = goalReviewObjects[0]
-            binding.tvOverallRating.text = "${goalReview?.overallRating} / 5.0"
-            binding.ratingBarSpecific.rating = goalReview?.specific!!
-            binding.ratingBarMeasurable.rating = goalReview.measurable!!
-            binding.ratingBarAchievable.rating = goalReview.achievable!!
-            binding.ratingBarRelevant.rating = goalReview.relevant!!
-            binding.ratingBarTimeBound.rating = goalReview.timeBound!!
-            binding.tvComment.text = goalReview.comment
+            if (!result.isEmpty) {
+                var goalReviewObjects = result.toObjects<GoalRating>()
+                goalReviewObjects = goalReviewObjects.sortedByDescending { it.lastUpdated }
+                var goalReview = goalReviewObjects[0]
+                binding.tvOverallRating.text = "${goalReview?.overallRating} / 5.0"
+                binding.ratingBarSpecific.rating = goalReview?.specific!!
+                binding.ratingBarMeasurable.rating = goalReview.measurable!!
+                binding.ratingBarAchievable.rating = goalReview.achievable!!
+                binding.ratingBarRelevant.rating = goalReview.relevant!!
+                binding.ratingBarTimeBound.rating = goalReview.timeBound!!
+                binding.tvComment.text = goalReview.comment
+            }
         }
     }
 

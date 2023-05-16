@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.firestore
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, PersonalFinancialManagementActivity::class.java))
                     initializeDailyReminderChildNotif()
                     initializeNearDeadlineNotif()
+
                 }
                 else if (userObject?.userType == "Parent") {
                     startActivity(Intent(this, ParentLandingPageActivity::class.java))
