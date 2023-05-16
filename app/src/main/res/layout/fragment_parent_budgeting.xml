@@ -73,7 +73,7 @@
                                 android:textAlignment="center"/>
 
                             <TextView
-                                android:id="@+id/text_status"
+                                android:id="@+id/tv_performance_status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"

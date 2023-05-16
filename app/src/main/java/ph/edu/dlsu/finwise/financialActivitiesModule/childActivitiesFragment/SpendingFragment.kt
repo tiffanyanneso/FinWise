@@ -116,20 +116,33 @@ class SpendingFragment : Fragment(){
     private fun getBudgeting() {
         //get completed spending activities
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
-            for (spending in results) {
-                var spendingActivity = spending.toObject<FinancialActivities>()
-                println("print " + spendingActivity.financialGoalID )
-                firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", spendingActivity.financialGoalID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { budgeting ->
-                    var budgetingID = budgeting.documents[0].id
-                    firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingID).whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
-                        nBudgetItems += results.size()
-                        for (budgetItem in results) {
+            if (!results.isEmpty) {
+                for (spending in results) {
+                    var spendingActivity = spending.toObject<FinancialActivities>()
+                    println("print " + spendingActivity.financialGoalID)
+                    firestore.collection("FinancialActivities")
+                        .whereEqualTo("financialGoalID", spendingActivity.financialGoalID)
+                        .whereEqualTo("financialActivityName", "Budgeting")
+                        .whereEqualTo("status", "Completed").get()
+                        .addOnSuccessListener { budgeting ->
+                            var budgetingID = budgeting.documents[0].id
+                            firestore.collection("BudgetItems")
+                                .whereEqualTo("financialActivityID", budgetingID)
+                                .whereEqualTo("status", "Active").get()
+                                .addOnSuccessListener { results ->
+                                    nBudgetItems += results.size()
+                                    for (budgetItem in results) {
 
-                            var budgetItemObject = budgetItem.toObject<BudgetItem>()
-                            checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
+                                        var budgetItemObject = budgetItem.toObject<BudgetItem>()
+                                        checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
+                                    }
+                                }
                         }
-                    }
                 }
+            } else {
+                binding.imgFace.setImageResource(R.drawable.peso_coin)
+                binding.tvPerformancePercentage.text = "Get Started!"
+                binding.tvPerformanceText.text = "Complete your goals to see your performance"
             }
         }
     }
@@ -195,7 +208,7 @@ class SpendingFragment : Fragment(){
     }
 
     private fun setOverall() {
-        binding.textPerformance.text ="${DecimalFormat("##0.00").format(overallSpending)}%"
+        binding.tvPerformancePercentage.text ="${DecimalFormat("##0.00").format(overallSpending)}%"
 
         if (overallSpending >= 96) {
             binding.imgFace.setImageResource(R.drawable.excellent)

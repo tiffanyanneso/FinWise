@@ -111,28 +111,39 @@ class BudgetingFragment : Fragment() {
 
     private fun getOverallBudgeting() {
         firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
-            for (activity in results) {
-                firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).whereEqualTo("status", "Active").get().addOnSuccessListener { budgetItems ->
-                    println("print number of budget items" + budgetItems.size())
-                    for (budgetItem in budgetItems) {
-                        budgetItemCount++
-                        var budgetItemObject = budgetItem.toObject<BudgetItem>()
-                        if (budgetItemObject.status == "Edited")
-                            nUpdates++
-                        //TODO: can't find this
-                        //binding.tvAverageUpdates.text = (nUpdates / budgetItemCount).roundToInt().toString()
+            if (!results.isEmpty) {
+                for (activity in results) {
+                    firestore.collection("BudgetItems")
+                        .whereEqualTo("financialActivityID", activity.id)
+                        .whereEqualTo("status", "Active").get()
+                        .addOnSuccessListener { budgetItems ->
+                            println("print number of budget items" + budgetItems.size())
+                            for (budgetItem in budgetItems) {
+                                budgetItemCount++
+                                var budgetItemObject = budgetItem.toObject<BudgetItem>()
+                                if (budgetItemObject.status == "Edited")
+                                    nUpdates++
+                                //TODO: can't find this
+                                //binding.tvAverageUpdates.text = (nUpdates / budgetItemCount).roundToInt().toString()
 
 
-                        //parental involvement
-                        firestore.collection("Users").document(budgetItemObject.createdBy.toString()).get().addOnSuccessListener { user ->
-                            //parent is the one who added the budget item
-                            if (user.toObject<Users>()!!.userType == "Parent")
-                                nParent++
-                        }.continueWith {
-                            getBudgetAccuracy(activity.id, budgetItem.id, budgetItemObject)
+                                //parental involvement
+                                firestore.collection("Users")
+                                    .document(budgetItemObject.createdBy.toString()).get()
+                                    .addOnSuccessListener { user ->
+                                        //parent is the one who added the budget item
+                                        if (user.toObject<Users>()!!.userType == "Parent")
+                                            nParent++
+                                    }.continueWith {
+                                    getBudgetAccuracy(activity.id, budgetItem.id, budgetItemObject)
+                                }
+                            }
                         }
-                    }
                 }
+            } else {
+                binding.imgFace.setImageResource(R.drawable.peso_coin)
+                binding.tvPerformancePercentage.text = "Get Started!"
+                binding.tvPerformanceText.text = "Complete budgeting activities to see your performance!"
             }
         }
     }

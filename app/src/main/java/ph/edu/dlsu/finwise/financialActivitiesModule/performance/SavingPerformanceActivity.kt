@@ -80,7 +80,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
     private fun getGoals() {
         val childID  = FirebaseAuth.getInstance().currentUser!!.uid
 
-        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
+        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
             totalGoals = results.size()
             for (goal in results) {
                 var goalObject = goal.toObject<FinancialGoals>()
@@ -217,11 +217,15 @@ class SavingPerformanceActivity : AppCompatActivity() {
             percentageLong = ((nLong.toFloat() / totalGoals.toFloat()) * 100)
         }
 
-        val entries = listOf(
-            PieEntry(percentageShort, "Short"),
-            PieEntry(percentageMedium, "Medium"),
-            PieEntry(percentageLong, "Long"),
-        )
+        var entries = mutableListOf<PieEntry>()
+        if (percentageShort!= 0.00F)
+            entries.add(PieEntry(percentageShort, "Short"))
+
+        if (percentageMedium!= 0.00F)
+            entries.add(PieEntry(percentageMedium, "Medium"))
+
+        if (percentageLong != 0.00F)
+            entries.add(PieEntry(percentageLong, "Long"))
 
         var dataSet = PieDataSet(entries, "Data")
 
@@ -251,13 +255,13 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
             if (num == 1) {
                 binding.tvTopPerformingDuration.text = durationRatingArray[i].name.toString()
-                binding.tvTopPerformingRating.text = DecimalFormat("##0.00").format(durationRatingArray[i].score) + "%"
+                binding.tvTopPerformingRating.text = DecimalFormat("##0.0").format(durationRatingArray[i].score) + "%"
             } else if (num == 2) {
                 binding.tvDuration2nd.text = durationRatingArray[i].name.toString()
-                binding.tvDuration2Rating.text = DecimalFormat("##0.00").format(durationRatingArray[i].score) + "%"
+                binding.tvDuration2Rating.text = DecimalFormat("##0.0").format(durationRatingArray[i].score) + "%"
             } else if (num == 3) {
                 binding.tvDuration3rd.text = durationRatingArray[i].name.toString()
-                binding.tvDuration3Rating.text = DecimalFormat("##0.00").format(durationRatingArray[i].score) + "%"
+                binding.tvDuration3Rating.text = DecimalFormat("##0.0").format(durationRatingArray[i].score) + "%"
                 specificDuration = durationRatingArray[i].name.toString()
             }
         }
@@ -278,15 +282,22 @@ class SavingPerformanceActivity : AppCompatActivity() {
             percentageDonating = ((nCharity.toFloat() / totalGoals.toFloat()) * 100)
         }
 
+        var entries = mutableListOf<PieEntry>()
+        if (percentageBuying!=0.00F)
+            entries.add(PieEntry(percentageBuying, "Buying Items"))
 
+        if (percentageEvent!=0.00F)
+            entries.add(PieEntry(percentageEvent, "Planning An Event"))
 
-        val entries = listOf(
-            PieEntry(percentageBuying, "Buying Items"),
-            PieEntry(percentageEvent, "Planning An Event"),
-            PieEntry(percentageEmergency, "Saving For Emergency Funds"),
-            PieEntry(percentageSituational, "Situational Shopping"),
-            PieEntry(percentageDonating, "Donating To Charity"),
-        )
+        if (percentageEmergency!=0.00F)
+            entries.add(PieEntry(percentageEmergency, "Saving For Emergency Funds"))
+
+        if (percentageSituational!=0.00F)
+            entries.add(PieEntry(percentageSituational, "Situational Shopping"))
+
+        if (percentageDonating!=0.00F)
+            entries.add(PieEntry(percentageDonating, "Donating To Charity"))
+
 
         var dataSet = PieDataSet(entries, "Data")
 
@@ -322,19 +333,19 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
             if (num == 1) {
                 binding.tvTopPerformingActivity.text = categoryRatingArray[i].name.toString()
-                binding.tvTopPerformingActivityPercentage.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
+                binding.tvTopPerformingActivityPercentage.text = DecimalFormat("##0.0").format(categoryRatingArray[i].score) + "%"
             } else if (num == 2) {
                 binding.tvActivity2nd.text = categoryRatingArray[i].name.toString()
-                binding.tvConcept2Activity.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
+                binding.tvConcept2Activity.text = DecimalFormat("##0.0").format(categoryRatingArray[i].score) + "%"
             } else if (num == 3) {
                 binding.tvActivity3rd.text = categoryRatingArray[i].name.toString()
-                binding.tvActivity3Rating.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
+                binding.tvActivity3Rating.text = DecimalFormat("##0.0").format(categoryRatingArray[i].score) + "%"
             } else if (num == 4) {
                 binding.tvActivity4th.text = categoryRatingArray[i].name.toString()
-                binding.tvActivity4Rating.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
+                binding.tvActivity4Rating.text = DecimalFormat("##0.0").format(categoryRatingArray[i].score) + "%"
             } else if (num == 5) {
                 binding.tvActivity5th.text = categoryRatingArray[i].name.toString()
-                binding.tvActivity5Rating.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
+                binding.tvActivity5Rating.text = DecimalFormat("##0.0").format(categoryRatingArray[i].score) + "%"
                 specificCategory = categoryRatingArray[i].name.toString()
             }
         }

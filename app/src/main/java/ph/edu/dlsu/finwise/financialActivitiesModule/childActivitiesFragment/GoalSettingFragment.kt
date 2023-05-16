@@ -291,6 +291,10 @@ class GoalSettingFragment : Fragment() {
                 }
                 binding.tvOverallRating.visibility = View.VISIBLE
                 binding.tvOverallRating.text ="${DecimalFormat("0.0").format(overall)}/5.0"
+            } else {
+                binding.imgFace.setImageResource(R.drawable.peso_coin)
+                binding.tvPerformanceStatus.text = "Get Started!"
+                binding.tvPerformanceText.text = "Complete your goals to see your performance"
             }
         }
     }

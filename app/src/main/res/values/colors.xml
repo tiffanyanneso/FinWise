@@ -36,4 +36,6 @@
 
     <color name="bright_green">#4C9A2A</color>
     <color name="bright_yellow">#FFFF00</color>
+
+    <color name="super_light_red">#FFDCD1</color>
 </resources>

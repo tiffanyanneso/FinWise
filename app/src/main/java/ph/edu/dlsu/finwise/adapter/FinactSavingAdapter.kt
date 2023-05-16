@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ItemFinactSavingBinding
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentSettingAGoalActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
@@ -17,6 +19,7 @@ import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Transactions
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.util.Calendar
 
 class FinactSavingAdapter : RecyclerView.Adapter<FinactSavingAdapter.ChildGoalViewHolder>{
 
@@ -67,12 +70,16 @@ class FinactSavingAdapter : RecyclerView.Adapter<FinactSavingAdapter.ChildGoalVi
                 goalStatus = goal?.status.toString()
                 childID = goal?.childID.toString()
                 itemBinding.tvGoal.text = goal?.goalName
-                // convert timestamp to date
-                val date = SimpleDateFormat("MM/dd/yyyy").format(goal?.targetDate?.toDate())
-                itemBinding.tvTargetDate.text = date.toString()
                 itemBinding.tvProgressAmount.text = "₱ " +  DecimalFormat("#,##0.00").format(goal?.currentSavings) + " of ₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount)
                 itemBinding.progressBar.progress = (goal?.currentSavings!! / goal?.targetAmount!! * 100).toInt()
                 itemBinding.tvProgressPercent.text = DecimalFormat("#,##0.00").format((goal?.currentSavings!! / goal?.targetAmount!! * 100)) + "%"
+
+                // convert timestamp to date
+                val date = SimpleDateFormat("MM/dd/yyyy").format(goal?.targetDate?.toDate())
+                itemBinding.tvTargetDate.text = date.toString()
+
+                if (goal?.targetDate!!.toDate().before(Calendar.getInstance().time))
+                    itemBinding.cardView.setCardBackgroundColor(ContextCompat.getColor(context, R.color.super_light_red))
             }
         }
 

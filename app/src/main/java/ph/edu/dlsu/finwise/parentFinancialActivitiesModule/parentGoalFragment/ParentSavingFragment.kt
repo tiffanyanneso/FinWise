@@ -257,6 +257,7 @@ class ParentSavingFragment : Fragment() {
     private fun computeOverallScore() {
         var nTotal = 0.00F
         var nOnTime =0.00F
+        var overall = 0.00F
         firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
 
             if (results.size()!=0) {
@@ -272,15 +273,13 @@ class ParentSavingFragment : Fragment() {
                             nOnTime++
                         }
                     }
+
+                    if (nTotal != 0.00F)
+                        overall = (nOnTime/nTotal) * 100
+                    val overallRoundedNumber = "%.1f".format(overall).toFloat()
+
+                    binding.tvPerformancePercentage.text ="${overallRoundedNumber}%"
                 }
-
-                var overall = 0.00F
-                if (nTotal != 0.00F)
-                    overall = (nOnTime/nTotal) * 100
-
-                val overallRoundedNumber = "%.1f".format(overall).toFloat()
-
-                binding.tvPerformancePercentage.text ="${overallRoundedNumber}%"
 
                 if (overall >= 96) {
                     binding.imgFace.setImageResource(R.drawable.excellent)
@@ -344,9 +343,10 @@ class ParentSavingFragment : Fragment() {
                     showSeeMoreButton()
                 }
             } else {
-                binding.imgFace.setImageResource(R.drawable.good)
-                binding.tvPerformanceStatus.text = ""
-                binding.tvPerformanceText.text = "Child has yet to complete goals."
+                binding.imgFace.setImageResource(R.drawable.peso_coin)
+                binding.tvPerformancePercentage.visibility = View.GONE
+                binding.tvPerformanceStatus.visibility = View.GONE
+                binding.tvPerformanceText.text = "Your child hasn't completed any goals. Come back soon!"
             }
         }
     }

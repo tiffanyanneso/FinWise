@@ -17,6 +17,7 @@ import ph.edu.dlsu.finwise.loginRegisterModule.LoginActivity
 import ph.edu.dlsu.finwise.loginRegisterModule.ParentRegisterActivity
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.parentFinancialManagementModule.ParentFinancialManagementActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.util.*
@@ -28,53 +29,36 @@ class MainActivity : AppCompatActivity() {
     private var currentUser = FirebaseAuth.getInstance().currentUser
     private var firestore = Firebase.firestore
 
+    private lateinit var alarmManager:AlarmManager
+
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        val intent = Intent(this, GoalNotificationServices::class.java)
-        val pendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-
-        val calendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 19)
-            set(Calendar.MINUTE, 31)
-        }
-
+        alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
 
         if (currentUser != null) {
-            firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser!!.uid).whereEqualTo("status", "Ongoing").get().addOnSuccessListener { goals ->
-                for (goal in goals) {
-                    var goalObject = goal.toObject<FinancialGoals>()
-                    val dueDate = goalObject.targetDate!!.toDate()
-                    val currentDate = Date()
-                    val daysUntilDue = TimeUnit.DAYS.convert(dueDate.time - currentDate.time, TimeUnit.MILLISECONDS).toInt()
-                    println("print until due " + daysUntilDue)
-                    if ((goalObject.goalLength == "Short" && daysUntilDue == 2) ||
-                        (goalObject.goalLength == "Medium" && daysUntilDue == 5) ||
-                        (goalObject.goalLength == "Long" && daysUntilDue == 7)){
-                        alarmManager.setExact(
-                            AlarmManager.RTC_WAKEUP,
-                            calendar.timeInMillis,
-                            pendingIntent
-                        )
+            firestore.collection("Users").document(currentUser!!.uid).get().addOnSuccessListener {
+                var userObject = it.toObject<Users>()
+                if (userObject?.userType == "Child") {
+                    startActivity(Intent(this, PersonalFinancialManagementActivity::class.java))
+                    initializeDailyReminderChildNotif()
+                    initializeNearDeadlineNotif()
+                }
+                else if (userObject?.userType == "Parent") {
+                    startActivity(Intent(this, ParentLandingPageActivity::class.java))
+                    firestore.collection("Users").whereEqualTo("parentID", currentUser!!.uid).get().addOnSuccessListener { result ->
+                        //there is a child under the parent, send daily reminder for them to check the app
+                        if (!result.isEmpty)
+                            initializeDailyReminderParentNotif()
+
                     }
                 }
+                else if (userObject?.userType == "Financial Expert")
+                     startActivity(Intent(this, FinancialAssessmentFinlitExpertActivity::class.java))
             }
         }
-
-//        if (currentUser != null) {
-//            firestore.collection("Users").document(currentUser!!.uid).get().addOnSuccessListener {
-//                var userObject = it.toObject<Users>()
-//                if (userObject?.userType == "Child")
-//                    startActivity(Intent(this, PersonalFinancialManagementActivity::class.java))
-//                else if (userObject?.userType == "Parent")
-//                    startActivity(Intent(this, ParentFinancialManagementActivity::class.java))
-//                else if (userObject.userType == "Financial Expert")
-//                     startActivity(Intent(this, FinancialAssessmentFinlitExpertActivity::class.java))
-//            }
-//        }
 
         binding.btnLogin.setOnClickListener {
             var login = Intent(this, LoginActivity::class.java)
@@ -85,5 +69,67 @@ class MainActivity : AppCompatActivity() {
             var register = Intent(this, ParentRegisterActivity::class.java)
             startActivity(register)
         }
+    }
+
+    private fun initializeNearDeadlineNotif() {
+        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser!!.uid).whereEqualTo("status", "Ongoing").get().addOnSuccessListener { goals ->
+            for (goal in goals) {
+                var goalObject = goal.toObject<FinancialGoals>()
+                val dueDate = goalObject.targetDate!!.toDate()
+                val currentDate = Date()
+                val daysUntilDue = TimeUnit.DAYS.convert(dueDate.time - currentDate.time, TimeUnit.MILLISECONDS).toInt()
+                if ((goalObject.goalLength == "Short" && daysUntilDue <= 2) ||
+                    (goalObject.goalLength == "Medium" && daysUntilDue <= 5) ||
+                    (goalObject.goalLength == "Long" && daysUntilDue <= 7)){
+
+                    val calendar = Calendar.getInstance().apply {
+                        set(Calendar.HOUR_OF_DAY, 12)
+                        set(Calendar.MINUTE, 0)
+                    }
+                    var  notificationIntent= Intent(this, GoalNotificationServices::class.java)
+                    notificationIntent.putExtra("notificationType", "nearDeadline")
+                    var pendingIntent = PendingIntent.getService(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
+                    alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.timeInMillis,
+                        pendingIntent
+                    )
+                }
+            }
+        }
+    }
+
+    private fun initializeDailyReminderChildNotif() {
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 18)
+            set(Calendar.MINUTE, 0)
+        }
+
+        var  notificationIntent= Intent(this, GoalNotificationServices::class.java)
+        notificationIntent.putExtra("notificationType", "recordTransactions")
+        var pendingIntent = PendingIntent.getService(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    }
+
+    private fun initializeDailyReminderParentNotif() {
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 18)
+            set(Calendar.MINUTE, 0)
+        }
+
+        var  notificationIntent= Intent(this, GoalNotificationServices::class.java)
+        notificationIntent.putExtra("notificationType", "checkForUpdatesParent")
+        var pendingIntent = PendingIntent.getService(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
     }
 }

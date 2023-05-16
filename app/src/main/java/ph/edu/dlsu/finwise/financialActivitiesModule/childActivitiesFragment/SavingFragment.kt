@@ -192,9 +192,7 @@ class SavingFragment : Fragment() {
 
             loadRecyclerView(goalIDArrayList)
         }.continueWith {
-            binding.rvViewGoals.visibility = View.VISIBLE
-            binding.loadingItems.stopShimmer()
-            binding.loadingItems.visibility = View.GONE
+
 
             getTotalSavings()
             setGoalCount()} 
@@ -371,8 +369,8 @@ class SavingFragment : Fragment() {
                     showSeeMoreButton()
                 }
             } else {
-                binding.imgFace.setImageResource(R.drawable.good)
-                binding.tvPerformanceStatus.text = ""
+                binding.imgFace.setImageResource(R.drawable.peso_coin)
+                binding.tvPerformancePercentage.text = "Get Started!"
                 binding.tvPerformanceText.text = "Complete your goals to see your performance"
             }
         }
@@ -385,6 +383,9 @@ class SavingFragment : Fragment() {
             LinearLayoutManager.VERTICAL,
             false)
         goalAdapter.notifyDataSetChanged()
+        binding.rvViewGoals.visibility = View.VISIBLE
+        binding.loadingItems.stopShimmer()
+        binding.loadingItems.visibility = View.GONE
     }
 
     private fun getGoals() {
