@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.childDashboardModule.fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -15,6 +16,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -23,9 +25,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
+import ph.edu.dlsu.finwise.childDashboardModule.FinancialAssessmentsDetailsActivity
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardFinancialAssessmentsBinding
 import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.util.*
@@ -75,6 +79,32 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
 
         getArgumentsBundle()
         getFinancialAssessmentScore()
+        initializeDetailsButton()
+        loadFinancialAssessmentScore()
+    }
+
+    private fun loadFinancialAssessmentScore() {
+        val df = DecimalFormat("#.#")
+        df.roundingMode = java.math.RoundingMode.UP
+        val roundedValue = df.format(financialAssessmentTotalPercentage)
+
+        binding.tvFinancialAssessmentPercent.text = "${roundedValue}%"
+        binding.progressBar.progress = financialAssessmentTotalPercentage.toInt()
+    }
+
+    private fun initializeDetailsButton() {
+        binding.btnDetails.setOnClickListener{
+            val goToDetails = Intent(context, FinancialAssessmentsDetailsActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("date", selectedDatesSort)
+            bundle.putString("user", user)
+            if (user == "child")
+                childID  = FirebaseAuth.getInstance().currentUser!!.uid
+
+            bundle.putString("childID", childID)
+            goToDetails.putExtras(bundle)
+            startActivity(goToDetails)
+        }
     }
 
     private fun getArgumentsBundle() {
@@ -107,21 +137,12 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             getAssessmentAttempts()
             getDatesOfAttempts()
             setData()
-            loadProgressTextView()
             initializeGraph()
         }
     }
 
-    private fun loadProgressTextView() {
-        Log.d("nnbaaaa", "financialAssessmentTotalPercentage: "+financialAssessmentTotalPercentage)
-        Log.d("nnbaaaa", "nAttempt: "+nAttempt)
-        financialAssessmentTotalPercentage /= nAttempt
-        binding.tvFinancialAssessmentPercent.text = String.format("%.1f%%", financialAssessmentTotalPercentage)
-        binding.progressBar.progress = financialAssessmentTotalPercentage.toInt()
-    }
-
     private fun initializeGraph() {
-        chart = view?.findViewById(R.id.financial_assessment_score_chart)!!
+        chart = view?.findViewById(R.id.financial_assessment_chart)!!
 
         val xAxis = chart.xAxis
         xAxis.granularity = 1f // Set a smaller granularity if there are fewer data points
@@ -142,6 +163,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             }
         }
         yAxis.axisMaximum = 100f // set maximum y-value to 100%
+        yAxis.axisMinimum = 0f // set maximum y-value to 100%
 
         // Create a dataset from the data
         val dataSet = LineDataSet(data, "Balance")
@@ -239,14 +261,14 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             }*/
             "monthly" -> {
                 weeks = getWeeksOfCurrentMonth(sortedDate)
-                iterateWeeksOfCurrentMonth(weeks!!)
+                getDataOfWeeksOfCurrentMonth(weeks!!)
                 /*val group = groupDates(sortedDate, "month")
                 iterateDatesByQuarter(group)*/
                 binding.tvBalanceTitle.text = "This Month's Financial Assessments Score Trend"
             }
             "quarterly" -> {
                 months = getMonthsOfQuarter(sortedDate)
-                forEachDateInMonths(months!!)
+                getDataOfMonthsOfCurrentQuarter(months!!)
                 binding.tvBalanceTitle.text = "This Quarter's Financial Assessments Score Trend"
             }
         }
@@ -279,7 +301,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     }
 
     @SuppressLint("NewApi")
-    private suspend fun forEachDateInMonths(months: Map<Int, List<Date>>) {
+    private suspend fun getDataOfMonthsOfCurrentQuarter(months: Map<Int, List<Date>>) {
         for ((month, datesInMonth) in months) {
             //var totalAmount = 0.00F
             for (date in datesInMonth) {
@@ -288,29 +310,29 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                     val weekDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
                     val attemptDate = attempt.dateTaken?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
                     if (attemptDate != null && weekDate == attemptDate) {
+                        Log.d("calvin", "attemptDate: "+attemptDate)
+                        Log.d("calvin", "weekDate: "+weekDate)
                         if (assessmentsTaken.isNotEmpty()) {
                             nAttempt++
-                            Log.d("nAttempt", "nAttempt: "+ nAttempt)
+                            Log.d("nAttempt", "nAttempt: "+nAttempt)
 
-                            for (assessment in assessmentsTaken) {
-                                val assessmentDocument = firestore.collection("Assessments")
-                                    .document(assessment.assessmentID!!).get().await()
-                                val assessmentObject =
-                                    assessmentDocument.toObject<FinancialAssessmentDetails>()
+                            val assessmentDocument = firestore.collection("Assessments")
+                                .document(attempt.assessmentID!!).get().await()
+                            val assessmentObject =
+                                assessmentDocument.toObject<FinancialAssessmentDetails>()
 
-                                val percentage = getPercentage(assessment)
-                                when (assessmentObject?.assessmentCategory) {
-                                    "Goal Setting" -> financialGoalsScores.add(percentage)
-                                    "Saving" -> savingScores.add(percentage)
-                                    "Budgeting" -> budgetingScores.add(percentage)
-                                    "Spending" -> spendingScores.add(percentage)
-                                }
+                            val percentage = getPercentage(attempt)
+                            when (assessmentObject?.assessmentCategory) {
+                                "Goal Setting" -> financialGoalsScores.add(percentage)
+                                "Saving" -> savingScores.add(percentage)
+                                "Budgeting" -> budgetingScores.add(percentage)
+                                "Spending" -> spendingScores.add(percentage)
                             }
-                            computeForPercentages()
                         }
                     }
                 }
             }
+            computeForPercentages()
         }
     }
 
@@ -338,7 +360,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private suspend fun iterateWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>) {
+    private suspend fun getDataOfWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>) {
         weeks.forEach { (weekNumber, datesInWeek) ->
             //var totalAmount = 0.00F
             datesInWeek.forEach { date ->
@@ -349,27 +371,22 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                     if (attemptDate != null && weekDate == attemptDate) {
                         if (assessmentsTaken.isNotEmpty()) {
                             nAttempt++
-                            Log.d("nAttempt", "iterateWeeksOfCurrentMonth: "+nAttempt)
-                            for (assessment in assessmentsTaken) {
-                                val assessmentDocument = firestore.collection("Assessments")
-                                    .document(assessment.assessmentID!!).get().await()
-                                val assessmentObject =
-                                    assessmentDocument.toObject<FinancialAssessmentDetails>()
-
-                                val percentage = getPercentage(assessment)
-                        
-                                when (assessmentObject?.assessmentCategory) {
-                                    "Goal Setting" -> financialGoalsScores.add(percentage)
-                                    "Saving" -> savingScores.add(percentage)
-                                    "Budgeting" -> budgetingScores.add(percentage)
-                                    "Spending" -> spendingScores.add(percentage)
-                                }
+                            val assessmentDocument = firestore.collection("Assessments")
+                                .document(attempt.assessmentID!!).get().await()
+                            val assessmentObject =
+                                assessmentDocument.toObject<FinancialAssessmentDetails>()
+                            val percentage = getPercentage(attempt)
+                            when (assessmentObject?.assessmentCategory) {
+                                "Goal Setting" -> financialGoalsScores.add(percentage)
+                                "Saving" -> savingScores.add(percentage)
+                                "Budgeting" -> budgetingScores.add(percentage)
+                                "Spending" -> spendingScores.add(percentage)
                             }
-                            computeForPercentages()
                         }
                     }
                 }
             }
+            computeForPercentages()
         }
     }
 
@@ -419,21 +436,20 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         val totalSum = spendingPercentage + savingPercentage + financialGoalsPercentage + budgetingPercentage
         val maxPossibleSum = 4 * 100  // assuming the maximum possible value for each variable is 100
 
+        /*Log.d("dogdays", "spendingPercentage: "+spendingPercentage)
+        Log.d("dogdays", "savingPercentage: "+savingPercentage)
+        Log.d("dogdays", "financialGoalsPercentage: "+financialGoalsPercentage)
+        Log.d("dogdays", "budgetingPercentage: "+budgetingPercentage)*/
+
         val financialAssessmentPerformance = (totalSum.toDouble() / maxPossibleSum) * 100
-        Log.d("nbacorki", "calculateFinancialAssessmentScore: "+ financialAssessmentPerformance)
-        Log.d("nbacorki", "savingPercentage: "+ savingPercentage)
-        Log.d("nbacorki", "spendingPercentage: "+ spendingPercentage)
-        Log.d("nbacorki", "financialGoalsPercentage: "+ financialGoalsPercentage)
-        Log.d("nbacorki", "budgetingPercentage: "+ budgetingPercentage)
+        Log.d("nAttempt", "financialAssessmentPerformance: "+financialAssessmentPerformance)
+
         financialAssessmentTotalPercentage += financialAssessmentPerformance
         data.add(Entry(xAxisPoint, financialAssessmentPerformance.toFloat()))
         xAxisPoint++
 
         //Update to be used in the leaderboard
         /*firestore.collection("ChildUser").document(childID).update("assessmentPerformance", percentage)*/
-
-        //TODO: Add lahat ng scores [ara ;agayu sa asemsent
-
 
         /*if (user == "Child")
             setTextPerformanceChild(percentage)
@@ -507,6 +523,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             binding.ivScore.setImageResource(R.drawable.amazing)
             binding.textViewPerformanceText.text = "Amazing"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.amazing_green))
+
             binding.tvPerformanceText.text =
                 "Great job! You have a good grasp of financial concepts and are starting to make smart choices with your money!"
             //showSeeMoreButton()

@@ -393,7 +393,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 return "${"%.1f".format(value)}%"
             }
         }
-        yAxis.axisMaximum = 100f // set maximum y-value to 100%
+        yAxis.axisMaximum = 100f
+        yAxis.axisMinimum = 0f
 
         // Create a dataset from the data
         val dataSet = LineDataSet(graphData, "Balance")

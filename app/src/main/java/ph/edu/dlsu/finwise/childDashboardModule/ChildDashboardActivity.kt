@@ -25,6 +25,10 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.*
 import ph.edu.dlsu.finwise.model.*
 import java.lang.Math.abs
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ChildDashboardActivity : AppCompatActivity(){
@@ -81,9 +85,26 @@ class ChildDashboardActivity : AppCompatActivity(){
         setContentView(binding.root)
 
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_dashboard)
-        getPersonalFinancePerformance()
+        getPerformance()
         initializeFragments()
         initializeDateButtons()
+    }
+
+    private fun getPerformance() {
+        //get the age of the child
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            val child = it.toObject<Users>()
+            //compute age
+            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            val difference = Period.between(to, from)
+
+            age = difference.years
+            Log.d("kandor", "age: "+age)
+            getPersonalFinancePerformance()
+        }
     }
 
     private fun initializeDateButtons() {
@@ -458,6 +479,9 @@ class ChildDashboardActivity : AppCompatActivity(){
             else
             overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4) * .35) + (financialAssessmentPerformance * .30)).toFloat()
         }
+        Log.d("kandor", "personalFinancePerformance: "+personalFinancePerformance)
+        Log.d("kandor", "financialAssessmentPerformance: "+financialAssessmentPerformance)
+        Log.d("kandor", "overallFinancialHealth: "+overallFinancialHealth)
         binding.tvPerformancePercentage.text =  DecimalFormat("##0.00").format(overallFinancialHealth) + "%"
         //TODO: 1. grade the child's overall score (percentage)
     //          2. give description
