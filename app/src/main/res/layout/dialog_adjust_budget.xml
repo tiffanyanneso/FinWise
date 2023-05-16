@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="You don't have anymore savings to budget\nAdjust other budget amounts to add a new one"
+            android:text="You don't have anymore savings left to budget.\You can adjust other budget amounts."
             android:textColor="@color/black"
             android:textSize="16dp"
             android:textAlignment="center"/>

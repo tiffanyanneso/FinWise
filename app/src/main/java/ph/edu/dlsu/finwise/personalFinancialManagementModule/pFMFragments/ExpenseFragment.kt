@@ -151,13 +151,13 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
 
 
         if (user == "child") {
-            binding.tvSummary.text = "You've spent ₱$totalText for this $dateRange"
+            binding.tvSummary.text = "You've spent ₱$totalText from $dateRange!"
             binding.tvTips.text =
-                "Consider reviewing your Top Expenses below or your previous transactions and see which you could lessen"
+                "Review your Top Expenses and previous transactions to see where you can cut down!"
         } else if (user == "parent") {
-            binding.tvSummary.text = "Your child spent ₱$totalText for this $dateRange!"
+            binding.tvSummary.text = "Your child spent ₱$totalText from $dateRange!"
             binding.tvTips.text =
-                "Consider reviewing your child's Top Expenses below or their previous transactions and see which they could lessen"
+                "Review your child's Top Expenses and previous transactions to see where they can cut down!"
         }
 
         /*if (user == "child" && total < 500) {
@@ -201,7 +201,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             "weekly" -> {
                 selectedDates = getDaysOfWeek(sortedDate)
                 addWeeklyData(selectedDates)
-                binding.tvExpenseBreakdown.text = "This Week's Expense"
+                binding.tvExpenseBreakdown.text = "This Week's Expenses"
             }
             "monthly" -> {
                 /*val group = groupDates(sortedDate, "monthly")
@@ -209,7 +209,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
                 val weeks = getWeeksOfCurrentMonth(sortedDate)
                 computeDataForMonth(weeks)
                 setTopThreeCategories()
-                binding.tvExpenseBreakdown.text = "This Month's Expense"
+                binding.tvExpenseBreakdown.text = "This Month's Expenses"
                 /*val group = groupDates(sortedDate, "month")
                 iterateDatesByQuarter(group)*/
             }
@@ -219,7 +219,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
                 val group = getMonthsOfQuarter(sortedDate)
                 computeDataForQuarter(group)
                 setTopThreeCategories()
-                binding.tvExpenseBreakdown.text = "This Quarter's Expense"
+                binding.tvExpenseBreakdown.text = "This Quarter's Expenses"
             }
         }
 

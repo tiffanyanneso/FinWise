@@ -195,20 +195,20 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         }
 
         if (user == "child" && total > 0) {
-            binding.tvSummary.text = "You've earned ₱$totalText for this $dateRange! "
-            binding.tvTips.text = "Go to the \"Financial Activities\" to develop your Financial Literacy using your money"
+            binding.tvSummary.text = "You've earned ₱$totalText from $dateRange! "
+            binding.tvTips.text = "Go to \"Financial Activities\" to further develop your Financial Literacy!"
             loadChildFinancialActivitiesButton()
         } else if (user == "child" && total < 0) {
-            binding.tvSummary.text = "Uh oh! You've earned ₱$totalText for this $dateRange"
+            binding.tvSummary.text = "Uh oh! You've earned ₱$totalText from $dateRange"
             binding.tvTips.text = "Consider selling your stuff or doing some chores to earn money"
             loadEarningChild()
         } else if (user == "parent" && total > 0) {
-            binding.tvSummary.text = "Your child earned ₱$totalText for this $dateRange!"
-            binding.tvTips.text = "Go to the \"Financial Activities\" to develop your child's Financial Literacy using their money"
+            binding.tvSummary.text = "Your child earned ₱$totalText from $dateRange!"
+            binding.tvTips.text = "Go to \"Financial Activities\" to further develop your child's Financial Literacy!"
             loadParentFinancialActivitiesButton()
         } else if (user == "parent" && total < 0) {
-            binding.tvSummary.text = "Bad news! Your child earned ₱$totalText for this $dateRange"
-            binding.tvTips.text = "Consider giving your child some chores so they can earn some money"
+            binding.tvSummary.text = "Uh oh! Your child only earned ₱$totalText from $dateRange"
+            binding.tvTips.text = "Consider giving your child some chores so they can earn some money!"
             loadEarningParent()
         }
 

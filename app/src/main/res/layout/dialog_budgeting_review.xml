@@ -28,9 +28,18 @@
             app:tint="@color/light_green"
             android:layout_gravity="center"/>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:gravity="center">
+
         <TextView
             android:id="@+id/tv_goal_feedback"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:text="Budgeting Review"
@@ -38,6 +47,15 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/img" />
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_mic_24"
+                app:tint="@color/light_grey"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. It is a plan on how to manage your money\n2. Is a useful guide when you are spending"
+            android:text="It's a plan on how to manage your money and is a useful guide when you are spending."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
         <LinearLayout
@@ -98,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Think about all the things you need to buy and divide them into budget items\n2. Always thoroughly review your budget"
+            android:text="1. Think about all the things you need to buy and divide them into budget items\n2. Use your past purchases as reference.\n3. If needed, use other sources as reference (Internet, parents, friends)."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
 
