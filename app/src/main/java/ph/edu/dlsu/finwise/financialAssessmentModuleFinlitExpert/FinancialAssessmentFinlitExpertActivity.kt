@@ -5912,7 +5912,7 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
         }
         question = hashMapOf(
             "assessmentID" to assessmentID,
-            "question" to "The following are good budgeting plans except..",
+            "question" to "The following are bad budgeting plans except..",
             "difficulty" to "Hard",
             "dateCreated" to Timestamp.now(),
             "createdBy" to currentUser,

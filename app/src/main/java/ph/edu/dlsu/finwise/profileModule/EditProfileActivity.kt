@@ -22,6 +22,12 @@ import ph.edu.dlsu.finwise.databinding.ActivityEditProfileBinding
 import ph.edu.dlsu.finwise.model.Users
 import java.text.SimpleDateFormat
 import java.util.*
+import android.graphics.Color
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import de.hdodenhof.circleimageview.CircleImageView
+import androidx.core.content.ContextCompat
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -31,12 +37,39 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var context: Context
     lateinit var birthday: Date
 
+    private lateinit var profileImageView: ImageView
+    private lateinit var changeColorButton: Button
+
+    private val colors = arrayOf(
+        R.color.Red,
+        R.color.Green,
+        R.color.Blue,
+        R.color.Yellow,
+        R.color.Orange,
+        R.color.white
+    )
+
+    private var currentColorIndex = 0
+
     @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context= this
+
+
+        profileImageView = findViewById(R.id.profileImageView)
+        changeColorButton = findViewById(R.id.changeColorButton)
+
+
+        changeColorButton.setOnClickListener {
+            currentColorIndex = (currentColorIndex + 1) % colors.size
+            val colorResId = colors[currentColorIndex]
+            val color = ContextCompat.getColor(this@EditProfileActivity, colorResId)
+            profileImageView.setBackgroundColor(color)
+        }
 
         getProfileData()
 

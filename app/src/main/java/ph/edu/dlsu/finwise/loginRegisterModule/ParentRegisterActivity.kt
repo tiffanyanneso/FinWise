@@ -6,6 +6,7 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -32,6 +33,7 @@ class ParentRegisterActivity : AppCompatActivity() {
 
         save()
         setCancel()
+        loadBackButton()
     }
 
     private fun save() {
@@ -166,6 +168,13 @@ class ParentRegisterActivity : AppCompatActivity() {
         binding.btnCancel.setOnClickListener {
             val goToLogin = Intent(this, LoginActivity::class.java)
             startActivity(goToLogin)
+        }
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
         }
     }
 }
