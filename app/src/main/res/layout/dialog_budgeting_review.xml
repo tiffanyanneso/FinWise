@@ -33,7 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:gravity="center">
 
@@ -41,20 +40,22 @@
             android:id="@+id/tv_goal_feedback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Budgeting Review"
+            android:textSize="22dp"
+            android:text="Budgeting"
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/img" />
 
             <ImageView
+                android:id="@+id/btn_sound_budget_review"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/baseline_mic_24"
                 app:tint="@color/light_grey"
                 android:layout_gravity="center"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -87,7 +88,8 @@
             android:textSize="16dp"
             android:text="It's a plan on how to manage your money and is a useful guide when you are spending."
             android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -118,7 +120,8 @@
             android:textSize="16dp"
             android:text="1. Think about all the things you need to buy and divide them into budget items\n2. Use your past purchases as reference.\n3. If needed, use other sources as reference (Internet, parents, friends)."
             android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -149,7 +152,8 @@
             android:layout_height="wrap_content"
             android:text="Improve your budget accuracy by reviewing your existing budget items and amounts."
             android:textColor="@color/black"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:layout_marginLeft="10dp"/>
 
 
             <androidx.appcompat.widget.AppCompatButton

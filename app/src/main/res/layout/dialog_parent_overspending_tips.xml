@@ -21,16 +21,33 @@
             app:tint="@color/light_green"
             android:layout_gravity="center"/>
 
-        <TextView
-            android:id="@+id/tv_goal_feedback"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Overspending Review"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/img" />
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_goal_feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="22dp"
+                android:text="Overspending"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/img" />
+
+            <ImageView
+                android:id="@+id/btn_sound_parent_overspending"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_mic_24"
+                app:tint="@color/light_grey"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,7 +78,8 @@
             android:layout_height="wrap_content"
             android:textSize="16dp"
             android:text="Occurs when you go over your budget or the amount you set for your budget item."
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:layout_marginLeft="10dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -91,11 +109,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Encourage them to review their budget to see if the item they want to buy will make them go over it\n2. Remind them to think twice before they buy something."
+            android:text="1. Encourage them to review their budget to see if you can afford items.\n2. Remind them to twice before you buy.\n3. Help them determine if it is a need or want.\n4. Remind them to plan their purchases."
             android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
-
-
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
