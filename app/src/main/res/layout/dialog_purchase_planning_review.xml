@@ -28,16 +28,34 @@
             app:tint="@color/light_green"
             android:layout_gravity="center"/>
 
-        <TextView
-            android:id="@+id/tv_goal_feedback"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Purchase Planning Review"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/img" />
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_goal_feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="22dp"
+                android:text="Purchase Planning"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/img" />
+
+            <ImageView
+                android:id="@+id/btn_sound_purchase_planning"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_mic_24"
+                app:tint="@color/light_grey"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,8 +85,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Planning and preparing for purchases in advance\n2. Helps you stay within your budget by avoiding unnecessary purchases"
-            android:textColor="@color/black"/>
+            android:text="Planning and preparing for purchases in advance. Helps you stay within your budget by avoiding unnecessary purchases!"
+            android:textColor="@color/black"
+            android:layout_marginLeft="10dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,9 +117,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Think about the things you need to buy\n2. List them down through the “Shopping List” feature"
+            android:text="1. Think about all the things you need to buy.\n2. List them down through the “Shopping List” feature.\n3. Use your past purchases as reference.\n4. If needed, consult other sources (Internet, friends, family)."
             android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -132,7 +152,8 @@
             android:textSize="16dp"
             android:text="Review your ongoing spending activities and plan your purchases!"
             android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_review_spending"

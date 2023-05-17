@@ -102,7 +102,6 @@ class ChildDashboardActivity : AppCompatActivity(){
             val difference = Period.between(to, from)
 
             age = difference.years
-            Log.d("kandor", "age: "+age)
             getPersonalFinancePerformance()
         }
     }
@@ -240,8 +239,8 @@ class ChildDashboardActivity : AppCompatActivity(){
                     nGoals++
                     val goalObject = goal.toObject<FinancialGoals>()
                     if (goalObject.dateCompleted != null) {
-                        val targetDate = goalObject?.targetDate!!.toDate()
-                        val completedDate = goalObject?.dateCompleted!!.toDate()
+                        val targetDate = goalObject.targetDate!!.toDate()
+                        val completedDate = goalObject.dateCompleted!!.toDate()
 
                         //goal was completed before the target date, meaning it was completed on time
                         if (completedDate.before(targetDate) || completedDate.equals(targetDate))
@@ -353,7 +352,6 @@ class ChildDashboardActivity : AppCompatActivity(){
                 overSpending++
 
         }.continueWith {
-
             overspendingPercentage = (overSpending/nBudgetItems)
             if (age > 9 ) {
                 purchasePlanning()
@@ -431,19 +429,7 @@ class ChildDashboardActivity : AppCompatActivity(){
     }
 
     private fun getOverallFinancialHealth(){
-//        println("print in overall financial health")
-//        println("print personal finance " + personalFinancePerformance)
-//        println("print goal setting " + goalSettingPercentage)
-//        println("print saving " + savingPercentage)
-//        println("print nsaving " + nSavingCompleted)
-//        println("print budgeting " + budgetingPercentage)
-//        println("print nBudgeting " + nBudgetingCompleted)
-//        println("print spending " + spendingPercentage)
-//        println("print nspending " + nSpendingCompleted)
-//        println("print assessment " + financialAssessmentPerformance)
-
-
-        //no goal setting performance for age 9 and 12 (age 9 - parent makes the goal, age 12 - child's goals doesn't need to be reviewed)
+        checkIfNaN()
         if (age == 9 || age == 12) {
             //no saving completed yet, score will be personal finance and financial assessment (prelim)
             overallFinancialHealth = if(nSavingCompleted == 0)
@@ -479,14 +465,31 @@ class ChildDashboardActivity : AppCompatActivity(){
             else
             overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4) * .35) + (financialAssessmentPerformance * .30)).toFloat()
         }
-        Log.d("kandor", "personalFinancePerformance: "+personalFinancePerformance)
-        Log.d("kandor", "financialAssessmentPerformance: "+financialAssessmentPerformance)
-        Log.d("kandor", "overallFinancialHealth: "+overallFinancialHealth)
-        binding.tvPerformancePercentage.text =  DecimalFormat("##0.00").format(overallFinancialHealth) + "%"
-        //TODO: 1. grade the child's overall score (percentage)
-    //          2. give description
-    //          3. Give action
 
+        Log.d("TORPE", "personalFinancePerformance: "+personalFinancePerformance)
+        Log.d("TORPE", "savingPercentage: "+savingPercentage)
+        Log.d("TORPE", "budgetingPercentage: "+budgetingPercentage)
+        Log.d("TORPE", "spendingPercentage: "+spendingPercentage)
+        Log.d("TORPE", "financialAssessmentPerformance: "+financialAssessmentPerformance)
+        binding.tvPerformancePercentage.text =  DecimalFormat("##0.00").format(overallFinancialHealth) + "%"
+    }
+
+    private fun checkIfNaN() {
+        val percentages = mutableListOf(personalFinancePerformance, financialAssessmentPerformance,
+            savingPercentage, spendingPercentage, budgetingPercentage, goalSettingPercentage)
+
+        for (i in percentages.indices) {
+            if (percentages[i].isNaN()) {
+                when (i) {
+                    0 -> personalFinancePerformance = 0.00f
+                    1 -> financialAssessmentPerformance = 0.00f
+                    2 -> savingPercentage = 0.00f
+                    3 -> spendingPercentage = 0.00f
+                    4 -> budgetingPercentage = 0.00f
+                    5 -> goalSettingPercentage = 0.00f
+                }
+            }
+        }
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){

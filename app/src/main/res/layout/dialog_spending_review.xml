@@ -28,16 +28,34 @@
             app:tint="@color/light_green"
             android:layout_gravity="center"/>
 
-        <TextView
-            android:id="@+id/tv_goal_feedback"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+        <TextView
+            android:id="@+id/tv_goal_feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22dp"
             android:text="Spending"
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/img" />
+
+            <ImageView
+                android:id="@+id/btn_sound_spending"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_mic_24"
+                app:tint="@color/light_grey"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,7 +85,7 @@
             android:layout_height="wrap_content"
             android:textSize="16dp"
             android:layout_marginLeft="10dp"
-            android:text="1. Purchase the things you need and want\n2. Shapes your present and future"
+            android:text="Allows you to purchase the things you need and want and shapes your present and future."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
         <LinearLayout
@@ -88,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
                 android:layout_marginLeft="10dp"
-                android:text="How can you Save?"
+                android:text="How can you Spend Wisely?"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_gravity="center_vertical"/>
@@ -98,8 +116,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Look for ways to find the best value for money (sales, discounts)\n2. Always refer to your budget as a guide\n3. Prioiritize your needs over your wants"
+            android:text="1. Refer to your budget as a guide.\n2. Find the best value for money (sales, discounts).\n3. Prioritize needs over wants.\n2. Think twice before you buy.\n4. Plan purchases."
             android:textColor="@color/black"
+            android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical"/>
 
         <LinearLayout
@@ -130,6 +149,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
+            android:layout_marginLeft="10dp"
             android:text="Review your ongoing spending activities and be more mindful of your spending."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>

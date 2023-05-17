@@ -249,13 +249,13 @@ class SavingsFragment : Fragment(R.layout.fragment_savings_chart) {
         savings = round(savings / 10.0f) * 10.0f
 
         if (savings > 0 && user == "child")
-            binding.tvSummary.text = "Good job! You are saving $savings% of your total deposits to your goals"
+            binding.tvSummary.text = "Good job! You are saving $savings% of your income through depositing money to your goals. Keep it up!"
         else if (savings > 0 && user == "parent") {
-            binding.tvSummary.text = "Great! Your child is saving $savings% of their total deposits to your goals"
+            binding.tvSummary.text = "Great! Your child is saving $savings% of their income by depositing to their goals. Encourage them to keep it up!"
         } else if (savings < 0 && user == "child") {
-            binding.tvSummary.text = "Uh oh! You are saving $savings% of your total deposits to your goals"
+            binding.tvSummary.text = "Uh oh! You are saving only $savings% of your income by depositing to your goals. Try depositing more!"
         } else if (savings < 0 && user == "parent") {
-            binding.tvSummary.text = "Uh oh! Your child is saving $savings% of their total deposits to your goals"
+            binding.tvSummary.text = "Uh oh! Your child is saving $savings% of their income by depsoting to their goals. Encourage them to deposit more!"
         }
         /*binding.tvDepositTotal.text = "₱$depositText"
         binding.tvWithdrawalTotal.text = "₱$withdrawalText"

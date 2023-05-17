@@ -21,16 +21,33 @@
             app:tint="@color/light_green"
             android:layout_gravity="center"/>
 
-        <TextView
-            android:id="@+id/tv_goal_feedback"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Budgeting Review"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/img" />
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_goal_feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="22dp"
+                android:text="Budgeting Review"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/img" />
+
+            <ImageView
+                android:id="@+id/btn_sound_parent_budgeting"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_mic_24"
+                app:tint="@color/light_grey"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,9 +77,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. It is a plan on how to manage your money\n2. Is a useful guide when you are spending"
+            android:text="It's a plan on how to manage your money and is a useful guide when you are spending."
             android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,9 +110,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Encourage them to think about all the things they need to buy and divide them into budget items.\n2. Remind them to thoroughly review their budget.\n3. Involve them in household budgeting."
+            android:text="1. Encourage them to think about all the things you need to buy and divide them into budget items.\n2. Remind them to use their past purchases as reference.\n3. If needed, encourage them to use other sources as reference (Internet, parents, friends)."
             android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"

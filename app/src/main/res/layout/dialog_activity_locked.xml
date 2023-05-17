@@ -39,7 +39,7 @@
                 android:layout_marginTop="10dp"
                 android:textAlignment="center"
                 android:textSize="16dp"
-                android:text="Oops! You do not have access to this activity because you returned your savings to your personal finance\nTry completing a different goal and proceed with the activity once you've accomplished it"
+                android:text="Oops! You do not have access to this activity because you returned your savings to your personal finance.\n\nTry completing a different goal and proceed with the activity once you've accomplished it."
                 android:textColor="@color/black" />
         </LinearLayout>
 
@@ -52,5 +52,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text = "Ok"/>
+        android:text = "Okay"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

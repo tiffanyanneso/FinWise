@@ -28,16 +28,34 @@
             app:tint="@color/light_green"
             android:layout_gravity="center"/>
 
-        <TextView
-            android:id="@+id/tv_goal_feedback"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Overspending Review"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/img" />
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_goal_feedback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="22dp"
+                android:text="Overspending"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/img" />
+
+            <ImageView
+                android:id="@+id/btn_sound_overspending"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_mic_24"
+                app:tint="@color/light_grey"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -68,7 +86,8 @@
             android:layout_height="wrap_content"
             android:textSize="16dp"
             android:text="Occurs when you go over your budget or the amount you set for your budget item."
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:layout_marginLeft="10dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,7 +117,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Reviewing your budget to see if the item you want to buy will make you go over it\n2. Thinking twice before you buy something"
+            android:layout_marginLeft="10dp"
+            android:text="1. Checking your budget to see if you can afford it.\n2. Thinking twice before you buy.\n3. Determining if it is a need or want.\n4. Planning your purchases."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
 
@@ -130,8 +150,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="Review your ongoing spending activities to check if you have overspent."
+            android:text="1. Keep these tips in mind the next time you spend!\n2. Review your ongoing spending activities to check."
             android:textColor="@color/black"
+            android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical"/>
 
         <androidx.appcompat.widget.AppCompatButton

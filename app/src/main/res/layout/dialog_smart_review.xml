@@ -29,16 +29,34 @@
             app:tint="@color/yellow"
             android:layout_gravity="center"/>
 
-        <TextView
-            android:id="@+id/tv_goal_feedback"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+        <TextView
+            android:id="@+id/tv_goal_feedback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22dp"
             android:text="SMART Goals"
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/img" />
+
+            <ImageView
+                android:id="@+id/btn_sound_smart_review"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/baseline_mic_24"
+                app:tint="@color/light_grey"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -101,7 +119,8 @@
             android:textSize="16dp"
             android:text="Specific- State what will be done"
             android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -109,7 +128,8 @@
             android:textSize="16dp"
             android:text="Measurable- Include a target amount "
             android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -117,7 +137,8 @@
             android:textSize="16dp"
             android:text="Achievable- See if the goal is realistic "
             android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -125,7 +146,8 @@
             android:textSize="16dp"
             android:text="Relevant- Ask if it is important to you "
             android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -133,7 +155,8 @@
             android:textSize="16dp"
             android:text="Time-bound- Set a target date"
             android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -165,7 +188,8 @@
             android:textSize="16dp"
             android:text="1. Practice your goal setting by setting a new goal.\n2. Review your existing goals to see how they can be made SMART-er."
             android:textColor="@color/black"
-            android:layout_gravity="center_vertical"/>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"

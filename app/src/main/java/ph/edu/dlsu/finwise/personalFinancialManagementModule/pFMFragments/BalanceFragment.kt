@@ -286,15 +286,15 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         /*binding.tvIncomeTotal.text = "₱$incomeText"
         binding.tvExpenseTotal.text = "₱$expenseText"*/
         if (netIncome > 0 && user == "child")
-            binding.tvSummary.text = "Good job! You've earned ₱$netIncomeText more than you spent"
+            binding.tvSummary.text = "Good job! You've earned ₱$netIncomeText more than you spent."
         else if (netIncome > 0 && user == "parent") {
-            binding.tvSummary.text = "Great! Your child earned ₱$netIncomeText more than they spent"
+            binding.tvSummary.text = "Great! Your child earned ₱$netIncomeText more than they spent."
         } else if (netIncome < 0 && user == "child") {
             netIncomeText = kotlin.math.abs(netIncome).toString()
-            binding.tvSummary.text = "Uh oh! You've spent ₱$netIncomeText more than you earned"
+            binding.tvSummary.text = "Uh oh! You've spent ₱$netIncomeText more than you earned."
         } else if (netIncome < 0 && user == "parent") {
             netIncomeText = kotlin.math.abs(netIncome).toString()
-            binding.tvSummary.text = "Bad news!Your child spent ₱$netIncomeText more than they earned 😞"
+            binding.tvSummary.text = "Bad news! Your child spent ₱$netIncomeText more than they earned."
         }
 
     }

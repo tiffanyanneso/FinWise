@@ -21,16 +21,33 @@
             app:tint="@color/light_green"
             android:layout_gravity="center"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center">
+
         <TextView
             android:id="@+id/tv_title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:textSize="22dp"
             android:text="Buying Items"
             android:gravity="center"
             android:textStyle="bold"
             android:textColor="@color/black"
             app:layout_constraintTop_toBottomOf="@id/img" />
+
+        <ImageView
+            android:id="@+id/btn_sound_parent_saving_category"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/baseline_mic_24"
+            app:tint="@color/light_grey"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"/>
+    </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,6 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
+            android:layout_marginLeft="10dp"
             android:text="Purchasing things such as goods or services."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
@@ -126,6 +144,7 @@
             android:textSize="16dp"
             android:text="1. Encourage them to set aside money consistently.\n2. Remind themm to keep their target date in mind."
             android:textColor="@color/black"
+            android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical"/>
 
 
