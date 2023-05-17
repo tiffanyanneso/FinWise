@@ -108,7 +108,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
             "monthly" -> {
                 weeks = getWeeksOfCurrentMonth(sortedDate)
                 Log.d("agustus", "weeks: "+weeks)
-                graphData = iterateWeeksOfCurrentMonth(weeks!!)
+                graphData = getDataOfWeeksOfCurrentMonth(weeks!!)
 
                 /*val group = groupDates(sortedDate, "month")
                 iterateDatesByQuarter(group)*/
@@ -116,7 +116,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
             }
             "quarterly" -> {
                 months = getMonthsOfQuarter(sortedDate)
-                graphData =  forEachDateInMonths(months!!)
+                graphData =  getDataOfMonthsOfCurrentQuarter(months!!)
                 Log.d("zaza", "QUARTER: "+graphData)
                 binding.tvBalanceTitle.text = "This Quarter's Personal Financial Score Trend"
             }
@@ -150,7 +150,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
         return groupedDates.filterKeys { it != null } as Map<Int, List<Date>>
     }
 
-    private fun forEachDateInMonths(months: Map<Int, List<Date>>): MutableList<Entry> {
+    private fun getDataOfMonthsOfCurrentQuarter(months: Map<Int, List<Date>>): MutableList<Entry> {
         val data = mutableListOf<Entry>()
         var totalIncome = 0.00f
         var income = 0.00f
@@ -215,7 +215,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
         }
     }
 
-    private fun iterateWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>): MutableList<Entry> {
+    private fun getDataOfWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>): MutableList<Entry> {
         val data = mutableListOf<Entry>()
         var totalIncome = 0.00f
         var income = 0.00f
@@ -253,85 +253,6 @@ class DashboardPersonalFinanceFragment : Fragment() {
             xAxisPoint++
         }
 
-        val totalPersonalFinancePerformance = calculatePersonalFinancePerformance(totalIncome, totalExpense)
-        setTotals(totalPersonalFinancePerformance)
-        return data
-    }
-
-
-    private fun getDaysOfWeek(dates: List<Date>): List<Date> {
-        val weekStart = Calendar.getInstance().apply {
-            firstDayOfWeek = Calendar.SUNDAY
-            set(Calendar.DAY_OF_WEEK, firstDayOfWeek)
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-        val weekEnd = weekStart.clone() as Calendar
-        weekEnd.add(Calendar.DAY_OF_MONTH, 6)
-
-        val currentWeekDates = mutableListOf<Date>()
-        dates.forEach { date ->
-            val calendar = Calendar.getInstance().apply { time = date }
-            if (!calendar.before(weekStart) && !calendar.after(weekEnd)) {
-                currentWeekDates.add(calendar.time)
-            }
-        }
-
-        if (!currentWeekDates.contains(weekStart.time)) {
-            currentWeekDates.add(weekStart.time)
-        }
-        if (!currentWeekDates.contains(weekEnd.time)) {
-            currentWeekDates.add(weekEnd.time)
-        }
-
-        return currentWeekDates.sorted()
-    }
-
-
-    private fun addWeeklyData(selectedDates: List<Date>): MutableList<Entry> {
-        //get deposit for a specific date
-        val data = mutableListOf<Entry>()
-
-        var totalIncome = 0.00f
-        var income = 0.00f
-        var totalExpense= 0.00f
-        var expense= 0.00f
-        var xAxisPoint = 0.00f
-        for (date in selectedDates) {
-            //var totalAmount = 0.00F
-            for (transaction in transactionsArrayList) {
-                //comparing the dates if they are equal
-                if (date.compareTo(transaction.date?.toDate()) == 0) {
-
-                    if (transaction.transactionType == "Income"){
-                        //totalAmount += transaction.amount!!
-                        totalIncome += transaction.amount!!
-                        income += transaction.amount!!
-                    }
-                    else {
-                        //totalAmount -= transaction.amount!!
-                        totalExpense += transaction.amount!!
-                        expense += transaction.amount!!
-                    }
-                }
-            }
-            var personalFinancePerformancePercent = income/expense * 100
-            if (personalFinancePerformancePercent > 200)
-                personalFinancePerformancePercent = 200F
-
-            var personalFinancePerformance = personalFinancePerformancePercent / 2
-            if (personalFinancePerformance.isNaN()) {
-                personalFinancePerformance = 0.0f
-            }
-            data.add(Entry(xAxisPoint, personalFinancePerformance))
-            income = 0.00F
-            expense = 0.00F
-            xAxisPoint++
-        }
-        Log.d("akala", "Data set size: ${data.size}")
-        Log.d("akala", "data: $data")
         val totalPersonalFinancePerformance = calculatePersonalFinancePerformance(totalIncome, totalExpense)
         setTotals(totalPersonalFinancePerformance)
         return data
@@ -497,6 +418,82 @@ class DashboardPersonalFinanceFragment : Fragment() {
         }
     }
 
+   /* private fun getDaysOfWeek(dates: List<Date>): List<Date> {
+        val weekStart = Calendar.getInstance().apply {
+            firstDayOfWeek = Calendar.SUNDAY
+            set(Calendar.DAY_OF_WEEK, firstDayOfWeek)
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        val weekEnd = weekStart.clone() as Calendar
+        weekEnd.add(Calendar.DAY_OF_MONTH, 6)
 
+        val currentWeekDates = mutableListOf<Date>()
+        dates.forEach { date ->
+            val calendar = Calendar.getInstance().apply { time = date }
+            if (!calendar.before(weekStart) && !calendar.after(weekEnd)) {
+                currentWeekDates.add(calendar.time)
+            }
+        }
+
+        if (!currentWeekDates.contains(weekStart.time)) {
+            currentWeekDates.add(weekStart.time)
+        }
+        if (!currentWeekDates.contains(weekEnd.time)) {
+            currentWeekDates.add(weekEnd.time)
+        }
+
+        return currentWeekDates.sorted()
+    }
+
+
+    private fun addWeeklyData(selectedDates: List<Date>): MutableList<Entry> {
+        //get deposit for a specific date
+        val data = mutableListOf<Entry>()
+
+        var totalIncome = 0.00f
+        var income = 0.00f
+        var totalExpense= 0.00f
+        var expense= 0.00f
+        var xAxisPoint = 0.00f
+        for (date in selectedDates) {
+            //var totalAmount = 0.00F
+            for (transaction in transactionsArrayList) {
+                //comparing the dates if they are equal
+                if (date.compareTo(transaction.date?.toDate()) == 0) {
+
+                    if (transaction.transactionType == "Income"){
+                        //totalAmount += transaction.amount!!
+                        totalIncome += transaction.amount!!
+                        income += transaction.amount!!
+                    }
+                    else {
+                        //totalAmount -= transaction.amount!!
+                        totalExpense += transaction.amount!!
+                        expense += transaction.amount!!
+                    }
+                }
+            }
+            var personalFinancePerformancePercent = income/expense * 100
+            if (personalFinancePerformancePercent > 200)
+                personalFinancePerformancePercent = 200F
+
+            var personalFinancePerformance = personalFinancePerformancePercent / 2
+            if (personalFinancePerformance.isNaN()) {
+                personalFinancePerformance = 0.0f
+            }
+            data.add(Entry(xAxisPoint, personalFinancePerformance))
+            income = 0.00F
+            expense = 0.00F
+            xAxisPoint++
+        }
+        Log.d("akala", "Data set size: ${data.size}")
+        Log.d("akala", "data: $data")
+        val totalPersonalFinancePerformance = calculatePersonalFinancePerformance(totalIncome, totalExpense)
+        setTotals(totalPersonalFinancePerformance)
+        return data
+    }*/
 
 }

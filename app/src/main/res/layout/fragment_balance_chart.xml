@@ -239,7 +239,7 @@
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/balance_chart"
                 android:layout_width="330dp"
-                android:layout_height="430dp"
+                android:layout_height="480dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginStart="5dp"
                 android:layout_gravity="center"
