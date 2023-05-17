@@ -38,38 +38,23 @@
             android:paddingTop="15dp"
             android:gravity="center">
 
-
-      <!--      <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/profile_image"
-                android:src="@drawable/baseline_profile_24"
-                android:background="@drawable/circle_shape"
-                android:scaleType="centerCrop"
-                android:layout_width="96dp"
-                android:layout_height="96dp"
-                app:civ_border_width="2dp"
-                app:civ_border_color="#FF000000"/>-->
-
             <ImageView
-                android:id="@+id/profileImageView"
+                android:id="@+id/circularImageView"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                android:background="@drawable/circle_shape"
-                android:scaleType="centerCrop"
-                app:civ_border_width="2dp"
-
-                android:padding="16dp" />
+                android:layout_centerInParent="true"
+                android:src="@drawable/profile_person"
+                android:contentDescription="Circular Image" />
 
             <Button
                 android:id="@+id/changeColorButton"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Change Profile Color"
-
-                android:layout_marginTop="16dp" />
+                android:layout_height="wrap_content"
+                android:layout_below="@id/circularImageView"
+                android:layout_centerHorizontal="true"
+                android:text="Change Profile Color" />
 
         </LinearLayout>
-
         <TextView
             android:id="@+id/tv_profile_picture"
             android:layout_width="match_parent"

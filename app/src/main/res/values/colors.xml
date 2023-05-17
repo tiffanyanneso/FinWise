@@ -29,11 +29,8 @@
     <color name="bronze">#CD7F32</color>
     <color name="silver">#d8d8d8 </color>
     <color name="gold">#FFD700</color>
-    <color name="Red">#FF0000</color>
-    <color name="Green">#00FF00</color>
-    <color name="Blue">#0000FF</color>
-    <color name="Yellow">#FFFF00</color>
-    <color name="Orange"> #FFA500</color>
+    <color name="blue">#0000FF</color>
+    <color name="orange"> #FFA500</color>
 
 
     <color name="light_red">#FFCCCB</color>

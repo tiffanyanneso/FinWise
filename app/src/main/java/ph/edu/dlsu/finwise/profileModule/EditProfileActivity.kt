@@ -23,11 +23,6 @@ import ph.edu.dlsu.finwise.model.Users
 import java.text.SimpleDateFormat
 import java.util.*
 import android.graphics.Color
-import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import de.hdodenhof.circleimageview.CircleImageView
-import androidx.core.content.ContextCompat
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -37,16 +32,13 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var context: Context
     lateinit var birthday: Date
 
-    private lateinit var profileImageView: ImageView
-    private lateinit var changeColorButton: Button
 
     private val colors = arrayOf(
-        R.color.Red,
-        R.color.Green,
-        R.color.Blue,
-        R.color.Yellow,
-        R.color.Orange,
-        R.color.white
+        Color.BLUE,
+        Color.RED,
+        Color.GREEN,
+        Color.CYAN,
+        Color.MAGENTA
     )
 
     private var currentColorIndex = 0
@@ -56,19 +48,12 @@ class EditProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
+        val view = binding.root
         setContentView(binding.root)
         context= this
 
-
-        profileImageView = findViewById(R.id.profileImageView)
-        changeColorButton = findViewById(R.id.changeColorButton)
-
-
-        changeColorButton.setOnClickListener {
-            currentColorIndex = (currentColorIndex + 1) % colors.size
-            val colorResId = colors[currentColorIndex]
-            val color = ContextCompat.getColor(this@EditProfileActivity, colorResId)
-            profileImageView.setBackgroundColor(color)
+        binding.changeColorButton.setOnClickListener {
+            changeColor()
         }
 
         getProfileData()
@@ -113,6 +98,25 @@ class EditProfileActivity : AppCompatActivity() {
                 binding.etContactNumber.setText(child.number.toString())
         }
     }
+    private fun changeColor() {
+        binding.circularImageView.setColorFilter(colors[currentColorIndex])
+        currentColorIndex = (currentColorIndex + 1) % colors.size
+    }
+/*
+    private fun createCircleDrawable(color: Int): Drawable {
+        val shapeDrawable = ShapeDrawable(OvalShape())
+        shapeDrawable.paint.color = color
+        val strokeColor = Color.BLACK
+        val strokeWidth = 8
+        shapeDrawable.paint.style = Paint.Style.STROKE
+        shapeDrawable.paint.strokeWidth = strokeWidth.toFloat()
+        shapeDrawable.paint.setShadowLayer(8f, 0f, 0f, strokeColor)
+        shapeDrawable.paint.setShadowLayer(8f, 0f, 0f, color)
+        val layerDrawable = LayerDrawable(arrayOf(shapeDrawable))
+        layerDrawable.setLayerInset(0, strokeWidth, strokeWidth, strokeWidth, strokeWidth)
+        return layerDrawable
+    }
+*/
 
     private fun updateProfile() {
         val firstName = binding.etFirstName.text.toString()
