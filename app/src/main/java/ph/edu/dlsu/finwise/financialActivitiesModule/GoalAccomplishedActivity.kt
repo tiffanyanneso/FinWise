@@ -205,7 +205,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
             val dialogBinding = DialogProceedNextActivityBinding.inflate(layoutInflater)
             val dialog = Dialog(this);
             dialog.setContentView(dialogBinding.root)
-            dialog.window!!.setLayout(900, 800)
+            dialog.window!!.setLayout(900, 850)
             dialog.show()
 
             dialogBinding.btnProceed.setOnClickListener {
@@ -260,6 +260,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
                             sendBundle.putString("savingActivityID", savingActivityID)
                             sendBundle.putString("budgetingActivityID", budgetingActivityID)
                             sendBundle.putString("spendingActivityID", spendingActivityID)
+                            sendBundle.putString("childID", FirebaseAuth.getInstance().currentUser!!.uid)
                             budgetActivity.putExtras(sendBundle)
                             startActivity(budgetActivity)
                         }

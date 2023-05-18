@@ -107,6 +107,9 @@ class ParentSettingAGoalActivity : AppCompatActivity() {
                 binding.tvIsForChild.text = "No"
             binding.tvStatus.text = goal?.status
 
+            firestore.collection("Users").document(childID).get().addOnSuccessListener {
+                binding.tvChildName.text = it.toObject<Users>()?.firstName
+            }
         }
     }
 

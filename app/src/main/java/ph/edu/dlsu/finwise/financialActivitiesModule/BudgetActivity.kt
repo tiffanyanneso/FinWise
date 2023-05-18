@@ -19,6 +19,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.BudgetCategoryAdapter
@@ -60,6 +64,7 @@ class BudgetActivity : AppCompatActivity() {
     private var isBudgetingCompleted = false
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+    private lateinit var currentUserType:String
     private lateinit var childID:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,10 +83,12 @@ class BudgetActivity : AppCompatActivity() {
         spendingActivityID = bundle.getString("spendingActivityID").toString()
         childID = bundle.getString("childID").toString()
 
-        checkUser()
-        getBudgetItems()
-        loadBackButton()
-        getExpenses()
+        CoroutineScope(Dispatchers.Main).launch {
+            checkUser()
+            getBudgetItems()
+            loadBackButton()
+            getExpenses()
+        }
 
         var allCompleted = true
         firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
@@ -248,7 +255,7 @@ class BudgetActivity : AppCompatActivity() {
 
     private fun getBudgetItems() {
         firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).whereEqualTo("status", "Active").get().addOnSuccessListener { budgetItems ->
-            if (budgetItems.isEmpty)
+            if (budgetItems.isEmpty && currentUserType == "Child")
                 createBudgetTemplate()
             else {
                 for (item in budgetItems)
@@ -761,19 +768,18 @@ class BudgetActivity : AppCompatActivity() {
     }
 
 
-    private fun checkUser() {
-        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-            var user  = it.toObject<Users>()!!
-            //current user is parent
-            if (user.userType == "Parent") {
-                binding.layoutWithdraw.visibility = View.GONE
-                binding.btnDoneSettingBudget.visibility = View.GONE
-                binding.btnDoneSpending.visibility = View.GONE
-            } else if (user.userType == "Child") {
-                binding.layoutWithdraw.visibility = View.VISIBLE
-                binding.btnDoneSettingBudget.visibility = View.VISIBLE
-                binding.btnDoneSpending.visibility = View.VISIBLE
-            }
+    private suspend fun checkUser() {
+        currentUserType = firestore.collection("Users").document(currentUser).get().await().toObject<Users>()!!.userType!!
+        //current user is parent
+        if (currentUserType == "Parent") {
+            binding.layoutWithdraw.visibility = View.GONE
+            binding.btnDoneSettingBudget.visibility = View.GONE
+            binding.btnDoneSpending.visibility = View.GONE
+        } else if (currentUserType == "Child") {
+            binding.layoutWithdraw.visibility = View.VISIBLE
+            binding.btnDoneSettingBudget.visibility = View.VISIBLE
+            binding.btnDoneSpending.visibility = View.VISIBLE
+            childID = currentUser
         }
     }
     private fun loadBackButton() {

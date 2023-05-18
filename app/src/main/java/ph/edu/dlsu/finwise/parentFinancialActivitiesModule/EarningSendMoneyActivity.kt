@@ -78,7 +78,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
         val bundle = intent.extras!!
         earningActivityID = bundle.getString("earningActivityID").toString()
         childID = bundle.getString("childID").toString()
-        paymentType = bundle.getString("paymentType").toString()
+        //paymentType = bundle.getString("paymentType").toString()
         checkUser()
         loadBackButton()
 
@@ -101,6 +101,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             binding.tvStatus.text = earning.status
             binding.tvSource.text = earning.depositTo
             binding.tvPaymentType.text = earning.paymentType
+            paymentType = earning.paymentType!!
             source = earning.depositTo!!
 
             if (earning.depositTo == "Financial Goal") {

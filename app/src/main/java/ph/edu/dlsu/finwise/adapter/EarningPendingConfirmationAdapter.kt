@@ -86,7 +86,7 @@ class EarningPendingConfirmationAdapter : RecyclerView.Adapter<EarningPendingCon
             val bundle = Bundle()
             bundle.putString("earningActivityID", itemBinding.tvEarningActivityId.text.toString())
             bundle.putString("childID", itemBinding.tvChildId.text.toString())
-            bundle.putString("paymentType", itemBinding.tvPaymentType.text.toString())
+            //bundle.putString("paymentType", itemBinding.tvPaymentType.text.toString())
             confirm.putExtras(bundle)
             confirm.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             context.startActivity(confirm)

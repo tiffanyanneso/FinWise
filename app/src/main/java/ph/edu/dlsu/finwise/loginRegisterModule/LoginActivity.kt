@@ -56,8 +56,6 @@ class LoginActivity : AppCompatActivity() {
                             if (documentSnapshot.exists()) {
                                 // User information already exists in the database
                                 var isFirstLogin = true
-                                firestore.collection("Users").document(currentUser)
-                                    .update("lastLogin", Timestamp.now())
                                 if (documentSnapshot.contains("lastLogin"))
                                     isFirstLogin = false
                                 Log.d("zxcvzxcvvc", "login: "+isFirstLogin)
