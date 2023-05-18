@@ -2,6 +2,8 @@ package ph.edu.dlsu.finwise.childDashboardModule.fragments
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -29,10 +31,12 @@ import ph.edu.dlsu.finwise.childDashboardModule.FinancialAssessmentsDetailsActiv
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardFinancialAssessmentsBinding
 import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
+import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.util.*
+import kotlin.math.roundToInt
 
 class DashboardFinancialAssessmentsFragment : Fragment() {
     private lateinit var binding: FragmentDashboardFinancialAssessmentsBinding
@@ -40,7 +44,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
 
     private lateinit var childID: String
     //private lateinit var user: String
-    private var user = "child"
+    private var userType = "child"
 
     private val assessmentsTaken = ArrayList<FinancialAssessmentAttempts>()
     private var financialAssessmentTotalPercentage = 0.0
@@ -79,17 +83,6 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
 
         getArgumentsBundle()
         getFinancialAssessmentScore()
-        initializeDetailsButton()
-        loadFinancialAssessmentScore()
-    }
-
-    private fun loadFinancialAssessmentScore() {
-        val df = DecimalFormat("#.#")
-        df.roundingMode = java.math.RoundingMode.UP
-        val roundedValue = df.format(financialAssessmentTotalPercentage)
-
-        binding.tvFinancialAssessmentPercent.text = "${roundedValue}%"
-        binding.progressBar.progress = financialAssessmentTotalPercentage.toInt()
     }
 
     private fun initializeDetailsButton() {
@@ -97,8 +90,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             val goToDetails = Intent(context, FinancialAssessmentsDetailsActivity::class.java)
             val bundle = Bundle()
             bundle.putString("date", selectedDatesSort)
-            bundle.putString("user", user)
-            if (user == "child")
+            bundle.putString("user", userType)
+            if (userType == "child")
                 childID  = FirebaseAuth.getInstance().currentUser!!.uid
 
             bundle.putString("childID", childID)
@@ -110,7 +103,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     private fun getArgumentsBundle() {
         val args = arguments
         childID = args?.getString("childID").toString()
-        user = arguments?.getString("user").toString()
+        userType = arguments?.getString("user").toString()
 
         val date = args?.getString("date")
         val currUser = args?.getString("user")
@@ -120,7 +113,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             childID = childIDBundle
 
         if (currUser != null) {
-            user = currUser
+            userType = currUser
         }
 
         if (date != null) {
@@ -128,6 +121,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             assessmentsTaken.clear()
             data.clear()
             xAxisPoint = 0.00F
+            nAttempt = 0
+            financialAssessmentTotalPercentage = 0.0
         }
 
     }
@@ -138,8 +133,111 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             getDatesOfAttempts()
             setData()
             initializeGraph()
+            initializeDetailsButton()
+            setPerformanceView()
         }
     }
+
+    private fun setPerformanceView() {
+        if (financialAssessmentTotalPercentage.isNaN())
+            financialAssessmentTotalPercentage = 0.0
+
+        financialAssessmentTotalPercentage /= nAttempt
+        val df = DecimalFormat("#.#")
+        df.roundingMode = RoundingMode.UP
+        val roundedValue = df.format(financialAssessmentTotalPercentage)
+
+        val imageView = binding.ivScore
+        val message: String
+        val performance: String
+        val bitmap: Bitmap
+
+        if (financialAssessmentTotalPercentage == 100.0) {
+            performance = "Excellent!"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.dark_green))
+            message = if (userType == "Parent")
+                "Your child has become a financial superstar. Celebrate their achievements and continue guiding them toward lifelong financial success!"
+            else "You've mastered the art of managing money. Keep shining and inspiring others with your remarkable skills!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
+        } else if (financialAssessmentTotalPercentage > 90) {
+            performance = "Amazing!"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.amazing_green))
+            message = if (userType == "Parent")
+                "Your child's financial knowledge is impressive. Encourage them to apply their skills to real-life situations and set meaningful goals!"
+            else "You're a financial whiz-kid. Keep up the excellent work and inspire others with your financial know-how!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
+        } else if (financialAssessmentTotalPercentage > 80) {
+            performance = "Great!"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.green))
+            message = if (userType == "Parent")
+                "Your child's financial skills are flourishing. Help them make more wise financial choices!"
+            else "Your financial skills are impressive. Keep honing your knowledge and exploring new ways to make wise financial choices!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
+        } else if (financialAssessmentTotalPercentage > 70) {
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.light_green))
+            performance = "Good!"
+            message = if (userType == "Parent")
+                "Your child is demonstrating a solid understanding of financial literacy. Support them in setting more ambitious financial goals!"
+            else "You have a solid understanding of financial concepts. Keep up the good work and aim for even greater achievements!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
+        } else if (financialAssessmentTotalPercentage > 60) {
+            performance = "Average"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
+            message = if (userType == "Parent")
+                "Your child is building confidence in managing money. Encourage them to explore different ways to budget and save effectively!"
+            else "You're becoming a savvy money manager. Keep practicing and expanding your knowledge to reach even higher levels!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
+        } else if (financialAssessmentTotalPercentage > 50) {
+            performance = "Nearly There"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.nearly_there_yellow))
+            message = if (userType == "Parent")
+                "Your child's grasp of financial concepts is expanding. Keep encouraging them to make smart financial decisions!"
+            else "Your financial skills are improving. Keep going and continue to learn new strategies for smart money decisions!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
+        } else if (financialAssessmentTotalPercentage > 40) {
+            performance = "Almost There"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.almost_there_yellow))
+            message = if (userType == "Parent")
+                "Your child is growing in their understanding of saving, budgeting, spending wisely, and setting achievable financial goals!"
+            else "You're getting the hang of managing your money. Keep exploring and applying what you've learned to keep growing!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
+        } else if (financialAssessmentTotalPercentage > 30) {
+            performance = "Getting There"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.getting_there_orange))
+            message = if (userType == "Parent")
+                "Your child is gaining essential knowledge about money matters. Continue to guide them in making informed financial choices!"
+            else "You're gaining a better understanding of financial concepts. Keep learning and practicing to improve even more!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
+        } else if (financialAssessmentTotalPercentage > 20) {
+            performance = "Not Quite There"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.not_quite_there_red))
+            message = if (userType == "Parent")
+                "Encourage your child to explore saving, spending wisely, budgeting, and setting financial goals to develop a solid foundation!"
+            else "Keep exploring and learning about managing money to improve your financial skills!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
+        } else if (financialAssessmentTotalPercentage > 10) {
+            performance = "Need Improvement"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
+            message = if (userType == "Parent")
+                "Enhance your child's financial skills. Keep using the app to improve your child's financial knowledge!"
+            else "Keep exploring and learning about managing money to improve your financial skills!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        }
+        else {
+            performance = "Get Started!"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
+            message = if (userType == "Parent")
+                "Your child hasn't taken any assessments. Do a financial activity to test your financial knowledge!"
+            else "You haven't taken any assessments. Do a financial activity to test your financial knowledge."
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
+        }
+
+        imageView.setImageBitmap(bitmap)
+        binding.tvPerformanceText.text = message
+        binding.tvPerformanceStatus.text = performance
+        binding.tvPerformancePercentage.text = "${roundedValue}%"
+    }
+
 
     private fun initializeGraph() {
         chart = view?.findViewById(R.id.financial_assessment_chart)!!
@@ -310,12 +408,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                     val weekDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
                     val attemptDate = attempt.dateTaken?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
                     if (attemptDate != null && weekDate == attemptDate) {
-                        Log.d("calvin", "attemptDate: "+attemptDate)
-                        Log.d("calvin", "weekDate: "+weekDate)
                         if (assessmentsTaken.isNotEmpty()) {
-                            nAttempt++
-                            Log.d("nAttempt", "nAttempt: "+nAttempt)
-
                             val assessmentDocument = firestore.collection("Assessments")
                                 .document(attempt.assessmentID!!).get().await()
                             val assessmentObject =
@@ -328,6 +421,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                                 "Budgeting" -> budgetingScores.add(percentage)
                                 "Spending" -> spendingScores.add(percentage)
                             }
+                            financialAssessmentTotalPercentage += percentage
+                            nAttempt++
                         }
                     }
                 }
@@ -370,7 +465,6 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                     val attemptDate = attempt.dateTaken?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
                     if (attemptDate != null && weekDate == attemptDate) {
                         if (assessmentsTaken.isNotEmpty()) {
-                            nAttempt++
                             val assessmentDocument = firestore.collection("Assessments")
                                 .document(attempt.assessmentID!!).get().await()
                             val assessmentObject =
@@ -382,6 +476,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                                 "Budgeting" -> budgetingScores.add(percentage)
                                 "Spending" -> spendingScores.add(percentage)
                             }
+                            financialAssessmentTotalPercentage += percentage
+                            nAttempt++
                         }
                     }
                 }
@@ -442,10 +538,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         Log.d("dogdays", "budgetingPercentage: "+budgetingPercentage)*/
 
         val financialAssessmentPerformance = (totalSum.toDouble() / maxPossibleSum) * 100
-        Log.d("nAttempt", "financialAssessmentPerformance: "+financialAssessmentPerformance)
-
-        financialAssessmentTotalPercentage += financialAssessmentPerformance
-        data.add(Entry(xAxisPoint, financialAssessmentPerformance.toFloat()))
+        val roundedFinancialAssessmentPerformance = (financialAssessmentPerformance * 10).roundToInt() / 10
+        data.add(Entry(xAxisPoint, roundedFinancialAssessmentPerformance.toFloat()))
         xAxisPoint++
 
         //Update to be used in the leaderboard
