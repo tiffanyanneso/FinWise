@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.profileModule
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,6 +24,7 @@ import ph.edu.dlsu.finwise.model.Users
 import java.text.SimpleDateFormat
 import java.util.*
 import android.graphics.Color
+import android.graphics.PorterDuff
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -34,6 +36,7 @@ class EditProfileActivity : AppCompatActivity() {
 
 
     private val colors = arrayOf(
+        Color.BLACK,
         Color.BLUE,
         Color.RED,
         Color.GREEN,
@@ -42,6 +45,9 @@ class EditProfileActivity : AppCompatActivity() {
     )
 
     private var currentColorIndex = 0
+    private var selectedColor: Int = Color.BLACK
+    private lateinit var sharedPrefs: SharedPreferences
+
 
     @RequiresApi(Build.VERSION_CODES.O)
 
@@ -51,6 +57,24 @@ class EditProfileActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(binding.root)
         context= this
+
+        // Initialize SharedPreferences
+        sharedPrefs = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
+
+        // Check if the color is already stored in SharedPreferences
+        if (!sharedPrefs.contains("color")) {
+            // If color is not found, it means it's a new account, so set the default color to black and save it in SharedPreferences
+            val editor = sharedPrefs.edit()
+            editor.putInt("color", Color.BLACK)
+            editor.apply()
+        }
+
+        // Retrieve the existing color value from SharedPreferences
+        selectedColor = sharedPrefs.getInt("color", Color.BLACK)
+
+        // Apply the retrieved color to the circularImageView
+        binding.circularImageView.setColorFilter(selectedColor, PorterDuff.Mode.SRC_IN)
+
 
         binding.changeColorButton.setOnClickListener {
             changeColor()
@@ -96,27 +120,34 @@ class EditProfileActivity : AppCompatActivity() {
                 binding.etBirthday.setText(SimpleDateFormat("MM/dd/yyyy").format(child?.birthday!!.toDate()))
             if (child?.number!= null)
                 binding.etContactNumber.setText(child.number.toString())
+
+            // Retrieve the color value from the "ColorPreferences" collection
+            val colorPreferencesRef = firestore.collection("ColorPreferences").document(currentUser)
+            colorPreferencesRef.get().addOnSuccessListener { documentSnapshot ->
+                val colorData = documentSnapshot.data
+                if (colorData != null && colorData.containsKey("color")) {
+                    val color = colorData["color"] as Long
+                    selectedColor = color.toInt()
+                    binding.circularImageView.setColorFilter(selectedColor, PorterDuff.Mode.SRC_IN)
+                }
+            }
         }
     }
     private fun changeColor() {
-        binding.circularImageView.setColorFilter(colors[currentColorIndex])
+        selectedColor = colors[(currentColorIndex + 1) % colors.size]
+        binding.circularImageView.setColorFilter(selectedColor, PorterDuff.Mode.SRC_IN)
         currentColorIndex = (currentColorIndex + 1) % colors.size
+
+        // Store the color value in SharedPreferences
+        val editor = sharedPrefs.edit()
+        editor.putInt("color", selectedColor)
+        editor.apply()
+
+     /*   selectedColor = colors[(currentColorIndex + 1) % colors.size]
+        binding.circularImageView.setColorFilter(selectedColor)
+        currentColorIndex = (currentColorIndex + 1) % colors.size*/
     }
-/*
-    private fun createCircleDrawable(color: Int): Drawable {
-        val shapeDrawable = ShapeDrawable(OvalShape())
-        shapeDrawable.paint.color = color
-        val strokeColor = Color.BLACK
-        val strokeWidth = 8
-        shapeDrawable.paint.style = Paint.Style.STROKE
-        shapeDrawable.paint.strokeWidth = strokeWidth.toFloat()
-        shapeDrawable.paint.setShadowLayer(8f, 0f, 0f, strokeColor)
-        shapeDrawable.paint.setShadowLayer(8f, 0f, 0f, color)
-        val layerDrawable = LayerDrawable(arrayOf(shapeDrawable))
-        layerDrawable.setLayerInset(0, strokeWidth, strokeWidth, strokeWidth, strokeWidth)
-        return layerDrawable
-    }
-*/
+
 
     private fun updateProfile() {
         val firstName = binding.etFirstName.text.toString()
@@ -124,8 +155,21 @@ class EditProfileActivity : AppCompatActivity() {
         val birthday = SimpleDateFormat("MM/dd/yyyy").parse(binding.etBirthday.text.toString())
         val number = binding.etContactNumber.text.toString()
 
+
+        // Store the color value in the separate "ColorPreferences" collection
+        val colorPreferencesRef = firestore.collection("ColorPreferences").document(currentUser)
+        colorPreferencesRef.set(mapOf("color" to selectedColor), SetOptions.merge())
+
         firestore.collection("Users").document(currentUser).update("firstName", firstName, "lastName", lastName, "birthday", birthday, "number", number).addOnSuccessListener {
             Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT)
+
+
+            // Store the color value in shared preferences
+            val sharedPrefs = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
+            val editor = sharedPrefs.edit()
+            editor.putInt("color", selectedColor)
+            editor.apply()
+            sharedPrefs.edit().putInt("color", selectedColor).apply()
             finish()
             val intent = Intent (this, ProfileActivity::class.java)
             startActivity (intent)

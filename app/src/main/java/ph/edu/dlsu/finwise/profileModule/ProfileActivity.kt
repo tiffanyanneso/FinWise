@@ -2,6 +2,8 @@ package ph.edu.dlsu.finwise.profileModule
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -59,6 +61,10 @@ class ProfileActivity : AppCompatActivity(){
         setupFragments()
         getProfileData()
 
+        val sharedPrefs = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
+        val color = sharedPrefs.getInt("color", Color.BLACK)
+        binding.circularImageView.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+
         binding.btnEditProfile.setOnClickListener {
             val gotoEditProfile = Intent(this, EditProfileActivity::class.java)
             context.startActivity(gotoEditProfile)
@@ -111,7 +117,15 @@ class ProfileActivity : AppCompatActivity(){
     }
 
     private fun getProfileData() {
-
+        // Retrieve the color value from the "ColorPreferences" collection
+        val colorPreferencesRef = firestore.collection("ColorPreferences").document(currentUser)
+        colorPreferencesRef.get().addOnSuccessListener { documentSnapshot ->
+            val colorData = documentSnapshot.data
+            if (colorData != null && colorData.containsKey("color")) {
+                val color = colorData["color"] as Long
+                binding.circularImageView.setColorFilter(color.toInt(), PorterDuff.Mode.SRC_IN)
+            }
+        }
         firestore.collection("Users").document(childID).get().addOnSuccessListener { documentSnapshot ->
             var child = documentSnapshot.toObject<Users>()
 
