@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPerformance
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -206,6 +207,8 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
         binding.textViewBudgetAccuracyProgress.text =  DecimalFormat("##0.##").format(totalBudgetAccuracy/ purchasedBudgetItemCount) + "%"
         binding.progressBarBudgetAccuracy.progress = budgetAccuracy
 
+        binding.btnBudgetAccuracyTips.visibility = View.GONE
+
         if (budgetAccuracy >= 96) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Excellent"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.dark_green))
@@ -226,26 +229,32 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
             binding.textViewBudgetAccuracyPerformanceText.text = "Average"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.yellow))
             binding.tvBudgetAccuracyText.text = "Your child is doing well! Encourage them to doublecheck their budget items and amoounts."
+            showAccuracyButton()
         } else if (budgetAccuracy in 46..55) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Nearly There"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
             binding.tvBudgetAccuracyText.text = "You child is nearly there! Click on the tips button to learn how to help them get there!"
+            showAccuracyButton()
         }  else if (budgetAccuracy in 36..45) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Almost There"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.almost_there_yellow))
             binding.tvBudgetAccuracyText.text = "Your child is almost there! They need to work on their budget accuracy. Click tips to learn how to help!"
+            showAccuracyButton()
         } else if (budgetAccuracy in 26..35) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Getting There"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.getting_there_orange))
             binding.tvBudgetAccuracyText.text = "Your child is getting there! Click tips to learn how to help!"
+            showAccuracyButton()
         } else if (budgetAccuracy in 16..25) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Not Quite\nThere"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.not_quite_there_red))
             binding.tvBudgetAccuracyText.text = "Your child is not quite there yet!  Click tips to learn how to help!"
+            showAccuracyButton()
         } else if (budgetAccuracy < 15) {
             binding.textViewBudgetAccuracyPerformanceText.text = "Needs\nImprovement"
             binding.textViewBudgetAccuracyPerformanceText.setTextColor(getResources().getColor(R.color.red))
             binding.tvBudgetAccuracyText.text = "Your child's budget accuracy needs a lot of improvement. Click tips to learn how to help!"
+            showAccuracyButton()
         }
     }
 
@@ -253,6 +262,7 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
         var overall = ((totalBudgetAccuracy/purchasedBudgetItemCount) + ((1 - (nParent.toFloat()/budgetItemCount)) * 100)) /2
 
         binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(overall)}%"
+        binding.btnTips.visibility = View.GONE
 
         if (overall >= 96) {
             binding.imgFace.setImageResource(R.drawable.excellent)
@@ -279,32 +289,46 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
             binding.textStatus.text = "Average"
             binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
             binding.tvPerformanceText.text = "Your child is doing a nice job of budgeting! Encourage them to always doublecheck their budget."
+            showPerformanceButton()
         } else if (overall < 56 && overall >= 46) {
             binding.imgFace.setImageResource(R.drawable.nearly_there)
             binding.textStatus.text = "Nearly There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
             binding.tvPerformanceText.text = "Your child is nearly there! Click the tips button to learn how to get there!"
+            showPerformanceButton()
         }  else if (overall < 46 && overall >= 36) {
             binding.imgFace.setImageResource(R.drawable.almost_there)
             binding.textStatus.text = "Almost There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
             binding.tvPerformanceText.text = "Your child is almost there! Click the tips button to learn how to help them get there!"
+            showPerformanceButton()
         } else if (overall < 36 && overall >= 26) {
             binding.imgFace.setImageResource(R.drawable.getting_there)
             binding.textStatus.text = "Getting There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
             binding.tvPerformanceText.text = "Your child is getting there! Click the tips button to learn how to help them get there!"
+            showPerformanceButton()
         } else if (overall < 26 && overall >= 16) {
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
             binding.textStatus.text = "Not Quite\nThere"
             binding.textStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
             binding.tvPerformanceText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
+            showPerformanceButton()
         } else if (overall < 15) {
             binding.imgFace.setImageResource(R.drawable.bad)
             binding.textStatus.text = "Needs\nImprovement"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them get there!"
+            showPerformanceButton()
         }
+    }
+
+    private fun showPerformanceButton(){
+        binding.btnTips.visibility = View.VISIBLE
+    }
+
+    private fun showAccuracyButton(){
+        binding.btnBudgetAccuracyTips.visibility = View.VISIBLE
     }
 
     private fun showBudgetingReivewDialog() {

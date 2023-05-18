@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -95,6 +96,8 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
 
             print("print overll over rating " + nOverall + "/" + nRatings)
 
+            binding.btnViewSMARTGoalsTip.visibility = View.GONE
+
             if (percentage >= 96) {
                 binding.imgFace.setImageResource(R.drawable.excellent)
                 binding.tvPerformanceStatus.text = "Excellent"
@@ -120,31 +123,37 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
                 binding.tvPerformanceStatus.text = "Average"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
                 binding.tvPerformanceText.text = "Your child is doing a nice job of setting goals! Encourage them to follow the SMART framework."
+                showPerformanceButton()
             } else if (percentage < 56 && percentage >= 46) {
                 binding.imgFace.setImageResource(R.drawable.nearly_there)
                 binding.tvPerformanceStatus.text = "Nearly There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
                 binding.tvPerformanceText.text = "Your child is nearly there! Encourage them to follow the SMART framework!"
+                showPerformanceButton()
             } else if (percentage < 46 && percentage >= 36) {
                 binding.imgFace.setImageResource(R.drawable.almost_there)
                 binding.tvPerformanceStatus.text = "Almost There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
                 binding.tvPerformanceText.text = "Your child is almost there! Encourage them to follow the SMART framework! "
+                showPerformanceButton()
             } else if (percentage < 36 && percentage >= 26) {
                 binding.imgFace.setImageResource(R.drawable.getting_there)
                 binding.tvPerformanceStatus.text = "Getting There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
                 binding.tvPerformanceText.text = "Your child is getting there! Encourage them to follow the SMART framework!"
+                showPerformanceButton()
             } else if (percentage < 26 && percentage >= 16) {
                 binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                 binding.tvPerformanceStatus.text = "Not Quite\nThere"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
                 binding.tvPerformanceText.text = "Your child is not quite there yet! Encourage them to follow the SMART framework!"
+                showPerformanceButton()
             } else if (percentage < 15) {
                 binding.imgFace.setImageResource(R.drawable.bad)
                 binding.tvPerformanceStatus.text = "Needs\nImprovement"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "Uh oh! Encourage your child to follow the SMART framework!"
+                showPerformanceButton()
             }
 
             val ratingArray = ArrayList<GoalSettingPerformanceActivity.Rating>()
@@ -179,6 +188,10 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun showPerformanceButton(){
+        binding.btnViewSMARTGoalsTip.visibility = View.VISIBLE
     }
 
     private fun showGoalDialog() {

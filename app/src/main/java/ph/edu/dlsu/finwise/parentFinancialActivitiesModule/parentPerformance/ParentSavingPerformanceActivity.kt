@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import com.github.mikephil.charting.data.PieData
@@ -179,37 +180,47 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
                     binding.tvPerformanceStatus.text = "Average"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
                     binding.tvPerformanceText.text = "Your child is doing a nice job of completing goals! Encourage them to save more consistently."
+                    showPerformanceButton()
                 } else if (overall < 56 && overall >= 46) {
                     binding.imgFace.setImageResource(R.drawable.nearly_there)
                     binding.tvPerformanceStatus.text = "Nearly There"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
                     binding.tvPerformanceText.text = "Your child is nearly there! Click the tips button to learn how to help them get there!"
+                    showPerformanceButton()
                 }  else if (overall < 46 && overall >= 36) {
                     binding.imgFace.setImageResource(R.drawable.almost_there)
                     binding.tvPerformanceStatus.text = "Almost There"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
                     binding.tvPerformanceText.text = "Your child is almost there! Click the tips button to learn how to help them get there!"
+                    showPerformanceButton()
                 } else if (overall < 36 && overall >= 26) {
                     binding.imgFace.setImageResource(R.drawable.getting_there)
                     binding.tvPerformanceStatus.text = "Getting There"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
                     binding.tvPerformanceText.text = "Your child is getting there! Click the tips button to learn how to help them get there!"
+                    showPerformanceButton()
                 } else if (overall < 26 && overall >= 16) {
                     binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                     binding.tvPerformanceStatus.text = "Not Quite\nThere"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
                     binding.tvPerformanceText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
+                    showPerformanceButton()
                 } else if (overall < 15) {
                     binding.imgFace.setImageResource(R.drawable.bad)
                     binding.tvPerformanceStatus.text = "Needs\nImprovement"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them improve their saving performance!"
+                    showPerformanceButton()
                 }
             } else {
                 binding.tvPerformanceStatus.text = ""
                 binding.tvPerformanceText.text = "Child has yet to complete goals."
             }
         }
+    }
+
+    private fun showPerformanceButton(){
+        binding.btnTips.visibility = View.VISIBLE
     }
 
     private fun setDurationPieChart() {
