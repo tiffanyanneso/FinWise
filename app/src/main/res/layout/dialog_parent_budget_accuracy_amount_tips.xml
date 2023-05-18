@@ -43,9 +43,9 @@
                 android:id="@+id/btn_sound_budget_accuracy_parent"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_gravity="center"
                 android:src="@drawable/baseline_mic_24"
-                app:tint="@color/light_grey"
-                android:layout_gravity="center"/>
+                app:tint="@color/light_grey" />
         </LinearLayout>
 
         <LinearLayout

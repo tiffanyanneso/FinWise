@@ -60,22 +60,23 @@
                                 android:orientation="vertical">
 
                                 <ImageView
-                                    android:src="@drawable/icon_colored_expense"
+                                    android:src="@drawable/baseline_shopping_cart_checkout_24"
                                     android:contentDescription="Profit"
                                     android:layout_width="30dp"
                                     android:layout_height="30dp"
                                     android:layout_marginTop="20dp"
                                     android:layout_gravity="center"
                                     android:layout_marginBottom="5dp"
-                                    />
+                                    app:tint="@color/very_light_green" />
 
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
-                                    android:textSize="12sp"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold"
                                     android:layout_marginBottom="10dp"
-                                    android:text="EXPENSE"
+                                    android:text="Expenses"
                                     android:textColor="@color/white"/>
 
                                 <LinearLayout
@@ -90,9 +91,8 @@
                                         android:id="@+id/tv_summary"
                                         android:gravity="center"
                                         android:textSize="16sp"
-                                        android:textStyle="bold"
                                         android:layout_marginTop="5dp"
-                                        android:text="Loading your data 🔃 \n Thank you for your patience ☺"
+                                        android:text="Loading..."
                                         android:textColor="@color/white"/>
 
                                     <TextView
@@ -100,17 +100,17 @@
                                         android:layout_height="40dp"
                                         android:id="@+id/tv_tips"
                                         android:gravity="center"
-                                        android:textSize="12sp"
-                                        android:textStyle="bold"
-                                        android:layout_marginTop="15dp"
+                                        android:textSize="16sp"
+                                        android:layout_marginTop="10dp"
                                         android:layout_marginBottom="5dp"
-                                        android:text=""
-                                        android:textColor="@color/cream"/>
+                                        android:text="..."
+                                        android:textColor="@color/white"/>
 
 
                                     <androidx.appcompat.widget.AppCompatButton
-                                        android:layout_width="180dp"
-                                        android:layout_height="50dp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginHorizontal="20dp"
                                         android:id="@+id/btn_action"
                                         android:gravity="center"
                                         android:layout_marginVertical="20dp"
@@ -138,7 +138,7 @@
                             android:id="@+id/pc_expense"
                             android:layout_width="350dp"
                             android:layout_height="350dp"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="20dp"
                             android:layout_marginBottom="15dp"
                             android:layout_gravity="center_horizontal"/>
 
@@ -147,7 +147,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Top 3 Expense Categories"
-                            android:textSize="18sp"
+                            android:textSize="20sp"
                             android:textStyle="bold"
                             android:layout_marginTop="5dp"
                             android:textColor="@color/dark_green"
