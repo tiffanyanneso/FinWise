@@ -134,7 +134,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
 
             binding.progressBarOverspending.progress = overspendingPercentage.toInt()
             binding.textOverspendingProgress.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
-
+            binding.btnOverspendingReview.visibility = View.GONE
 
             if (overspendingPercentage < 5) {
                 binding.textOverspendingText.text = "Excellent"
@@ -153,34 +153,41 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                 binding.textOverspendingText.text = "Good"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.light_green))
                 binding.tvOverspendingText.text = "Good job! Remember to keep your budget in mind when spending!"
+                showOverspendingButton()
             } else if (overspendingPercentage < 45 && overspendingPercentage >= 35) {
                 binding.textOverspendingText.text = "Average"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.yellow))
                 binding.tvOverspendingText.text = "Nice work! Work on improving your performance by using your budget as a guide and thinking before your buy."
+                showOverspendingButton()
             } else if (overspendingPercentage < 55 && overspendingPercentage >= 45) {
                 binding.imgFace.setImageResource(R.drawable.nearly_there)
                 binding.textOverspendingText.text = "Nearly There"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
                 binding.tvOverspendingText.text = "You're nearly there! Work on improving your performance by using your budget as a guide and thinking before your buy."
+                showOverspendingButton()
             }  else if (overspendingPercentage < 65 && overspendingPercentage >= 55) {
                 binding.imgFace.setImageResource(R.drawable.almost_there)
                 binding.textOverspendingText.text = "Almost There"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.almost_there_yellow))
                 binding.tvOverspendingText.text = "Almost there! Work on improving your performance by using your budget as a guide and thinking before your buy."
+                showOverspendingButton()
             } else if (overspendingPercentage < 75 && overspendingPercentage >= 65) {
                 binding.imgFace.setImageResource(R.drawable.getting_there)
                 binding.textOverspendingText.text = "Getting There"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.getting_there_orange))
                 binding.tvOverspendingText.text = "Getting there! Work on improving your performance by using your budget as a guide and thinking before your buy."
+                showOverspendingButton()
             } else if (overspendingPercentage < 85 && overspendingPercentage >= 75) {
                 binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                 binding.textOverspendingText.text  = "Not Quite\nThere"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.not_quite_there_red))
                 binding.tvOverspendingText.text = "Not quite there yet! Don't give up. Work on improving your performance by using your budget as a guide and thinking before your buy."
+                showOverspendingButton()
             } else if (overspendingPercentage > 84) {
                 binding.textOverspendingText.text = "Needs\nImprovement"
                 binding.textOverspendingText.setTextColor(getResources().getColor(R.color.red))
                 binding.tvOverspendingText.text = "Don't give up! Work on improving your performance by using your budget as a guide and thinking before your buy."
+                showOverspendingButton()
             }
         }
     }
@@ -204,6 +211,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                         val purchasePlanningPercentage = (nPlanned/nTotalPurchased)*100
                         binding.progressBarPurchasePlanning.progress = purchasePlanningPercentage.toInt()
                         binding.textPurchasePlanning.text  = DecimalFormat("##0.00").format(purchasePlanningPercentage) + "%"
+                        binding.btnPurchasePlanningReview.visibility = View.GONE
 
                         if (purchasePlanningPercentage >= 96) {
                             binding.textPurchasePlanningText.text = "Excellent"
@@ -225,26 +233,32 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                             binding.textPurchasePlanningText.text = "Average"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.yellow))
                             binding.tvPurchasePlanningText.text = "Nice Work! To improve, you may want to plan your expenses more via the shopping list."
+                            showPlanningButton()
                         } else if (purchasePlanningPercentage < 56 && purchasePlanningPercentage >= 46) {
                             binding.textPurchasePlanningText.text = "Nearly There"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
                             binding.tvPurchasePlanningText.text = "You're nearly there! Click review to learn how to get there!"
+                            showPlanningButton()
                         }  else if (purchasePlanningPercentage < 46 && purchasePlanningPercentage >= 36) {
                             binding.textPurchasePlanningText.text = "Almost There"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.almost_there_yellow))
                             binding.tvPurchasePlanningText.text = "Almost there! You need to work on your spending. Click review to learn how!"
+                            showPlanningButton()
                         } else if (purchasePlanningPercentage < 36 && purchasePlanningPercentage >= 26) {
                             binding.textPurchasePlanningText.text = "Getting There"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.getting_there_orange))
                             binding.tvPurchasePlanningText.text = "Getting there! You need to work on your spending. Click review to learn how!"
+                            showPlanningButton()
                         } else if (purchasePlanningPercentage < 26 && purchasePlanningPercentage >= 16) {
                             binding.textPurchasePlanningText.text  = "Not Quite\nThere"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.not_quite_there_red))
                             binding.tvPurchasePlanningText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
+                            showPlanningButton()
                         } else if (purchasePlanningPercentage < 15) {
                             binding.textPurchasePlanningText.text = "Needs\nImprovement"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.red))
                             binding.tvPurchasePlanningText.text = "Uh oh! Seems like you haven’t really been planning your expenses by putting them in your shopping list. Try this out next time!"
+                            showPlanningButton()
                         }
 
 
@@ -285,36 +299,54 @@ class SpendingPerformanceActivity : AppCompatActivity() {
             binding.tvPerformanceStatus.text = "Average"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
             binding.tvPerformanceText.text = "Nice work! Work on improving your spending performance by always planning ahead. You’ll get there soon!"
+            showPerformanceButton()
         } else if (overallSpending < 56 && overallSpending >= 46) {
             binding.imgFace.setImageResource(R.drawable.nearly_there)
             binding.tvPerformanceStatus.text = "Nearly There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.nearly_there_yellow))
             binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
+            showPerformanceButton()
         }  else if (overallSpending < 46 && overallSpending >= 36) {
             binding.imgFace.setImageResource(R.drawable.almost_there)
             binding.tvPerformanceStatus.text = "Almost There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.almost_there_yellow))
             binding.tvPerformanceText.text = "Almost there! You need to work on your spending. Click review to learn how!"
+            showPerformanceButton()
         } else if (overallSpending < 36 && overallSpending >= 26) {
             binding.imgFace.setImageResource(R.drawable.getting_there)
             binding.tvPerformanceStatus.text = "Getting There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.getting_there_orange))
             binding.tvPerformanceText.text = "Getting there! You need to work on your spending. Click review to learn how!"
+            showPerformanceButton()
         } else if (overallSpending < 26 && overallSpending >= 16) {
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
             binding.tvPerformanceStatus.text = "Not Quite\nThere"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.nearly_there_yellow))
             binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
+            showPerformanceButton()
         } else if (overallSpending < 15) {
             binding.imgFace.setImageResource(R.drawable.bad)
             binding.tvPerformanceStatus.text = "Needs\nImprovement"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
             binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
+            showPerformanceButton()
         }  else {
         binding.imgFace.setImageResource(R.drawable.good)
         binding.tvPerformanceStatus.text = ""
         binding.tvPerformanceText.text = "Finish spending to see your performance"
     }
+    }
+
+    private fun showPerformanceButton(){
+        binding.btnReview.visibility = View.VISIBLE
+    }
+
+    private fun showOverspendingButton(){
+        binding.btnOverspendingReview.visibility = View.VISIBLE
+    }
+
+    private fun showPlanningButton(){
+        binding.btnPurchasePlanningReview.visibility = View.VISIBLE
     }
     private fun showSpendingReivewDialog() {
 

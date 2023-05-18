@@ -146,6 +146,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             val overallRoundedNumber = "%.1f".format(overall).toFloat()
 
             binding.tvPerformancePercentage.text ="${overallRoundedNumber}%"
+                binding.btnReview.visibility = View.GONE
 
             if (overall >= 96) {
                 binding.imgFace.setImageResource(R.drawable.excellent)
@@ -172,37 +173,47 @@ class SavingPerformanceActivity : AppCompatActivity() {
                 binding.tvPerformanceStatus.text = "Average"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
                 binding.tvPerformanceText.text = "Nice work! Up your performance by consistently setting money aside!"
+                showPerformanceButton()
             } else if (overall < 56 && overall >= 46) {
                 binding.imgFace.setImageResource(R.drawable.nearly_there)
                 binding.tvPerformanceStatus.text = "Nearly There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
                 binding.tvPerformanceText.text = "You're nearly there! Up your performance by setting money aside and earning through activities."
+                showPerformanceButton()
             }  else if (overall < 46 && overall >= 36) {
                 binding.imgFace.setImageResource(R.drawable.almost_there)
                 binding.tvPerformanceStatus.text = "Almost There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
                 binding.tvPerformanceText.text = "Almost there! Up your performance by setting money aside and earning through activities."
+                showPerformanceButton()
             } else if (overall < 36 && overall >= 26) {
                 binding.imgFace.setImageResource(R.drawable.getting_there)
                 binding.tvPerformanceStatus.text = "Getting There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
                 binding.tvPerformanceText.text = "Getting there! Up your performance by setting money aside and earning through activities."
+                showPerformanceButton()
             } else if (overall < 26 && overall >= 16) {
                 binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                 binding.tvPerformanceStatus.text = "Not Quite\nThere"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
                 binding.tvPerformanceText.text = "Not quite there yet! Up your performance by setting money aside and earning through activities. Don't give up!"
+                showPerformanceButton()
             } else if (overall < 15) {
                 binding.imgFace.setImageResource(R.drawable.bad)
                 binding.tvPerformanceStatus.text = "Needs\nImprovement"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "Don't worry! Up your performance by setting money aside and earning through activities. You can do it!"
+                showPerformanceButton()
             }
             } else {
                 binding.tvPerformanceStatus.text = "Get Started!"
                 binding.tvPerformanceText.text = "Complete goals to see your performance!"
             }
         }
+    }
+
+    private fun showPerformanceButton(){
+        binding.btnReview.visibility = View.VISIBLE
     }
 
     private fun setDurationPieChart() {
