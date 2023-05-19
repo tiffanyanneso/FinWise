@@ -55,19 +55,6 @@
                 android:text="Change Profile Color" />
 
         </LinearLayout>
-        <TextView
-            android:id="@+id/tv_profile_picture"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="20dp"
-            android:textSize="14dp"
-            android:textAllCaps = "true"
-            android:text="@string/profile_picture"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginHorizontal="20dp"/>
 
 <!--        <TextView-->
 <!--            android:id="@+id/tv_first_name"-->
@@ -109,6 +96,7 @@
             app:helperText=""
             app:helperTextTextColor="@color/red"
             android:paddingBottom="10dp"
+            android:layout_marginTop="10dp"
             >
 
             <com.google.android.material.textfield.TextInputEditText

@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="(Click the empty space below to see the graph) "
+            android:text="Click space below to see graph!"
             android:textStyle="bold"
             android:textColor="@color/light_green"
             android:textSize="16sp"
@@ -57,7 +57,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="(Click the empty space below to see the graph) "
+            android:text="Click space below to see graph!"
             android:textStyle="bold"
             android:textColor="@color/light_green"
             android:textSize="16sp"
@@ -87,7 +87,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="(Click the empty space below to see the graph) "
+            android:text="Click space below to see graph!"
             android:textStyle="bold"
             android:textColor="@color/light_green"
             android:textSize="16sp"
@@ -117,7 +117,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="(Click the empty space below to see the graph) "
+            android:text="Click space below to see graph!"
             android:textStyle="bold"
             android:textColor="@color/light_green"
             android:textSize="16sp"

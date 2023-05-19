@@ -50,7 +50,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     android:text="Assessment Name"
                     android:textStyle="bold"
                     android:textColor="@color/black"

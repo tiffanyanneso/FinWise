@@ -355,8 +355,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/black"
-                android:textSize="18dp"
-                android:text="Don't forget to check if your child was able to complete the chore before sending the reward"
+                android:textSize="16dp"
+                android:text="Verify whether your child was able to complete the chore before sending the reward!"
                 />
 
         </LinearLayout>

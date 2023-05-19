@@ -305,16 +305,16 @@
                     android:orientation="vertical"
                     android:background="@drawable/button_border_white"
                     android:backgroundTint="@color/very_light_green"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:padding="20dp">
 
                     <TextView
                         android:id="@+id/tv_overall_rating"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="30sp"
+                        android:textSize="20sp"
                         android:text="X/X"
-                        android:textColor="@color/yellow"
+                        android:textColor="@color/teal_700"
                         android:textStyle="bold"
                         android:gravity="center"/>
 

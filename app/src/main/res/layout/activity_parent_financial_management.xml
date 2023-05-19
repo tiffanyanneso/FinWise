@@ -283,14 +283,14 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/gradient_pfm_detail_card2"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
                     <ImageView
                         android:src="@drawable/icon_financial_health"
                         android:contentDescription="Profit"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_marginTop="20dp"
                         android:layout_gravity="center"
                         android:layout_marginBottom="5dp"
                         />
@@ -299,7 +299,8 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:textSize="12sp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:text="Personal Finance Score"
                         android:textColor="@color/off_white"/>
 
@@ -325,46 +326,32 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:id="@+id/tv_performance"
-                            android:textSize="20sp"
+                            android:textSize="16sp"
                             android:textStyle="bold"
                             android:text="Loading..."
                             android:layout_marginTop="15dp"
-                            android:textColor="@color/cream"/>
-
-
+                            android:textColor="@color/white"/>
 
                         <TextView
-                            android:layout_width="325dp"
-                            android:layout_height="150dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:id="@+id/tv_score"
                             android:gravity="center"
                             android:textSize="16sp"
                             android:textStyle="bold"
-
-                            android:text="Loading data 🔃 \n For the meantime, you could look at the functions above to send or track your child's money. \n You could also check the navigation bar for more cool features!"
+                            android:text=""
+                            android:layout_marginBottom="10dp"
                             android:textColor="@color/white"/>
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:layout_width="130dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/btn_explanation"
                             android:gravity="center"
                             android:text="View Explanation"
-                            android:textSize="12sp"
                             android:background="@drawable/button_border_white"
                             android:backgroundTint="@color/light_green"
                             android:textColor="@color/white"/>
-
-                        <TextView
-                            android:id="@+id/tv_difference"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="14sp"
-                            android:gravity="center"
-                            android:layout_margin="20dp"
-                            android:text="Scroll down to see more 👇"
-                            android:textColor="@color/off_white"
-                            android:textStyle="bold"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -390,7 +377,8 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                     android:backgroundTint="@color/light_green"
                     android:textColor="@color/black"
                     android:layout_margin="5dp"
-                    android:text="WEEKLY"/>
+                    android:text="WEEKLY"
+                    android:textSize="13sp"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="0dp"
@@ -408,6 +396,7 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                     android:layout_weight="1"
                     android:layout_margin="5dp"
                     app:cornerRadius="5dp"
+                    android:textSize="13sp"
                     android:backgroundTint="@color/white"
                     android:textColor="@color/black"
                     android:layout_height="wrap_content"

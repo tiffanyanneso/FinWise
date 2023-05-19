@@ -21,7 +21,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:padding="20dp"
             android:background="@drawable/button_border_white"
-            android:backgroundTint="@color/very_light_green"
+            android:backgroundTint="@color/teal_700"
             android:layout_marginTop="10dp"
             android:gravity="center">
 
@@ -29,7 +29,7 @@
                 android:src="@drawable/education"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="15dp"/>
 
 
             <TextView
@@ -38,9 +38,11 @@
                 android:id="@+id/tv_title"
                 android:textSize="30sp"
                 android:text="Great Work!"
-                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textColor="@color/white"
                 android:gravity="center"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
@@ -68,7 +70,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
                     tools:progress="60"
-                    android:visibility="gone"/>
+                    android:visibility="invisible"/>
 
                 <TextView
                     android:id="@+id/text_view_progress"
@@ -79,7 +81,8 @@
                     app:layout_constraintEnd_toEndOf="@+id/progress_bar"
                     app:layout_constraintStart_toStartOf="@+id/progress_bar"
                     app:layout_constraintTop_toTopOf="@+id/progress_bar"
-                    tools:text="60%" />
+                    tools:text=""
+                    android:textColor="@color/white"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -87,9 +90,9 @@
                 android:id="@+id/tv_score"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="26sp"
-                android:text="Your score is being calculated and saved. Hold on tight!"
-                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:text="Your score is being calculated, hold on tight!"
+                android:textColor="@color/white"
                 android:layout_marginBottom="20dp"
                 android:gravity="center"/>
         </LinearLayout>

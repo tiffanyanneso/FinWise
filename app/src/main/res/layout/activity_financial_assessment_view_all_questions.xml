@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/assessment_name"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
