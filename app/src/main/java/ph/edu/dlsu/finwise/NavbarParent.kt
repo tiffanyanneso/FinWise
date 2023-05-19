@@ -65,7 +65,6 @@ class NavbarParent (bottomNavigationView: BottomNavigationView, appCon: Context,
 
     private fun getAndSetBundle(bundle: Bundle?): Bundle {
         val childID = bundle?.getString("childID")
-        Log.d("NavbarParent", "Received childID: $childID")
 
         val sendBundle = Bundle()
         sendBundle.putString("childID", childID)

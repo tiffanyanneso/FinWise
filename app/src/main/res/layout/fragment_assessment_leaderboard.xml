@@ -57,7 +57,7 @@
                             app:layout_constraintEnd_toEndOf="@+id/progress_bar"
                             app:layout_constraintStart_toStartOf="@+id/progress_bar"
                             app:layout_constraintTop_toTopOf="@+id/progress_bar"
-                            tools:text="Loading"
+                            tools:text="..."
                             android:textColor="@color/white"
                             android:textStyle="bold"/>
 
@@ -72,7 +72,7 @@
                             app:layout_constraintStart_toStartOf="@+id/progress_bar"
                             app:layout_constraintTop_toTopOf="@+id/progress_bar"
                             app:layout_constraintVertical_bias="0.75"
-                            tools:text="Loading"
+                            tools:text=""
                             android:textSize="16dp"
                             />
 
@@ -109,7 +109,7 @@
                         android:src="@drawable/baseline_leaderboard_24"
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
-                        app:tint="@color/bright_green" />
+                        app:tint="@color/teal_700" />
 
                     <TextView
                         android:id="@+id/tv_friends_leaderboard"
@@ -127,13 +127,12 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </LinearLayout>
 
-
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_ranking"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_margin="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="50dp"
                     android:layout_weight="8"
                     tools:listitem="@layout/item_leaderboard_ranking" />

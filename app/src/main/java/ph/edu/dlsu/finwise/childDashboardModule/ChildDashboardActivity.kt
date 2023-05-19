@@ -1,6 +1,8 @@
 package ph.edu.dlsu.finwise.childDashboardModule
 
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -35,7 +37,7 @@ class ChildDashboardActivity : AppCompatActivity(){
 
     private var firestore = Firebase.firestore
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-    private lateinit var userType: String
+    private var userType = "child"
 
     private lateinit var binding: ActivityChildDashboardBinding
     private var bundle = Bundle()
@@ -267,7 +269,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                             //parental involvement
                             firestore.collection("Users").document(budgetItemObject.createdBy.toString()).get().addOnSuccessListener { user ->
                                 //parent is the one who added the budget item
-                                if (user.toObject<Users>()!!.userType == "Parent")
+                                if (user.toObject<Users>()?.userType == "Parent")
                                     nParent++
                             }.continueWith {
                                 getBudgetAccuracy(activity.id, budgetItem.id, budgetItemObject)
@@ -466,12 +468,109 @@ class ChildDashboardActivity : AppCompatActivity(){
             overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4) * .35) + (financialAssessmentPerformance * .30)).toFloat()
         }
 
-        Log.d("TORPE", "personalFinancePerformance: "+personalFinancePerformance)
-        Log.d("TORPE", "savingPercentage: "+savingPercentage)
-        Log.d("TORPE", "budgetingPercentage: "+budgetingPercentage)
-        Log.d("TORPE", "spendingPercentage: "+spendingPercentage)
-        Log.d("TORPE", "financialAssessmentPerformance: "+financialAssessmentPerformance)
+        setPerformanceView()
+    }
+
+    private fun setPerformanceView() {
+        if (overallFinancialHealth.isNaN())
+            overallFinancialHealth = 0.00F
+
+        val df = DecimalFormat("#.#")
+        df.roundingMode = java.math.RoundingMode.UP
+        val roundedValue = df.format(overallFinancialHealth)
+
+        binding.tvPerformancePercentage.text = "${roundedValue}%"
+
+        val imageView = binding.ivScore
+        val message: String
+        val performance: String
+        val bitmap: Bitmap
+
+        if (overallFinancialHealth == 100.00F) {
+            performance = "Excellent!"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.dark_green))
+            message = if (userType == "Parent")
+                "Your child is a financial guru. Celebrate their accomplishments and encourage them to pursue advanced financial literacy courses or activities!"
+            else "You've demonstrated exceptional knowledge and skills in personal finance, financial activities, and financial assessments!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
+        } else if (overallFinancialHealth > 90) {
+            performance = "Amazing!"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.amazing_green))
+            message = if (userType == "Parent")
+                "They have a solid foundation in personal finance. Keep empowering them to pursue their financial goals!"
+            else "You're a true financial whiz. Keep refining your skills, exploring complex financial concepts, and inspiring others with your expertise!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
+        } else if (overallFinancialHealth > 80) {
+            performance = "Great!"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.green))
+            message = if (userType == "Parent")
+                "Your child's financial knowledge and skills are strong. Encourage them to explore new ways to grow their savings and make informed financial decisions!"
+            else "You have a strong grasp of personal finance concepts. Keep exploring advanced topics and applying your knowledge to real-life situations!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
+        } else if (overallFinancialHealth > 70) {
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.light_green))
+            performance = "Good!"
+            message = if (userType == "Parent")
+                "Your child is doing an excellent job with their financial literacy. They understand the value of budgeting and saving. Keep supporting their efforts!"
+            else "You're well on your way to becoming a financial expert. Keep setting goals, budgeting effectively, and making informed choices!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
+        } else if (overallFinancialHealth > 60) {
+            performance = "Average"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
+            message = if (userType == "Parent")
+                "Your child's financial skills are improving. Continue helping them track their expenses and work towards achieving their goals!"
+            else "You're becoming a confident financial decision-maker. Keep practicing financial activities and assessments to enhance your knowledge and skills!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
+        } else if (overallFinancialHealth > 50) {
+            performance = "Nearly There"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.nearly_there_yellow))
+            message = if (userType == "Parent")
+                "Your child has reached the halfway point. They are building solid financial habits. Keep encouraging them to save and set realistic goals!"
+            else "You're making significant strides in your financial literacy journey. Keep saving, setting goals, and budgeting wisely. Your financial future looks bright!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
+        } else if (overallFinancialHealth > 40) {
+            performance = "Almost There"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.almost_there_yellow))
+            message = if (userType == "Parent")
+                "Your child is developing a good understanding of personal finance. Support them in making thoughtful spending decisions!"
+            else "You're becoming a savvy money manager. Keep exploring different financial activities and assessments to strengthen your skills!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
+        } else if (overallFinancialHealth > 30) {
+            performance = "Getting There"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.getting_there_orange))
+            message = if (userType == "Parent")
+                "They are learning the importance of budgeting and saving. Encourage them to practice these skills regularly!"
+            else "You're building a solid foundation in personal finance. Keep setting goals, budgeting wisely, and learning about money. Your financial confidence is growing!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
+        } else if (overallFinancialHealth > 20) {
+            performance = "Not Quite There"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.not_quite_there_red))
+            message = if (userType == "Parent")
+                "Your child is making progress in understanding personal finance. Continue guiding them in setting financial goals!"
+            else "You're making progress in developing your financial skills. Keep practicing different activities and assessments to continue growing your financial knowledge!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
+        } else if (overallFinancialHealth > 10) {
+            performance = "Need Improvement"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
+            message = if (userType == "Parent")
+                "Your child is starting their financial journey! Encourage them to keep learning and exploring different ways to manage money!"
+            else "You're just getting started, and that's fantastic! Keep exploring saving, goal setting, budgeting, and spending. Your financial journey is off to a great start!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        }
+        else {
+            performance = "Get Started!"
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
+            message = "You have no overall finance performance yet. Start using the app and go back to this module"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
+        }
+
+        imageView.setImageBitmap(bitmap)
+        binding.tvPerformanceText.text = message
+        binding.tvPerformanceStatus.text = performance
         binding.tvPerformancePercentage.text =  DecimalFormat("##0.00").format(overallFinancialHealth) + "%"
+
+        /**/
+
     }
 
     private fun checkIfNaN() {

@@ -38,7 +38,7 @@
                     android:padding="20dp">
 
                     <ImageView
-                        android:src="@drawable/icon_cash_flow"
+                        android:src="@drawable/money_expenses"
                         android:contentDescription="Profit"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
@@ -50,8 +50,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="12sp"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
                         android:text="Balance Cash Flow"
                         android:textColor="@color/white"/>
 
@@ -60,7 +60,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:layout_marginTop="5dp">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -68,13 +69,12 @@
                             android:id="@+id/tv_summary"
                             android:gravity="center"
                             android:textSize="16sp"
-                            android:textStyle="bold"
                             android:layout_marginVertical="10dp"
-                            android:text="Loading data 🔃 \n Thank you for your patience ☺"
+                            android:text="Loading..."
                             android:textColor="@color/white"/>
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:layout_width="110dp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/btn_details"
                             android:text="View More"
@@ -82,7 +82,7 @@
                             android:background="@drawable/button_border_white"
                             android:backgroundTint="@color/light_green"
                             android:textColor="@color/white"
-                            android:layout_marginVertical="15dp"
+                            android:layout_marginTop="10dp"
                             />
 
                         <!--<TextView
@@ -221,20 +221,20 @@
                 android:textStyle="bold"
                 android:textColor="@color/dark_green"
                 android:textSize="20sp"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:layout_marginBottom="10dp"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="(Click the empty space below to see the graph) "
-                android:textStyle="bold"
-                android:textColor="@color/light_green"
-                android:textSize="16sp"
-                android:layout_margin="5dp"
-                android:gravity="center"
-                />
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="(Click the empty space below to see the graph) "-->
+<!--                android:textStyle="bold"-->
+<!--                android:textColor="@color/light_green"-->
+<!--                android:textSize="16sp"-->
+<!--                android:layout_margin="5dp"-->
+<!--                android:gravity="center"-->
+<!--                />-->
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/balance_chart"

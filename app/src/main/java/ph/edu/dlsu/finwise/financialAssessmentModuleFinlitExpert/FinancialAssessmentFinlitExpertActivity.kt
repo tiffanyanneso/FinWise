@@ -1550,20 +1550,6 @@ class FinancialAssessmentFinlitExpertActivity : AppCompatActivity() {
                 "isCorrect" to true
             )
             firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "An item you want to buy",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
-
-            choice = hashMapOf(
-                "questionID" to questionID,
-                "choice" to "A way to earn more money",
-                "isCorrect" to false
-            )
-            firestore.collection("AssessmentChoices").add(choice)
         }
         question = hashMapOf(
             "assessmentID" to assessmentID,
