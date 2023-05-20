@@ -60,6 +60,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         budgetItemsIDArrayList.clear()
+        binding.title.text = "Overall Spending Performance"
 
         getBudgeting()
         setNavigationBar()

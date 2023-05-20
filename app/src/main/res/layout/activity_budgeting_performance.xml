@@ -58,6 +58,37 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+
+                        <TextView
+                            android:id="@+id/title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            tools:text="Overall Budgeting Performance"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"
+                            android:textAlignment="center"
+                            android:layout_marginBottom="10dp"
+                            android:layout_gravity="center"/>
+
+                        <ImageView
+                            android:id="@+id/btn_audio_overall_budgeting_performance"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/baseline_mic_24"
+                            app:tint="@color/light_grey"
+                            android:layout_marginBottom="8dp"
+                            android:layout_marginLeft="5dp"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
 
@@ -130,14 +161,40 @@
                     android:backgroundTint="@color/white"
                     android:layout_marginBottom="10dp">
 
-                    <TextView
+                   <!-- <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textStyle="bold"
                         android:text="Parental Involvement"
                         android:textSize="18sp"
                         android:textColor="@color/black"
-                        android:paddingBottom="5dp"/>
+                        android:paddingBottom="5dp"/>-->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="Parental Involvement"
+                            android:textSize="18sp"
+                            android:textColor="@color/black"
+                            android:paddingBottom="5dp"/>/>
+
+                        <ImageView
+                            android:id="@+id/btn_audio_parental_involvement"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/baseline_mic_24"
+                            app:tint="@color/dark_green"
+                            android:layout_marginTop="3dp"
+                            android:layout_marginLeft="5dp"
+                            />
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -225,14 +282,41 @@
                 android:backgroundTint="@color/white"
                 android:layout_marginBottom="10dp">
 
-                <TextView
+        <!--        <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
                     android:text="Budget Amount Accuracy"
                     android:textSize="18sp"
                     android:textColor="@color/black"
-                    android:paddingBottom="5dp"/>
+                    android:paddingBottom="5dp"/>-->
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="Budget Amount Accuracy"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:paddingBottom="5dp"/>
+
+                    <ImageView
+                        android:id="@+id/btn_audio_budget_amount_accuracy"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/baseline_mic_24"
+                        app:tint="@color/dark_green"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginLeft="5dp"
+                        />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"

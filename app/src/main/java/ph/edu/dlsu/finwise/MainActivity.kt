@@ -2,6 +2,10 @@ package ph.edu.dlsu.finwise
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -18,6 +22,7 @@ import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import ph.edu.dlsu.finwise.services.FirestoreDataSyncService
+import ph.edu.dlsu.finwise.services.FirestoreJobService
 import ph.edu.dlsu.finwise.services.GoalNotificationServices
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -44,7 +49,8 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, PersonalFinancialManagementActivity::class.java))
                     initializeDailyReminderChildNotif()
                     initializeNearDeadlineNotif()
-                    saveScores()
+                    scheduleFirestoreSyncJob(this)
+                    //saveScores()
                 }
                 else if (userObject?.userType == "Parent") {
                     startActivity(Intent(this, ParentLandingPageActivity::class.java))
@@ -131,6 +137,27 @@ class MainActivity : AppCompatActivity() {
             AlarmManager.INTERVAL_DAY,
             pendingIntent
         )
+    }
+
+    fun scheduleFirestoreSyncJob(context: Context) {
+        val jobId = 1 // Unique job ID
+
+        val componentName = ComponentName(context, FirestoreJobService::class.java)
+        val jobInfo = JobInfo.Builder(jobId, componentName)
+            .setRequiresCharging(false) // Set any additional constraints if needed
+            .setPersisted(true) // Allow the job to survive device reboots
+            .setMinimumLatency(getTimeUntilNextMidnight()) // Set the initial delay until 11:59 PM
+            .setPeriodic(AlarmManager.INTERVAL_DAY) // Repeat the job daily
+            .build()
+
+        val jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        jobScheduler.schedule(jobInfo)
+    }
+
+    fun getTimeUntilNextMidnight(): Long {
+        val currentTime = System.currentTimeMillis()
+        val midnight = (currentTime / 86400000L + 1) * 86400000L // Next midnight timestamp
+        return midnight - currentTime
     }
 
     private fun saveScores() {

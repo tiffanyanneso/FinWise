@@ -98,12 +98,12 @@ class ParentLandingPageActivity : AppCompatActivity() {
             goalsToReviewAdapter.notifyDataSetChanged()
 
             dialogBinding.btnFinact.setOnClickListener {
-//                var intent = Intent(this, ParentFinancialActivity::class.java)
-//                var bundle = Bundle()
-//                bundle.putString("childID", childID)
-//                intent.putExtras(bundle)
-//                startActivity(intent)
-//                dialog.dismiss()
+                var intent = Intent(this, ParentPendingForReviewActivity::class.java)
+                var bundle = Bundle()
+                bundle.putString("view", "goal")
+                intent.putExtras(bundle)
+                startActivity(intent)
+                dialog.dismiss()
             }
 
             dialogBinding.btnClose.setOnClickListener { dialog.dismiss() }
@@ -136,12 +136,12 @@ class ParentLandingPageActivity : AppCompatActivity() {
             earningReviewAdapter.notifyDataSetChanged()
 
             dialogBinding.btnEarning.setOnClickListener {
-//                var intent = Intent(this, ParentFinancialActivity::class.java)
-//                var bundle = Bundle()
-//                bundle.putString("childID", childID)
-//                intent.putExtras(bundle)
-//                startActivity(intent)
-//                dialog.dismiss()
+                var intent = Intent(this, ParentPendingForReviewActivity::class.java)
+                var bundle = Bundle()
+                bundle.putString("view", "earning")
+                intent.putExtras(bundle)
+                startActivity(intent)
+                dialog.dismiss()
             }
 
             dialogBinding.btnClose.setOnClickListener { dialog.dismiss() }

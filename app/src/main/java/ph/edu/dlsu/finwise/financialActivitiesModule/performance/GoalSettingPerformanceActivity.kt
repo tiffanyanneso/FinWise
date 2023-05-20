@@ -55,6 +55,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
         // and initializes the navbar
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+        binding.title.text = "Overall Goal Setting Performance"
 
         initializeRating()
         loadBackButton()

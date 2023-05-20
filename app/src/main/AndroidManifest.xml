@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -17,6 +18,13 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
+            android:name=".parentFinancialActivitiesModule.ParentPendingForReviewActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".childDashboardModule.FinancialAssessmentsDetailsActivity"
             android:exported="false" />
 
@@ -24,7 +32,9 @@
             android:name=".services.FirestoreDataSyncService"
             android:enabled="true"
             android:exported="false" />
-
+        <service
+            android:name=".services.FirestoreJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
             android:name=".services.GoalNotificationServices"
             android:enabled="true"
@@ -218,8 +228,7 @@
             android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.ParentLandingPageActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".parentFinancialActivitiesModule.ParentSettingAGoalActivity"
             android:exported="false" />
@@ -274,8 +283,7 @@
         </activity>
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".profileModule.ProfileActivity"
             android:exported="false" />
@@ -336,8 +344,7 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".financialActivitiesModule.EditGoal"
             android:exported="false" />
@@ -349,8 +356,7 @@
             android:exported="true" />
         <activity
             android:name=".parentFinancialManagementModule.ParentFinancialManagementActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".parentFinancialManagementModule.ParentSendMoneyActivity"
             android:exported="false" />
@@ -374,8 +380,7 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">

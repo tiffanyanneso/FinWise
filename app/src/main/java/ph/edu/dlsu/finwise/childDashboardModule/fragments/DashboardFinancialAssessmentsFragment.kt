@@ -80,7 +80,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDashboardFinancialAssessmentsBinding.bind(view)
-
+        binding.title.text = "Financial Assessment Score"
         getArgumentsBundle()
         getFinancialAssessmentScore()
     }
