@@ -21,7 +21,12 @@
             android:exported="false" />
 
         <service
-            android:name=".GoalNotificationServices"
+            android:name=".services.FirestoreDataSyncService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name=".services.GoalNotificationServices"
             android:enabled="true"
             android:exported="false" />
 
@@ -214,14 +219,6 @@
         <activity
             android:name=".parentFinancialActivitiesModule.ParentLandingPageActivity"
             android:exported="false">
-
-            <!--
-<intent-filter>
-    <action android:name="android.intent.action.MAIN" />
-
-    <category android:name="android.intent.category.LAUNCHER" />
-</intent-filter>
-            -->
         </activity>
         <activity
             android:name=".parentFinancialActivitiesModule.ParentSettingAGoalActivity"
@@ -278,13 +275,6 @@
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
             android:exported="false">
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
         </activity>
         <activity
             android:name=".profileModule.ProfileActivity"
@@ -347,19 +337,7 @@
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
             android:exported="false">
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            -->
         </activity>
-        <!--
-      <activity
-            android:name=".personalFinancialManagementModule.TransactionSortActivity"
-            android:exported="false" />
-        -->
         <activity
             android:name=".financialActivitiesModule.EditGoal"
             android:exported="false" />
@@ -372,14 +350,6 @@
         <activity
             android:name=".parentFinancialManagementModule.ParentFinancialManagementActivity"
             android:exported="false">
-
-            <!--
-<intent-filter>
-    <action android:name="android.intent.action.MAIN" />
-    <category android:name="android.intent.category.LAUNCHER" />
-</intent-filter>
-            -->
-
         </activity>
         <activity
             android:name=".parentFinancialManagementModule.ParentSendMoneyActivity"
@@ -405,20 +375,15 @@
         <activity
             android:name=".loginRegisterModule.LoginActivity"
             android:exported="true">
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="false">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
 
             <!-- <meta-data -->
             <!-- android:name="android.app.lib_name" -->

@@ -5,13 +5,10 @@ import android.app.PendingIntent
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.databinding.ActivityAddFriendsBinding
 import ph.edu.dlsu.finwise.databinding.ActivityMainBinding
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity
 import ph.edu.dlsu.finwise.loginRegisterModule.LoginActivity
@@ -19,8 +16,9 @@ import ph.edu.dlsu.finwise.loginRegisterModule.ParentRegisterActivity
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
-import ph.edu.dlsu.finwise.parentFinancialManagementModule.ParentFinancialManagementActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
+import ph.edu.dlsu.finwise.services.FirestoreDataSyncService
+import ph.edu.dlsu.finwise.services.GoalNotificationServices
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -46,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, PersonalFinancialManagementActivity::class.java))
                     initializeDailyReminderChildNotif()
                     initializeNearDeadlineNotif()
-
+                    saveScores()
                 }
                 else if (userObject?.userType == "Parent") {
                     startActivity(Intent(this, ParentLandingPageActivity::class.java))
@@ -127,6 +125,29 @@ class MainActivity : AppCompatActivity() {
         var  notificationIntent= Intent(this, GoalNotificationServices::class.java)
         notificationIntent.putExtra("notificationType", "checkForUpdatesParent")
         var pendingIntent = PendingIntent.getService(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    }
+
+    private fun saveScores() {
+        println("print in save main ")
+        val intent = Intent(applicationContext, FirestoreDataSyncService::class.java)
+        val pendingIntent = PendingIntent.getService(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 12)
+            set(Calendar.MINUTE, 50)
+        }
+
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,

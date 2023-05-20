@@ -1,5 +1,7 @@
 package ph.edu.dlsu.finwise.loginRegisterModule
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -21,8 +23,13 @@ import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActi
 import ph.edu.dlsu.finwise.databinding.ActivityLoginBinding
 import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity
+import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
+import ph.edu.dlsu.finwise.services.FirestoreDataSyncService
+import ph.edu.dlsu.finwise.services.GoalNotificationServices
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class LoginActivity : AppCompatActivity() {
 
@@ -30,11 +37,16 @@ class LoginActivity : AppCompatActivity() {
     lateinit var email: String
     lateinit var password: String
     private var firestore = Firebase.firestore
+    private lateinit var currentUser:String
+
+    private lateinit var alarmManager:AlarmManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
 
         forgotPassWord()
         register()
@@ -48,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
                     .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().setPersistenceEnabled(true).build()
-                        val currentUser: String = FirebaseAuth.getInstance().currentUser!!.uid
+                        currentUser  = FirebaseAuth.getInstance().currentUser!!.uid
                         Log.d("xxcxcxcxc", "login: "+currentUser)
 
                         firestore.collection("Users").document(currentUser).get()
@@ -101,14 +113,104 @@ class LoginActivity : AppCompatActivity() {
         val user = documentSnapshot.toObject<Users>()!!
         when (user.userType) {
             "Parent" -> {
+                initializeDailyReminderParentNotif()
                 goToParentLandingPage()
             }
             "Child" -> {
+                initializeDailyReminderChildNotif()
+                initializeNearDeadlineNotif()
+                saveScores()
                 goToChild(isFirstLogin)
             }
             "Financial Expert" -> goToFinLitExpert()
         }
     }
+
+    private fun initializeNearDeadlineNotif() {
+        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser!!).whereEqualTo("status", "Ongoing").get().addOnSuccessListener { goals ->
+            for (goal in goals) {
+                var goalObject = goal.toObject<FinancialGoals>()
+                val dueDate = goalObject.targetDate!!.toDate()
+                val currentDate = Date()
+                val daysUntilDue = TimeUnit.DAYS.convert(dueDate.time - currentDate.time, TimeUnit.MILLISECONDS).toInt()
+                if ((goalObject.goalLength == "Short" && daysUntilDue <= 2) ||
+                    (goalObject.goalLength == "Medium" && daysUntilDue <= 5) ||
+                    (goalObject.goalLength == "Long" && daysUntilDue <= 7)){
+
+                    val calendar = Calendar.getInstance().apply {
+                        set(Calendar.HOUR_OF_DAY, 12)
+                        set(Calendar.MINUTE, 0)
+                    }
+                    var  notificationIntent= Intent(this, GoalNotificationServices::class.java)
+                    notificationIntent.putExtra("notificationType", "nearDeadline")
+                    var pendingIntent = PendingIntent.getService(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
+                    alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.timeInMillis,
+                        pendingIntent
+                    )
+                }
+            }
+        }
+    }
+
+    private fun initializeDailyReminderChildNotif() {
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 18)
+            set(Calendar.MINUTE, 0)
+        }
+
+        var  notificationIntent= Intent(this, GoalNotificationServices::class.java)
+        notificationIntent.putExtra("notificationType", "recordTransactions")
+        var pendingIntent = PendingIntent.getService(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    }
+
+    private fun initializeDailyReminderParentNotif() {
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 18)
+            set(Calendar.MINUTE, 0)
+        }
+
+        var  notificationIntent= Intent(this, GoalNotificationServices::class.java)
+        notificationIntent.putExtra("notificationType", "checkForUpdatesParent")
+        var pendingIntent = PendingIntent.getService(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    }
+
+    private fun saveScores() {
+        println("print in save score llogin")
+        val intent = Intent(applicationContext, FirestoreDataSyncService::class.java)
+        val pendingIntent = PendingIntent.getService(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 12)
+            set(Calendar.MINUTE, 25)
+        }
+
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+    }
+
 
     private fun goToChild(isFirstLogin: Boolean) {
         if (isFirstLogin) {

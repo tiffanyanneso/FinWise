@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.ParentSettingsActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import ph.edu.dlsu.finwise.databinding.ItemChildBinding
 import ph.edu.dlsu.finwise.model.Users
@@ -56,6 +58,15 @@ class ParentChildrenAdapter: RecyclerView.Adapter<ParentChildrenAdapter.ChildVie
                 val child = it.toObject<Users>()
                 itemBinding.tvChildId.text = it.id
                 itemBinding.tvUsername.text = child?.username
+            }
+
+            itemBinding.btnSettings.setOnClickListener {
+                var settings = Intent(context, ParentSettingsActivity::class.java)
+                var bundle = Bundle()
+                bundle.putString("childID", itemBinding.tvChildId.text.toString())
+                bundle.putString("parentID", FirebaseAuth.getInstance().currentUser!!.uid)
+                settings.putExtras(bundle)
+                context.startActivity(settings)
             }
         }
 

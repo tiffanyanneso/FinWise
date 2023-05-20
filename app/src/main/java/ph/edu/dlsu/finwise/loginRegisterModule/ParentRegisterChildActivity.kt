@@ -21,6 +21,9 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityParentRegisterChildBinding
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class ParentRegisterChildActivity : AppCompatActivity() {
@@ -70,11 +73,14 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                             "parentID" to parentuserID,
                             "userType" to "Child",
                             "number" to contactNumber,
-                            "lastShown" to Timestamp.now())
+                            "lastShown" to Timestamp.now(),
+                            "lastLogin" to Timestamp.now())
 
                         println("current/child user   " + FirebaseAuth.getInstance().currentUser!!.uid.toString())
 
                         val childID = FirebaseAuth.getInstance().currentUser!!.uid
+
+                        createSettings(parentuserID, childID)
 
                         firestore.collection("Users").document(childID).set(user).addOnSuccessListener { childUser ->
                             clearForm()
@@ -138,6 +144,57 @@ class ParentRegisterChildActivity : AppCompatActivity() {
 
         firestore.collection("ChildWallet").add(cashWallet)
         firestore.collection("ChildWallet").add(mayaWallet)
+
+    }
+
+    private fun createSettings(parentID:String, childID:String) {
+    //compute age
+        val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("M/d/yyyy")
+        val from = LocalDate.now()
+        val to = LocalDate.parse(birthday, dateFormatter)
+        var difference = Period.between(to, from)
+
+        var age = difference.years
+        if (age == 9) {
+            var settings = hashMapOf(
+                "childID" to childID,
+                 "parentID" to parentID,
+                 "maxAmountActivities" to 3000.00,
+                 "alertAmount" to 0.00,
+                 "buyingItem" to true,
+                 "planingEvent" to false,
+                 "emergencyFund" to false,
+                 "donatingCharity" to false,
+                 "situationalShopping" to false
+            )
+            firestore.collection("Settings").add(settings)
+        } else if (age == 10 || age == 11) {
+            var settings = hashMapOf(
+                "childID" to childID,
+                "parentID" to parentID,
+                "maxAmountActivities" to 5000.00,
+                "alertAmount" to 0.00,
+                "buyingItem" to true,
+                "planingEvent" to false,
+                "emergencyFund" to false,
+                "donatingCharity" to true,
+                "situationalShopping" to true
+            )
+            firestore.collection("Settings").add(settings)
+        } else if (age == 12) {
+            var settings = hashMapOf(
+                "childID" to childID,
+                "parentID" to parentID,
+                "maxAmountActivities" to 10000.00,
+                "alertAmount" to 0.00,
+                "buyingItem" to true,
+                "planingEvent" to true,
+                "emergencyFund" to true,
+                "donatingCharity" to true,
+                "situationalShopping" to true
+            )
+            firestore.collection("Settings").add(settings)
+        }
 
     }
 

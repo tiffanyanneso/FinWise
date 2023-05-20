@@ -1,22 +1,14 @@
-package ph.edu.dlsu.finwise
+package ph.edu.dlsu.finwise.services
 
 import android.app.IntentService
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.model.FinancialActivities
-import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 class GoalNotificationServices : IntentService("GoalNotificationServices") {
 
