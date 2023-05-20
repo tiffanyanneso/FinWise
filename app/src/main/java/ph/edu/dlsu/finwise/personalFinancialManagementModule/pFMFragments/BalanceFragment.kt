@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -43,6 +44,8 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     private var user = "child"
     private lateinit var chart: LineChart
     var graphData = mutableListOf<Entry>()
+    private lateinit var mediaPlayer: MediaPlayer
+
 
 
     override fun onCreateView(

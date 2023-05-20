@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.childDashboardModule
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -80,6 +81,9 @@ class ChildDashboardActivity : AppCompatActivity(){
         R.drawable.baseline_assessment_24
     )
 
+    private lateinit var mediaPlayer: MediaPlayer
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,6 +95,7 @@ class ChildDashboardActivity : AppCompatActivity(){
         initializeFragments()
         initializeDateButtons()
     }
+
 
     private fun getPerformance() {
         //get the age of the child
@@ -107,6 +112,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             getPersonalFinancePerformance()
         }
     }
+
 
     private fun initializeDateButtons() {
         //initializeWeeklyButton()
@@ -569,8 +575,30 @@ class ChildDashboardActivity : AppCompatActivity(){
         binding.tvPerformanceStatus.text = performance
         binding.tvPerformancePercentage.text =  DecimalFormat("##0.00").format(overallFinancialHealth) + "%"
 
-        /**/
+        loadAudio()
+    }
+    private fun loadAudio() {
+        /*TODO: Change binding and Audio file in mediaPlayer
+        binding.ivAudio.setOnClickListener {
+            if (!this::mediaPlayer.isInitialized) {
+                mediaPlayer = MediaPlayer.create(context, R.raw)
+            }
 
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+                mediaPlayer.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayer.start()
+        }*/
+    }
+
+    override fun onDestroy() {
+        if (this::mediaPlayer.isInitialized) {
+            mediaPlayer.stop()
+            mediaPlayer.release()
+        }
+        super.onDestroy()
     }
 
     private fun checkIfNaN() {

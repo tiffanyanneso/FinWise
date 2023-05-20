@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.financialActivitiesModule.performance
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -35,6 +36,10 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
     private var nRelevant = 0.00F
     private var nTimeBound = 0.00F
 
+    private var mediaPlayer: MediaPlayer? = null
+    private var mediaPlayerGoalDialog: MediaPlayer? = null
+    private var mediaPlayerIndividualDialog: MediaPlayer? = null
+
     private var SMARTIndividual = "Specific"
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
@@ -55,13 +60,25 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
         loadBackButton()
 
         binding.btnViewSMARTGoalsInfo.setOnClickListener{
+            mediaPlayer?.let { pauseMediaPlayer(it) }
             showGoalDialog()
         }
 
         binding.btnReviewConcept.setOnClickListener{
+            mediaPlayer?.let { pauseMediaPlayer(it) }
             showIndividualDialog()
         }
     }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
+
     private fun RatingObject(name: String, score: Float): Rating {
         val rating = Rating()
 
@@ -89,64 +106,78 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
             var percentage = (overall / 5) * 100
 
             binding.btnReviewConcept.visibility = View.GONE
-
+            /*TODO: Change binding and Audio file in mediaPlayer*/
+            var audio = R.raw.sample
             if (percentage >= 96) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.excellent)
                 binding.tvPerformanceStatus.text = "Excellent"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
                 binding.tvPerformanceText.text = "Excellent work! Goal Setting is your strong point. Keep setting SMART goals!"
             } else if (percentage < 96 && percentage >= 86) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.amazing)
                 binding.tvPerformanceStatus.text = "Amazing"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
                 binding.tvPerformanceText.text = "Amazing job! Goal Setting is your strong point. Keep setting SMART goals!"
             } else if (percentage < 86 && percentage >= 76) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.great)
                 binding.tvPerformanceStatus.text = "Great"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
                 binding.tvPerformanceText.text = "Great job! You are performing well. Keep setting SMART goals!"
             } else if (percentage < 76 && percentage >= 66) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.good)
                 binding.tvPerformanceStatus.text = "Good"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
                 binding.tvPerformanceText.text = "Good job! By reviewing what SMART goals are, you’ll surely up your performance!"
             } else if (percentage < 66 && percentage >= 56) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.average)
                 binding.tvPerformanceStatus.text = "Average"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
                 binding.tvPerformanceText.text = "Nice work! Work on improving your goal setting performance. Set SMART Goals!"
                 showPerformanceButton()
             } else if (percentage < 56 && percentage >= 46) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.nearly_there)
                 binding.tvPerformanceStatus.text = "Nearly There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "You're nearly there! Improve your SMART goal setting to get there!"
                 showPerformanceButton()
             } else if (percentage < 46 && percentage >= 36) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.almost_there)
                 binding.tvPerformanceStatus.text = "Almost There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "Almost there! You need to improve your SMART goal setting!"
                 showPerformanceButton()
             } else if (percentage < 36 && percentage >= 26) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.getting_there)
                 binding.tvPerformanceStatus.text = "Getting There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "Getting there! You need to improve your SMART goal setting!"
                 showPerformanceButton()
+                audio = R.raw.sample
             } else if (percentage < 26 && percentage >= 16) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                 binding.tvPerformanceStatus.text = "Not Quite\nThere"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Improve your SMART goal setting!"
                 showPerformanceButton()
             } else if (percentage < 15) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.bad)
                 binding.tvPerformanceStatus.text = "Needs\nImprovement"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                 binding.tvPerformanceText.text = "Uh oh! You need to work on your SMART goal setting!"
                 showPerformanceButton()
             }
+            loadOverallAudio(audio)
+
 
             val ratingArray = ArrayList<Rating>()
 
@@ -193,6 +224,29 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadOverallAudio(audio: Int) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        binding.imgFace.setOnClickListener {
+            if (mediaPlayer == null) {
+                mediaPlayer = MediaPlayer.create(this, audio)
+            }
+
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
+                mediaPlayer?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayer?.start()
+        }
+    }
+
+    override fun onDestroy() {
+        mediaPlayer?.let { releaseMediaPlayer(it) }
+        mediaPlayerGoalDialog?.let { releaseMediaPlayer(it) }
+        mediaPlayerIndividualDialog?.let { releaseMediaPlayer(it) }
+        super.onDestroy()
+    }
+
     private fun showPerformanceButton(){
         binding.btnReviewConcept.visibility = View.VISIBLE
     }
@@ -204,6 +258,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
             onBackPressed()
         }
     }
+
 
     private fun showGoalDialog() {
 
@@ -232,32 +287,63 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
             goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(goToNewGoal)
         }
+        //TODO: Change audio and dialogBinding
+        val audio = R.raw.sample
+        dialogBinding.btnSoundSmartReview.setOnClickListener {
+            if (mediaPlayerGoalDialog == null) {
+                mediaPlayerGoalDialog = MediaPlayer.create(this, audio)
+            }
+
+            if (mediaPlayerGoalDialog?.isPlaying == true) {
+                mediaPlayerGoalDialog?.pause()
+                mediaPlayerGoalDialog?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerGoalDialog?.start()
+        }
+        dialog.setOnDismissListener { mediaPlayerGoalDialog?.let { it1 -> pauseMediaPlayer(it1) } }
 
         dialog.show()
     }
 
+    private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
+        mediaPlayer.let {
+            if (it.isPlaying) {
+                it.pause()
+                it.seekTo(0)
+            }
+        }
+    }
+
     private fun showIndividualDialog() {
 
-        var dialogBinding= DialogSmartIndividualBinding.inflate(getLayoutInflater())
-        var dialog= Dialog(this);
+        val dialogBinding= DialogSmartIndividualBinding.inflate(getLayoutInflater())
+        val dialog= Dialog(this);
 
+        //TODO: Change audio and dialogBinding
+        var audio = R.raw.sample
         if (SMARTIndividual == "Specific") {
+            audio = R.raw.sample
             dialogBinding.tvName.text = "Specific"
             dialogBinding.tvDefinition.text = "Specific goals are very clear with what should be achieved."
             dialogBinding.tvGuideQuestions.text = "1. What do I want to achieve?\n2. Is the goal clear?\n3. Have I included everything I want to achieve?"
         } else if (SMARTIndividual == "Measurable") {
+            audio = R.raw.sample
             dialogBinding.tvName.text = "Measurable"
             dialogBinding.tvDefinition.text = "Measurable goals have target amounts. "
             dialogBinding.tvGuideQuestions.text = "1. Can my goal be measured?\n" + "2. How much do I need to save?\n" + "3. Have I indicated a target amount?"
         } else if (SMARTIndividual == "Achievable") {
+            audio = R.raw.sample
             dialogBinding.tvName.text = "Achievable"
             dialogBinding.tvDefinition.text = "Achievable goals are realistic."
             dialogBinding.tvGuideQuestions.text = "1. Can I achieve the goal on or before the target date?\n" + "2. Will I be able to save or earn enough money?\n"
         } else if (SMARTIndividual == "Relevant") {
+            audio = R.raw.sample
             dialogBinding.tvName.text = "Relevant"
             dialogBinding.tvDefinition.text = "Relevant goals are important to you and with what you want to do."
             dialogBinding.tvGuideQuestions.text = "1.Is this goal important to me?\n" + "2. Why do I want to achieve this goal?\n3. How will this goal benefit me?"
         } else if (SMARTIndividual == "Time-Bound") {
+            audio = R.raw.sample
             dialogBinding.tvName.text = "Time-Bound"
             dialogBinding.tvDefinition.text = "Time-bound goals have a target or end date."
             dialogBinding.tvGuideQuestions.text = "1. How long will it take me to complete this goal?\n" + "2. Can I complete this goal on or before the target date?"
@@ -270,6 +356,20 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }
+
+        dialogBinding.btnSoundSmartIndividual.setOnClickListener {
+            if (mediaPlayerIndividualDialog == null) {
+                mediaPlayerIndividualDialog = MediaPlayer.create(this, audio)
+            }
+
+            if (mediaPlayerIndividualDialog?.isPlaying == true) {
+                mediaPlayerIndividualDialog?.pause()
+                mediaPlayerIndividualDialog?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerIndividualDialog?.start()
+        }
+        dialog.setOnDismissListener { mediaPlayerIndividualDialog?.let { it1 -> pauseMediaPlayer(it1) } }
 
         dialog.show()
     }
