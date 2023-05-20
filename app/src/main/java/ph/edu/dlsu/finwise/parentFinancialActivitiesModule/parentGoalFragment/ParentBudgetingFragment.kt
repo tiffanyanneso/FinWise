@@ -201,6 +201,7 @@ class ParentBudgetingFragment : Fragment() {
             binding.tvPerformanceText.text = "Amazing"
             binding.tvPerformanceText.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "Your child is amazing at budgeting!  Encourage them to keep up the excellent work."
+            showSeeMoreButton()
         } else if (overall < 86 && overall >= 76) {
             binding.imgFace.setImageResource(R.drawable.great)
             binding.tvPerformanceText.text = "Great"
@@ -217,7 +218,7 @@ class ParentBudgetingFragment : Fragment() {
             binding.imgFace.setImageResource(R.drawable.average)
             binding.tvPerformanceText.text = "Average"
             binding.tvPerformanceText.setTextColor(getResources().getColor(R.color.yellow))
-            binding.tvPerformanceText.text = "Your child is doing a nice job of budgeting! Encourage them to always doublecheck their budget."
+            binding.tvPerformanceText.text = "Your child is doing a nice job of budgeting! Encourage them to always double check their budget."
             showSeeMoreButton()
         } else if (overall < 56 && overall >= 46) {
             binding.imgFace.setImageResource(R.drawable.nearly_there)
