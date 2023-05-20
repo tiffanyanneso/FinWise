@@ -39,9 +39,9 @@ class EditProfileActivity : AppCompatActivity() {
         Color.BLACK,
         Color.BLUE,
         Color.RED,
-        Color.GREEN,
-        Color.CYAN,
-        Color.MAGENTA
+        Color.parseColor("#058B47"), // Dark Green color
+        Color.parseColor("#FFA500"), // Orange color
+        Color.parseColor("#E75480") // Pink color
     )
 
     private var currentColorIndex = 0
