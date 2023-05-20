@@ -23,6 +23,7 @@ import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityNewGoalBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.model.SettingsModel
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import java.text.DecimalFormat
@@ -239,43 +240,62 @@ class NewGoal : AppCompatActivity() {
     private fun initializeDropDownForReasons() {
         var dropdownContent = ArrayList<String>()
 
-        firestore.collection("Users").document(childID).get().addOnSuccessListener {
-            var child = it.toObject<Users>()
-
-            //compute age
-            val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
-            val from = LocalDate.now()
-            val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
-            val to = LocalDate.parse(date.toString(), dateFormatter)
-            var difference = Period.between(to, from)
-
-            currentChildAge = difference.years
-            if (currentChildAge == 9) {
-                maxAmount = 3000F
-                binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#0.00").format(maxAmount)}"
-            }
-            dropdownContent.add("Buying Items")
-
-            if (currentChildAge == 10 || currentChildAge == 11 || currentChildAge == 12) {
-                maxAmount = 5000F
+        firestore.collection("Settings").whereEqualTo("childID", childID).get().addOnSuccessListener {
+            if (!it.isEmpty) {
+                var settings = it.documents[0].toObject<SettingsModel>()
+                maxAmount = settings?.maxAmountActivities!!.toFloat()
                 binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#0.00").format(maxAmount)}"
 
-                dropdownContent.add("Situational Shopping")
-                dropdownContent.add("Donating To Charity")
-
-                if (currentChildAge == 12) {
-                    maxAmount = 10000F
-                    binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#0.00").format(maxAmount)}"
-
+                if (settings.buyingItem == true)
+                    dropdownContent.add("Buying Items")
+                if (settings.donatingCharity == true)
+                    dropdownContent.add("Donating To Charity")
+                if (settings.situationalShopping == true)
+                    dropdownContent.add("Situational Shopping")
+                if (settings.planingEvent == true)
                     dropdownContent.add("Planning An Event")
+                if (settings.emergencyFund == true)
                     dropdownContent.add("Saving For Emergency Funds")
-                }
+
+                // for the dropdown
+                val adapter = ArrayAdapter(this, R.layout.list_item, dropdownContent)
+                binding.dropdownActivity.setAdapter(adapter)
             }
         }
 
-        // for the dropdown
-        val adapter = ArrayAdapter(this, R.layout.list_item, dropdownContent)
-        binding.dropdownActivity.setAdapter(adapter)
+//        firestore.collection("Users").document(childID).get().addOnSuccessListener {
+//            var child = it.toObject<Users>()
+//
+//            //compute age
+//            val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+//            val from = LocalDate.now()
+//            val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+//            val to = LocalDate.parse(date.toString(), dateFormatter)
+//            var difference = Period.between(to, from)
+//
+//            currentChildAge = difference.years
+//            if (currentChildAge == 9) {
+//                maxAmount = 3000F
+//                binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#0.00").format(maxAmount)}"
+//            }
+//            dropdownContent.add("Buying Items")
+//
+//            if (currentChildAge == 10 || currentChildAge == 11 || currentChildAge == 12) {
+//                maxAmount = 5000F
+//                binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#0.00").format(maxAmount)}"
+//
+//                dropdownContent.add("Situational Shopping")
+//                dropdownContent.add("Donating To Charity")
+//
+//                if (currentChildAge == 12) {
+//                    maxAmount = 10000F
+//                    binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#0.00").format(maxAmount)}"
+//
+//                    dropdownContent.add("Planning An Event")
+//                    dropdownContent.add("Saving For Emergency Funds")
+//                }
+//            }
+//        }
     }
 
     private fun filledUp() : Boolean {

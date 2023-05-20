@@ -22,10 +22,7 @@ import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEditGoalBinding
 import ph.edu.dlsu.finwise.databinding.DialogDeleteGoalWarningBinding
-import ph.edu.dlsu.finwise.model.ChildWallet
-import ph.edu.dlsu.finwise.model.FinancialGoals
-import ph.edu.dlsu.finwise.model.Transactions
-import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -196,26 +193,36 @@ class EditGoal : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun checkAge() {
-        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-            var child = it.toObject<Users>()
 
-            //compute age
-            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
-            val from = LocalDate.now()
-            val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
-            val to = LocalDate.parse(date.toString(), dateFormatter)
-            var difference = Period.between(to, from)
-
-            var age = difference.years
-            if (age == 9)
-                maxAmount = 3000F
-            else if (age == 10 || age == 11)
-                maxAmount = 5000F
-            else
-                maxAmount = 10000F
-
-            binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#,##0.00").format(maxAmount)}"
+        firestore.collection("Settings").whereEqualTo("childID", currentUser).get().addOnSuccessListener {
+            if (!it.isEmpty) {
+                var settings = it.documents[0].toObject<SettingsModel>()
+                maxAmount = settings?.maxAmountActivities!!.toFloat()
+                binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#0.00").format(maxAmount)}"
+            }
         }
+
+
+//        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+//            var child = it.toObject<Users>()
+//
+//            //compute age
+//            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+//            val from = LocalDate.now()
+//            val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+//            val to = LocalDate.parse(date.toString(), dateFormatter)
+//            var difference = Period.between(to, from)
+//
+//            var age = difference.years
+//            if (age == 9)
+//                maxAmount = 3000F
+//            else if (age == 10 || age == 11)
+//                maxAmount = 5000F
+//            else
+//                maxAmount = 10000F
+//
+//            binding.tvMaxAmount.text = "The max amount that can be set is ₱${DecimalFormat("#,##0.00").format(maxAmount)}"
+//        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
