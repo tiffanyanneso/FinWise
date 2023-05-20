@@ -86,6 +86,8 @@ class ChildDashboardActivity : AppCompatActivity(){
         binding = ActivityChildDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.title.text = "Overall Financial Literacy Score"
+
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_dashboard)
         getPerformance()
         initializeFragments()

@@ -83,7 +83,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <TextView
+                     <!--   <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_what"
@@ -91,7 +91,36 @@
                             android:text="What is this Assessment?"
                             android:textStyle="bold"
                             android:textColor="@color/white"
-                            />
+                            />-->
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_gravity="center"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/tv_what"
+                                android:textSize="18dp"
+                                android:text="What is this Assessment?"
+                                android:layout_marginBottom="10dp"
+                                android:textStyle="bold"
+                                android:textColor="@color/white" />
+
+
+                            <ImageView
+                                android:id="@+id/btn_audio_what_is_this_assessment"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@drawable/baseline_mic_24"
+                                app:tint="@color/light_grey"
+                                android:layout_marginBottom="10dp"
+                                />
+
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/tv_description"

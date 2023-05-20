@@ -55,7 +55,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDashboardPersonalFinanceBinding.bind(view)
-
+        binding.title.text = "Personal Finance Score"
         getArgumentsBundle()
         initializeBalanceLineGraph()
         //getPersonalFinancePerformance()

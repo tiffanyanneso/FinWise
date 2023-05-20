@@ -64,6 +64,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityBudgetingPerformanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.title.text = "Overall Budgeting Performance"
 
         getOverallBudgeting()
         setNavigationBar()
