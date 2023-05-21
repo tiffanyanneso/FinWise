@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,7 +13,6 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -32,7 +32,6 @@ import ph.edu.dlsu.finwise.model.GoalRating
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.*
@@ -43,6 +42,10 @@ class GoalSettingFragment : Fragment() {
     private lateinit var binding: FragmentGoalSettingBinding
     private var firestore = Firebase.firestore
     private lateinit var goalSettingAdapter: FinactGoalSettingAdapter
+
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var mediaPlayerGoalDialog: MediaPlayer
+    private lateinit var mediaPlayerSmartDialog: MediaPlayer
 
     private var nRatings = 0
     private var nOverall = 0.00F
@@ -90,15 +93,21 @@ class GoalSettingFragment : Fragment() {
 
 
         binding.btnViewSMARTGoalsInfo.setOnClickListener{
+            if (this::mediaPlayer.isInitialized)
+                pauseMediaPlayer(mediaPlayer)
             showGoalDialog()
         }
 
         binding.btnSeeMore.setOnClickListener {
+            if (this::mediaPlayer.isInitialized)
+                pauseMediaPlayer(mediaPlayer)
             var goToPerformance = Intent(requireContext().applicationContext, GoalSettingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
 
         binding.btnSeeMore2.setOnClickListener {
+            if (this::mediaPlayer.isInitialized)
+                pauseMediaPlayer(mediaPlayer)
             var goToPerformance = Intent(requireContext().applicationContext, GoalSettingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
@@ -161,6 +170,8 @@ class GoalSettingFragment : Fragment() {
                         assessmentTaken = false
                 }.continueWith {
                     binding.btnNewGoal.setOnClickListener {
+                        if (this::mediaPlayer.isInitialized)
+                            pauseMediaPlayer(mediaPlayer)
                         if (!assessmentTaken)
                             buildAssessmentDialog()
                         else if (ongoingGoals >= 5)
@@ -224,65 +235,77 @@ class GoalSettingFragment : Fragment() {
         }.continueWith {
             var overall = 0.00F
             binding.tvOverallRating.visibility = View.GONE
+            //TODO: Change audio
+            var audio = 0
             if (nRatings!=0) {
                 overall = nOverall / nRatings
                 var percentage = (overall / 5) * 100
 
                 if (percentage >= 96) {
+                    audio = R.raw.sample
                     binding.imgFace.setImageResource(R.drawable.excellent)
                     binding.tvPerformanceStatus.text = "Excellent"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
                     binding.tvPerformanceText.text = "Keep up the excellent work! Goal Setting is your strong point. Keep setting those goals!"
                     showSeeMoreButton()
                 } else if (percentage < 96 && percentage >= 86) {
+                    audio = R.raw.sample
                     binding.imgFace.setImageResource(R.drawable.amazing)
                     binding.tvPerformanceStatus.text = "Amazing"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
                     binding.tvPerformanceText.text = "Amazing job! You are performing well. Goal Setting is your strong point. Keep setting those goals!"
                     showSeeMoreButton()
                 } else if (percentage < 86 && percentage >= 76) {
+                    audio = R.raw.sample
                     binding.imgFace.setImageResource(R.drawable.great)
                     binding.tvPerformanceStatus.text = "Great"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
                     binding.tvPerformanceText.text = "Great job! You are performing well. Keep setting those goals!"
                     showSeeMoreButton()
                 } else if (percentage < 76 && percentage >= 66) {
+                    audio = R.raw.sample
                     binding.imgFace.setImageResource(R.drawable.good)
                     binding.tvPerformanceStatus.text = "Good"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
                     binding.tvPerformanceText.text = "Good job! With a bit more dedication and effort, you’ll surely up your performance!"
                     showSeeMoreButton()
                 } else if (percentage < 66 && percentage >= 56) {
+                    audio = R.raw.sample
                     binding.imgFace.setImageResource(R.drawable.average)
                     binding.tvPerformanceStatus.text = "Average"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
                     binding.tvPerformanceText.text = "Nice work! Work on improving your goal setting performance. Review SMART Goals!"
                     showSeeMoreButton()
                 } else if (percentage < 56 && percentage >= 46) {
+                    audio = R.raw.sample
                     binding.imgFace.setImageResource(R.drawable.nearly_there)
                     binding.tvPerformanceStatus.text = "Nearly There"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
                     showSeeMoreButton()
                 } else if (percentage < 46 && percentage >= 36) {
+                    audio = R.raw.sample
                     binding.imgFace.setImageResource(R.drawable.almost_there)
                     binding.tvPerformanceStatus.text = "Almost There"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Almost there! You need to work on your goal setting. Click review to learn how!"
                     showSeeMoreButton()
                 } else if (percentage < 36 && percentage >= 26) {
+                    audio = R.raw.sample
                     binding.imgFace.setImageResource(R.drawable.getting_there)
                     binding.tvPerformanceStatus.text = "Getting There"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Getting there! You need to work on your goal setting. Click review to learn how!"
                     showSeeMoreButton()
                 } else if (percentage < 26 && percentage >= 16) {
+                    audio = R.raw.sample
                     binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                     binding.tvPerformanceStatus.text = "Not Quite\nThere"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
                     binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
                     showSeeMoreButton()
                 } else if (percentage < 15) {
+                    audio = R.raw.sample
                     binding.imgFace.setImageResource(R.drawable.bad)
                     binding.tvPerformanceStatus.text = "Needs\nImprovement"
                     binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
@@ -292,12 +315,34 @@ class GoalSettingFragment : Fragment() {
                 binding.tvOverallRating.visibility = View.VISIBLE
                 binding.tvOverallRating.text ="${DecimalFormat("0.0").format(overall)}/5.0"
             } else {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.peso_coin)
                 binding.tvPerformanceStatus.text = "Get Started!"
                 binding.tvPerformanceText.text = "Complete your goals to see your performance"
             }
+            loadOverallAudio(audio)
+        }
+
+    }
+
+    private fun loadOverallAudio(audio: Int) {
+        //TODO: Change binding and Audio file in mediaPlayer
+
+        binding.imgFace.setOnClickListener {
+            if (!this::mediaPlayer.isInitialized) {
+                mediaPlayer = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+                mediaPlayer.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayer.start()
         }
     }
+
+
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
         goalSettingAdapter = FinactGoalSettingAdapter(requireContext().applicationContext, goalIDArrayList)
@@ -355,8 +400,49 @@ class GoalSettingFragment : Fragment() {
             this.startActivity(goToNewGoal)
             dialog.dismiss()
         }
-
+        loadSmartDialogAudio(dialogBinding)
+        dialog.setOnDismissListener { mediaPlayerSmartDialog.let { it1 -> pauseMediaPlayer(it1) } }
         dialog.show()
+    }
+
+    override fun onDestroy() {
+        if (this::mediaPlayer.isInitialized)
+            releaseMediaPlayer(mediaPlayer)
+
+        if (this::mediaPlayerGoalDialog.isInitialized)
+            releaseMediaPlayer(mediaPlayerGoalDialog)
+
+        if (this::mediaPlayerSmartDialog.isInitialized)
+            releaseMediaPlayer(mediaPlayerSmartDialog)
+
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
+
+    private fun loadSmartDialogAudio(dialogBinding: DialogSmartGoalInfoBinding) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        val audio = R.raw.sample
+
+        dialogBinding.btnSoundSmartGoalInfo.setOnClickListener {
+            if (!this::mediaPlayerSmartDialog.isInitialized) {
+                mediaPlayerSmartDialog = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayerSmartDialog.isPlaying) {
+                mediaPlayerSmartDialog.pause()
+                mediaPlayerSmartDialog.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerSmartDialog.start()
+        }
     }
 
     private fun showGoalDialog() {
@@ -387,6 +473,38 @@ class GoalSettingFragment : Fragment() {
             this.startActivity(goToNewGoal)
         }
 
+        loadGoalDialogAudio(dialogBinding)
+        dialog.setOnDismissListener { pauseMediaPlayer(mediaPlayerGoalDialog) }
+
         dialog.show()
     }
+
+    private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
+        mediaPlayer.let {
+            if (it.isPlaying) {
+                it.pause()
+                it.seekTo(0)
+            }
+        }
+    }
+
+
+    private fun loadGoalDialogAudio(dialogBinding: DialogSmartReviewBinding) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        val audio = R.raw.sample
+
+        dialogBinding.btnSoundSmartReview.setOnClickListener {
+            if (!this::mediaPlayerGoalDialog.isInitialized) {
+                mediaPlayerGoalDialog = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayerGoalDialog.isPlaying) {
+                mediaPlayerGoalDialog.pause()
+                mediaPlayerGoalDialog.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerGoalDialog.start()
+        }
+    }
+
 }

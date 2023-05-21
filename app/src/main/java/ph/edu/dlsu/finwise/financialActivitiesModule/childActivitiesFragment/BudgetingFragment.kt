@@ -2,6 +2,7 @@ package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 
 import android.app.Dialog
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,8 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactBudgetingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogBudgetingReviewBinding
+import ph.edu.dlsu.finwise.databinding.DialogNewGoalWarningBinding
+import ph.edu.dlsu.finwise.databinding.DialogSmartGoalInfoBinding
 import ph.edu.dlsu.finwise.databinding.FragmentFinactBudgetingBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.performance.BudgetingPerformanceActivity
 import ph.edu.dlsu.finwise.model.BudgetItem
@@ -25,13 +28,14 @@ import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 class BudgetingFragment : Fragment() {
 
     private lateinit var binding: FragmentFinactBudgetingBinding
     private var firestore = Firebase.firestore
-    private lateinit var bugdetingAdapater: FinactBudgetingAdapter
+    private lateinit var budgetingAdapter: FinactBudgetingAdapter
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var mediaPlayerDialog: MediaPlayer
 
     //contains only going budgeting activities for the recycler view
     var goalIDArrayList = ArrayList<String>()
@@ -62,7 +66,7 @@ class BudgetingFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentFinactBudgetingBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -73,17 +77,20 @@ class BudgetingFragment : Fragment() {
         getBudgeting()
 
         binding.btnSeeMore.setOnClickListener {
+            pauseMediaPlayer(mediaPlayer)
             var goToPerformance = Intent(requireContext().applicationContext, BudgetingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
 
         binding.btnSeeMore2.setOnClickListener {
+            pauseMediaPlayer(mediaPlayer)
             var goToPerformance = Intent(requireContext().applicationContext, BudgetingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
 
         binding.btnBudgetingReview.setOnClickListener{
-            showBudgetingReivewDialog()
+            pauseMediaPlayer(mediaPlayer)
+            showBudgetingReviewDialog()
         }
     }
 
@@ -158,7 +165,7 @@ class BudgetingFragment : Fragment() {
                     firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).get().addOnSuccessListener { transactions ->
                         var spent = 0.00F
                         for (transaction in transactions)
-                            spent += transaction.toObject<Transactions>()!!.amount!!
+                            spent += transaction.toObject<Transactions>().amount!!
                         println("print budget accuracy " +  (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100))
                         if (budgetItemObject.amount!! !=0.00F)
                             totalBudgetAccuracy += (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100)
@@ -180,67 +187,119 @@ class BudgetingFragment : Fragment() {
 
         binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(overall)}%"
 
+        //TODO: Change audio
+        var audio = 0
+
         if (overall >= 96) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.excellent)
             binding.textStatus.text = "Excellent"
             binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
             binding.tvPerformanceText.text = "Keep up the excellent work! Budgeting is your strong point. Keep making those budgets!"
             showSeeMoreButton()
         } else if (overall < 96 && overall >= 86) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.amazing)
             binding.textStatus.text = "Amazing"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "Amazing job! You are performing well. Budgeting is your strong point. Keep making those budgets!"
         } else if (overall < 86 && overall >= 76) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.great)
             binding.textStatus.text = "Great"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "You are performing well. Keep making those budgets!"
             showSeeMoreButton()
         } else if (overall < 76 && overall >= 66) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.good)
             binding.textStatus.text = "Good"
             binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
             binding.tvPerformanceText.text = "Good job! With a bit more attention to detail, you’ll surely up your performance!"
             showSeeMoreButton()
         } else if (overall < 66 && overall >= 56) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.average)
             binding.textStatus.text = "Average"
             binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
             binding.tvPerformanceText.text = "Nice work! Work on improving your budget by always doublechecking. You’ll get there soon!"
             showSeeMoreButton()
         } else if (overall < 56 && overall >= 46) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.nearly_there)
             binding.textStatus.text = "Nearly There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
             showSeeMoreButton()
         }  else if (overall < 46 && overall >= 36) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.almost_there)
             binding.textStatus.text = "Almost There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Almost there! You need to work on your budgeting. Click review to learn how!"
             showSeeMoreButton()
         } else if (overall < 36 && overall >= 26) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.getting_there)
             binding.textStatus.text = "Getting There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Getting there! You need to work on your budgeting. Click review to learn how!"
             showSeeMoreButton()
         } else if (overall < 26 && overall >= 16) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
             binding.textStatus.text = "Not Quite\nThere"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
             showSeeMoreButton()
         } else if (overall < 15) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.bad)
             binding.textStatus.text = "Needs\nImprovement"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your budgeting performance needs a lot of improvement. Click review to learn how!"
             showSeeMoreButton()
         }
+
+        loadAudio(audio)
     }
+    private fun loadAudio(audio: Int) {
+        //TODO: Change binding and Audio file in mediaPlayer
+
+        binding.imgFace.setOnClickListener {
+            if (!this::mediaPlayer.isInitialized) {
+                mediaPlayer = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+                mediaPlayer.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayer.start()
+        }
+    }
+
+
+    override fun onDestroy() {
+        if (this::mediaPlayer.isInitialized)
+            releaseMediaPlayer(mediaPlayer)
+
+        if (this::mediaPlayerDialog.isInitialized)
+            releaseMediaPlayer(mediaPlayerDialog)
+
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
+
 
     private fun showSeeMoreButton() {
         binding.btnSeeMore.visibility = View.VISIBLE
@@ -253,24 +312,57 @@ class BudgetingFragment : Fragment() {
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
-        bugdetingAdapater = FinactBudgetingAdapter(requireContext().applicationContext, goalIDArrayList)
-        binding.rvViewGoals.adapter = bugdetingAdapater
+        budgetingAdapter = FinactBudgetingAdapter(requireContext().applicationContext, goalIDArrayList)
+        binding.rvViewGoals.adapter = budgetingAdapter
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
-        bugdetingAdapater.notifyDataSetChanged()
+        budgetingAdapter.notifyDataSetChanged()
     }
 
-    private fun showBudgetingReivewDialog() {
+    private fun showBudgetingReviewDialog() {
 
-        var dialogBinding= DialogBudgetingReviewBinding.inflate(getLayoutInflater())
-        var dialog= Dialog(requireContext().applicationContext);
-        dialog.setContentView(dialogBinding.getRoot())
+        val dialogBinding= DialogBudgetingReviewBinding.inflate(layoutInflater)
+        val dialog= Dialog(requireContext().applicationContext);
+        dialog.setContentView(dialogBinding.root)
 
         dialog.window!!.setLayout(1000, 1400)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }
+        loadAudioDialog(dialogBinding)
+        dialog.setOnDismissListener { pauseMediaPlayer(mediaPlayerDialog) }
 
         dialog.show()
+
     }
+
+    private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
+        mediaPlayer.let {
+            if (it.isPlaying) {
+                it.pause()
+                it.seekTo(0)
+            }
+        }
+    }
+
+
+    private fun loadAudioDialog(dialogBinding: DialogBudgetingReviewBinding) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        val audio = R.raw.sample
+
+        dialogBinding.btnSoundBudgetReview.setOnClickListener {
+            if (!this::mediaPlayerDialog.isInitialized) {
+                mediaPlayerDialog = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayerDialog.isPlaying) {
+                mediaPlayerDialog.pause()
+                mediaPlayerDialog.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerDialog.start()
+        }
+    }
+
+
 }

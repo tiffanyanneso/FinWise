@@ -2,12 +2,14 @@ package ph.edu.dlsu.finwise.financialActivitiesModule.performance
 
 import android.app.Dialog
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
+import androidx.viewbinding.ViewBinding
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -56,6 +58,11 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
     private var specificDuration = "Short Term"
     private var specificCategory = "Buying Items"
+
+    private var mediaPlayer: MediaPlayer? = null
+    private var mediaPlayerGoalDialog: MediaPlayer? = null
+    private var mediaPlayerDurationDialog: MediaPlayer? = null
+    private var mediaPlayerCategoryDialog: MediaPlayer? = null
 
     data class DurationRating(var name: String? = null, var score: Float)
 
@@ -106,14 +113,17 @@ class SavingPerformanceActivity : AppCompatActivity() {
         }
 
         binding.btnReview.setOnClickListener{
+            mediaPlayer?.let { pauseMediaPlayer(it) }
             showGoalDialog()
         }
 
         binding.btnReviewDuration.setOnClickListener{
+            mediaPlayer?.let { pauseMediaPlayer(it) }
             showDurationDialog()
         }
 
         binding.btnReviewConcept.setOnClickListener{
+            mediaPlayer?.let { pauseMediaPlayer(it) }
             showCategoryDialog()
         }
     }
@@ -123,7 +133,8 @@ class SavingPerformanceActivity : AppCompatActivity() {
         var nTotal = 0.00F
         var nOnTime =0.00F
         firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
-
+            //TODO: Change audio
+            var audio = 0
             if (results.size()!=0) {
                 nTotal = results.size().toFloat()
                 for (goal in results) {
@@ -148,57 +159,69 @@ class SavingPerformanceActivity : AppCompatActivity() {
             binding.tvPerformancePercentage.text ="${overallRoundedNumber}%"
                 binding.btnReview.visibility = View.GONE
 
+
+
             if (overall >= 96) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.excellent)
                 binding.tvPerformanceStatus.text = "Excellent"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
                 binding.tvPerformanceText.text = "Keep up the excellent work! You are good at saving. Keep completing your goals!"
             } else if (overall < 96 && overall >= 86) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.amazing)
                 binding.tvPerformanceStatus.text = "Amazing"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.amazing_green))
                 binding.tvPerformanceText.text = "Amazing job! Saving is your strong point. Keep completing your goals!"
             } else if (overall < 86 && overall >= 76) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.great)
                 binding.tvPerformanceStatus.text = "Great"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
                 binding.tvPerformanceText.text = "Great job! You are performing well. Keep completing your goals!"
             } else if (overall < 76 && overall >= 66) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.good)
                 binding.tvPerformanceStatus.text = "Good"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
                 binding.tvPerformanceText.text = "Good job! Up your performance by keeping your goals in mind!"
             } else if (overall < 66 && overall >= 56) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.average)
                 binding.tvPerformanceStatus.text = "Average"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
                 binding.tvPerformanceText.text = "Nice work! Up your performance by consistently setting money aside!"
                 showPerformanceButton()
             } else if (overall < 56 && overall >= 46) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.nearly_there)
                 binding.tvPerformanceStatus.text = "Nearly There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
                 binding.tvPerformanceText.text = "You're nearly there! Up your performance by setting money aside and earning through activities."
                 showPerformanceButton()
             }  else if (overall < 46 && overall >= 36) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.almost_there)
                 binding.tvPerformanceStatus.text = "Almost There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
                 binding.tvPerformanceText.text = "Almost there! Up your performance by setting money aside and earning through activities."
                 showPerformanceButton()
             } else if (overall < 36 && overall >= 26) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.getting_there)
                 binding.tvPerformanceStatus.text = "Getting There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
                 binding.tvPerformanceText.text = "Getting there! Up your performance by setting money aside and earning through activities."
                 showPerformanceButton()
             } else if (overall < 26 && overall >= 16) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                 binding.tvPerformanceStatus.text = "Not Quite\nThere"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
                 binding.tvPerformanceText.text = "Not quite there yet! Up your performance by setting money aside and earning through activities. Don't give up!"
                 showPerformanceButton()
             } else if (overall < 15) {
+                audio = R.raw.sample
                 binding.imgFace.setImageResource(R.drawable.bad)
                 binding.tvPerformanceStatus.text = "Needs\nImprovement"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
@@ -206,11 +229,49 @@ class SavingPerformanceActivity : AppCompatActivity() {
                 showPerformanceButton()
             }
             } else {
+                audio = R.raw.sample
                 binding.tvPerformanceStatus.text = "Get Started!"
                 binding.tvPerformanceText.text = "Complete goals to see your performance!"
             }
+            loadAudio(audio)
         }
     }
+
+    private fun loadAudio(audio: Int) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        binding.imgFace.setOnClickListener {
+            if (mediaPlayer == null) {
+                mediaPlayer = MediaPlayer.create(this, audio)
+            }
+
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
+                mediaPlayer?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayer?.start()
+        }
+    }
+
+    override fun onDestroy() {
+        releaseMediaPlayer(mediaPlayer)
+        releaseMediaPlayer(mediaPlayerGoalDialog)
+        releaseMediaPlayer(mediaPlayerDurationDialog)
+        releaseMediaPlayer(mediaPlayerCategoryDialog)
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer?) {
+        if (mediaPlayer?.isPlaying == true) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+    }
+
+
+
 
     private fun showPerformanceButton(){
         binding.btnReview.visibility = View.VISIBLE
@@ -418,16 +479,37 @@ class SavingPerformanceActivity : AppCompatActivity() {
             goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(goToNewGoal)
         }
+        //TODO: Change audio and dialogBinding
+        val audio = R.raw.sample
+        dialogBinding.btnSoundSaving.setOnClickListener {
+            if (mediaPlayerGoalDialog == null) {
+                mediaPlayerGoalDialog = MediaPlayer.create(this, audio)
+            }
+
+            if (mediaPlayerGoalDialog?.isPlaying == true) {
+                mediaPlayerGoalDialog?.pause()
+                mediaPlayerGoalDialog?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerGoalDialog?.start()
+        }
+        dialog.setOnDismissListener { mediaPlayerGoalDialog?.let { it1 -> pauseMediaPlayer(it1) } }
+
         dialog.show()
+
     }
 
     private fun showDurationDialog() {
+
+        //TODO: Change audio and dialogBinding
+        var audio = R.raw.sample
 
         var dialogBinding= DialogSavingDurationReviewBinding.inflate(layoutInflater)
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.root)
 
         if (specificDuration == "Short Term") {
+            audio = R.raw.sample
             dialogBinding.tvTitle.text = "Short Term"
             dialogBinding.tvDefinition.text = "1. Can be achieved in a short amount of time\n" + "2. Duration: Less than 2 weeks\n" + "3. Focused on immediate wants or needs"
             dialogBinding.tvExamples.text = "1. Saving for a Fried Chicken Sandwich\n" +
@@ -436,6 +518,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Set aside money consistently\n" +
                     "2. Keep the target date in mind\n" + "3. Accomplish chores or sell items for extra money"
         }  else if (specificDuration == "Medium Term") {
+            audio = R.raw.sample
             dialogBinding.tvTitle.text = "Medium Term"
             dialogBinding.tvDefinition.text = "1. Takes a longer time to achieve and involves bigger target amounts \n" +
                     "2. Duration: 2 to 4 weeks"
@@ -445,6 +528,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
                     "2. Earn extra by helping with chores and selling items\n" +
                     "3. Keep the target date in mind"
         } else if (specificDuration == "Long Term") {
+            audio = R.raw.sample
             dialogBinding.tvTitle.text = "Long Term"
             dialogBinding.tvDefinition.text = "1. Takes a long time to achieve and involves bigger target amounts \n" +
                     "2. Duration: Over a month"
@@ -461,15 +545,41 @@ class SavingPerformanceActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
+        dialogBinding.btnSoundSavingDuration.setOnClickListener {
+            if (mediaPlayerDurationDialog == null) {
+                mediaPlayerDurationDialog = MediaPlayer.create(this, audio)
+            }
+
+            if (mediaPlayerDurationDialog?.isPlaying == true) {
+                mediaPlayerDurationDialog?.pause()
+                mediaPlayerDurationDialog?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerDurationDialog?.start()
+        }
+
+        dialog.setOnDismissListener { mediaPlayerDurationDialog?.let { it1 -> pauseMediaPlayer(it1) } }
+
         dialog.show()
     }
 
-    private fun showCategoryDialog() {
+    private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
+        mediaPlayer.let {
+            if (it.isPlaying) {
+                it.pause()
+                it.seekTo(0)
+            }
+        }
+    }
 
+    private fun showCategoryDialog() {
+        //TODO: Change audio and dialogBinding
+        var audio = R.raw.sample
         var dialog= Dialog(this);
         var dialogBinding= DialogSavingCategoryReviewBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
         if (specificCategory == "Buying Items") {
+            audio = R.raw.sample
             dialogBinding.tvTitle.text = "Buying Items"
             dialogBinding.tvDefinition.text = "Purchasing things such as goods or services."
             dialogBinding.tvExamples.text = "1. Buying a toy\n" +
@@ -477,6 +587,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
                     "2. Keep your target date in mind.\n" + "3. Accomplish chores or sell items for extra money."
         } else if (specificCategory == "Planning An Event") {
+            audio = R.raw.sample
             dialogBinding.tvTitle.text = "Planning An Event"
             dialogBinding.tvDefinition.text = "Organizing an event and ensuring that all needed materials or services are accounted for."
             dialogBinding.tvExamples.text = "1. Birthday party\n" +
@@ -486,6 +597,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             "3. Accomplish chores or sell items for extra money."
 
         } else if (specificCategory == "Saving For Emergency Funds") {
+            audio = R.raw.sample
             dialogBinding.tvTitle.text = "Saving For Emergency Funds"
             dialogBinding.tvDefinition.text = "1. Saving money to be used in the future for unexpected situations.\n" +
                     "2. Important to be prepared for these situations."
@@ -494,6 +606,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
                     "2. Keep your future in mind.\n" + "3. Accomplish chores or sell items for extra money."
         } else if (specificCategory == "Donating To Charity") {
+            audio = R.raw.sample
             println("print in donating to charity")
             dialogBinding.tvTitle.text = "Donating To Charity"
             dialogBinding.tvDefinition.text = "Giving money to a non-profit organization to support an advocacy."
@@ -502,6 +615,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Donate to an organization that you share an advocacy with.\n" +
                     "2. Set aside money consistently.\n" + "3. Accomplish chores or sell items for extra money."
         } else if (specificCategory == "Situational Shopping") {
+            audio = R.raw.sample
             dialogBinding.tvTitle.text = "Situational Shopping"
             dialogBinding.tvDefinition.text = "Shopping for a certain event or happening."
             dialogBinding.tvExamples.text = "1. Grocery shopping \n" +
@@ -515,6 +629,20 @@ class SavingPerformanceActivity : AppCompatActivity() {
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }
+
+        dialogBinding.btnSoundSavingCategory.setOnClickListener {
+            if (mediaPlayerCategoryDialog == null) {
+                mediaPlayerCategoryDialog = MediaPlayer.create(this, audio)
+            }
+
+            if (mediaPlayerCategoryDialog?.isPlaying == true) {
+                mediaPlayerCategoryDialog?.pause()
+                mediaPlayerCategoryDialog?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerCategoryDialog?.start()
+        }
+        dialog.setOnDismissListener { mediaPlayerCategoryDialog?.let { it1 -> pauseMediaPlayer(it1) } }
 
         dialog.show()
     }

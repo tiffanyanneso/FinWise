@@ -2,6 +2,7 @@ package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment
 
 import android.app.Dialog
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -40,6 +41,9 @@ class ParentSavingFragment : Fragment() {
     private lateinit var binding: FragmentParentSavingBinding
     private var firestore = Firebase.firestore
     private lateinit var goalAdapter: FinactSavingAdapter
+
+    private lateinit var mediaPlayerGoalDialog: MediaPlayer
+    private lateinit var mediaPlayerSmartDialog: MediaPlayer
 
     var goalIDArrayList = ArrayList<String>()
     var savingsArrayList = ArrayList<FinancialActivities>()
@@ -139,8 +143,60 @@ class ParentSavingFragment : Fragment() {
             dialog.dismiss()
         }
 
+        loadSmartAudioDialog(dialogBinding)
+        dialog.setOnDismissListener { pauseMediaPlayer(mediaPlayerSmartDialog) }
+
         dialog.show()
     }
+
+    override fun onDestroy() {
+        if (this::mediaPlayerSmartDialog.isInitialized)
+            releaseMediaPlayer(mediaPlayerSmartDialog)
+
+        if (this::mediaPlayerSmartDialog.isInitialized)
+            releaseMediaPlayer(mediaPlayerSmartDialog)
+
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
+
+
+
+    private fun loadSmartAudioDialog(dialogBinding: DialogSmartGoalInfoBinding) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        val audio = R.raw.sample
+
+        dialogBinding.btnSoundSmartGoalInfo.setOnClickListener {
+            if (!this::mediaPlayerSmartDialog.isInitialized) {
+                mediaPlayerSmartDialog = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayerSmartDialog.isPlaying) {
+                mediaPlayerSmartDialog.pause()
+                mediaPlayerSmartDialog.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerSmartDialog.start()
+        }
+    }
+
+    private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
+        mediaPlayer.let {
+            if (it.isPlaying) {
+                it.pause()
+                it.seekTo(0)
+            }
+        }
+    }
+
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){ }
 
@@ -422,7 +478,27 @@ class ParentSavingFragment : Fragment() {
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }
-
+        loadGoalAudioDialog(dialogBinding)
+        dialog.setOnDismissListener { pauseMediaPlayer(mediaPlayerGoalDialog) }
         dialog.show()
     }
+
+    private fun loadGoalAudioDialog(dialogBinding: DialogParentSavingTipsBinding) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        val audio = R.raw.sample
+
+        dialogBinding.btnSoundParentSavingTips.setOnClickListener {
+            if (!this::mediaPlayerGoalDialog.isInitialized) {
+                mediaPlayerGoalDialog = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayerGoalDialog.isPlaying) {
+                mediaPlayerGoalDialog.pause()
+                mediaPlayerGoalDialog.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerGoalDialog.start()
+        }
+    }
+
 }

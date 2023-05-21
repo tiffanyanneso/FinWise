@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -28,6 +29,9 @@ class ParentGoalSettingFragment : Fragment() {
     private lateinit var binding: FragmentParentGoalSettingBinding
     private var firestore = Firebase.firestore
     private lateinit var goalSettingAdapter: FinactGoalSettingAdapter
+
+    private lateinit var mediaPlayerGoalDialog: MediaPlayer
+    private lateinit var mediaPlayerSmartDialog: MediaPlayer
 
     private var nRatings = 0
     private var nOverall = 0.00F
@@ -264,9 +268,57 @@ class ParentGoalSettingFragment : Fragment() {
             this.startActivity(goToNewGoal)
             dialog.dismiss()
         }
-
+        loadSmartDialogAudio(dialogBinding)
+        dialog.setOnDismissListener { mediaPlayerSmartDialog.let { it1 -> pauseMediaPlayer(it1) } }
         dialog.show()
     }
+
+    override fun onDestroy() {
+        if (this::mediaPlayerGoalDialog.isInitialized)
+            releaseMediaPlayer(mediaPlayerGoalDialog)
+
+        if (this::mediaPlayerSmartDialog.isInitialized)
+            releaseMediaPlayer(mediaPlayerSmartDialog)
+
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
+
+    private fun loadSmartDialogAudio(dialogBinding: DialogSmartGoalInfoBinding) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        val audio = R.raw.sample
+
+        dialogBinding.btnSoundSmartGoalInfo.setOnClickListener {
+            if (!this::mediaPlayerSmartDialog.isInitialized) {
+                mediaPlayerSmartDialog = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayerSmartDialog.isPlaying) {
+                mediaPlayerSmartDialog.pause()
+                mediaPlayerSmartDialog.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerSmartDialog.start()
+        }
+    }
+
+    private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
+        mediaPlayer.let {
+            if (it.isPlaying) {
+                it.pause()
+                it.seekTo(0)
+            }
+        }
+    }
+
 
 
     private fun buildDialog() {
@@ -315,6 +367,27 @@ class ParentGoalSettingFragment : Fragment() {
             this.startActivity(goToGoalSetting)
         }
 
+        loadGoalDialogAudio(dialogBinding)
+        dialog.setOnDismissListener { pauseMediaPlayer(mediaPlayerGoalDialog) }
         dialog.show()
     }
+
+    private fun loadGoalDialogAudio(dialogBinding: DialogParentSmartTipBinding) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        val audio = R.raw.sample
+
+        dialogBinding.btnSoundParentSmartTip.setOnClickListener {
+            if (!this::mediaPlayerGoalDialog.isInitialized) {
+                mediaPlayerGoalDialog = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayerGoalDialog.isPlaying) {
+                mediaPlayerGoalDialog.pause()
+                mediaPlayerGoalDialog.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerGoalDialog.start()
+        }
+    }
+
 }

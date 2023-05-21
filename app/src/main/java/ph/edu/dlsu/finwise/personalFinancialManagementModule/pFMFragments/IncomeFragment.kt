@@ -3,8 +3,10 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +44,8 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     private lateinit var binding: FragmentIncomeBinding
     private var firestore = Firebase.firestore
     private val bundle = Bundle()
+    private lateinit var mediaPlayer: MediaPlayer
+
 
     private var transactionsArrayList = ArrayList<Transactions>()
     var allowancePercentage = 0.00f
@@ -171,7 +175,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
                 addData(group)*/
                 val weeks = getWeeksOfCurrentMonth(sortedDate)
                 computeDataForMonth(weeks)
-                setTopThreeCategories()
                 binding.tvIncomeTitle.text = "This Month's Income"
                 /*val group = groupDates(sortedDate, "month")
                 iterateDatesByQuarter(group)*/
@@ -181,9 +184,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
                 addData(group)*/
                 val group = getMonthsOfQuarter(sortedDate)
                 computeDataForQuarter(group)
-                setTopThreeCategories()
-                topIncome()
-                setSummary()
                 binding.tvIncomeTitle.text = "This Quarter's Income"
             }
         }
@@ -191,6 +191,8 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     }
 
     private fun setSummary() {
+        if (total.isNaN())
+            total = 0.00F
         val dec = DecimalFormat("#,###.00")
         val totalText = dec.format(total)
         var dateRange = "week"
@@ -198,34 +200,98 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
             "monthly" -> dateRange = "month"
             "yearly" -> dateRange = "quarter"
         }
+        Log.d("kahoot", "setSummary: "+total)
 
+        //TODO: Change audio
+        var audio = 0
         if (user == "child" && total > 0) {
+            audio = R.raw.sample
             binding.tvSummary.text = "You've earned ₱$totalText from $dateRange! "
             binding.tvTips.text = "Go to \"Financial Activities\" to further develop your Financial Literacy!"
             loadChildFinancialActivitiesButton()
         } else if (user == "child" && total < 0) {
+            audio = R.raw.sample
             binding.tvSummary.text = "Uh oh! You've earned ₱$totalText from $dateRange"
             binding.tvTips.text = "Consider selling your stuff or doing some chores to earn money"
             loadEarningChild()
         } else if (user == "parent" && total > 0) {
+            audio = R.raw.sample
             binding.tvSummary.text = "Your child earned ₱$totalText from $dateRange!"
             binding.tvTips.text = "Go to \"Financial Activities\" to further develop your child's Financial Literacy!"
             loadParentFinancialActivitiesButton()
         } else if (user == "parent" && total < 0) {
+            audio = R.raw.sample
             binding.tvSummary.text = "Uh oh! Your child only earned ₱$totalText from $dateRange"
             binding.tvTips.text = "Consider giving your child some chores so they can earn some money!"
             loadEarningParent()
+        } else if (user == "parent" && total == 0.0F) {
+            audio = R.raw.sample
+            binding.tvSummary.text = "Uh oh! Your child has no income for this $dateRange"
+            binding.tvTips.text = "Consider giving your child some chores so they can earn some money!"
+            loadEarningParent()
+        } else if (user == "child" && total == 0.0F) {
+            audio = R.raw.sample
+            binding.tvSummary.text = "Uh oh! You've earned nothing from $dateRange"
+            binding.tvTips.text = "Consider selling your stuff or doing some chores to earn money"
+            loadEarningParent()
         }
-
+        loadAudio(audio)
     }
+
+    private fun loadAudio(audio: Int) {
+        //TODO: Change binding and Audio file in mediaPlayer
+
+        binding.btnAudioFragmentIncome.setOnClickListener {
+            if (!this::mediaPlayer.isInitialized) {
+                mediaPlayer = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+                mediaPlayer.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayer.start()
+        }
+    }
+
+    override fun onDestroy() {
+        if (this::mediaPlayer.isInitialized)
+            releaseMediaPlayer(mediaPlayer)
+
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
+
+
 
     private fun loadEarningChild() {
         binding.btnAction.setOnClickListener {
+            if (this::mediaPlayer.isInitialized) {
+                pauseMediaPlayer(mediaPlayer)
+            }
             val goToEarningActivity = Intent(context, EarningMenuActivity::class.java)
             bundle.putString("childID", childID)
             bundle.putString("module", "pfm")
             goToEarningActivity.putExtras(bundle)
             startActivity(goToEarningActivity)
+        }
+    }
+
+    private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
+        mediaPlayer.let {
+            if (it.isPlaying) {
+                it.pause()
+                it.seekTo(0)
+            }
         }
     }
 
@@ -384,8 +450,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         giftPercentage = gift / total * 100
         rewardPercentage = reward / total * 100
         otherPercentage = other / total * 100
-
-
     }
 
     private fun addWeeklyData(selectedDates: List<Date>) {

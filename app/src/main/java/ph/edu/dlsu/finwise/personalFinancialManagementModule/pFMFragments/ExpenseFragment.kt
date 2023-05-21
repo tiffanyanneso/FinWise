@@ -3,11 +3,14 @@ package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.animation.Easing
@@ -36,6 +39,9 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
     private lateinit var binding: FragmentExpenseBinding
     private var bundle = Bundle()
     private var firestore = Firebase.firestore
+    private lateinit var mediaPlayer: MediaPlayer
+
+
     private var transactionsArrayList = ArrayList<Transactions>()
     private var clothesPercentage = 0.00f
     private var foodPercentage = 0.00f
@@ -89,6 +95,10 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
 
     private fun loadTransactionHistory() {
         binding.btnAction.setOnClickListener {
+            Toast.makeText(context, "pause", Toast.LENGTH_SHORT).show()
+            if (this::mediaPlayer.isInitialized) {
+                pauseMediaPlayer(mediaPlayer)
+            }
             val goToTransactionHistory = Intent(context, TransactionHistoryActivity::class.java)
             bundle.putString("user", user)
             if (user == "parent")
@@ -98,6 +108,17 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             startActivity(goToTransactionHistory)
         }
     }
+
+    private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
+        mediaPlayer.let {
+            if (it.isPlaying) {
+                it.pause()
+                it.seekTo(0)
+            }
+        }
+        Log.d("bark", "pausee")
+    }
+
 
     private fun getArgumentsFromPFM() {
         val args = arguments
@@ -152,15 +173,27 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             "yearly" -> dateRange = "quarter"
         }
 
-
-        if (user == "child") {
+        //TODO: Change audio
+        var audio = 0
+        if (user == "child" && total > 0.00F) {
+            audio = R.raw.sample
             binding.tvSummary.text = "You've spent ₱$totalText from $dateRange!"
             binding.tvTips.text =
-                "Review your Top Expenses and previous transactions to see where you can cut down!"
-        } else if (user == "parent") {
+                "Review your Top Expenses and previous transactions to see where you can reduce!"
+        } else if (user == "parent" && total > 0.00F) {
+            audio = R.raw.sample
             binding.tvSummary.text = "Your child spent ₱$totalText from $dateRange!"
             binding.tvTips.text =
-                "Review your child's Top Expenses and previous transactions to see where they can cut down!"
+                "Review your child's Top Expenses and previous transactions to see where they can reduce!"
+        } else if (user == "parent" && total == 0.0F) {
+            audio = R.raw.sample
+            binding.tvSummary.text = "Nice! Your child has no expense for this $dateRange"
+            binding.tvTips.text = "Review your child's Top Expenses and previous transactions to see where they can reduce!"
+        } else if (user == "child" && total == 0.0F) {
+            audio = R.raw.sample
+            binding.tvSummary.text = "Uh oh! You've earned ₱$totalText from $dateRange"
+            binding.tvTips.text = "Review your child's Top Expenses and previous transactions to see where they can reduce!"
+
         }
 
         /*if (user == "child" && total < 500) {
@@ -176,6 +209,40 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             binding.tvSummary.text = "You've child earned ₱$totalText for this $dateRange"
             binding.tvTips.text = "Consider reviewing your child's previous transactions and see which they could lessen"
         }*/
+        loadAudio(audio)
+    }
+
+    private fun loadAudio(audio: Int) {
+        //TODO: Change binding and Audio file in mediaPlayer
+
+        binding.btnAudioFragmentExpense.setOnClickListener {
+            if (!this::mediaPlayer.isInitialized) {
+                mediaPlayer = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+                mediaPlayer.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayer.start()
+        }
+    }
+
+    override fun onDestroy() {
+        if (this::mediaPlayer.isInitialized)
+            releaseMediaPlayer(mediaPlayer)
+
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
     }
 
     private fun getDatesOfTransactions(): List<Date> {

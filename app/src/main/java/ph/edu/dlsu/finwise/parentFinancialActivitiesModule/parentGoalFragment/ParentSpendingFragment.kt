@@ -2,6 +2,7 @@ package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment
 
 import android.app.Dialog
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,6 +33,9 @@ class ParentSpendingFragment : Fragment() {
     private lateinit var binding: FragmentParentSpendingBinding
     private var firestore = Firebase.firestore
     private lateinit var spendingAdapter: FinactSpendingAdapter
+
+    private lateinit var mediaPlayerDialog: MediaPlayer
+
 
     var spendingActivityIDArrayList = ArrayList<String>()
     var goalIDArrayList = ArrayList<String>()
@@ -317,6 +321,53 @@ class ParentSpendingFragment : Fragment() {
             dialog.dismiss()
         }
 
+        loadAudioDialog(dialogBinding)
+        dialog.setOnDismissListener { pauseMediaPlayer(mediaPlayerDialog) }
+
         dialog.show()
     }
+    private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
+        mediaPlayer.let {
+            if (it.isPlaying) {
+                it.pause()
+                it.seekTo(0)
+            }
+        }
+    }
+
+    private fun loadAudioDialog(dialogBinding: DialogParentSpendingTipsBinding) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        val audio = R.raw.sample
+
+        dialogBinding.btnSoundParentSpending.setOnClickListener {
+            if (!this::mediaPlayerDialog.isInitialized) {
+                mediaPlayerDialog = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayerDialog.isPlaying) {
+                mediaPlayerDialog.pause()
+                mediaPlayerDialog.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerDialog.start()
+        }
+    }
+
+    override fun onDestroy() {
+        if (this::mediaPlayerDialog.isInitialized)
+            releaseMediaPlayer(mediaPlayerDialog)
+
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
+
+
 }

@@ -2,6 +2,7 @@ package ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment
 
 import android.app.Dialog
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -35,6 +36,9 @@ class SpendingFragment : Fragment(){
     private lateinit var binding: FragmentFinactSpendingBinding
     private var firestore = Firebase.firestore
     private lateinit var spendingAdapter: FinactSpendingAdapter
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var mediaPlayerDialog: MediaPlayer
+
 
     var spendingActivityIDArrayList = ArrayList<String>()
     var budgetItemsIDArrayList = ArrayList<BudgetItemAmount>()
@@ -68,8 +72,7 @@ class SpendingFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentFinactSpendingBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,15 +80,21 @@ class SpendingFragment : Fragment(){
         binding.title.text= "Overall Spending Performance"
 
         binding.btnSpendingReview.setOnClickListener {
-            showSpendingReivewDialog()
+            if (this::mediaPlayer.isInitialized)
+                pauseMediaPlayer(mediaPlayer)
+            showSpendingReviewDialog()
         }
 
         binding.btnSeeMore.setOnClickListener {
+            if (this::mediaPlayer.isInitialized)
+                pauseMediaPlayer(mediaPlayer)
             var goToPerformance = Intent(requireContext().applicationContext, SpendingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
 
         binding.btnSeeMore2.setOnClickListener {
+            if (this::mediaPlayer.isInitialized)
+                pauseMediaPlayer(mediaPlayer)
             var goToPerformance = Intent(requireContext().applicationContext, SpendingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
@@ -209,69 +218,99 @@ class SpendingFragment : Fragment(){
 
     private fun setOverall() {
         binding.tvPerformancePercentage.text ="${DecimalFormat("##0.00").format(overallSpending)}%"
-
+        //TODO: Change audio
+        var audio = 0
         if (overallSpending >= 96) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.excellent)
             binding.textStatus.text = "Excellent"
             binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
             binding.tvPerformanceText.text = "Keep up the excellent work! Spending wisely is your strong point. Keep it up!"
             showSeeMoreButton()
         } else if (overallSpending < 96 && overallSpending >= 86) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.amazing)
             binding.textStatus.text = "Amazing"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "Amazing job! You are performing well. Spending wisely is your strong point. Keep completing those goals!"
             showSeeMoreButton()
         } else if (overallSpending < 86 && overallSpending >= 76) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.great)
             binding.textStatus.text = "Great"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = " Great job! You are performing well. Keep spending wisely!"
             showSeeMoreButton()
         } else if (overallSpending < 76 && overallSpending >= 66) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.good)
             binding.textStatus.text = "Good"
             binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
             binding.tvPerformanceText.text = "Good job! With a bit more planning to detail, you’ll surely up your performance!"
             showSeeMoreButton()
         } else if (overallSpending < 66 && overallSpending >= 56) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.average)
             binding.textStatus.text = "Average"
             binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
             binding.tvPerformanceText.text = "Nice work! Work on improving your spending performance by always planning ahead. You’ll get there soon!"
             showSeeMoreButton()
         } else if (overallSpending < 56 && overallSpending >= 46) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.nearly_there)
             binding.textStatus.text = "Nearly There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
             showSeeMoreButton()
         }  else if (overallSpending < 46 && overallSpending >= 36) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.almost_there)
             binding.textStatus.text = "Almost There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Almost there! You need to work on your spending. Click review to learn how!"
             showSeeMoreButton()
         } else if (overallSpending < 36 && overallSpending >= 26) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.getting_there)
             binding.textStatus.text = "Getting There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Getting there! You need to work on your spending. Click review to learn how!"
             showSeeMoreButton()
         } else if (overallSpending < 26 && overallSpending >= 16) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
             binding.textStatus.text = "Not Quite\nThere"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
             showSeeMoreButton()
         } else if (overallSpending < 15) {
+            audio = R.raw.sample
             binding.imgFace.setImageResource(R.drawable.bad)
             binding.textStatus.text = "Needs\nImprovement"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
             showSeeMoreButton()
         }
+        loadAudio(audio)
     }
+
+    private fun loadAudio(audio: Int) {
+        //TODO: Change binding and Audio file in mediaPlayer
+
+        binding.imgFace.setOnClickListener {
+            if (!this::mediaPlayer.isInitialized) {
+                mediaPlayer = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+                mediaPlayer.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayer.start()
+        }
+    }
+
 
     private fun showSeeMoreButton() {
         binding.btnSeeMore.visibility = View.VISIBLE
@@ -293,7 +332,7 @@ class SpendingFragment : Fragment(){
         spendingAdapter.notifyDataSetChanged()
     }
 
-    private fun showSpendingReivewDialog() {
+    private fun showSpendingReviewDialog() {
 
         var dialogBinding= DialogSpendingReviewBinding.inflate(getLayoutInflater())
         var dialog= Dialog(requireContext().applicationContext);
@@ -304,7 +343,58 @@ class SpendingFragment : Fragment(){
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }
+        loadAudioDialog(dialogBinding)
+        dialog.setOnDismissListener { pauseMediaPlayer(mediaPlayerDialog) }
 
         dialog.show()
     }
+    private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
+        mediaPlayer.let {
+            if (it.isPlaying) {
+                it.pause()
+                it.seekTo(0)
+            }
+        }
+    }
+
+
+    private fun loadAudioDialog(dialogBinding: DialogSpendingReviewBinding) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        val audio = R.raw.sample
+
+        dialogBinding.btnSoundSpending.setOnClickListener {
+            if (!this::mediaPlayerDialog.isInitialized) {
+                mediaPlayerDialog = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayerDialog.isPlaying) {
+                mediaPlayerDialog.pause()
+                mediaPlayerDialog.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerDialog.start()
+        }
+    }
+
+    override fun onDestroy() {
+        if (this::mediaPlayer.isInitialized)
+            releaseMediaPlayer(mediaPlayer)
+
+        if (this::mediaPlayerDialog.isInitialized)
+            releaseMediaPlayer(mediaPlayerDialog)
+
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
+
+
+
 }

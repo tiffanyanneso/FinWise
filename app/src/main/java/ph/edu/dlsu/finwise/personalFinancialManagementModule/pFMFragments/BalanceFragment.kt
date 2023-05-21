@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -44,6 +45,8 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     private var user = "child"
     private lateinit var chart: LineChart
     var graphData = mutableListOf<Entry>()
+    private lateinit var mediaPlayer: MediaPlayer
+
 
 
     override fun onCreateView(
@@ -279,6 +282,8 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     }
 
     private fun setTotals(totalIncome: Float, totalExpense: Float) {
+        Log.d("kahoot", "setTotals: "+totalIncome)
+
         val dec = DecimalFormat("#,###.00")
         /*val incomeText = dec.format(totalIncome)
         val expenseText = dec.format(totalExpense)*/
@@ -297,8 +302,11 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         } else if (netIncome < 0 && user == "parent") {
             netIncomeText = kotlin.math.abs(netIncome).toString()
             binding.tvSummary.text = "Bad news! Your child spent ₱$netIncomeText more than they earned."
+        } else if (netIncome == 0.0F && user == "parent") {
+            binding.tvSummary.text = "Your child doesn't have any transactions yet. Add your child's income or expense to see their data."
+        } else if (netIncome == 0.0F && user == "child") {
+            binding.tvSummary.text = "You don't have any transactions yet. Add your income or expense to see their data."
         }
-
     }
 
     private fun getDatesOfTransactions(): List<Date> {

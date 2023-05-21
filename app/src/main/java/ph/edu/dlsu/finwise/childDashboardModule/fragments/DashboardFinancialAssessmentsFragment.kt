@@ -115,7 +115,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         if (currUser != null) {
             userType = currUser
         }
-
+ 
         if (date != null) {
             selectedDatesSort = date
             assessmentsTaken.clear()

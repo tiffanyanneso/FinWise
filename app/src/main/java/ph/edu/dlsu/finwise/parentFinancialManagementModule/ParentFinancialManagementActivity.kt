@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -43,6 +44,8 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
     private var income = 0.00f
     private var expense = 0.00f
     private lateinit var childID: String
+    private lateinit var mediaPlayer: MediaPlayer
+
 
     private val tabIcons2 = intArrayOf(
         R.drawable.baseline_account_balance_24,
@@ -83,6 +86,31 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         firestore.collection("Users").document(childID).get().addOnSuccessListener {
             binding.currentBalanceOfChildText.text = "Balance of ${it.toObject<Users>()!!.firstName}"
         }
+    }
+
+    private fun loadAudio(audio: Int) {
+        //TODO: Change binding and Audio file in mediaPlayer
+        binding.ivScore.setOnClickListener {
+            if (!this::mediaPlayer.isInitialized) {
+                mediaPlayer = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+                mediaPlayer.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayer.start()
+        }
+    }
+
+
+    override fun onDestroy() {
+        if (this::mediaPlayer.isInitialized) {
+            mediaPlayer.stop()
+            mediaPlayer.release()
+        }
+        super.onDestroy()
     }
 
     private fun initializeParentNavbar() {
@@ -244,59 +272,72 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         val grade: String
         val performance: String
         val bitmap: Bitmap
+        //TODO: Change audio
+        var audio = 0
 
         if (ratio >= 180) {
+            audio = R.raw.sample
             performance = "Excellent!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.dark_green))
             grade = "Your child's income is much more than their expenses, and they're saving a large amount of money. They're doing an amazing job!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (ratio in 160..180) {
+            audio = R.raw.sample
             performance = "Amazing!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.amazing_green))
             grade = "Your child's income is significantly more than their expenses, and they're saving a substantial amount of money. They can look for ways to invest their money wisely."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
         } else if (ratio in 140..159) {
+            audio = R.raw.sample
             performance = "Great!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.green))
             grade = "Your child's income is much more than their expenses, and they're saving a good amount of money. They're on the right track!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (ratio in 120..139) {
+            audio = R.raw.sample
             binding.tvPerformance.setTextColor(resources.getColor(R.color.light_green))
             performance = "Good!"
             grade = "Your child's income is more than their expenses, and they're saving a decent amount of money. They should Keep it up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
         } else if (ratio in 100..119) {
+            audio = R.raw.sample
             performance = "Average"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.yellow))
             grade = "Your child's income is slightly more than their expenses, and they're saving a small amount of money. They should keep it up and look for ways to increase their income and savings."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else if (ratio in 80..99) {
+            audio = R.raw.sample
             performance = "Nearly There"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.nearly_there_yellow))
             grade = "Your child's income and expenses are about the same, and they're not saving much money. They need to look for ways to increase their income and reduce their expenses."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
         } else if (ratio in 60..79) {
+            audio = R.raw.sample
             performance = "Almost There"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.almost_there_yellow))
             grade = "Your child's expenses are slightly more than their income, and they're saving a little bit of money. They should try to reduce their expenses further to save more money."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
         } else if (ratio in 40..59) {
+            audio = R.raw.sample
             performance = "Getting There"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.getting_there_orange))
             grade = "Your child's expenses are more than their income, and they're barely saving any money. They need to cut down on their expenses to start saving money."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
         } else if (ratio in 20..39) {
+            audio = R.raw.sample
             performance = "Not Quite There"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.not_quite_there_red))
             grade = "Your child's expenses are much more than their income, and they're not saving any money. They need to make some changes to their spending habits."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
         } else if (ratio in 1..19) {
+            audio = R.raw.sample
             performance = "Need Improvement"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
             grade = "Your child's expenses are more than their income. This means that they're in trouble and need to take action right away to cut down their expenses."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
         }
         else {
+            audio = R.raw.sample
             performance = "Bad...!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
             grade = "Your child has 0 balance. You can give them money through Maya by clicking the button above"
@@ -306,7 +347,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         imageView.setImageBitmap(bitmap)
         binding.tvScore.text = grade
         binding.tvPerformance.text = performance
-
+        loadAudio(audio)
     }
 
     private fun loadExplanation() {
@@ -316,6 +357,10 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
             val fm: FragmentManager = activity.supportFragmentManager
             val dialogFragment = ExplanationParentFragment()
             dialogFragment.show(fm, "fragment_alert")
+            if (this::mediaPlayer.isInitialized) {
+                mediaPlayer.pause()
+                mediaPlayer.seekTo(0)
+            }
         }
     }
 
