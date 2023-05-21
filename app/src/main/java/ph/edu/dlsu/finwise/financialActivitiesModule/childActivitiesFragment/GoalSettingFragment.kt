@@ -476,7 +476,6 @@ class GoalSettingFragment : Fragment() {
         loadGoalDialogAudio(dialogBinding)
         dialog.setOnDismissListener { pauseMediaPlayer(mediaPlayerGoalDialog) }
 
-
         dialog.show()
     }
 

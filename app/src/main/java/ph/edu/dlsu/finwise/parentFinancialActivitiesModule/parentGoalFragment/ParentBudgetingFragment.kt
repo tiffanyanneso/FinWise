@@ -2,6 +2,7 @@ package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentGoalFragment
 
 import android.app.Dialog
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -23,13 +24,15 @@ import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 class ParentBudgetingFragment : Fragment() {
 
     private lateinit var binding: FragmentParentBudgetingBinding
     private var firestore = Firebase.firestore
     private lateinit var budgetingAdapter: FinactBudgetingAdapter
+
+    private lateinit var mediaPlayerDialog: MediaPlayer
+
 
     var goalIDArrayList = ArrayList<String>()
     var budgetingArrayList = ArrayList<FinancialActivities>()
@@ -285,6 +288,53 @@ class ParentBudgetingFragment : Fragment() {
             dialog.dismiss()
         }
 
+        loadAudioDialog(dialogBinding)
+        dialog.setOnDismissListener { pauseMediaPlayer(mediaPlayerDialog) }
+
         dialog.show()
+    }
+
+    private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
+        mediaPlayer.let {
+            if (it.isPlaying) {
+                it.pause()
+                it.seekTo(0)
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        if (this::mediaPlayerDialog.isInitialized)
+            releaseMediaPlayer(mediaPlayerDialog)
+
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
+
+
+    private fun loadAudioDialog(dialogBinding: DialogParentBudgetingTipsBinding) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        val audio = R.raw.sample
+
+        dialogBinding.btnSoundParentBudgeting.setOnClickListener {
+            if (!this::mediaPlayerDialog.isInitialized) {
+                mediaPlayerDialog = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayerDialog.isPlaying) {
+                mediaPlayerDialog.pause()
+                mediaPlayerDialog.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerDialog.start()
+        }
     }
 }

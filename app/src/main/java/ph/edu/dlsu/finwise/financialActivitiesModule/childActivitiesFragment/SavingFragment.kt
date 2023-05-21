@@ -167,6 +167,8 @@ class SavingFragment : Fragment() {
         dialog.show()
     }
 
+
+
     private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
         mediaPlayer.let {
             if (it.isPlaying) {

@@ -343,9 +343,9 @@ class SpendingFragment : Fragment(){
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }
+        loadAudioDialog(dialogBinding)
         dialog.setOnDismissListener { pauseMediaPlayer(mediaPlayerDialog) }
 
-        loadAudioDialog(dialogBinding)
         dialog.show()
     }
     private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {

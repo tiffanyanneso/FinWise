@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPerformance
 
 import android.app.Dialog
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -28,6 +29,9 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
     //used to get all budgeting activities to count parent involvement
     var budgetingArrayList = ArrayList<FinancialActivities>()
     var goalFilterArrayList = ArrayList<BudgetingFragment.GoalFilter>()
+
+    private var mediaPlayerBudgetingReviewDialog: MediaPlayer? = null
+    private var mediaPlayerBudgetingAccuracyDialog: MediaPlayer? = null
 
     //arraylist that holds all user IDs for createdBy fields in BudgetItem, for parental involvement
     private var createdByUserIDArrayList = ArrayList<String>()
@@ -127,16 +131,17 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
                         setParentalInvolvement()
                         setOverall()
                     }
-                } else
+                } else {
                     setBudgetAccuracy()
                     setParentalInvolvement()
                     setOverall()
+                }
             }
         }
     }
 
     private fun setParentalInvolvement() {
-        var parentalPercentage = nParent.toFloat()/budgetItemCount.toFloat()*100
+        var parentalPercentage = nParent.toFloat()/ budgetItemCount *100
         binding.textViewProgressParentalInvolvement.text = DecimalFormat("##0.##").format(parentalPercentage)+ "%"
         binding.progressBarParentalInvolvement.progress = parentalPercentage.toInt()
         if (parentalPercentage < 5) {
@@ -343,8 +348,26 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
+        //TODO: Change audio and dialogBinding
+        val audio = R.raw.sample
+        dialogBinding.btnSoundParentBudgeting.setOnClickListener {
+            if (mediaPlayerBudgetingReviewDialog == null) {
+                mediaPlayerBudgetingReviewDialog = MediaPlayer.create(this, audio)
+            }
+
+            if (mediaPlayerBudgetingReviewDialog?.isPlaying == true) {
+                mediaPlayerBudgetingReviewDialog?.pause()
+                mediaPlayerBudgetingReviewDialog?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerBudgetingReviewDialog?.start()
+        }
+        dialog.setOnDismissListener { mediaPlayerBudgetingReviewDialog?.let { it1 -> pauseMediaPlayer(it1) } }
+
         dialog.show()
     }
+
+
 
     private fun showBudgetAccuracyAmountReivewDialog() {
 
@@ -358,6 +381,48 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
+        //TODO: Change audio and dialogBinding
+        var audio = R.raw.sample
+        dialogBinding.btnSoundBudgetAccuracyParent.setOnClickListener {
+            if (mediaPlayerBudgetingAccuracyDialog == null) {
+                mediaPlayerBudgetingAccuracyDialog = MediaPlayer.create(this, audio)
+            }
+
+            if (mediaPlayerBudgetingAccuracyDialog?.isPlaying == true) {
+                mediaPlayerBudgetingAccuracyDialog?.pause()
+                mediaPlayerBudgetingAccuracyDialog?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerBudgetingAccuracyDialog?.start()
+        }
+
+        dialog.setOnDismissListener { mediaPlayerBudgetingAccuracyDialog?.let { it1 -> pauseMediaPlayer(it1) } }
+
         dialog.show()
     }
+
+    override fun onDestroy() {
+        releaseMediaPlayer(mediaPlayerBudgetingReviewDialog)
+        releaseMediaPlayer(mediaPlayerBudgetingAccuracyDialog)
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer?) {
+        if (mediaPlayer?.isPlaying == true) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+    }
+
+    private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
+        mediaPlayer.let {
+            if (it.isPlaying) {
+                it.pause()
+                it.seekTo(0)
+            }
+        }
+    }
+
 }

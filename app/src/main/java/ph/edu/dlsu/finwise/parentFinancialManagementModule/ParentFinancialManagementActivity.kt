@@ -90,7 +90,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
 
     private fun loadAudio(audio: Int) {
         //TODO: Change binding and Audio file in mediaPlayer
-        binding.btnAudioPersonalFinanceScore.setOnClickListener {
+        binding.ivScore.setOnClickListener {
             if (!this::mediaPlayer.isInitialized) {
                 mediaPlayer = MediaPlayer.create(context, audio)
             }
