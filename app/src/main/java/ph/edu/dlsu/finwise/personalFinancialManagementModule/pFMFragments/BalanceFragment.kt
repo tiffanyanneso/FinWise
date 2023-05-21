@@ -23,6 +23,7 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentBalanceChartBinding
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -60,6 +61,7 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         getArgumentsFromPFM()
         initializeBalanceLineGraph()
         initializeDetailsButton()
+        checkUser()
     }
 
 
@@ -478,6 +480,22 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         }
 
         return currentWeekDates.sorted()
+    }
+
+    private fun checkUser() {
+        var user = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("Users").document(user).get().addOnSuccessListener {
+
+            if (it.toObject<Users>()!!.userType == "Parent") {
+                binding.btnAudioFragmentBalanceCashFlow.visibility = View.GONE
+                binding.balanceCashFlowChild.visibility = View.GONE
+                binding.balanceCashFlowParent.visibility= View.VISIBLE}
+            else if (it.toObject<Users>()!!.userType == "Child"){
+                binding.btnAudioFragmentBalanceCashFlow.visibility = View.VISIBLE
+                binding.balanceCashFlowChild.visibility= View.VISIBLE
+                binding.balanceCashFlowParent.visibility= View.GONE
+            }
+        }
     }
 
     /*private fun addData(groups: Map<Int, List<Date>>): MutableList<Entry> {

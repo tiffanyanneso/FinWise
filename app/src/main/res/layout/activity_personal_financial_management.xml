@@ -383,16 +383,16 @@
                         android:text="Personal Finance Score"
                         android:gravity="center"
                         android:textStyle="bold"
-                        android:textColor="@color/white"/>
-                        <!--android:layout_marginRight="5dp"-->
+                        android:textColor="@color/white"
+                        android:layout_marginRight="5dp"/>
 
 
-               <!--     <ImageView
+                    <ImageView
                         android:id="@+id/btn_audio_personal_finance_score"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/baseline_mic_24"
-                        app:tint="@color/light_grey" />-->
+                        app:tint="@color/light_grey" />
                 </LinearLayout>
                 <ImageView
                     android:src="@drawable/loading"

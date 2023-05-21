@@ -19,13 +19,17 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.MPPointF
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentIncomeBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
@@ -77,6 +81,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         binding = FragmentIncomeBinding.bind(view)
         getArgumentsFromPFM()
         loadPieChart()
+        checkUser()
     }
 
 
@@ -577,6 +582,21 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         return entries
     }
 
+    private fun checkUser() {
+        var user = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("Users").document(user).get().addOnSuccessListener {
+
+            if (it.toObject<Users>()!!.userType == "Parent") {
+             binding.btnAudioFragmentIncome.visibility = View.GONE
+                binding.incomeChild.visibility = View.GONE
+                binding.incomeParent.visibility= View.VISIBLE}
+                else if (it.toObject<Users>()!!.userType == "Child"){
+            binding.btnAudioFragmentIncome.visibility = View.VISIBLE
+                binding.incomeChild.visibility= View.VISIBLE
+                binding.incomeParent.visibility= View.GONE
+            }
+        }
+    }
     /*  private fun groupDates(dates: List<Date>, range: String): Map<Int, List<Date>> {
       val calendar = Calendar.getInstance()
       val groups = mutableMapOf<Int, MutableList<Date>>()
@@ -613,5 +633,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
               }
           }
       }*/
+
 
 }

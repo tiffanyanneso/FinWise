@@ -18,12 +18,14 @@ import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.utils.MPPointF
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentExpenseBinding
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
 import java.text.DecimalFormat
 import java.util.*
@@ -82,6 +84,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         getArgumentsFromPFM()
         loadTransactionHistory()
         loadPieChart()
+        checkUser()
     }
 
     private fun loadTransactionHistory() {
@@ -430,9 +433,9 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
 
 
         binding.tvTopExpense2.text = top3Categories[1].key
-        binding.tvTopExpenseTotal2.text = "₱"+dec.format(top3Categories[1].value)
+        binding.tvTopExpenseTotal2.text = "₱" + dec.format(top3Categories[1].value)
         binding.tvTopExpense3.text = top3Categories[2].key
-        binding.tvTopExpenseTotal3.text = "₱"+dec.format(top3Categories[2].value)
+        binding.tvTopExpenseTotal3.text = "₱" + dec.format(top3Categories[2].value)
     }
 
 
@@ -532,17 +535,20 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         // add a lot of colors to list
         val colors: ArrayList<Int> = ArrayList()
         colors.add(resources.getColor(R.color.purple_200))
-        colors.add(resources.getColor( R.color.yellow))
+        colors.add(resources.getColor(R.color.yellow))
         colors.add(resources.getColor(R.color.red))
-        colors.add(resources.getColor( R.color.dark_green))
-        colors.add(resources.getColor( R.color.teal_200))
+        colors.add(resources.getColor(R.color.dark_green))
+        colors.add(resources.getColor(R.color.teal_200))
 
         // setting colors.
         dataSet.colors = colors
 
         dataSet.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return String.format("%.1f%%", value) // add the ₱ character to the data point values
+                return String.format(
+                    "%.1f%%",
+                    value
+                ) // add the ₱ character to the data point values
             }
         }
         // setting pie data set
@@ -602,7 +608,22 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         return entries
     }
 
-    /* private fun calculatePercentage() {
+    private fun checkUser() {
+        var user = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("Users").document(user).get().addOnSuccessListener {
+
+            if (it.toObject<Users>()!!.userType == "Parent") {
+                binding.btnAudioFragmentExpense.visibility = View.GONE
+                binding.expenseChild.visibility = View.GONE
+                binding.expenseParent.visibility = View.VISIBLE
+            } else if (it.toObject<Users>()!!.userType == "Child") {
+                binding.btnAudioFragmentExpense.visibility = View.VISIBLE
+                binding.expenseChild.visibility = View.VISIBLE
+                binding.expenseParent.visibility = View.GONE
+            }
+        }
+    }
+        /* private fun calculatePercentage() {
      for (transaction in transactionsArrayList) {
          when (transaction.category) {
              "Clothes" -> clothes += transaction.amount!!.toFloat()
@@ -625,6 +646,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
      topExpense()
      loadPieChartView()
  }*/
+
 
 
 }
