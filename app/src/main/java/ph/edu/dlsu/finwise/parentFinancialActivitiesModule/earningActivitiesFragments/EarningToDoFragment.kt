@@ -6,14 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.EarningCompletedAdapter
+import ph.edu.dlsu.finwise.adapter.EarningOverdueAdapter
 import ph.edu.dlsu.finwise.adapter.EarningToDoAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentEarningCompletedBinding
 import ph.edu.dlsu.finwise.databinding.FragmentEarningToDoBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
+import ph.edu.dlsu.finwise.model.Users
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -24,6 +27,7 @@ class EarningToDoFragment : Fragment() {
     private lateinit var childID:String
 
     private var firestore = Firebase.firestore
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,13 +60,32 @@ class EarningToDoFragment : Fragment() {
                     earningToDoArrayList.add(earning.id)
             }
 
-            earningToDoAdapter = EarningToDoAdapter(requireActivity().applicationContext, earningToDoArrayList)
-            binding.rvViewActivitiesToDo.adapter = earningToDoAdapter
-            binding.rvViewActivitiesToDo.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
-            earningToDoAdapter.notifyDataSetChanged()
+            if (!earningToDoArrayList.isEmpty())
+                loadRecyclerView(earningToDoArrayList)
+            else
+                emptyList()
             binding.rvViewActivitiesToDo.visibility = View.VISIBLE
             binding.loadingItems.stopShimmer()
             binding.loadingItems.visibility = View.GONE
+        }
+    }
+
+    private fun loadRecyclerView(earningToDoArrayList: ArrayList<String>) {
+        earningToDoAdapter = EarningToDoAdapter(requireActivity().applicationContext, earningToDoArrayList)
+        binding.rvViewActivitiesToDo.adapter = earningToDoAdapter
+        binding.rvViewActivitiesToDo.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
+        earningToDoAdapter.notifyDataSetChanged()
+    }
+
+    private fun emptyList() {
+        binding.rvViewActivitiesToDo.visibility = View.GONE
+        binding.layoutEmptyActivity.visibility = View.VISIBLE
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            var userType = it.toObject<Users>()?.userType
+            if (userType == "Parent")
+                binding.tvEmptyListMessage.text = "Your child doesn't have any chores now.\nCreate one to help them start earning!"
+            else if (userType == "Child")
+                binding.tvEmptyListMessage.text = "There are no chores at the moment.\nAsk your parents to create one for you"
         }
     }
 }

@@ -161,8 +161,8 @@ class SavingFragment : Fragment() {
             this.startActivity(goToNewGoal)
             dialog.dismiss()
         }
-        loadSmartAudioDialog(dialogBinding)
-        dialog.setOnDismissListener { pauseMediaPlayer(mediaPlayerDialog) }
+//        loadSmartAudioDialog(dialogBinding)
+//        dialog.setOnDismissListener { pauseMediaPlayer(mediaPlayerDialog) }
 
         dialog.show()
     }
@@ -215,7 +215,14 @@ class SavingFragment : Fragment() {
             for (goal in goalFilterArrayList)
                 goalIDArrayList.add(goal.financialGoalID.toString())
 
-            loadRecyclerView(goalIDArrayList)
+            if (!goalIDArrayList.isEmpty())
+                loadRecyclerView(goalIDArrayList)
+            else {
+                binding.loadingItems.stopShimmer()
+                binding.loadingItems.visibility = View.GONE
+                binding.rvViewGoals.visibility = View.GONE
+                binding.layoutEmptyActivity.visibility = View.VISIBLE
+            }
         }.continueWith {
 
 
@@ -419,7 +426,7 @@ class SavingFragment : Fragment() {
     private fun loadAudio(audio: Int) {
         //TODO: Change binding and Audio file in mediaPlayer
 
-        binding.imgFace.setOnClickListener {
+        binding.btnAudioOverallSavingPerformance.setOnClickListener {
            if (!this::mediaPlayer.isInitialized) {
                mediaPlayer = MediaPlayer.create(context, audio)
            }

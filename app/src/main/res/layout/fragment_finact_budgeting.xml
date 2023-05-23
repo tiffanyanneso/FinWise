@@ -353,23 +353,14 @@
                         android:orientation="vertical">
 
                         <include layout="@layout/item_finact_budgeting_loading" />
-
                         <include layout="@layout/item_finact_budgeting_loading" />
-
                         <include layout="@layout/item_finact_budgeting_loading" />
-
                         <include layout="@layout/item_finact_budgeting_loading" />
-
                         <include layout="@layout/item_finact_budgeting_loading" />
-
                         <include layout="@layout/item_finact_budgeting_loading" />
-
                         <include layout="@layout/item_finact_budgeting_loading" />
-
                         <include layout="@layout/item_finact_budgeting_loading" />
-
                         <include layout="@layout/item_finact_budgeting_loading" />
-
                         <include layout="@layout/item_finact_budgeting_loading" />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
@@ -381,6 +372,33 @@
                     android:layout_weight="8"
                     tools:listitem="@layout/item_finact_budgeting"
                     android:visibility="gone"/>
+
+                <LinearLayout
+                    android:id="@+id/layout_empty_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:visibility="gone">
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@drawable/peso_coin"
+                        android:layout_gravity="center"
+                        />
+
+                    <TextView
+                        android:layout_marginTop="30dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="Complete your goals see budgeting activities!"
+                        android:layout_gravity="center"
+                        android:textSize="16dp"
+                        android:textColor="@color/black"
+                        android:textAlignment="center"
+                        />
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

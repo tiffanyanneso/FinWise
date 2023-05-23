@@ -220,7 +220,12 @@ class ParentSavingFragment : Fragment() {
             for (goal in goalFilterArrayList)
                 goalIDArrayList.add(goal.financialGoalID.toString())
 
-            loadRecyclerView(goalIDArrayList)
+            if (!goalIDArrayList.isEmpty())
+                loadRecyclerView(goalIDArrayList)
+            else {
+                binding.rvViewGoals.visibility = View.GONE
+                binding.layoutEmptyActivity.visibility = View.VISIBLE
+            }
         }.continueWith {
             binding.rvViewGoals.visibility = View.VISIBLE
             binding.loadingItems.stopShimmer()

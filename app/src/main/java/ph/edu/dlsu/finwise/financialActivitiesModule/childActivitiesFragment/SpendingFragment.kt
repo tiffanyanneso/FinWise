@@ -111,7 +111,12 @@ class SpendingFragment : Fragment(){
                 var activityObject = activity.toObject<FinancialActivities>()
                 spendingActivityIDArrayList.add(activityObject?.financialGoalID.toString())
             }
-            loadRecyclerView(spendingActivityIDArrayList)
+            if (!spendingActivityIDArrayList.isEmpty())
+                loadRecyclerView(spendingActivityIDArrayList)
+            else {
+                binding.rvViewGoals.visibility = View.GONE
+                binding.layoutEmptyActivity.visibility = View.VISIBLE
+            }
         }.continueWith {
             binding.rvViewGoals.visibility = View.VISIBLE
             binding.loadingItems.stopShimmer()
@@ -297,7 +302,7 @@ class SpendingFragment : Fragment(){
     private fun loadAudio(audio: Int) {
         //TODO: Change binding and Audio file in mediaPlayer
 
-        binding.imgFace.setOnClickListener {
+        binding.btnAudioOverallSpendingPerformance.setOnClickListener {
             if (!this::mediaPlayer.isInitialized) {
                 mediaPlayer = MediaPlayer.create(context, audio)
             }

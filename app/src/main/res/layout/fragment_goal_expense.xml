@@ -6,7 +6,7 @@
     tools:context=".financialActivitiesModule.goalTransactionsFragments.GoalWithdrawalFragment">
 
     <ScrollView
-        android:id="@+id/scroll"
+        android:id="@+id/scroll_transactions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -47,5 +47,33 @@
         tools:listitem="@layout/item_transaction"/>
     </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/layout_empty_transaction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:visibility="gone">
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/transaction"
+            android:layout_gravity="center"
+            />
+
+        <TextView
+            android:layout_marginTop="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="You will see your transactions once you have deposited to your goal"
+            android:layout_gravity="center"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            />
+
+    </LinearLayout>
 
 </FrameLayout>

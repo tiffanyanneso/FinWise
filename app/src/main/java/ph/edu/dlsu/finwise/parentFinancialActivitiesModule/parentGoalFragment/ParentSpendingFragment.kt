@@ -123,7 +123,12 @@ class ParentSpendingFragment : Fragment() {
                 var activityObject = activity.toObject<FinancialActivities>()
                 spendingActivityIDArrayList.add(activityObject?.financialGoalID.toString())
             }
-            loadRecyclerView(spendingActivityIDArrayList)
+            if (!spendingActivityIDArrayList.isEmpty())
+                loadRecyclerView(spendingActivityIDArrayList)
+            else {
+                binding.rvViewGoals.visibility = View.GONE
+                binding.layoutEmptyActivity.visibility = View.VISIBLE
+            }
         }.continueWith {
             binding.rvViewGoals.visibility = View.VISIBLE
             binding.loadingItems.stopShimmer()

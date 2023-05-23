@@ -9,6 +9,9 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -23,9 +26,11 @@ import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActi
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import ph.edu.dlsu.finwise.services.FirestoreDataSyncService
 import ph.edu.dlsu.finwise.services.FirestoreJobService
+import ph.edu.dlsu.finwise.services.FirestoreSyncWorkManager
 import ph.edu.dlsu.finwise.services.GoalNotificationServices
 import java.util.*
 import java.util.concurrent.TimeUnit
+import androidx.work.Constraints
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private lateinit var alarmManager:AlarmManager
+
+    private lateinit var workManager: WorkManager
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -49,8 +56,9 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, PersonalFinancialManagementActivity::class.java))
                     initializeDailyReminderChildNotif()
                     initializeNearDeadlineNotif()
-                    scheduleFirestoreSyncJob(this)
+                    //scheduleFirestoreSyncJob(this)
                     //saveScores()
+                    saveData()
                 }
                 else if (userObject?.userType == "Parent") {
                     startActivity(Intent(this, ParentLandingPageActivity::class.java))
@@ -139,47 +147,80 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    fun scheduleFirestoreSyncJob(context: Context) {
-        val jobId = 1 // Unique job ID
 
-        val componentName = ComponentName(context, FirestoreJobService::class.java)
-        val jobInfo = JobInfo.Builder(jobId, componentName)
-            .setRequiresCharging(false) // Set any additional constraints if needed
-            .setPersisted(true) // Allow the job to survive device reboots
-            .setMinimumLatency(getTimeUntilNextMidnight()) // Set the initial delay until 11:59 PM
-            .setPeriodic(AlarmManager.INTERVAL_DAY) // Repeat the job daily
+    private fun saveData() {
+        // Initialize WorkManager
+        workManager = WorkManager.getInstance(applicationContext)
+
+        // Create a Constraints object to specify requirements for running the worker
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-        jobScheduler.schedule(jobInfo)
+        // Create a OneTimeWorkRequest for the worker
+        val workRequest = OneTimeWorkRequestBuilder<FirestoreSyncWorkManager>()
+            .setConstraints(constraints)
+            .setInitialDelay(calculateDelay(), TimeUnit.MILLISECONDS)
+            .build()
+
+        // Enqueue the work request with WorkManager
+        workManager.enqueue(workRequest)
     }
 
-    fun getTimeUntilNextMidnight(): Long {
+    private fun calculateDelay(): Long {
         val currentTime = System.currentTimeMillis()
-        val midnight = (currentTime / 86400000L + 1) * 86400000L // Next midnight timestamp
-        return midnight - currentTime
-    }
-
-    private fun saveScores() {
-        println("print in save main ")
-        val intent = Intent(applicationContext, FirestoreDataSyncService::class.java)
-        val pendingIntent = PendingIntent.getService(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
-
         val calendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 12)
-            set(Calendar.MINUTE, 50)
+            timeInMillis = currentTime
+            set(Calendar.HOUR_OF_DAY, 10)
+            set(Calendar.MINUTE, 26)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
         }
-
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )
+        val scheduledTime = calendar.timeInMillis
+        return scheduledTime - currentTime
     }
+
+//    fun scheduleFirestoreSyncJob(context: Context) {
+//        val jobId = 1 // Unique job ID
+//
+//        val componentName = ComponentName(context, FirestoreJobService::class.java)
+//        val jobInfo = JobInfo.Builder(jobId, componentName)
+//            .setRequiresCharging(false) // Set any additional constraints if needed
+//            .setPersisted(true) // Allow the job to survive device reboots
+//            .setMinimumLatency(getTimeUntilNextMidnight()) // Set the initial delay until 11:59 PM
+//            .setPeriodic(AlarmManager.INTERVAL_DAY) // Repeat the job daily
+//            .build()
+//
+//        val jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+//        jobScheduler.schedule(jobInfo)
+//    }
+//
+//    fun getTimeUntilNextMidnight(): Long {
+//        val currentTime = System.currentTimeMillis()
+//        val midnight = (currentTime / 86400000L + 1) * 86400000L // Next midnight timestamp
+//        return midnight - currentTime
+//    }
+//
+//    private fun saveScores() {
+//        println("print in save main ")
+//        val intent = Intent(applicationContext, FirestoreDataSyncService::class.java)
+//        val pendingIntent = PendingIntent.getService(
+//            this,
+//            0,
+//            intent,
+//            PendingIntent.FLAG_IMMUTABLE
+//        )
+//
+//        val calendar = Calendar.getInstance().apply {
+//            set(Calendar.HOUR_OF_DAY, 12)
+//            set(Calendar.MINUTE, 50)
+//        }
+//
+//        alarmManager.setRepeating(
+//            AlarmManager.RTC_WAKEUP,
+//            calendar.timeInMillis,
+//            AlarmManager.INTERVAL_DAY,
+//            pendingIntent
+//        )
+//    }
 }

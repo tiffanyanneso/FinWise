@@ -239,7 +239,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
     private fun loadAudio(audio: Int) {
         /*TODO: Change binding and Audio file in mediaPlayer*/
-        binding.imgFace.setOnClickListener {
+        binding.btnAudioOverallSavingPerformance.setOnClickListener {
             if (mediaPlayer == null) {
                 mediaPlayer = MediaPlayer.create(this, audio)
             }

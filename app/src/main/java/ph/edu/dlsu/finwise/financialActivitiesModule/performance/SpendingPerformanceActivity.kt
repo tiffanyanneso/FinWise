@@ -313,7 +313,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
 
     private fun loadOverspendingAudio(audio: Int) {
         /*TODO: Change binding and Audio file in mediaPlayer*/
-        binding.tvOverspendingText.setOnClickListener {
+        binding.btnAudioOverspending.setOnClickListener {
             if (mediaPlayerOverspending == null) {
                 mediaPlayerOverspending = MediaPlayer.create(this, audio)
             }
@@ -329,7 +329,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
 
 
     private fun loadPurchasePlanningAudio(audio: Int) {
-        binding.tvPurchasePlanningText.setOnClickListener {
+        binding.btnAudioPurchasePlanning.setOnClickListener {
             if (mediaPlayerPurchasePlanning == null) {
                 mediaPlayerPurchasePlanning = MediaPlayer.create(this, audio)
             }
@@ -566,7 +566,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
 
     private fun loadOverallAudio(audio: Int) {
         /*TODO: Change binding and Audio file in mediaPlayer*/
-        binding.imgFace.setOnClickListener {
+        binding.btnAudioOverallSpendingPerformance.setOnClickListener {
             if (mediaPlayerOverall == null) {
                 mediaPlayerOverall = MediaPlayer.create(this, audio)
             }

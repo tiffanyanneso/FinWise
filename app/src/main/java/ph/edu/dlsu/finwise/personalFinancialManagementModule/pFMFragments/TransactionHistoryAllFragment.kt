@@ -163,7 +163,12 @@ class TransactionHistoryAllFragment : Fragment() {
             for (transactionFilter in transactionFilterArrayList)
                 transactionIDArrayList.add(transactionFilter.transactionID!!)
 
-           loadRecyclerView(transactionIDArrayList)
+           if (!transactionIDArrayList.isEmpty())
+               loadRecyclerView(transactionIDArrayList)
+           else {
+               binding.scrollTransactions.visibility = View.GONE
+               binding.layoutEmptyTransaction.visibility = View.VISIBLE
+           }
         }
     }
 
@@ -180,6 +185,9 @@ class TransactionHistoryAllFragment : Fragment() {
             binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireContext().applicationContext,
                 LinearLayoutManager.VERTICAL,
                 false)
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
+            binding.rvViewTransactions.visibility = View.VISIBLE
         }
     }
 }

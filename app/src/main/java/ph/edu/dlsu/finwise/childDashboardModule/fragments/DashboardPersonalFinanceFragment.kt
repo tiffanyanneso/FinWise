@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.childDashboardModule.fragments
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -22,6 +24,9 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardPersonalFinanceBinding
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
+import ph.edu.dlsu.finwise.parentFinancialManagementModule.ParentFinancialManagementActivity
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,9 +36,9 @@ class DashboardPersonalFinanceFragment : Fragment() {
     private lateinit var binding: FragmentDashboardPersonalFinanceBinding
     private var firestore = Firebase.firestore
 
-    private var childID = FirebaseAuth.getInstance().currentUser!!.uid
+    private lateinit var childID: String
 
-    private var user = "child"
+    private var userType = "child"
 
     val transactionsArrayList = ArrayList<Transactions>()
     private lateinit var sortedDate: List<Date>
@@ -287,70 +292,70 @@ class DashboardPersonalFinanceFragment : Fragment() {
         if (personalFinancePerformance == 100.00F) {
             performance = "Excellent!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.dark_green))
-            message = if (user == "Parent")
+            message = if (userType == "Parent")
                 "Your child reached the pinnacle of financial success. Your child's skills and knowledge are outstanding. Your child is  a true financial superstar!"
             else  "You've reached the pinnacle of financial success. Your skills and knowledge are outstanding. You're a true financial superstar!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (personalFinancePerformance > 90) {
             performance = "Amazing!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.amazing_green))
-            message = if (user == "Parent")
+            message = if (userType == "Parent")
                 "Your child's dedication to managing your money is paying off. Continue to fine-tune their financial habits and explore ways to use their savings wisely!"
             else  "Your dedication to managing your money is paying off. Continue to fine-tune your financial habits and explore ways to use your savings wisely!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
         } else if (personalFinancePerformance > 80) {
             performance = "Great!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.green))
-            message = if (user == "Parent")
+            message = if (userType == "Parent")
                 "Your child is making wise choices with your money, and it shows. Keep expanding their knowledge and seek opportunities to grow their savings!"
             else  "You're making wise choices with your money, and it shows. Keep expanding your knowledge and seek opportunities to grow your savings!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (personalFinancePerformance > 70) {
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.light_green))
             performance = "Good!"
-            message = if (user == "Parent")
+            message = if (userType == "Parent")
                 "Your has have a good grasp of managing your income and expenses. Keep up the good work and challenge your child to take on new financial goals!"
             else  "You have a good grasp of managing your income and expenses. Keep up the good work and challenge yourself to take on new financial goals!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
         } else if (personalFinancePerformance > 60) {
             performance = "Average"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
-            message = if (user == "Parent")
+            message = if (userType == "Parent")
                 "Your child's financial skills are improving, and they're becoming more confident in managing their money. They're making a difference!"
             else  "Your financial skills are improving, and you're becoming more confident in managing your money. You're making a difference!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else if (personalFinancePerformance > 50) {
             performance = "Nearly There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.nearly_there_yellow))
-            message = if (user == "Parent")
+            message = if (userType == "Parent")
                 "Your child is making balanced choices with your money. Continue to track their income and expenses, and look for ways to make their money work for them!"
             else  "You're making balanced choices with your money. Continue to track your income and expenses, and look for ways to make your money work for you!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
         } else if (personalFinancePerformance > 40) {
             performance = "Almost There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.almost_there_yellow))
-            message = if (user == "Parent")
+            message = if (userType == "Parent")
                 "Your child is becoming more mindful of their money choices. Help them keep making smart decisions when it comes to spending and saving!"
             else  "You're becoming more mindful of your money choices. Keep making smart decisions when it comes to spending and saving!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
         } else if (personalFinancePerformance > 30) {
             performance = "Getting There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.getting_there_orange))
-            message = if (user == "Parent")
+            message = if (userType == "Parent")
                 "They're getting the hang of managing their income and expenses. Keep exploring different ways to save and budget their money!"
             else  "You're getting the hang of managing your income and expenses. Keep exploring different ways to save and budget your money!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
         } else if (personalFinancePerformance > 20) {
             performance = "Not Quite There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.not_quite_there_red))
-            message = if (user == "Parent")
+            message = if (userType == "Parent")
                 "They're making progress in understanding how money works. Help them keep it up and remember to track their expenses and save some money for their future!"
             else  "You're making progress in understanding how money works. Keep it up and remember to track your expenses and save some money for the future!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
         } else if (personalFinancePerformance > 10) {
             performance = "Need Improvement"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
-            message = if (user == "Parent")
+            message = if (userType == "Parent")
                 "Your child is on their way to becoming a financial superstar. Keep exploring and learning about managing their money!"
             else  "You're on your way to becoming a financial superstar. Keep exploring and learning about managing your money!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
@@ -358,27 +363,41 @@ class DashboardPersonalFinanceFragment : Fragment() {
         else {
             performance = "Get Started!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
-            message = if (user == "Parent")
-                "They have no data yet. Remind them to use the app regularly to develop their financial literacy!"
-            else  "You have 0 balance. Click the income button above to add your money."
+            var date = "month"
+            if (selectedDatesSort == "quarterly")
+                date = "quarter"
+            message = if (userType == "Parent")
+                "They have no data yet for this $date. Remind them to use the app regularly to develop their financial literacy!"
+            else  "You have no data yet for this $date. Click the income button above to add your money."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
         }
 
         imageView.setImageBitmap(bitmap)
         binding.tvPerformanceText.text = message
         binding.tvPerformanceStatus.text = performance
-        /*if (personalFinancePerformanceDecimalFormat > 0 && user == "child")
-            binding.tvSummary.text = "Good job! You've earned ₱$netIncomeText more than you spent"
-            binding.tvPersonalFinanceText.text = ""
-        else if (personalFinancePerformanceDecimalFormat > 0 && user == "parent") {
-            binding.tvSummary.text = "Great! Your child earned ₱$netIncomeText more than they spent"
-        } else if (personalFinancePerformanceDecimalFormat < 0 && user == "child") {
-            netIncomeText = kotlin.math.abs(netIncome).toString()
-            binding.tvSummary.text = "Uh oh! You've spent ₱$netIncomeText more than you earned"
-        } else if (personalFinancePerformanceDecimalFormat < 0 && user == "parent") {
-            netIncomeText = kotlin.math.abs(netIncome).toString()
-            binding.tvSummary.text = "Bad news!Your child spent ₱$netIncomeText more than they earned 😞"
-        }*/
+
+        loadButton()
+    }
+
+    private fun initializeParentFinancialActivityBundle(): Bundle {
+        val bundle = Bundle()
+        bundle.putString("childID", childID)
+        return bundle
+    }
+
+    private fun loadButton() {
+        binding.btnSeeMore.setOnClickListener {
+            Toast.makeText(context, ""+userType, Toast.LENGTH_SHORT).show()
+            val goToActivity = if (userType == "Parent") {
+                val bundle = initializeParentFinancialActivityBundle()
+                val intent = Intent(context, ParentFinancialManagementActivity::class.java)
+                intent.putExtras(bundle)
+                intent
+            } else {
+                Intent(context, PersonalFinancialManagementActivity::class.java)
+            }
+            startActivity(goToActivity)
+        }
     }
 
     private fun initializeGraph() {
@@ -495,13 +514,11 @@ class DashboardPersonalFinanceFragment : Fragment() {
         val childIDBundle = args?.getString("childID")
         val currUser = args?.getString("user")
         if (currUser != null) {
-            user = currUser
+            userType = currUser
         }
 
         if (childIDBundle != null)
             childID = childIDBundle
-
-
 
         if (date != null) {
             selectedDatesSort = date

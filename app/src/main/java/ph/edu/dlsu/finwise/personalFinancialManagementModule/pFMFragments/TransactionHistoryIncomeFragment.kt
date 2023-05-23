@@ -172,7 +172,12 @@ class TransactionHistoryIncomeFragment : Fragment() {
             for (transactionFilter in transactionFilterArrayList)
                 incomeIDArrayList.add(transactionFilter.transactionID!!)
 
-            loadRecyclerView(incomeIDArrayList)
+                if (!incomeIDArrayList.isEmpty())
+                    loadRecyclerView(incomeIDArrayList)
+                else {
+                    binding.scrollTransactions.visibility = View.GONE
+                    binding.layoutEmptyTransaction.visibility = View.VISIBLE
+                }
         }
     }
 
@@ -191,6 +196,9 @@ class TransactionHistoryIncomeFragment : Fragment() {
                 LinearLayoutManager.VERTICAL,
                 false)
             transactionAdapter.notifyDataSetChanged()
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
+            binding.rvViewTransactions.visibility = View.VISIBLE
         }
     }
 }

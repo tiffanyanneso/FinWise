@@ -7,6 +7,7 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -18,6 +19,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.childDashboardModule.fragments.DashboardFinancialActivitiesFragment
 import ph.edu.dlsu.finwise.childDashboardModule.fragments.DashboardFinancialAssessmentsFragment
@@ -90,13 +92,36 @@ class ChildDashboardActivity : AppCompatActivity(){
         binding = ActivityChildDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.title.text = "Overall Financial Literacy Score"
-
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_dashboard)
-        getPerformance()
-        initializeFragments()
-        initializeDateButtons()
+        checkUser()
     }
+
+    private fun checkUser() {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            val user = it.toObject<Users>()!!
+            userType = user.userType.toString()
+            //current user is a child
+            val bottomNavigationViewChild = binding.bottomNav
+            val bottomNavigationViewParent = binding.bottomNavParent
+            if (user.userType == "Child") {
+                bottomNavigationViewChild.visibility = View.VISIBLE
+                bottomNavigationViewParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_dashboard)
+            } else if (user.userType == "Parent") {
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                //sends the ChildID to the parent navbar
+                val bundle = intent.extras
+                currentUser = bundle?.getString("childID").toString()
+                val bundleNavBar = Bundle()
+                bundleNavBar.putString("childID", currentUser)
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_dashboard, bundleNavBar)
+            }
+            getPerformance()
+            initializeFragments()
+            initializeDateButtons()
+        }
+    }
+
 
 
     private fun getPerformance() {
@@ -186,8 +211,6 @@ class ChildDashboardActivity : AppCompatActivity(){
     private fun setBundle() {
         // sending of friendchildID
         bundle.putString("childID", currentUser)
-        //TODO: change
-        userType = "child"
         bundle.putString("user", userType)
     }
 
