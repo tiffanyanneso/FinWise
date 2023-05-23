@@ -294,16 +294,14 @@
                 android:gravity="center"
                 android:layout_marginBottom="10dp"/>
 
-<!--            <TextView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:text="(Click the empty space below to see the graph) "-->
-<!--                android:textStyle="bold"-->
-<!--                android:textColor="@color/light_green"-->
-<!--                android:textSize="16sp"-->
-<!--                android:layout_margin="5dp"-->
-<!--                android:gravity="center"-->
-<!--                />-->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Click space below to see graph!"
+                android:textStyle="bold"
+                android:textColor="@color/light_green"
+                android:textSize="16sp"
+                android:gravity="center" />
 
 
             <com.github.mikephil.charting.charts.LineChart
