@@ -146,7 +146,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         binding.textViewProgressParentalInvolvement.text = DecimalFormat("##0.00").format(parentalPercentage)+ "%"
         binding.progressBarParentalInvolvement.progress = parentalPercentage.toInt()
         if (parentalPercentage < 5) {
-            audio = R.raw.sample
+            audio = R.raw.budgeting_performance_parental_involvement_excellent
             binding.textViewPerformanceTextParentalInvolvement.text = "Excellent"
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.dark_green))
             binding.tvParentalInvolvementText.text = "Keep up the excellent work! You are able to budget independently."
@@ -154,12 +154,12 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
             audio = R.raw.sample
             binding.textViewPerformanceTextParentalInvolvement.text = "Amazing"
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.green))
-            binding.tvParentalInvolvementText.text = "Amazing job! Keep up budgeting independently."
+            binding.tvParentalInvolvementText.text = "Amazing job! Keep budgeting independently."
         } else if (parentalPercentage < 25 && parentalPercentage >= 15) {
             audio = R.raw.sample
             binding.textViewPerformanceTextParentalInvolvement.text = "Great"
             binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.green))
-            binding.tvParentalInvolvementText.text = "You are performing well! Keep up budgeting independently."
+            binding.tvParentalInvolvementText.text = "You are performing well! Keep budgeting independently."
         } else if (parentalPercentage < 35 && parentalPercentage >= 25) {
             audio = R.raw.sample
             binding.textViewPerformanceTextParentalInvolvement.text = "Good"
@@ -330,7 +330,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         } else {
             audio = R.raw.sample
             binding.tvBudgetAccuracyText.text =
-                "Complete spending activities to know your budget accuracy"
+                "Complete spending activities to know your budget accuracy!"
         }
         loadBudgetingAccuracyAudio(audio)
     }
@@ -420,7 +420,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
             binding.textStatus.text = "Getting There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
             binding.tvPerformanceText.text =
-                "Getting there!Work on improving your budget by always doublechecking!"
+                "Getting there! Work on improving your budget by always doublechecking!"
             showPerformanceButton()
         } else if (overall < 26 && overall >= 16) {
             audio = R.raw.sample
