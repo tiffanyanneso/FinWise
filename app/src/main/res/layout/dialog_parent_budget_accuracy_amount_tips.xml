@@ -45,7 +45,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:src="@drawable/baseline_mic_24"
-                app:tint="@color/light_grey" />
+                app:tint="@color/dark_green" />
         </LinearLayout>
 
         <LinearLayout
