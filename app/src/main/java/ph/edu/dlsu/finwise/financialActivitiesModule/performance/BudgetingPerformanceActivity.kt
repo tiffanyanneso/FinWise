@@ -201,7 +201,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
 
     private fun loadParentalInvolvementAudio(audio: Int) {
         /*TODO: Change binding and Audio file in mediaPlayer*/
-        binding.tvParentalInvolvementText.setOnClickListener {
+        binding.btnAudioParentalInvolvement.setOnClickListener {
             if (mediaPlayerParentalInvolvement == null) {
                 mediaPlayerParentalInvolvement = MediaPlayer.create(this, audio)
             }
@@ -217,7 +217,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
 
     private fun loadOverallAudio(audio: Int) {
         /*TODO: Change binding and Audio file in mediaPlayer*/
-        binding.imgFace.setOnClickListener {
+        binding.btnAudioOverallBudgetingPerformance.setOnClickListener {
             if (mediaPlayerOverall == null) {
                 mediaPlayerOverall = MediaPlayer.create(this, audio)
             }
@@ -337,7 +337,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
 
     private fun loadBudgetingAccuracyAudio(audio: Int) {
         /*TODO: Change binding and Audio file in mediaPlayer*/
-        binding.tvBudgetAccuracyText.setOnClickListener {
+        binding.btnAudioBudgetAmountAccuracy.setOnClickListener {
             if (mediaPlayerBudgetingAccuracy == null) {
                 mediaPlayerBudgetingAccuracy = MediaPlayer.create(this, audio)
             }

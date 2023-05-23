@@ -328,7 +328,7 @@ class GoalSettingFragment : Fragment() {
     private fun loadOverallAudio(audio: Int) {
         //TODO: Change binding and Audio file in mediaPlayer
 
-        binding.imgFace.setOnClickListener {
+        binding.btnAudioOverallGoalSettingPerformance.setOnClickListener {
             if (!this::mediaPlayer.isInitialized) {
                 mediaPlayer = MediaPlayer.create(context, audio)
             }

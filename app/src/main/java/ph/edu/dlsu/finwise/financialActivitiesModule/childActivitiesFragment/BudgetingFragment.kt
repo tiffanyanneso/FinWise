@@ -266,7 +266,7 @@ class BudgetingFragment : Fragment() {
     private fun loadAudio(audio: Int) {
         //TODO: Change binding and Audio file in mediaPlayer
 
-        binding.imgFace.setOnClickListener {
+        binding.btnAudioOverallBudgetingPerformance.setOnClickListener {
             if (!this::mediaPlayer.isInitialized) {
                 mediaPlayer = MediaPlayer.create(context, audio)
             }
