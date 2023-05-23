@@ -227,7 +227,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
 
     private fun loadOverallAudio(audio: Int) {
         /*TODO: Change binding and Audio file in mediaPlayer*/
-        binding.imgFace.setOnClickListener {
+        binding.btnAudioOverallGoalSettingPerformance.setOnClickListener {
             if (mediaPlayer == null) {
                 mediaPlayer = MediaPlayer.create(this, audio)
             }
