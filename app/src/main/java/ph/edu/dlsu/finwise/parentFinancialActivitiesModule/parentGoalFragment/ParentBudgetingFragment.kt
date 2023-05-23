@@ -200,62 +200,62 @@ class ParentBudgetingFragment : Fragment() {
 
         if (overall >= 96) {
             binding.imgFace.setImageResource(R.drawable.excellent)
-            binding.tvPerformanceText.text = "Excellent"
-            binding.tvPerformanceText.setTextColor(getResources().getColor(R.color.dark_green))
+            binding.tvPerformanceStatus.text = "Excellent"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
             binding.tvPerformanceText.text = "Your child excels at budgeting. Encourage them to keep up the excellent work."
             showSeeMoreButton()
         } else if (overall < 96 && overall >= 86) {
             binding.imgFace.setImageResource(R.drawable.amazing)
-            binding.tvPerformanceText.text = "Amazing"
-            binding.tvPerformanceText.setTextColor(getResources().getColor(R.color.green))
+            binding.tvPerformanceStatus.text = "Amazing"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "Your child is amazing at budgeting!  Encourage them to keep up the excellent work."
             showSeeMoreButton()
         } else if (overall < 86 && overall >= 76) {
             binding.imgFace.setImageResource(R.drawable.great)
-            binding.tvPerformanceText.text = "Great"
-            binding.tvPerformanceText.setTextColor(getResources().getColor(R.color.green))
+            binding.tvPerformanceStatus.text = "Great"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "Your child is doing a great job of budgeting!"
             showSeeMoreButton()
         } else if (overall < 76 && overall >= 66) {
             binding.imgFace.setImageResource(R.drawable.good)
-            binding.tvPerformanceText.text = "Good"
-            binding.tvPerformanceText.setTextColor(getResources().getColor(R.color.light_green))
+            binding.tvPerformanceStatus.text = "Good"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
             binding.tvPerformanceText.text = "Your child is doing a good job of budgeting! Encourage them to review their budget."
             showSeeMoreButton()
         } else if (overall < 66 && overall >= 56) {
             binding.imgFace.setImageResource(R.drawable.average)
-            binding.tvPerformanceText.text = "Average"
-            binding.tvPerformanceText.setTextColor(getResources().getColor(R.color.yellow))
+            binding.tvPerformanceStatus.text = "Average"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
             binding.tvPerformanceText.text = "Your child is doing a nice job of budgeting! Encourage them to always double check their budget."
             showSeeMoreButton()
         } else if (overall < 56 && overall >= 46) {
             binding.imgFace.setImageResource(R.drawable.nearly_there)
-            binding.tvPerformanceText.text = "Nearly There"
-            binding.tvPerformanceText.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceStatus.text = "Nearly There"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your child is nearly there! Click the tips button to learn how to get there!"
             showSeeMoreButton()
         }  else if (overall < 46 && overall >= 36) {
             binding.imgFace.setImageResource(R.drawable.almost_there)
-            binding.tvPerformanceText.text = "Almost There"
-            binding.tvPerformanceText.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceStatus.text = "Almost There"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your child is almost there! Click the tips button to learn how to help them get there!"
             showSeeMoreButton()
         } else if (overall < 36 && overall >= 26) {
             binding.imgFace.setImageResource(R.drawable.getting_there)
-            binding.tvPerformanceText.text = "Getting There"
-            binding.tvPerformanceText.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceStatus.text = "Getting There"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your child is getting there! Click the tips button to learn how to help them get there!"
             showSeeMoreButton()
         } else if (overall < 26 && overall >= 16) {
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
-            binding.tvPerformanceText.text = "Not Quite\nThere"
-            binding.tvPerformanceText.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceStatus.text = "Not Quite\nThere"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
             showSeeMoreButton()
         } else if (overall < 15) {
             binding.imgFace.setImageResource(R.drawable.bad)
-            binding.tvPerformanceText.text = "Needs\nImprovement"
-            binding.tvPerformanceText.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceStatus.text = "Needs\nImprovement"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them get there!"
             showSeeMoreButton()
         }

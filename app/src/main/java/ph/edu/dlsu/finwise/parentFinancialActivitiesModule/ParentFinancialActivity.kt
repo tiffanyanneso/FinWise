@@ -36,12 +36,12 @@ class ParentFinancialActivity : AppCompatActivity() {
     private var autoApprove = false
 
     private val tabIcons = intArrayOf(
-        ph.edu.dlsu.finwise.R.drawable.baseline_star_24,
-        ph.edu.dlsu.finwise.R.drawable.baseline_wallet_24,
-        ph.edu.dlsu.finwise.R.drawable.baseline_pie_chart_24,
-        ph.edu.dlsu.finwise.R.drawable.baseline_shopping_cart_checkout_24,
-        ph.edu.dlsu.finwise.R.drawable.baseline_check_24,
-        ph.edu.dlsu.finwise.R.drawable.baseline_do_not_disturb_24,
+        R.drawable.baseline_star_24,
+        R.drawable.baseline_wallet_24,
+        R.drawable.baseline_pie_chart_24,
+        R.drawable.baseline_shopping_cart_checkout_24,
+        R.drawable.baseline_check_24,
+        R.drawable.baseline_do_not_disturb_24,
     )
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -50,8 +50,6 @@ class ParentFinancialActivity : AppCompatActivity() {
         binding = ActivityParentFinancialActivitiesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context = this
-
-
 
         initializeChildID()
         initializeParentNavbar()

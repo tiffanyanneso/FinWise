@@ -29,6 +29,7 @@ import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.childDashboardModule.FinancialAssessmentsDetailsActivity
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardFinancialAssessmentsBinding
+import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentLandingPageActivity
 import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
 import java.math.RoundingMode
@@ -85,7 +86,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         getFinancialAssessmentScore()
     }
 
-    private fun initializeDetailsButton() {
+    /*private fun initializeDetailsButton() {
         binding.btnDetails.setOnClickListener{
             val goToDetails = Intent(context, FinancialAssessmentsDetailsActivity::class.java)
             val bundle = Bundle()
@@ -98,7 +99,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             goToDetails.putExtras(bundle)
             startActivity(goToDetails)
         }
-    }
+    }*/
 
     private fun getArgumentsBundle() {
         val args = arguments
@@ -133,7 +134,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             getDatesOfAttempts()
             setData()
             initializeGraph()
-            initializeDetailsButton()
+            //initializeDetailsButton()
             setPerformanceView()
         }
     }
@@ -142,7 +143,13 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         if (financialAssessmentTotalPercentage.isNaN())
             financialAssessmentTotalPercentage = 0.0
 
+
+
         financialAssessmentTotalPercentage /= nAttempt
+
+        if (financialAssessmentTotalPercentage.isNaN())
+            financialAssessmentTotalPercentage = 0.0
+
         val df = DecimalFormat("#.#")
         df.roundingMode = RoundingMode.UP
         val roundedValue = df.format(financialAssessmentTotalPercentage)
@@ -226,9 +233,12 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         else {
             performance = "Get Started!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
+            var date = "month"
+            if (selectedDatesSort == "quarterly")
+                date = "quarter"
             message = if (userType == "Parent")
-                "Your child hasn't taken any assessments. Do a financial activity to test your financial knowledge!"
-            else "You haven't taken any assessments. Do a financial activity to test your financial knowledge."
+                "Your child hasn't taken any assessments for this $date. Do a financial activity to test your financial knowledge!"
+            else "You haven't taken any assessments for this $date. Do a financial activity to test your financial knowledge."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
         }
 
@@ -236,6 +246,23 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         binding.tvPerformanceText.text = message
         binding.tvPerformanceStatus.text = performance
         binding.tvPerformancePercentage.text = "${roundedValue}%"
+
+        loadButton()
+    }
+
+    private fun loadButton() {
+        binding.btnSeeMore.setOnClickListener {
+            val goToActivity = Intent(context, FinancialAssessmentLandingPageActivity::class.java)
+            val bundle = loadBundle()
+            goToActivity.putExtras(bundle)
+            startActivity(goToActivity)
+        }
+    }
+
+    private fun loadBundle(): Bundle {
+        val bundle = Bundle()
+        bundle.putString("childID", childID)
+        return bundle
     }
 
 

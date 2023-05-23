@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.childDashboardModule.fragments
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
@@ -20,7 +21,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardFinancialActivitiesBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.*
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -258,8 +261,11 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         else {
             performance = "Get Started!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
+            /*var date = "month"
+            if (selectedDatesSort == "quarterly")
+                date = "quarter"*/
             message = if (userType == "Parent")
-                "Your child is a financial guru. Celebrate their accomplishments and encourage them to pursue advanced financial literacy courses or activities.!"
+                "Your child hasn't done a financial activity. Go to the financial activities button to start.!"
             else "You haven't done a financial activity. Go to the financial activities button to start!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
         }
@@ -268,6 +274,28 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         binding.tvPerformanceText.text = message
         binding.tvPerformanceStatus.text = performance
         binding.tvPerformancePercentage.text = "${roundedValue}%"
+
+        loadButton()
+    }
+
+    private fun initializeParentFinancialActivityBundle(): Bundle {
+        val bundle = Bundle()
+        bundle.putString("childID", userID)
+        return bundle
+    }
+
+    private fun loadButton() {
+        binding.btnSeeMore.setOnClickListener {
+            val goToActivity = if (userType == "Parent") {
+                val bundle = initializeParentFinancialActivityBundle()
+                val intent = Intent(context, ParentFinancialActivity::class.java)
+                intent.putExtras(bundle)
+                intent
+            } else {
+                Intent(context, FinancialActivity::class.java)
+            }
+            startActivity(goToActivity)
+        }
     }
 
 
@@ -454,8 +482,21 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
     private fun getArgumentsBundle() {
         val args = arguments
-        userID = args?.getString("childID").toString()
-        userType = args?.getString("user").toString()
+
+        val date = args?.getString("date")
+        val childIDBundle = args?.getString("childID")
+        val currUser = args?.getString("user")
+        if (currUser != null) {
+            userType = currUser
+        }
+
+        if (childIDBundle != null)
+            userID = childIDBundle
+
+        /*if (date != null) {
+            selectedDatesSort = date
+            transactionsArrayList.clear()
+        }*/
     }
 
 
