@@ -357,14 +357,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/gradient_pfm_detail_card2"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="20dp">
 
                 <ImageView
                     android:src="@drawable/icon_financial_health"
                     android:contentDescription="Profit"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_marginTop="20dp"
                     android:layout_gravity="center"
                     android:layout_marginBottom="5dp"
                     />
@@ -434,37 +434,37 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="325dp"
-                        android:layout_height="150dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:id="@+id/tv_score"
                         android:gravity="center"
                         android:textSize="16sp"
-                        android:layout_margin="5dp"
-                        android:textStyle="bold"
-                        android:text="Loading data \n For the meantime, you could look at the functions above to track your money. \n You could also check the navigation bar for more cool features! \n Thank you for your patience!"
+                        android:layout_marginTop="5dp"
+                        android:text="Track your money above or check the navigation bar for more cool features!"
                         android:textColor="@color/white"/>
 
                     <androidx.appcompat.widget.AppCompatButton
-                        android:layout_width="130dp"
-                        android:layout_height="50dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:id="@+id/btn_explanation"
                         android:gravity="center"
                         android:text="View Explanation"
                         android:textSize="12sp"
                         android:background="@drawable/button_border_white"
                         android:backgroundTint="@color/dark_green"
-                        android:textColor="@color/white"/>
+                        android:textColor="@color/white"
+                        android:layout_marginTop="15dp"/>
 
-                    <TextView
-                        android:id="@+id/tv_difference"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:gravity="center"
-                        android:layout_margin="20dp"
-                        android:text="Scroll down to see more!"
-                        android:textColor="@color/off_white"
-                        android:textStyle="bold"/>
+<!--                    <TextView-->
+<!--                        android:id="@+id/tv_difference"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:textSize="16sp"-->
+<!--                        android:gravity="center"-->
+<!--                        android:layout_margin="20dp"-->
+<!--                        android:text="Scroll down to see more!"-->
+<!--                        android:textColor="@color/off_white"-->
+<!--                        android:textStyle="bold"/>-->
                 </LinearLayout>
             </LinearLayout>
 
@@ -537,7 +537,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ll_sort_dates"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="15dp">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabs_bar_charts"

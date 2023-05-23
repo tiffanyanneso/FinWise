@@ -229,7 +229,7 @@
                     android:textSize="20dp"
                     android:text="@string/review"
                     android:textStyle="bold"
-                    android:textColor="@color/dark_green"/>
+                    android:textColor="@color/black"/>
 
                 <TextView
                     android:id="@+id/tv_overall_rating"
@@ -237,7 +237,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="24dp"
                     android:text="0.0 / 5.0"
-                    android:textColor="@color/yellow"
+                    android:textColor="@color/teal_700"
                     android:textStyle="bold"
                     android:gravity="center" />
 
