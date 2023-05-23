@@ -76,7 +76,13 @@ class TransactionHistoryExpenseFragment : Fragment() {
             for (transactionFilter in transactionFilterArrayList)
                 expenseIDArrayList.add(transactionFilter.transactionID!!)
 
-            loadRecyclerView(expenseIDArrayList)
+
+            if (!expenseIDArrayList.isEmpty())
+                loadRecyclerView(expenseIDArrayList)
+            else {
+                binding.scrollTransactions.visibility = View.GONE
+                binding.layoutEmptyTransaction.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -190,6 +196,9 @@ class TransactionHistoryExpenseFragment : Fragment() {
                 LinearLayoutManager.VERTICAL,
                 false)
             transactionAdapter.notifyDataSetChanged()
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
+            binding.rvViewTransactions.visibility = View.VISIBLE
         }
     }
 

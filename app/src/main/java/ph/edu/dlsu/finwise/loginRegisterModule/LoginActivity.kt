@@ -12,6 +12,10 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.AuthResult
@@ -32,6 +36,7 @@ import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import ph.edu.dlsu.finwise.services.FirestoreDataSyncService
 import ph.edu.dlsu.finwise.services.FirestoreJobService
+import ph.edu.dlsu.finwise.services.FirestoreSyncWorkManager
 import ph.edu.dlsu.finwise.services.GoalNotificationServices
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -45,6 +50,9 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var currentUser:String
 
     private lateinit var alarmManager:AlarmManager
+
+    private lateinit var workManager: WorkManager
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,7 +132,8 @@ class LoginActivity : AppCompatActivity() {
             "Child" -> {
                 initializeDailyReminderChildNotif()
                 initializeNearDeadlineNotif()
-                scheduleFirestoreSyncJob(this)
+                saveData()
+                //scheduleFirestoreSyncJob(this)
                 //saveScores()
                 goToChild(isFirstLogin)
             }
@@ -194,49 +203,81 @@ class LoginActivity : AppCompatActivity() {
         )
     }
 
-    fun scheduleFirestoreSyncJob(context: Context) {
-        val jobId = 1 // Unique job ID
+    private fun saveData() {
+        // Initialize WorkManager
+        workManager = WorkManager.getInstance(applicationContext)
 
-        val componentName = ComponentName(context, FirestoreJobService::class.java)
-        val jobInfo = JobInfo.Builder(jobId, componentName)
-            .setRequiresCharging(false) // Set any additional constraints if needed
-            .setPersisted(true) // Allow the job to survive device reboots
-            .setMinimumLatency(getTimeUntilNextMidnight()) // Set the initial delay until 11:59 PM
-            .setPeriodic(AlarmManager.INTERVAL_DAY) // Repeat the job daily
+        // Create a Constraints object to specify requirements for running the worker
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-        jobScheduler.schedule(jobInfo)
+        // Create a OneTimeWorkRequest for the worker
+        val workRequest = OneTimeWorkRequestBuilder<FirestoreSyncWorkManager>()
+            .setConstraints(constraints)
+            .setInitialDelay(calculateDelay(), TimeUnit.MILLISECONDS)
+            .build()
+
+        // Enqueue the work request with WorkManager
+        workManager.enqueue(workRequest)
     }
 
-    fun getTimeUntilNextMidnight(): Long {
+    private fun calculateDelay(): Long {
         val currentTime = System.currentTimeMillis()
-        val midnight = (currentTime / 86400000L + 1) * 86400000L // Next midnight timestamp
-        return midnight - currentTime
-    }
-
-    private fun saveScores() {
-        println("print in save score llogin")
-        val intent = Intent(applicationContext, FirestoreDataSyncService::class.java)
-        val pendingIntent = PendingIntent.getService(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
-
         val calendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 12)
-            set(Calendar.MINUTE, 25)
+            timeInMillis = currentTime
+            set(Calendar.HOUR_OF_DAY, 10)
+            set(Calendar.MINUTE, 22)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
         }
-
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )
+        val scheduledTime = calendar.timeInMillis
+        return scheduledTime - currentTime
     }
+
+//    fun scheduleFirestoreSyncJob(context: Context) {
+//        val jobId = 1 // Unique job ID
+//
+//        val componentName = ComponentName(context, FirestoreJobService::class.java)
+//        val jobInfo = JobInfo.Builder(jobId, componentName)
+//            .setRequiresCharging(false) // Set any additional constraints if needed
+//            .setPersisted(true) // Allow the job to survive device reboots
+//            .setMinimumLatency(getTimeUntilNextMidnight()) // Set the initial delay until 11:59 PM
+//            .setPeriodic(AlarmManager.INTERVAL_DAY) // Repeat the job daily
+//            .build()
+//
+//        val jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+//        jobScheduler.schedule(jobInfo)
+//    }
+//
+//    fun getTimeUntilNextMidnight(): Long {
+//        val currentTime = System.currentTimeMillis()
+//        val midnight = (currentTime / 86400000L + 1) * 86400000L // Next midnight timestamp
+//        return midnight - currentTime
+//    }
+//
+//    private fun saveScores() {
+//        println("print in save score llogin")
+//        val intent = Intent(applicationContext, FirestoreDataSyncService::class.java)
+//        val pendingIntent = PendingIntent.getService(
+//            this,
+//            0,
+//            intent,
+//            PendingIntent.FLAG_IMMUTABLE
+//        )
+//
+//        val calendar = Calendar.getInstance().apply {
+//            set(Calendar.HOUR_OF_DAY, 12)
+//            set(Calendar.MINUTE, 25)
+//        }
+//
+//        alarmManager.setRepeating(
+//            AlarmManager.RTC_WAKEUP,
+//            calendar.timeInMillis,
+//            AlarmManager.INTERVAL_DAY,
+//            pendingIntent
+//        )
+//    }
 
 
     private fun goToChild(isFirstLogin: Boolean) {

@@ -61,12 +61,17 @@ class GoalWithdrawalFragment : Fragment() {
             for (filter in transactionFilterArrayList)
                 transactionsIDArrayList.add(filter.transactionID)
 
-            goalTransactionsAdapter = GoalTransactionsHistoryAdapater(requireActivity().applicationContext, transactionsIDArrayList)
-            binding.rvViewTransactions.adapter = goalTransactionsAdapter
-            binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
-            binding.loadingItems.stopShimmer()
-            binding.loadingItems.visibility = View.GONE
-            binding.rvViewTransactions.visibility = View.VISIBLE
+            if (!transactionsIDArrayList.isEmpty()) {
+                goalTransactionsAdapter = GoalTransactionsHistoryAdapater(requireActivity().applicationContext, transactionsIDArrayList)
+                binding.rvViewTransactions.adapter = goalTransactionsAdapter
+                binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
+                binding.loadingItems.stopShimmer()
+                binding.loadingItems.visibility = View.GONE
+                binding.rvViewTransactions.visibility = View.VISIBLE
+            } else {
+                binding.scrollTransactions.visibility = View.GONE
+                binding.layoutEmptyTransaction.visibility = View.VISIBLE
+            }
         }
     }
 

@@ -108,7 +108,12 @@ class BudgetingFragment : Fragment() {
                 goalIDArrayList.add(activityObject?.financialGoalID.toString())
             }
             getOverallBudgeting()
-            loadRecyclerView(goalIDArrayList)
+            if (!goalIDArrayList.isEmpty())
+                loadRecyclerView(goalIDArrayList)
+            else {
+                binding.rvViewGoals.visibility = View.GONE
+                binding.layoutEmptyActivity.visibility = View.VISIBLE
+            }
         }.continueWith {
             binding.rvViewGoals.visibility = View.VISIBLE
             binding.loadingItems.stopShimmer()

@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -26,6 +27,8 @@ import ph.edu.dlsu.finwise.databinding.DialogNotifNewEarningActivitiesBinding
 import ph.edu.dlsu.finwise.databinding.DialogNotifNewGoalToRateParentBinding
 import ph.edu.dlsu.finwise.loginRegisterModule.ParentRegisterChildActivity
 import ph.edu.dlsu.finwise.model.EarningActivityModel
+import ph.edu.dlsu.finwise.model.SettingsModel
+import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.model.Users
 
 class ParentLandingPageActivity : AppCompatActivity() {
@@ -35,6 +38,7 @@ class ParentLandingPageActivity : AppCompatActivity() {
 
     private var firestore = Firebase.firestore
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+    private lateinit var lastLogin:Timestamp
 
     private lateinit var childAdapter:ParentChildrenAdapter
 
@@ -49,6 +53,7 @@ class ParentLandingPageActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             loadChildren()
             checkNotification()
+            updateLastLogin()
         }
 
         binding.btnAddChild.setOnClickListener {
@@ -74,6 +79,7 @@ class ParentLandingPageActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             newGoals()
             earningActivities()
+            overThreshold()
         }
     }
 
@@ -114,12 +120,11 @@ class ParentLandingPageActivity : AppCompatActivity() {
 
     private suspend fun earningActivities() {
         var earningActivitiesArrayList = ArrayList<String>()
-        var lastLogin = firestore.collection("Users").document(currentUser).get().await().toObject<Users>()!!.lastLogin!!.toDate()
         for (childID in childIDArrayList) {
             var earnings = firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("status", "Pending").get().await()
             for (earning in earnings) {
                 var dateCompleted = earning.toObject<EarningActivityModel>().dateCompleted!!.toDate()
-                if(dateCompleted.after(lastLogin))
+                if(dateCompleted.after(lastLogin.toDate()))
                     earningActivitiesArrayList.add(earning.id)
             }
         }
@@ -151,7 +156,30 @@ class ParentLandingPageActivity : AppCompatActivity() {
 
     }
 
+    private suspend fun overThreshold() {
+        var exceedArrayList = ArrayList<String>()
+        for (childID in childIDArrayList) {
+            var settings = firestore.collection("Settings").whereEqualTo("childID", childID).whereEqualTo("parentID", currentUser).get().await()
+            if (!settings.isEmpty) {
+                var settingsObject = settings.documents[0].toObject<SettingsModel>()
+                firestore.collection("Transactions").whereEqualTo("userID", childID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { transactions ->
+                    if (!transactions.isEmpty) {
+                        for (transaction in transactions) {
+                            var transactionObject = transaction.toObject<Transactions>()
+                            if (settingsObject?.alertAmount != 0.00F && (transactionObject.amount!! >= settingsObject?.alertAmount!!))
+                                exceedArrayList.add(transaction.id)
+                        }
+                    }
+                }
+            }
+        }
+
+        println("print exceed " + exceedArrayList.size)
+        for (transaction in exceedArrayList)
+            println("print id " + transaction)
+    }
     private suspend fun loadChildren() {
+        lastLogin = firestore.collection("Users").document(currentUser).get().await().toObject<Users>()!!.lastLogin!!
         var children =  firestore.collection("Users").whereEqualTo("userType", "Child").whereEqualTo("parentID", currentUser).get().await()
         if (children.size()!=0) {
             for (child in children)
@@ -160,5 +188,9 @@ class ParentLandingPageActivity : AppCompatActivity() {
             binding.rvViewChildren.adapter = childAdapter
             binding.rvViewChildren.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         }
+    }
+
+    private fun updateLastLogin() {
+        firestore.collection("Users").document(currentUser).update("lastLogin", Timestamp.now())
     }
 }

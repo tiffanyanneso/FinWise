@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.firestore.ktx.toObject
@@ -15,6 +16,7 @@ import ph.edu.dlsu.finwise.adapter.EarningOverdueAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentEarningCompletedBinding
 import ph.edu.dlsu.finwise.databinding.FragmentEarningOverdueBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
+import ph.edu.dlsu.finwise.model.Users
 import java.sql.Timestamp
 import java.util.*
 import kotlin.collections.ArrayList
@@ -27,6 +29,7 @@ class EarningOverdueFragment : Fragment() {
     private lateinit var childID:String
 
     private var firestore = Firebase.firestore
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,13 +62,32 @@ class EarningOverdueFragment : Fragment() {
                     earningOverdueArrayList.add(earning.id)
             }
 
-            earningOverdueAdapter = EarningOverdueAdapter(requireActivity().applicationContext, earningOverdueArrayList)
-            binding.rvViewActivitiesCompleted.adapter = earningOverdueAdapter
-            binding.rvViewActivitiesCompleted.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
-            earningOverdueAdapter.notifyDataSetChanged()
+            if (!earningOverdueArrayList.isEmpty())
+                loadRecyclerView(earningOverdueArrayList)
+            else
+                emptyList()
             binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
             binding.loadingItems.stopShimmer()
             binding.loadingItems.visibility = View.GONE
+        }
+    }
+
+    private fun loadRecyclerView(earningOverdueArrayList: ArrayList<String>) {
+        earningOverdueAdapter = EarningOverdueAdapter(requireActivity().applicationContext, earningOverdueArrayList)
+        binding.rvViewActivitiesCompleted.adapter = earningOverdueAdapter
+        binding.rvViewActivitiesCompleted.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
+        earningOverdueAdapter.notifyDataSetChanged()
+    }
+
+    private fun emptyList() {
+        binding.rvViewActivitiesCompleted.visibility = View.GONE
+        binding.layoutEmptyActivity.visibility = View.VISIBLE
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            var userType = it.toObject<Users>()?.userType
+            if (userType == "Parent")
+                binding.tvEmptyListMessage.text = "Your child doesn't have any overdue chores."
+            else if (userType == "Child")
+                binding.tvEmptyListMessage.text = "Good job! You've been completing your chores on time!"
         }
     }
 

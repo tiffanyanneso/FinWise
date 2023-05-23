@@ -73,11 +73,27 @@ class EarningSellingActivity : AppCompatActivity() {
 
             for (saleSort in salesFilterArrayList)
                 salesArrayList.add(saleSort.saleItem)
-            salesAdapter = EarningSalesAdapter(this, salesArrayList)
-            binding.rvViewTransactions.adapter = salesAdapter
-            binding.rvViewTransactions.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            salesAdapter.notifyDataSetChanged()
+
+            if (!salesArrayList.isEmpty())
+                loadRecyclerView()
+            else
+                emptyList()
+            binding.rvViewTransactions.visibility = View.VISIBLE
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
         }
+    }
+
+    private fun loadRecyclerView() {
+        salesAdapter = EarningSalesAdapter(this, salesArrayList)
+        binding.rvViewTransactions.adapter = salesAdapter
+        binding.rvViewTransactions.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        salesAdapter.notifyDataSetChanged()
+    }
+
+    private fun emptyList() {
+        binding.rvViewTransactions.visibility = View.GONE
+        binding.layoutEmptyActivity.visibility = View.VISIBLE
     }
 
 

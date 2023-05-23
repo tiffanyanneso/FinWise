@@ -105,4 +105,7 @@ dependencies {
     //PayMaya Api
     implementation 'com.github.paymaya:paymaya-android-sdk-v2:v2.1.0'
 
+    implementation "androidx.work:work-runtime-ktx:2.7.0"
+
+
 }
