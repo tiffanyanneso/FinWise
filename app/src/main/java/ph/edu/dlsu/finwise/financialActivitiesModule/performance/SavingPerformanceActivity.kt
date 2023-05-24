@@ -174,13 +174,13 @@ class SavingPerformanceActivity : AppCompatActivity() {
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.amazing_green))
                 binding.tvPerformanceText.text = "Amazing job! Saving is your strong point. Keep completing your goals!"
             } else if (overall < 86 && overall >= 76) {
-                audio = R.raw.sample
+                audio = R.raw.saving_performance_overall_great
                 binding.imgFace.setImageResource(R.drawable.great)
                 binding.tvPerformanceStatus.text = "Great"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
                 binding.tvPerformanceText.text = "Great job! You are performing well. Keep completing your goals!"
             } else if (overall < 76 && overall >= 66) {
-                audio = R.raw.sample
+                audio = R.raw.saving_performance_overall_good
                 binding.imgFace.setImageResource(R.drawable.good)
                 binding.tvPerformanceStatus.text = "Good"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
@@ -193,7 +193,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
                 binding.tvPerformanceText.text = "Nice work! Up your performance by consistently setting money aside!"
                 showPerformanceButton()
             } else if (overall < 56 && overall >= 46) {
-                audio = R.raw.sample
+                audio = R.raw.saving_performance_overall_nearly_there
                 binding.imgFace.setImageResource(R.drawable.nearly_there)
                 binding.tvPerformanceStatus.text = "Nearly There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
@@ -207,21 +207,21 @@ class SavingPerformanceActivity : AppCompatActivity() {
                 binding.tvPerformanceText.text = "Almost there! Up your performance by setting money aside and earning through activities."
                 showPerformanceButton()
             } else if (overall < 36 && overall >= 26) {
-                audio = R.raw.sample
+                audio = R.raw.saving_performance_overall_getting_there
                 binding.imgFace.setImageResource(R.drawable.getting_there)
                 binding.tvPerformanceStatus.text = "Getting There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
                 binding.tvPerformanceText.text = "Getting there! Up your performance by setting money aside and earning through activities."
                 showPerformanceButton()
             } else if (overall < 26 && overall >= 16) {
-                audio = R.raw.sample
+                audio = R.raw.saving_performance_overall_not_quite_there_yet
                 binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
                 binding.tvPerformanceStatus.text = "Not Quite\nThere"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
                 binding.tvPerformanceText.text = "Not quite there yet! Up your performance by setting money aside and earning through activities. Don't give up!"
                 showPerformanceButton()
             } else if (overall < 15) {
-                audio = R.raw.sample
+                audio = R.raw.saving_performance_overall_needs_improvement
                 binding.imgFace.setImageResource(R.drawable.bad)
                 binding.tvPerformanceStatus.text = "Needs\nImprovement"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
