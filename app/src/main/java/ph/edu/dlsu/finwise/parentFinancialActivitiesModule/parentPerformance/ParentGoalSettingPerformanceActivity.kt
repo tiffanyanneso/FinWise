@@ -273,9 +273,9 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
         } else if (SMARTIndividual == "Relevant") {
             audio = R.raw.sample
             dialogBinding.tvName.text = "Relevant"
-            dialogBinding.tvDefinition.text = "Relevant goals are important to you and with what you want to do."
+            dialogBinding.tvDefinition.text = "Relevant goals are important to your child and with what they want to do."
             dialogBinding.tvGuideQuestions.text = "1.Is the goal important?\n" + "2. What is the reasoning behind the goal?"
-            dialogBinding.tvTips.text = "1. Guide them in exploring their priorities.\n2. Encourage them to set goals that are meaningful to the."
+            dialogBinding.tvTips.text = "1. Guide them in exploring their priorities.\n2. Encourage them to set goals that are meaningful to them."
         } else if (SMARTIndividual == "Time-Bound") {
             audio = R.raw.sample
             dialogBinding.tvName.text = "Time-Bound"

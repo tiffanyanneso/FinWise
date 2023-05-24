@@ -463,7 +463,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         }
 
         //TODO: Change audio and dialogBinding
-        val audio = R.raw.sample
+        val audio = R.raw.dialog_budgeting_review
         dialogBinding.btnSoundBudgetReview.setOnClickListener {
             if (mediaPlayerBudgetingReviewDialog == null) {
                 mediaPlayerBudgetingReviewDialog = MediaPlayer.create(this, audio)
@@ -504,7 +504,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         }
 
         //TODO: Change audio and dialogBinding
-        var audio = R.raw.sample
+        var audio = R.raw.dialog_budget_accuracy_amount_review
         dialogBinding.btnSoundBudgetAccuracy.setOnClickListener {
             if (mediaPlayerBudgetingAccuracyDialog == null) {
                 mediaPlayerBudgetingAccuracyDialog = MediaPlayer.create(this, audio)

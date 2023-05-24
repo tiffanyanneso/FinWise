@@ -116,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Refer to your budget as a guide.\n2. Find the best value for money (sales, discounts).\n3. Prioritize needs over wants.\n2. Think twice before you buy.\n4. Plan purchases."
+            android:text="1. Refer to your budget as a guide.\n2. Find the best value for money (sales, discounts).\n3. Prioritize needs over wants.\n4. Think twice before you buy.\n5. Plan purchases."
             android:textColor="@color/black"
             android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical"/>

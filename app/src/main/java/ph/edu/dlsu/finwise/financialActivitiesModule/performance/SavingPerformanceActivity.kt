@@ -480,7 +480,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             this.startActivity(goToNewGoal)
         }
         //TODO: Change audio and dialogBinding
-        val audio = R.raw.sample
+        val audio = R.raw.dialog_saving_review
         dialogBinding.btnSoundSaving.setOnClickListener {
             if (mediaPlayerGoalDialog == null) {
                 mediaPlayerGoalDialog = MediaPlayer.create(this, audio)

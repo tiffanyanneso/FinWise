@@ -289,7 +289,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
             this.startActivity(goToNewGoal)
         }
         //TODO: Change audio and dialogBinding
-        val audio = R.raw.sample
+        val audio = R.raw.dialog_smart_review
         dialogBinding.btnSoundSmartReview.setOnClickListener {
             if (mediaPlayerGoalDialog == null) {
                 mediaPlayerGoalDialog = MediaPlayer.create(this, audio)

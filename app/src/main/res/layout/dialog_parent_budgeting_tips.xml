@@ -32,11 +32,11 @@
                 android:id="@+id/tv_goal_feedback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="22dp"
-                android:text="Budgeting Review"
                 android:gravity="center"
-                android:textStyle="bold"
+                android:text="Budgeting"
                 android:textColor="@color/black"
+                android:textSize="22dp"
+                android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@id/img" />
 
             <ImageView

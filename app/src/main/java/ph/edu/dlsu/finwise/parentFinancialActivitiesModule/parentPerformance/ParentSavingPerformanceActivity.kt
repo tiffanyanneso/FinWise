@@ -450,7 +450,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         if (specificDuration == "Short Term") {
             audio = R.raw.sample
             dialogBinding.tvTitle.text = "Short Term"
-            dialogBinding.tvDefinition.text = "1. Can be achieved in a short amount of time and have \n" + "2. Duration: Less than 2 weeks"
+            dialogBinding.tvDefinition.text = "1. Can be achieved in a short amount of time and have lower target amounts.\n" + "2. Duration: Less than 2 weeks"
             dialogBinding.tvExamples.text = "1. Saving for a Fried Chicken Sandwich\n" +
                     "2. Saving for a Small Toy\n" +
                     "3. Saving for a Book"
