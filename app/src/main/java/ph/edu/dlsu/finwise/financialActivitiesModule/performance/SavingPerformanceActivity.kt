@@ -162,13 +162,13 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
 
             if (overall >= 96) {
-                audio = R.raw.sample
+                audio = R.raw.saving_performance_overall_excellent
                 binding.imgFace.setImageResource(R.drawable.excellent)
                 binding.tvPerformanceStatus.text = "Excellent"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
                 binding.tvPerformanceText.text = "Keep up the excellent work! You are good at saving. Keep completing your goals!"
             } else if (overall < 96 && overall >= 86) {
-                audio = R.raw.sample
+                audio = R.raw.saving_performance_overall_amazing
                 binding.imgFace.setImageResource(R.drawable.amazing)
                 binding.tvPerformanceStatus.text = "Amazing"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.amazing_green))
@@ -186,7 +186,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
                 binding.tvPerformanceText.text = "Good job! Up your performance by keeping your goals in mind!"
             } else if (overall < 66 && overall >= 56) {
-                audio = R.raw.sample
+                audio = R.raw.saving_performance_overall_average
                 binding.imgFace.setImageResource(R.drawable.average)
                 binding.tvPerformanceStatus.text = "Average"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
@@ -200,7 +200,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
                 binding.tvPerformanceText.text = "You're nearly there! Up your performance by setting money aside and earning through activities."
                 showPerformanceButton()
             }  else if (overall < 46 && overall >= 36) {
-                audio = R.raw.sample
+                audio = R.raw.saving_performance_overall_almost_there
                 binding.imgFace.setImageResource(R.drawable.almost_there)
                 binding.tvPerformanceStatus.text = "Almost There"
                 binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
@@ -229,7 +229,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
                 showPerformanceButton()
             }
             } else {
-                audio = R.raw.sample
+                audio = R.raw.saving_performance_overall_default
                 binding.tvPerformanceStatus.text = "Get Started!"
                 binding.tvPerformanceText.text = "Complete goals to see your performance!"
             }
@@ -509,7 +509,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
         dialog.setContentView(dialogBinding.root)
 
         if (specificDuration == "Short Term") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_short_term
             dialogBinding.tvTitle.text = "Short Term"
             dialogBinding.tvDefinition.text = "1. Can be achieved in a short amount of time\n" + "2. Duration: Less than 2 weeks\n" + "3. Focused on immediate wants or needs"
             dialogBinding.tvExamples.text = "1. Saving for a Fried Chicken Sandwich\n" +
@@ -518,7 +518,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Set aside money consistently\n" +
                     "2. Keep the target date in mind\n" + "3. Accomplish chores or sell items for extra money"
         }  else if (specificDuration == "Medium Term") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_medium
             dialogBinding.tvTitle.text = "Medium Term"
             dialogBinding.tvDefinition.text = "1. Takes a longer time to achieve and involves bigger target amounts \n" +
                     "2. Duration: 2 to 4 weeks"
@@ -528,7 +528,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
                     "2. Earn extra by helping with chores and selling items\n" +
                     "3. Keep the target date in mind"
         } else if (specificDuration == "Long Term") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_long
             dialogBinding.tvTitle.text = "Long Term"
             dialogBinding.tvDefinition.text = "1. Takes a long time to achieve and involves bigger target amounts \n" +
                     "2. Duration: Over a month"
@@ -579,7 +579,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
         var dialogBinding= DialogSavingCategoryReviewBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)
         if (specificCategory == "Buying Items") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_buying_items
             dialogBinding.tvTitle.text = "Buying Items"
             dialogBinding.tvDefinition.text = "Purchasing things such as goods or services."
             dialogBinding.tvExamples.text = "1. Buying a toy\n" +
@@ -587,7 +587,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
                     "2. Keep your target date in mind.\n" + "3. Accomplish chores or sell items for extra money."
         } else if (specificCategory == "Planning An Event") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_planning_event
             dialogBinding.tvTitle.text = "Planning An Event"
             dialogBinding.tvDefinition.text = "Organizing an event and ensuring that all needed materials or services are accounted for."
             dialogBinding.tvExamples.text = "1. Birthday party\n" +
@@ -597,7 +597,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             "3. Accomplish chores or sell items for extra money."
 
         } else if (specificCategory == "Saving For Emergency Funds") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_emergency_funds
             dialogBinding.tvTitle.text = "Saving For Emergency Funds"
             dialogBinding.tvDefinition.text = "1. Saving money to be used in the future for unexpected situations.\n" +
                     "2. Important to be prepared for these situations."
@@ -606,7 +606,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Set aside money consistently.\n" +
                     "2. Keep your future in mind.\n" + "3. Accomplish chores or sell items for extra money."
         } else if (specificCategory == "Donating To Charity") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_charity
             println("print in donating to charity")
             dialogBinding.tvTitle.text = "Donating To Charity"
             dialogBinding.tvDefinition.text = "Giving money to a non-profit organization to support an advocacy."
@@ -615,7 +615,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Donate to an organization that you share an advocacy with.\n" +
                     "2. Set aside money consistently.\n" + "3. Accomplish chores or sell items for extra money."
         } else if (specificCategory == "Situational Shopping") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_situational
             dialogBinding.tvTitle.text = "Situational Shopping"
             dialogBinding.tvDefinition.text = "Shopping for a certain event or happening."
             dialogBinding.tvExamples.text = "1. Grocery shopping \n" +
