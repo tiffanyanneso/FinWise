@@ -18,6 +18,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.goalTransactionsFragments.G
 import ph.edu.dlsu.finwise.financialActivitiesModule.goalTransactionsFragments.GoalWithdrawalFragment
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPendingFragments.ParentPendingEarningFragment
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPendingFragments.ParentPendingGoalFragment
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPendingFragments.ParentTransactionReviewFragment
 import java.util.ArrayList
 
 class ParentPendingForReviewActivity : AppCompatActivity() {
@@ -52,8 +53,12 @@ class ParentPendingForReviewActivity : AppCompatActivity() {
         var pendingEarningFragment = ParentPendingEarningFragment()
         pendingEarningFragment.arguments = fragmentBundle
 
+        var transactionReviewFragment = ParentTransactionReviewFragment()
+        transactionReviewFragment.arguments = fragmentBundle
+
         adapter.addFragment(pendingGoalFragment,"Goals")
         adapter.addFragment(pendingEarningFragment,"Chores")
+        adapter.addFragment(transactionReviewFragment,"Transactions")
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
 

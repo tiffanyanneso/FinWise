@@ -7,9 +7,12 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import com.paymaya.sdk.android.common.LogLevel
 import com.paymaya.sdk.android.common.PayMayaEnvironment
@@ -20,10 +23,15 @@ import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMaya
 import com.paymaya.sdk.android.paywithpaymaya.PayWithPayMayaResult
 import com.paymaya.sdk.android.paywithpaymaya.SinglePaymentResult
 import com.paymaya.sdk.android.paywithpaymaya.models.SinglePaymentRequest
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import org.json.JSONObject
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmconfirmTransactionBinding
+import ph.edu.dlsu.finwise.model.SettingsModel
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -250,11 +258,31 @@ class ConfirmTransactionActivity : AppCompatActivity() {
 
         firestore.collection("Transactions").add(transaction).addOnSuccessListener {
             Log.d("xcvvvv", "updateChildWallet: loobfirestore"+ it.id)
+            if (transactionType == "Expense") {
+                CoroutineScope(Dispatchers.Main).launch {
+                    checkAmount(it.id)
+                }
+            }
             goToPFM()
         }
             .addOnFailureListener {
                 Toast.makeText(this, "Failed to add transaction", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private suspend fun checkAmount(transactionID:String) {
+        var settings = firestore.collection("Settings").whereEqualTo("childID", childID).get().await()
+        if (!settings.isEmpty) {
+            var settingsObject = settings.documents[0].toObject<SettingsModel>()
+            if (amount >= settingsObject?.alertAmount!! && settingsObject.alertAmount!! != 0.00F) {
+                var overAmount = hashMapOf(
+                    "transactionID" to transactionID,
+                    "childID" to childID,
+                    "dateRecorded" to Timestamp.now()
+                )
+                firestore.collection("OverTransactions").add(overAmount)
+            }
+        }
     }
 
     private fun goToPFM() {

@@ -16,13 +16,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.adapter.ParentPendingEarningAdapter
+import ph.edu.dlsu.finwise.adapter.TransactionNotifAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentParentPendingEarningBinding
-import ph.edu.dlsu.finwise.model.EarningActivityModel
-import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.databinding.FragmentParentTransactionBinding
+import ph.edu.dlsu.finwise.databinding.FragmentParentTransactionReviewBinding
+import ph.edu.dlsu.finwise.model.*
 
-class ParentPendingEarningFragment: Fragment() {
+class ParentTransactionReviewFragment: Fragment() {
 
-    private lateinit var binding: FragmentParentPendingEarningBinding
+    private lateinit var binding: FragmentParentTransactionReviewBinding
     private var firestore = Firebase.firestore
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
@@ -38,28 +40,28 @@ class ParentPendingEarningFragment: Fragment() {
     }
 
     private suspend fun getPendingEarning() {
-        var earningActivitiesArrayList = ArrayList<String>()
-        var lastLogin = firestore.collection("Users").document(currentUser).get().await().toObject<Users>()!!.lastLogin!!.toDate()
+        var transactionArrayList = ArrayList<String>()
         for (childID in childIDArrayList) {
-            var earnings = firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("status", "Pending").get().await()
-            for (earning in earnings) {
-                var dateCompleted = earning.toObject<EarningActivityModel>().dateCompleted!!.toDate()
-                if (dateCompleted.after(lastLogin))
-                    earningActivitiesArrayList.add(earning.id)
+            var transactions = firestore.collection("OverTransactions").whereEqualTo("childID", childID).get().await()
+            if (!transactions.isEmpty) {
+                for (transaction in transactions) {
+                    var transactionObject = transaction.toObject<OverThresholdExpenseModel>()
+                    transactionArrayList.add(transactionObject.transactionID!!)
+                }
             }
         }
 
-        if (!earningActivitiesArrayList.isEmpty()) {
-            var earningReviewAdapter = ParentPendingEarningAdapter(requireActivity().applicationContext, earningActivitiesArrayList)
-            binding.rvEarning.adapter = earningReviewAdapter
-            binding.rvEarning.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
-            earningReviewAdapter.notifyDataSetChanged()
+        if (!transactionArrayList.isEmpty()) {
+            var transactionsAdapter = TransactionNotifAdapter(requireActivity().applicationContext, transactionArrayList)
+            binding.rvTransactions.adapter = transactionsAdapter
+            binding.rvTransactions.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
+            transactionsAdapter.notifyDataSetChanged()
         } else
             binding.layoutEmptyActivity.visibility = View.VISIBLE
 
         binding.loadingItems.stopShimmer()
         binding.loadingItems.visibility = View.GONE
-        binding.rvEarning.visibility = View.VISIBLE
+        binding.rvTransactions.visibility = View.VISIBLE
     }
 
     private suspend fun loadChildren() {
@@ -74,7 +76,7 @@ class ParentPendingEarningFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentParentPendingEarningBinding.inflate(inflater, container, false)
+        binding = FragmentParentTransactionReviewBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }

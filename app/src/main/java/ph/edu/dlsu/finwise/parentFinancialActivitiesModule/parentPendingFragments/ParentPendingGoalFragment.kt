@@ -51,7 +51,12 @@ class ParentPendingGoalFragment: Fragment() {
             binding.rvGoals.adapter = parentPendingGoalsAdapter
             binding.rvGoals.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
             parentPendingGoalsAdapter.notifyDataSetChanged()
-        }
+        } else
+            binding.layoutEmptyActivity.visibility = View.VISIBLE
+
+        binding.loadingItems.stopShimmer()
+        binding.loadingItems.visibility = View.GONE
+        binding.rvGoals.visibility = View.VISIBLE
     }
 
     private suspend fun loadChildren() {
