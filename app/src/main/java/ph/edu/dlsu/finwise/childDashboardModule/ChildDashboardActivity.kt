@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -236,6 +237,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             if (personalFinancePerformancePercent > 200)
                 personalFinancePerformancePercent = 200F
             personalFinancePerformance = personalFinancePerformancePercent / 2
+
             /*binding.progressBarPersonalFinance.progress = personalFinancePerformance.toInt()
             binding.tvPersonalFinancePercent.text = DecimalFormat("##0.00").format(personalFinancePerformance) + "%"*/
             if (age == 10 || age == 11)
@@ -419,6 +421,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                     }.continueWith {
                         spendingPercentage = ((1-overspendingPercentage)*100 + ((nPlanned/nTotalPurchased)*100)) /2
 
+                        checkIfNaNFinancialActivitiesScores()
                         println("print goal setting " + goalSettingPercentage)
                         println("print saving " + savingPercentage)
                         println("print budgeting " + budgetingPercentage)
@@ -438,7 +441,24 @@ class ChildDashboardActivity : AppCompatActivity(){
         }
     }
 
+    private fun checkIfNaNFinancialActivitiesScores() {
+        val percentages = mutableListOf(savingPercentage, spendingPercentage, budgetingPercentage,
+            goalSettingPercentage)
+
+        for (i in percentages.indices) {
+            if (percentages[i].isNaN()) {
+                when (i) {
+                    0 -> savingPercentage = 0.00f
+                    1 -> spendingPercentage = 0.00f
+                    2 -> budgetingPercentage = 0.00f
+                    3 -> goalSettingPercentage = 0.00f
+                }
+            }
+        }
+    }
+
     private fun getFinancialAssessmentScore() {
+
         var nCorrect = 0
         var nQuestions = 0
         firestore.collection("AssessmentAttempts").whereEqualTo("childID", currentUser).get().addOnSuccessListener { results ->
@@ -499,6 +519,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4) * .35) + (financialAssessmentPerformance * .30)).toFloat()
         }
 
+        Toast.makeText(this, ""+overallFinancialHealth, Toast.LENGTH_SHORT).show()
         setPerformanceView()
     }
 
@@ -654,17 +675,22 @@ class ChildDashboardActivity : AppCompatActivity(){
 
     private fun checkIfNaN() {
         val percentages = mutableListOf(personalFinancePerformance, financialAssessmentPerformance,
-            savingPercentage, spendingPercentage, budgetingPercentage, goalSettingPercentage)
+            financialActivitiesPerformance, savingPercentage, spendingPercentage,
+            budgetingPercentage, goalSettingPercentage)
+
+        for (ind in percentages)
+            Log.d("mastro", "checkIfNaN: "+ind)
 
         for (i in percentages.indices) {
             if (percentages[i].isNaN()) {
                 when (i) {
                     0 -> personalFinancePerformance = 0.00f
                     1 -> financialAssessmentPerformance = 0.00f
-                    2 -> savingPercentage = 0.00f
-                    3 -> spendingPercentage = 0.00f
-                    4 -> budgetingPercentage = 0.00f
-                    5 -> goalSettingPercentage = 0.00f
+                    2 -> financialActivitiesPerformance = 0.00f
+                    3 -> savingPercentage = 0.00f
+                    4 -> spendingPercentage = 0.00f
+                    5 -> budgetingPercentage = 0.00f
+                    6 -> goalSettingPercentage = 0.00f
                 }
             }
         }

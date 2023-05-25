@@ -150,7 +150,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             if (age > 9 ) {
                 CoroutineScope(Dispatchers.Main).launch {
                     purchasePlanning()
-                    calculateFinancialAssessmentScore()
+                    calculateFinancialActivitiesScore()
                 }
             }
             else {
@@ -165,7 +165,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
     }
 
-    private fun calculateFinancialAssessmentScore() {
+    private fun calculateFinancialActivitiesScore() {
         checkIfNaN()
 
         if (age == 9 || age == 12)
@@ -177,6 +177,8 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     }
 
     private fun setPerformanceView() {
+        Log.d("hatdog", "getFinancialAssessmentScore: "+financialActivitiesPerformance)
+
         if (financialActivitiesPerformance.isNaN())
             financialActivitiesPerformance = 0.0F
 
@@ -351,6 +353,8 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     private fun checkIfNaN() {
         val percentages = mutableListOf(savingPercentage, spendingPercentage, budgetingPercentage,
             goalSettingPercentage)
+
+
 
         for (i in percentages.indices) {
             if (percentages[i].isNaN()) {

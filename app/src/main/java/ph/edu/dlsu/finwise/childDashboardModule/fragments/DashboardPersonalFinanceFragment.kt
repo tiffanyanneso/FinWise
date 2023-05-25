@@ -37,7 +37,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
     private lateinit var binding: FragmentDashboardPersonalFinanceBinding
     private var firestore = Firebase.firestore
 
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = MediaPlayer()
 
     private lateinit var childID: String
 
@@ -63,7 +63,6 @@ class DashboardPersonalFinanceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDashboardPersonalFinanceBinding.bind(view)
-        binding.title.text = "Personal Finance Score"
         getArgumentsBundle()
         initializeBalanceLineGraph()
         //getPersonalFinancePerformance()
@@ -300,8 +299,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
             performance = "Excellent!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.dark_green))
             message = if (userType == "Parent")
-                "Your child reached the pinnacle of financial success. Your child's skills and knowledge are outstanding. Your child is  a true financial superstar!"
-            else  "You've reached the pinnacle of financial success. Your skills and knowledge are outstanding. You're a true financial superstar!"
+                "Your child reached the pinnacle of financial success. Your child's skills and knowledge are outstanding."
+            else  "You've reached the pinnacle of financial success. Your skills and knowledge are outstanding."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (personalFinancePerformance > 90) {
             audio = R.raw.sample
@@ -332,8 +331,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
             performance = "Average"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
             message = if (userType == "Parent")
-                "Your child's financial skills are improving, and they're becoming more confident in managing their money. They're making a difference!"
-            else  "Your financial skills are improving, and you're becoming more confident in managing your money. You're making a difference!"
+                "Your child's financial skills are improving, and they're becoming more confident in managing their money!"
+            else  "Your financial skills are improving, and you're becoming more confident in managing your money!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else if (personalFinancePerformance > 50) {
             audio = R.raw.sample
@@ -393,25 +392,22 @@ class DashboardPersonalFinanceFragment : Fragment() {
         binding.tvPerformanceText.text = message
         binding.tvPerformanceStatus.text = performance
 
-        loadOverallAudio(audio)
+        mediaPlayer = MediaPlayer.create(context, audio)
+        loadOverallAudio()
         loadButton()
     }
 
-    private fun loadOverallAudio(audio: Int) {
+    private fun loadOverallAudio() {
         binding.btnAudioPersonalFinanceScore.setOnClickListener {
             try {
-                if (!this::mediaPlayer.isInitialized) {
-                    mediaPlayer = MediaPlayer.create(context, audio)
-                }
-
                 mediaPlayer.let { player ->
-                    if (player.isPlaying) {
+                    if (player?.isPlaying == true) {
                         player.pause()
                         player.seekTo(0)
                         return@setOnClickListener
                     }
 
-                    player.start()
+                    player?.start()
                 }
             } catch (e: IllegalStateException) {
                 // Handle the exception, e.g., log an error or display a message
@@ -421,17 +417,16 @@ class DashboardPersonalFinanceFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        if (this::mediaPlayer.isInitialized) {
             try {
-                if (mediaPlayer.isPlaying) {
-                    mediaPlayer.stop()
+                if (mediaPlayer?.isPlaying == true) {
+                    mediaPlayer?.stop()
                 }
-                mediaPlayer.release()
+                mediaPlayer?.release()
             } catch (e: IllegalStateException) {
                 // Handle the exception gracefully
                 e.printStackTrace()
             }
-        }
+
     }
 
 
@@ -444,16 +439,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
     }
 
     private fun releaseMediaPlayer() {
-        try {
-            mediaPlayer?.let { player ->
-                if (player.isPlaying) {
-                    player.pause()
-                }
-                player.release()
-            }
-        } catch (e: IllegalStateException) {
-            // Handle the exception, e.g., log an error or display a message
-        }
+        mediaPlayer?.release()
+        mediaPlayer = null
     }
 
 
@@ -465,7 +452,6 @@ class DashboardPersonalFinanceFragment : Fragment() {
 
     private fun loadButton() {
         binding.btnSeeMore.setOnClickListener {
-            if (this::mediaPlayer.isInitialized)
                 releaseMediaPlayer()
             val goToActivity = if (userType == "Parent") {
                 val bundle = initializeParentFinancialActivityBundle()
