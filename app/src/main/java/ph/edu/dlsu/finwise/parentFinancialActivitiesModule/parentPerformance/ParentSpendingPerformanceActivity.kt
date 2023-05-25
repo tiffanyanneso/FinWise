@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPerformance
 
 import android.app.Dialog
+import android.media.MediaPlayer
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,6 +12,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentSpendingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentOverspendingTipsBinding
@@ -27,6 +29,9 @@ import java.time.format.DateTimeFormatter
 class ParentSpendingPerformanceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityParentSpendingPerformanceBinding
     private var firestore = Firebase.firestore
+
+    private var mediaPlayerOverspendingDialog: MediaPlayer? = null
+    private var mediaPlayerSpendingPurchasePlanningDialog: MediaPlayer? = null
 
     var budgetItemsIDArrayList = ArrayList<SpendingFragment.BudgetItemAmount>()
     var goalFilterArrayList = ArrayList<SpendingFragment.GoalFilter>()
@@ -49,6 +54,8 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
 
+        initializeParentNavbar()
+
         budgetItemsIDArrayList.clear()
         getBudgeting()
 
@@ -61,7 +68,6 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
         // Hides actionbar,
         // and initializes the navbar
         supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_goal)
 
         binding.btnTips.setOnClickListener {
             showSpendingReivewDialog()
@@ -75,6 +81,13 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
             showSpendingPurchasePlanningReviewDialog()
         }
     }
+
+    private fun initializeParentNavbar() {
+        val bundleNavBar = Bundle()
+        bundleNavBar.putString("childID", childID)
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance, bundleNavBar)
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getBudgeting() {
@@ -355,13 +368,39 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
+        var audio = R.raw.sample
+        dialogBinding.btnSoundParentSpending.setOnClickListener {
+            if (mediaPlayerOverspendingDialog == null) {
+                mediaPlayerOverspendingDialog = MediaPlayer.create(this, audio)
+            }
+
+            if (mediaPlayerOverspendingDialog?.isPlaying == true) {
+                mediaPlayerOverspendingDialog?.pause()
+                mediaPlayerOverspendingDialog?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerOverspendingDialog?.start()
+        }
+
+        dialog.setOnDismissListener { mediaPlayerOverspendingDialog?.let { it1 -> pauseMediaPlayer(it1) } }
+
         dialog.show()
     }
 
+    private fun pauseMediaPlayer(mediaPlayer: MediaPlayer) {
+        mediaPlayer.let {
+            if (it.isPlaying) {
+                it.pause()
+                it.seekTo(0)
+            }
+        }
+    }
+
+
     private fun showOverspendingReivewDialog() {
 
-        var dialogBinding= DialogParentOverspendingTipsBinding.inflate(getLayoutInflater())
-        var dialog= Dialog(this);
+        val dialogBinding= DialogParentOverspendingTipsBinding.inflate(getLayoutInflater())
+        val dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
         dialog.window!!.setLayout(1000, 1400)
@@ -369,14 +408,31 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }
+
+        //TODO: Change audio and dialogBinding
+        val audio = R.raw.sample
+        dialogBinding.btnSoundParentOverspending.setOnClickListener {
+            if (mediaPlayerOverspendingDialog == null) {
+                mediaPlayerOverspendingDialog = MediaPlayer.create(this, audio)
+            }
+
+            if (mediaPlayerOverspendingDialog?.isPlaying == true) {
+                mediaPlayerOverspendingDialog?.pause()
+                mediaPlayerOverspendingDialog?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerOverspendingDialog?.start()
+        }
+
+        dialog.setOnDismissListener { mediaPlayerOverspendingDialog?.let { it1 -> pauseMediaPlayer(it1) } }
 
         dialog.show()
     }
 
     private fun showSpendingPurchasePlanningReviewDialog() {
 
-        var dialogBinding = DialogParentPurchasePlanningTipsBinding.inflate(getLayoutInflater())
-        var dialog = Dialog(this);
+        val dialogBinding = DialogParentPurchasePlanningTipsBinding.inflate(getLayoutInflater())
+        val dialog = Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
         dialog.window!!.setLayout(1000, 1400)
@@ -385,6 +441,40 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
+        //TODO: Change audio and dialogBinding
+        val audio = R.raw.sample
+        dialogBinding.btnSoundParentPurchasePlanning.setOnClickListener {
+            if (mediaPlayerSpendingPurchasePlanningDialog == null) {
+                mediaPlayerSpendingPurchasePlanningDialog = MediaPlayer.create(this, audio)
+            }
+
+            if (mediaPlayerSpendingPurchasePlanningDialog?.isPlaying == true) {
+                mediaPlayerSpendingPurchasePlanningDialog?.pause()
+                mediaPlayerSpendingPurchasePlanningDialog?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayerSpendingPurchasePlanningDialog?.start()
+        }
+
+        dialog.setOnDismissListener { mediaPlayerSpendingPurchasePlanningDialog?.let { it1 -> pauseMediaPlayer(it1) } }
+
         dialog.show()
     }
+
+    override fun onDestroy() {
+        releaseMediaPlayer(mediaPlayerOverspendingDialog)
+        releaseMediaPlayer(mediaPlayerSpendingPurchasePlanningDialog)
+        releaseMediaPlayer(mediaPlayerSpendingPurchasePlanningDialog)
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer?) {
+        if (mediaPlayer?.isPlaying == true) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+    }
+
 }

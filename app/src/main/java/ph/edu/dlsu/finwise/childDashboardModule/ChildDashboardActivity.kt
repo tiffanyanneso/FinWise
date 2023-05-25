@@ -42,6 +42,8 @@ class ChildDashboardActivity : AppCompatActivity(){
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
     private var userType = "child"
 
+    private var mediaPlayer: MediaPlayer? = null
+
     private lateinit var binding: ActivityChildDashboardBinding
     private var bundle = Bundle()
 
@@ -82,8 +84,6 @@ class ChildDashboardActivity : AppCompatActivity(){
         R.drawable.goal,
         R.drawable.baseline_assessment_24
     )
-
-    private lateinit var mediaPlayer: MediaPlayer
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -517,7 +517,11 @@ class ChildDashboardActivity : AppCompatActivity(){
         val performance: String
         val bitmap: Bitmap
 
+        /*TODO: Change Audio file in mediaPlayer*/
+        var audio = 0
+
         if (overallFinancialHealth == 100.00F) {
+            audio = R.raw.sample
             performance = "Excellent!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.dark_green))
             message = if (userType == "Parent")
@@ -525,6 +529,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             else "You've demonstrated exceptional knowledge and skills in personal finance, financial activities, and financial assessments!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (overallFinancialHealth > 90) {
+            audio = R.raw.sample
             performance = "Amazing!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.amazing_green))
             message = if (userType == "Parent")
@@ -532,6 +537,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             else "You're a true financial whiz. Keep refining your skills, exploring complex financial concepts, and inspiring others with your expertise!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
         } else if (overallFinancialHealth > 80) {
+            audio = R.raw.sample
             performance = "Great!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.green))
             message = if (userType == "Parent")
@@ -539,6 +545,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             else "You have a strong grasp of personal finance concepts. Keep exploring advanced topics and applying your knowledge to real-life situations!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (overallFinancialHealth > 70) {
+            audio = R.raw.sample
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.light_green))
             performance = "Good!"
             message = if (userType == "Parent")
@@ -546,6 +553,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             else "You're well on your way to becoming a financial expert. Keep setting goals, budgeting effectively, and making informed choices!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
         } else if (overallFinancialHealth > 60) {
+            audio = R.raw.sample
             performance = "Average"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
             message = if (userType == "Parent")
@@ -553,6 +561,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             else "You're becoming a confident financial decision-maker. Keep practicing financial activities and assessments to enhance your knowledge and skills!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else if (overallFinancialHealth > 50) {
+            audio = R.raw.sample
             performance = "Nearly There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.nearly_there_yellow))
             message = if (userType == "Parent")
@@ -560,6 +569,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             else "You're making significant strides in your financial literacy journey. Keep saving, setting goals, and budgeting wisely. Your financial future looks bright!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
         } else if (overallFinancialHealth > 40) {
+            audio = R.raw.sample
             performance = "Almost There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.almost_there_yellow))
             message = if (userType == "Parent")
@@ -567,6 +577,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             else "You're becoming a savvy money manager. Keep exploring different financial activities and assessments to strengthen your skills!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
         } else if (overallFinancialHealth > 30) {
+            audio = R.raw.sample
             performance = "Getting There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.getting_there_orange))
             message = if (userType == "Parent")
@@ -574,6 +585,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             else "You're building a solid foundation in personal finance. Keep setting goals, budgeting wisely, and learning about money. Your financial confidence is growing!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
         } else if (overallFinancialHealth > 20) {
+            audio = R.raw.sample
             performance = "Not Quite There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.not_quite_there_red))
             message = if (userType == "Parent")
@@ -581,6 +593,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             else "You're making progress in developing your financial skills. Keep practicing different activities and assessments to continue growing your financial knowledge!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
         } else if (overallFinancialHealth > 10) {
+            audio = R.raw.sample
             performance = "Need Improvement"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
             message = if (userType == "Parent")
@@ -589,6 +602,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
         }
         else {
+            audio = R.raw.sample
             performance = "Get Started!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
             message = "You have no overall finance performance yet. Start using the app and go back to this module"
@@ -600,31 +614,43 @@ class ChildDashboardActivity : AppCompatActivity(){
         binding.tvPerformanceStatus.text = performance
         binding.tvPerformancePercentage.text =  DecimalFormat("##0.00").format(overallFinancialHealth) + "%"
 
-        loadAudio()
+        loadAudio(audio)
     }
-    private fun loadAudio() {
-        /*TODO: Change binding and Audio file in mediaPlayer
-        binding.ivAudio.setOnClickListener {
-            if (!this::mediaPlayer.isInitialized) {
-                mediaPlayer = MediaPlayer.create(context, R.raw)
+    private fun loadAudio(audio: Int) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        binding.btnAudioOverallFinancialLiteracyScore.setOnClickListener {
+            if (mediaPlayer == null) {
+                mediaPlayer = MediaPlayer.create(this, audio)
             }
 
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.pause()
-                mediaPlayer.seekTo(0)
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
+                mediaPlayer?.seekTo(0)
                 return@setOnClickListener
             }
-            mediaPlayer.start()
-        }*/
+            mediaPlayer?.start()
+        }
     }
 
     override fun onDestroy() {
-        if (this::mediaPlayer.isInitialized) {
-            mediaPlayer.stop()
-            mediaPlayer.release()
-        }
+        mediaPlayer?.let { releaseMediaPlayer(it) }
         super.onDestroy()
     }
+
+    override fun onPause() {
+        mediaPlayer?.let { releaseMediaPlayer(it) }
+        super.onPause()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
+
 
     private fun checkIfNaN() {
         val percentages = mutableListOf(personalFinancePerformance, financialAssessmentPerformance,

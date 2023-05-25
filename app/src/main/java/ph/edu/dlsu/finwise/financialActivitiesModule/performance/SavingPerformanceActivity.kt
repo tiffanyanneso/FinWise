@@ -502,7 +502,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
     private fun showDurationDialog() {
 
         //TODO: Change audio and dialogBinding
-        var audio = R.raw.sample
+        var audio = 0
 
         var dialogBinding= DialogSavingDurationReviewBinding.inflate(layoutInflater)
         var dialog= Dialog(this);
@@ -574,7 +574,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
 
     private fun showCategoryDialog() {
         //TODO: Change audio and dialogBinding
-        var audio = R.raw.sample
+        var audio = 0
         var dialog= Dialog(this);
         var dialogBinding= DialogSavingCategoryReviewBinding.inflate(layoutInflater)
         dialog.setContentView(dialogBinding.root)

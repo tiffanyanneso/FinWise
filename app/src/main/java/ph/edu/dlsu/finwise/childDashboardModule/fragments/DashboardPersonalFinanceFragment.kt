@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.childDashboardModule.fragments
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -35,6 +36,8 @@ import java.util.*
 class DashboardPersonalFinanceFragment : Fragment() {
     private lateinit var binding: FragmentDashboardPersonalFinanceBinding
     private var firestore = Firebase.firestore
+
+    private lateinit var mediaPlayer: MediaPlayer
 
     private lateinit var childID: String
 
@@ -289,7 +292,11 @@ class DashboardPersonalFinanceFragment : Fragment() {
         val performance: String
         val bitmap: Bitmap
 
+        //TODO: Change audio
+        var audio = 0
+
         if (personalFinancePerformance == 100.00F) {
+            audio = R.raw.sample
             performance = "Excellent!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.dark_green))
             message = if (userType == "Parent")
@@ -297,6 +304,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
             else  "You've reached the pinnacle of financial success. Your skills and knowledge are outstanding. You're a true financial superstar!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (personalFinancePerformance > 90) {
+            audio = R.raw.sample
             performance = "Amazing!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.amazing_green))
             message = if (userType == "Parent")
@@ -304,6 +312,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
             else  "Your dedication to managing your money is paying off. Continue to fine-tune your financial habits and explore ways to use your savings wisely!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
         } else if (personalFinancePerformance > 80) {
+            audio = R.raw.sample
             performance = "Great!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.green))
             message = if (userType == "Parent")
@@ -311,6 +320,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
             else  "You're making wise choices with your money, and it shows. Keep expanding your knowledge and seek opportunities to grow your savings!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (personalFinancePerformance > 70) {
+            audio = R.raw.sample
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.light_green))
             performance = "Good!"
             message = if (userType == "Parent")
@@ -318,6 +328,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
             else  "You have a good grasp of managing your income and expenses. Keep up the good work and challenge yourself to take on new financial goals!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
         } else if (personalFinancePerformance > 60) {
+            audio = R.raw.sample
             performance = "Average"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
             message = if (userType == "Parent")
@@ -325,6 +336,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
             else  "Your financial skills are improving, and you're becoming more confident in managing your money. You're making a difference!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else if (personalFinancePerformance > 50) {
+            audio = R.raw.sample
             performance = "Nearly There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.nearly_there_yellow))
             message = if (userType == "Parent")
@@ -332,6 +344,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
             else  "You're making balanced choices with your money. Continue to track your income and expenses, and look for ways to make your money work for you!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
         } else if (personalFinancePerformance > 40) {
+            audio = R.raw.sample
             performance = "Almost There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.almost_there_yellow))
             message = if (userType == "Parent")
@@ -339,6 +352,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
             else  "You're becoming more mindful of your money choices. Keep making smart decisions when it comes to spending and saving!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
         } else if (personalFinancePerformance > 30) {
+            audio = R.raw.sample
             performance = "Getting There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.getting_there_orange))
             message = if (userType == "Parent")
@@ -346,6 +360,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
             else  "You're getting the hang of managing your income and expenses. Keep exploring different ways to save and budget your money!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
         } else if (personalFinancePerformance > 20) {
+            audio = R.raw.sample
             performance = "Not Quite There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.not_quite_there_red))
             message = if (userType == "Parent")
@@ -353,14 +368,16 @@ class DashboardPersonalFinanceFragment : Fragment() {
             else  "You're making progress in understanding how money works. Keep it up and remember to track your expenses and save some money for the future!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
         } else if (personalFinancePerformance > 10) {
+            audio = R.raw.sample
             performance = "Need Improvement"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
             message = if (userType == "Parent")
                 "Your child is on their way to becoming a financial superstar. Keep exploring and learning about managing their money!"
-            else  "You're on your way to becoming a financial superstar. Keep exploring and learning about managing your money!"
+            else "You're on your way to becoming a financial superstar. Keep exploring and learning about managing your money!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
         }
         else {
+            audio = R.raw.sample
             performance = "Get Started!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
             var date = "month"
@@ -376,8 +393,69 @@ class DashboardPersonalFinanceFragment : Fragment() {
         binding.tvPerformanceText.text = message
         binding.tvPerformanceStatus.text = performance
 
+        loadOverallAudio(audio)
         loadButton()
     }
+
+    private fun loadOverallAudio(audio: Int) {
+        binding.btnAudioPersonalFinanceScore.setOnClickListener {
+            try {
+                if (!this::mediaPlayer.isInitialized) {
+                    mediaPlayer = MediaPlayer.create(context, audio)
+                }
+
+                mediaPlayer.let { player ->
+                    if (player.isPlaying) {
+                        player.pause()
+                        player.seekTo(0)
+                        return@setOnClickListener
+                    }
+
+                    player.start()
+                }
+            } catch (e: IllegalStateException) {
+                // Handle the exception, e.g., log an error or display a message
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (this::mediaPlayer.isInitialized) {
+            try {
+                if (mediaPlayer.isPlaying) {
+                    mediaPlayer.stop()
+                }
+                mediaPlayer.release()
+            } catch (e: IllegalStateException) {
+                // Handle the exception gracefully
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        releaseMediaPlayer()
+    }
+
+    private fun releaseMediaPlayer() {
+        try {
+            mediaPlayer?.let { player ->
+                if (player.isPlaying) {
+                    player.pause()
+                }
+                player.release()
+            }
+        } catch (e: IllegalStateException) {
+            // Handle the exception, e.g., log an error or display a message
+        }
+    }
+
 
     private fun initializeParentFinancialActivityBundle(): Bundle {
         val bundle = Bundle()
@@ -387,7 +465,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
 
     private fun loadButton() {
         binding.btnSeeMore.setOnClickListener {
-            Toast.makeText(context, ""+userType, Toast.LENGTH_SHORT).show()
+            if (this::mediaPlayer.isInitialized)
+                releaseMediaPlayer()
             val goToActivity = if (userType == "Parent") {
                 val bundle = initializeParentFinancialActivityBundle()
                 val intent = Intent(context, ParentFinancialManagementActivity::class.java)

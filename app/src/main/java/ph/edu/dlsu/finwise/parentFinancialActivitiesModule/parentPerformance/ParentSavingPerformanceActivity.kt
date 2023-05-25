@@ -15,6 +15,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentSavingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSavingCategoryTipsBinding
@@ -71,13 +72,14 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         childID = bundle?.getString("childID").toString()
 
+        initializeParentNavbar()
+
         ongoingGoals = 0
         totalGoals = 0
         goalIDArrayList.clear()
         savingsArrayList.clear()
 
         supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_goal)
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
             R.drawable.baseline_arrow_back_24, null)
@@ -102,6 +104,13 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         computeOverallScore()
 
     }
+
+    private fun initializeParentNavbar() {
+        val bundleNavBar = Bundle()
+        bundleNavBar.putString("childID", childID)
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance, bundleNavBar)
+    }
+
 
     private fun getGoals() {
         firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
@@ -445,7 +454,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         var dialog= Dialog(this)
 
         //TODO: Change audio and dialogBinding
-        var audio = R.raw.sample
+        var audio = 0
 
         if (specificDuration == "Short Term") {
             audio = R.raw.sample
@@ -512,7 +521,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         print("CATEgoRY " + specificCategory)
 
         //TODO: Change audio and dialogBinding
-        var audio = R.raw.sample
+        var audio = 0
         if (specificCategory == "Buying Items") {
             audio = R.raw.sample
             dialogBinding.tvTitle.text = "Buying Items"

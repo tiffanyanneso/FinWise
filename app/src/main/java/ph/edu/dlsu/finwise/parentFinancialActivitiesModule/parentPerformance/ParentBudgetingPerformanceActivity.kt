@@ -11,6 +11,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.*
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.BudgetingFragment
@@ -65,10 +66,11 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_goal)
 
         var bundle: Bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
+
+        initializeParentNavbar()
 
         getOverallBudgeting()
 
@@ -87,6 +89,13 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
             onBackPressed()
         }
     }
+
+    private fun initializeParentNavbar() {
+        val bundleNavBar = Bundle()
+        bundleNavBar.putString("childID", childID)
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance, bundleNavBar)
+    }
+
 
     private fun getOverallBudgeting() {
         firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->

@@ -36,6 +36,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
     private var nRelevant = 0.00F
     private var nTimeBound = 0.00F
 
+
     private var mediaPlayer: MediaPlayer? = null
     private var mediaPlayerGoalDialog: MediaPlayer? = null
     private var mediaPlayerIndividualDialog: MediaPlayer? = null
@@ -108,7 +109,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
 
             binding.btnReviewConcept.visibility = View.GONE
             /*TODO: Change binding and Audio file in mediaPlayer*/
-            var audio = R.raw.sample
+            var audio = 0
             if (percentage >= 96) {
                 audio = R.raw.goal_setting_performance_overall_excellent
                 binding.imgFace.setImageResource(R.drawable.excellent)
@@ -322,7 +323,7 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
         val dialog= Dialog(this);
 
         //TODO: Change audio and dialogBinding
-        var audio = R.raw.sample
+        var audio = 0
         if (SMARTIndividual == "Specific") {
             audio = R.raw.goal_setting_performance_specific
             dialogBinding.tvName.text = "Specific"

@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.childDashboardModule.fragments
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -36,6 +37,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     private var firestore = Firebase.firestore
     private var userType = "child"
 
+    private lateinit var mediaPlayer: MediaPlayer
 
     private lateinit var userID: String
     private var age = 0
@@ -187,7 +189,11 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         val performance: String
         val bitmap: Bitmap
 
+        //TODO: Change audio
+        var audio = 0
+
         if (financialActivitiesPerformance == 100.00F) {
+            audio = R.raw.sample
             performance = "Excellent!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.dark_green))
             message = if (userType == "Parent")
@@ -195,6 +201,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else "Keep inspiring others with your financial knowledge and success. You're on the path to greatness!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (financialActivitiesPerformance > 90) {
+            audio = R.raw.sample
             performance = "Amazing!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.amazing_green))
             message = if (userType == "Parent")
@@ -202,6 +209,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else "Keep refining your strategies, exploring new ways to save and invest, and setting ambitious goals!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
         } else if (financialActivitiesPerformance > 80) {
+            audio = R.raw.sample
             performance = "Great!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.green))
             message = if (userType == "Parent")
@@ -209,6 +217,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else "Keep mastering the art of managing money. Your financial future looks bright!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (financialActivitiesPerformance > 70) {
+            audio = R.raw.sample
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.light_green))
             performance = "Good!"
             message = if (userType == "Parent")
@@ -216,6 +225,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else "Continue building your knowledge of saving, goal setting, budgeting, and spending!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
         } else if (financialActivitiesPerformance > 60) {
+            audio = R.raw.sample
             performance = "Average"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
             message = if (userType == "Parent")
@@ -223,6 +233,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else "Keep setting challenging goals, tracking your progress, and making smart financial choices!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else if (financialActivitiesPerformance > 50) {
+            audio = R.raw.sample
             performance = "Nearly There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.nearly_there_yellow))
             message = if (userType == "Parent")
@@ -230,6 +241,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else "Keep honing your financial skills. By setting goals and making informed spending decisions, you'll achieve success!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
         } else if (financialActivitiesPerformance > 40) {
+            audio = R.raw.sample
             performance = "Almost There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.almost_there_yellow))
             message = if (userType == "Parent")
@@ -237,6 +249,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else "Keep practicing saving, setting goals, and budgeting. Your dedication will pay off!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
         } else if (financialActivitiesPerformance > 30) {
+            audio = R.raw.sample
             performance = "Getting There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.getting_there_orange))
             message = if (userType == "Parent")
@@ -244,6 +257,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else "Keep exploring and learning new ways to save, set goals, and make smart spending choices. Your financial journey is exciting!."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
         } else if (financialActivitiesPerformance > 20) {
+            audio = R.raw.sample
             performance = "Not Quite There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.not_quite_there_red))
             message = if (userType == "Parent")
@@ -251,6 +265,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else "Practice saving, setting goals, and budgeting wisely. You're building a strong foundation for your financial future!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
         } else if (financialActivitiesPerformance > 10) {
+            audio = R.raw.sample
             performance = "Need Improvement"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
             message = if (userType == "Parent")
@@ -259,6 +274,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
         }
         else {
+            audio = R.raw.sample
             performance = "Get Started!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
             /*var date = "month"
@@ -275,7 +291,38 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         binding.tvPerformanceStatus.text = performance
         binding.tvPerformancePercentage.text = "${roundedValue}%"
 
+        loadOverallAudio(audio)
         loadButton()
+    }
+
+    private fun loadOverallAudio(audio: Int) {
+        binding.btnAudioFinancialActivitiesScore.setOnClickListener {
+            if (!this::mediaPlayer.isInitialized) {
+                mediaPlayer = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+                mediaPlayer.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayer.start()
+        }
+    }
+
+    override fun onDestroy() {
+        if (this::mediaPlayer.isInitialized)
+            releaseMediaPlayer(mediaPlayer)
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
     }
 
     private fun initializeParentFinancialActivityBundle(): Bundle {
@@ -286,6 +333,8 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
     private fun loadButton() {
         binding.btnSeeMore.setOnClickListener {
+            if (this::mediaPlayer.isInitialized)
+                releaseMediaPlayer(mediaPlayer)
             val goToActivity = if (userType == "Parent") {
                 val bundle = initializeParentFinancialActivityBundle()
                 val intent = Intent(context, ParentFinancialActivity::class.java)

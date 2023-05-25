@@ -12,6 +12,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.financialActivitiesModule.performance.GoalSettingPerformanceActivity
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentGoalSettingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentSmartConceptTipBinding
@@ -48,12 +49,14 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
         var bundle: Bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
 
+        initializeParentNavbar()
+
+
         print("print child ID " + childID)
 
         // Hides actionbar,
         // and initializes the navbar
         supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_goal)
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
             R.drawable.baseline_arrow_back_24, null)
@@ -71,6 +74,12 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
             showIndividualDialog()
         }
 
+    }
+
+    private fun initializeParentNavbar() {
+        val bundleNavBar = Bundle()
+        bundleNavBar.putString("childID", childID)
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance, bundleNavBar)
     }
 
     private fun RatingObject(name: String, score: Float): GoalSettingPerformanceActivity.Rating {
@@ -250,7 +259,7 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
         var dialog= Dialog(this)
 
         //TODO: Change audio and dialogBinding
-        var audio = R.raw.sample
+        var audio = 0
 
         if (SMARTIndividual == "Specific") {
             audio = R.raw.sample

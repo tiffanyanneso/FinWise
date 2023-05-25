@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -42,6 +43,8 @@ import kotlin.math.roundToInt
 class DashboardFinancialAssessmentsFragment : Fragment() {
     private lateinit var binding: FragmentDashboardFinancialAssessmentsBinding
     private var firestore = Firebase.firestore
+
+    private lateinit var mediaPlayer: MediaPlayer
 
     private lateinit var childID: String
     //private lateinit var user: String
@@ -159,7 +162,11 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         val performance: String
         val bitmap: Bitmap
 
+        //TODO: Change audio
+        var audio = 0
+
         if (financialAssessmentTotalPercentage == 100.0) {
+            audio = R.raw.sample
             performance = "Excellent!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.dark_green))
             message = if (userType == "Parent")
@@ -167,6 +174,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             else "You've mastered the art of managing money. Keep shining and inspiring others with your remarkable skills!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (financialAssessmentTotalPercentage > 90) {
+            audio = R.raw.sample
             performance = "Amazing!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.amazing_green))
             message = if (userType == "Parent")
@@ -174,6 +182,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             else "You're a financial whiz-kid. Keep up the excellent work and inspire others with your financial know-how!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
         } else if (financialAssessmentTotalPercentage > 80) {
+            audio = R.raw.sample
             performance = "Great!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.green))
             message = if (userType == "Parent")
@@ -181,6 +190,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             else "Your financial skills are impressive. Keep honing your knowledge and exploring new ways to make wise financial choices!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (financialAssessmentTotalPercentage > 70) {
+            audio = R.raw.sample
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.light_green))
             performance = "Good!"
             message = if (userType == "Parent")
@@ -188,6 +198,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             else "You have a solid understanding of financial concepts. Keep up the good work and aim for even greater achievements!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
         } else if (financialAssessmentTotalPercentage > 60) {
+            audio = R.raw.sample
             performance = "Average"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
             message = if (userType == "Parent")
@@ -195,6 +206,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             else "You're becoming a savvy money manager. Keep practicing and expanding your knowledge to reach even higher levels!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else if (financialAssessmentTotalPercentage > 50) {
+            audio = R.raw.sample
             performance = "Nearly There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.nearly_there_yellow))
             message = if (userType == "Parent")
@@ -202,6 +214,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             else "Your financial skills are improving. Keep going and continue to learn new strategies for smart money decisions!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
         } else if (financialAssessmentTotalPercentage > 40) {
+            audio = R.raw.sample
             performance = "Almost There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.almost_there_yellow))
             message = if (userType == "Parent")
@@ -209,6 +222,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             else "You're getting the hang of managing your money. Keep exploring and applying what you've learned to keep growing!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
         } else if (financialAssessmentTotalPercentage > 30) {
+            audio = R.raw.sample
             performance = "Getting There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.getting_there_orange))
             message = if (userType == "Parent")
@@ -216,6 +230,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             else "You're gaining a better understanding of financial concepts. Keep learning and practicing to improve even more!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
         } else if (financialAssessmentTotalPercentage > 20) {
+            audio = R.raw.sample
             performance = "Not Quite There"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.not_quite_there_red))
             message = if (userType == "Parent")
@@ -223,6 +238,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             else "Keep exploring and learning about managing money to improve your financial skills!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
         } else if (financialAssessmentTotalPercentage > 10) {
+            audio = R.raw.sample
             performance = "Need Improvement"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
             message = if (userType == "Parent")
@@ -231,6 +247,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
         }
         else {
+            audio = R.raw.sample
             performance = "Get Started!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
             var date = "month"
@@ -247,11 +264,45 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         binding.tvPerformanceStatus.text = performance
         binding.tvPerformancePercentage.text = "${roundedValue}%"
 
+        loadOverallAudio(audio)
         loadButton()
     }
 
+    private fun loadOverallAudio(audio: Int) {
+        binding.btnAudioFinancialAssessmentScore.setOnClickListener {
+            if (!this::mediaPlayer.isInitialized) {
+                mediaPlayer = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.pause()
+                mediaPlayer.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayer.start()
+        }
+    }
+
+    override fun onDestroy() {
+        if (this::mediaPlayer.isInitialized)
+            releaseMediaPlayer(mediaPlayer)
+        super.onDestroy()
+    }
+
+    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.pause()
+            mediaPlayer.seekTo(0)
+        }
+        mediaPlayer.stop()
+        mediaPlayer.release()
+    }
+
+
     private fun loadButton() {
         binding.btnSeeMore.setOnClickListener {
+            if (this::mediaPlayer.isInitialized)
+                releaseMediaPlayer(mediaPlayer)
             val goToActivity = Intent(context, FinancialAssessmentLandingPageActivity::class.java)
             val bundle = loadBundle()
             goToActivity.putExtras(bundle)
@@ -267,7 +318,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
 
 
     private fun initializeGraph() {
-        chart = view?.findViewById(R.id.financial_assessment_chart)!!
+        chart = binding.financialAssessmentChart
 
         val xAxis = chart.xAxis
         xAxis.granularity = 1f // Set a smaller granularity if there are fewer data points

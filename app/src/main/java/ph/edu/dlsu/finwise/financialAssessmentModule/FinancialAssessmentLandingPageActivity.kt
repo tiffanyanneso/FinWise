@@ -91,7 +91,6 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
 
     private fun setUpChartTabs() {
         setBundle()
-        Toast.makeText(this, "childnavbar"+childID, Toast.LENGTH_SHORT).show()
 
         val adapter = PFMAdapter(supportFragmentManager)
         val assessmentLeaderboardFragment = AssessmentLeaderboardFragment()

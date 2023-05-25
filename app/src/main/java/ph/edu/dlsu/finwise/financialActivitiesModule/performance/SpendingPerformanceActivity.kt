@@ -40,7 +40,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
     private var mediaPlayerPurchasePlanning: MediaPlayer? = null
     private var mediaPlayerSpendingDialog: MediaPlayer? = null
     private var mediaPlayerOverspendingDialog: MediaPlayer? = null
-    private var mediaPlayerSpendingPurchaseplanningDialog: MediaPlayer? = null
+    private var mediaPlayerSpendingPurchasePlanningDialog: MediaPlayer? = null
 
 
     var budgetItemsIDArrayList = ArrayList<SpendingFragment.BudgetItemAmount>()
@@ -523,19 +523,19 @@ class SpendingPerformanceActivity : AppCompatActivity() {
         //TODO: Change audio and dialogBinding
         var audio = R.raw.sample
         dialogBinding.btnSoundPurchasePlanning.setOnClickListener {
-            if (mediaPlayerSpendingPurchaseplanningDialog == null) {
-                mediaPlayerSpendingPurchaseplanningDialog = MediaPlayer.create(this, audio)
+            if (mediaPlayerSpendingPurchasePlanningDialog == null) {
+                mediaPlayerSpendingPurchasePlanningDialog = MediaPlayer.create(this, audio)
             }
 
-            if (mediaPlayerSpendingPurchaseplanningDialog?.isPlaying == true) {
-                mediaPlayerSpendingPurchaseplanningDialog?.pause()
-                mediaPlayerSpendingPurchaseplanningDialog?.seekTo(0)
+            if (mediaPlayerSpendingPurchasePlanningDialog?.isPlaying == true) {
+                mediaPlayerSpendingPurchasePlanningDialog?.pause()
+                mediaPlayerSpendingPurchasePlanningDialog?.seekTo(0)
                 return@setOnClickListener
             }
-            mediaPlayerSpendingPurchaseplanningDialog?.start()
+            mediaPlayerSpendingPurchasePlanningDialog?.start()
         }
 
-        dialog.setOnDismissListener { mediaPlayerSpendingPurchaseplanningDialog?.let { it1 -> pauseMediaPlayer(it1) } }
+        dialog.setOnDismissListener { mediaPlayerSpendingPurchasePlanningDialog?.let { it1 -> pauseMediaPlayer(it1) } }
 
         dialog.show()
     }
@@ -587,8 +587,8 @@ class SpendingPerformanceActivity : AppCompatActivity() {
         releaseMediaPlayer(mediaPlayerPurchasePlanning)
         releaseMediaPlayer(mediaPlayerOverspending)
         releaseMediaPlayer(mediaPlayerOverspendingDialog)
-        releaseMediaPlayer(mediaPlayerSpendingPurchaseplanningDialog)
-        releaseMediaPlayer(mediaPlayerSpendingPurchaseplanningDialog)
+        releaseMediaPlayer(mediaPlayerSpendingPurchasePlanningDialog)
+        releaseMediaPlayer(mediaPlayerSpendingPurchasePlanningDialog)
         super.onDestroy()
     }
 
