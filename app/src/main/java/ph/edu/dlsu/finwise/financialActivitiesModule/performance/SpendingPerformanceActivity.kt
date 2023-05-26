@@ -253,7 +253,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                             binding.textOverspendingText.setTextColor(getResources().getColor(R.color.amazing_green))
                             binding.tvPurchasePlanningText.text = "Amazing job! You always plan for your expenses. Keep it up!"
                         } else if (purchasePlanningPercentage < 86 && purchasePlanningPercentage >= 76) {
-                            audio = R.raw.sample
+                            audio = R.raw.spending_performance_great
                             binding.textPurchasePlanningText.text = "Great"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.green))
                             binding.tvPurchasePlanningText.text = "Great job planning your purchases in your shopping list. Keep this up!"
@@ -293,7 +293,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                             binding.tvPurchasePlanningText.text = "Not quite there yet! Don't give up. Plan your expenses more via the shopping list!"
                             showPlanningButton()
                         } else if (purchasePlanningPercentage < 15) {
-                            audio = R.raw.sample
+                            audio = R.raw.spending_performance_needs_improvement
                             binding.textPurchasePlanningText.text = "Needs\nImprovement"
                             binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.red))
                             binding.tvPurchasePlanningText.text = "Uh oh! Seems like you haven’t really been planning your expenses by putting them in your shopping list. Try this out next time!"
@@ -374,7 +374,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.light_green))
             binding.tvPerformanceText.text = "Good job! With a bit more planning, you’ll surely up your performance!"
         } else if (overallSpending < 66 && overallSpending >= 56) {
-            audio = R.raw.sample
+            audio = R.raw.spending_performance_average
             binding.imgFace.setImageResource(R.drawable.average)
             binding.tvPerformanceStatus.text = "Average"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
@@ -447,7 +447,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         //TODO: Change audio and dialogBinding
-        var audio = R.raw.sample
+        var audio = R.raw.dialog_spending_review
         dialogBinding.btnSoundSpending.setOnClickListener {
             if (mediaPlayerSpendingDialog == null) {
                 mediaPlayerSpendingDialog = MediaPlayer.create(this, audio)
@@ -489,7 +489,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
         }
 
         //TODO: Change audio and dialogBinding
-        var audio = R.raw.sample
+        var audio = R.raw.dialog_overspending_review
         dialogBinding.btnSoundOverspending.setOnClickListener {
             if (mediaPlayerOverspendingDialog == null) {
                 mediaPlayerOverspendingDialog = MediaPlayer.create(this, audio)

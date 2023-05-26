@@ -196,69 +196,69 @@ class BudgetingFragment : Fragment() {
         var audio = 0
 
         if (overall >= 96) {
-            audio = R.raw.sample
+            audio = R.raw.budgeting_performance_overall_excellent
             binding.imgFace.setImageResource(R.drawable.excellent)
             binding.textStatus.text = "Excellent"
             binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
             binding.tvPerformanceText.text = "Keep up the excellent work! Budgeting is your strong point. Keep making those budgets!"
             showSeeMoreButton()
         } else if (overall < 96 && overall >= 86) {
-            audio = R.raw.sample
+            audio = R.raw.budgeting_performance_overall_amazing
             binding.imgFace.setImageResource(R.drawable.amazing)
             binding.textStatus.text = "Amazing"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "Amazing job! You are performing well. Budgeting is your strong point. Keep making those budgets!"
         } else if (overall < 86 && overall >= 76) {
-            audio = R.raw.sample
+            audio = R.raw.budgeting_performance_overall_great_good
             binding.imgFace.setImageResource(R.drawable.great)
             binding.textStatus.text = "Great"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "You are performing well. Keep making those budgets!"
             showSeeMoreButton()
         } else if (overall < 76 && overall >= 66) {
-            audio = R.raw.sample
+            audio = R.raw.budgeting_performance_overall_great_good
             binding.imgFace.setImageResource(R.drawable.good)
             binding.textStatus.text = "Good"
             binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
             binding.tvPerformanceText.text = "Good job! With a bit more attention to detail, you’ll surely up your performance!"
             showSeeMoreButton()
         } else if (overall < 66 && overall >= 56) {
-            audio = R.raw.sample
+            audio = R.raw.budgeting_performance_overall_average
             binding.imgFace.setImageResource(R.drawable.average)
             binding.textStatus.text = "Average"
             binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
             binding.tvPerformanceText.text = "Nice work! Work on improving your budget by always doublechecking. You’ll get there soon!"
             showSeeMoreButton()
         } else if (overall < 56 && overall >= 46) {
-            audio = R.raw.sample
+            audio = R.raw.budgeting_performance_overall_nearly_there
             binding.imgFace.setImageResource(R.drawable.nearly_there)
             binding.textStatus.text = "Nearly There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
             showSeeMoreButton()
         }  else if (overall < 46 && overall >= 36) {
-            audio = R.raw.sample
+            audio = R.raw.budgeting_performance_overall_almost_there
             binding.imgFace.setImageResource(R.drawable.almost_there)
             binding.textStatus.text = "Almost There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Almost there! You need to work on your budgeting. Click review to learn how!"
             showSeeMoreButton()
         } else if (overall < 36 && overall >= 26) {
-            audio = R.raw.sample
+            audio = R.raw.budgeting_performance_overall_getting_there
             binding.imgFace.setImageResource(R.drawable.getting_there)
             binding.textStatus.text = "Getting There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Getting there! You need to work on your budgeting. Click review to learn how!"
             showSeeMoreButton()
         } else if (overall < 26 && overall >= 16) {
-            audio = R.raw.sample
+            audio = R.raw.budgeting_performance_overall_not_quite_there_yet
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
             binding.textStatus.text = "Not Quite\nThere"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
             showSeeMoreButton()
         } else if (overall < 15) {
-            audio = R.raw.sample
+            audio = R.raw.budgeting_performance_accuracy_needs_improvement
             binding.imgFace.setImageResource(R.drawable.bad)
             binding.textStatus.text = "Needs\nImprovement"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
@@ -353,7 +353,7 @@ class BudgetingFragment : Fragment() {
 
     private fun loadAudioDialog(dialogBinding: DialogBudgetingReviewBinding) {
         /*TODO: Change binding and Audio file in mediaPlayer*/
-        val audio = R.raw.sample
+        val audio = R.raw.dialog_budgeting_review
 
         dialogBinding.btnSoundBudgetReview.setOnClickListener {
             if (!this::mediaPlayerDialog.isInitialized) {

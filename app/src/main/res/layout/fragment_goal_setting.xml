@@ -414,37 +414,37 @@
                         android:background="@drawable/button_border"/>
                 </LinearLayout>
 
-                <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/loading_items"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+<!--                <com.facebook.shimmer.ShimmerFrameLayout-->
+<!--                    android:id="@+id/loading_items"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent">-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        android:orientation="vertical">-->
 
-                        <include layout="@layout/item_finact_goal_setting_loading" />
+<!--                        <include layout="@layout/item_finact_goal_setting_loading" />-->
 
-                        <include layout="@layout/item_finact_goal_setting_loading" />
+<!--                        <include layout="@layout/item_finact_goal_setting_loading" />-->
 
-                        <include layout="@layout/item_finact_goal_setting_loading" />
+<!--                        <include layout="@layout/item_finact_goal_setting_loading" />-->
 
-                        <include layout="@layout/item_finact_goal_setting_loading" />
+<!--                        <include layout="@layout/item_finact_goal_setting_loading" />-->
 
-                        <include layout="@layout/item_finact_goal_setting_loading" />
+<!--                        <include layout="@layout/item_finact_goal_setting_loading" />-->
 
-                        <include layout="@layout/item_finact_goal_setting_loading" />
+<!--                        <include layout="@layout/item_finact_goal_setting_loading" />-->
 
-                        <include layout="@layout/item_finact_goal_setting_loading" />
+<!--                        <include layout="@layout/item_finact_goal_setting_loading" />-->
 
-                        <include layout="@layout/item_finact_goal_setting_loading" />
+<!--                        <include layout="@layout/item_finact_goal_setting_loading" />-->
 
-                        <include layout="@layout/item_finact_goal_setting_loading" />
+<!--                        <include layout="@layout/item_finact_goal_setting_loading" />-->
 
-                        <include layout="@layout/item_finact_goal_setting_loading" />
-                    </LinearLayout>
-                </com.facebook.shimmer.ShimmerFrameLayout>
+<!--                        <include layout="@layout/item_finact_goal_setting_loading" />-->
+<!--                    </LinearLayout>-->
+<!--                </com.facebook.shimmer.ShimmerFrameLayout>-->
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_view_goals"

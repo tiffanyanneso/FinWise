@@ -368,7 +368,7 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
             dialog.dismiss()
         }
 
-        var audio = R.raw.sample
+        var audio = R.raw.dialog_parent_spending_tips
         dialogBinding.btnSoundParentSpending.setOnClickListener {
             if (mediaPlayerOverspendingDialog == null) {
                 mediaPlayerOverspendingDialog = MediaPlayer.create(this, audio)
@@ -410,7 +410,7 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
         }
 
         //TODO: Change audio and dialogBinding
-        val audio = R.raw.sample
+        val audio = R.raw.dialog_parent_overspending_tips
         dialogBinding.btnSoundParentOverspending.setOnClickListener {
             if (mediaPlayerOverspendingDialog == null) {
                 mediaPlayerOverspendingDialog = MediaPlayer.create(this, audio)
@@ -442,7 +442,7 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
         }
 
         //TODO: Change audio and dialogBinding
-        val audio = R.raw.sample
+        val audio = R.raw.dialog_parent_purchase_planning
         dialogBinding.btnSoundParentPurchasePlanning.setOnClickListener {
             if (mediaPlayerSpendingPurchasePlanningDialog == null) {
                 mediaPlayerSpendingPurchasePlanningDialog = MediaPlayer.create(this, audio)

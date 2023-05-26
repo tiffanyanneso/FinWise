@@ -430,7 +430,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         }
 
         //TODO: Change audio and dialogBinding
-        val audio = R.raw.sample
+        val audio = R.raw.dialog_parent_saving_tips
         dialogBinding.btnSoundParentSavingTips.setOnClickListener {
             if (mediaPlayerGoalDialog == null) {
                 mediaPlayerGoalDialog = MediaPlayer.create(this, audio)
@@ -457,7 +457,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         var audio = 0
 
         if (specificDuration == "Short Term") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_parent_short_term
             dialogBinding.tvTitle.text = "Short Term"
             dialogBinding.tvDefinition.text = "1. Can be achieved in a short amount of time and have lower target amounts.\n" + "2. Duration: Less than 2 weeks"
             dialogBinding.tvExamples.text = "1. Saving for a Fried Chicken Sandwich\n" +
@@ -466,7 +466,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Encourage your child to consistently set aside money.\n2. Remind them to take note of their target date as it is a short timeline.\n3. Set earning activities such as chores to help them out."
 
         }  else if (specificDuration == "Medium Term") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_parent_medium_term
             dialogBinding.tvTitle.text = "Medium Term"
             dialogBinding.tvDefinition.text = "1. Takes a longer time to achieve and usually involves bigger target amounts \n" +
                     "2. Duration: 2 to 4 weeks"
@@ -476,7 +476,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
                     "2. Set earning activities such as chores to help them out.\n" +
                     "3. Remind them to take note of their target date as it is a short timeline."
         } else if (specificDuration == "Long Term") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_parent_long_term
             dialogBinding.tvTitle.text = "Long Term"
             dialogBinding.tvDefinition.text = "1. Takes a long time to achieve and involves bigger target amounts \n" +
                     "2. Duration: Over a month"
@@ -523,14 +523,14 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
         //TODO: Change audio and dialogBinding
         var audio = 0
         if (specificCategory == "Buying Items") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_parent_buying_items
             dialogBinding.tvTitle.text = "Buying Items"
             dialogBinding.tvDefinition.text = "Purchasing things such as goods or services."
             dialogBinding.tvExamples.text = "1. Buying a toy\n" +
                     "2. Buying a book"
             dialogBinding.tvTips.text = "1. Encourage them to set aside money consistently.\n2. Remind them to keep their target date in mind."
         } else if (specificCategory == "Planning An Event") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_parent_planning_event
             dialogBinding.tvTitle.text = "Planning An Event"
             dialogBinding.tvDefinition.text = "Organizing an event and ensuring that all needed materials or services are accounted for."
             dialogBinding.tvExamples.text = "1. Birthday party\n" +
@@ -540,7 +540,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
                     "3. Remind them to keep their target date in mind."
 
         } else if (specificCategory == "Saving For Emergency Funds") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_parent_emergency_funds
             dialogBinding.tvTitle.text = "Saving For Emergency Funds"
             dialogBinding.tvDefinition.text = "1. Saving money to be used in the future for unexpected situations \n" +
                     "2. Important to be prepared for these situations"
@@ -549,7 +549,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Encourage them to set aside money consistently.\n" +
                     "2. Encourage them to think about their future.\n3. Share instances where you have had unexpected expenses with them."
         } else if (specificCategory == "Donating To Charity") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_parent_donating_charity
             dialogBinding.tvTitle.text = "Donating To Charity"
             dialogBinding.tvDefinition.text = "1. Giving money to a non-profit organization to support an advocacy.\n" +
                     "2. Important to think about others"
@@ -558,7 +558,7 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
             dialogBinding.tvTips.text = "1. Encourage them to donate to an organization that they share an advocacy with \n" +
                     "2. Encourage them to set aside money consistently.\n3. Share experiences when you have donated to an organization."
         } else if (specificCategory == "Situational Shopping") {
-            audio = R.raw.sample
+            audio = R.raw.saving_performance_parent_situational_shopping
             dialogBinding.tvTitle.text = "Situational Shopping"
             dialogBinding.tvDefinition.text = "Shopping for a certain event or happening."
             dialogBinding.tvExamples.text = "1. Grocery shopping \n" +

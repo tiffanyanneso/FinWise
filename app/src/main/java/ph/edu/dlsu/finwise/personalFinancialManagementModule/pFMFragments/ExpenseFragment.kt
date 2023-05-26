@@ -177,12 +177,12 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         var audio = 0
         if (user == "child" && total > 0.00F) {
             audio = R.raw.sample
-            binding.tvSummary.text = "You've spent ₱$totalText from $dateRange!"
+            binding.tvSummary.text = "You've spent ₱$totalText this $dateRange!"
             binding.tvTips.text =
                 "Review your Top Expenses and previous transactions to see where you can reduce!"
         } else if (user == "parent" && total > 0.00F) {
             audio = R.raw.sample
-            binding.tvSummary.text = "Your child spent ₱$totalText from $dateRange!"
+            binding.tvSummary.text = "Your child spent ₱$totalText this $dateRange!"
             binding.tvTips.text =
                 "Review your child's Top Expenses and previous transactions to see where they can reduce!"
         } else if (user == "parent" && total == 0.0F) {
@@ -191,7 +191,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             binding.tvTips.text = "Review your child's Top Expenses and previous transactions to see where they can reduce!"
         } else if (user == "child" && total == 0.0F) {
             audio = R.raw.sample
-            binding.tvSummary.text = "Uh oh! You've earned ₱$totalText from $dateRange"
+            binding.tvSummary.text = "Uh oh! You've earned ₱$totalText this $dateRange"
             binding.tvTips.text = "Review your child's Top Expenses and previous transactions to see where they can reduce!"
 
         }

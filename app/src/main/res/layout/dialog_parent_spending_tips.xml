@@ -109,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Look for ways to find the best value for money (sales, discounts)\n2. Encourage them to refer to their budget as a guide\n3. Help them prioritize their needs over their wants.\n4. Involve them in spending decisions at home."
+            android:text="1. Look for ways to find the best value for money (sales, discounts).\n2. Encourage them to refer to their budget as a guide.\n3. Help them prioritize their needs over their wants.\n4. Involve them in spending decisions at home."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"/>

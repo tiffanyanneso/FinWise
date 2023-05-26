@@ -226,7 +226,7 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
         }
 
         //TODO: Change audio and dialogBinding
-        val audio = R.raw.sample
+        val audio = R.raw.dialog_parent_smart_tip
         dialogBinding.btnSoundParentSmartTip.setOnClickListener {
             if (mediaPlayerGoalDialog == null) {
                 mediaPlayerGoalDialog = MediaPlayer.create(this, audio)
@@ -262,31 +262,31 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
         var audio = 0
 
         if (SMARTIndividual == "Specific") {
-            audio = R.raw.sample
+            audio = R.raw.goal_setting_performance_parent_specific
             dialogBinding.tvName.text = "Specific"
             dialogBinding.tvDefinition.text = "Specific goals are very clear with what should be achieved."
             dialogBinding.tvGuideQuestions.text = "1. Is the goal clear?\n" + "2. What is to be achieved?"
             dialogBinding.tvTips.text = "1. Encourage them to figure out what they want to accomplish.\n2. Help them put their goal into words."
         } else if (SMARTIndividual == "Measurable") {
-            audio = R.raw.sample
+            audio = R.raw.goal_setting_performance_parent_measurable
             dialogBinding.tvName.text = "Measurable"
             dialogBinding.tvDefinition.text = "Measurable goals have target amounts. "
             dialogBinding.tvGuideQuestions.text = "1. Is there a way to measure the goal?\n" + "2. How much needs to be saved?\n" + "3. How will it be known that the goal has been achieved?"
             dialogBinding.tvTips.text = "1. It is important that a target amount be set.\n2. Ensure that this target amount is reasonable."
         } else if (SMARTIndividual == "Achievable") {
-            audio = R.raw.sample
+            audio = R.raw.goal_setting_performance_parent_achievable
             dialogBinding.tvName.text = "Achievable"
             dialogBinding.tvDefinition.text = "Achievable goals are realistic."
             dialogBinding.tvGuideQuestions.text = "1. Is the goal achievable?\n" + "2. Is it possible to save or earn enough money?\n" + "3. Is the timeline realistic?"
             dialogBinding.tvTips.text = "1. Give them advice on whether or not it is realistic.\n2. Consider their current financial situation.\n3. Break their goals down into smaller ones."
         } else if (SMARTIndividual == "Relevant") {
-            audio = R.raw.sample
+            audio = R.raw.goal_setting_performance_parent_relevant
             dialogBinding.tvName.text = "Relevant"
             dialogBinding.tvDefinition.text = "Relevant goals are important to your child and with what they want to do."
             dialogBinding.tvGuideQuestions.text = "1.Is the goal important?\n" + "2. What is the reasoning behind the goal?"
             dialogBinding.tvTips.text = "1. Guide them in exploring their priorities.\n2. Encourage them to set goals that are meaningful to them."
         } else if (SMARTIndividual == "Time-Bound") {
-            audio = R.raw.sample
+            audio = R.raw.goal_setting_performance_parent_time_bound
             dialogBinding.tvName.text = "Time-Bound"
             dialogBinding.tvDefinition.text = "Time-bound goals have a target or end date."
             dialogBinding.tvGuideQuestions.text = "1. How long will it take for the goal to be accomplished?\n" + "2. When does the goal need to be completed?"

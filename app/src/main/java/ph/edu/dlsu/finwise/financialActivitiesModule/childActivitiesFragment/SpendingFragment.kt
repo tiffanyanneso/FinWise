@@ -226,28 +226,28 @@ class SpendingFragment : Fragment(){
         //TODO: Change audio
         var audio = 0
         if (overallSpending >= 96) {
-            audio = R.raw.sample
+            audio = R.raw.spending_performance_excellent
             binding.imgFace.setImageResource(R.drawable.excellent)
             binding.textStatus.text = "Excellent"
             binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
             binding.tvPerformanceText.text = "Keep up the excellent work! Spending wisely is your strong point. Keep it up!"
             showSeeMoreButton()
         } else if (overallSpending < 96 && overallSpending >= 86) {
-            audio = R.raw.sample
+            audio = R.raw.spending_performance_amazing
             binding.imgFace.setImageResource(R.drawable.amazing)
             binding.textStatus.text = "Amazing"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = "Amazing job! You are performing well. Spending wisely is your strong point. Keep completing those goals!"
             showSeeMoreButton()
         } else if (overallSpending < 86 && overallSpending >= 76) {
-            audio = R.raw.sample
+            audio = R.raw.spending_performance_great
             binding.imgFace.setImageResource(R.drawable.great)
             binding.textStatus.text = "Great"
             binding.textStatus.setTextColor(getResources().getColor(R.color.green))
             binding.tvPerformanceText.text = " Great job! You are performing well. Keep spending wisely!"
             showSeeMoreButton()
         } else if (overallSpending < 76 && overallSpending >= 66) {
-            audio = R.raw.sample
+            audio = R.raw.spending_performance_good
             binding.imgFace.setImageResource(R.drawable.good)
             binding.textStatus.text = "Good"
             binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
@@ -261,35 +261,35 @@ class SpendingFragment : Fragment(){
             binding.tvPerformanceText.text = "Nice work! Work on improving your spending performance by always planning ahead. You’ll get there soon!"
             showSeeMoreButton()
         } else if (overallSpending < 56 && overallSpending >= 46) {
-            audio = R.raw.sample
+            audio = R.raw.spending_performance_nearly_there
             binding.imgFace.setImageResource(R.drawable.nearly_there)
             binding.textStatus.text = "Nearly There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
             showSeeMoreButton()
         }  else if (overallSpending < 46 && overallSpending >= 36) {
-            audio = R.raw.sample
+            audio = R.raw.spending_performance_almost_there
             binding.imgFace.setImageResource(R.drawable.almost_there)
             binding.textStatus.text = "Almost There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Almost there! You need to work on your spending. Click review to learn how!"
             showSeeMoreButton()
         } else if (overallSpending < 36 && overallSpending >= 26) {
-            audio = R.raw.sample
+            audio = R.raw.spending_performance_getting_there
             binding.imgFace.setImageResource(R.drawable.getting_there)
             binding.textStatus.text = "Getting There"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Getting there! You need to work on your spending. Click review to learn how!"
             showSeeMoreButton()
         } else if (overallSpending < 26 && overallSpending >= 16) {
-            audio = R.raw.sample
+            audio = R.raw.spending_performance_not_quite_there_yet
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
             binding.textStatus.text = "Not Quite\nThere"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
             binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
             showSeeMoreButton()
         } else if (overallSpending < 15) {
-            audio = R.raw.sample
+            audio = R.raw.spending_performance_needs_improvement
             binding.imgFace.setImageResource(R.drawable.bad)
             binding.textStatus.text = "Needs\nImprovement"
             binding.textStatus.setTextColor(getResources().getColor(R.color.red))
@@ -365,7 +365,7 @@ class SpendingFragment : Fragment(){
 
     private fun loadAudioDialog(dialogBinding: DialogSpendingReviewBinding) {
         /*TODO: Change binding and Audio file in mediaPlayer*/
-        val audio = R.raw.sample
+        val audio = R.raw.dialog_spending_review
 
         dialogBinding.btnSoundSpending.setOnClickListener {
             if (!this::mediaPlayerDialog.isInitialized) {
