@@ -34,6 +34,8 @@ import ph.edu.dlsu.finwise.databinding.FragmentDashboardFinancialAssessmentsBind
 import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentLandingPageActivity
 import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
+import ph.edu.dlsu.finwise.parentFinancialManagementModule.ParentFinancialManagementActivity
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -45,7 +47,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     private lateinit var binding: FragmentDashboardFinancialAssessmentsBinding
     private var firestore = Firebase.firestore
 
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = MediaPlayer()
 
     private lateinit var childID: String
     //private lateinit var user: String
@@ -270,48 +272,71 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         binding.tvPerformanceStatus.text = performance
         binding.tvPerformancePercentage.text = "${roundedValue}%"
 
-        loadOverallAudio(audio)
+        mediaPlayer = MediaPlayer.create(context, audio)
+        loadOverallAudio()
         loadButton()
     }
 
-    private fun loadOverallAudio(audio: Int) {
+    private fun loadOverallAudio() {
         binding.btnAudioFinancialAssessmentScore.setOnClickListener {
-            if (!this::mediaPlayer.isInitialized) {
-                mediaPlayer = MediaPlayer.create(context, audio)
-            }
 
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.pause()
-                mediaPlayer.seekTo(0)
-                return@setOnClickListener
+            try {
+                mediaPlayer.let { player ->
+                    if (player?.isPlaying == true) {
+                        player.pause()
+                        player.seekTo(0)
+                        return@setOnClickListener
+                    }
+
+                    player?.start()
+                }
+            } catch (e: IllegalStateException) {
+                // Handle the exception, e.g., log an error or display a message
             }
-            mediaPlayer.start()
         }
     }
 
-    override fun onDestroy() {
-        if (this::mediaPlayer.isInitialized)
-            releaseMediaPlayer(mediaPlayer)
-        super.onDestroy()
-    }
-
-    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
-        if (mediaPlayer.isPlaying) {
-            mediaPlayer.pause()
-            mediaPlayer.seekTo(0)
+    override fun onPause() {
+        super.onPause()
+        try {
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.stop()
+            }
+            mediaPlayer?.release()
+        } catch (e: IllegalStateException) {
+            // Handle the exception gracefully
+            e.printStackTrace()
         }
-        mediaPlayer.stop()
-        mediaPlayer.release()
+
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        releaseMediaPlayer()
+    }
+
+    private fun releaseMediaPlayer() {
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
+    private fun initializeParentFinancialActivityBundle(): Bundle {
+        val bundle = Bundle()
+        bundle.putString("childID", childID)
+        return bundle
+    }
 
     private fun loadButton() {
         binding.btnSeeMore.setOnClickListener {
-            if (this::mediaPlayer.isInitialized)
-                releaseMediaPlayer(mediaPlayer)
-            val goToActivity = Intent(context, FinancialAssessmentLandingPageActivity::class.java)
-            val bundle = loadBundle()
-            goToActivity.putExtras(bundle)
+            releaseMediaPlayer()
+            val goToActivity = if (userType == "Parent") {
+                val bundle = initializeParentFinancialActivityBundle()
+                val intent = Intent(context, ParentFinancialManagementActivity::class.java)
+                intent.putExtras(bundle)
+                intent
+            } else {
+                Intent(context, PersonalFinancialManagementActivity::class.java)
+            }
             startActivity(goToActivity)
         }
     }

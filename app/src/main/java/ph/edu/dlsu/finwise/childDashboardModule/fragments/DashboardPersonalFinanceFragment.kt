@@ -430,9 +430,6 @@ class DashboardPersonalFinanceFragment : Fragment() {
     }
 
 
-
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         releaseMediaPlayer()
