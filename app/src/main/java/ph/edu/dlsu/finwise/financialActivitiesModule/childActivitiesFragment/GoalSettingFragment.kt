@@ -399,7 +399,7 @@ class GoalSettingFragment : Fragment() {
             dialog.dismiss()
         }
         loadSmartDialogAudio(dialogBinding)
-        dialog.setOnDismissListener { mediaPlayerSmartDialog.let { it1 -> pauseMediaPlayer(it1) } }
+        //dialog.setOnDismissListener { mediaPlayerSmartDialog.let { it1 -> pauseMediaPlayer(it1) } }
         dialog.show()
     }
 

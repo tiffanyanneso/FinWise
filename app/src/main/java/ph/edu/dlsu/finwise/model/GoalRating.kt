@@ -13,5 +13,6 @@ class GoalRating (
     var timeBound:Float?=null,
     var comment:String?=null,
     var overallRating:Float?=null,
+    var status:String?=null,
     var lastUpdated: Timestamp?=null
 ) { }

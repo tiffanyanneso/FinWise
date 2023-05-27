@@ -7,9 +7,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -24,25 +23,17 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.mayaAPI.MayaPayment
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
-import ph.edu.dlsu.finwise.adapter.EarningToDoAdapter
-import ph.edu.dlsu.finwise.adapter.GoalRatingNotificationAdapter
-import ph.edu.dlsu.finwise.adapter.PFMAdapter
+import ph.edu.dlsu.finwise.adapter.*
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
-import ph.edu.dlsu.finwise.databinding.DialogNotifNewEarningActivitiesBinding
-import ph.edu.dlsu.finwise.databinding.DialogNotifNewGoalRatingBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
+import ph.edu.dlsu.finwise.databinding.DialogNotifSummaryChildBinding
 import ph.edu.dlsu.finwise.model.*
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.SavingsFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.BalanceFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.ExplanationFragment
 import java.text.DecimalFormat
-import java.util.ArrayList
-
+import java.util.*
 
 
 class PersonalFinancialManagementActivity : AppCompatActivity() {
@@ -57,6 +48,13 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     var balance = 0.00f
     var income = 0.00f
     var expense = 0.00f
+
+    private lateinit var lastLogin: Date
+
+    private var newEarningArrayList = ArrayList<String>()
+    private var earningSentArrayList = ArrayList<String>()
+    private var goalEditArrayList = ArrayList<String>()
+    private var goalReviewedArrayList = ArrayList<String>()
 
     /*private val tabIcons1 = intArrayOf(
         R.drawable.baseline_wallet_24,
@@ -432,18 +430,19 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private fun checkNotifications() {
         CoroutineScope(Dispatchers.Main).launch {
-            notificationsForEarning()
-            notificationsForGoalRating()
+            lastLogin = firestore.collection("Users").document(childID).get().await().toObject<Users>()!!.lastLogin!!.toDate()
+            notificationsForNewEarning()
+            notificationForSentEarning()
+            notificationsForGoalReviewed()
+            notificationsForGoalEdit()
+            loadDialogAndRecyclerView()
             updateLastLogin()
         }
 
     }
 
-    private suspend fun notificationsForEarning() {
-        var newEarningArrayList = ArrayList<String>()
-
+    private suspend fun notificationsForNewEarning() {
         var earningActivities = firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("status", "Ongoing").get().await()
-        var lastLogin = firestore.collection("Users").document(childID).get().await().toObject<Users>()!!.lastLogin!!.toDate()
 
         for (earning in earningActivities) {
             var earningDateAdded = earning.toObject<EarningActivityModel>().dateAdded!!.toDate()
@@ -451,65 +450,76 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             if (earningDateAdded.after(lastLogin))
                 newEarningArrayList.add(earning.id)
         }
-
-        if (!newEarningArrayList.isEmpty()) {
-            var dialogBinding = DialogNotifNewEarningActivitiesBinding.inflate(layoutInflater)
-            var dialog = Dialog(this)
-            dialog.setContentView(dialogBinding.root)
-            dialog.window!!.setLayout(1100, 1500)
-
-            var newEarningAdapter = EarningToDoAdapter(this, newEarningArrayList)
-            dialogBinding.rvEarning.adapter = newEarningAdapter
-            dialogBinding.rvEarning.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            newEarningAdapter.notifyDataSetChanged()
-
-            dialogBinding.btnEarning.setOnClickListener {
-                var intent = Intent(this, EarningActivity::class.java)
-                var bundle = Bundle()
-                bundle.putString("childID", childID)
-                bundle.putString("module", "pfm")
-                intent.putExtras(bundle)
-                startActivity(intent)
-                dialog.dismiss()
-            }
-
-            dialogBinding.btnClose.setOnClickListener { dialog.dismiss() }
-
-            dialog.show()
-        }
     }
 
-    private suspend fun notificationsForGoalRating() {
-        var goalsReviewedArrayList = ArrayList<String>()
+    private suspend fun notificationForSentEarning() {
+        var earningActivities = firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("status", "Completed").get().await()
+        for (earning in earningActivities) {
+            var earningDateSent = earning.toObject<EarningActivityModel>().dateSent!!.toDate()
 
-        var goalsReviewed = firestore.collection("GoalRating").whereEqualTo("childID", childID).get().await()
-        var lastLogin = firestore.collection("Users").document(childID).get().await().toObject<Users>()!!.lastLogin!!.toDate()
+            if (earningDateSent.after(lastLogin))
+                earningSentArrayList.add(earning.id)
+        }
+
+    }
+
+    private suspend fun notificationsForGoalReviewed() {
+        var goalsReviewed = firestore.collection("GoalRating").whereEqualTo("childID", childID).whereEqualTo("status", "Approved").get().await()
         for (goalRating in goalsReviewed) {
             var dateGoalReviewed = goalRating.toObject<GoalRating>().lastUpdated!!.toDate()
 
             if (dateGoalReviewed.after(lastLogin))
-                goalsReviewedArrayList.add(goalRating.toObject<GoalRating>().financialGoalID!!)
+                goalReviewedArrayList.add(goalRating.toObject<GoalRating>().financialGoalID!!)
         }
+    }
 
-        if (!goalsReviewedArrayList.isEmpty()) {
-            var dialogBinding = DialogNotifNewGoalRatingBinding.inflate(layoutInflater)
+    private suspend fun notificationsForGoalEdit() {
+        var goalsEdit = firestore.collection("FinancialGoals").whereEqualTo("status", "For Editing").get().await()
+        for (goalEdit in goalsEdit) {
+            goalEditArrayList.add(goalEdit.id)
+        }
+    }
+
+    private fun loadDialogAndRecyclerView() {
+        if (!newEarningArrayList.isEmpty() || !earningSentArrayList.isEmpty() || !goalReviewedArrayList.isEmpty() || !goalEditArrayList.isEmpty()) {
+            var dialogBinding = DialogNotifSummaryChildBinding.inflate(layoutInflater)
             var dialog = Dialog(this)
             dialog.setContentView(dialogBinding.root)
-            dialog.window!!.setLayout(1000, 1500)
+            dialog.window!!.setLayout(1100, 2000)
 
-            var goalRatingAdapter = GoalRatingNotificationAdapter(this, goalsReviewedArrayList)
-            dialogBinding.rvGoals.adapter = goalRatingAdapter
-            dialogBinding.rvGoals.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            goalRatingAdapter.notifyDataSetChanged()
+            if (!newEarningArrayList.isEmpty()) {
+                var newEarningActivityModel = ChildNotificationNewEarningAdapter(this, newEarningArrayList)
+                dialogBinding.rvNewEarning.adapter = newEarningActivityModel
+                dialogBinding.rvNewEarning.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                newEarningActivityModel.notifyDataSetChanged()
+            } else
+               dialogBinding.layoutNewEarning.visibility = View.GONE
 
-            dialogBinding.btnFinact.setOnClickListener {
-                var intent = Intent(this, FinancialActivity::class.java)
-                startActivity(intent)
-                dialog.dismiss()
-            }
+            if (!earningSentArrayList.isEmpty()) {
+                var earningSentAdapter = ChildNotificationRewardSentAdapter(this, earningSentArrayList)
+                dialogBinding.rvReceivedEarning.adapter = earningSentAdapter
+                dialogBinding.rvReceivedEarning.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                earningSentAdapter.notifyDataSetChanged()
+            } else
+                dialogBinding.layoutReceivedEarning.visibility = View.GONE
+
+            if (!goalReviewedArrayList.isEmpty()) {
+                var goalsApprovedAdapter = ChildNotificationGoalRatedAdapter(this, goalReviewedArrayList)
+                dialogBinding.rvApprovedGoals.adapter = goalsApprovedAdapter
+                dialogBinding.rvApprovedGoals.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                goalsApprovedAdapter.notifyDataSetChanged()
+            } else
+                dialogBinding.layoutGoalApproved.visibility = View.GONE
+
+            if (!goalEditArrayList.isEmpty()) {
+                var goalEditAdapter = ChildNotificationGoalEditAdapter(this, goalEditArrayList)
+                dialogBinding.rvGoalEdit.adapter = goalEditAdapter
+                dialogBinding.rvGoalEdit.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                goalEditAdapter.notifyDataSetChanged()
+            } else
+                dialogBinding.layoutGoalEdit.visibility = View.GONE
 
             dialogBinding.btnClose.setOnClickListener { dialog.dismiss() }
-
             dialog.show()
         }
     }

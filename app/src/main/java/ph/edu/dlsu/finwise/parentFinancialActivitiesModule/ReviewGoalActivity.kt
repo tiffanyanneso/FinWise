@@ -119,6 +119,7 @@ class ReviewGoalActivity : AppCompatActivity() {
 
         overall = (specific + measurable + achievable + relevant + timeBound) /5
 
+        var status = binding.dropdownStatus.text.toString()
         var rating = hashMapOf(
             "parentID" to FirebaseAuth.getInstance().currentUser!!.uid,
             "childID" to childID,
@@ -130,11 +131,11 @@ class ReviewGoalActivity : AppCompatActivity() {
             "timeBound" to binding.ratingBarTimeBound.rating,
             "comment" to comment,
             "overallRating" to overall,
+            "status" to status,
             "lastUpdated" to Timestamp.now()
         )
 
         firestore.collection("GoalRating").add(rating).addOnSuccessListener {
-            var status = binding.dropdownStatus.text.toString()
             if (status == "Approved")
                 status = "In Progress"
 
@@ -144,7 +145,7 @@ class ReviewGoalActivity : AppCompatActivity() {
 
 
 
-            firestore.collection("FinancialGoals").document(financialGoalID).update("status", status).addOnSuccessListener {
+            firestore.collection("FinancialGoals").document(financialGoalID).update("status", status, "lastUpdated", Timestamp.now()).addOnSuccessListener {
                 firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("financialActivityName", "Saving").get().addOnSuccessListener { result ->
                     var finactID = result.documents[0].id
                     firestore.collection("FinancialActivities").document(finactID).update("status", activityStatus, "dateStarted", Timestamp.now())

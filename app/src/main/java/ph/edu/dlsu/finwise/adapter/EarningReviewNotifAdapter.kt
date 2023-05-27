@@ -65,6 +65,7 @@ class EarningReviewNotifAdapter : RecyclerView.Adapter<EarningReviewNotifAdapter
             firestore.collection("EarningActivities").document(earningID).get().addOnSuccessListener{ document ->
                 var earning = document.toObject<EarningActivityModel>()!!
                 itemBinding.tvEarningActivityId.text = earningID
+                itemBinding.tvChildId.text = earning.childID
                 itemBinding.tvEarning.text = earning.activityName
                 itemBinding.tvAmount.text =  "₱ " +  DecimalFormat("#,##0.00").format(earning.amount)
                 firestore.collection("Users").document(earning.childID!!).get().addOnSuccessListener {

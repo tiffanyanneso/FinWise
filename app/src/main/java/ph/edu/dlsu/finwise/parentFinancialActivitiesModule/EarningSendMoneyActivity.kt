@@ -245,7 +245,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
 
     private fun logTransactions() {
         firestore.collection("EarningActivities").document(earningActivityID).update("status", "Completed")
-        //firestore.collection("EarningActivities").document(earningActivityID).update("dateCompleted", Timestamp.now())
+        firestore.collection("EarningActivities").document(earningActivityID).update("dateSent", Timestamp.now())
 
         if (source == "Financial Goal")
             makeTransactionsGoal()
