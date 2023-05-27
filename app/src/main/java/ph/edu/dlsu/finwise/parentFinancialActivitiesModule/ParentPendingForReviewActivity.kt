@@ -68,6 +68,8 @@ class ParentPendingForReviewActivity : AppCompatActivity() {
             binding.viewPager.currentItem = 0
         else if (bundle.getString("view") == "earning")
             binding.viewPager.currentItem = 1
+        else if (bundle.getString("view") == "transaction")
+            binding.viewPager.currentItem = 2
     }
 
 

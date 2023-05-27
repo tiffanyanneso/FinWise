@@ -100,6 +100,7 @@
                     android:layout_marginTop="10dp">
 
                     <LinearLayout
+                        android:id="@+id/layout_pending_goals"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
@@ -110,7 +111,7 @@
                         android:layout_marginRight="7dp">
 
                         <TextView
-                            android:id="@+id/tv_pending_goals"
+                            android:id="@+id/tv_number_pending_goals"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
@@ -131,6 +132,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layout_pending_earning"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -141,7 +143,7 @@
                         android:layout_marginRight="7dp">
 
                         <TextView
-                            android:id="@+id/tv_pending_earning"
+                            android:id="@+id/tv_number_pending_earning"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
@@ -161,6 +163,7 @@
                             android:textAlignment="center"/>
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/layout_over_limit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
@@ -171,7 +174,7 @@
                         android:layout_marginRight="7dp">
 
                         <TextView
-                            android:id="@+id/tv_over_limit"
+                            android:id="@+id/tv_number_over_limit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textSize="16dp"
@@ -212,8 +215,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="8"/>
+                    android:layout_height="550dp" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

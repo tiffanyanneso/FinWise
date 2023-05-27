@@ -31,6 +31,7 @@ import ph.edu.dlsu.finwise.services.GoalNotificationServices
 import java.util.*
 import java.util.concurrent.TimeUnit
 import androidx.work.Constraints
+import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                     //saveData()
                 }
                 else if (userObject?.userType == "Parent") {
-                    startActivity(Intent(this, ParentLandingPageActivity::class.java))
+                    startActivity(Intent(this, ParentDashboardActivity::class.java))
                     firestore.collection("Users").whereEqualTo("parentID", currentUser!!.uid).get().addOnSuccessListener { result ->
                         //there is a child under the parent, send daily reminder for them to check the app
                         if (!result.isEmpty)

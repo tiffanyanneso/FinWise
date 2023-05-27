@@ -218,8 +218,6 @@ class SpendingActivity : AppCompatActivity() {
         fragmentBundle.putString("budgetItemID", budgetItemID)
         fragmentBundle.putFloat("remainingBudget", remainingBudget)
 
-
-        println("print " + childID)
         firestore.collection("Users").document(childID).get().addOnSuccessListener {
             var user = it.toObject<Users>()
             if (user?.userType == "Child") {

@@ -33,6 +33,7 @@ import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.FinancialAssessmentFinlitExpertActivity
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import ph.edu.dlsu.finwise.services.FirestoreDataSyncService
 import ph.edu.dlsu.finwise.services.FirestoreJobService
@@ -127,7 +128,7 @@ class LoginActivity : AppCompatActivity() {
         when (user.userType) {
             "Parent" -> {
                 initializeDailyReminderParentNotif()
-                goToParentLandingPage()
+                goToParentDashboard()
             }
             "Child" -> {
                 initializeDailyReminderChildNotif()
@@ -295,8 +296,8 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun goToParentLandingPage() {
-        val intent = Intent(this, ParentLandingPageActivity::class.java)
+    private fun goToParentDashboard() {
+        val intent = Intent(this, ParentDashboardActivity::class.java)
         startActivity(intent)
         finish()
     }
