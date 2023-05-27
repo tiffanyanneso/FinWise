@@ -22,9 +22,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardFinancialActivitiesBinding
-import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.*
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import ph.edu.dlsu.finwise.parentFinancialManagementModule.ParentFinancialManagementActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.math.RoundingMode
@@ -98,11 +96,21 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
             getBudgetingPerformanceScore()
             getSpendingPerformance()
-            Log.d("kfc", "getFinancialActivitiesPerformance: "+goalSettingPercentage)
-            Log.d("kfc", "savingPercentage: "+savingPercentage)
-            Log.d("kfc", "spendingPercentage: "+spendingPercentage)
-            Log.d("kfc", "budgetingPercentage: "+budgetingPercentage)
+            getFinancialActivitiesScores()
         }
+    }
+
+    private fun getFinancialActivitiesScores() {
+        if (age > 9 ) {
+            CoroutineScope(Dispatchers.Main).launch {
+                purchasePlanning()
+            }
+        }
+        else spendingPercentage = (1-overspendingPercentage)*100
+
+
+        calculateFinancialActivitiesScore()
+        setPerformanceView()
     }
 
     private suspend fun getSpendingPerformance() {
@@ -126,11 +134,11 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                         .whereEqualTo("financialActivityID", budgetingID)
                         .whereEqualTo("status", "Active").get().await()
                         nBudgetItems += budgetItemsDocuments.size()
-                        for (budgetItem in budgetItemsDocuments) {
 
-                            val budgetItemObject = budgetItem.toObject<BudgetItem>()
-                            checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
-                        }
+                for (budgetItem in budgetItemsDocuments) {
+                    val budgetItemObject = budgetItem.toObject<BudgetItem>()
+                    checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
+                }
             }
         }
     }
@@ -144,49 +152,179 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 val expenseObject = expense.toObject<Transactions>()
                 amountSpent+= expenseObject.amount!!
             }
-            //they spent more than their allocated budget
+        //they spent more than their allocated budget
             if (amountSpent > budgetItemAmount)
                 overSpending++
 
             overspendingPercentage = (overSpending/nBudgetItems)
-            if (age > 9 ) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    purchasePlanning()
-                    calculateFinancialActivitiesScore()
-                }
-            }
-            else {
-                spendingPercentage = (1-overspendingPercentage)*100
-//                println("print goal  setting " + goalSettingPercentage)
-//                println("print savings " +  savingPercentage)
-//                println("print budgeting " +  budgetingPercentage)
-//                println("print spending " + spendingPercentage)
-                financialActivitiesPerformance = ((savingPercentage + budgetingPercentage + spendingPercentage) / 3)
-                setPerformanceView()
-            }
-
     }
 
     private fun calculateFinancialActivitiesScore() {
-        checkIfNaN()
+        checkIfNaNFinancialActivitiesScores()
 
         if (age == 9 || age == 12)
             financialActivitiesPerformance = ((savingPercentage + budgetingPercentage + spendingPercentage) / 3)
         else if (age == 10 || age == 11)
             financialActivitiesPerformance = ((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4)
+        Log.d("victor", "calculateFinancialActivitiesScoreFinACT: "+financialActivitiesPerformance )
 
-        setPerformanceView()
     }
 
+
+
+    private suspend fun purchasePlanning() {
+        //items planned / all the items they bought * 100
+        val financialActivitiesDocuments = firestore.collection("FinancialActivities")
+            .whereEqualTo("childID", userID)
+            .whereEqualTo("financialActivityName", "Spending")
+            .whereEqualTo("status", "Completed").get().await()
+        for (spendingActivityID in financialActivitiesDocuments) {
+            val shoppingListItemsDocuments = firestore.collection("ShoppingListItems")
+                .whereEqualTo("spendingActivityID", spendingActivityID.id).get().await()
+            for (shoppingListItem in shoppingListItemsDocuments) {
+                val shoppingListItemObject = shoppingListItem.toObject<ShoppingListItem>()
+                if (shoppingListItemObject.status == "Purchased")
+                    nPlanned++
+            }
+            val transactionsDocuments = firestore.collection("Transactions")
+                .whereEqualTo("financialActivityID", spendingActivityID.id)
+                .whereEqualTo("transactionType", "Expense").get().await()
+            nTotalPurchased += transactionsDocuments.size().toFloat()
+            spendingPercentage = ((1-overspendingPercentage)*100 + ((nPlanned/nTotalPurchased)*100)) /2
+
+        }
+
+    }
+
+    private suspend fun getBudgetingPerformanceScore() {
+        val financialActivitiesDocuments = firestore.collection("FinancialActivities")
+            .whereEqualTo("childID", userID)
+            .whereEqualTo("financialActivityName", "Budgeting")
+            .whereEqualTo("status", "Completed").get().await()
+        nBudgetingCompleted = financialActivitiesDocuments.size()
+
+        if (financialActivitiesDocuments.size() != 0) {
+            for (activity in financialActivitiesDocuments) {
+                processBudgetItems(activity)
+            }
+        }
+    }
+
+
+    private suspend fun processBudgetItems(activity: QueryDocumentSnapshot?) {
+        val budgetItemsDocuments = firestore.collection("BudgetItems")
+            .whereEqualTo("financialActivityID", activity?.id)
+            .whereEqualTo("status", "Active").get().await()
+
+        for (budgetItem in budgetItemsDocuments) {
+            budgetItemCount++
+            val budgetItemObject = budgetItem.toObject<BudgetItem>()
+            //parental involvement
+            getParentalInvolvementBudget(budgetItemObject)
+            if (activity != null) {
+                getBudgetAccuracy(activity.id, budgetItem.id, budgetItemObject)
+            }
+        }
+    }
+
+    private suspend fun getBudgetAccuracy(budgetingActivityID:String, budgetItemID:String,
+                                          budgetItemObject:BudgetItem) {
+        val financialActivitiesDocument = firestore.collection("FinancialActivities")
+            .document(budgetingActivityID).get().await()
+        val financialActivitiesDocuments = firestore.collection("FinancialActivities")
+            .whereEqualTo("financialGoalID",
+                financialActivitiesDocument.toObject<FinancialActivities>()!!.financialGoalID!!)
+            .whereEqualTo("financialActivityName", "Spending").get().await()
+        val spendingActivity = financialActivitiesDocuments.documents[0].toObject<FinancialActivities>()
+        Log.d("ufc", "spendingActivity: "+spendingActivity?.status)
+
+        if (spendingActivity?.status == "Completed") {
+            //budget accuracy
+            purchasedBudgetItemCount++
+            val transactionsDocuments = firestore.collection("Transactions")
+                .whereEqualTo("budgetItemID", budgetItemID).get().await()
+            var spent = 0.00F
+            for (transaction in transactionsDocuments)
+                spent += transaction.toObject<Transactions>().amount!!
+            totalBudgetAccuracy +=
+                (100 - (kotlin.math.abs(budgetItemObject.amount!! - spent)
+                        / budgetItemObject.amount!!) * 100)
+
+            budgetingPercentage = if (purchasedBudgetItemCount != 0.00F)
+                ((totalBudgetAccuracy/purchasedBudgetItemCount)
+                        + ((1 - (nParent.toFloat()/budgetItemCount)) * 100)) /2
+            else
+                ((1 - (nParent.toFloat()/budgetItemCount)) * 100)
+
+        } else {
+            budgetingPercentage = if (purchasedBudgetItemCount != 0.00F)
+                ((totalBudgetAccuracy/purchasedBudgetItemCount) + ((1 - (nParent.toFloat()/budgetItemCount)) * 100)) /2
+            else
+                ((1 - (nParent.toFloat()/budgetItemCount)) * 100)
+        }
+        //println("print budgeting " + budgetingPercentage )
+    }
+
+
+    private suspend fun getParentalInvolvementBudget(budgetItemObject: BudgetItem) {
+        val userDocument = firestore.collection("Users")
+            .document(budgetItemObject.createdBy.toString()).get().await()
+        //parent is the one who added the budget item
+        if (userDocument.toObject<Users>()?.userType == "Parent")
+            nParent++
+
+    }
+
+    private suspend fun getGoalSettingPerformance() {
+        var overallRating = 0.00F
+        val nRatings: Int
+        val goalRatingDocuments = firestore.collection("GoalRating")
+            .whereEqualTo("childID", userID).get().await()
+        nGoalSettingCompleted = goalRatingDocuments.size()
+        nRatings = goalRatingDocuments.size()
+        for (rating in goalRatingDocuments) {
+            val ratingObject = rating.toObject<GoalRating>()
+            overallRating += ratingObject.overallRating!!
+        }
+        goalSettingPercentage = 0.00F
+
+        if (nRatings != 0)
+            goalSettingPercentage = ((overallRating / nRatings)/5)* 100
+
+        getSavingPerformanceScore()
+    }
+
+    private suspend fun getSavingPerformanceScore() {
+        var nGoals = 0.00F
+        var nOnTime = 0.00F
+        val financialGoalsDocuments = firestore.collection("FinancialGoals")
+            .whereEqualTo("childID", userID)
+            .whereEqualTo("status", "Completed").get().await()
+        nSavingCompleted = financialGoalsDocuments.size()
+
+        if (financialGoalsDocuments.size() != 0) {
+            for (goal in financialGoalsDocuments) {
+                nGoals++
+                val goalObject = goal.toObject<FinancialGoals>()
+                if (goalObject.dateCompleted != null) {
+                    val targetDate = goalObject.targetDate!!.toDate()
+                    val completedDate = goalObject.dateCompleted!!.toDate()
+
+                    //goal was completed before the target date, meaning it was completed on time
+                    if (completedDate.before(targetDate) || completedDate == targetDate)
+                        nOnTime++
+                }
+            }
+            savingPercentage = (nOnTime/nGoals)*100
+            Log.d("katol", "getChildAge: "+savingPercentage)
+        }
+    }
+
+
     private fun setPerformanceView() {
-        Log.d("hatdog", "getFinancialAssessmentScore: "+financialActivitiesPerformance)
 
         if (financialActivitiesPerformance.isNaN())
             financialActivitiesPerformance = 0.0F
-
-        val df = DecimalFormat("#.#")
-        df.roundingMode = RoundingMode.UP
-        val roundedValue = df.format(financialActivitiesPerformance)
 
         val imageView = binding.ivScore
         val message: String
@@ -293,8 +431,12 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         imageView.setImageBitmap(bitmap)
         binding.tvPerformanceText.text = message
         binding.tvPerformanceStatus.text = performance
+
+        val df = DecimalFormat("#.#")
+        df.roundingMode = RoundingMode.UP
+        val roundedValue = df.format(financialActivitiesPerformance)
         binding.tvPerformancePercentage.text = "${roundedValue}%"
-        
+
         mediaPlayer = MediaPlayer.create(context, audio)
         loadOverallAudio()
         loadButton()
@@ -364,7 +506,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     }
 
 
-    private fun checkIfNaN() {
+    private fun checkIfNaNFinancialActivitiesScores() {
         val percentages = mutableListOf(savingPercentage, spendingPercentage, budgetingPercentage,
             goalSettingPercentage)
 
@@ -381,157 +523,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             }
         }
     }
-
-
-    private suspend fun purchasePlanning() {
-        //items planned / all the items they bought * 100
-        val financialActivitiesDocuments = firestore.collection("FinancialActivities")
-            .whereEqualTo("childID", userID)
-            .whereEqualTo("financialActivityName", "Spending")
-            .whereEqualTo("status", "Completed").get().await()
-            for (spendingActivityID in financialActivitiesDocuments) {
-                val shoppingListItemsDocuments = firestore.collection("ShoppingListItems")
-                    .whereEqualTo("spendingActivityID", spendingActivityID.id).get().await()
-                    for (shoppingListItem in shoppingListItemsDocuments) {
-                        val shoppingListItemObject = shoppingListItem.toObject<ShoppingListItem>()
-                        if (shoppingListItemObject.status == "Purchased")
-                            nPlanned++
-                    }
-                    val transactionsDocuments = firestore.collection("Transactions")
-                        .whereEqualTo("financialActivityID", spendingActivityID.id)
-                        .whereEqualTo("transactionType", "Expense").get().await()
-                        nTotalPurchased += transactionsDocuments.size().toFloat()
-                        spendingPercentage = ((1-overspendingPercentage)*100 + ((nPlanned/nTotalPurchased)*100)) /2
-
-            }
-
-    }
-
-    private suspend fun getBudgetingPerformanceScore() {
-        val financialActivitiesDocuments = firestore.collection("FinancialActivities")
-            .whereEqualTo("childID", userID)
-            .whereEqualTo("financialActivityName", "Budgeting")
-            .whereEqualTo("status", "Completed").get().await()
-            nBudgetingCompleted = financialActivitiesDocuments.size()
-
-        if (financialActivitiesDocuments.size() != 0) {
-                for (activity in financialActivitiesDocuments) {
-                    processBudgetItems(activity)
-                }
-            }
-
-    }
-
-
-    private suspend fun processBudgetItems(activity: QueryDocumentSnapshot?) {
-        val budgetItemsDocuments = firestore.collection("BudgetItems")
-            .whereEqualTo("financialActivityID", activity?.id)
-            .whereEqualTo("status", "Active").get().await()
-
-
-        for (budgetItem in budgetItemsDocuments) {
-            budgetItemCount++
-            val budgetItemObject = budgetItem.toObject<BudgetItem>()
-            //parental involvement
-            getParentalInvolvementBudget(budgetItemObject)
-            if (activity != null) {
-                getBudgetAccuracy(activity.id, budgetItem.id, budgetItemObject)
-            }
-        }
-    }
-
-    private suspend fun getBudgetAccuracy(budgetingActivityID:String, budgetItemID:String,
-                                          budgetItemObject:BudgetItem) {
-        val financialActivitiesDocument = firestore.collection("FinancialActivities")
-            .document(budgetingActivityID).get().await()
-        val financialActivitiesDocuments = firestore.collection("FinancialActivities")
-            .whereEqualTo("financialGoalID",
-                financialActivitiesDocument.toObject<FinancialActivities>()!!.financialGoalID!!)
-            .whereEqualTo("financialActivityName", "Spending").get().await()
-            val spendingActivity = financialActivitiesDocuments.documents[0].toObject<FinancialActivities>()
-            Log.d("ufc", "spendingActivity: "+spendingActivity?.status)
-
-        if (spendingActivity?.status == "Completed") {
-                //budget accuracy
-                purchasedBudgetItemCount++
-            val transactionsDocuments = firestore.collection("Transactions")
-                .whereEqualTo("budgetItemID", budgetItemID).get().await()
-                var spent = 0.00F
-                for (transaction in transactionsDocuments)
-                    spent += transaction.toObject<Transactions>().amount!!
-                totalBudgetAccuracy +=
-                    (100 - (kotlin.math.abs(budgetItemObject.amount!! - spent)
-                            / budgetItemObject.amount!!) * 100)
-
-                budgetingPercentage = if (purchasedBudgetItemCount != 0.00F)
-                    ((totalBudgetAccuracy/purchasedBudgetItemCount)
-                            + ((1 - (nParent.toFloat()/budgetItemCount)) * 100)) /2
-                else
-                    ((1 - (nParent.toFloat()/budgetItemCount)) * 100)
-
-            } else {
-                budgetingPercentage = if (purchasedBudgetItemCount != 0.00F)
-                    ((totalBudgetAccuracy/purchasedBudgetItemCount) + ((1 - (nParent.toFloat()/budgetItemCount)) * 100)) /2
-                else
-                    ((1 - (nParent.toFloat()/budgetItemCount)) * 100)
-        }
-            //println("print budgeting " + budgetingPercentage )
-    }
-
-
-    private suspend fun getParentalInvolvementBudget(budgetItemObject: BudgetItem) {
-        val userDocument = firestore.collection("Users")
-            .document(budgetItemObject.createdBy.toString()).get().await()
-            //parent is the one who added the budget item
-        if (userDocument.toObject<Users>()?.userType == "Parent")
-            nParent++
-
-    }
-
-    private suspend fun getGoalSettingPerformance() {
-        var overallRating = 0.00F
-        val nRatings: Int
-        val goalRatingDocuments = firestore.collection("GoalRating")
-            .whereEqualTo("childID", userID).get().await()
-        nGoalSettingCompleted = goalRatingDocuments.size()
-        nRatings = goalRatingDocuments.size()
-        for (rating in goalRatingDocuments) {
-            val ratingObject = rating.toObject<GoalRating>()
-            overallRating += ratingObject.overallRating!!
-        }
-        goalSettingPercentage = 0.00F
-
-        if (nRatings != 0)
-            goalSettingPercentage = ((overallRating / nRatings)/5)* 100
-
-        getSavingPerformanceScore()
-    }
-
-    private suspend fun getSavingPerformanceScore() {
-        var nGoals = 0.00F
-        var nOnTime = 0.00F
-        val financialGoalsDocuments = firestore.collection("FinancialGoals")
-            .whereEqualTo("childID", userID)
-            .whereEqualTo("status", "Completed").get().await()
-        nSavingCompleted = financialGoalsDocuments.size()
-
-        if (financialGoalsDocuments.size() != 0) {
-                for (goal in financialGoalsDocuments) {
-                    nGoals++
-                    val goalObject = goal.toObject<FinancialGoals>()
-                    if (goalObject.dateCompleted != null) {
-                        val targetDate = goalObject.targetDate!!.toDate()
-                        val completedDate = goalObject.dateCompleted!!.toDate()
-
-                        //goal was completed before the target date, meaning it was completed on time
-                        if (completedDate.before(targetDate) || completedDate == targetDate)
-                            nOnTime++
-                    }
-                }
-                savingPercentage = (nOnTime/nGoals)*100
-            }
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getChildAge() {
         val ageDocument = firestore.collection("Users").document(userID).get().await()
@@ -545,6 +536,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         val difference = Period.between(to, from)
 
         age = difference.years
+        Log.d("katol", "getChildAge: "+age)
     }
 
     private fun getArgumentsBundle() {

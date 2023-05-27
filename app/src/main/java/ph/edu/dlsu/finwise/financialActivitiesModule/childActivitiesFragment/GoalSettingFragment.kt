@@ -350,8 +350,8 @@ class GoalSettingFragment : Fragment() {
             false)
         goalSettingAdapter.notifyDataSetChanged()
         binding.rvViewGoals.visibility = View.VISIBLE
-        binding.loadingItems.stopShimmer()
-        binding.loadingItems.visibility = View.GONE
+        /*binding.loadingItems.stopShimmer()
+        binding.loadingItems.visibility = View.GONE*/
     }
 
     private fun buildDialog() {
