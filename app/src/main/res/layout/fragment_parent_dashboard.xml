@@ -22,12 +22,13 @@
         android:layout_marginHorizontal="20dp">
 
         <LinearLayout
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@drawable/button_border_white"
             android:backgroundTint="@color/white"
-            android:padding="10dp">
+            android:padding="10dp"
+            android:layout_gravity="center">
 
             <ImageView
                 android:src="@drawable/peso_coin"                                android:id="@+id/img_face"
@@ -55,6 +56,108 @@
                 android:textColor="@color/dark_green"
                 android:textStyle="bold"
                 android:layout_gravity="center"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Personal Finance"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"/>
+
+        <LinearLayout
+            android:id="@+id/linear_layout_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ProgressBar
+                android:id="@+id/progress_bar_personal_finance"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:scaleY="4"
+                android:max="100"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/tv_personal_finance_percentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="xxx%"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_marginLeft="8dp"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Financial Activities"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ProgressBar
+                android:id="@+id/progress_bar_financial_activities"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:scaleY="4"
+                android:max="100"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/tv_financial_activities_percentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="xxx%"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_marginLeft="8dp"/>
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Financial Assessments"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:layout_marginTop="5dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ProgressBar
+                android:id="@+id/progress_bar_financial_assessments"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:scaleY="4"
+                android:max="100"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/tv_financial_assessments_percentage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="xxx%"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_marginLeft="8dp"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -144,7 +247,7 @@
             android:background="@drawable/layout_bg_green"
             android:backgroundTint="@color/dark_green"
             android:layout_weight="1"
-            android:layout_marginRight="7dp">
+            android:layout_marginRight="5dp">
 
             <TextView
                 android:id="@+id/tv_budgeting"
@@ -173,8 +276,7 @@
             android:padding="10dp"
             android:background="@drawable/layout_bg_green"
             android:backgroundTint="@color/dark_green"
-            android:layout_weight="1"
-            android:layout_marginRight="7dp">
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/tv_spending"
