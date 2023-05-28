@@ -91,9 +91,8 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             getChildAge()
             if (age == 10 || age == 11)
                 getGoalSettingPerformance()
-            else
-                getSavingPerformanceScore()
 
+            getSavingPerformanceScore()
             getBudgetingPerformanceScore()
             getSpendingPerformance()
             getFinancialActivitiesScores()
@@ -107,7 +106,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             }
         }
         else spendingPercentage = (1-overspendingPercentage)*100
-
 
         calculateFinancialActivitiesScore()
         setPerformanceView()
@@ -236,7 +234,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 financialActivitiesDocument.toObject<FinancialActivities>()!!.financialGoalID!!)
             .whereEqualTo("financialActivityName", "Spending").get().await()
         val spendingActivity = financialActivitiesDocuments.documents[0].toObject<FinancialActivities>()
-        Log.d("ufc", "spendingActivity: "+spendingActivity?.status)
 
         if (spendingActivity?.status == "Completed") {
             //budget accuracy
@@ -291,7 +288,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         if (nRatings != 0)
             goalSettingPercentage = ((overallRating / nRatings)/5)* 100
 
-        getSavingPerformanceScore()
     }
 
     private suspend fun getSavingPerformanceScore() {
@@ -316,7 +312,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 }
             }
             savingPercentage = (nOnTime/nGoals)*100
-            Log.d("katol", "getChildAge: "+savingPercentage)
         }
     }
 

@@ -127,29 +127,12 @@ class ChildDashboardActivity : AppCompatActivity(){
     }
 
 
-
-    private fun getPerformance() {
-        //get the age of the child
-        firestore.collection("Users").document(childID).get().addOnSuccessListener {
-            val child = it.toObject<Users>()
-            //compute age
-            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
-            val from = LocalDate.now()
-            val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
-            val to = LocalDate.parse(date.toString(), dateFormatter)
-            val difference = Period.between(to, from)
-
-            age = difference.years
-            getPersonalFinancePerformance()
-        }
-    }
-
-
     private fun initializeDateButtons() {
         //initializeWeeklyButton()
         initializeMonthlyButton()
         initializeQuarterlyButton()
     }
+
 
     /*private fun initializeWeeklyButton() {
         val weeklyButton = binding.btnWeekly
@@ -225,6 +208,24 @@ class ChildDashboardActivity : AppCompatActivity(){
         binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[2])
     }
 
+    private fun getPerformance() {
+        //get the age of the child
+        firestore.collection("Users").document(childID).get().addOnSuccessListener {
+            val child = it.toObject<Users>()
+            //compute age
+            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            val difference = Period.between(to, from)
+
+            age = difference.years
+            getPersonalFinancePerformance()
+        }
+    }
+
+
+
     private fun getPersonalFinancePerformance() {
         var income = 0.00F
         var expense = 0.00F
@@ -252,9 +253,8 @@ class ChildDashboardActivity : AppCompatActivity(){
         CoroutineScope(Dispatchers.Main).launch {
             if (age == 10 || age == 11)
                 getGoalSettingPerformance()
-            else
-                getSavingPerformanceScore()
 
+            getSavingPerformanceScore()
             getBudgetingPerformanceScore()
             getSpendingPerformance()
             getFinancialActivitiesScores()
@@ -451,7 +451,6 @@ class ChildDashboardActivity : AppCompatActivity(){
         if (nRatings != 0)
             goalSettingPercentage = ((overallRating / nRatings)/5)* 100
 
-        getSavingPerformanceScore()
     }
 
     private suspend fun getSavingPerformanceScore() {
@@ -520,6 +519,30 @@ class ChildDashboardActivity : AppCompatActivity(){
         }
     }
 
+    private fun checkIfNaN() {
+        val percentages = mutableListOf(personalFinancePerformance, financialAssessmentPerformance,
+            financialActivitiesPerformance, savingPercentage, spendingPercentage,
+            budgetingPercentage, goalSettingPercentage)
+
+        for (ind in percentages)
+            Log.d("mastro", "checkIfNaN: "+ind)
+
+        for (i in percentages.indices) {
+            if (percentages[i].isNaN()) {
+                when (i) {
+                    0 -> personalFinancePerformance = 0.00f
+                    1 -> financialAssessmentPerformance = 0.00f
+                    2 -> financialActivitiesPerformance = 0.00f
+                    3 -> savingPercentage = 0.00f
+                    4 -> spendingPercentage = 0.00f
+                    5 -> budgetingPercentage = 0.00f
+                    6 -> goalSettingPercentage = 0.00f
+                }
+            }
+        }
+    }
+
+
     private fun getOverallFinancialHealth(){
         checkIfNaN()
         if (age == 9 || age == 12) {
@@ -561,6 +584,7 @@ class ChildDashboardActivity : AppCompatActivity(){
         Toast.makeText(this, ""+overallFinancialHealth, Toast.LENGTH_SHORT).show()
         setPerformanceView()
     }
+
 
     private fun setPerformanceView() {
         if (overallFinancialHealth.isNaN())
@@ -709,30 +733,6 @@ class ChildDashboardActivity : AppCompatActivity(){
         }
         mediaPlayer.stop()
         mediaPlayer.release()
-    }
-
-
-    private fun checkIfNaN() {
-        val percentages = mutableListOf(personalFinancePerformance, financialAssessmentPerformance,
-            financialActivitiesPerformance, savingPercentage, spendingPercentage,
-            budgetingPercentage, goalSettingPercentage)
-
-        for (ind in percentages)
-            Log.d("mastro", "checkIfNaN: "+ind)
-
-        for (i in percentages.indices) {
-            if (percentages[i].isNaN()) {
-                when (i) {
-                    0 -> personalFinancePerformance = 0.00f
-                    1 -> financialAssessmentPerformance = 0.00f
-                    2 -> financialActivitiesPerformance = 0.00f
-                    3 -> savingPercentage = 0.00f
-                    4 -> spendingPercentage = 0.00f
-                    5 -> budgetingPercentage = 0.00f
-                    6 -> goalSettingPercentage = 0.00f
-                }
-            }
-        }
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){
