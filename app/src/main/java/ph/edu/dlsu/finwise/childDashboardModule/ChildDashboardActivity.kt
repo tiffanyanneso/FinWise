@@ -609,7 +609,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             performance = "Excellent!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.dark_green))
             message = if (userType == "Parent")
-                "Your child is a financial guru. Celebrate their accomplishments and encourage them to pursue advanced financial literacy courses or activities!"
+                "Your child is a financial guru. Celebrate their accomplishments and encourage them to continue participating in financial activities!"
             else "You've demonstrated exceptional knowledge and skills in personal finance, financial activities, and financial assessments!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (overallFinancialHealth > 90) {
@@ -689,7 +689,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             audio = R.raw.sample
             performance = "Get Started!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
-            message = "You have no overall finance performance yet. Start using the app and go back to this module"
+            message = "Start using the app and go back to this module to view your performance!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
         }
 
