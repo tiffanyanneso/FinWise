@@ -173,7 +173,7 @@ class FinancialActivityConfirmExpense : AppCompatActivity() {
         var withdrawal = hashMapOf(
             "userID" to currentUser,
             "transactionType" to "Withdrawal",
-            "transactionName" to "$goalName Withdrawal for $expenseName",
+            "transactionName" to "Withdrawal from $goalName for $expenseName",
             "amount" to cashBalance,
             "category" to "Goal",
             "financialActivityID" to savingActivityID,

@@ -198,6 +198,9 @@ class ParentDashboardActivity : AppCompatActivity(){
 
             dialog.show()
         }
+
+        binding.layoutLoading.visibility = View.GONE
+        binding.layoutDashboard.visibility = View.VISIBLE
     }
 
     private suspend fun loadChildren() {

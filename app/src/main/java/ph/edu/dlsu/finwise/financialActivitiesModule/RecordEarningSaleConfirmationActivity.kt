@@ -207,9 +207,15 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
         }
     }
     private fun loadBackButton() {
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             onBackPressed()
+        }
+
+        binding.btnCancel.setOnClickListener {
+            var recordSale = Intent(this, RecordEarningSaleActivity::class.java)
+           recordSale.putExtras(bundle)
+            startActivity(recordSale)
         }
     }
 

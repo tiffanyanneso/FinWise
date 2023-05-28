@@ -130,13 +130,6 @@ class GoalConfirmationActivity : AppCompatActivity() {
             }
         }
 
-//        binding.btnBack.setOnClickListener {
-//            var goToNewGoal = Intent(context, FinancialActivity::class.java)
-//            goToNewGoal.putExtras(bundle)
-//            goToNewGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            context.startActivity(goToNewGoal)
-//        }
-
         binding.btnSMARTGoal.setOnClickListener{
             showGoalDialog()
         }

@@ -80,6 +80,7 @@ class NewGoal : AppCompatActivity() {
                 //TODO: reset spinner and date to default value
                 binding.etGoal.text?.clear()
                 binding.etAmount.text?.clear()
+                binding.cbGoalSelf.isChecked = false
 
                 goToGoalConfirmation.putExtras(bundle)
                 goToGoalConfirmation.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -307,10 +308,10 @@ class NewGoal : AppCompatActivity() {
         } else
             binding.goalContainer.helperText = ""
 
-      if (binding.dropdownActivity.text.toString().trim().isEmpty()) {
-        binding.containerActivity.helperText = "Input goal name."
-        valid = false
-      } else
+        if (binding.dropdownActivity.text.toString().trim().isEmpty()) {
+            binding.containerActivity.helperText = "Input goal name."
+            valid = false
+        } else
             binding.containerActivity.helperText = ""
 
         if (binding.etAmount.text.toString().trim().isEmpty()) {

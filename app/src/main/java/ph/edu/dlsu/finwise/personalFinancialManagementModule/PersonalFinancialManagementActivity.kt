@@ -522,6 +522,10 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             dialogBinding.btnClose.setOnClickListener { dialog.dismiss() }
             dialog.show()
         }
+
+        binding.layoutLoading.visibility = View.GONE
+        binding.layoutPfm.visibility = View.VISIBLE
+
     }
 
     private fun updateLastLogin() {

@@ -59,9 +59,9 @@ class GoalDepositFragment : Fragment() {
                 transactionsIDArrayList.add(filter.transactionID)
 
             if (!transactionsIDArrayList.isEmpty()) {
-                goalTransactionsAdapter = GoalTransactionsHistoryAdapater(requireActivity().applicationContext, transactionsIDArrayList)
+                goalTransactionsAdapter = GoalTransactionsHistoryAdapater(requireActivity(), transactionsIDArrayList)
                 binding.rvViewTransactions.adapter = goalTransactionsAdapter
-                binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
+                binding.rvViewTransactions.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
                 binding.loadingItems.stopShimmer()
                 binding.loadingItems.visibility = View.GONE
                 binding.rvViewTransactions.visibility = View.VISIBLE

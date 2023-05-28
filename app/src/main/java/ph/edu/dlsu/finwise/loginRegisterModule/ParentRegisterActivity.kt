@@ -15,6 +15,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityParentRegisterBinding
+import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
 
 class ParentRegisterActivity : AppCompatActivity() {
 
@@ -56,11 +57,11 @@ class ParentRegisterActivity : AppCompatActivity() {
                            .addOnSuccessListener {
                                clearForm()
 
-                               val parentLandingPage = Intent (this, ParentLandingPageActivity::class.java)
+                               val parentDashboard = Intent (this, ParentDashboardActivity::class.java)
                                val bundle = Bundle()
                                bundle.putString("parentUserID", currentUser)
-                               parentLandingPage.putExtras(bundle)
-                               startActivity (parentLandingPage)
+                               parentDashboard.putExtras(bundle)
+                               startActivity (parentDashboard)
                            }
                            /*.addOnFailureListener { exception ->
                                Toast.makeText(this, "Failed to Register", Toast.LENGTH_SHORT).show()

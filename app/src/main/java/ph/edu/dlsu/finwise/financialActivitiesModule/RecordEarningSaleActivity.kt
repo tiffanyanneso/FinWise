@@ -23,6 +23,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityRecordEarningSaleBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningSellingActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.NewEarningActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -37,6 +38,8 @@ class RecordEarningSaleActivity : AppCompatActivity() {
 
     private lateinit var savingActivityID:String
 
+    private lateinit var bundle: Bundle
+
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -45,14 +48,16 @@ class RecordEarningSaleActivity : AppCompatActivity() {
         binding = ActivityRecordEarningSaleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        bundle = intent.extras!!
+        val childID = bundle.getString("childID").toString()
+        binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
+
+        checkBundle()
         loadButtons()
         initializeDropDowns()
         setNavigationBar()
 
-        val bundle = intent.extras!!
-        val childID = bundle.getString("childID").toString()
 
-        binding.etDate.setText(SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate()))
         binding.etDate.setOnClickListener { showCalendar() }
 
         binding.dropdownDestination.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
@@ -102,10 +107,15 @@ class RecordEarningSaleActivity : AppCompatActivity() {
             binding.containerSaleName.helperText = ""
 
         if (binding.etAmount.text.toString().trim().isEmpty()) {
-            binding.amountContainer.helperText = "Please input name an amount"
+            binding.amountContainer.helperText = "Please input an amount"
             valid = false
-        } else
-            binding.amountContainer.helperText = ""
+        } else {
+            if (binding.etAmount.text.toString().toFloat() <= 0) {
+                binding.amountContainer.helperText = "Input a valid amount."
+                valid = false
+            } else
+                binding.amountContainer.helperText = ""
+        }
 
         if (binding.dropdownDestination.text.toString().trim().isEmpty()) {
             binding.containerDestination.helperText = "Please select a destination"
@@ -174,7 +184,18 @@ class RecordEarningSaleActivity : AppCompatActivity() {
     }
 
     private fun loadButtons() {
-        loadBackButton()
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
+        binding.btnCancel.setOnClickListener {
+            var saleList = Intent(this, EarningSellingActivity::class.java)
+            var bundle = Bundle()
+            bundle.putString("childID", currentUser)
+            saleList.putExtras(bundle)
+            startActivity(saleList)
+        }
     }
 
     private fun setNavigationBar() {
@@ -202,11 +223,33 @@ class RecordEarningSaleActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadBackButton() {
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
-        binding.topAppBar.setNavigationOnClickListener {
-            onBackPressed()
+    private fun checkBundle() {
+        if (bundle.containsKey("saleName"))
+            binding.etName.setText(bundle.getString("saleName"))
+
+        if (bundle.containsKey("saleAmount"))
+            binding.etAmount.setText(bundle.getFloat("saleAmount").toInt().toString())
+
+        if (bundle.containsKey("paymentType"))
+            binding.dropdownTypeOfPayment.setText(bundle.getString("paymentType"))
+
+        if (bundle.containsKey("depositTo")) {
+            binding.dropdownDestination.setText(bundle.getString("depositTo"))
+
+            if (bundle.getString("depositTo") == "Financial Goal") {
+                binding.layoutGoal.visibility = View.VISIBLE
+
+                firestore.collection("FinancialActivities").document(bundle.getString("savingActivityID")!!).get().addOnSuccessListener {
+                    var goalID = it.toObject<FinancialActivities>()?.financialGoalID
+                    firestore.collection("FinancialGoals").document(goalID!!).get().addOnSuccessListener {
+                        var goalObject = it.toObject<FinancialGoals>()
+                        binding.dropdownGoal.setText(goalObject?.goalName)
+                        binding.tvProgressAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goalObject?.currentSavings)!! +
+                                " / ₱ " + DecimalFormat("#,##0.00").format(goalObject?.targetAmount!!)
+                        binding.pbProgress.progress = ((goalObject?.currentSavings!! / goalObject?.targetAmount!!)*100).toInt()
+                    }
+                }
+            }
         }
     }
-
 }

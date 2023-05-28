@@ -17,9 +17,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.MainActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityParentRegisterChildBinding
+import ph.edu.dlsu.finwise.databinding.DialogParentLoginAgainBinding
+import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
@@ -85,12 +88,7 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                         firestore.collection("Users").document(childID).set(user).addOnSuccessListener { childUser ->
                             clearForm()
                             createChildWallet(childID)
-                            Toast.makeText(this, "Child register successful", Toast.LENGTH_SHORT).show()
-                            //TODO: change current user back to parent
-                            println("current/parent user   " + FirebaseAuth.getInstance().currentUser!!.uid.toString())
-                            val parentLandingPage = Intent (this, ParentLandingPageActivity::class.java)
-                            startActivity (parentLandingPage)
-                            finish()
+                            loginAgainDialog()
                         }
                     } else {
                         //not successfully registered
@@ -195,7 +193,23 @@ class ParentRegisterChildActivity : AppCompatActivity() {
             )
             firestore.collection("Settings").add(settings)
         }
+    }
 
+    private fun loginAgainDialog() {
+        var dialogBinding = DialogParentLoginAgainBinding.inflate(getLayoutInflater())
+        var dialog = Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(900, 750)
+        dialog.setCancelable(false)
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+            FirebaseAuth.getInstance().signOut()
+            val mainActivity = Intent (this, LoginActivity::class.java)
+            startActivity (mainActivity)
+            finish()
+        }
+        dialog.show()
     }
 
     private fun validateAndSetUserInput(): Boolean {
@@ -284,15 +298,17 @@ class ParentRegisterChildActivity : AppCompatActivity() {
     private fun clearForm() {
         binding.etFirstName.text?.clear()
         binding.etLastName.text?.clear()
+        binding.etContactNumber.text?.clear()
         binding.etEmail.text?.clear()
         binding.etUsername.text?.clear()
+        binding.etBirthday.text?.clear()
         binding.etPassword.text?.clear()
         binding.etConfirmPassword.text?.clear()
     }
 
     private fun setCancel() {
         binding.btnCancel.setOnClickListener {
-            val goToParentLandingPage = Intent(this, ParentLandingPageActivity::class.java)
+            val goToParentLandingPage = Intent(this, ParentDashboardActivity::class.java)
             startActivity(goToParentLandingPage)
         }
     }
@@ -319,8 +335,11 @@ class ParentRegisterChildActivity : AppCompatActivity() {
 
 
         calendar.setOnDateChangedListener { datePicker: DatePicker, mYear, mMonth, mDay ->
-            binding.etBirthday.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
-            dialog.dismiss()
+            // Check if the user has selected the year, month, and day
+            if (mMonth != 0 && mDay != 1) {
+                binding.etBirthday.setText((mMonth + 1).toString() + "/" + mDay.toString() + "/" + mYear.toString())
+                dialog.dismiss()
+            }
         }
         dialog.show()
     }

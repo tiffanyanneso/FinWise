@@ -61,6 +61,7 @@ class GoalTransactionsHistoryAdapater : RecyclerView.Adapter<GoalTransactionsHis
         fun bindGoal(transactionID: String){
             firestore.collection("Transactions").document(transactionID).get().addOnSuccessListener {
                 var transaction = it.toObject<Transactions>()
+                itemBinding.tvTransactionId.text = it.id
 
                 val date =  SimpleDateFormat("MM/dd/yyyy").format(transaction?.date?.toDate())
                 itemBinding.tvDate.text = date.toString()
