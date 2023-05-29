@@ -54,7 +54,6 @@ class EditProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityEditProfileBinding.inflate(layoutInflater)
-        val view = binding.root
         setContentView(binding.root)
         context= this
 
@@ -142,10 +141,6 @@ class EditProfileActivity : AppCompatActivity() {
         val editor = sharedPrefs.edit()
         editor.putInt("color", selectedColor)
         editor.apply()
-
-     /*   selectedColor = colors[(currentColorIndex + 1) % colors.size]
-        binding.circularImageView.setColorFilter(selectedColor)
-        currentColorIndex = (currentColorIndex + 1) % colors.size*/
     }
 
 

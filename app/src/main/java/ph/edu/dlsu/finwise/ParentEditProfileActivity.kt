@@ -11,10 +11,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.databinding.ActivityEditProfileBinding
 import ph.edu.dlsu.finwise.databinding.ActivityParentEditProfileBinding
 import ph.edu.dlsu.finwise.model.Users
-import ph.edu.dlsu.finwise.profileModule.ProfileActivity
 import java.text.SimpleDateFormat
 
 class ParentEditProfileActivity : AppCompatActivity() {

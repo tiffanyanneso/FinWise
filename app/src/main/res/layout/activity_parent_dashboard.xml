@@ -26,7 +26,6 @@
                 android:layout_height="?attr/actionBarSize"
                 app:titleCentered="true"
                 app:title="Dashboard"
-                app:menu="@menu/top_app_bar_logout"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:backgroundTint="@color/dark_green"
                 />
@@ -236,7 +235,7 @@
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
-    <!--Bottom navigation bar-->
+<!--    &lt;!&ndash;Bottom navigation bar&ndash;&gt;
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav_parent"
         android:layout_width="match_parent"
@@ -248,5 +247,5 @@
         android:background="#FFFFFF"
         app:labelVisibilityMode="labeled"
         app:itemIconSize="36dp"
-        app:itemIconTint="@drawable/selector"/>
+        app:itemIconTint="@drawable/selector"/>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

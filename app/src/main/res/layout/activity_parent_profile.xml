@@ -44,9 +44,9 @@
             >
 
             <ImageView
-                android:id="@+id/profile_picture"
-                android:src="@drawable/peso_coin"
-                android:contentDescription="Peso logo"
+                android:id="@+id/circularImageView"
+                android:src="@drawable/baseline_person_24"
+                android:contentDescription="Profile Picture"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 />
@@ -75,7 +75,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_edit_profile"
-                android:layout_width="100dp"
+                android:layout_width="80dp"
                 android:layout_height="40dp"
                 android:text="@string/edit"
                 android:textColor="@color/off_white"

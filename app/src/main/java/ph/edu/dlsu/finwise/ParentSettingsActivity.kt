@@ -1,8 +1,10 @@
 package ph.edu.dlsu.finwise
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.firestoreSettings
@@ -34,6 +36,18 @@ class ParentSettingsActivity : AppCompatActivity() {
         binding = ActivityParentSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         bundle = intent.extras!!
+
+        loadBackButton()
+        cancel()
+
+        //Initializes the navbar
+        //sends the ChildID to the parent navbar
+        val bundle = intent.extras!!
+        val childID = bundle.getString("childID").toString()
+        val bundleNavBar = Bundle()
+        bundleNavBar.putString("childID", childID)
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_profile, bundleNavBar)
+
         CoroutineScope(Dispatchers.Main).launch {
             loadSettings()
         }
@@ -72,6 +86,19 @@ class ParentSettingsActivity : AppCompatActivity() {
             binding.checkEmergency.isChecked = settings?.emergencyFund!!
             binding.checkDonating.isChecked = settings?.donatingCharity!!
             binding.checkSituational.isChecked = settings?.situationalShopping!!
+        }
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+    }
+
+    private fun cancel() {
+        binding.btnCancel.setOnClickListener {
+            finish()
         }
     }
 }
