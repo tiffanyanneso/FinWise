@@ -85,8 +85,7 @@
                     android:layout_below="@id/linear_layout_2"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:text="P XX,XXX.XX"
-                    android:textStyle="bold"/>
+                    android:text="P XX,XXX.XX" />
             </LinearLayout>
     </RelativeLayout>
 

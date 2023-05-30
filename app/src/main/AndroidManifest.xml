@@ -17,6 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
+        <activity android:name=".personalFinancialManagementModule.ChildNotificationSummary"
+            android:exported="false"/>
         <activity
             android:name=".parentFinancialActivitiesModule.ParentPendingForReviewActivity"
             android:exported="false">

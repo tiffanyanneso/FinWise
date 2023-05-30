@@ -519,6 +519,12 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             } else
                 dialogBinding.layoutGoalEdit.visibility = View.GONE
 
+            dialogBinding.btnViewAll.setOnClickListener {
+                var summary = Intent(this, ChildNotificationSummary::class.java)
+                summary.putExtra("lastLogin", lastLogin)
+                startActivity(summary)
+            }
+
             dialogBinding.btnClose.setOnClickListener { dialog.dismiss() }
             dialog.show()
         }

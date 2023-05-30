@@ -25,7 +25,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:titleCentered="true"
-                app:title="Dashboard"
+                app:title="Child Account"
+                app:menu="@menu/top_app_bar_logout"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:backgroundTint="@color/dark_green"
                 />
