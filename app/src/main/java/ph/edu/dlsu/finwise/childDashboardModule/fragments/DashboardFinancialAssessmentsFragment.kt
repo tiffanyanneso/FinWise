@@ -149,8 +149,6 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         if (financialAssessmentTotalPercentage.isNaN())
             financialAssessmentTotalPercentage = 0.0
 
-
-
         financialAssessmentTotalPercentage /= nAttempt
 
         if (financialAssessmentTotalPercentage.isNaN())
@@ -373,7 +371,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         yAxis.axisMinimum = 0f // set maximum y-value to 100%
 
         // Create a dataset from the data
-        val dataSet = LineDataSet(data, "Balance")
+        val dataSet = LineDataSet(data, "Financial Assessments Performance")
         dataSet.color = R.color.red
         dataSet.setCircleColor(R.color.teal_200)
         dataSet.valueTextSize = 12f
@@ -455,7 +453,6 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             }
         }
         sortedDate =  uniqueDates.sorted()
-        Log.d("nnbaaaa", "getDatesOfAttempts: "+ sortedDate)
     }
 
     @SuppressLint("NewApi")
@@ -617,8 +614,16 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         budgetingPercentage = ((budgetingPercentageSum / (maxScore * budgetingScores.size)) * 100).toFloat()
         val financialGoalsPercentageSum = financialGoalsScores.sumOf { it ?: 0.0 }
         financialGoalsPercentage = ((financialGoalsPercentageSum / (maxScore * financialGoalsScores.size)) * 100).toFloat()
+        clearScores()
         checkIfNaN()
         calculateFinancialAssessmentScore()
+    }
+
+    private fun clearScores() {
+        savingScores.clear()
+        spendingScores.clear()
+        budgetingScores.clear()
+        financialGoalsScores.clear()
     }
 
     private fun checkIfNaN() {
@@ -650,6 +655,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         val roundedFinancialAssessmentPerformance = (financialAssessmentPerformance * 10).roundToInt() / 10
         data.add(Entry(xAxisPoint, roundedFinancialAssessmentPerformance.toFloat()))
         xAxisPoint++
+
+
 
         //Update to be used in the leaderboard
         /*firestore.collection("ChildUser").document(childID).update("assessmentPerformance", percentage)*/

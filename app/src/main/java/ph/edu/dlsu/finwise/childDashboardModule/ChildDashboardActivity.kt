@@ -6,7 +6,6 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.Navbar
-import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.childDashboardModule.fragments.DashboardFinancialActivitiesFragment
 import ph.edu.dlsu.finwise.childDashboardModule.fragments.DashboardFinancialAssessmentsFragment
@@ -89,43 +87,17 @@ class ChildDashboardActivity : AppCompatActivity(){
         R.drawable.baseline_assessment_24
     )
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChildDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        checkUser()
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_dashboard)
+        getPerformance()
+        initializeFragments()
+        initializeDateButtons()
     }
-
-    private fun checkUser() {
-        firestore.collection("Users").document(childID).get().addOnSuccessListener {
-            val user = it.toObject<Users>()!!
-            userType = user.userType.toString()
-            //current user is a child
-            val bottomNavigationViewChild = binding.bottomNav
-            val bottomNavigationViewParent = binding.bottomNavParent
-            if (user.userType == "Child") {
-                bottomNavigationViewChild.visibility = View.VISIBLE
-                bottomNavigationViewParent.visibility = View.GONE
-                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_dashboard)
-            } else if (user.userType == "Parent") {
-                bottomNavigationViewChild.visibility = View.GONE
-                bottomNavigationViewParent.visibility = View.VISIBLE
-                //sends the ChildID to the parent navbar
-                val bundle = intent.extras
-                childID = bundle?.getString("childID").toString()
-                val bundleNavBar = Bundle()
-                bundleNavBar.putString("childID", childID)
-                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_dashboard, bundleNavBar)
-            }
-            getPerformance()
-            initializeFragments()
-            initializeDateButtons()
-        }
-    }
-
 
     private fun initializeDateButtons() {
         //initializeWeeklyButton()
@@ -264,7 +236,7 @@ class ChildDashboardActivity : AppCompatActivity(){
     private fun getFinancialActivitiesScores() {
         if (age > 9 ) {
             CoroutineScope(Dispatchers.Main).launch {
-                purchasePlanning()
+                purchasePlanningPerformance()
             }
         }
         else spendingPercentage = (1-overspendingPercentage)*100
@@ -332,7 +304,7 @@ class ChildDashboardActivity : AppCompatActivity(){
 
 
 
-    private suspend fun purchasePlanning() {
+    private suspend fun purchasePlanningPerformance() {
         //items planned / all the items they bought * 100
         val financialActivitiesDocuments = firestore.collection("FinancialActivities")
             .whereEqualTo("childID", childID)
@@ -375,7 +347,6 @@ class ChildDashboardActivity : AppCompatActivity(){
         val budgetItemsDocuments = firestore.collection("BudgetItems")
             .whereEqualTo("financialActivityID", activity?.id)
             .whereEqualTo("status", "Active").get().await()
-
         for (budgetItem in budgetItemsDocuments) {
             budgetItemCount++
             val budgetItemObject = budgetItem.toObject<BudgetItem>()
@@ -475,7 +446,6 @@ class ChildDashboardActivity : AppCompatActivity(){
                 }
             }
             savingPercentage = (nOnTime/nGoals)*100
-            Log.d("katol", "getChildAge: "+savingPercentage)
         }
     }
 
