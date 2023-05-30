@@ -29,14 +29,14 @@ class ParentEditProfileActivity : AppCompatActivity() {
         context= this
 
         getProfileData()
+
         //Initializes the navbar
         //sends the ChildID to the parent navbar
-        val bundle = intent.extras!!
-        val childID = bundle.getString("childID").toString()
-        val bundleNavBar = Bundle()
-        bundleNavBar.putString("childID", childID)
+        val childID = intent.getStringExtra("childID")
+        val bundleNavBar = Bundle().apply {
+            putString("childID", childID)
+        }
         NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_profile, bundleNavBar)
-
 
         binding.btnSave.setOnClickListener{
             updateProfile()
