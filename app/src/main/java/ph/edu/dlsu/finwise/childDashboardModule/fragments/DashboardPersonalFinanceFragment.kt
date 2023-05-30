@@ -489,7 +489,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
         yAxis.axisMinimum = 0f
 
         // Create a dataset from the data
-        val dataSet = LineDataSet(graphData, "Balance")
+        val dataSet = LineDataSet(graphData, "Personal Financial Performance")
         dataSet.color = R.color.red
         dataSet.setCircleColor(R.color.teal_200)
         dataSet.valueTextSize = 12f
