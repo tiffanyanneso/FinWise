@@ -39,7 +39,6 @@
         app:helperTextEnabled="true"
         app:helperText=""
         app:helperTextTextColor="@color/red"
-
         android:paddingTop="20dp"
         app:startIconDrawable="@drawable/baseline_wallet_24"
         >

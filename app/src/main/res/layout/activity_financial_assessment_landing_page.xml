@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:backgroundTint="@color/dark_green"
-            app:menu="@menu/top_app_bar"
+            app:menu="@menu/top_app_bar_notification"
             app:title="Assessments"
             app:titleCentered="true" />
     </com.google.android.material.appbar.AppBarLayout>
