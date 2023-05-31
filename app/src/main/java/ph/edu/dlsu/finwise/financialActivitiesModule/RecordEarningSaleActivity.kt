@@ -141,8 +141,8 @@ class RecordEarningSaleActivity : AppCompatActivity() {
 
 
     private fun initializeDropDowns() {
-        val incomeDestinationAdapter = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.income_destination))
-        binding.dropdownDestination.setAdapter(incomeDestinationAdapter)
+        var incomeDestinationArrayList = ArrayList<String>()
+        incomeDestinationArrayList.add("Personal Finance")
 
         val paymentTypeItems = resources.getStringArray(R.array.payment_type)
         val adapterPaymentTypeItems = ArrayAdapter (this, R.layout.list_item, paymentTypeItems)
@@ -163,6 +163,12 @@ class RecordEarningSaleActivity : AppCompatActivity() {
                     binding.dropdownGoal.setAdapter(goalAdapter)
                 }
             }
+
+            if (!activityResults.isEmpty)
+                incomeDestinationArrayList.add("Financial Goal")
+
+            val incomeDestinationAdapter = ArrayAdapter(this, R.layout.list_item, incomeDestinationArrayList)
+            binding.dropdownDestination.setAdapter(incomeDestinationAdapter)
         }
     }
 

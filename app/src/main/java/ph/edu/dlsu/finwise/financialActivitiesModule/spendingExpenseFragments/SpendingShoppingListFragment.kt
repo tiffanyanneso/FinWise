@@ -16,6 +16,7 @@ import ph.edu.dlsu.finwise.databinding.DialogNewShoppingListItemBinding
 import ph.edu.dlsu.finwise.databinding.DialogShoppingListRecordExpenseBinding
 import ph.edu.dlsu.finwise.databinding.FragmentSpendingShoppingListBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivityRecordExpense
+import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.ShoppingListItem
 import ph.edu.dlsu.finwise.model.Users
 import java.util.*
@@ -70,9 +71,16 @@ class SpendingShoppingListFragment : Fragment() {
 
         getShoppingListItems()
 
-        binding.btnAddShoppingListItem.setOnClickListener {
-            addShoppingListItemDialog()
+        firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
+            if (it.toObject<FinancialActivities>()!!.status == "Ongoing") {
+                binding.btnAddShoppingListItem.visibility = View.VISIBLE
+                binding.btnAddShoppingListItem.setOnClickListener {
+                    addShoppingListItemDialog()
+                }
+            } else
+                binding.btnAddShoppingListItem.visibility = View.GONE
         }
+
     }
 
     private fun getShoppingListItems() {

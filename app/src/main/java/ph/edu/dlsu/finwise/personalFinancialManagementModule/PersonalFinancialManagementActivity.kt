@@ -531,6 +531,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
         binding.layoutLoading.visibility = View.GONE
         binding.layoutPfm.visibility = View.VISIBLE
+        binding.bottomNav.visibility = View.VISIBLE
 
     }
 

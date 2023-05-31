@@ -41,9 +41,24 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <ScrollView
+        <LinearLayout
+            android:id="@+id/layout_loading"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                />
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -337,6 +352,7 @@
                     android:backgroundTint="@color/dark_green"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="10dp"
+                    android:visibility="gone"
                     />
 
                 <Button

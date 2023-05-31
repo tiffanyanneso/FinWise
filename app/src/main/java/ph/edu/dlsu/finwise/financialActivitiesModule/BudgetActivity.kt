@@ -85,6 +85,7 @@ class BudgetActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.Main).launch {
             checkUser()
+            getBalance()
             getBudgetItems()
             loadBackButton()
             getExpenses()
@@ -100,7 +101,8 @@ class BudgetActivity : AppCompatActivity() {
                 firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
                     if (it.toObject<Users>()!!.userType == "Child") {
                         binding.btnDoneSettingBudget.visibility = View.GONE
-                        binding.btnDoneSpending.visibility = View.VISIBLE
+                        //checks if the user has recorded at least once expense before showing "done spending button"
+                        checkDoneSpendingButtonClickable()
                     }
                 }
                 binding.topAppBar.title = "Spending"
@@ -120,8 +122,6 @@ class BudgetActivity : AppCompatActivity() {
                 }
             }
 
-            getBalance()
-
             firestore.collection("FinancialGoals").document(budgetingActivity?.financialGoalID!!).get().addOnSuccessListener {
                 binding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
             }
@@ -139,9 +139,13 @@ class BudgetActivity : AppCompatActivity() {
                 //spending is done, hide buttons
                 else
                     binding.linearLayoutButtons.visibility = View.GONE
+
             }.continueWith {
                 if (allCompleted)
                     binding.btnNewCategory.visibility = View.GONE
+
+                binding.layoutLoading.visibility = View.GONE
+                binding.mainLayout.visibility = View.VISIBLE
             }
         }
 
@@ -299,6 +303,15 @@ class BudgetActivity : AppCompatActivity() {
                 binding.loadingItems.visibility = View.GONE
                 binding.rvViewCategories.visibility = View.VISIBLE
             }
+        }
+    }
+
+    private fun checkDoneSpendingButtonClickable() {
+        firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID).get().addOnSuccessListener { results ->
+            if (!results.isEmpty)
+                binding.btnDoneSpending.visibility = View.VISIBLE
+            else
+                binding.btnDoneSpending.visibility = View.GONE
         }
     }
 

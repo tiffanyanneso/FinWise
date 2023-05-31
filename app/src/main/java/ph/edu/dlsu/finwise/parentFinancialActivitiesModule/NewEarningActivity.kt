@@ -71,6 +71,8 @@ class NewEarningActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             initializeDropDowns()
             getCommonChores()
+            binding.layoutLoading.visibility = View.GONE
+            binding.mainLayout.visibility = View.VISIBLE
         }
         loadBackButton()
         cancel()
@@ -206,7 +208,6 @@ class NewEarningActivity : AppCompatActivity() {
     private fun fillUpFields() {
         if (module == "pfm") {
             binding.dropdownDestination.setText("Personal Finance")
-            binding.dropdownGoal.visibility = View.GONE
         } else if (module == "finact") {
             var bundle = intent.extras!!
             var financialGoalID = bundle.getString("financialGoalID").toString()
@@ -388,20 +389,26 @@ class NewEarningActivity : AppCompatActivity() {
         // for the dropdown
         binding.dropdownChore.setAdapter(choresAdapter)
 
-        val incomeDestinationAdapter = ArrayAdapter(this, R.layout.list_item, resources.getStringArray(R.array.income_destination))
-        binding.dropdownDestination.setAdapter(incomeDestinationAdapter)
+        var incomeDestinationArrayList = ArrayList<String>()
+        incomeDestinationArrayList.add("Personal Finance")
 
         firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { activityResults ->
-                for (saving in activityResults) {
-                    firestore.collection("FinancialGoals")
-                        .document(saving.toObject<FinancialActivities>().financialGoalID!!)
-                        .get().addOnSuccessListener { goal ->
-                        goalDropDownArrayList.add(GoalDropDown(saving.id, goal.toObject<FinancialGoals>()?.goalName!!))
-                    }.continueWith {
-                        goalAdapter = ArrayAdapter(this, R.layout.list_item, goalDropDownArrayList.map { it.goalName })
-                        binding.dropdownGoal.setAdapter(goalAdapter)
-                    }
+            for (saving in activityResults) {
+                firestore.collection("FinancialGoals").document(saving.toObject<FinancialActivities>().financialGoalID!!).get().addOnSuccessListener { goal ->
+                    goalDropDownArrayList.add(
+                        GoalDropDown(saving.id, goal.toObject<FinancialGoals>()?.goalName!!)
+                    )
+                }.continueWith {
+                    goalAdapter = ArrayAdapter(this, R.layout.list_item, goalDropDownArrayList.map { it.goalName })
+                    binding.dropdownGoal.setAdapter(goalAdapter)
                 }
+            }
+
+            if (!activityResults.isEmpty)
+                incomeDestinationArrayList.add("Financial Goal")
+
+            val incomeDestinationAdapter = ArrayAdapter(this, R.layout.list_item, incomeDestinationArrayList)
+            binding.dropdownDestination.setAdapter(incomeDestinationAdapter)
         }
     }
 

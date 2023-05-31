@@ -207,7 +207,6 @@ class ViewGoalActivity : AppCompatActivity() {
                     savingActivityStatus = activityObject.status!!
                     savingActivityID = finActivity.id
                     if (activityObject.status == "Completed") {
-//                        binding.btnEditGoal.visibility = View.GONE
                         binding.btnEditGoal.isEnabled = false
                         binding.btnEditGoal.isClickable = false
                         binding.btnEditGoal.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_grey)))
@@ -325,6 +324,9 @@ class ViewGoalActivity : AppCompatActivity() {
                         binding.tvRemaining.text = differenceDays.toString() + " days remaining"
                     } else
                         binding.tvRemaining.visibility = View.GONE
+
+                    binding.layoutLoading.visibility = View.GONE
+                    binding.linearLayout.visibility = View.VISIBLE
                 }
             }
         }
@@ -380,7 +382,10 @@ class ViewGoalActivity : AppCompatActivity() {
     }
 
     private fun loadButtons(){
-        loadBackButton()
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun setNavigationBar() {
@@ -408,12 +413,6 @@ class ViewGoalActivity : AppCompatActivity() {
     }
     }
 
-    private fun loadBackButton() {
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
-        binding.topAppBar.setNavigationOnClickListener {
-            onBackPressed()
-        }
-    }
 
     private fun cannotWithdrawDialog() {
         var dialogBinding = DialogWarningCannotWtithdrawBinding.inflate(getLayoutInflater())

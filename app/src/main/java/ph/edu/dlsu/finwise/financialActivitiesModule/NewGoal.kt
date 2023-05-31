@@ -50,9 +50,12 @@ class NewGoal : AppCompatActivity() {
         binding = ActivityNewGoalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setNavigationBar()
-        getCurrentUserType()
-        loadBackButton()
+        CoroutineScope(Dispatchers.Main).launch {
+            setNavigationBar()
+            getCurrentUserType()
+            loadBackButton()
+            getCommonGoals()
+        }
 
         binding.etTargetDate.setOnClickListener{
             showCalendar()
@@ -159,10 +162,6 @@ class NewGoal : AppCompatActivity() {
                 childID = currentUser
                 binding.layoutCommonGoalsParents.visibility = View.GONE
             }
-
-            CoroutineScope(Dispatchers.Main).launch {
-                getCommonGoals()
-            }
         }.continueWith {
             initializeDropDownForReasons()
         }
@@ -231,9 +230,8 @@ class NewGoal : AppCompatActivity() {
             binding.layoutCommonGoalsChild.visibility = View.GONE
         }
 
-    }
-
-    private suspend fun getCommonGoalsChild() {
+        binding.layoutLoading.visibility = View.GONE
+        binding.mainLayout.visibility = View.VISIBLE
 
     }
 

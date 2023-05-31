@@ -26,9 +26,33 @@
             android:backgroundTint="@color/dark_green" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <LinearLayout
+        android:id="@+id/layout_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/main_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topbar"
+        app:layout_constraintBottom_toTopOf="@id/bottom_nav_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="55dp"
+        android:visibility="gone">
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/container_chore"
-        app:layout_constraintTop_toBottomOf="@+id/topbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Chore"
@@ -126,36 +150,13 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/container_type_of_payment"
-        app:layout_constraintTop_toBottomOf="@+id/container_destination"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Payment Type"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_marginHorizontal="20dp"
-        android:textSize="16sp"
-        app:helperTextEnabled="true"
-        app:helperText=""
-        app:helperTextTextColor="@color/red"
-        app:startIconDrawable="@drawable/baseline_saved_search_24">
-
-        <AutoCompleteTextView
-            android:id="@+id/dropdown_type_of_payment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            android:layout_marginBottom="5dp"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
     <LinearLayout
         android:id="@+id/layout_goal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container_type_of_payment"
+        app:layout_constraintTop_toBottomOf="@+id/container_destination"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -206,7 +207,28 @@
 
     </LinearLayout>
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/container_type_of_payment"
+        app:layout_constraintTop_toBottomOf="@+id/layout_goal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Payment Type"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_marginHorizontal="20dp"
+        android:textSize="16sp"
+        app:helperTextEnabled="true"
+        app:helperText=""
+        app:helperTextTextColor="@color/red"
+        app:startIconDrawable="@drawable/baseline_saved_search_24">
 
+        <AutoCompleteTextView
+            android:id="@+id/dropdown_type_of_payment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:layout_marginBottom="5dp"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -216,7 +238,7 @@
         style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_goal"
+        app:layout_constraintTop_toBottomOf="@+id/container_type_of_payment"
         android:layout_marginHorizontal="20dp"
         app:helperTextEnabled="true"
         app:helperText=""
@@ -325,6 +347,8 @@
             android:backgroundTint="@color/dark_green"
             android:background="@drawable/button_border"
             android:layout_weight="1" />
+    </LinearLayout>
+
     </LinearLayout>
 
     <!--Bottom navigation bar-->

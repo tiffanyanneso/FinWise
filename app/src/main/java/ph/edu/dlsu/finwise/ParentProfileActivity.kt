@@ -16,6 +16,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityProfileBinding
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.profileModule.EditProfileActivity
 import ph.edu.dlsu.finwise.NavbarParent
+import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
 
 class ParentProfileActivity : AppCompatActivity() {
 
@@ -73,10 +74,16 @@ class ParentProfileActivity : AppCompatActivity() {
     private fun loadChildren() {
         var parentID = FirebaseAuth.getInstance().currentUser?.uid
         var childIDArrayList = ArrayList<String>()
+        var childFilterArrayList = ArrayList<ParentDashboardActivity.ChildFilter>()
         firestore.collection("Users").whereEqualTo("userType", "Child").whereEqualTo("parentID", parentID).get().addOnSuccessListener { results ->
             if (results.size()!=0) {
                 for (child in results)
-                    childIDArrayList.add(child.id)
+                    childFilterArrayList.add(ParentDashboardActivity.ChildFilter(child.id, child.toObject<Users>().firstName!!))
+
+                var filtered = childFilterArrayList.sortedBy { it.childFirstName }
+                for (child in filtered)
+                    childIDArrayList.add(child.childID)
+
                 childAdapter = ParentChildrenAdapter(this, childIDArrayList)
                 binding.rvViewChildren.adapter = childAdapter
                 binding.rvViewChildren.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)

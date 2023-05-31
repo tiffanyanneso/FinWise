@@ -203,28 +203,34 @@ class ParentDashboardActivity : AppCompatActivity(){
         binding.layoutDashboard.visibility = View.VISIBLE
     }
 
+    class ChildFilter (var childID:String, var childFirstName:String)
     private suspend fun loadChildren() {
+        var childFilterArrayList = ArrayList<ChildFilter>()
         val adapter = ViewPagerAdapter(supportFragmentManager)
+
 
         lastLogin = firestore.collection("Users").document(currentUser).get().await().toObject<Users>()!!.lastLogin!!
         var children =  firestore.collection("Users").whereEqualTo("userType", "Child").whereEqualTo("parentID", currentUser).get().await()
         if (children.size()!=0) {
-            for (child in children) {
-                childIDArrayList.add(child.id)
-                var childName = child.toObject<Users>().firstName!!
-
-                //initializing each fragment
-                var fragmentBundle = Bundle()
-                fragmentBundle.putString("childID", child.id)
-                var childFragment = ParentDashboardFragment()
-                childFragment.arguments = fragmentBundle
-                adapter.addFragment(childFragment, childName)
-            }
+            for (child in children)
+                childFilterArrayList.add(ChildFilter(child.id, child.toObject<Users>().firstName!!))
 
             //setting fragment to tabs
             binding.viewPager.adapter = adapter
             binding.tabLayout.setupWithViewPager(binding.viewPager)
             adapter.notifyDataSetChanged()
+
+             var filtered = childFilterArrayList.sortedBy { it.childFirstName }
+            for (child in filtered) {
+                childIDArrayList.add(child.childID)
+                //initializing each fragment
+                var fragmentBundle = Bundle()
+                fragmentBundle.putString("childID", child.childID)
+                var childFragment = ParentDashboardFragment()
+                childFragment.arguments = fragmentBundle
+                adapter.addFragment(childFragment, child.childFirstName)
+                adapter.notifyDataSetChanged()
+            }
 
             childAdapter = ParentChildrenAdapter(this, childIDArrayList)
             binding.rvViewChildren.adapter = childAdapter

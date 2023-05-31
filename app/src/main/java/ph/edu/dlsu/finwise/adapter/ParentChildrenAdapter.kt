@@ -15,6 +15,7 @@ import ph.edu.dlsu.finwise.ParentSettingsActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import ph.edu.dlsu.finwise.databinding.ItemChildBinding
 import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.parentFinancialManagementModule.ParentFinancialManagementActivity
 
 class ParentChildrenAdapter: RecyclerView.Adapter<ParentChildrenAdapter.ChildViewHolder> {
 
@@ -57,7 +58,7 @@ class ParentChildrenAdapter: RecyclerView.Adapter<ParentChildrenAdapter.ChildVie
             firestore.collection("Users").document(childID).get().addOnSuccessListener {
                 val child = it.toObject<Users>()
                 itemBinding.tvChildId.text = it.id
-                itemBinding.tvUsername.text = child?.username
+                itemBinding.tvFirstName.text = child?.firstName
             }
 
             itemBinding.btnSettings.setOnClickListener {
@@ -73,7 +74,7 @@ class ParentChildrenAdapter: RecyclerView.Adapter<ParentChildrenAdapter.ChildVie
         override fun onClick(p0: View?) {
             val bundle = Bundle()
             bundle.putString("childID", itemBinding.tvChildId.text.toString())
-            val parentGoal = Intent(context, ParentFinancialActivity::class.java)
+            val parentGoal = Intent(context, ParentFinancialManagementActivity::class.java)
             parentGoal.putExtras(bundle)
             context.startActivity(parentGoal)
         }
