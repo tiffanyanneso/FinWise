@@ -45,7 +45,6 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
     private var user = "child"
     private lateinit var chart: LineChart
     var graphData = mutableListOf<Entry>()
-    private lateinit var mediaPlayer: MediaPlayer
 
 
 
@@ -495,11 +494,11 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
         firestore.collection("Users").document(user).get().addOnSuccessListener {
 
             if (it.toObject<Users>()!!.userType == "Parent") {
-                binding.btnAudioFragmentBalanceCashFlow.visibility = View.GONE
+                //binding.btnAudioFragmentBalanceCashFlow.visibility = View.GONE
                 binding.balanceCashFlowChild.visibility = View.GONE
                 binding.balanceCashFlowParent.visibility= View.VISIBLE}
             else if (it.toObject<Users>()!!.userType == "Child"){
-                binding.btnAudioFragmentBalanceCashFlow.visibility = View.VISIBLE
+                //binding.btnAudioFragmentBalanceCashFlow.visibility = View.VISIBLE
                 binding.balanceCashFlowChild.visibility= View.VISIBLE
                 binding.balanceCashFlowParent.visibility= View.GONE
             }

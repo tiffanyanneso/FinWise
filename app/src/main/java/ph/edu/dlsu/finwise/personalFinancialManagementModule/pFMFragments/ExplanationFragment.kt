@@ -11,8 +11,7 @@ import ph.edu.dlsu.finwise.databinding.FragmentExplanationBinding
 
 class ExplanationFragment : DialogFragment() {
     private lateinit var binding: FragmentExplanationBinding
-    private lateinit var mediaPlayer: MediaPlayer
-
+    private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,25 +33,35 @@ class ExplanationFragment : DialogFragment() {
     private fun loadAudio() {
         //TODO: Change binding and Audio file in mediaPlayer
         binding.btnSoundPersonalFinanceExplanation.setOnClickListener {
-            if (!this::mediaPlayer.isInitialized) {
+            if (mediaPlayer == null) {
                 mediaPlayer = MediaPlayer.create(context, R.raw.sample)
             }
 
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.pause()
-                mediaPlayer.seekTo(0)
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
+                mediaPlayer?.seekTo(0)
                 return@setOnClickListener
             }
-            mediaPlayer.start()
+            mediaPlayer?.start()
         }
     }
 
     override fun onDestroy() {
-        if (this::mediaPlayer.isInitialized) {
-            mediaPlayer.stop()
-            mediaPlayer.release()
-        }
         super.onDestroy()
+        releaseMediaPlayer()
+    }
+
+
+    private fun releaseMediaPlayer() {
+        mediaPlayer?.apply {
+            if (isPlaying) {
+                pause()
+                seekTo(0)
+            }
+            stop()
+            release()
+        }
+        mediaPlayer = null
     }
 
 

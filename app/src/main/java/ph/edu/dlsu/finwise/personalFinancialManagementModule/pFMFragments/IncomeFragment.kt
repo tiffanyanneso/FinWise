@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.github.mikephil.charting.animation.Easing
@@ -305,19 +306,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         }
     }
 
-    private fun loadTransactionHistory() {
-        binding.btnAction.setOnClickListener {
-            val goToTransactionHistory = Intent(context, TransactionHistoryActivity::class.java)
-            bundle.putString("user", user)
-            if (user == "parent")
-                bundle.putString("childID", childID)
-            bundle.putString("isExpense", "yes")
-            goToTransactionHistory.putExtras(bundle)
-            startActivity(goToTransactionHistory)
-        }
-    }
-
-
     private fun loadParentFinancialActivitiesButton() {
         //TODO: double chekc kung tama link
         binding.btnAction.setOnClickListener {
@@ -329,8 +317,10 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
     }
 
     private fun loadChildFinancialActivitiesButton() {
-        //TODO: double chekc kung tama link
         binding.btnAction.setOnClickListener {
+            if (this::mediaPlayer.isInitialized) {
+                pauseMediaPlayer(mediaPlayer)
+            }
             val goToFinancialActivity = Intent(context, FinancialActivity::class.java)
             startActivity(goToFinancialActivity)
         }

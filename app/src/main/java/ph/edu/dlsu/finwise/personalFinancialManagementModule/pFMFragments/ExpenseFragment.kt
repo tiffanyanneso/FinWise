@@ -95,7 +95,6 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
 
     private fun loadTransactionHistory() {
         binding.btnAction.setOnClickListener {
-            Toast.makeText(context, "pause", Toast.LENGTH_SHORT).show()
             if (this::mediaPlayer.isInitialized) {
                 pauseMediaPlayer(mediaPlayer)
             }

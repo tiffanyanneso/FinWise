@@ -71,7 +71,7 @@ class ParentDashboardActivity : AppCompatActivity(){
 //                }
 //                else -> false
 //            }
-        }
+//        }
 
         binding.btnAddChild.setOnClickListener {
             val goToChildRegister = Intent(this, ParentRegisterChildActivity::class.java)

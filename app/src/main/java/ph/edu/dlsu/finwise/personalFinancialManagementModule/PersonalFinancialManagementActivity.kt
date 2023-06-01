@@ -43,7 +43,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private var bundle = Bundle()
     private var childID  = FirebaseAuth.getInstance().currentUser!!.uid
     private lateinit var context: Context
-    private lateinit var mediaPlayer: MediaPlayer
+    private var mediaPlayer: MediaPlayer? = null
 
     var balance = 0.00f
     var income = 0.00f
@@ -107,26 +107,41 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
 
     private fun loadAudio(audio: Int) {
         //TODO: Change binding and Audio file in mediaPlayer
-        binding.tvPerformance.setOnClickListener {
-            if (!this::mediaPlayer.isInitialized) {
-                mediaPlayer = MediaPlayer.create(context, audio)
+        binding.btnAudioPersonalFinanceScore.setOnClickListener {
+            if (mediaPlayer == null) {
+                mediaPlayer = MediaPlayer.create(this, audio)
             }
 
-            if (mediaPlayer.isPlaying) {
-                mediaPlayer.pause()
-                mediaPlayer.seekTo(0)
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
+                mediaPlayer?.seekTo(0)
                 return@setOnClickListener
             }
-            mediaPlayer.start()
+            mediaPlayer?.start()
         }
     }
 
+    override fun onPause() {
+        releaseMediaPlayer()
+        super.onPause()
+    }
+
     override fun onDestroy() {
-        if (this::mediaPlayer.isInitialized) {
-            mediaPlayer.stop()
-            mediaPlayer.release()
-        }
         super.onDestroy()
+        releaseMediaPlayer()
+    }
+
+
+    private fun releaseMediaPlayer() {
+        mediaPlayer?.apply {
+            if (isPlaying) {
+                pause()
+                seekTo(0)
+            }
+            stop()
+            release()
+        }
+        mediaPlayer = null
     }
 
     private fun loadExplanation() {
@@ -135,10 +150,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             val fm: FragmentManager = activity.supportFragmentManager
             val dialogFragment = ExplanationFragment()
             dialogFragment.show(fm, "fragment_alert")
-            if (this::mediaPlayer.isInitialized) {
-                mediaPlayer.pause()
-                mediaPlayer.seekTo(0)
-            }
+            releaseMediaPlayer()
         }
     }
 

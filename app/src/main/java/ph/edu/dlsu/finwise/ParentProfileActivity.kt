@@ -74,7 +74,8 @@ class ParentProfileActivity : AppCompatActivity() {
     private fun loadChildren() {
         var parentID = FirebaseAuth.getInstance().currentUser?.uid
         var childIDArrayList = ArrayList<String>()
-        var childFilterArrayList = ArrayList<ParentDashboardActivity.ChildFilter>()
+        //TODO: Can't find ChildFilter
+        /*var childFilterArrayList = ArrayList<ParentDashboardActivity.ChildFilter>()
         firestore.collection("Users").whereEqualTo("userType", "Child").whereEqualTo("parentID", parentID).get().addOnSuccessListener { results ->
             if (results.size()!=0) {
                 for (child in results)
@@ -88,6 +89,6 @@ class ParentProfileActivity : AppCompatActivity() {
                 binding.rvViewChildren.adapter = childAdapter
                 binding.rvViewChildren.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
             }
-        }
+        }*/
     }
 }
