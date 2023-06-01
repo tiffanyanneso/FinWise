@@ -8,6 +8,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentPendingForReviewBinding
 import ph.edu.dlsu.finwise.databinding.ActivityPfmtransactionHistoryBinding
@@ -34,6 +35,8 @@ class ParentPendingForReviewActivity : AppCompatActivity() {
         initializeFragments()
         //setNavigationBar()
         //setupTabIcons()
+        //TODO: Needs one childID from the prev activity to work
+        //initializeParentNavbar()
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
             R.drawable.baseline_arrow_back_24, null)
@@ -41,6 +44,12 @@ class ParentPendingForReviewActivity : AppCompatActivity() {
 
         }
     }
+
+   /* private fun initializeParentNavbar() {
+        val bundleNavBar = Bundle()
+        bundleNavBar.putString("childID", childID)
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance, bundleNavBar)
+    }*/
 
     private fun initializeFragments() {
         val adapter = ViewPagerAdapter(supportFragmentManager)

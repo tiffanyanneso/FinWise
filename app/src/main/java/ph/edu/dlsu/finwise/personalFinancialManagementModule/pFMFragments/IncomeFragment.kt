@@ -124,7 +124,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
                 getDataBasedOnDate()
                 calculatePercentages()
                 setTopThreeCategories()
-                topIncome()
                 setSummary()
                 loadPieChartView()
             }
@@ -334,14 +333,55 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
             "Reward" to reward,
             "Other" to other
         )
-        val top3Categories = totals.entries.sortedByDescending { it.value }.take(3)
 
+        val top3Categories = totals.entries
+            .sortedByDescending { it.value }
+            .take(3)
+            .map { entry ->
+                if (entry.value == 0F) {
+                    entry.key to 0.0
+                } else {
+                    entry.key to entry.value
+                }
+            }
 
         val dec = DecimalFormat("#,###.00")
-        binding.tvTopIncome2.text = top3Categories[1].key
-        binding.tvTopIncomeTotal2.text = "₱"+dec.format(top3Categories[1].value)
-        binding.tvTopIncome3.text = top3Categories[2].key
-        binding.tvTopIncomeTotal3.text = "₱"+dec.format(top3Categories[2].value)
+
+        binding.tvTopIncome.text = if (top3Categories.isNotEmpty()) {
+            if (top3Categories[0].second == 0.0) "₱" else top3Categories[0].first
+        } else {
+            "None"
+        }
+        binding.tvTopIncomeTotal.text = if (top3Categories.isNotEmpty()) {
+            val incomeTotal = top3Categories[0].second
+            if (incomeTotal != 0.0) "₱" + dec.format(incomeTotal) else "None"
+        } else {
+            "None"
+        }
+
+        binding.tvTopIncome2.text = if (top3Categories.size >= 2) {
+            if (top3Categories[1].second == 0.0) "None" else top3Categories[1].first
+        } else {
+            "None"
+        }
+        binding.tvTopIncomeTotal2.text = if (top3Categories.size >= 2) {
+            val incomeTotal = top3Categories[1].second
+            if (incomeTotal != 0.0) "₱" + dec.format(incomeTotal) else "None"
+        } else {
+            "None"
+        }
+
+        binding.tvTopIncome3.text = if (top3Categories.size >= 3) {
+            if (top3Categories[2].second == 0.0) "None" else top3Categories[2].first
+        } else {
+            "None"
+        }
+        binding.tvTopIncomeTotal3.text = if (top3Categories.size >= 3) {
+            val incomeTotal = top3Categories[2].second
+            if (incomeTotal != 0.0) "₱" + dec.format(incomeTotal) else "None"
+        } else {
+            "None"
+        }
     }
 
     private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
@@ -493,30 +533,6 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         return currentWeekDates.sorted()
     }
 
-    private fun topIncome() {
-        val dec = DecimalFormat("#,###.00")
-        if (allowance >= gift && allowance >= reward && allowance >= other) {
-            topIncomeCategory = "Allowance"
-            binding.tvTopIncome.text = topIncomeCategory
-            val amount = dec.format(allowance)
-            binding.tvIncomeTotal.text = "₱$amount"
-        } else if (gift >= allowance && gift >= reward && gift >= other) {
-            topIncomeCategory = "Gift"
-            binding.tvTopIncome.text = topIncomeCategory
-            val amount = dec.format(gift)
-            binding.tvIncomeTotal.text = "₱$amount"
-        } else if (reward >= allowance && reward >= gift && reward >= other) {
-            topIncomeCategory = "Reward"
-            binding.tvTopIncome.text = topIncomeCategory
-            val amount = dec.format(reward)
-            binding.tvIncomeTotal.text = "₱$amount"
-        } else {
-            topIncomeCategory = "Other"
-            binding.tvTopIncome.text = topIncomeCategory
-            val amount = dec.format(other)
-            binding.tvIncomeTotal.text = "₱$amount"
-        }
-    }
 
     private fun loadPieChartView() {
         val pieChart: PieChart = view?.findViewById(R.id.pc_income)!!

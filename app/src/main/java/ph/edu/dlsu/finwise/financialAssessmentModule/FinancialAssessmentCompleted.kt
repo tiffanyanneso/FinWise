@@ -85,8 +85,13 @@ class FinancialAssessmentCompleted : AppCompatActivity() {
             setScores()
             badges()
             updateAssessmentAttempts()
+            updateLastLogin()
             initializeFinishButtonActivity()
         }
+    }
+
+    private fun updateLastLogin() {
+        firestore.collection("Users").document(childID).update("lastLogin", Timestamp.now())
     }
 
     @SuppressLint("NewApi")

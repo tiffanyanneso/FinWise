@@ -2,15 +2,9 @@ package ph.edu.dlsu.finwise
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.app.job.JobInfo
-import android.app.job.JobScheduler
-import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
+import androidx.appcompat.app.AppCompatActivity
 import androidx.work.WorkManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -22,16 +16,12 @@ import ph.edu.dlsu.finwise.loginRegisterModule.LoginActivity
 import ph.edu.dlsu.finwise.loginRegisterModule.ParentRegisterActivity
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
+import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import ph.edu.dlsu.finwise.services.FirestoreDataSyncService
-import ph.edu.dlsu.finwise.services.FirestoreJobService
-import ph.edu.dlsu.finwise.services.FirestoreSyncWorkManager
 import ph.edu.dlsu.finwise.services.GoalNotificationServices
 import java.util.*
 import java.util.concurrent.TimeUnit
-import androidx.work.Constraints
-import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var alarmManager:AlarmManager
 
-    private lateinit var workManager: WorkManager
+    //private lateinit var workManager: WorkManager
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)

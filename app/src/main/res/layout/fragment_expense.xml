@@ -228,7 +228,7 @@
                                     android:layout_weight="1"/>
 
                                 <TextView
-                                    android:id="@+id/tv_expense_total"
+                                    android:id="@+id/tv_top_expense_total"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="₱ XXXX.XX"

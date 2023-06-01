@@ -155,7 +155,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
                 getDataBasedOnDate()
                 calculatePercentages()
                 setTopThreeCategories()
-                topExpense()
+                //topExpense()
                 setSummary()
                 loadPieChartView()
             }
@@ -494,18 +494,58 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             "Other" to other
         )
 
-        val top3Categories = totals.entries.sortedByDescending { it.value }.take(3)
+        val top3Categories = totals.entries
+            .sortedByDescending { it.value }
+            .take(3)
+            .map { entry ->
+                if (entry.value == 0F) {
+                    entry.key to 0.0
+                } else {
+                    entry.key to entry.value
+                }
+            }
+
         val dec = DecimalFormat("#,###.00")
 
+        binding.tvTopExpense.text = if (top3Categories.isNotEmpty()) {
+            if (top3Categories[0].second == 0.0) "none" else top3Categories[0].first
+        } else {
+            "none"
+        }
+        binding.tvTopExpenseTotal.text = if (top3Categories.isNotEmpty()) {
+            val expenseTotal = top3Categories[0].second
+            if (expenseTotal != 0.0) "₱" + dec.format(expenseTotal) else ""
+        } else {
+            "None"
+        }
 
-        binding.tvTopExpense2.text = top3Categories[1].key
-        binding.tvTopExpenseTotal2.text = "₱" + dec.format(top3Categories[1].value)
-        binding.tvTopExpense3.text = top3Categories[2].key
-        binding.tvTopExpenseTotal3.text = "₱" + dec.format(top3Categories[2].value)
+        binding.tvTopExpense2.text = if (top3Categories.size >= 2) {
+            if (top3Categories[1].second == 0.0) "none" else top3Categories[1].first
+        } else {
+            "none"
+        }
+        binding.tvTopExpenseTotal2.text = if (top3Categories.size >= 2) {
+            val expenseTotal = top3Categories[1].second
+            if (expenseTotal != 0.0) "₱" + dec.format(expenseTotal) else ""
+        } else {
+            "None"
+        }
+
+        binding.tvTopExpense3.text = if (top3Categories.size >= 3) {
+            if (top3Categories[2].second == 0.0) "None" else top3Categories[2].first
+        } else {
+            "None"
+        }
+        binding.tvTopExpenseTotal3.text = if (top3Categories.size >= 3) {
+            val expenseTotal = top3Categories[2].second
+            if (expenseTotal != 0.0) "₱" + dec.format(expenseTotal) else ""
+        } else {
+            "None"
+        }
     }
 
 
-    private fun topExpense() {
+   /* private fun topExpense() {
         val highest =
             maxOf(
                 clothes, food, gift, toysAndGames, transportation, entertainment, personalCare,
@@ -530,7 +570,7 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             miscellaneous -> binding.tvTopExpense.text = "Miscellaneous"
             other -> binding.tvTopExpense.text = "Other"
         }
-    }
+    }*/
 
     private fun loadPieChartView() {
         pieChart = view?.findViewById(R.id.pc_expense)!!
