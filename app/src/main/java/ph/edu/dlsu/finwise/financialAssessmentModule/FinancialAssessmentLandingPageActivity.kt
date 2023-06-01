@@ -26,6 +26,7 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFinancialAssessmentLandingPageBinding
     private val setBundle = Bundle()
 
+
     //TODO: Change to the right icons
     private val tabIcons2 = intArrayOf(
         R.drawable.baseline_performance_24,

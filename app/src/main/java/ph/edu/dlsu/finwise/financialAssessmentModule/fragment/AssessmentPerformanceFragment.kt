@@ -1,10 +1,12 @@
 package ph.edu.dlsu.finwise.financialAssessmentModule.fragment
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -23,6 +25,7 @@ class AssessmentPerformanceFragment : Fragment() {
     private var firestore = Firebase.firestore
     private lateinit var childID: String
     private lateinit var user: String
+    private var mediaPlayer: MediaPlayer? = null
 
     private val assessmentsTaken = ArrayList<FinancialAssessmentAttempts>()
     private var financialGoalsPercentage = 0.00F
@@ -179,6 +182,8 @@ class AssessmentPerformanceFragment : Fragment() {
     }
 
     private fun setTextPerformanceParent(percentage: Double) {
+        //TODO: Change audio
+        var audio = 0
         if (percentage >= 96) {
             binding.ivScore.setImageResource(R.drawable.excellent)
             binding.textViewPerformanceText.text = "Excellent"
@@ -237,16 +242,14 @@ class AssessmentPerformanceFragment : Fragment() {
             //showReviewButton()
         } else if (percentage < 26 && percentage >= 16) {
             binding.ivScore.setImageResource(R.drawable.not_quite_there_yet)
-            binding.textViewPerformanceText.text = "Not Quite\n" +
-                    "There"
+            binding.textViewPerformanceText.text = "Not Quite There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.not_quite_there_red))
             binding.tvPerformanceText.text =
                 "Not quite there! Your child needs an extra push to better grasp financial concepts. Encourage and guide them to continue doing financial activities."
             //showReviewButton()
         } else if (percentage < 15) {
             binding.ivScore.setImageResource(R.drawable.bad)
-            binding.textViewPerformanceText.text = "Needs\n" +
-                    "Improvement"
+            binding.textViewPerformanceText.text = "Needs Improvement"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.red))
             binding.tvPerformanceText.text =
                 "Uh oh! Your child requires immediate education and guidance to improve their financial concept knowledge."
@@ -254,9 +257,49 @@ class AssessmentPerformanceFragment : Fragment() {
         }
     }
 
+    private fun loadAudio(audio: Int) {
+        binding.btnAudio.setOnClickListener {
+            if (mediaPlayer == null) {
+                mediaPlayer = MediaPlayer.create(context, audio)
+            }
+
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
+                mediaPlayer?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayer?.start()
+        }
+    }
+
+    override fun onPause() {
+        releaseMediaPlayer()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        releaseMediaPlayer()
+    }
+
+
+    private fun releaseMediaPlayer() {
+        mediaPlayer?.apply {
+            if (isPlaying) {
+                pause()
+                seekTo(0)
+            }
+            stop()
+            release()
+        }
+        mediaPlayer = null
+    }
+
     private fun setTextPerformanceChild(percentage: Double) {
-        Log.d("xcvxcvxcxz", "setTextPerformanceChild: "+percentage)
+        //TODO: Change audio
+        var audio = 0
         if (percentage >= 90) {
+            audio = R.raw.sample
             binding.ivScore.setImageResource(R.drawable.excellent)
             binding.textViewPerformanceText.text = "Excellent"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.dark_green))
@@ -264,6 +307,7 @@ class AssessmentPerformanceFragment : Fragment() {
                 "Keep up the excellent work! You have a strong understanding of financial concepts!"
             //showSeeMoreButton()
         } else if (percentage < 96 && percentage >= 86) {
+            audio = R.raw.sample
             binding.ivScore.setImageResource(R.drawable.amazing)
             binding.textViewPerformanceText.text = "Amazing"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.amazing_green))
@@ -271,6 +315,7 @@ class AssessmentPerformanceFragment : Fragment() {
                 "Great job! You have a good grasp of financial concepts!"
             //showSeeMoreButton()
         } else if (percentage < 86 && percentage >= 76) {
+            audio = R.raw.sample
             binding.ivScore.setImageResource(R.drawable.great)
             binding.textViewPerformanceText.text = "Great"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.green))
@@ -278,6 +323,7 @@ class AssessmentPerformanceFragment : Fragment() {
                 "Great! You have a good grasp of financial concepts!"
             //showReviewButton()
         } else if (percentage < 76 && percentage >= 66) {
+            audio = R.raw.sample
             binding.ivScore.setImageResource(R.drawable.good)
             binding.textViewPerformanceText.text = "Good"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.light_green))
@@ -285,6 +331,7 @@ class AssessmentPerformanceFragment : Fragment() {
                 "Good! You understand financial concepts. Keep improving!"
             //showSeeMoreButton()
         } else if (percentage < 66 && percentage >= 56) {
+            audio = R.raw.sample
             binding.ivScore.setImageResource(R.drawable.average)
             binding.textViewPerformanceText.text = "Average"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.yellow))
@@ -292,6 +339,7 @@ class AssessmentPerformanceFragment : Fragment() {
                 "Nice work! You have basic knowledge of financial concepts. Keep performing financial activities to improve!"
             //showReviewButton()
         } else if (percentage < 56 && percentage >= 46) {
+            audio = R.raw.sample
             binding.ivScore.setImageResource(R.drawable.nearly_there)
             binding.textViewPerformanceText.text = "Nearly There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.nearly_there_yellow))
@@ -299,6 +347,7 @@ class AssessmentPerformanceFragment : Fragment() {
                 "Nearly there! You have limited knowledge of financial concepts. Keep performing financial activities to improve!"
             //showReviewButton()
         }  else if (percentage < 46 && percentage >= 36) {
+            audio = R.raw.sample
             binding.ivScore.setImageResource(R.drawable.almost_there)
             binding.textViewPerformanceText.text = "Almost There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.almost_there_yellow))
@@ -306,6 +355,7 @@ class AssessmentPerformanceFragment : Fragment() {
                 "Almost there! Improve your knowledge of financial concepts by performing financial activities!"
             //showReviewButton()
         } else if (percentage < 36 && percentage >= 26) {
+            audio = R.raw.sample
             binding.ivScore.setImageResource(R.drawable.getting_there)
             binding.textViewPerformanceText.text = "Getting There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.getting_there_orange))
@@ -313,6 +363,7 @@ class AssessmentPerformanceFragment : Fragment() {
                 "Getting there! Improve your knowledge of financial concepts by performing financial activities!"
             //showReviewButton()
         } else if (percentage < 26 && percentage >= 16) {
+            audio = R.raw.sample
             binding.ivScore.setImageResource(R.drawable.not_quite_there_yet)
             binding.textViewPerformanceText.text = "Not Quite\n There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.not_quite_there_red))
@@ -320,6 +371,7 @@ class AssessmentPerformanceFragment : Fragment() {
                 "Uh oh! Improve your knowledge of financial concepts by performing financial activities!"
             //showReviewButton()
         } else if (percentage < 15 ) {
+            audio = R.raw.sample
             binding.ivScore.setImageResource(R.drawable.bad)
             binding.textViewPerformanceText.text = "Needs\nImprovement"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.red))
@@ -327,10 +379,11 @@ class AssessmentPerformanceFragment : Fragment() {
                 "Uh oh! Improve your knowledge of financial concepts by performing financial activities!"
             //showReviewButton()
         }
+        loadAudio(audio)
     }
 
     private fun setEmptyAssessmentText() {
-        binding.ivScore.setImageResource(R.drawable.bad)
+        binding.btnAudio.setImageResource(R.drawable.bad)
         binding.textViewProgress.visibility = View.GONE
 
         binding.textViewPerformanceText.text = "Bad"

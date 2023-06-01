@@ -28,6 +28,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import ph.edu.dlsu.finwise.LeaderboardActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.childDashboardModule.FinancialAssessmentsDetailsActivity
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardFinancialAssessmentsBinding
@@ -372,11 +373,11 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             releaseMediaPlayer()
             val goToActivity = if (userType == "Parent") {
                 val bundle = initializeParentFinancialActivityBundle()
-                val intent = Intent(context, ParentFinancialManagementActivity::class.java)
+                val intent = Intent(context, FinancialAssessmentLandingPageActivity::class.java)
                 intent.putExtras(bundle)
                 intent
             } else {
-                Intent(context, PersonalFinancialManagementActivity::class.java)
+                Intent(context, FinancialAssessmentLandingPageActivity::class.java)
             }
             startActivity(goToActivity)
         }

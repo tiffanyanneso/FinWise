@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise
 
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.auth.FirebaseAuth
@@ -18,8 +19,6 @@ class LeaderboardActivity : AppCompatActivity() {
     private var friendRankingArrayList = ArrayList<Ranking>()
 
     private var firestore = Firebase.firestore
-
-    private lateinit var leaderboardRankingAdapter: LeaderboardRankingAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

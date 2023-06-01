@@ -730,23 +730,27 @@ class ChildDashboardActivity : AppCompatActivity(){
         }
     }
 
-    override fun onDestroy() {
-        mediaPlayer?.let { releaseMediaPlayer(it) }
-        super.onDestroy()
-    }
-
     override fun onPause() {
-        mediaPlayer?.let { releaseMediaPlayer(it) }
+        releaseMediaPlayer()
         super.onPause()
     }
 
-    private fun releaseMediaPlayer(mediaPlayer: MediaPlayer) {
-        if (mediaPlayer.isPlaying) {
-            mediaPlayer.pause()
-            mediaPlayer.seekTo(0)
+    override fun onDestroy() {
+        super.onDestroy()
+        releaseMediaPlayer()
+    }
+
+
+    private fun releaseMediaPlayer() {
+        mediaPlayer?.apply {
+            if (isPlaying) {
+                pause()
+                seekTo(0)
+            }
+            stop()
+            release()
         }
-        mediaPlayer.stop()
-        mediaPlayer.release()
+        mediaPlayer = null
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){
