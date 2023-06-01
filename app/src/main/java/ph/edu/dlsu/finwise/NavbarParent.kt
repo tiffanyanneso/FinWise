@@ -53,7 +53,7 @@ class NavbarParent (bottomNavigationView: BottomNavigationView, appCon: Context,
                 }
 
                 R.id.nav_parent_profile-> {
-                    val intent = Intent(appCon, ParentProfileActivity::class.java)
+                    val intent = Intent(appCon, ParentDashboardActivity::class.java)
                     if (bundle != null) {
                         intent.putExtras(sendBundle)
                     }

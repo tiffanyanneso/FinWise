@@ -2,6 +2,7 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
+import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.SpendingExpenseAdapter
 import ph.edu.dlsu.finwise.databinding.ActivitySpendingTransactionsBinding
 import ph.edu.dlsu.finwise.model.Transactions
@@ -28,6 +31,9 @@ class SpendingTransactionsActivity : AppCompatActivity() {
         binding = ActivitySpendingTransactionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Initializes the navbar
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_profile)
+
         var bundle = intent.extras!!
         spendingActivityID = bundle.getString("spendingActivityID").toString()
 
@@ -41,6 +47,8 @@ class SpendingTransactionsActivity : AppCompatActivity() {
             binding.rvExpenses.adapter = expenseAdapter
             binding.rvExpenses.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
             expenseAdapter.notifyDataSetChanged()
+            binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
+                R.drawable.baseline_arrow_back_24, null)
         }
 
     }
