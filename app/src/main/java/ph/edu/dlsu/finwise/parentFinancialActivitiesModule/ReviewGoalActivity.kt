@@ -53,7 +53,8 @@ class ReviewGoalActivity : AppCompatActivity() {
         binding.dropdownStatus.setAdapter(adapter)
 
         binding.btnSubmit.setOnClickListener {
-            submitGoalRating()
+            if (fieldsFilledUp())
+                submitGoalRating()
         }
 
         binding.ratingBarSpecific.setOnRatingBarChangeListener { ratingBar, rating, fromUser -> updateOverallRating() }
@@ -141,6 +142,7 @@ class ReviewGoalActivity : AppCompatActivity() {
 
             var activityStatus = "In Progress"
             if (status == "For Editing" || status == "Disapproved")
+            if (status == "For Editing" || status == "Disapproved")
                 activityStatus = "Locked"
 
 
@@ -159,6 +161,16 @@ class ReviewGoalActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    private fun fieldsFilledUp():Boolean {
+        if (binding.dropdownStatus.text.toString().isEmpty()) {
+            binding.containerStatus.helperText = "Select a status"
+            return false
+        } else
+            binding.containerStatus.helperText = ""
+
+        return true
     }
 
     private fun showGoalDialog() {

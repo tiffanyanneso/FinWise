@@ -305,12 +305,17 @@ class ViewGoalActivity : AppCompatActivity() {
                     else
                         binding.progressBar.progress = 100
 
-                    goalTransactionsAdapter = GoalTransactionsAdapater(this, transactionsArrayList)
-                    binding.rvSavingsDeposit.adapter = goalTransactionsAdapter
-                    binding.rvSavingsDeposit.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+                    if (!transactionsArrayList.isEmpty()) {
+                        goalTransactionsAdapter = GoalTransactionsAdapater(this, transactionsArrayList)
+                        binding.rvSavingsDeposit.adapter = goalTransactionsAdapter
+                        binding.rvSavingsDeposit.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+                        binding.rvSavingsDeposit.visibility = View.VISIBLE
+                    } else {
+                        binding.rvSavingsDeposit.visibility = View.GONE
+                        binding.layoutEmptyTransaction.visibility = View.VISIBLE
+                    }
                     binding.loadingItems.stopShimmer()
                     binding.loadingItems.visibility = View.GONE
-                    binding.rvSavingsDeposit.visibility = View.VISIBLE
 
                     //compute remaining days
                     val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")

@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
@@ -22,11 +23,17 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordDepositBinding
+import ph.edu.dlsu.finwise.databinding.DialogTakeAssessmentBinding
+import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -35,6 +42,7 @@ class RecordDepositActivity : AppCompatActivity() {
     private lateinit var binding : ActivityPfmrecordDepositBinding
     var bundle = Bundle()
     private var firestore = Firebase.firestore
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private lateinit var adapterPaymentTypeItems: ArrayAdapter<String>
     private var selectedPaymentType = "Cash"
@@ -63,7 +71,7 @@ class RecordDepositActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(ph.edu.dlsu.finwise.R.id.bottom_nav), this, ph.edu.dlsu.finwise.R.id.nav_finance)
 
-
+        goToFinancialAssessmentActivity()
 
         firestore.collection("ChildWallet").whereEqualTo("childID", childID).get().addOnSuccessListener {
             walletBalance = it.documents[0].toObject<ChildWallet>()!!.currentBalance!!
@@ -219,12 +227,53 @@ class RecordDepositActivity : AppCompatActivity() {
          binding.spinnerGoal.adapter(null)*/
     }
 
-    /*private fun getCurrentTime() {
-        //Time
-        val formatter = SimpleDateFormat("MM/dd/yyyy")
-        val time = Calendar.getInstance().time
-        date = formatter.format(time)
-    }*/
+    private fun goToFinancialAssessmentActivity() {
+        firestore.collection("Assessments").whereEqualTo("assessmentType", "Pre-Activity").whereEqualTo("assessmentCategory", "Saving").get().addOnSuccessListener {
+            if (it.size()!= 0) {
+                var assessmentID = it.documents[0].id
+                firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).orderBy("dateTaken", Query.Direction.DESCENDING).get().addOnSuccessListener { results ->
+                    if (results.size() != 0) {
+                        var assessmentAttemptsObjects = results.toObjects<FinancialAssessmentAttempts>()
+                        var latestAssessmentAttempt = assessmentAttemptsObjects.get(0).dateTaken
+                        val dateFormatter: DateTimeFormatter =
+                            DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                        val lastTakenFormat =
+                            SimpleDateFormat("MM/dd/yyyy").format(latestAssessmentAttempt!!.toDate())
+                        val from = LocalDate.parse(lastTakenFormat.toString(), dateFormatter)
+                        val today = SimpleDateFormat("MM/dd/yyyy").format(Timestamp.now().toDate())
+                        val to = LocalDate.parse(today.toString(), dateFormatter)
+                        var difference = Period.between(from, to)
+
+                        if (difference.days >= 7)
+                            buildAssessmentDialog()
+                    } else
+                        buildAssessmentDialog()
+                }
+            }
+        }
+    }
+
+    private fun buildAssessmentDialog() {
+        var dialogBinding= DialogTakeAssessmentBinding.inflate(layoutInflater)
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.root)
+        dialog.window!!.setLayout(950, 900)
+        dialog.setCancelable(false)
+        dialogBinding.btnOk.setOnClickListener { goToAssessment() }
+        dialog.show()
+    }
+
+    private fun goToAssessment() {
+        val bundle = Bundle()
+        val assessmentType = "Pre-Activity" // Change: Pre-Activity, Post-Activity
+        val assessmentCategory = "Saving" // Change: Budgeting, Saving, Spending, Goal Setting
+        bundle.putString("assessmentType", assessmentType)
+        bundle.putString("assessmentCategory", assessmentCategory)
+
+        val assessmentQuiz = Intent(this, FinancialAssessmentActivity::class.java)
+        assessmentQuiz.putExtras(bundle)
+        startActivity(assessmentQuiz)
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun showCalendar() {

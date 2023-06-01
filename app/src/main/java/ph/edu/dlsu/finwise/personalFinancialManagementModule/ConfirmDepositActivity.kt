@@ -5,14 +5,21 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityPfmconfirmDepositBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.GoalAccomplishedActivity
+import ph.edu.dlsu.finwise.financialActivitiesModule.ViewGoalActivity
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
@@ -125,9 +132,40 @@ class ConfirmDepositActivity : AppCompatActivity() {
             "paymentType" to paymentType
         )
         firestore.collection("Transactions").add(transaction).addOnSuccessListener {
-            goToPFM()
+            CoroutineScope(Dispatchers.Main).launch {
+                checkGoalCompletion()
+            }
         }.addOnFailureListener {
             Toast.makeText(this, "Failed to add transaction", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private suspend fun checkGoalCompletion(){
+        var financialGoalID = firestore.collection("FinancialActivities").document(savingActivityID).get().await().toObject<FinancialActivities>()?.financialGoalID!!
+
+        var budgetingActivityID = firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("financialActivityName", "Budgeting").get().await().documents[0].id
+        var spendingActivityID = firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("financialActivityName", "Spending").get().await().documents[0].id
+        firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
+            val goal = it.toObject<FinancialGoals>()
+            //goal is ongoing and target amount has already been met, update status of goal and fin activity to completed
+            if (goal?.targetAmount!! <= goal.currentSavings!! && goal.status != "Completed") {
+                firestore.collection("FinancialGoals").document(financialGoalID).update("status", "Completed")
+                firestore.collection("FinancialGoals").document(financialGoalID).update("dateCompleted", Timestamp.now())
+                firestore.collection("FinancialActivities").document(savingActivityID).update("status", "Completed")
+                firestore.collection("FinancialActivities").document(savingActivityID).update("dateCompleted", Timestamp.now())
+                val goalAccomplished = Intent(this, GoalAccomplishedActivity::class.java)
+                val sendBundle = Bundle()
+                sendBundle.putString("financialGoalID", financialGoalID)
+                sendBundle.putString("savingActivityID", savingActivityID)
+                sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                sendBundle.putString("spendingActivityID", spendingActivityID)
+                goalAccomplished.putExtras(sendBundle)
+                goalAccomplished.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                this.startActivity(goalAccomplished)
+                finish()
+            } else
+               goToPFM()
+
         }
     }
 
@@ -170,10 +208,9 @@ class ConfirmDepositActivity : AppCompatActivity() {
             val goToPFM = Intent(this, PersonalFinancialManagementActivity::class.java)
             goToPFM.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(goToPFM)
+        }.addOnFailureListener {
+            Toast.makeText(this, "Failed to add transaction", Toast.LENGTH_SHORT).show()
         }
-            .addOnFailureListener {
-                Toast.makeText(this, "Failed to add transaction", Toast.LENGTH_SHORT).show()
-            }
     }
 
 

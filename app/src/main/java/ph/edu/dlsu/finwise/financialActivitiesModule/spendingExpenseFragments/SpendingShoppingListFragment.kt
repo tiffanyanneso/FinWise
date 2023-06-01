@@ -72,7 +72,7 @@ class SpendingShoppingListFragment : Fragment() {
         getShoppingListItems()
 
         firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
-            if (it.toObject<FinancialActivities>()!!.status == "Ongoing") {
+            if (it.toObject<FinancialActivities>()!!.status == "In Progress") {
                 binding.btnAddShoppingListItem.visibility = View.VISIBLE
                 binding.btnAddShoppingListItem.setOnClickListener {
                     addShoppingListItemDialog()
@@ -148,11 +148,15 @@ class SpendingShoppingListFragment : Fragment() {
 
         dialogBinding.btnSave.setOnClickListener {
             var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-            var shoppingListItem = ShoppingListItem(dialogBinding.etShoppingListItemName.text.toString(), budgetItemID, currentUser, "In List", spendingActivityID)
-            firestore.collection("ShoppingListItems").add(shoppingListItem).addOnSuccessListener { newItem ->
-                dialog.dismiss()
-                shoppingListArrayList.add(ShoppingListAdapterItem(newItem.id, dialogBinding.etShoppingListItemName.text.toString(), false))
-            }
+            dialogBinding.containerCategory.helperText =""
+            if (!dialogBinding.etShoppingListItemName.text.toString().isEmpty()) {
+                var shoppingListItem = ShoppingListItem(dialogBinding.etShoppingListItemName.text.toString(), budgetItemID, currentUser, "In List", spendingActivityID)
+                firestore.collection("ShoppingListItems").add(shoppingListItem).addOnSuccessListener { newItem ->
+                    dialog.dismiss()
+                    shoppingListArrayList.add(ShoppingListAdapterItem(newItem.id, dialogBinding.etShoppingListItemName.text.toString(), false))
+                }
+            } else
+                dialogBinding.containerCategory.helperText = "Input name of item"
         }
 
         dialogBinding.btnCancel.setOnClickListener {

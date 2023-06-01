@@ -453,6 +453,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Status"
+                    app:helperTextEnabled="true"
+                    app:helperTextTextColor="@color/red"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                     android:paddingBottom="10dp"
                     app:startIconDrawable="@drawable/baseline_star_24">

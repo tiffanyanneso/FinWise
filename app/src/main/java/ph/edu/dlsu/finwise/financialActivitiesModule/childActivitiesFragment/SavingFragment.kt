@@ -496,7 +496,7 @@ class SavingFragment : Fragment() {
             totalGoals = results.size()
             for (goalSnapshot in results) {
                 var goal = goalSnapshot.toObject<FinancialGoals>()
-                if (goal.status == "In Progress")
+                if (goal.status == "In Progress" || goal.status == "For Review" || goal.status ==  "For Editing")
                     ongoingGoals++
             }
         }

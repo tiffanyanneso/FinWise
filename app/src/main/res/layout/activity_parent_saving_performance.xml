@@ -166,6 +166,7 @@
                         android:layout_marginTop="10dp"/>
 
                     <LinearLayout
+                        android:id="@+id/layout_duration_1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -235,6 +236,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layout_duration_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -283,6 +285,7 @@
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/layout_duration_3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -375,6 +378,7 @@
                         android:layout_marginTop="10dp"/>
 
                     <LinearLayout
+                        android:id="@+id/layout_category_1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -444,6 +448,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/layout_category_2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -493,6 +498,7 @@
 
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/layout_category_3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -541,6 +547,7 @@
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/layout_category_4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
@@ -589,6 +596,7 @@
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
+                        android:id="@+id/layout_category_5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"

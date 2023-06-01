@@ -248,11 +248,15 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
             percentageLong = ((nLong.toFloat() / totalGoals.toFloat()) * 100)
         }
 
-        val entries = listOf(
-            PieEntry(percentageShort, "Short"),
-            PieEntry(percentageMedium, "Medium"),
-            PieEntry(percentageLong, "Long"),
-        )
+        var entries = mutableListOf<PieEntry>()
+        if (percentageShort!= 0.00F)
+            entries.add(PieEntry(percentageShort, "Short"))
+
+        if (percentageMedium!= 0.00F)
+            entries.add(PieEntry(percentageMedium, "Medium"))
+
+        if (percentageLong != 0.00F)
+            entries.add(PieEntry(percentageLong, "Long"))
 
         var dataSet = PieDataSet(entries, "Data")
 
@@ -296,15 +300,24 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
             var num = i + 1
 
             if (num == 1) {
-                binding.tvTopPerformingDuration.text = durationRatingArray[i].name.toString()
-                binding.tvTopPerformingRating.text = DecimalFormat("##0.00").format(durationRatingArray[i].score) + "%"
+                if (durationRatingArray[i].score != 0.00F) {
+                    binding.tvTopPerformingDuration.text = durationRatingArray[i].name.toString()
+                    binding.tvTopPerformingRating.text = DecimalFormat("##0.0").format(durationRatingArray[i].score) + "%"
+                } else
+                    binding.layoutDuration1.visibility = View.GONE
             } else if (num == 2) {
-                binding.tvDuration2nd.text = durationRatingArray[i].name.toString()
-                binding.tvDuration2Rating.text = DecimalFormat("##0.00").format(durationRatingArray[i].score) + "%"
+                if (durationRatingArray[i].score != 0.00F) {
+                    binding.tvDuration2nd.text = durationRatingArray[i].name.toString()
+                    binding.tvDuration2Rating.text = DecimalFormat("##0.0").format(durationRatingArray[i].score) + "%"
+                } else
+                    binding.layoutDuration2.visibility = View.GONE
             } else if (num == 3) {
-                binding.tvDuration3rd.text = durationRatingArray[i].name.toString()
-                binding.tvDuration3Rating.text = DecimalFormat("##0.00").format(durationRatingArray[i].score) + "%"
-                specificDuration = durationRatingArray[i].name.toString()
+                if (durationRatingArray[i].score != 0.00F) {
+                    binding.tvDuration3rd.text = durationRatingArray[i].name.toString()
+                    binding.tvDuration3Rating.text = DecimalFormat("##0.0").format(durationRatingArray[i].score) + "%"
+                    specificDuration = durationRatingArray[i].name.toString()
+                } else
+                    binding.layoutDuration3.visibility = View.GONE
             }
         }
 //        binding.progressBarShortTerm.progress = percentageShort.toInt()
@@ -332,13 +345,22 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
 
 
 
-        val entries = listOf(
-            PieEntry(percentageBuying, "Buying Items"),
-            PieEntry(percentageEvent, "Planning An Event"),
-            PieEntry(percentageEmergency, "Saving For Emergency Funds"),
-            PieEntry(percentageSituational, "Situational Shopping"),
-            PieEntry(percentageDonating, "Donating To Charity"),
-        )
+        var entries = mutableListOf<PieEntry>()
+        if (percentageBuying!=0.00F)
+            entries.add(PieEntry(percentageBuying, "Buying Items"))
+
+        if (percentageEvent!=0.00F)
+            entries.add(PieEntry(percentageEvent, "Planning An Event"))
+
+        if (percentageEmergency!=0.00F)
+            entries.add(PieEntry(percentageEmergency, "Saving For Emergency Funds"))
+
+        if (percentageSituational!=0.00F)
+            entries.add(PieEntry(percentageSituational, "Situational Shopping"))
+
+        if (percentageDonating!=0.00F)
+            entries.add(PieEntry(percentageDonating, "Donating To Charity"))
+
 
         var dataSet = PieDataSet(entries, "Data")
 
@@ -398,21 +420,36 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
             var num = i + 1
 
             if (num == 1) {
-                binding.tvTopPerformingActivity.text = categoryRatingArray[i].name
-                binding.tvTopPerformingActivityPercentage.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
+                if (categoryRatingArray[i].score != 0.00F) {
+                    binding.tvTopPerformingActivity.text = categoryRatingArray[i].name.toString()
+                    binding.tvTopPerformingActivityPercentage.text = DecimalFormat("##0.0").format(categoryRatingArray[i].score) + "%"
+                } else
+                    binding.layoutCategory1.visibility = View.GONE
             } else if (num == 2) {
-                binding.tvActivity2nd.text = categoryRatingArray[i].name
-                binding.tvConcept2Activity.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
+                if (categoryRatingArray[i].score != 0.00F) {
+                    binding.tvActivity2nd.text = categoryRatingArray[i].name.toString()
+                    binding.tvConcept2Activity.text = DecimalFormat("##0.0").format(categoryRatingArray[i].score) + "%"
+                } else
+                    binding.layoutCategory2.visibility = View.GONE
             } else if (num == 3) {
-                binding.tvActivity3rd.text = categoryRatingArray[i].name
-                binding.tvActivity3Rating.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
+                if (categoryRatingArray[i].score != 0.00F) {
+                    binding.tvActivity3rd.text = categoryRatingArray[i].name.toString()
+                    binding.tvActivity3Rating.text = DecimalFormat("##0.0").format(categoryRatingArray[i].score) + "%"
+                } else
+                    binding.layoutCategory3.visibility = View.GONE
             } else if (num == 4) {
-                binding.tvActivity4th.text = categoryRatingArray[i].name
-                binding.tvActivity4Rating.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
+                if (categoryRatingArray[i].score != 0.00F) {
+                    binding.tvActivity4th.text = categoryRatingArray[i].name.toString()
+                    binding.tvActivity4Rating.text = DecimalFormat("##0.0").format(categoryRatingArray[i].score) + "%"
+                } else
+                    binding.layoutCategory4.visibility = View.GONE
             } else if (num == 5) {
-                binding.tvActivity5th.text = categoryRatingArray[i].name
-                binding.tvActivity5Rating.text = DecimalFormat("##0.00").format(categoryRatingArray[i].score) + "%"
-                specificCategory = categoryRatingArray[i].name.toString()
+                if (categoryRatingArray[i].score != 0.00F) {
+                    binding.tvActivity5th.text = categoryRatingArray[i].name.toString()
+                    binding.tvActivity5Rating.text = DecimalFormat("##0.0").format(categoryRatingArray[i].score) + "%"
+                    specificCategory = categoryRatingArray[i].name.toString()
+                } else
+                    binding.layoutCategory5.visibility = View.GONE
             }
         }
     }

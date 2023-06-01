@@ -204,7 +204,7 @@ class GoalSettingFragment : Fragment() {
     }
 
     private fun getOnGoingGoals() {
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "In Progress").get().addOnSuccessListener { results ->
+        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", Arrays.asList("In Progress", "For Review", "For Editing")).get().addOnSuccessListener { results ->
            ongoingGoals = results.size()
         }
     }

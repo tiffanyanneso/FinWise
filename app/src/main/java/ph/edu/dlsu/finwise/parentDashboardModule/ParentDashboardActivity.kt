@@ -60,18 +60,18 @@ class ParentDashboardActivity : AppCompatActivity(){
         binding = ActivityParentDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
-//            when (menuItem.itemId) {
-//                R.id.btn_logout -> {
-//                    FirebaseAuth.getInstance().signOut()
-//                    val intent = Intent (this, MainActivity::class.java)
-//                    startActivity (intent)
-//                    finish()
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId) {
+                R.id.btn_logout -> {
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent (this, MainActivity::class.java)
+                    startActivity (intent)
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
 
         binding.btnAddChild.setOnClickListener {
             val goToChildRegister = Intent(this, ParentRegisterChildActivity::class.java)
