@@ -15,7 +15,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.Navbar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityParentSendMoneyBinding
@@ -55,7 +58,7 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         val childID = bundle.getString("childID").toString()
         val bundleNavBar = Bundle()
         bundleNavBar.putString("childID", childID)
-        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_dashboard, bundleNavBar)
+        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_finance, bundleNavBar)
         initializeDropdown()
         goToConfirmPayment()
         cancel()
@@ -72,18 +75,20 @@ class ParentSendMoneyActivity :AppCompatActivity () {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun goToConfirmPayment(){
         binding.btnConfirm.setOnClickListener {
-            if (validateAndSetUserInput()) {
-                setBundle()
-                //Toast.makeText(this, ""+paymentType, Toast.LENGTH_SHORT).show()
-                val goToMayaConfirmPayment = Intent(applicationContext, ParentConfirmPayment::class.java)
-                goToMayaConfirmPayment.putExtras(bundle)
-                goToMayaConfirmPayment.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(goToMayaConfirmPayment)
-            } else {
-                Toast.makeText(
-                    baseContext, "Please fill up the form correctly.",
-                    Toast.LENGTH_SHORT
-                ).show()
+            CoroutineScope(Dispatchers.Main).launch {
+                if (validateAndSetUserInput()) {
+                    setBundle()
+                    //Toast.makeText(this, ""+paymentType, Toast.LENGTH_SHORT).show()
+                    val goToMayaConfirmPayment = Intent(applicationContext, ParentConfirmPayment::class.java)
+                    goToMayaConfirmPayment.putExtras(bundle)
+                    goToMayaConfirmPayment.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(goToMayaConfirmPayment)
+                } else {
+                    Toast.makeText(
+                        baseContext, "Please fill up the form correctly.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
@@ -95,7 +100,6 @@ class ParentSendMoneyActivity :AppCompatActivity () {
 
         bundle.putString("name", name)
         bundle.putFloat("amount", amount.toFloat())
-        bundle.putString("phone", phone)
         bundle.putString("paymentType", paymentType)
         bundle.putString("selectedChildID", selectedChildID)
         bundle.putString("childID", childID)
@@ -138,48 +142,63 @@ class ParentSendMoneyActivity :AppCompatActivity () {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun validateAndSetUserInput(): Boolean {
+    private suspend fun validateAndSetUserInput(): Boolean {
         var valid = true
+        var nameFound = true
         // Check if edit text is empty and valid
         if (binding.etChildName.text.toString().trim().isEmpty()) {
-            binding.etChildName.error = "Please enter the name of the child."
-            binding.etChildName.requestFocus()
+            binding.containerChildName.helperText = "Please select the name of the child."
             valid = false
+            nameFound = false
         } else {
-            binding.etChildName.error = null
+            binding.containerChildName.helperText = ""
             name = binding.etChildName.text.toString().trim()
         }
 
-        if (binding.dropdownTypeOfPayment.text.toString() == "") {
-            binding.dropdownTypeOfPayment.error = "Please select if you used cash or Maya"
+
+        if (binding.etChildName.text.toString() == "") {
+            binding.containerChildName.helperText = "Please select if you used cash or Maya"
             valid = false
         } else {
-            binding.dropdownTypeOfPayment.error = null
-            paymentType = binding.dropdownTypeOfPayment.text.toString()
+            getChildID()
+            binding.containerChildName.helperText = ""
+            name = binding.etChildName.text.toString()
         }
 
-        getChildID()
-
+        if (binding.dropdownTypeOfPayment.text.toString() == "") {
+            binding.containerTypeOfPayment.helperText = "Please select if you used cash or Maya"
+            valid = false
+        } else {
+            binding.containerTypeOfPayment.helperText = ""
+            paymentType = binding.dropdownTypeOfPayment.text.toString()
+            getChildID()
+            getIfPhoneIfMaya(nameFound)
+        }
 
         if (binding.etAmount.text.toString().trim().isEmpty()) {
-            binding.etAmount.error = "Please enter the amount."
-            binding.etAmount.requestFocus()
+            binding.amountContainer.helperText = "Please enter the amount."
             valid = false
-        } else amount = binding.etAmount.text.toString().trim()
-
-
-        if (selectedValue == "Maya") {
-            if (binding.etPhone.text.toString().trim().isEmpty() || binding.etPhone.text?.length!! < 11) {
-                binding.etPhone.error = "Please enter the right 11 digit Phone Number."
-                binding.etPhone.requestFocus()
-                valid = false
-            } else phone = binding.etPhone.text.toString().trim()
+        } else {
+            binding.amountContainer.helperText = ""
+            amount = binding.etAmount.text.toString().trim()
         }
 
 
-        getCurrentTime()
+        //isMayaPayment(nameFound)
 
+        getCurrentTime()
+        Toast.makeText(this, ""+valid, Toast.LENGTH_SHORT).show()
         return valid
+    }
+
+    private suspend fun getIfPhoneIfMaya(nameFound: Boolean) {
+        if (paymentType == "Maya" && nameFound) {
+            binding.phoneContainer.visibility = View.VISIBLE
+                val user = firestore.collection("Users").document(selectedChildID).get().await()
+                phone = user.toObject<Users>()!!.number.toString()
+                bundle.putString("phone", phone)
+                binding.etPhone.setText(phone)
+        }
     }
 
     private fun getChildID() {
@@ -210,7 +229,6 @@ class ParentSendMoneyActivity :AppCompatActivity () {
                 val paymentTypeItems = resources.getStringArray(R.array.payment_type)
                 adapterPaymentTypeItems = ArrayAdapter (this, R.layout.list_item, paymentTypeItems)
                 binding.dropdownTypeOfPayment.setAdapter(adapterPaymentTypeItems)
-                isMayaPayment()
             }
 
         /* val items = resources.getStringArray(R.array.pfm_income_category)
@@ -220,13 +238,12 @@ class ParentSendMoneyActivity :AppCompatActivity () {
 
     }
 
-    private fun isMayaPayment() {
+    private fun isMayaPayment(nameFound: Boolean) {
         binding.dropdownTypeOfPayment.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             selectedValue = adapterPaymentTypeItems.getItem(position).toString()
-            if (selectedValue == "Maya") {
+            if (selectedValue == "Maya" && nameFound) {
                 binding.phoneContainer.visibility = View.VISIBLE
                 name = binding.etChildName.text.toString().trim()
-                getChildID()
                 firestore.collection("Users").document(selectedChildID).get().addOnSuccessListener {
                     binding.etPhone.setText(it.toObject<Users>()!!.number.toString())
                 }

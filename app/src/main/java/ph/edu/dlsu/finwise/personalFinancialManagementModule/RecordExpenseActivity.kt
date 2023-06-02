@@ -122,54 +122,64 @@ class RecordExpenseActivity : AppCompatActivity() {
 
         if (selectedPaymentType == "Maya") {
             if (binding.etMerchant.text.toString().trim().isEmpty()) {
-                binding.etMerchant.error = "Please enter the name of the Merchant/Seller."
-                binding.etMerchant.requestFocus()
+                binding.merchantContainer.helperText = "Please enter the name of the Merchant/Seller."
                 valid = false
-            } else merchant = binding.etMerchant.text.toString().trim()
+            } else {
+                binding.merchantContainer.helperText = ""
+                merchant = binding.etMerchant.text.toString().trim()
+            }
 
             if (binding.etPhone.text.toString().trim().isEmpty() || binding.etPhone.text?.length!! < 11) {
-                binding.etPhone.error = "Please enter the right 11 digit Phone Number."
-                binding.etPhone.requestFocus()
+                binding.phoneContainer.helperText = "Please enter the right 11 digit Phone Number."
                 valid = false
-            } else phone = binding.etPhone.text.toString().trim()
+            } else {
+                binding.phoneContainer.helperText = ""
+                phone = binding.etPhone.text.toString().trim()
+            }
         }
 
         // Check if edit text is empty and valid
         if (binding.etName.text.toString().trim().isEmpty()) {
-            binding.etName.error = "Please enter the name of the transaction."
-            binding.etName.requestFocus()
-            valid = false
-        } else name = binding.etName.text.toString().trim()
-
-        if (binding.dropdownCategory.text.toString() == "") {
-            binding.dropdownCategory.error = "Please select a category of the transaction."
+            binding.containerExpense.helperText = "Please enter the name of the transaction."
             valid = false
         } else {
-            binding.dropdownCategory.error = null
+            binding.containerExpense.helperText = ""
+            name = binding.etName.text.toString().trim()
+        }
+
+        if (binding.dropdownCategory.text.toString() == "") {
+            binding.containerCategory.helperText = "Please select a category of the transaction."
+            valid = false
+        } else {
+            binding.containerCategory.helperText = ""
             category = binding.dropdownCategory.text.toString()
         }
 
         if (binding.dropdownTypeOfPayment.text.toString() == "") {
-            binding.dropdownTypeOfPayment.error = "Please select if you used cash or Maya"
+            binding.containerTypeOfPayment.helperText = "Please select if you used cash or Maya"
             valid = false
         } else {
-            binding.dropdownTypeOfPayment.error = null
+            binding.containerTypeOfPayment.helperText = ""
             paymentType = binding.dropdownTypeOfPayment.text.toString()
         }
 
         if (binding.etAmount.text.toString().trim().isEmpty()) {
-            binding.etAmount.error = "Please enter the amount."
-            binding.etAmount.requestFocus()
+            binding.amountContainer.helperText = "Please enter the amount."
             valid = false
-        } else amount = binding.etAmount.text.toString().trim()
+        } else {
+            binding.amountContainer.helperText = ""
+            amount = binding.etAmount.text.toString().trim()
+        }
 
 //        date = SimpleDateFormat("MM-dd-yyyy").parse((binding.etDate.month+1).toString() + "-" +
 //                binding.etDate.dayOfMonth.toString() + "-" + binding.etDate.year)
 
         if (binding.etDate.text.toString().trim().isEmpty()) {
-            binding.etDate.error = "Please enter the name of the transaction."
-            binding.etDate.requestFocus()
+            binding.dateContainer.helperText = "Please enter the name of the transaction."
             valid = false
+        } else {
+            binding.dateContainer.helperText = ""
+            date = SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString())
         }
 
 

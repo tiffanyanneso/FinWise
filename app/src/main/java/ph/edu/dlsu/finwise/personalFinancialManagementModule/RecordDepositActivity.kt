@@ -146,33 +146,34 @@ class RecordDepositActivity : AppCompatActivity() {
         var valid = true
         // Check if edit text is empty and valid
         if (binding.etAmount.text.toString().trim().isEmpty()) {
-            binding.etAmount.error = "Please enter the amount."
-            binding.etAmount.requestFocus()
-            valid = false
-        } else amount = binding.etAmount.text.toString().trim()
-
-        if (binding.dropdownGoal.text.toString() == "") {
-            binding.dropdownGoal.error = "Please select a Goal."
+            binding.amountContainer.helperText = "Please input an amount"
             valid = false
         } else {
-            binding.dropdownGoal.error = null
+            amount = binding.etAmount.text.toString().trim()
+            binding.amountContainer.helperText = ""
+        }
+
+        if (binding.dropdownGoal.text.toString().trim().isEmpty()) {
+            binding.containerGoal.helperText = "Please select a Goal."
+            valid = false
+        } else {
+            binding.containerGoal.helperText = ""
             goal = binding.dropdownGoal.text.toString()
         }
 
         if (binding.etDate.text.toString().trim().isEmpty()) {
-            binding.etDate.error = "Please enter the name of the transaction."
-            binding.etDate.requestFocus()
+            binding.dateContainer.helperText = "Please enter the name of the transaction."
             valid = false
         } else {
-            binding.etDate.error = null
+            binding.dateContainer.helperText = ""
             date = SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString())
         }
 
-        if (binding.dropdownTypeOfPayment.text.toString() == "") {
-            binding.dropdownTypeOfPayment.error = "Please select if you used cash or Maya"
+        if (binding.dropdownTypeOfPayment.text.toString().trim().isEmpty()) {
+            binding.containerTypeOfPayment.helperText = "Please select if you used cash or Maya"
             valid = false
         } else {
-            binding.dropdownTypeOfPayment.error = null
+            binding.containerTypeOfPayment.helperText = ""
             paymentType = binding.dropdownTypeOfPayment.text.toString()
         }
 

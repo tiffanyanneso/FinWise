@@ -63,6 +63,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_marginHorizontal="20dp"
         android:textSize="16sp"
+        app:helperTextTextColor="@color/red"
         app:startIconDrawable="@drawable/baseline_saved_search_24">
 
         <AutoCompleteTextView
@@ -83,6 +84,7 @@
         android:layout_marginTop="10dp"
         app:helperTextEnabled="true"
         app:endIconMode="custom"
+        app:helperTextTextColor="@color/red"
         app:startIconDrawable="@drawable/baseline_calendar_today_24"
         android:hint="Date">
 
@@ -108,6 +110,7 @@
         android:layout_marginHorizontal="20dp"
         android:paddingVertical="10dp"
         android:textSize="16sp"
+        app:helperTextTextColor="@color/red"
         app:startIconDrawable="@drawable/baseline_money_24">
 
         <AutoCompleteTextView

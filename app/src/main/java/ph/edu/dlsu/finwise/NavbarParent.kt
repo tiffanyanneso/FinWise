@@ -37,7 +37,7 @@ class NavbarParent (bottomNavigationView: BottomNavigationView, appCon: Context,
                 }
 
                 R.id.nav_parent_dashboard -> {
-                    val intent = Intent(appCon, ChildDashboardActivity::class.java)
+                    val intent = Intent(appCon, ParentDashboardActivity::class.java)
                     if (bundle != null) {
                         intent.putExtras(sendBundle)
                     }
