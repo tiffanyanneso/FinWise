@@ -215,11 +215,11 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
     private fun setUpChartTabs() {
         val adapter = PFMAdapter(supportFragmentManager)
         val balanceFragment = BalanceFragment()
-        val savingsFragment = SavingsFragment()
+        //val savingsFragment = SavingsFragment()
         bundle.putString("user", "parent")
         bundle.putString("childID", childID)
         balanceFragment.arguments = bundle
-        savingsFragment.arguments = bundle
+        //savingsFragment.arguments = bundle
         adapter.addFragment(balanceFragment, "Balance")
      //   adapter.addFragment(savingsFragment, "Goal Savings")
         binding.viewPagerBarCharts.adapter = adapter

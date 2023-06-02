@@ -456,6 +456,8 @@ class BalanceFragment : Fragment(R.layout.fragment_balance_chart) {
                 return String.format("₱$value") // add the ₱ character to the data point values
             }
         }
+        chart.setNoDataText("You have no data yet. Add your transactions above.")
+        chart.invalidate()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

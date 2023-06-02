@@ -260,15 +260,6 @@
 <!--                android:gravity="center"-->
 <!--                />-->
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Click space below to see graph!"
-                android:textStyle="bold"
-                android:textColor="@color/light_green"
-                android:textSize="16sp"
-                android:gravity="center" />
-
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/balance_chart"
                 android:layout_width="330dp"

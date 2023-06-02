@@ -561,6 +561,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 return "$formattedValue%"
             }
         }
+        chart.setNoDataText("You have no data yet. Come back to this module after you have used the app.")
+        chart.invalidate()
     }
 
     /*private fun updateXAxisWeekly(xAxis: XAxis?) {
