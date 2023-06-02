@@ -421,14 +421,15 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 R.raw.dashboard_pfm_default
 
             performance = "Get Started!"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.black))
             var date = "month"
             if (selectedDatesSort == "quarterly")
                 date = "quarter"
             message = if (userType == "Parent")
                 "They have no data yet for this $date. Remind your child to update the app regularly!"
             else  "You have no data yet for this $date. Click the income button above to add your money."
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
+            binding.tvPerformancePercentage.visibility = View.GONE
         }
 
         imageView.setImageBitmap(bitmap)

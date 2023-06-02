@@ -32,7 +32,7 @@ class EarningSellingActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private lateinit var salesAdapter: EarningSalesAdapter
-    private var salesArrayList = ArrayList<SellingItems>()
+    private var salesArrayList = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +59,7 @@ class EarningSellingActivity : AppCompatActivity() {
 
     }
 
-    class SaleSort(var saleDate: Date, var saleItem: SellingItems)
+    class SaleSort(var saleDate: Date, var saleID: String)
 
     private fun getSales() {
         var salesFilterArrayList = ArrayList<SaleSort>()
@@ -67,12 +67,12 @@ class EarningSellingActivity : AppCompatActivity() {
         firestore.collection("SellingItems").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
             for (sale in results) {
                 var saleObject = sale.toObject<SellingItems>()
-                salesFilterArrayList.add(SaleSort(saleObject.date!!.toDate(), saleObject))
+                salesFilterArrayList.add(SaleSort(saleObject.date!!.toDate(), sale.id))
             }
             salesFilterArrayList.sortedByDescending { it.saleDate }
 
             for (saleSort in salesFilterArrayList)
-                salesArrayList.add(saleSort.saleItem)
+                salesArrayList.add(saleSort.saleID)
 
             if (!salesArrayList.isEmpty())
                 loadRecyclerView()
