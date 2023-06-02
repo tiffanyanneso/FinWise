@@ -629,10 +629,37 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     private fun calculateFinancialActivitiesScore() {
         checkIfNaNFinancialActivitiesScores()
         var financialActivitiesPerformanceScore = 0F
-        if (age == 9 || age == 12)
-            financialActivitiesPerformanceScore = ((savingPercentage + budgetingPercentage + spendingPercentage) / 3)
+        if (age == 9 || age == 12) {
+            if (nGoals == 0.00F) {
+                var bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
+                binding.ivScore.setImageBitmap(bitmap)
+                binding.tvPerformanceStatus.visibility = View.GONE
+                binding.tvPerformancePercentage.visibility = View.GONE
+                binding.tvPerformanceText.text = "Complete financial activities to see your score here"
+            }
+            else if (nBudgetingCompleted == 0)
+                financialActivitiesPerformanceScore =  savingPercentage
+            else if (nSpendingCompleted == 0)
+                financialActivitiesPerformanceScore = (savingPercentage + budgetingPercentage)/2
+            else
+                financialActivitiesPerformanceScore = ((savingPercentage + budgetingPercentage + spendingPercentage) / 3)
+        }
         else if (age == 10 || age == 11)
-            financialActivitiesPerformanceScore = ((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4)
+            if (nGoalSettingCompleted == 0) {
+                var bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
+                binding.ivScore.setImageBitmap(bitmap)
+                binding.tvPerformanceStatus.visibility = View.GONE
+                binding.tvPerformancePercentage.visibility = View.GONE
+                binding.tvPerformanceText.text = "Complete financial activities to see your score here"
+            }
+            else if (nGoals == 0.00F)
+                financialActivitiesPerformance = goalSettingPercentage
+            else if (nBudgetingCompleted == 0)
+                financialActivitiesPerformanceScore =  (goalSettingPercentage + savingPercentage) /2
+            else if (nSpendingCompleted == 0)
+                financialActivitiesPerformanceScore = (goalSettingPercentage + savingPercentage + budgetingPercentage)/3
+            else
+                financialActivitiesPerformanceScore = ((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4)
 
         iteration++
         financialActivitiesPerformance += financialActivitiesPerformanceScore
@@ -913,14 +940,15 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 R.raw.dashboard_financial_activities_default
 
             performance = "Get Started!"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.black))
             /*var date = "month"
             if (selectedDatesSort == "quarterly")
                 date = "quarter"*/
             message = if (userType == "Parent")
                 "Your child hasn't accomplished any financial activities yet!"
             else "You haven't accomplished any financial activities. Click the button to start!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
+            binding.tvPerformancePercentage.visibility = View.GONE
         }
 
         imageView.setImageBitmap(bitmap)

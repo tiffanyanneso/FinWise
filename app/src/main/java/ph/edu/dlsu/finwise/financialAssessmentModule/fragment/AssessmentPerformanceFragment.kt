@@ -160,7 +160,8 @@ class AssessmentPerformanceFragment : Fragment() {
         binding.tvConcept4th.text = topCategories[3].key
         binding.tvConcept4Percentage.text = String.format("%.1f%%", topCategories[3].value)
 
-
+        binding.layoutLoading.visibility = View.GONE
+        binding.layoutMain.visibility = View.VISIBLE
 
     }
 

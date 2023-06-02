@@ -6,6 +6,7 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -702,9 +703,10 @@ class ChildDashboardActivity : AppCompatActivity(){
                 R.raw.child_dashboard_parent_default
 
             performance = "Get Started!"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
+            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.black))
             message = "Start using the app and go back to this module to view your performance!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
+            binding.tvPerformancePercentage.visibility = View.GONE
         }
 
         imageView.setImageBitmap(bitmap)

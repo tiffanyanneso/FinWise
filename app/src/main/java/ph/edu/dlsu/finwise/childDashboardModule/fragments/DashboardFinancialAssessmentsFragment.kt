@@ -298,7 +298,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 R.raw.dashboard_financial_assessments_default
 
             performance = "Get Started!"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
 
             var date = "month"
             if (selectedDatesSort == "quarterly")
@@ -306,7 +306,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             message = if (userType == "Parent")
                 "Your child hasn't taken any assessments yet for this $date!"
             else "You haven't taken any assessments yet for this $date!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
+            binding.tvPerformancePercentage.visibility = View.GONE
         }
 
         imageView.setImageBitmap(bitmap)

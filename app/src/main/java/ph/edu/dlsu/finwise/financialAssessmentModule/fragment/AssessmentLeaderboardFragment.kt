@@ -209,6 +209,8 @@ class AssessmentLeaderboardFragment : Fragment() {
         setRankOfChildUser(rankedFriends)
 
         loadRecyclerView(rankedFriends)
+        binding.layoutLoading.visibility = View.GONE
+        binding.layoutMain.visibility = View.VISIBLE
     }
 
     private fun setRankOfChildUser(rankedFriends: List<FriendRanking>) {
