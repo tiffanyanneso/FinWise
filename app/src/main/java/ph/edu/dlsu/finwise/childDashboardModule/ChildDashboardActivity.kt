@@ -100,6 +100,12 @@ class ChildDashboardActivity : AppCompatActivity(){
         initializeDateButtons()
     }
 
+    private fun loadView() {
+        binding.layoutLoading.visibility = View.GONE
+        binding.layoutMain.visibility = View.VISIBLE
+        binding.bottomNav.visibility = View.VISIBLE
+    }
+
     private fun initializeDateButtons() {
         //initializeWeeklyButton()
         initializeMonthlyButton()
@@ -715,6 +721,7 @@ class ChildDashboardActivity : AppCompatActivity(){
         binding.tvPerformancePercentage.text =  DecimalFormat("##0.00").format(overallFinancialHealth) + "%"
 
         loadAudio(audio)
+        loadView()
     }
     private fun loadAudio(audio: Int) {
         /*TODO: Change binding and Audio file in mediaPlayer*/

@@ -27,7 +27,21 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
             />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <LinearLayout
+        android:id="@+id/layout_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            />
+    </LinearLayout>
+
     <ScrollView
+        android:id="@+id/layout_pfm"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -35,9 +49,11 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav_parent"
         android:layout_marginTop="70dp"
-        android:layout_marginBottom="60dp">
+        android:layout_marginBottom="60dp"
+        android:visibility="gone">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -477,6 +493,7 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
         app:layout_constraintRight_toRightOf="parent"
         app:menu="@menu/bottom_nav_parent"
         android:background="#FFFFFF"
+        android:visibility="gone"
         app:labelVisibilityMode="labeled"
         app:itemIconSize="36dp"
         app:itemIconTint="@drawable/selector"/>

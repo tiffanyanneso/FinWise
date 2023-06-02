@@ -132,7 +132,13 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             setData()
             initializeGraph()
             setPerformanceView()
+            loadView()
         }
+    }
+
+    private fun loadView() {
+        binding.layoutLoading.visibility = View.GONE
+        binding.layoutMain.visibility = View.VISIBLE
     }
 
     private suspend fun getData(weeks: Map<Int, List<Date>>) {

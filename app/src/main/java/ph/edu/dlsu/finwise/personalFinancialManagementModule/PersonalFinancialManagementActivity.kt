@@ -102,11 +102,17 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 getIncomeAndExpense(transactionsArrayList)
                 computeIncomeExpenseRatio()
                 loadExplanation()
+                loadView()
             }
     }
 
+    private fun loadView() {
+        binding.layoutLoading.visibility = View.GONE
+        binding.layoutPfm.visibility = View.VISIBLE
+        binding.bottomNav.visibility = View.VISIBLE
+    }
+
     private fun loadAudio(audio: Int) {
-        //TODO: Change binding and Audio file in mediaPlayer
         binding.btnAudioPersonalFinanceScore.setOnClickListener {
             if (mediaPlayer == null) {
                 mediaPlayer = MediaPlayer.create(this, audio)
@@ -540,10 +546,6 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             dialogBinding.btnClose.setOnClickListener { dialog.dismiss() }
             dialog.show()
         }
-
-        binding.layoutLoading.visibility = View.GONE
-        binding.layoutPfm.visibility = View.VISIBLE
-        binding.bottomNav.visibility = View.VISIBLE
 
     }
 

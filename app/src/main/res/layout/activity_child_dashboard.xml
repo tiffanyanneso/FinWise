@@ -24,7 +24,23 @@
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
             android:backgroundTint="@color/dark_green" />
     </com.google.android.material.appbar.AppBarLayout>
+
     <LinearLayout
+        android:id="@+id/layout_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_main"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -253,7 +269,7 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="920dp"
+            android:layout_height="850dp"
             />
 
 
@@ -560,6 +576,7 @@
         android:background="#FFFFFF"
         app:labelVisibilityMode="labeled"
         app:itemIconSize="36dp"
+        android:visibility="gone"
         app:itemIconTint="@drawable/selector"/>
 
 

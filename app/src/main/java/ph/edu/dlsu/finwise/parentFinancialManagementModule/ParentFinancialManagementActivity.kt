@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -128,6 +129,13 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         goToParentTransactions()
         goToEarningActivity()
         goToCashMayaBalanceBreakdownParent()
+        loadView()
+    }
+
+    private fun loadView() {
+        binding.layoutLoading.visibility = View.GONE
+        binding.layoutPfm.visibility = View.VISIBLE
+        binding.bottomNavParent.visibility = View.VISIBLE
     }
 
     private fun goToCashMayaBalanceBreakdownParent(){

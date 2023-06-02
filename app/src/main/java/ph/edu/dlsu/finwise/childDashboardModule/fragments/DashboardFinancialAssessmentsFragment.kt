@@ -143,7 +143,13 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             initializeGraph()
             //initializeDetailsButton()
             setPerformanceView()
+            loadView()
         }
+    }
+
+    private fun loadView() {
+        binding.layoutLoading.visibility = View.GONE
+        binding.layoutMain.visibility = View.VISIBLE
     }
 
     private fun setPerformanceView() {

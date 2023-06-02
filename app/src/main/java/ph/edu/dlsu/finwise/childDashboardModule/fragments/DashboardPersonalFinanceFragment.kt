@@ -75,7 +75,13 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 sortedDate = getDatesOfTransactions(transactionsArrayList)
                 setData()
                 initializeGraph()
+                loadView()
             }
+    }
+
+    private fun loadView() {
+        binding.layoutLoading.visibility = View.GONE
+        binding.layoutMain.visibility = View.VISIBLE
     }
 
     private fun initializeTransactions(documents: QuerySnapshot) {
