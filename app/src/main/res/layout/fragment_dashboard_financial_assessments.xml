@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".childDashboardModule.fragments.DashboardFinancialAssessmentsFragment">
+    tools:context=".childDashboardModule.fragments.DashboardFinancialAssessmentsFragment"
+    android:backgroundTint="@color/white">
 
     <LinearLayout
         android:id="@+id/layout_loading"
@@ -66,7 +67,7 @@
                         android:id="@+id/title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="Financial Assessment Score"
+                        tools:text="Financial Assessment Performance"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:textColor="@color/white"

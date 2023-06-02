@@ -122,6 +122,8 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         binding = FragmentDashboardFinancialActivitiesBinding.bind(view)
         getArgumentsBundle()
         initializeBalanceLineGraph()
+
+        binding.title.text = "Financial Activities Performance"
     }
 
     private fun initializeBalanceLineGraph() {
@@ -821,7 +823,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         //TODO: Change audio
         var audio = 0
 
-        if (financialActivitiesPerformance == 100.00F) {
+        if (financialActivitiesPerformance >= 96F) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_excellent
             else
@@ -833,7 +835,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child is a financial superstar! Their skills in goal setting, saving, budgeting, and spending are commendable!"
             else "Excellent work superstar! Continue exploring and exercising your financial decision-making skills."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
-        } else if (financialActivitiesPerformance > 90) {
+        } else if (financialActivitiesPerformance in 86.0..95.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_amazing
             else
@@ -845,7 +847,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child's financial skills are exceptional. Encourage them to continue completing goals and financial activities!"
             else "Amazing work! Keep exploring and accomplishing different financial activities."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
-        } else if (financialActivitiesPerformance > 80) {
+        } else if (financialActivitiesPerformance in 76.0..85.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_great
             else
@@ -857,7 +859,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child's performance in activities showcases their strong financial decision-making skills. Encourage them to keep it up!"
             else "Keep mastering the art of financial decision-making through financial activities! Your financial future looks bright!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
-        } else if (financialActivitiesPerformance > 70) {
+        } else if (financialActivitiesPerformance in 66.0..75.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_good
             else
@@ -869,7 +871,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child is becoming better at performing financial activities. Encourage them to continue!"
             else "Good job! Continue building your experience in performing financial activities, it’ll be useful in the long run."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
-        } else if (financialActivitiesPerformance > 60) {
+        } else if (financialActivitiesPerformance in 56.0..65.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_average
             else
@@ -881,61 +883,61 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child has a solid performance in activities. Allow them to participate in financial activities at home!"
             else "Keep exploring new financial activities, tracking your progress, and making smart financial choices!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
-        } else if (financialActivitiesPerformance > 50) {
+        } else if (financialActivitiesPerformance in 46.0..55.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_nearly_there
             else
                 R.raw.dashboard_financial_activities_nearly_there
 
-            performance = "Nearly There"
+            performance = "Nearly\nThere"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.nearly_there_yellow))
             message = if (userType == "Parent")
                 "Your child's commitment to financial activities is paying off. They are developing valuable skills!"
             else "Keep honing your financial decision-making through financial activities. Through practice, you'll get there soon!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
-        } else if (financialActivitiesPerformance > 40) {
+        } else if (financialActivitiesPerformance in 36.0..45.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_almost_there
             else
                 R.raw.dashboard_financial_activities_almost_there
 
-            performance = "Almost There"
+            performance = "Almost\nThere"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.almost_there_yellow))
             message = if (userType == "Parent")
                 "Your child is gaining a better understanding of financial activities. Encourage them to set continue to set SMART goals!"
             else "Keep practicing goal setting, saving, budgeting, and spending. Your dedication will pay off!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
-        } else if (financialActivitiesPerformance > 30) {
+        } else if (financialActivitiesPerformance in 26.0..35.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_getting_there
             else
                 R.raw.dashboard_financial_activities_getting_there
 
-            performance = "Getting There"
+            performance = "Getting\nThere"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.getting_there_orange))
             message = if (userType == "Parent")
                 "Your child is taking steps towards financial literacy. Encourage them to keep performing financial activities!"
             else "Keep exploring ways to better set goals, save, budget, and spend. You’ll get there!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
-        } else if (financialActivitiesPerformance > 20) {
+        } else if (financialActivitiesPerformance in 16.0..25.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_not_quite_there
             else
                 R.raw.dashboard_financial_activities_not_quite_there
 
-            performance = "Not Quite There"
+            performance = "Not Quite\nThere"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.not_quite_there_red))
             message = if (userType == "Parent")
                 "Your child is beginning to get the hang of things. Help them out by allowing them to participate in household financial activities!"
             else "You are beginning to get the hang of things. Keep practicing by accomplishing financial activities!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
-        } else if (financialActivitiesPerformance > 10) {
+        } else if (financialActivitiesPerformance < 15) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_needs_improvement
             else
                 R.raw.dashboard_financial_activities_needs_improvement
 
-            performance = "Needs Improvement"
+            performance = "Needs\nImprovement"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
             message = if (userType == "Parent")
                 "Help your child improve by encouraging and guiding them to perform financial activities!"

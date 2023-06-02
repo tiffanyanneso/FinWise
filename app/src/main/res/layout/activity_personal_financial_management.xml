@@ -27,18 +27,18 @@
             />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/layout_loading"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:gravity="center">-->
 
-        <ProgressBar
-            android:id="@+id/pb_loading"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            />
-    </LinearLayout>
+<!--        <ProgressBar-->
+<!--            android:id="@+id/pb_loading"-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="100dp"-->
+<!--            />-->
+<!--    </LinearLayout>-->
 
     <ScrollView
         android:id="@+id/layout_pfm"
@@ -50,7 +50,8 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_nav"
         android:layout_marginTop="70dp"
         android:layout_marginBottom="60dp"
-        android:visibility="gone">
+<!--        android:visibility="gone"-->
+        >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -409,15 +410,28 @@
                         android:src="@drawable/baseline_mic_24"
                         app:tint="@color/light_grey" />
                 </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/button_border_white"
+                    android:backgroundTint="@color/white"
+                    android:padding="10dp"
+                    android:layout_marginTop="10dp">
+
                 <ImageView
                     android:src="@drawable/loading"
                     android:contentDescription="Profit"
                     android:id="@+id/iv_score"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_gravity="center"
-                    />
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -426,9 +440,9 @@
                     android:id="@+id/tv_performance"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:text="Loading..."
-                    android:layout_marginTop="15dp"
-                    android:textColor="@color/cream"/>
+                    android:textAlignment="center"
+                    android:text="..."
+                    android:textColor="@color/black"/>
 
                 <!--<TextView
                     android:layout_width="wrap_content"
@@ -440,6 +454,18 @@
                     android:textStyle="bold"
                     android:text=""
                     android:textColor="@color/cream"/>-->
+                </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_score"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:layout_marginTop="5dp"
+                    android:textColor="@color/white"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="15dp"/>
+            </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/linear_layout_text5"
@@ -448,38 +474,26 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tv_score"
-                        android:gravity="center"
-                        android:textSize="16sp"
-                        android:layout_marginTop="5dp"
-                        android:text="Track your money above or check the navigation bar for more cool features!"
-                        android:textColor="@color/white"/>
-
                     <androidx.appcompat.widget.AppCompatButton
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/btn_explanation"
                         android:gravity="center"
                         android:text="View Explanation"
-                        android:textSize="12sp"
                         android:background="@drawable/button_border_white"
                         android:backgroundTint="@color/dark_green"
                         android:textColor="@color/white"
                         android:layout_marginTop="15dp"/>
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/tv_difference"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:textSize="16sp"-->
-<!--                        android:gravity="center"-->
-<!--                        android:layout_margin="20dp"-->
-<!--                        android:text="Scroll down to see more!"-->
-<!--                        android:textColor="@color/off_white"-->
-<!--                        android:textStyle="bold"/>-->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:text="Scroll down to see more!"
+                        android:textColor="@color/off_white"
+                        android:textStyle="bold"/>
                 </LinearLayout>
             </LinearLayout>
 

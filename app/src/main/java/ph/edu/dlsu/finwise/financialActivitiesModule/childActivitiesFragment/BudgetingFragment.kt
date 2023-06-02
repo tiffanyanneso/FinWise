@@ -232,29 +232,29 @@ class BudgetingFragment : Fragment() {
         } else if (overall < 56 && overall >= 46) {
             audio = R.raw.budgeting_performance_overall_nearly_there
             binding.imgFace.setImageResource(R.drawable.nearly_there)
-            binding.textStatus.text = "Nearly There"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.textStatus.text = "Nearly\nThere"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
             binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
             showSeeMoreButton()
         }  else if (overall < 46 && overall >= 36) {
             audio = R.raw.budgeting_performance_overall_almost_there
             binding.imgFace.setImageResource(R.drawable.almost_there)
-            binding.textStatus.text = "Almost There"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.textStatus.text = "Almost\nThere"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
             binding.tvPerformanceText.text = "Almost there! You need to work on your budgeting. Click review to learn how!"
             showSeeMoreButton()
         } else if (overall < 36 && overall >= 26) {
             audio = R.raw.budgeting_performance_overall_getting_there
             binding.imgFace.setImageResource(R.drawable.getting_there)
-            binding.textStatus.text = "Getting There"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.textStatus.text = "Getting\nThere"
+            binding.textStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
             binding.tvPerformanceText.text = "Getting there! You need to work on your budgeting. Click review to learn how!"
             showSeeMoreButton()
         } else if (overall < 26 && overall >= 16) {
             audio = R.raw.budgeting_performance_overall_not_quite_there_yet
             binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
             binding.textStatus.text = "Not Quite\nThere"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.textStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
             binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
             showSeeMoreButton()
         } else if (overall < 15) {

@@ -581,7 +581,7 @@ class ChildDashboardActivity : AppCompatActivity(){
         /*TODO: Change Audio file in mediaPlayer*/
         var audio = 0
 
-        if (overallFinancialHealth == 100.00F) {
+        if (overallFinancialHealth >= 96F) {
             audio = if (userType == "Parent")
                 R.raw.child_dashboard_parent_excellent
             else
@@ -593,7 +593,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 "Your child is a financial guru! Celebrate their accomplishments and encourage them to keep it up!"
             else "You've demonstrated exceptional knowledge and skills in personal finance, financial activities, and financial assessments!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
-        } else if (overallFinancialHealth > 90) {
+        } else if (overallFinancialHealth in 86.0..95.0) {
             audio = if (userType == "Parent")
                 R.raw.child_dashboard_parent_amazing
             else
@@ -605,7 +605,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 "Your child has a solid foundation in personal finance, financial activities, and concepts. Keep empowering them!"
             else " You're a true financial whiz! Keep refining your skills, exploring financial concepts, and inspiring others with your expertise!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
-        } else if (overallFinancialHealth > 80) {
+        } else if (overallFinancialHealth in 76.0..85.0) {
             audio = if (userType == "Parent")
                 R.raw.child_dashboard_parent_great
             else
@@ -617,7 +617,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 "Your child has strong financial decision-making skills. Encourage them to keep this up!"
             else "You have a strong grasp of finance concepts and know how to properly manage your money in day to day activities. Keep it up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
-        } else if (overallFinancialHealth > 70) {
+        } else if (overallFinancialHealth in 66.0..75.0) {
             audio = if (userType == "Parent")
                 R.raw.child_dashboard_parent_good
             else
@@ -629,7 +629,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 "Your child is good at real-life financial decision-making & has a good grasp of financial concepts!"
             else "Keep making great decisions in real-life financial situations and learning about financial concepts!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
-        } else if (overallFinancialHealth > 60) {
+        } else if (overallFinancialHealth in 56.0..65.0) {
             audio = if (userType == "Parent")
                 R.raw.child_dashboard_parent_average
             else
@@ -641,61 +641,61 @@ class ChildDashboardActivity : AppCompatActivity(){
                 "Continue supporting your child in their development by having them participate in decision making activities at home!"
             else "You're becoming a confident financial decision-maker. Keep doing financial activities & assessments to grow!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
-        } else if (overallFinancialHealth > 50) {
+        } else if (overallFinancialHealth in 46.0..55.0) {
             audio = if (userType == "Parent")
                 R.raw.child_dashboard_parent_nearly_there
             else
                 R.raw.child_dashboard_nearly_there
 
-            performance = "Nearly There"
+            performance = "Nearly\nThere"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.nearly_there_yellow))
             message = if (userType == "Parent")
                 "Your child is nearly there. Have them participate in decision making activities at home!"
             else "You're making significant strides in your financial literacy journey. Keep making wise financial decisions!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
-        } else if (overallFinancialHealth > 40) {
+        } else if (overallFinancialHealth in 36.0..45.0) {
             audio = if (userType == "Parent")
                 R.raw.child_dashboard_parent_almost_there
             else
                 R.raw.child_dashboard_almost_there
 
-            performance = "Almost There"
+            performance = "Almost\nThere"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.almost_there_yellow))
             message = if (userType == "Parent")
                 "Your child is developing their financial decision-making. Have them participate in decision making activities at home!"
             else "You're becoming a savvy money manager. Keep exploring financial activities and assessments to strengthen your skills!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
-        } else if (overallFinancialHealth > 30) {
+        } else if (overallFinancialHealth in 26.0..35.0) {
             audio = if (userType == "Parent")
                 R.raw.child_dashboard_parent_getting_there
             else
                 R.raw.child_dashboard_getting_there
 
-            performance = "Getting There"
+            performance = "Getting\nThere"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.getting_there_orange))
             message = if (userType == "Parent")
                 "Your child is still developing their financial decision-making. Allow them to practice this skill at home!"
             else "You're beginning to build a solid foundation in financial decision-making. Keep improving!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
-        } else if (overallFinancialHealth > 20) {
+        } else if (overallFinancialHealth in 16.0..25.0) {
             audio = if (userType == "Parent")
                 R.raw.child_dashboard_parent_not_quite
             else
                 R.raw.child_dashboard_not_quite
 
-            performance = "Not Quite There"
+            performance = "Not Quite\nThere"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.not_quite_there_red))
             message = if (userType == "Parent")
                 "Your child is still developing their financial decision-making. Allow them to practice this skill at home!"
             else "You're developing your financial decision-making skills. Keep exercising financial decision making to improve!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
-        } else if (overallFinancialHealth > 10) {
+        } else if (overallFinancialHealth < 15) {
             audio = if (userType == "Parent")
                 R.raw.child_dashboard_parent_needs_improement
             else
                 R.raw.child_dashboard_needs_improvement
 
-            performance = "Needs Improvement"
+            performance = "Needs\nImprovement"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
             message = if (userType == "Parent")
                 "Your child is starting their financial journey! Encourage them to keep exploring financial decision-making!"

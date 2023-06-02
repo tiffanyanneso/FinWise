@@ -88,7 +88,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDashboardFinancialAssessmentsBinding.bind(view)
-        binding.title.text = "Financial Assessment Score"
+        binding.title.text = "Financial Assessment Performance"
         getArgumentsBundle()
         getFinancialAssessmentScore()
     }
@@ -173,7 +173,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         //TODO: Change audio
         var audio = 0
 
-        if (financialAssessmentTotalPercentage == 100.0) {
+        if (financialAssessmentTotalPercentage >= 96) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_assessments_excellent
             else
@@ -186,7 +186,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 "Your child is a financial superstar in the realm of financial assessments. Encourage them to keep it up!"
             else "You've mastered financial concepts! Keep shining and inspiring others with your remarkable knowledge!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
-        } else if (financialAssessmentTotalPercentage > 90) {
+        } else if (financialAssessmentTotalPercentage in 86.0..95.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_assessments_amazing
             else
@@ -199,7 +199,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 "Your child's financial knowledge is impressive. Encourage them to apply their skills to real-life situations!"
             else "You're a financial whiz! Keep up the excellent work and inspire others with your financial know-how!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
-        } else if (financialAssessmentTotalPercentage > 80) {
+        } else if (financialAssessmentTotalPercentage in 76.0..85.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_assessments_great
             else
@@ -211,7 +211,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 "Your child's financial knowledge is flourishing! Encourage them to keep it up."
             else "Your financial knowledge is impressive! Keep honing it and applying it to real-life."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
-        } else if (financialAssessmentTotalPercentage > 70) {
+        } else if (financialAssessmentTotalPercentage in 66.0..75.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_assessments_good
             else
@@ -223,7 +223,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 "Your child is demonstrating a solid understanding of financial concepts. Support them in applying this in real life!"
             else "You have a solid understanding of financial concepts! Keep up the good work and apply it in real life."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
-        } else if (financialAssessmentTotalPercentage > 60) {
+        } else if (financialAssessmentTotalPercentage in 56.0..65.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_assessments_average
             else
@@ -235,62 +235,62 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 "Your child is building confidence in financial concepts! Encourage them to continue learning."
             else "Your understanding of financial concepts is great! Improve by deepening your knowledge and applying the concepts in real life."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
-        } else if (financialAssessmentTotalPercentage > 50) {
+        } else if (financialAssessmentTotalPercentage in 46.0..55.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_assessments_nearly_there
             else
                 R.raw.dashboard_financial_assessments_nearly_there
 
-            performance = "Nearly There"
+            performance = "Nearly\nThere"
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.nearly_there_yellow))
 
             message = if (userType == "Parent")
                 "Your child's grasp of financial concepts is still on the works! Encourage them to continue!"
             else "Your knowledge of financial concepts are improving! Improve by deepening your knowledge and applying the concepts in real life."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
-        } else if (financialAssessmentTotalPercentage > 40) {
+        } else if (financialAssessmentTotalPercentage in 36.0..45.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_assessments_almost_there
             else
                 R.raw.dashboard_financial_assessments_almost_there
 
-            performance = "Almost There"
+            performance = "Almost\nThere"
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.almost_there_yellow))
             message = if (userType == "Parent")
                 "Your child is growing in their understanding of saving, budgeting, spending, and setting achievable financial goals!"
             else "You're getting the hang of financial concepts! Keep it up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
-        } else if (financialAssessmentTotalPercentage > 30) {
+        } else if (financialAssessmentTotalPercentage in 26.0..35.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_assessments_getting_there
             else
                 R.raw.dashboard_financial_assessments_getting_there
 
-            performance = "Getting There"
+            performance = "Getting\nThere"
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.getting_there_orange))
             message = if (userType == "Parent")
                 "Your child is on the path to great financial knowledge. Continue to guide them in making informed financial choices!"
             else "You're gaining a better understanding of financial concepts. Keep learning and practicing to improve even more!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
-        } else if (financialAssessmentTotalPercentage > 20) {
+        } else if (financialAssessmentTotalPercentage in 16.0..25.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_assessments_not_quite_there
             else
                 R.raw.dashboard_financial_assessments_needs_improvement_not_quite_there
 
-            performance = "Not Quite There"
+            performance = "Not Quite\nThere"
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.not_quite_there_red))
             message = if (userType == "Parent")
                 "Uh oh! Help expand your child's financial knowledge by encouraging them to perform financial activities!"
             else "Keep exploring and learning about financial concepts! Don't give up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
-        } else if (financialAssessmentTotalPercentage > 10) {
+        } else if (financialAssessmentTotalPercentage < 15) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_assessments_needs_improvement
             else
                 R.raw.dashboard_financial_assessments_needs_improvement_not_quite_there
 
-            performance = "Needs Improvement"
+            performance = "Needs\nImprovement"
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
             message = if (userType == "Parent")
                 "Your child needs support developing their financial knowledge. Encourage them to continue performing financial activities!"
