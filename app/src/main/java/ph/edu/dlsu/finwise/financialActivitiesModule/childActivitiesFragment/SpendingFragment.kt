@@ -155,7 +155,7 @@ class SpendingFragment : Fragment(){
                 }
             } else {
                 binding.imgFace.setImageResource(R.drawable.peso_coin)
-                binding.tvPerformancePercentage.text = "Get Started!"
+                binding.tvPerformancePercentage.text = "Get\nStarted!"
                 binding.tvPerformanceText.text = "Complete your goals to see your performance"
             }
         }

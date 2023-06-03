@@ -175,23 +175,23 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
         //TODO: Change audio
         var audio = 0
         if (user == "child" && total > 0.00F) {
-            audio = R.raw.sample
+            audio = R.raw.expense_child_spend
             binding.tvSummary.text = "You've spent ₱$totalText this $dateRange!"
             binding.tvTips.text =
-                "Review your Top Expenses and previous transactions to see where you can reduce!"
+                "Spending money is alright as long you do it smart! To decrease it, you can review your Top Expenses and previous transactions to see where you can reduce!"
         } else if (user == "parent" && total > 0.00F) {
-            audio = R.raw.sample
+            audio = R.raw.expense_parent_spend
             binding.tvSummary.text = "Your child spent ₱$totalText this $dateRange!"
             binding.tvTips.text =
-                "Review your child's Top Expenses and previous transactions to see where they can reduce!"
+                "Spending money is alright as long they do it smart! Encourage them to still review their Top Expenses and previous transactions to see where they can reduce!"
         } else if (user == "parent" && total == 0.0F) {
-            audio = R.raw.sample
-            binding.tvSummary.text = "Nice! Your child has no expense for this $dateRange"
-            binding.tvTips.text = "Review your child's Top Expenses and previous transactions to see where they can reduce!"
+            audio = R.raw.expense_parent_no_spend
+            binding.tvSummary.text = "Wow! Your child had no expenses for this $dateRange"
+            binding.tvTips.text = "Remember, spending money is alright as long as they need something or have thought long and hard about it!"
         } else if (user == "child" && total == 0.0F) {
-            audio = R.raw.sample
-            binding.tvSummary.text = "Uh oh! You've earned ₱$totalText this $dateRange"
-            binding.tvTips.text = "Review your child's Top Expenses and previous transactions to see where they can reduce!"
+            audio = R.raw.expense_child_no_spend
+            binding.tvSummary.text = "Wow! You've had no expenses for this $dateRange"
+            binding.tvTips.text = "Remember, spending money is alright as long as you need something or have thought long and hard about it!"
 
         }
 

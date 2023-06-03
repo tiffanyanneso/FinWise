@@ -109,7 +109,7 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:layout_marginLeft="10dp"
-            android:text="It is based on their income and expenses. It is best if your income is higher than their expenses."
+            android:text="It is based on their income and expenses. It is best if their income is higher than their expenses."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
         

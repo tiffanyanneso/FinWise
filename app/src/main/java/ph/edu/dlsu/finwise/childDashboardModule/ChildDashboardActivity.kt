@@ -708,7 +708,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             else
                 R.raw.child_dashboard_parent_default
 
-            performance = "Get Started!"
+            performance = "Get\nStarted!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.black))
             message = "Start using the app and go back to this module to view your performance!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)

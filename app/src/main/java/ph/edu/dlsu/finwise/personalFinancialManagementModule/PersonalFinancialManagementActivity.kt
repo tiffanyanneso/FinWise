@@ -231,7 +231,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         }
         else {
             audio = R.raw.financial_management_default
-            performance = "Get Started!"
+            performance = "Get\nStarted!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.dark_green))
             grade = "You have 0 balance. Click the income button above to add your money."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)

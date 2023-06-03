@@ -40,7 +40,7 @@ class ExplanationParentFragment : DialogFragment() {
         //TODO: Change binding and Audio file in mediaPlayer
         binding.btnSoundParentPersonalFinanceExplanation.setOnClickListener {
             if (mediaPlayer == null) {
-                mediaPlayer = MediaPlayer.create(context, R.raw.sample)
+                mediaPlayer = MediaPlayer.create(context, R.raw.fragment_explanation_parent)
             }
 
             if (mediaPlayer?.isPlaying == true) {

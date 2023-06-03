@@ -317,7 +317,7 @@ class GoalSettingFragment : Fragment() {
             } else {
                 audio = R.raw.goal_setting_performance_default
                 binding.imgFace.setImageResource(R.drawable.peso_coin)
-                binding.tvPerformanceStatus.text = "Get Started!"
+                binding.tvPerformanceStatus.text = "Get\nStarted!"
                 binding.tvPerformanceText.text = "Set goals to see your performance!"
             }
             loadOverallAudio(audio)

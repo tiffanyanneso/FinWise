@@ -303,7 +303,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             else
                 R.raw.dashboard_financial_assessments_default
 
-            performance = "Get Started!"
+            performance = "Get\nStarted!"
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
 
             var date = "month"

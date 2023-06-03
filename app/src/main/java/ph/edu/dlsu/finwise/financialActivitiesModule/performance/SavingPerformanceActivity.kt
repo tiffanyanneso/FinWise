@@ -230,7 +230,7 @@ class SavingPerformanceActivity : AppCompatActivity() {
             }
             } else {
                 audio = R.raw.saving_performance_overall_default
-                binding.tvPerformanceStatus.text = "Get Started!"
+                binding.tvPerformanceStatus.text = "Get\nStarted!"
                 binding.tvPerformanceText.text = "Complete goals to see your performance!"
             }
             loadAudio(audio)

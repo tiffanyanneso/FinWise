@@ -346,7 +346,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         }
         else {
             //audio = R.raw.parent_financial_management_default
-            performance = "Get Started!"
+            performance = "Get\nStarted!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
             grade = "Your child's balance is 0. You can send them money through Maya by clicking the button above."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)

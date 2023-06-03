@@ -428,7 +428,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
             else
                 R.raw.dashboard_pfm_default
 
-            performance = "Get Started!"
+            performance = "Get\nStarted!"
             binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.black))
             var date = "month"
             if (selectedDatesSort == "quarterly")

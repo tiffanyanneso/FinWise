@@ -416,7 +416,7 @@ class SavingFragment : Fragment() {
             } else {
                 audio = R.raw.saving_performance_overall_default
                 binding.imgFace.setImageResource(R.drawable.peso_coin)
-                binding.tvPerformancePercentage.text = "Get Started!"
+                binding.tvPerformancePercentage.text = "Get\nStarted!"
                 binding.tvPerformanceText.text = "Complete your goals to see your performance"
             }
             loadAudio(audio)
