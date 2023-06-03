@@ -34,6 +34,7 @@ class EditProfileActivity : AppCompatActivity() {
     private lateinit var context: Context
     lateinit var birthday: Date
 
+    private var isColorChanged = false // Flag to track if color is changed
 
     private val colors = arrayOf(
         Color.BLACK,
@@ -85,8 +86,9 @@ class EditProfileActivity : AppCompatActivity() {
             showCalendar()
         }
 
-        binding.btnSave.setOnClickListener{
+        binding.btnSave.setOnClickListener {
             updateProfile()
+            isColorChanged = true // Set the flag to true when the Save button is clicked
             var goToProfile = Intent(this, ProfileActivity::class.java)
             context.startActivity(goToProfile)
         }
@@ -96,11 +98,9 @@ class EditProfileActivity : AppCompatActivity() {
             context.startActivity(goToProfile)
         }
 
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
-            R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
-            val goToProfile = Intent(applicationContext, ProfileActivity::class.java)
-            this.startActivity(goToProfile)
+            onBackPressed()
         }
 
         // Initializes the navbar
@@ -108,6 +108,26 @@ class EditProfileActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        if (isColorChanged) {
+            resetColorAndNavigateBack()
+        } else {
+            super.onBackPressed()
+        }
+    }
+    private fun resetColorAndNavigateBack() {
+        // Reset the color to black
+        selectedColor = Color.BLACK
+        binding.circularImageView.setColorFilter(selectedColor, PorterDuff.Mode.SRC_IN)
+
+        // Store the color value in SharedPreferences
+        val editor = sharedPrefs.edit()
+        editor.putInt("color", selectedColor)
+        editor.apply()
+
+        // Navigate back to the previous activity
+        super.onBackPressed()
+    }
     fun getProfileData() {
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener { documentSnapshot ->
             var child = documentSnapshot.toObject<Users>()

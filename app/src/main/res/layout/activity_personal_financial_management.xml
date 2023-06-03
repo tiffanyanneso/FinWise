@@ -49,9 +49,7 @@
         app:layout_constraintTop_toBottomOf="@id/topbar"
         app:layout_constraintBottom_toTopOf="@id/bottom_nav"
         android:layout_marginTop="70dp"
-        android:layout_marginBottom="60dp"
-<!--        android:visibility="gone"-->
-        >
+        android:layout_marginBottom="60dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
