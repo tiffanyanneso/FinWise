@@ -8,12 +8,12 @@
         android:icon="@drawable/goal"
         android:id="@+id/nav_parent_goal"/>
     <item android:title=""
+        android:icon="@drawable/baseline_home_24"
+        android:id="@+id/nav_parent_profile"/>
+    <item android:title=""
         android:icon="@drawable/baseline_dashboard_24"
         android:id="@+id/nav_parent_dashboard"/>
     <item android:title=""
         android:icon="@drawable/baseline_assessment_24"
         android:id="@+id/nav_parent_assessment"/>
-    <item android:title=""
-        android:icon="@drawable/baseline_home_24"
-        android:id="@+id/nav_parent_profile"/>
 </menu>

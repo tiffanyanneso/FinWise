@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.MainActivity
+import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.EarningReviewNotifAdapter
@@ -73,10 +74,10 @@ class ParentDashboardActivity : AppCompatActivity(){
             }
         }
 
-        binding.btnAddChild.setOnClickListener {
-            val goToChildRegister = Intent(this, ParentRegisterChildActivity::class.java)
-            startActivity(goToChildRegister)
-        }
+//        binding.btnAddChild.setOnClickListener {
+//            val goToChildRegister = Intent(this, ParentRegisterChildActivity::class.java)
+//            startActivity(goToChildRegister)
+//        }
 
         binding.layoutPendingEarning.setOnClickListener {
             var intent = Intent(this, ParentPendingForReviewActivity::class.java)
@@ -107,6 +108,9 @@ class ParentDashboardActivity : AppCompatActivity(){
             checkNotification()
             updateLastLogin()
         }
+
+        supportActionBar?.hide()
+        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
     }
 
     private suspend fun checkNotification() {
