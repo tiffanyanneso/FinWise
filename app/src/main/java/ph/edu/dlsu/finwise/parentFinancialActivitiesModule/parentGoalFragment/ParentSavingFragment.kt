@@ -172,7 +172,7 @@ class ParentSavingFragment : Fragment() {
 
     private fun loadSmartAudioDialog(dialogBinding: DialogSmartGoalInfoBinding) {
         /*TODO: Change binding and Audio file in mediaPlayer*/
-        val audio = R.raw.sample
+        val audio = R.raw.dialog_smart_goal_info
 
         dialogBinding.btnSoundSmartGoalInfo.setOnClickListener {
             if (!this::mediaPlayerSmartDialog.isInitialized) {
@@ -490,7 +490,7 @@ class ParentSavingFragment : Fragment() {
 
     private fun loadGoalAudioDialog(dialogBinding: DialogParentSavingTipsBinding) {
         /*TODO: Change binding and Audio file in mediaPlayer*/
-        val audio = R.raw.sample
+        val audio = R.raw.dialog_parent_saving_tips
 
         dialogBinding.btnSoundParentSavingTips.setOnClickListener {
             if (!this::mediaPlayerGoalDialog.isInitialized) {

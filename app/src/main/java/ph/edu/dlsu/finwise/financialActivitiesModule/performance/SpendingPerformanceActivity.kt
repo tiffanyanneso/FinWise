@@ -521,7 +521,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
         }
 
         //TODO: Change audio and dialogBinding
-        var audio = R.raw.sample
+        var audio = R.raw.dialog_purchase_plannning
         dialogBinding.btnSoundPurchasePlanning.setOnClickListener {
             if (mediaPlayerSpendingPurchasePlanningDialog == null) {
                 mediaPlayerSpendingPurchasePlanningDialog = MediaPlayer.create(this, audio)

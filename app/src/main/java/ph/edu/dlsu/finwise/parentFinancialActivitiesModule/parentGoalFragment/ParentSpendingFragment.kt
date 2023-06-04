@@ -342,7 +342,7 @@ class ParentSpendingFragment : Fragment() {
 
     private fun loadAudioDialog(dialogBinding: DialogParentSpendingTipsBinding) {
         /*TODO: Change binding and Audio file in mediaPlayer*/
-        val audio = R.raw.sample
+        val audio = R.raw.dialog_parent_spending_tips
 
         dialogBinding.btnSoundParentSpending.setOnClickListener {
             if (!this::mediaPlayerDialog.isInitialized) {

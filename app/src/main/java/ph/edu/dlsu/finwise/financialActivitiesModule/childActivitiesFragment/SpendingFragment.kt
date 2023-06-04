@@ -254,7 +254,7 @@ class SpendingFragment : Fragment(){
             binding.tvPerformanceText.text = "Good job! With a bit more planning to detail, you’ll surely up your performance!"
             showSeeMoreButton()
         } else if (overallSpending < 66 && overallSpending >= 56) {
-            audio = R.raw.sample
+            audio = R.raw.spending_performance_good
             binding.imgFace.setImageResource(R.drawable.average)
             binding.textStatus.text = "Average"
             binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))

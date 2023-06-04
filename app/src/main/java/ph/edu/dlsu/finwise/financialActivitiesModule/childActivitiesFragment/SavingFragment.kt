@@ -440,23 +440,23 @@ class SavingFragment : Fragment() {
         }
     }
 
-    private fun loadSmartAudioDialog(dialogBinding: DialogSmartGoalInfoBinding) {
-        /*TODO: Change binding and Audio file in mediaPlayer*/
-        val audio = R.raw.sample
-
-        dialogBinding.btnSoundSmartGoalInfo.setOnClickListener {
-           if (!this::mediaPlayerDialog.isInitialized) {
-               mediaPlayerDialog = MediaPlayer.create(context, audio)
-           }
-
-            if (mediaPlayerDialog.isPlaying) {
-                mediaPlayerDialog.pause()
-                mediaPlayerDialog.seekTo(0)
-                return@setOnClickListener
-            }
-            mediaPlayerDialog.start()
-        }
-    }
+//    private fun loadSmartAudioDialog(dialogBinding: DialogSmartGoalInfoBinding) {
+//        /*TODO: Change binding and Audio file in mediaPlayer*/
+//        val audio = R.raw.sample
+//
+//        dialogBinding.btnSoundSmartGoalInfo.setOnClickListener {
+//           if (!this::mediaPlayerDialog.isInitialized) {
+//               mediaPlayerDialog = MediaPlayer.create(context, audio)
+//           }
+//
+//            if (mediaPlayerDialog.isPlaying) {
+//                mediaPlayerDialog.pause()
+//                mediaPlayerDialog.seekTo(0)
+//                return@setOnClickListener
+//            }
+//            mediaPlayerDialog.start()
+//        }
+//    }
 
 
     override fun onDestroy() {

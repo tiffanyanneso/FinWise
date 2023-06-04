@@ -205,34 +205,34 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         //TODO: Change audio
         var audio = 0
         if (user == "child" && total > 0) {
-            audio = R.raw.sample
+            audio = R.raw.income_fragment_child_income
             binding.tvSummary.text = "You've earned ₱$totalText from $dateRange! "
-            binding.tvTips.text = "Go to \"Financial Activities\" to further develop your Financial Literacy!"
+            binding.tvTips.text = "It's great that you had income, keep it up! Go to \"Financial Activities\" to further develop your skills!"
             loadChildFinancialActivitiesButton()
         } else if (user == "child" && total < 0) {
-            audio = R.raw.sample
-            binding.tvSummary.text = "Uh oh! You've earned ₱$totalText from $dateRange"
-            binding.tvTips.text = "Consider selling your stuff or doing some chores to earn money"
+            audio = R.raw.income_fragment_child_some
+            binding.tvSummary.text = "Uh oh! You've earned ₱$totalText from $dateRange!"
+            binding.tvTips.text = "To have more income, you can accomplish chores, sell items, and decrease expenses!"
             loadEarningChild()
         } else if (user == "parent" && total > 0) {
-            audio = R.raw.sample
+            audio = R.raw.income_fragment_parent_income
             binding.tvSummary.text = "Your child earned ₱$totalText from $dateRange!"
-            binding.tvTips.text = "Go to \"Financial Activities\" to further develop your child's Financial Literacy!"
+            binding.tvTips.text = "It is great that they had income. Encourage them to keep it up!"
             loadParentFinancialActivitiesButton()
         } else if (user == "parent" && total < 0) {
-            audio = R.raw.sample
-            binding.tvSummary.text = "Uh oh! Your child only earned ₱$totalText from $dateRange"
-            binding.tvTips.text = "Consider giving your child some chores so they can earn some money!"
+            audio = R.raw.income_fragment_parent_some
+            binding.tvSummary.text = "Uh oh! Your child only earned ₱$totalText from $dateRange!"
+            binding.tvTips.text = "Consider giving them some chores, encouraging them to sell items, or decreasing expenses so they can earn some money!"
             loadEarningParent()
         } else if (user == "parent" && total == 0.0F) {
-            audio = R.raw.sample
-            binding.tvSummary.text = "Uh oh! Your child has no income for this $dateRange"
-            binding.tvTips.text = "Consider giving your child some chores so they can earn some money!"
+            audio = R.raw.income_fragment_parent_none
+            binding.tvSummary.text = "Uh oh! Your child has no income for this $dateRange!"
+            binding.tvTips.text = "Consider giving your child some chores, encouraging them to sell items, or decreasing expenses so they can earn some money!"
             loadEarningParent()
         } else if (user == "child" && total == 0.0F) {
-            audio = R.raw.sample
-            binding.tvSummary.text = "Uh oh! You've earned nothing from $dateRange"
-            binding.tvTips.text = "Consider selling your stuff or doing some chores to earn money"
+            audio = R.raw.income_fragment_child_none
+            binding.tvSummary.text = "Uh oh! You've earned nothing from $dateRange!"
+            binding.tvTips.text = "To have income, you can accomplish chores, sell items, and decrease expenses!"
             loadEarningParent()
         }
         loadAudio(audio)
