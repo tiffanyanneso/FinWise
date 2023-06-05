@@ -19,10 +19,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.databinding.FragmentParentDashboardBinding
 import ph.edu.dlsu.finwise.model.*
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 
 class ParentDashboardFragment : Fragment() {
@@ -120,8 +122,8 @@ class ParentDashboardFragment : Fragment() {
                 personalFinancePerformancePercent = 200F
             personalFinancePerformance = personalFinancePerformancePercent / 2
 
-            /*binding.progressBarPersonalFinance.progress = personalFinancePerformance.toInt()
-            binding.tvPersonalFinancePercent.text = DecimalFormat("##0.00").format(personalFinancePerformance) + "%"*/
+            binding.progressBarPersonalFinance.progress = personalFinancePerformance.toInt()
+            binding.tvPersonalFinancePercentage.text = DecimalFormat("##0.0").format(personalFinancePerformance) + "%"
             getFinancialActivitiesPerformance()
         }
     }
@@ -131,6 +133,8 @@ class ParentDashboardFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             if (age == 10 || age == 11)
                 getGoalSettingPerformance()
+            else
+                binding.layoutGoalSettingInProgress.visibility = View.GONE
 
             getSavingPerformanceScore()
             getBudgetingPerformanceScore()
@@ -179,6 +183,9 @@ class ParentDashboardFragment : Fragment() {
                 }
             }
         }
+
+        var ongoingSaving = firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Ongoing").get().await()
+        binding.tvSpending.text = ongoingSaving.size().toString()
     }
 
     private suspend fun checkOverSpending(budgetItemID:String, budgetItemAmount:Float){
@@ -246,6 +253,9 @@ class ParentDashboardFragment : Fragment() {
                 processBudgetItems(activity)
             }
         }
+
+        var ongoingSaving = firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Ongoing").get().await()
+        binding.tvBudgeting.text = ongoingSaving.size().toString()
     }
 
 
@@ -330,6 +340,8 @@ class ParentDashboardFragment : Fragment() {
         if (nRatings != 0)
             goalSettingPercentage = ((overallRating / nRatings)/5)* 100
 
+        var goalSettingOngoing = firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereIn("status", Arrays.asList("For Review", "For Editing")).get().await()
+        binding.tvGoalSetting.text = goalSettingOngoing.size().toString()
     }
 
     private suspend fun getSavingPerformanceScore() {
@@ -356,6 +368,9 @@ class ParentDashboardFragment : Fragment() {
             savingPercentage = (nOnTime/nGoals)*100
             Log.d("katol", "getChildAge: "+savingPercentage)
         }
+
+        var ongoingSaving = firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Saving").whereEqualTo("status", "Ongoing").get().await()
+        binding.tvSaving.text = ongoingSaving.size().toString()
     }
 
     private fun checkIfNaNFinancialActivitiesScores() {
@@ -390,8 +405,8 @@ class ParentDashboardFragment : Fragment() {
                 println("print correct " + nCorrect)
                 println("print nquestions"  + nQuestions)
                 financialAssessmentPerformance = (nCorrect.toFloat() / nQuestions.toFloat()) * 100
-                /*binding.progressBarFinancialAssessments.progress = financialAssessmentPerformance.toInt()
-                binding.tvFinancialAssessmentPercentage.text = DecimalFormat("##0.00").format(financialAssessmentPerformance) + "%"*/
+                binding.progressBarFinancialAssessments.progress = financialAssessmentPerformance.toInt()
+                binding.tvFinancialAssessmentsPercentage.text = DecimalFormat("##0.00").format(financialAssessmentPerformance) + "%"
                 getOverallFinancialHealth()
             } else
                 getOverallFinancialHealth()
@@ -426,38 +441,74 @@ class ParentDashboardFragment : Fragment() {
         checkIfNaN()
         if (age == 9 || age == 12) {
             //no saving completed yet, score will be personal finance and financial assessment (prelim)
-            overallFinancialHealth = if(nSavingCompleted == 0)
-                (((personalFinancePerformance * .5) + financialAssessmentPerformance*.5)*100).toFloat()
+             if(nSavingCompleted == 0) {
+                 overallFinancialHealth = (((personalFinancePerformance * .5) + financialAssessmentPerformance * .5) * 100).toFloat()
+                 binding.tvFinancialActivitiesPercentage.text = "N/A"
+            }
 
             //no budgeting completed yet, score will be personal finance, saving performance,  financial assessment (prelim)
-            else if (nBudgetingCompleted == 0)
-                ((personalFinancePerformance * .35) + (savingPercentage  * .35) + (financialAssessmentPerformance * .30)).toFloat()
+            else if (nBudgetingCompleted == 0) {
+                overallFinancialHealth = ((personalFinancePerformance * .35) + (savingPercentage  * .35) + (financialAssessmentPerformance * .30)).toFloat()
+                 binding.tvFinancialActivitiesPercentage.text = DecimalFormat("##0.0").format(savingPercentage) + "%"
+                 binding.progressBarFinancialActivities.progress = savingPercentage.toInt()
+            }
 
             //no spending completed yet, score will be personal finance, saving performance, budgeting performance,  financial assessment (prelim)
-            else if (nSpendingCompleted == 0)
-                ((personalFinancePerformance * .35) + (((savingPercentage + budgetingPercentage) / 2) * .35) + (financialAssessmentPerformance * .30)).toFloat()
-            else
-                ((personalFinancePerformance * .35) + (((savingPercentage + budgetingPercentage + spendingPercentage) / 3) * .35) + (financialAssessmentPerformance * .30)).toFloat()
+            else if (nSpendingCompleted == 0) {
+                 overallFinancialHealth =
+                     ((personalFinancePerformance * .35) + (((savingPercentage + budgetingPercentage) / 2) * .35) + (financialAssessmentPerformance * .30)).toFloat()
+                 binding.tvFinancialActivitiesPercentage.text = DecimalFormat("##0.0").format((savingPercentage+budgetingPercentage)/2) + "%"
+                 binding.progressBarFinancialActivities.progress = ((savingPercentage+budgetingPercentage)/2).toInt()
+
+             }
+            else {
+                 overallFinancialHealth =
+                     ((personalFinancePerformance * .35) + (((savingPercentage + budgetingPercentage + spendingPercentage) / 3) * .35) + (financialAssessmentPerformance * .30)).toFloat()
+                 binding.tvFinancialActivitiesPercentage.text = DecimalFormat("##0.0").format(((savingPercentage + budgetingPercentage + spendingPercentage) / 3)) + "%"
+                 binding.progressBarFinancialActivities.progress = ((savingPercentage + budgetingPercentage + spendingPercentage) / 3).toInt()
+
+             }
 
         } else if (age == 10 || age == 11) {
             //no goal setting completed yet, score will be personal finance, and  financial assessment (prelim)
-            if (nGoalSettingCompleted == 0)
-                overallFinancialHealth = (((personalFinancePerformance * .5) + financialAssessmentPerformance*.5)*100).toFloat()
+            if (nGoalSettingCompleted == 0) {
+                overallFinancialHealth =
+                    (((personalFinancePerformance * .5) + financialAssessmentPerformance * .5) * 100).toFloat()
+                binding.tvFinancialActivitiesPercentage.text = "N/A"
+            }
 
             //no saving completed yet, score will be personal finance, goal setting, and financial assessment (prelim)
-            else if(nSavingCompleted == 0)
-                overallFinancialHealth = ((personalFinancePerformance * .35) + (goalSettingPercentage  * .35) + (financialAssessmentPerformance * .30)).toFloat()
+            else if(nSavingCompleted == 0) {
+                overallFinancialHealth =
+                    ((personalFinancePerformance * .35) + (goalSettingPercentage * .35) + (financialAssessmentPerformance * .30)).toFloat()
+                binding.tvFinancialActivitiesPercentage.text = DecimalFormat("##0.0").format(goalSettingPercentage) + "%"
+                binding.progressBarFinancialActivities.progress = goalSettingPercentage.toInt()
 
+            }
             //no budgeting completed yet, score will be personal finance, saving performance,  financial assessment (prelim)
-            else if (nBudgetingCompleted == 0)
-                overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage)/2)  * .35) + (financialAssessmentPerformance * .30)).toFloat()
+            else if (nBudgetingCompleted == 0) {
+                overallFinancialHealth =
+                    ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage) / 2) * .35) + (financialAssessmentPerformance * .30)).toFloat()
+                binding.tvFinancialActivitiesPercentage.text = DecimalFormat("##0.0").format((goalSettingPercentage + savingPercentage) / 2) + "%"
+                binding.progressBarFinancialActivities.progress = ((goalSettingPercentage + savingPercentage) / 2).toInt()
 
+
+            }
             //no spending completed yet, score will be personal finance, saving performance, budgeting performance,  financial assessment (prelim)
-            else if (nSpendingCompleted == 0)
+            else if (nSpendingCompleted == 0) {
                 overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage + budgetingPercentage) / 3) * .35) + (financialAssessmentPerformance * .30)).toFloat()
+                binding.tvFinancialActivitiesPercentage.text = DecimalFormat("##0.0").format((goalSettingPercentage + savingPercentage + budgetingPercentage) / 3) + "%"
+                binding.progressBarFinancialActivities.progress = ((goalSettingPercentage + savingPercentage + budgetingPercentage) / 3).toInt()
 
-            else
-                overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4) * .35) + (financialAssessmentPerformance * .30)).toFloat()
+
+            }
+            else {
+                overallFinancialHealth =
+                    ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4) * .35) + (financialAssessmentPerformance * .30)).toFloat()
+                binding.tvFinancialActivitiesPercentage.text = DecimalFormat("##0.0").format((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4) + "%"
+                binding.progressBarFinancialActivities.progress = ((goalSettingPercentage + savingPercentage + budgetingPercentage +spendingPercentage) / 4).toInt()
+
+            }
         }
     }
 

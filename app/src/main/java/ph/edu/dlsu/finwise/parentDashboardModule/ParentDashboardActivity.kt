@@ -55,6 +55,8 @@ class ParentDashboardActivity : AppCompatActivity(){
     private var earningArrayList = ArrayList<String>()
     private var transactionArrayList = ArrayList<String>()
 
+    private lateinit var dialog:Dialog
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +70,7 @@ class ParentDashboardActivity : AppCompatActivity(){
                     var bundle = Bundle()
                     bundle.putString("view", "goal")
                     notificationList.putExtras(bundle)
+                    dialog.dismiss()
                     startActivity(notificationList)
                     true
                 }
@@ -75,6 +78,7 @@ class ParentDashboardActivity : AppCompatActivity(){
                     FirebaseAuth.getInstance().signOut()
                     val intent = Intent (this, MainActivity::class.java)
                     startActivity (intent)
+                    dialog.dismiss()
                     finish()
                     true
                 }
@@ -169,7 +173,7 @@ class ParentDashboardActivity : AppCompatActivity(){
     private fun loadDialogAndRecyclerView() {
         if (!goalsArrayList.isEmpty() || !earningArrayList.isEmpty() || !transactionArrayList.isEmpty()) {
             var dialogBinding = DialogNotifSummaryParentBinding.inflate(layoutInflater)
-            var dialog = Dialog(this)
+            dialog = Dialog(this)
             dialog.setContentView(dialogBinding.root)
             dialog.window!!.setLayout(1100, 2000)
 

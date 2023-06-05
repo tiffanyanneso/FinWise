@@ -557,8 +557,6 @@ class ChildDashboardActivity : AppCompatActivity(){
             else
             overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4) * .35) + (financialAssessmentPerformance * .30)).toFloat()
         }
-
-        Toast.makeText(this, ""+overallFinancialHealth, Toast.LENGTH_SHORT).show()
         setPerformanceView()
     }
 

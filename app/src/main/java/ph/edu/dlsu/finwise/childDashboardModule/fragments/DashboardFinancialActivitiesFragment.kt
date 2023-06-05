@@ -215,6 +215,9 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             var goalSettingPercentage  = ((overallRating / nRatings)/5)* 100
             goalSettingPercentage = checkIfNaNPercentage(goalSettingPercentage)
             goalSettingPercentageArray.add(goalSettingPercentage)
+            binding.layoutGoalSettingPerformance.visibility = View.VISIBLE
+            binding.tvGoalSettingPercentage.text = DecimalFormat("##0.0").format(goalSettingPercentage) + "%"
+            binding.progressBarGoalSetting.progress = goalSettingPercentage.toInt()
         }
 
 
@@ -222,6 +225,8 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         var savingPercentage = (nOnTime/nGoals)*100
         savingPercentage = checkIfNaNPercentage(savingPercentage)
         savingPercentageArray.add(savingPercentage)
+        binding.tvSavingPerformance.text = DecimalFormat("##0.0").format(savingPercentage) + "%"
+        binding.progresSBarSaving.progress = savingPercentage.toInt()
 
 
 
@@ -239,9 +244,15 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else
                 ((1 - (nParent.toFloat()/budgetItemCount)) * 100)
         }
+        println("print is spending complete" + isSpendingActivityCompleted)
+        println("print nParent" +  nParent)
+        println("print budget item couint " + budgetItemCount)
+        println("print budget accuracy " + (1 - (nParent.toFloat()/budgetItemCount)) * 100)
         Log.d("liven", "budgetingPercentage: "+budgetingPercentage)
         budgetingPercentage = checkIfNaNPercentage(budgetingPercentage)
         budgetingPercentageArray.add(budgetingPercentage)
+        binding.tvBudgetingPerformance.text = DecimalFormat("##0.0").format(budgetingPercentage) + "%"
+        binding.progressBarBudegting.progress = budgetingPercentage.toInt()
 
         //Overspending
         var overspendingPercentage = (overSpending/nBudgetItems)
@@ -252,6 +263,9 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         var spendingPercentage = ((1-overspendingPercentage)*100 + ((nPlanned/nTotalPurchased)*100)) /2
         spendingPercentage = checkIfNaNPercentage(spendingPercentage)
         spendingPercentageArray.add(spendingPercentage)
+
+        binding.tvSpendingPerformance.text = DecimalFormat("##0.0").format(spendingPercentage) + "%"
+        binding.progressBarSpending.progress = spendingPercentage.toInt()
     }
 
     private fun checkIfNaNPercentage(percentage: Float): Float {
@@ -548,7 +562,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     private suspend fun getBudgetingActivities() {
         val financialActivitiesDocuments = firestore.collection("FinancialActivities")
             .whereEqualTo("childID", userID)
-            .whereEqualTo("financialActivityName", "Spending")
+            .whereEqualTo("financialActivityName", "Budgeting")
             .whereEqualTo("status", "Completed").get().await()
 
         for (budgeting in financialActivitiesDocuments) {
@@ -655,23 +669,26 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else
                 financialActivitiesPerformanceScore = ((savingPercentage + budgetingPercentage + spendingPercentage) / 3)
         }
-        else if (age == 10 || age == 11)
+        else if (age == 10 || age == 11) {
             if (nGoalSettingCompleted == 0) {
                 var bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
                 binding.ivScore.setImageBitmap(bitmap)
                 binding.tvPerformanceStatus.visibility = View.GONE
                 binding.tvPerformancePercentage.visibility = View.GONE
-                binding.tvPerformanceText.text = "Complete financial activities to see your score here"
-            }
-            else if (nGoals == 0.00F)
+                binding.tvPerformanceText.text =
+                    "Complete financial activities to see your score here"
+            } else if (nGoals == 0.00F)
                 financialActivitiesPerformance = goalSettingPercentage
             else if (nBudgetingCompleted == 0)
-                financialActivitiesPerformanceScore =  (goalSettingPercentage + savingPercentage) /2
+                financialActivitiesPerformanceScore = (goalSettingPercentage + savingPercentage) / 2
             else if (nSpendingCompleted == 0)
-                financialActivitiesPerformanceScore = (goalSettingPercentage + savingPercentage + budgetingPercentage)/3
-            else
-                financialActivitiesPerformanceScore = ((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4)
-
+                financialActivitiesPerformanceScore =
+                    (goalSettingPercentage + savingPercentage + budgetingPercentage) / 3
+            else {
+                financialActivitiesPerformanceScore =
+                    ((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4)
+            }
+        }
         iteration++
         financialActivitiesPerformance += financialActivitiesPerformanceScore
 
@@ -679,8 +696,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         data.add(Entry(xAxisPoint, roundedFinancialActivitiesPerformance.toFloat()))
         xAxisPoint++
     }
-
-
 
     private suspend fun getPurchasePlanning(date: Date, spendingActivity: QueryDocumentSnapshot) {
         //items planned / all the items they bought * 100
@@ -756,7 +771,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             totalBudgetAccuracy +=
                 (100 - (kotlin.math.abs(budgetItemObject.amount!! - spent)
                         / budgetItemObject.amount!!) * 100)
-
 
         } else {
             isSpendingActivityCompleted = false
@@ -964,12 +978,11 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
         imageView.setImageBitmap(bitmap)
         binding.tvPerformanceText.text = message
+        binding.tvPerformanceStatus.visibility = View.VISIBLE
         binding.tvPerformanceStatus.text = performance
+        binding.tvPerformancePercentage.visibility = View.VISIBLE
+        binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(financialActivitiesPerformance)}%"
 
-        val df = DecimalFormat("#.#")
-        df.roundingMode = RoundingMode.UP
-        val roundedValue = df.format(financialActivitiesPerformance)
-        binding.tvPerformancePercentage.text = "${roundedValue}%"
 
         mediaPlayer = MediaPlayer.create(context, audio)
         loadOverallAudio()
