@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.MainActivity
+import ph.edu.dlsu.finwise.NavbarParentFirst
+import ph.edu.dlsu.finwise.ParentProfileActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActivity
 import ph.edu.dlsu.finwise.databinding.ActivityParentRegisterChildBinding
@@ -51,6 +53,9 @@ class ParentRegisterChildActivity : AppCompatActivity() {
         save()
         setCancel()
         loadBackButton()
+
+        NavbarParentFirst(findViewById(R.id.bottom_nav_parent_first), this, R.id.nav_parent_first_profile)
+
 
         binding.etBirthday.setOnClickListener{
             showCalendar()
@@ -314,10 +319,9 @@ class ParentRegisterChildActivity : AppCompatActivity() {
     }
 
     private fun loadBackButton() {
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
-            val goToParentLandingPage = Intent(applicationContext, ParentLandingPageActivity::class.java)
-            startActivity(goToParentLandingPage)
+            onBackPressed()
         }
     }
 

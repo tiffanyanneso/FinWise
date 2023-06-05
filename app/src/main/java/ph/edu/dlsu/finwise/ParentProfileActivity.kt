@@ -16,6 +16,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityProfileBinding
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.profileModule.EditProfileActivity
 import ph.edu.dlsu.finwise.NavbarParent
+import ph.edu.dlsu.finwise.loginRegisterModule.ParentRegisterChildActivity
 import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentPendingForReviewActivity
 
@@ -42,6 +43,11 @@ class ParentProfileActivity : AppCompatActivity() {
         binding.btnEditProfile.setOnClickListener {
             val gotoParentEditProfile = Intent(this, ParentEditProfileActivity::class.java)
             context.startActivity(gotoParentEditProfile)}
+
+        binding.btnAddChild.setOnClickListener {
+            val goToParentRegisterChildActivity = Intent (this, ParentRegisterChildActivity::class.java)
+            context.startActivity(goToParentRegisterChildActivity)
+        }
 
         binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
             when (menuItem.itemId) {
