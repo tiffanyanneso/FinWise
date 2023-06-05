@@ -31,7 +31,6 @@ import ph.edu.dlsu.finwise.databinding.FragmentDashboardFinancialActivitiesBindi
 import ph.edu.dlsu.finwise.model.*
 import ph.edu.dlsu.finwise.parentFinancialManagementModule.ParentFinancialManagementActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
-import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -100,6 +99,10 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     private var totalBudgetAccuracy = 0.00F
 
     private var financialActivitiesPerformance = 0.00F
+    private var goalSettingPercentageAverage = 0F
+    private var savingPercentageTotalAverage = 0F
+    private var budgetingPercentageAverage = 0F
+    private var spendingPercentageAverage = 0F
 
     private var goalRatingObjectArray = ArrayList<GoalRating>()
     private var savingObjectArray = ArrayList<FinancialGoals>()
@@ -134,6 +137,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             setData()
             initializeGraph()
             setPerformanceView()
+            loadOnGoingActivities()
             loadView()
         }
     }
@@ -141,6 +145,51 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     private fun loadView() {
         binding.layoutLoading.visibility = View.GONE
         binding.layoutMain.visibility = View.VISIBLE
+    }
+
+    private suspend fun loadOnGoingActivities() {
+        Log.d("ageeee", "loadOnGoingActivities: "+age)
+        if (age in 10..11) {
+            val goalSettingOngoing = firestore.collection("FinancialGoals")
+                .whereEqualTo("childID", userID)
+                .whereIn("status", Arrays.asList("For Review", "For Editing")).get().await()
+            var numGoals = goalSettingOngoing.size()
+            if (goalSettingOngoing.isEmpty)
+                numGoals = 0
+            binding.llGoalSetting.visibility = View.VISIBLE
+            binding.tvGoalSetting.text = numGoals.toString()
+            Log.d("fickle", "goalSettingOngoing: "+goalSettingOngoing.size())
+        }
+
+        val ongoingSaving = firestore.collection("FinancialActivities")
+            .whereEqualTo("childID", userID)
+            .whereEqualTo("financialActivityName", "Saving")
+            .whereEqualTo("status", "Ongoing").get().await()
+        Log.d("fickle", "ongoingSaving: "+ongoingSaving.size())
+        var numSaving = ongoingSaving.size()
+        if (ongoingSaving.isEmpty)
+            numSaving = 0
+        binding.tvSaving.text = numSaving.toString()
+
+        val ongoingSpending = firestore.collection("FinancialActivities")
+            .whereEqualTo("childID", userID)
+            .whereEqualTo("financialActivityName", "Spending")
+            .whereEqualTo("status", "Ongoing").get().await()
+        Log.d("fickle", "ongoingSpending: "+ongoingSpending.size())
+        var numSpending = ongoingSpending.size()
+        if (ongoingSpending.isEmpty)
+            numSpending = 0
+        binding.tvSpending.text = numSpending.toString()
+
+        val ongoingBudgeting = firestore.collection("FinancialActivities")
+            .whereEqualTo("childID", userID)
+            .whereEqualTo("financialActivityName", "Budgeting")
+            .whereEqualTo("status", "Ongoing").get().await()
+
+        var numBudgeting = ongoingBudgeting.size()
+        if (ongoingBudgeting.isEmpty)
+            numBudgeting = 0
+        binding.tvBudgeting.text = numBudgeting.toString()
     }
 
     private suspend fun getData(weeks: Map<Int, List<Date>>) {
@@ -215,9 +264,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             var goalSettingPercentage  = ((overallRating / nRatings)/5)* 100
             goalSettingPercentage = checkIfNaNPercentage(goalSettingPercentage)
             goalSettingPercentageArray.add(goalSettingPercentage)
-            binding.layoutGoalSettingPerformance.visibility = View.VISIBLE
-            binding.tvGoalSettingPercentage.text = DecimalFormat("##0.0").format(goalSettingPercentage) + "%"
-            binding.progressBarGoalSetting.progress = goalSettingPercentage.toInt()
         }
 
 
@@ -225,9 +271,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         var savingPercentage = (nOnTime/nGoals)*100
         savingPercentage = checkIfNaNPercentage(savingPercentage)
         savingPercentageArray.add(savingPercentage)
-        binding.tvSavingPerformance.text = DecimalFormat("##0.0").format(savingPercentage) + "%"
-        binding.progresSBarSaving.progress = savingPercentage.toInt()
-
 
 
         // Budgeting
@@ -244,15 +287,10 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else
                 ((1 - (nParent.toFloat()/budgetItemCount)) * 100)
         }
-        println("print is spending complete" + isSpendingActivityCompleted)
-        println("print nParent" +  nParent)
-        println("print budget item couint " + budgetItemCount)
-        println("print budget accuracy " + (1 - (nParent.toFloat()/budgetItemCount)) * 100)
-        Log.d("liven", "budgetingPercentage: "+budgetingPercentage)
+
         budgetingPercentage = checkIfNaNPercentage(budgetingPercentage)
         budgetingPercentageArray.add(budgetingPercentage)
-        binding.tvBudgetingPerformance.text = DecimalFormat("##0.0").format(budgetingPercentage) + "%"
-        binding.progressBarBudegting.progress = budgetingPercentage.toInt()
+
 
         //Overspending
         var overspendingPercentage = (overSpending/nBudgetItems)
@@ -264,8 +302,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         spendingPercentage = checkIfNaNPercentage(spendingPercentage)
         spendingPercentageArray.add(spendingPercentage)
 
-        binding.tvSpendingPerformance.text = DecimalFormat("##0.0").format(spendingPercentage) + "%"
-        binding.progressBarSpending.progress = spendingPercentage.toInt()
     }
 
     private fun checkIfNaNPercentage(percentage: Float): Float {
@@ -290,7 +326,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     }
 
     private fun calculateAveragePercentage(percentageArray: ArrayList<Float?>): Float {
-        Log.d("pkliop", "percentageArray: "+percentageArray)
         val nonNullValues = percentageArray.filterNotNull()
         val sum = nonNullValues.sum()
         val count = nonNullValues.size
@@ -691,6 +726,10 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         }
         iteration++
         financialActivitiesPerformance += financialActivitiesPerformanceScore
+        goalSettingPercentageAverage += goalSettingPercentage
+        savingPercentageTotalAverage += savingPercentage
+        budgetingPercentageAverage += budgetingPercentage
+        spendingPercentageAverage += spendingPercentage
 
         val roundedFinancialActivitiesPerformance = (financialActivitiesPerformanceScore * 10).roundToInt() / 10
         data.add(Entry(xAxisPoint, roundedFinancialActivitiesPerformance.toFloat()))
@@ -820,14 +859,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
 
     private fun setPerformanceView() {
-
-        if (financialActivitiesPerformance.isNaN())
-            financialActivitiesPerformance = 0.0F
-
-        financialActivitiesPerformance /= iteration
-
-        if (financialActivitiesPerformance.isNaN())
-            financialActivitiesPerformance = 0.0F
+        calculateTotals()
 
         val imageView = binding.ivScore
         val message: String
@@ -984,9 +1016,53 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(financialActivitiesPerformance)}%"
 
 
+        if (age in 10..11 && goalRatingObjectArray.isNotEmpty()) {
+            binding.layoutGoalSettingPerformance.visibility = View.VISIBLE
+            binding.tvGoalSettingPercentage.text = DecimalFormat("##0.0").format(goalSettingPercentageAverage) + "%"
+            binding.progressBarGoalSetting.progress = goalSettingPercentageAverage.toInt()
+        }
+
+        binding.tvSavingPerformance.text = DecimalFormat("##0.0").format(savingPercentageTotalAverage) + "%"
+        binding.progressBarSaving.progress = savingPercentageTotalAverage.toInt()
+
+        binding.tvBudgetingPerformance.text = DecimalFormat("##0.0").format(budgetingPercentageAverage) + "%"
+        binding.progressBarBudegting.progress = budgetingPercentage.toInt()
+
+        binding.tvSpendingPerformance.text = DecimalFormat("##0.0").format(spendingPercentageAverage) + "%"
+        binding.progressBarSpending.progress = spendingPercentage.toInt()
+
         mediaPlayer = MediaPlayer.create(context, audio)
         loadOverallAudio()
         loadButton()
+    }
+
+    private fun calculateTotals() {
+        checkIfNaNTotals()
+
+        financialActivitiesPerformance /= iteration
+        budgetingPercentageAverage /= iteration
+        goalSettingPercentageAverage /= iteration
+        savingPercentageTotalAverage /= iteration
+        spendingPercentageAverage /= iteration
+
+        checkIfNaNTotals()
+    }
+
+    private fun checkIfNaNTotals() {
+        if (financialActivitiesPerformance.isNaN())
+            financialActivitiesPerformance = 0.0F
+
+        if (budgetingPercentageAverage.isNaN())
+            budgetingPercentageAverage = 0.0F
+
+        if (goalSettingPercentageAverage.isNaN())
+            goalSettingPercentageAverage = 0.0F
+
+        if (savingPercentageTotalAverage.isNaN())
+            savingPercentageTotalAverage = 0.0F
+
+        if (spendingPercentageAverage.isNaN())
+            spendingPercentageAverage = 0.0F
     }
 
     private fun loadOverallAudio() {

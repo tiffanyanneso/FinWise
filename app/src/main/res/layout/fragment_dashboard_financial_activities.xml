@@ -195,7 +195,7 @@
                     android:orientation="horizontal">
 
                     <ProgressBar
-                        android:id="@+id/progresS_bar_saving"
+                        android:id="@+id/progress_bar_saving"
                         android:layout_width="match_parent"
                         android:layout_height="20dp"
                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
@@ -337,8 +337,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/ll_goal_setting"
                 android:orientation="vertical"
                 android:padding="10dp"
+                android:visibility="gone"
                 android:background="@drawable/layout_bg_green"
                 android:backgroundTint="@color/dark_green"
                 android:layout_weight="1"
@@ -349,7 +351,7 @@
                     android:id="@+id/tv_goal_setting"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:text="X"
                     android:textAllCaps = "true"
                     android:textColor="@color/white"
@@ -359,7 +361,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:text="Goal Setting"
                     android:textAllCaps = "true"
                     android:textColor="@color/white"
@@ -380,7 +382,7 @@
                     android:id="@+id/tv_saving"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:text="X"
                     android:textAllCaps = "true"
                     android:textColor="@color/white"
@@ -390,7 +392,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:text="Saving"
                     android:textAllCaps = "true"
                     android:textColor="@color/white"
@@ -410,7 +412,7 @@
                     android:id="@+id/tv_budgeting"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:text="X"
                     android:textAllCaps = "true"
                     android:textColor="@color/white"
@@ -420,7 +422,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:text="Budgeting"
                     android:textAllCaps = "true"
                     android:textColor="@color/white"
@@ -439,7 +441,7 @@
                     android:id="@+id/tv_spending"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:text="X"
                     android:textAllCaps = "true"
                     android:textColor="@color/white"
@@ -449,7 +451,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
                     android:text="Spending"
                     android:textAllCaps = "true"
                     android:textColor="@color/white"

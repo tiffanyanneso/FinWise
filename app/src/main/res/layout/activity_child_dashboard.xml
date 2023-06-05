@@ -238,7 +238,7 @@
                 android:textColor="@color/black"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_monthly"
-                android:text="monthly"/>
+                android:text="This Month"/>
 
             <com.google.android.material.button.MaterialButton
                 android:layout_width="0dp"
@@ -250,7 +250,7 @@
                 android:textColor="@color/black"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_quarterly"
-                android:text="quarterly"/>
+                android:text="This Quarter"/>
 
         </LinearLayout>
 
@@ -268,7 +268,7 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="850dp"
+            android:layout_height="1300dp"
             />
 
 

@@ -116,11 +116,9 @@ class LoginActivity : AppCompatActivity() {
     private fun noAccountFound(task: Task<AuthResult>) {
         Log.d("xzcxcxz", "noAccountFound: "+task.exception?.message)
 
-        binding.etPassword.error = "Please enter your correct password."
-        binding.etPassword.requestFocus()
+        binding.passwordContainer.helperText = "Please enter your correct password."
 
-        binding.etEmail.error = "Please enter your correct email address."
-        binding.etEmail.requestFocus()
+        binding.emailContainer.helperText = "Please enter your correct email address."
     }
 
     private fun initializeRedirect(documentSnapshot: DocumentSnapshot, isFirstLogin: Boolean) {
@@ -312,23 +310,29 @@ class LoginActivity : AppCompatActivity() {
         var valid = true
         // Check if edit text is empty and valid
         if (binding.etEmail.text.toString().trim().isEmpty()) {
-            binding.etEmail.error = "Please enter your email address."
-            binding.etEmail.requestFocus()
+            binding.emailContainer.helperText = "Please enter your email address."
             valid = false
+        } else {
+            binding.emailContainer.helperText = ""
+
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(binding.etEmail.text).matches()) {
-            binding.etEmail.error = "Please enter a valid email address."
-            binding.etEmail.requestFocus()
+            binding.emailContainer.helperText = "Please enter a valid email address."
             valid = false
-        } else email = binding.etEmail.text.toString().trim()
+        } else {
+            binding.emailContainer.helperText = ""
+            email = binding.etEmail.text.toString().trim()
+        }
 
         // Check if edit text is empty and valid
         if (binding.etPassword.text.toString().trim().isEmpty()) {
-            binding.etPassword.error = "Please enter your correct password."
-            binding.etPassword.requestFocus()
+            binding.passwordContainer.helperText = "Please enter your correct password."
             valid = false
-        } else password = binding.etPassword.text.toString().trim()
+        } else {
+            binding.passwordContainer.helperText = ""
+            password = binding.etPassword.text.toString().trim()
+        }
 
         return valid
     }
