@@ -17,6 +17,7 @@ import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.profileModule.EditProfileActivity
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentPendingForReviewActivity
 
 class ParentProfileActivity : AppCompatActivity() {
 
@@ -36,13 +37,7 @@ class ParentProfileActivity : AppCompatActivity() {
         loadChildren()
         getProfileData()
 
-        //Initializes the navbar
-        //sends the ChildID to the parent navbar
-        val childID = intent.getStringExtra("childID")
-        val bundleNavBar = Bundle().apply {
-            putString("childID", childID)
-        }
-        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_profile, bundleNavBar)
+        NavbarParentFirst(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_first_profile)
 
         binding.btnEditProfile.setOnClickListener {
             val gotoParentEditProfile = Intent(this, ParentEditProfileActivity::class.java)
@@ -50,6 +45,15 @@ class ParentProfileActivity : AppCompatActivity() {
 
         binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
             when (menuItem.itemId) {
+                R.id.btn_notification -> {
+                    var notificationList = Intent (this, ParentPendingForReviewActivity::class.java)
+                    var bundle = Bundle()
+                    bundle.putString("view", "goal")
+                    notificationList.putExtras(bundle)
+                    startActivity(notificationList)
+                    true
+                }
+
                 R.id.btn_logout -> {
                     FirebaseAuth.getInstance().signOut()
                     val intent = Intent (this, MainActivity::class.java)
@@ -72,11 +76,9 @@ class ParentProfileActivity : AppCompatActivity() {
     }
 
     private fun loadChildren() {
-        var parentID = FirebaseAuth.getInstance().currentUser?.uid
         var childIDArrayList = ArrayList<String>()
-        //TODO: Can't find ChildFilter
-        /*var childFilterArrayList = ArrayList<ParentDashboardActivity.ChildFilter>()
-        firestore.collection("Users").whereEqualTo("userType", "Child").whereEqualTo("parentID", parentID).get().addOnSuccessListener { results ->
+        var childFilterArrayList = ArrayList<ParentDashboardActivity.ChildFilter>()
+        firestore.collection("Users").whereEqualTo("userType", "Child").whereEqualTo("parentID", currentUser).get().addOnSuccessListener { results ->
             if (results.size()!=0) {
                 for (child in results)
                     childFilterArrayList.add(ParentDashboardActivity.ChildFilter(child.id, child.toObject<Users>().firstName!!))
@@ -89,6 +91,6 @@ class ParentProfileActivity : AppCompatActivity() {
                 binding.rvViewChildren.adapter = childAdapter
                 binding.rvViewChildren.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
             }
-        }*/
+        }
     }
 }

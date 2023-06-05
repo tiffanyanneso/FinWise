@@ -33,7 +33,9 @@ class NotificationEarningFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lastLogin = arguments?.getSerializable("lastLogin") as Date
+        if (arguments?.containsKey("lastLogin")!!)
+            lastLogin = arguments?.getSerializable("lastLogin") as Date
+
         CoroutineScope(Dispatchers.Main).launch {
             getPendingEarning()
         }

@@ -21,10 +21,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import ph.edu.dlsu.finwise.MainActivity
-import ph.edu.dlsu.finwise.Navbar
-import ph.edu.dlsu.finwise.NavbarParent
-import ph.edu.dlsu.finwise.R
+import ph.edu.dlsu.finwise.*
 import ph.edu.dlsu.finwise.adapter.EarningReviewNotifAdapter
 import ph.edu.dlsu.finwise.adapter.GoalToReviewNotificationAdapter
 import ph.edu.dlsu.finwise.adapter.ParentChildrenAdapter
@@ -62,6 +59,7 @@ class ParentDashboardActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         binding = ActivityParentDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        dialog = Dialog(this)
 
         binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
             when (menuItem.itemId) {
@@ -122,7 +120,7 @@ class ParentDashboardActivity : AppCompatActivity(){
         }
 
         supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_first_dashboard)
+        NavbarParentFirst(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_first_dashboard)
     }
 
     private suspend fun checkNotification() {

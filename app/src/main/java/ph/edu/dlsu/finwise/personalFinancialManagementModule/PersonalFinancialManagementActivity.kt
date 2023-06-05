@@ -77,6 +77,20 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
 
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId) {
+                R.id.btn_notification -> {
+                    var notificationList = Intent (this, ChildNotificationSummary::class.java)
+                    var bundle = Bundle()
+                    bundle.putString("view", "goal")
+                    notificationList.putExtras(bundle)
+                    startActivity(notificationList)
+                    true
+                }
+                else -> false
+            }
+        }
+
         checkNotifications()
         initializeFragments()
         //setUpBreakdownTabs()

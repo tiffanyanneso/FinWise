@@ -19,6 +19,7 @@ import ph.edu.dlsu.finwise.financialAssessmentModule.fragment.AssessmentLeaderbo
 import ph.edu.dlsu.finwise.financialAssessmentModule.fragment.AssessmentPerformanceFragment
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentPendingForReviewActivity
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.ChildNotificationSummary
 
 class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
 
@@ -45,7 +46,12 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
         binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
             when (menuItem.itemId) {
                 R.id.btn_notification -> {
-                    var notificationList = Intent (this, ParentPendingForReviewActivity::class.java)
+                    var notificationList = Intent()
+                    if (userType == "Parent")
+                        notificationList = Intent (this, ParentPendingForReviewActivity::class.java)
+                    else if (userType == "Child")
+                        notificationList = Intent (this, ChildNotificationSummary::class.java)
+
                     var bundle = Bundle()
                     bundle.putString("view", "goal")
                     notificationList.putExtras(bundle)

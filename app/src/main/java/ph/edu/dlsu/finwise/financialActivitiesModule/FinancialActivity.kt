@@ -30,6 +30,8 @@ import ph.edu.dlsu.finwise.databinding.DialogNearingDeadlineBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.*
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentPendingForReviewActivity
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.ChildNotificationSummary
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -89,6 +91,20 @@ class FinancialActivity : AppCompatActivity() {
         // and initializes the navbar
         supportActionBar?.hide()
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId) {
+                R.id.btn_notification -> {
+                    var notificationList = Intent (this, ChildNotificationSummary::class.java)
+                    var bundle = Bundle()
+                    bundle.putString("view", "goal")
+                    notificationList.putExtras(bundle)
+                    startActivity(notificationList)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun sendNotif() {
