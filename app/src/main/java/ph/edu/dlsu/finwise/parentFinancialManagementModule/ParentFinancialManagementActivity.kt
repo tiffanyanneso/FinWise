@@ -26,6 +26,7 @@ import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentPendingForReviewActivity
 import ph.edu.dlsu.finwise.parentFinancialManagementModule.pFMFragments.ExplanationParentFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.CashMayaBalanceBreakdownActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
@@ -64,18 +65,19 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         initializeParentNavbar()
         loadBalance()
 
-//        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
-//            when (menuItem.itemId) {
-//                R.id.btn_logout -> {
-//                    FirebaseAuth.getInstance().signOut()
-//                    val intent = Intent (this, MainActivity::class.java)
-//                    startActivity (intent)
-//                    finish()
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId) {
+                R.id.btn_notification -> {
+                    var notificationList = Intent (this, ParentPendingForReviewActivity::class.java)
+                    var bundle = Bundle()
+                    bundle.putString("view", "goal")
+                    notificationList.putExtras(bundle)
+                    startActivity(notificationList)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun initializeChildID() {

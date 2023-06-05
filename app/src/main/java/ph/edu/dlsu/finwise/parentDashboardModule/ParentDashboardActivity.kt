@@ -63,6 +63,14 @@ class ParentDashboardActivity : AppCompatActivity(){
 
         binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
             when (menuItem.itemId) {
+                R.id.btn_notification -> {
+                    var notificationList = Intent (this, ParentPendingForReviewActivity::class.java)
+                    var bundle = Bundle()
+                    bundle.putString("view", "goal")
+                    notificationList.putExtras(bundle)
+                    startActivity(notificationList)
+                    true
+                }
                 R.id.btn_logout -> {
                     FirebaseAuth.getInstance().signOut()
                     val intent = Intent (this, MainActivity::class.java)
@@ -110,7 +118,7 @@ class ParentDashboardActivity : AppCompatActivity(){
         }
 
         supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+        Navbar(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_first_dashboard)
     }
 
     private suspend fun checkNotification() {

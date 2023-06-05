@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.financialAssessmentModule
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -17,6 +18,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentLandingPageBin
 import ph.edu.dlsu.finwise.financialAssessmentModule.fragment.AssessmentLeaderboardFragment
 import ph.edu.dlsu.finwise.financialAssessmentModule.fragment.AssessmentPerformanceFragment
 import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentPendingForReviewActivity
 
 class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
 
@@ -33,14 +35,26 @@ class FinancialAssessmentLandingPageActivity : AppCompatActivity() {
         R.drawable.baseline_leaderboard_24
     )
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialAssessmentLandingPageBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         checkUser()
+
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId) {
+                R.id.btn_notification -> {
+                    var notificationList = Intent (this, ParentPendingForReviewActivity::class.java)
+                    var bundle = Bundle()
+                    bundle.putString("view", "goal")
+                    notificationList.putExtras(bundle)
+                    startActivity(notificationList)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun setBundle() {

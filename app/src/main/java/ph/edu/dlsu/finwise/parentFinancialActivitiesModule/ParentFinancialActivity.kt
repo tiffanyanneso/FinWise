@@ -61,18 +61,19 @@ class ParentFinancialActivity : AppCompatActivity() {
         sendBundle.putString("childID", childID)
 
 
-//        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
-//            when (menuItem.itemId) {
-//                R.id.btn_logout -> {
-//                    FirebaseAuth.getInstance().signOut()
-//                    val intent = Intent (this, MainActivity::class.java)
-//                    startActivity (intent)
-//                    finish()
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
+        binding.topAppBar.setOnMenuItemClickListener{ menuItem ->
+            when (menuItem.itemId) {
+                R.id.btn_notification -> {
+                    var notificationList = Intent (this, ParentPendingForReviewActivity::class.java)
+                    var bundle = Bundle()
+                    bundle.putString("view", "goal")
+                    notificationList.putExtras(bundle)
+                    startActivity(notificationList)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun initializeParentNavbar() {
