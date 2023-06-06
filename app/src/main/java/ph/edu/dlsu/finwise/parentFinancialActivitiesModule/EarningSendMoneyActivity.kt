@@ -2,6 +2,10 @@ package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +20,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.paymaya.sdk.android.common.LogLevel
 import com.paymaya.sdk.android.common.PayMayaEnvironment
 import com.paymaya.sdk.android.common.exceptions.BadRequestException
@@ -35,6 +40,7 @@ import ph.edu.dlsu.finwise.model.EarningActivityModel
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
+import java.io.File
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -85,6 +91,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
         // Initializes the navbar
 
         loadEarningActivityText()
+        loadProofImage()
         loadSendMoneyButton()
         loadEditAmountButton()
     }
@@ -103,6 +110,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             binding.tvPaymentType.text = earning.paymentType
             paymentType = earning.paymentType!!
             source = earning.depositTo!!
+            childID = earning.childID!!
 
             if (earning.depositTo == "Financial Goal") {
                 savingActivityID = earning.savingActivityID!!
@@ -116,6 +124,48 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             } else
                 binding.layoutGoalName.visibility = View.GONE
 
+            if (earning.status == "Completed") {
+                binding.layoutText.visibility = View.GONE
+                binding.layoutButtons.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun loadProofImage() {
+        var storageReference = Firebase.storage.reference.child("images/$earningActivityID")
+        val file = File.createTempFile("tempImage", "jpg")
+        storageReference.getFile(file).addOnSuccessListener {
+
+            val exifInterface = ExifInterface(file.absolutePath)
+            val orientation = exifInterface.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_UNDEFINED
+            )
+
+            val rotationAngle = when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> 90
+                ExifInterface.ORIENTATION_ROTATE_180 -> 180
+                ExifInterface.ORIENTATION_ROTATE_270 -> 270
+                else -> 0
+            }
+
+            val originalBitmap = BitmapFactory.decodeFile(file.absolutePath)
+
+            val matrix = Matrix()
+            matrix.postRotate(rotationAngle.toFloat())
+
+            val rotatedBitmap = Bitmap.createBitmap(
+                originalBitmap,
+                0,
+                0,
+                originalBitmap.width,
+                originalBitmap.height,
+                matrix,
+                true
+            )
+            binding.imageProof.setImageBitmap(rotatedBitmap)
+            binding.layoutLoading.visibility = View.GONE
+            binding.layoutMain.visibility = View.VISIBLE
         }
     }
 
@@ -339,7 +389,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
                 bottomNavigationViewParent.visibility = View.GONE
                 Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
                 binding.btnSendMoney.visibility = View.GONE
-                binding.linearLayout2.visibility = View.GONE
+                binding.layoutText.visibility = View.GONE
                 binding.btnEditAmount.visibility = View.GONE
             } else if (user.userType == "Parent") {
                 bottomNavigationViewChild.visibility = View.GONE

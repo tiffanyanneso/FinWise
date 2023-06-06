@@ -1,6 +1,8 @@
 package ph.edu.dlsu.finwise.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,7 @@ import ph.edu.dlsu.finwise.databinding.ItemEarningCompletedBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningSendMoneyActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
@@ -57,6 +60,8 @@ class EarningCompletedAdapter : RecyclerView.Adapter<EarningCompletedAdapter.Ear
         fun bindItem(earningID: String){
             firestore.collection("EarningActivities").document(earningID).get().addOnSuccessListener {
                 var earning = it.toObject<EarningActivityModel>()
+                itemBinding.tvEarningId.text = it.id
+                itemBinding.tvChildId.text = earning?.childID
                 itemBinding.tvActivity.text = earning?.activityName
                 itemBinding.tvAmount.text = "₱ " + DecimalFormat("#,##0.00").format(earning?.amount)
                 itemBinding.tvDuration.text = earning?.requiredTime.toString() + " minutes"
@@ -76,7 +81,13 @@ class EarningCompletedAdapter : RecyclerView.Adapter<EarningCompletedAdapter.Ear
         }
 
         override fun onClick(p0: View?) {
-
+            val confirm = Intent (context, EarningSendMoneyActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("earningActivityID", itemBinding.tvEarningId.text.toString())
+            bundle.putString("childID", itemBinding.tvChildId.text.toString())
+            confirm.putExtras(bundle)
+            confirm.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            context.startActivity(confirm)
         }
     }
 }

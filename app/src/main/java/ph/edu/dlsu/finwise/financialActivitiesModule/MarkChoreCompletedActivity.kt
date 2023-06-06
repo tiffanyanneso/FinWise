@@ -1,15 +1,20 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule
 
+import android.app.ProgressDialog
 import android.content.Intent
+import android.media.Image
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
@@ -17,6 +22,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityMarkChoreCompletedBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
+import java.net.URI
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 
@@ -30,6 +36,8 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
     private lateinit var childID:String
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+
+    lateinit var ImageUri:Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +53,40 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
         getDetails()
 
         binding.btnCompleted.setOnClickListener {
+            selectImage()
+        }
+
+        binding.btnUpload.setOnClickListener {
+            uploadImage()
+        }
+    }
+
+    private fun selectImage() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(intent, 100)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode ==  100 && resultCode ==  RESULT_OK) {
+            ImageUri = data?.data!!
+            binding.imageProof.setImageURI(ImageUri)
+            binding.layoutButton.visibility = View.GONE
+            binding.layoutTwoButtons.visibility = View.VISIBLE
+        }
+    }
+
+    private fun uploadImage() {
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Uploading file...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+
+        var storageReference = Firebase.storage.getReference("images/$earningActivityID")
+        storageReference.putFile(ImageUri).addOnSuccessListener {
+            binding.imageProof.setImageURI(null)
             val completedEarning = Intent(this, CompletedEarningActivity::class.java)
             firestore.collection("EarningActivities").document(earningActivityID).update("dateCompleted", Timestamp.now())
             val bundle = Bundle()
@@ -52,8 +94,15 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
             bundle.putString("childID", childID)
             completedEarning.putExtras(bundle)
             startActivity(completedEarning)
+
+            if (progressDialog.isShowing) progressDialog.dismiss()
+        }.addOnFailureListener{
+            if (progressDialog.isShowing) progressDialog.dismiss()
+            Toast.makeText(this, "Upload Failed", Toast.LENGTH_SHORT).show()
         }
     }
+
+
 
     private fun getDetails() {
         firestore.collection("EarningActivities").document(earningActivityID).get().addOnSuccessListener {
@@ -106,7 +155,7 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
             } else if (it.toObject<Users>()!!.userType == "Child") {
                 bottomNavigationViewChild.visibility = View.VISIBLE
                 bottomNavigationViewParent.visibility = View.GONE
-                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
             }
         }
     }
