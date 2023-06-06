@@ -1,20 +1,27 @@
 package ph.edu.dlsu.finwise.parentFinancialActivitiesModule
 
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.auth.User
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityOverdueChoreBinding
 import ph.edu.dlsu.finwise.databinding.DialogConfirmDeleteEarningBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.CompletedEarningActivity
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
@@ -32,6 +39,9 @@ class OverdueChoreActivity : AppCompatActivity() {
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
+    lateinit var ImageUri: Uri
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOverdueChoreBinding.inflate(layoutInflater)
@@ -42,6 +52,7 @@ class OverdueChoreActivity : AppCompatActivity() {
         earningActivityID = bundle.getString("earningActivityID").toString()
         childID = bundle.getString("childID").toString()
 
+        checkUser()
         getDetails()
 
         binding.btnEdit.setOnClickListener {
@@ -55,6 +66,55 @@ class OverdueChoreActivity : AppCompatActivity() {
 
         binding.btnDelete.setOnClickListener {
             confirmDeleteDialog()
+        }
+
+        binding.btnCompleted.setOnClickListener {
+            selectImage()
+        }
+
+        binding.btnUpload.setOnClickListener {
+            uploadImage()
+        }
+    }
+
+    private fun selectImage() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(intent, 100)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode ==  100 && resultCode ==  RESULT_OK) {
+            ImageUri = data?.data!!
+            binding.imageProof.setImageURI(ImageUri)
+            binding.layoutButton.visibility = View.GONE
+            binding.layoutTwoButtons.visibility = View.VISIBLE
+        }
+    }
+
+    private fun uploadImage() {
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Uploading file...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+
+        var storageReference = Firebase.storage.getReference("images/$earningActivityID")
+        storageReference.putFile(ImageUri).addOnSuccessListener {
+            binding.imageProof.setImageURI(null)
+            val completedEarning = Intent(this, CompletedEarningActivity::class.java)
+            firestore.collection("EarningActivities").document(earningActivityID).update("dateCompleted", Timestamp.now())
+            val bundle = Bundle()
+            bundle.putString("earningActivityID", earningActivityID)
+            bundle.putString("childID", childID)
+            completedEarning.putExtras(bundle)
+            startActivity(completedEarning)
+
+            if (progressDialog.isShowing) progressDialog.dismiss()
+        }.addOnFailureListener{
+            if (progressDialog.isShowing) progressDialog.dismiss()
+            Toast.makeText(this, "Upload Failed", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -131,6 +191,19 @@ class OverdueChoreActivity : AppCompatActivity() {
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             onBackPressed()
+        }
+    }
+
+    private fun checkUser() {
+        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+            var userType = it.toObject<Users>()?.userType
+            if (userType == "Child") {
+                binding.layoutChild.visibility = View.VISIBLE
+                binding.layoutParentButtons.visibility = View.GONE
+            } else if (userType == "Parent") {
+                binding.layoutChild.visibility = View.GONE
+                binding.layoutParentButtons.visibility = View.VISIBLE
+            }
         }
     }
 }
