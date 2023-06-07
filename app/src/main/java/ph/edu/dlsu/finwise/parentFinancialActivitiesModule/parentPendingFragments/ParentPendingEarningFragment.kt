@@ -16,6 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.adapter.ParentPendingEarningAdapter
+import ph.edu.dlsu.finwise.databinding.FragmentFinactBudgetingBinding
 import ph.edu.dlsu.finwise.databinding.FragmentParentPendingEarningBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
 import ph.edu.dlsu.finwise.model.Users
@@ -27,18 +28,27 @@ class ParentPendingEarningFragment: Fragment() {
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
     private var childIDArrayList = ArrayList<String>()
+    private var earningActivitiesArrayList = ArrayList<String>()
+
+    private lateinit var earningReviewAdapter: ParentPendingEarningAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var bundle = arguments
+        childIDArrayList.clear()
+        earningActivitiesArrayList.clear()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.Main).launch {
+            earningActivitiesArrayList.clear()
             loadChildren()
             getPendingEarning()
         }
     }
 
     private suspend fun getPendingEarning() {
-        var earningActivitiesArrayList = ArrayList<String>()
         var lastLogin = firestore.collection("Users").document(currentUser).get().await().toObject<Users>()!!.lastLogin!!.toDate()
         for (childID in childIDArrayList) {
             var earnings = firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("status", "Pending").get().await()
@@ -50,7 +60,8 @@ class ParentPendingEarningFragment: Fragment() {
         }
 
         if (!earningActivitiesArrayList.isEmpty()) {
-            var earningReviewAdapter = ParentPendingEarningAdapter(requireActivity().applicationContext, earningActivitiesArrayList)
+            binding.rvEarning.adapter = null
+            earningReviewAdapter = ParentPendingEarningAdapter(requireActivity().applicationContext, earningActivitiesArrayList)
             binding.rvEarning.adapter = earningReviewAdapter
             binding.rvEarning.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
             earningReviewAdapter.notifyDataSetChanged()

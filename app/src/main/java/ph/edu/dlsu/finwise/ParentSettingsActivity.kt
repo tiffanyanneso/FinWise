@@ -17,6 +17,7 @@ import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.databinding.ActivityMainBinding
 import ph.edu.dlsu.finwise.databinding.ActivityParentSettingsBinding
 import ph.edu.dlsu.finwise.model.SettingsModel
+import java.text.DecimalFormat
 
 class ParentSettingsActivity : AppCompatActivity() {
 
@@ -40,13 +41,8 @@ class ParentSettingsActivity : AppCompatActivity() {
         loadBackButton()
         cancel()
 
-        //Initializes the navbar
-        //sends the ChildID to the parent navbar
-        val bundle = intent.extras!!
-        val childID = bundle.getString("childID").toString()
-        val bundleNavBar = Bundle()
-        bundleNavBar.putString("childID", childID)
-        NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_profile, bundleNavBar)
+        bundle = intent.extras!!
+        NavbarParentFirst(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_first_profile)
 
         CoroutineScope(Dispatchers.Main).launch {
             loadSettings()
@@ -79,8 +75,8 @@ class ParentSettingsActivity : AppCompatActivity() {
         if (!settingsSnapshot.isEmpty) {
             settingsID = settingsSnapshot.documents[0].id
             var settings = settingsSnapshot.documents[0].toObject<SettingsModel>()
-            binding.etMaxAmount.setText(settings?.maxAmountActivities.toString())
-            binding.etAlertAmount.setText(settings?.alertAmount.toString())
+            binding.etMaxAmount.setText(DecimalFormat("###0").format(settings?.maxAmountActivities))
+            binding.etAlertAmount.setText(DecimalFormat("###0").format(settings?.alertAmount))
             binding.checkBuyingItems.isChecked = settings?.buyingItem!!
             binding.checkPlanningEvent.isChecked = settings?.planingEvent!!
             binding.checkEmergency.isChecked = settings?.emergencyFund!!

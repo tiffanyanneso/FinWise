@@ -100,7 +100,11 @@ class ParentDashboardFragment : Fragment() {
             val difference = Period.between(to, from)
 
             age = difference.years
-            getPersonalFinancePerformance()
+            CoroutineScope(Dispatchers.Main).launch {
+                getPersonalFinancePerformance()
+                getFinancialActivitiesPerformance()
+                getFinancialAssessmentScore()
+            }
         }
     }
 
@@ -115,7 +119,8 @@ class ParentDashboardFragment : Fragment() {
                 if (transactionObject.transactionType == "Income")
                     income += transactionObject.amount!!
                 else if (transactionObject.transactionType == "Expense")
-                    expense += transactionObject.amount!!}
+                    expense += transactionObject.amount!!
+            }
         }.continueWith {
             var personalFinancePerformancePercent = income/expense * 100
             if (personalFinancePerformancePercent > 200)
@@ -124,12 +129,11 @@ class ParentDashboardFragment : Fragment() {
 
             binding.progressBarPersonalFinance.progress = personalFinancePerformance.toInt()
             binding.tvPersonalFinancePercentage.text = DecimalFormat("##0.0").format(personalFinancePerformance) + "%"
-            getFinancialActivitiesPerformance()
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getFinancialActivitiesPerformance() {
+    private suspend fun getFinancialActivitiesPerformance() {
         CoroutineScope(Dispatchers.Main).launch {
             if (age == 10 || age == 11)
                 getGoalSettingPerformance()
@@ -407,9 +411,9 @@ class ParentDashboardFragment : Fragment() {
                 financialAssessmentPerformance = (nCorrect.toFloat() / nQuestions.toFloat()) * 100
                 binding.progressBarFinancialAssessments.progress = financialAssessmentPerformance.toInt()
                 binding.tvFinancialAssessmentsPercentage.text = DecimalFormat("##0.00").format(financialAssessmentPerformance) + "%"
-                getOverallFinancialHealth()
-            } else
-                getOverallFinancialHealth()
+            }
+        }.continueWith {
+            getOverallFinancialHealth()
         }
     }
 
@@ -510,6 +514,13 @@ class ParentDashboardFragment : Fragment() {
 
             }
         }
+        println("print personal finance" +  personalFinancePerformance)
+        println("print finact goal setting " + goalSettingPercentage)
+        println("print finact saving"  + savingPercentage)
+        println("print finact budgeting " + budgetingPercentage)
+        println("print finact spending " + spendingPercentage)
+        println("print fin assessments" + financialAssessmentPerformance)
+        binding.tvFinancialHealthScore.text = DecimalFormat("##0.0").format(overallFinancialHealth) + "%"
     }
 
 }

@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.adapter.ParentPendingEarningAdapter
 import ph.edu.dlsu.finwise.adapter.TransactionNotifAdapter
+import ph.edu.dlsu.finwise.databinding.FragmentFinactBudgetingBinding
 import ph.edu.dlsu.finwise.databinding.FragmentParentPendingEarningBinding
 import ph.edu.dlsu.finwise.databinding.FragmentParentTransactionBinding
 import ph.edu.dlsu.finwise.databinding.FragmentParentTransactionReviewBinding
@@ -29,18 +30,26 @@ class ParentTransactionReviewFragment: Fragment() {
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
     private var childIDArrayList = ArrayList<String>()
+    private var transactionArrayList = ArrayList<String>()
+
+    private lateinit var transactionsAdapter:TransactionNotifAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var bundle = arguments
-        CoroutineScope(Dispatchers.Main).launch {
-            loadChildren()
-            getPendingEarning()
-        }
+        childIDArrayList.clear()
+        transactionArrayList.clear()
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        CoroutineScope(Dispatchers.Main).launch {
+            transactionArrayList.clear()
+            loadChildren()
+            getPendingEarning()
+        }}
+
     private suspend fun getPendingEarning() {
-        var transactionArrayList = ArrayList<String>()
         for (childID in childIDArrayList) {
             var transactions = firestore.collection("OverTransactions").whereEqualTo("childID", childID).get().await()
             if (!transactions.isEmpty) {
@@ -52,7 +61,7 @@ class ParentTransactionReviewFragment: Fragment() {
         }
 
         if (!transactionArrayList.isEmpty()) {
-            var transactionsAdapter = TransactionNotifAdapter(requireActivity().applicationContext, transactionArrayList)
+            transactionsAdapter = TransactionNotifAdapter(requireActivity().applicationContext, transactionArrayList)
             binding.rvTransactions.adapter = transactionsAdapter
             binding.rvTransactions.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
             transactionsAdapter.notifyDataSetChanged()

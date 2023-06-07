@@ -141,7 +141,7 @@ class ReviewGoalActivity : AppCompatActivity() {
                 status = "In Progress"
 
             var activityStatus = "In Progress"
-            if (status == "For Editing" || status == "Disapproved")
+
             if (status == "For Editing" || status == "Disapproved")
                 activityStatus = "Locked"
 
@@ -150,7 +150,8 @@ class ReviewGoalActivity : AppCompatActivity() {
             firestore.collection("FinancialGoals").document(financialGoalID).update("status", status, "lastUpdated", Timestamp.now()).addOnSuccessListener {
                 firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", financialGoalID).whereEqualTo("financialActivityName", "Saving").get().addOnSuccessListener { result ->
                     var finactID = result.documents[0].id
-                    firestore.collection("FinancialActivities").document(finactID).update("status", activityStatus, "dateStarted", Timestamp.now())
+                    if (status == "Approved")
+                        firestore.collection("FinancialActivities").document(finactID).update("status", activityStatus, "dateStarted", Timestamp.now())
                 }
                 Toast.makeText(this, "Rating saved", Toast.LENGTH_SHORT).show()
                 var viewGoal = Intent(this, ParentFinancialActivity::class.java)
