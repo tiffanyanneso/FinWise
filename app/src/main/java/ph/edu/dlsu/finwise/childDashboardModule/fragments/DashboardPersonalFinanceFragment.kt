@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -48,7 +49,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
     //private lateinit var days: List<Date>
     private var weeks: Map<Int, List<Date>>? = null
     private var months: Map<Int, List<Date>>? = null
-    private var selectedDatesSort = "monthly"
+    private var selectedDatesSort = "current"
     private lateinit var chart: LineChart
     var graphData = mutableListOf<Entry>()
 
@@ -63,6 +64,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDashboardPersonalFinanceBinding.bind(view)
+        binding.layoutLoading.visibility = View.VISIBLE
+        binding.layoutMain.visibility = View.GONE
         getArgumentsBundle()
         initializeBalanceLineGraph()
         //getPersonalFinancePerformance()
@@ -115,20 +118,32 @@ class DashboardPersonalFinanceFragment : Fragment() {
     }
 
     private fun  setData(): MutableList<Entry> {
+        val month: Int
+        if (selectedDatesSort == "current") {
+            /*val group = groupDates(sortedDate, "month")
+            iterateDatesByQuarter(group)*/
+            month = getCurrentMonth()
+            binding.tvBalanceTitle.text = "This Month's Personal Financial Score Trend"
+        } else {
+            month = getMonthIndex(selectedDatesSort)
+            /*val group = groupDates(sortedDate, "month")
+            iterateDatesByQuarter(group)*/
+            binding.tvBalanceTitle.text = "Personal Financial Score Trend of $selectedDatesSort"
+        }
+        weeks = getWeeksOfMonth(sortedDate, month)
+        graphData = getDataOfWeeksOfCurrentMonth(weeks!!)
 
-        when (selectedDatesSort) {
-            /*"weekly" -> {
+        /*when (selectedDatesSort) {
+            *//*"weekly" -> {
                 selectedDates = getDaysOfWeek(sortedDate)
                 graphData = addWeeklyData(selectedDates)
                 binding.tvBalanceTitle.text = "This Week's Personal Financial Score Trend"
-            }*/
-            "monthly" -> {
+            }*//*
+            "current" -> {
                 weeks = getWeeksOfCurrentMonth(sortedDate)
-                Log.d("agustus", "weeks: "+weeks)
                 graphData = getDataOfWeeksOfCurrentMonth(weeks!!)
-
-                /*val group = groupDates(sortedDate, "month")
-                iterateDatesByQuarter(group)*/
+                *//*val group = groupDates(sortedDate, "month")
+                iterateDatesByQuarter(group)*//*
                 binding.tvBalanceTitle.text = "This Month's Personal Financial Score Trend"
             }
             "quarterly" -> {
@@ -137,11 +152,25 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 Log.d("zaza", "QUARTER: "+graphData)
                 binding.tvBalanceTitle.text = "This Quarter's Personal Financial Score Trend"
             }
-        }
+        }*/
         return graphData
     }
 
-    private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
+    private fun getMonthIndex(selectedMonth: String): Int {
+        val months = arrayOf(
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        )
+        val monthIndex = months.indexOf(selectedMonth)
+        return if (monthIndex != -1) monthIndex + 1 else -1
+    }
+
+    private fun getCurrentMonth(): Int {
+        val calendar = Calendar.getInstance()
+        return calendar.get(Calendar.MONTH)
+    }
+
+  /*  private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
         // Get the current quarter
         val currentQuarter = (Calendar.getInstance().get(Calendar.MONTH) / 3) + 1
 
@@ -208,20 +237,19 @@ class DashboardPersonalFinanceFragment : Fragment() {
         val totalPersonalFinancePerformance = calculatePersonalFinancePerformance(totalIncome, totalExpense)
         setTotals(totalPersonalFinancePerformance)
         return data
-    }
+    }*/
 
 
-    private fun getWeeksOfCurrentMonth(dates: List<Date>): Map<Int, List<Date>> {
+    private fun getWeeksOfMonth(dates: List<Date>, month: Int): Map<Int, List<Date>> {
         val calendar = Calendar.getInstance()
 
-        // Get the current month and year
-        val currentMonth = calendar.get(Calendar.MONTH)
+        // Get the current year
         val currentYear = calendar.get(Calendar.YEAR)
 
-        // Filter the dates that belong to the current month and year
+        // Filter the dates that belong to the specified month and current year
         val filteredDates = dates.filter { date ->
             calendar.time = date
-            calendar.get(Calendar.MONTH) == currentMonth &&
+            calendar.get(Calendar.MONTH) == month &&
                     calendar.get(Calendar.YEAR) == currentYear
         }
 
@@ -299,6 +327,9 @@ class DashboardPersonalFinanceFragment : Fragment() {
         val performance: String
         val bitmap: Bitmap
 
+        val context = requireContext()
+        val resources = context.resources
+
         //TODO: Change audio
         var audio = 0
 
@@ -309,7 +340,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 R.raw.dashboard_pfm_excellent
 
             performance = "Excellent!"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.dark_green))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.dark_green))
             message = if (userType == "Parent")
                 "Your child is excellent at personal finance! They make exceptional financial decisions."
             else  "You are excellent at personal finance! Keep making exceptional financial decisions."
@@ -321,7 +353,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 R.raw.dashboard_pfm_amazing
 
             performance = "Amazing!"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.amazing_green))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.amazing_green))
             message = if (userType == "Parent")
                 "Your child's dedication to managing money is paying off. Continue to encourage them to make financial decisions!"
             else  "Your dedication to managing money is paying off. Continue to make amazing financial decisions!"
@@ -333,7 +366,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 R.raw.dashboard_pfm_great
 
             performance = "Great!"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.green))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.green))
             message = if (userType == "Parent")
                 "Your child is making wise choices with their money. Keep encouraging them to seek opportunities to grow their savings!"
             else  "You're making wise choices with your money, and it shows. Keep seeking opportunities to grow your savings!"
@@ -344,7 +378,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
             else
                 R.raw.dashboard_pfm_good
 
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.light_green))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.light_green))
             performance = "Good!"
             message = if (userType == "Parent")
                 "Your child has a good grasp of managing their income and expenses. Encourage them to keep it up!"
@@ -357,7 +392,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 R.raw.dashboard_pfm_average
 
             performance = "Average"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.yellow))
             message = if (userType == "Parent")
                 "Your child's financial skills are improving, and they're becoming more confident in managing their money!"
             else  "Your financial skills are improving, and you're becoming more confident in managing your money!"
@@ -369,7 +405,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 R.raw.dashboard_parent_pfm_nearly_there
 
             performance = "Nearly\nThere"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.nearly_there_yellow))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.nearly_there_yellow))
             message = if (userType == "Parent")
                 "Your child is making balanced choices with their money. Encourage them to practice their financial decision making!"
             else  "You're making balanced choices with your money. Continue practicing your financial decision making!"
@@ -380,7 +417,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
             else
                 R.raw.dashboard_pfm_almost_there
             performance = "Almost\nThere"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.almost_there_yellow))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.almost_there_yellow))
             message = if (userType == "Parent")
                 "Your child is becoming more mindful of their money choices. Encourage them to keep making smart decisions!"
             else  "You're becoming more mindful of your money choices. Keep making smart decisions to improve!"
@@ -392,7 +430,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 R.raw.dashboard_pfm_getting_there
 
             performance = "Getting\nThere"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.getting_there_orange))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.getting_there_orange))
             message = if (userType == "Parent")
                 "They're getting the hang of managing their income and expenses. Encourage them to explore different ways to save and budget their money!"
             else  "You're getting the hang of managing your income and expenses. Explore different ways to save and budget your money!"
@@ -404,7 +443,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 R.raw.dashboard_pfm_not_quite
 
             performance = "Not Quite\nThere"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.not_quite_there_red))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.not_quite_there_red))
             message = if (userType == "Parent")
                 "They're making progress in understanding how money works. Remind them to track their expenses and save money for their future!"
             else  "You're making progress in understanding how money works. Remember to track your expenses and save money for the future!"
@@ -416,7 +456,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 R.raw.dashboard_pfm_needs_improvement
 
             performance = "Needs\nImprovement"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.red))
             message = if (userType == "Parent")
                 "Don't worry, your child is still developing financially. Encourage them to save money and track their spending!"
             else "Everyone starts from somewhere! Remember to manage your expenses and save consistently!"
@@ -429,7 +470,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 R.raw.dashboard_pfm_default
 
             performance = "Get\nStarted!"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.black))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.black))
             var date = "month"
             if (selectedDatesSort == "quarterly")
                 date = "quarter"
