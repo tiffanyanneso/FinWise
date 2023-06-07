@@ -7,9 +7,11 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -96,20 +98,20 @@ class ChildDashboardActivity : AppCompatActivity(){
 
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_dashboard)
         getPerformance()
-        initializeFragments()
-        initializeDateButtons()
+        initializeDateSelectionSpinner()
+    //initializeDateButtons()
     }
 
     private fun loadView() {
         binding.layoutLoading.visibility = View.GONE
-        binding.layoutMain.visibility = View.VISIBLE
+        binding.llOverallFinancialHealth.visibility = View.VISIBLE
         binding.bottomNav.visibility = View.VISIBLE
     }
 
     private fun initializeDateButtons() {
         //initializeWeeklyButton()
-        initializeMonthlyButton()
-        initializeQuarterlyButton()
+        //initializeMonthlyButton()
+
     }
 
 
@@ -127,32 +129,60 @@ class ChildDashboardActivity : AppCompatActivity(){
         }
     }*/
 
-    private fun initializeMonthlyButton() {
+    /*private fun initializeMonthlyButton() {
         //val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
-        val yearlyButton = binding.btnQuarterly
         monthlyButton.setOnClickListener {
             //weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
-            yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
+            *//*yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             bundle.putString("date", "monthly")
-            initializeFragments()
+            initializeFragments()*//*
             //setUpBreakdownTabs()
         }
-    }
+    }*/
 
-    private fun initializeQuarterlyButton() {
-        //val weeklyButton = binding.btnWeekly
+    private fun initializeDateSelectionSpinner() {
+        val calendar = Calendar.getInstance()
+        val currentMonth = calendar.get(Calendar.MONTH)
+
+        val months = arrayOf(
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        )
+
+        val filteredMonths = months.sliceArray(0..currentMonth)
+
+        val spinner = binding.monthSpinner
+        spinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, filteredMonths)
+        spinner.setSelection(currentMonth)
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedMonth = months[position]
+                // Do something with the selected month
+                bundle.putString("date", selectedMonth)
+                initializeFragments()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Handle case when no month is selected
+                bundle.putString("date", "current")
+                initializeFragments()
+            }
+        }
+
+
+        /*val weeklyButton = binding.btnWeekly
         val monthlyButton = binding.btnMonthly
-        val quarterlyButton = binding.btnQuarterly
-        quarterlyButton.setOnClickListener {
+        .setOnClickListener {
             //weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             quarterlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
             bundle.putString("date", "quarterly")
             initializeFragments()
             //setUpBreakdownTabs()
-        }
+        }*/
     }
 
     private fun initializeFragments() {
@@ -586,7 +616,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 R.raw.child_dashboard_excellent
 
             performance = "Excellent!"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.dark_green))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.dark_green))
             message = if (userType == "Parent")
                 "Your child is a financial guru! Celebrate their accomplishments and encourage them to keep it up!"
             else "You've demonstrated exceptional knowledge and skills in personal finance, financial activities, and financial assessments!"
@@ -598,7 +628,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 R.raw.child_dashboard_amazing
 
             performance = "Amazing!"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.amazing_green))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.amazing_green))
             message = if (userType == "Parent")
                 "Your child has a solid foundation in personal finance, financial activities, and concepts. Keep empowering them!"
             else " You're a true financial whiz! Keep refining your skills, exploring financial concepts, and inspiring others with your expertise!"
@@ -610,7 +640,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 R.raw.child_dashboard_great
 
             performance = "Great!"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.green))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.green))
             message = if (userType == "Parent")
                 "Your child has strong financial decision-making skills. Encourage them to keep this up!"
             else "You have a strong grasp of finance concepts and know how to properly manage your money in day to day activities. Keep it up!"
@@ -621,7 +651,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             else
                 R.raw.child_dashboard_good
 
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.light_green))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.light_green))
             performance = "Good!"
             message = if (userType == "Parent")
                 "Your child is good at real-life financial decision-making & has a good grasp of financial concepts!"
@@ -634,7 +664,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 R.raw.child_dashboard_average
 
             performance = "Average"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.yellow))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.yellow))
             message = if (userType == "Parent")
                 "Continue supporting your child in their development by having them participate in decision making activities at home!"
             else "You're becoming a confident financial decision-maker. Keep doing financial activities & assessments to grow!"
@@ -646,7 +676,8 @@ class ChildDashboardActivity : AppCompatActivity(){
                 R.raw.child_dashboard_nearly_there
 
             performance = "Nearly\nThere"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.nearly_there_yellow))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.nearly_there_yellow))
+
             message = if (userType == "Parent")
                 "Your child is nearly there. Have them participate in decision making activities at home!"
             else "You're making significant strides in your financial literacy journey. Keep making wise financial decisions!"
@@ -658,7 +689,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 R.raw.child_dashboard_almost_there
 
             performance = "Almost\nThere"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.almost_there_yellow))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.almost_there_yellow))
             message = if (userType == "Parent")
                 "Your child is developing their financial decision-making. Have them participate in decision making activities at home!"
             else "You're becoming a savvy money manager. Keep exploring financial activities and assessments to strengthen your skills!"
@@ -670,7 +701,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 R.raw.child_dashboard_getting_there
 
             performance = "Getting\nThere"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.getting_there_orange))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.getting_there_orange))
             message = if (userType == "Parent")
                 "Your child is still developing their financial decision-making. Allow them to practice this skill at home!"
             else "You're beginning to build a solid foundation in financial decision-making. Keep improving!"
@@ -682,7 +713,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 R.raw.child_dashboard_not_quite
 
             performance = "Not Quite\nThere"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.not_quite_there_red))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.not_quite_there_red))
             message = if (userType == "Parent")
                 "Your child is still developing their financial decision-making. Allow them to practice this skill at home!"
             else "You're developing your financial decision-making skills. Keep exercising financial decision making to improve!"
@@ -694,7 +725,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 R.raw.child_dashboard_needs_improvement
 
             performance = "Needs\nImprovement"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.red))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.red))
             message = if (userType == "Parent")
                 "Your child is starting their financial journey! Encourage them to keep exploring financial decision-making!"
             else "You're just getting started, and that's okay! Keep exercising your financial decision-making. Don't give up!"
@@ -707,7 +738,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 R.raw.child_dashboard_parent_default
 
             performance = "Get\nStarted!"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.black))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.black))
             message = "Start using the app and go back to this module to view your performance!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
             binding.tvPerformancePercentage.visibility = View.GONE

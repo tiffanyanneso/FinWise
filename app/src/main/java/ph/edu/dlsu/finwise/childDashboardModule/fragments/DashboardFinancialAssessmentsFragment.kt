@@ -73,7 +73,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     //private lateinit var days: List<Date>
     private var weeks: Map<Int, List<Date>>? = null
     private var months: Map<Int, List<Date>>? = null
-    private var selectedDatesSort = "monthly"
+    private var selectedDatesSort = "current"
     private lateinit var chart: LineChart
 
 
@@ -88,6 +88,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDashboardFinancialAssessmentsBinding.bind(view)
+        binding.layoutLoading.visibility = View.VISIBLE
+        binding.layoutMain.visibility = View.GONE
         binding.title.text = "Financial Assessment Performance"
         getArgumentsBundle()
         getFinancialAssessmentScore()
@@ -170,6 +172,9 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         val performance: String
         val bitmap: Bitmap
 
+        val context = requireContext()
+        val resources = context.resources
+
         //TODO: Change audio
         var audio = 0
 
@@ -180,7 +185,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 R.raw.dashboard_financial_assessments_excellent
 
             performance = "Excellent!"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.dark_green))
 
             message = if (userType == "Parent")
                 "Your child is a financial superstar in the realm of financial assessments. Encourage them to keep it up!"
@@ -193,7 +199,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 R.raw.dashboard_financial_assessments_amazing
 
             performance = "Amazing!"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.amazing_green))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.amazing_green))
 
             message = if (userType == "Parent")
                 "Your child's financial knowledge is impressive. Encourage them to apply their skills to real-life situations!"
@@ -206,7 +213,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 R.raw.dashboard_financial_assessments_great
 
             performance = "Great!"
-            binding.tvPerformanceStatus.setTextColor(resources.getColor(R.color.green))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.green))
             message = if (userType == "Parent")
                 "Your child's financial knowledge is flourishing! Encourage them to keep it up."
             else "Your financial knowledge is impressive! Keep honing it and applying it to real-life."
@@ -217,7 +225,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             else
                 R.raw.dashboard_financial_assessments_good
 
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_green))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.light_green))
             performance = "Good!"
             message = if (userType == "Parent")
                 "Your child is demonstrating a solid understanding of financial concepts. Support them in applying this in real life!"
@@ -230,7 +239,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 R.raw.dashboard_financial_assessments_average
 
             performance = "Average"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.yellow))
             message = if (userType == "Parent")
                 "Your child is building confidence in financial concepts! Encourage them to continue learning."
             else "Your understanding of financial concepts is great! Improve by deepening your knowledge and applying the concepts in real life."
@@ -242,7 +252,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 R.raw.dashboard_financial_assessments_nearly_there
 
             performance = "Nearly\nThere"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.nearly_there_yellow))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.nearly_there_yellow))
 
             message = if (userType == "Parent")
                 "Your child's grasp of financial concepts is still on the works! Encourage them to continue!"
@@ -255,7 +266,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 R.raw.dashboard_financial_assessments_almost_there
 
             performance = "Almost\nThere"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.almost_there_yellow))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.almost_there_yellow))
             message = if (userType == "Parent")
                 "Your child is growing in their understanding of saving, budgeting, spending, and setting achievable financial goals!"
             else "You're getting the hang of financial concepts! Keep it up!"
@@ -267,7 +279,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 R.raw.dashboard_financial_assessments_getting_there
 
             performance = "Getting\nThere"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.getting_there_orange))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.getting_there_orange))
             message = if (userType == "Parent")
                 "Your child is on the path to great financial knowledge. Continue to guide them in making informed financial choices!"
             else "You're gaining a better understanding of financial concepts. Keep learning and practicing to improve even more!"
@@ -279,7 +292,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 R.raw.dashboard_financial_assessments_needs_improvement_not_quite_there
 
             performance = "Not Quite\nThere"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.not_quite_there_red))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.not_quite_there_red))
             message = if (userType == "Parent")
                 "Uh oh! Help expand your child's financial knowledge by encouraging them to perform financial activities!"
             else "Keep exploring and learning about financial concepts! Don't give up!"
@@ -291,7 +305,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 R.raw.dashboard_financial_assessments_needs_improvement_not_quite_there
 
             performance = "Needs\nImprovement"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.red))
             message = if (userType == "Parent")
                 "Your child needs support developing their financial knowledge. Encourage them to continue performing financial activities!"
             else "Keep exploring and learning about financial concepts! Don't give up!"
@@ -304,7 +319,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 R.raw.dashboard_financial_assessments_default
 
             performance = "Get\nStarted!"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.black))
 
             var date = "month"
             if (selectedDatesSort == "quarterly")
@@ -510,17 +526,31 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
 
     @SuppressLint("NewApi")
     private suspend fun  setData() {
-        when (selectedDatesSort) {
-            /*"weekly" -> {
+        val month: Int
+        if (selectedDatesSort == "current") {
+            /*val group = groupDates(sortedDate, "month")
+            iterateDatesByQuarter(group)*/
+            month = getCurrentMonth()
+            binding.tvBalanceTitle.text = "This Month's Financial Assessment Score Trend"
+        } else {
+            month = getMonthIndex(selectedDatesSort)
+            /*val group = groupDates(sortedDate, "month")
+            iterateDatesByQuarter(group)*/
+            binding.tvBalanceTitle.text = "Financial Assessment Score Trend of $selectedDatesSort"
+        }
+        weeks = getWeeksOfMonth(sortedDate, month)
+        getDataOfWeeksOfCurrentMonth(weeks!!)
+        /*when (selectedDatesSort) {
+            *//*"weekly" -> {
                 selectedDates = getDaysOfWeek(sortedDate)
                 graphData = addWeeklyData(selectedDates)
                 binding.tvBalanceTitle.text = "This Week's Personal Financial Score Trend"
-            }*/
+            }*//*
             "monthly" -> {
                 weeks = getWeeksOfCurrentMonth(sortedDate)
                 getDataOfWeeksOfCurrentMonth(weeks!!)
-                /*val group = groupDates(sortedDate, "month")
-                iterateDatesByQuarter(group)*/
+                *//*val group = groupDates(sortedDate, "month")
+                iterateDatesByQuarter(group)*//*
                 binding.tvBalanceTitle.text = "This Month's Financial Assessments Score Trend"
             }
             "quarterly" -> {
@@ -528,81 +558,33 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 getDataOfMonthsOfCurrentQuarter(months!!)
                 binding.tvBalanceTitle.text = "This Quarter's Financial Assessments Score Trend"
             }
-        }
+        }*/
     }
 
-    private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
-        // Get the current quarter
-        val currentQuarter = (Calendar.getInstance().get(Calendar.MONTH) / 3) + 1
-
-        // Group the dates by month for the current quarter
-        val groupedDates = dates.groupBy { date ->
-            val calendar = Calendar.getInstance()
-            calendar.time = date
-
-            // Check if the date falls within the current quarter
-            val quarter = (calendar.get(Calendar.MONTH) / 3) + 1
-            if (quarter == currentQuarter) {
-                // Get the month of the date
-                val month = calendar.get(Calendar.MONTH) + 1
-
-                // Return the month number as the key
-                month
-            } else {
-                // If the date does not fall within the current quarter, return null
-                null
-            }
-        }
-
-        return groupedDates.filterKeys { it != null } as Map<Int, List<Date>>
+    private fun getMonthIndex(selectedMonth: String): Int {
+        val months = arrayOf(
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        )
+        val monthIndex = months.indexOf(selectedMonth)
+        return if (monthIndex != -1) monthIndex + 1 else -1
     }
 
-    @SuppressLint("NewApi")
-    private suspend fun getDataOfMonthsOfCurrentQuarter(months: Map<Int, List<Date>>) {
-        for ((month, datesInMonth) in months) {
-            //var totalAmount = 0.00F
-            for (date in datesInMonth) {
-                for (attempt in assessmentsTaken) {
-                    //Convert both dates to LocalDate so they can be compared regardless of the time
-                    val weekDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-                    val attemptDate = attempt.dateTaken?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
-                    if (attemptDate != null && weekDate == attemptDate) {
-                        if (assessmentsTaken.isNotEmpty()) {
-                            val assessmentDocument = firestore.collection("Assessments")
-                                .document(attempt.assessmentID!!).get().await()
-                            val assessmentObject =
-                                assessmentDocument.toObject<FinancialAssessmentDetails>()
-
-                            val percentage = getPercentage(attempt)
-                            when (assessmentObject?.assessmentCategory) {
-                                "Goal Setting" -> financialGoalsScores.add(percentage)
-                                "Saving" -> savingScores.add(percentage)
-                                "Budgeting" -> budgetingScores.add(percentage)
-                                "Spending" -> spendingScores.add(percentage)
-                            }
-                            financialAssessmentTotalPercentage += percentage
-                            nAttempt++
-                        }
-                    }
-                }
-            }
-            computeForPercentages()
-        }
+    private fun getCurrentMonth(): Int {
+        val calendar = Calendar.getInstance()
+        return calendar.get(Calendar.MONTH)
     }
 
-
-
-    private fun getWeeksOfCurrentMonth(dates: List<Date>): Map<Int, List<Date>> {
+    private fun getWeeksOfMonth(dates: List<Date>, month: Int): Map<Int, List<Date>> {
         val calendar = Calendar.getInstance()
 
-        // Get the current month and year
-        val currentMonth = calendar.get(Calendar.MONTH)
+        // Get the current year
         val currentYear = calendar.get(Calendar.YEAR)
 
-        // Filter the dates that belong to the current month and year
+        // Filter the dates that belong to the specified month and current year
         val filteredDates = dates.filter { date ->
             calendar.time = date
-            calendar.get(Calendar.MONTH) == currentMonth &&
+            calendar.get(Calendar.MONTH) == month &&
                     calendar.get(Calendar.YEAR) == currentYear
         }
 
@@ -612,6 +594,68 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             calendar.get(Calendar.WEEK_OF_MONTH)
         }
     }
+
+
+    /* private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
+         // Get the current quarter
+         val currentQuarter = (Calendar.getInstance().get(Calendar.MONTH) / 3) + 1
+
+         // Group the dates by month for the current quarter
+         val groupedDates = dates.groupBy { date ->
+             val calendar = Calendar.getInstance()
+             calendar.time = date
+
+             // Check if the date falls within the current quarter
+             val quarter = (calendar.get(Calendar.MONTH) / 3) + 1
+             if (quarter == currentQuarter) {
+                 // Get the month of the date
+                 val month = calendar.get(Calendar.MONTH) + 1
+
+                 // Return the month number as the key
+                 month
+             } else {
+                 // If the date does not fall within the current quarter, return null
+                 null
+             }
+         }
+
+         return groupedDates.filterKeys { it != null } as Map<Int, List<Date>>
+     }
+
+     @SuppressLint("NewApi")
+     private suspend fun getDataOfMonthsOfCurrentQuarter(months: Map<Int, List<Date>>) {
+         for ((month, datesInMonth) in months) {
+             //var totalAmount = 0.00F
+             for (date in datesInMonth) {
+                 for (attempt in assessmentsTaken) {
+                     //Convert both dates to LocalDate so they can be compared regardless of the time
+                     val weekDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+                     val attemptDate = attempt.dateTaken?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
+                     if (attemptDate != null && weekDate == attemptDate) {
+                         if (assessmentsTaken.isNotEmpty()) {
+                             val assessmentDocument = firestore.collection("Assessments")
+                                 .document(attempt.assessmentID!!).get().await()
+                             val assessmentObject =
+                                 assessmentDocument.toObject<FinancialAssessmentDetails>()
+
+                             val percentage = getPercentage(attempt)
+                             when (assessmentObject?.assessmentCategory) {
+                                 "Goal Setting" -> financialGoalsScores.add(percentage)
+                                 "Saving" -> savingScores.add(percentage)
+                                 "Budgeting" -> budgetingScores.add(percentage)
+                                 "Spending" -> spendingScores.add(percentage)
+                             }
+                             financialAssessmentTotalPercentage += percentage
+                             nAttempt++
+                         }
+                     }
+                 }
+             }
+             computeForPercentages()
+         }
+     }*/
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getDataOfWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>) {
