@@ -296,6 +296,8 @@ class SpendingFragment : Fragment(){
             binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
             showSeeMoreButton()
         }
+        binding.layoutLoading.visibility= View.GONE
+        binding.mainLayout.visibility = View.VISIBLE
         loadAudio(audio)
     }
 

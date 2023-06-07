@@ -12,12 +12,13 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.FinactDisapprovedAdapter
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentDisapprovedBinding
+import ph.edu.dlsu.finwise.databinding.FragmentParentDisapprovedBinding
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import java.util.*
 
 class ParentDisapprovedFragment : Fragment() {
 
-    private lateinit var binding: FragmentDisapprovedBinding
+    private lateinit var binding: FragmentParentDisapprovedBinding
     private var firestore = Firebase.firestore
     private lateinit var goalAdapter: FinactDisapprovedAdapter
 
@@ -35,7 +36,7 @@ class ParentDisapprovedFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentDisapprovedBinding.inflate(inflater, container, false)
+        binding = FragmentParentDisapprovedBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
@@ -60,7 +61,14 @@ class ParentDisapprovedFragment : Fragment() {
             goalFilterArrayList.sortBy { it.goalTargetDate }
             for (goalFilter in goalFilterArrayList)
                 goalIDArrayList.add(goalFilter.financialGoalID!!)
-            loadRecyclerView(goalIDArrayList)
+            if (!goalIDArrayList.isEmpty())
+                loadRecyclerView(goalIDArrayList)
+            else {
+                binding.rvViewGoals.visibility = View.GONE
+                binding.layoutEmptyActivity.visibility = View.VISIBLE
+            }
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
         }
     }
 
@@ -72,7 +80,5 @@ class ParentDisapprovedFragment : Fragment() {
             false)
         goalAdapter.notifyDataSetChanged()
         binding.rvViewGoals.visibility = View.VISIBLE
-        binding.loadingItems.stopShimmer()
-        binding.loadingItems.visibility = View.GONE
     }
 }

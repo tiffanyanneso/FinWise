@@ -25,36 +25,53 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
-
                 <include layout="@layout/item_finact_disapproved_loading" />
-
                 <include layout="@layout/item_finact_disapproved_loading" />
-
                 <include layout="@layout/item_finact_disapproved_loading" />
-
                 <include layout="@layout/item_finact_disapproved_loading" />
-
                 <include layout="@layout/item_finact_disapproved_loading" />
-
                 <include layout="@layout/item_finact_disapproved_loading" />
-
                 <include layout="@layout/item_finact_disapproved_loading" />
-
                 <include layout="@layout/item_finact_disapproved_loading" />
-
                 <include layout="@layout/item_finact_disapproved_loading" />
-
                 <include layout="@layout/item_finact_disapproved_loading" />
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_view_goals"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="8"
-        tools:listitem="@layout/item_finact_disapproved"
-        android:visibility="gone"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_view_goals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="8"
+            tools:listitem="@layout/item_finact_disapproved"
+            android:visibility="gone"/>
+
+        <LinearLayout
+            android:id="@+id/layout_empty_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:padding="20dp"
+            android:visibility="gone">
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/peso_coin"
+                android:layout_gravity="center"
+                />
+
+            <TextView
+                android:layout_marginTop="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="You don't have any disapproved goals!\nKeep up the nice goal setting!"
+                android:layout_gravity="center"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:textAlignment="center"
+                />
+        </LinearLayout>
     </LinearLayout>
     </ScrollView>
 

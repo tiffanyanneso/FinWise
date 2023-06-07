@@ -44,8 +44,14 @@ class AchievedFragment : Fragment() {
                 var finactObject = financialActivity.toObject<FinancialActivities>()
                 goalIDArrayList.add(finactObject.financialGoalID!!)
             }
-
-            loadRecyclerView(goalIDArrayList)
+            if (!goalIDArrayList.isEmpty())
+                loadRecyclerView(goalIDArrayList)
+            else {
+                binding.rvViewGoals.visibility = View.GONE
+                binding.layoutEmptyActivity.visibility = View.VISIBLE
+            }
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
         }
     }
 
@@ -57,7 +63,5 @@ class AchievedFragment : Fragment() {
             false)
         goalAdapter.notifyDataSetChanged()
         binding.rvViewGoals.visibility = View.VISIBLE
-        binding.loadingItems.stopShimmer()
-        binding.loadingItems.visibility = View.GONE
     }
 }

@@ -64,7 +64,15 @@ class DisapprovedFragment : Fragment() {
             goalFilterArrayList.sortBy { it.goalTargetDate }
             for (goalFilter in goalFilterArrayList)
                 goalIDArrayList.add(goalFilter.financialGoalID!!)
-            loadRecyclerView(goalIDArrayList)
+
+            if (!goalIDArrayList.isEmpty())
+                loadRecyclerView(goalIDArrayList)
+            else {
+                binding.rvViewGoals.visibility = View.GONE
+                binding.layoutEmptyActivity.visibility = View.VISIBLE
+            }
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
         }
     }
 
@@ -77,9 +85,6 @@ class DisapprovedFragment : Fragment() {
                 false)
             goalAdapter.notifyDataSetChanged()
             binding.rvViewGoals.visibility = View.VISIBLE
-            binding.loadingItems.stopShimmer()
-            binding.loadingItems.visibility = View.GONE
         }
-
     }
 }

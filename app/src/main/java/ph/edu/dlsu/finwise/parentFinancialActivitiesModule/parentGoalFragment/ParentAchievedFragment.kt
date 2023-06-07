@@ -48,7 +48,14 @@ class ParentAchievedFragment : Fragment() {
                 val goalID = goalSnapshot.id
                 goalIDArrayList.add(goalID)
             }
-            loadRecyclerView(goalIDArrayList)
+            if (!goalIDArrayList.isEmpty())
+                loadRecyclerView(goalIDArrayList)
+            else {
+                binding.rvViewGoals.visibility = View.GONE
+                binding.layoutEmptyActivity.visibility = View.VISIBLE
+            }
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
         }
     }
 
@@ -58,7 +65,5 @@ class ParentAchievedFragment : Fragment() {
         binding.rvViewGoals.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
         goalAdapter.notifyDataSetChanged()
         binding.rvViewGoals.visibility = View.VISIBLE
-        binding.loadingItems.stopShimmer()
-        binding.loadingItems.visibility = View.GONE
     }
 }

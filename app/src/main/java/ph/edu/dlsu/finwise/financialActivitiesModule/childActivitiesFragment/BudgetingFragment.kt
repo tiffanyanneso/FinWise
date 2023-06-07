@@ -13,6 +13,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactBudgetingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogBudgetingReviewBinding
@@ -74,22 +77,28 @@ class BudgetingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.title.text = "Overall Budgeting Performance"
-        getBudgeting()
+        CoroutineScope(Dispatchers.Main).launch {
+            getBudgeting()
+            getOverallBudgeting()
+        }
 
         binding.btnSeeMore.setOnClickListener {
-            pauseMediaPlayer(mediaPlayer)
+            if (this::mediaPlayer.isInitialized)
+                pauseMediaPlayer(mediaPlayer)
             var goToPerformance = Intent(requireContext().applicationContext, BudgetingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
 
         binding.btnSeeMore2.setOnClickListener {
-            pauseMediaPlayer(mediaPlayer)
+            if (this::mediaPlayer.isInitialized)
+                pauseMediaPlayer(mediaPlayer)
             var goToPerformance = Intent(requireContext().applicationContext, BudgetingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
 
         binding.btnBudgetingReview.setOnClickListener{
-            pauseMediaPlayer(mediaPlayer)
+            if (this::mediaPlayer.isInitialized)
+                pauseMediaPlayer(mediaPlayer)
             showBudgetingReviewDialog()
         }
     }
@@ -107,7 +116,6 @@ class BudgetingFragment : Fragment() {
                 var activityObject = activity.toObject<FinancialActivities>()
                 goalIDArrayList.add(activityObject?.financialGoalID.toString())
             }
-            getOverallBudgeting()
             if (!goalIDArrayList.isEmpty())
                 loadRecyclerView(goalIDArrayList)
             else {
@@ -265,7 +273,8 @@ class BudgetingFragment : Fragment() {
             binding.tvPerformanceText.text = "Your budgeting performance needs a lot of improvement. Click review to learn how!"
             showSeeMoreButton()
         }
-
+        binding.layoutLoading.visibility= View.GONE
+        binding.mainLayout.visibility = View.VISIBLE
         loadAudio(audio)
     }
     private fun loadAudio(audio: Int) {

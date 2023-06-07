@@ -110,6 +110,8 @@ class SavingPerformanceActivity : AppCompatActivity() {
         }.continueWith {
             setDurationPieChart()
             setReasonPieChart()
+            binding.layoutLoading.visibility = View.GONE
+            binding.mainLayout.visibility = View.VISIBLE
         }
 
         binding.btnReview.setOnClickListener{

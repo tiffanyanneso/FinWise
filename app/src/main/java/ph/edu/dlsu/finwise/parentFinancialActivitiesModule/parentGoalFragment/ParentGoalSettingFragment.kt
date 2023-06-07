@@ -226,6 +226,8 @@ class ParentGoalSettingFragment : Fragment() {
                 binding.tvOverallRating.visibility = View.VISIBLE
                 binding.tvOverallRating.text ="${DecimalFormat("0.0").format(overall)}/5.0"
             }
+            binding.layoutLoading.visibility= View.GONE
+            binding.mainLayout.visibility = View.VISIBLE
         }
     }
 

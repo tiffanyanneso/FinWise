@@ -143,11 +143,6 @@ class ParentBudgetingFragment : Fragment() {
                             for (budgetItem in budgetItems) {
                                 budgetItemCount++
                                 var budgetItemObject = budgetItem.toObject<BudgetItem>()
-                                if (budgetItemObject.status == "Edited")
-                                    nUpdates++
-                                //TODO: can't find this
-                                // binding.tvAverageUpdates.text = (nUpdates / budgetItemCount).roundToInt().toString()
-
 
                                 //parental involvement
                                 firestore.collection("Users")
@@ -259,6 +254,8 @@ class ParentBudgetingFragment : Fragment() {
             binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them get there!"
             showSeeMoreButton()
         }
+        binding.layoutLoading.visibility= View.GONE
+        binding.mainLayout.visibility = View.VISIBLE
     }
 
     private fun showSeeMoreButton() {

@@ -514,12 +514,12 @@ class ParentDashboardFragment : Fragment() {
 
             }
         }
-        println("print personal finance" +  personalFinancePerformance)
-        println("print finact goal setting " + goalSettingPercentage)
-        println("print finact saving"  + savingPercentage)
-        println("print finact budgeting " + budgetingPercentage)
-        println("print finact spending " + spendingPercentage)
-        println("print fin assessments" + financialAssessmentPerformance)
+//        println("print personal finance" +  personalFinancePerformance)
+//        println("print finact goal setting " + goalSettingPercentage)
+//        println("print finact saving"  + savingPercentage)
+//        println("print finact budgeting " + budgetingPercentage)
+//        println("print finact spending " + spendingPercentage)
+//        println("print fin assessments" + financialAssessmentPerformance)
         binding.tvFinancialHealthScore.text = DecimalFormat("##0.0").format(overallFinancialHealth) + "%"
     }
 

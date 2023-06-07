@@ -335,6 +335,8 @@ class ParentBudgetingPerformanceActivity : AppCompatActivity() {
             binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them get there!"
             showPerformanceButton()
         }
+        binding.layoutLoading.visibility= View.GONE
+        binding.mainLayout.visibility = View.VISIBLE
     }
 
     private fun showPerformanceButton(){

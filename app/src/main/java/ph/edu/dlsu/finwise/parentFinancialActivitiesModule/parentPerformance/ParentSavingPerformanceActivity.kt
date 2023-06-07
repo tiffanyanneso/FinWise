@@ -230,6 +230,8 @@ class ParentSavingPerformanceActivity : AppCompatActivity() {
                 binding.tvPerformanceStatus.text = ""
                 binding.tvPerformanceText.text = "Child has yet to complete goals."
             }
+            binding.layoutLoading.visibility= View.GONE
+            binding.mainLayout.visibility = View.VISIBLE
         }
     }
 

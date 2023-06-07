@@ -440,6 +440,8 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
             showPerformanceButton()
         }
         loadOverallAudio(audio)
+        binding.layoutLoading.visibility = View.GONE
+        binding.mainLayout.visibility = View.VISIBLE
     }
 
     private fun showPerformanceButton(){

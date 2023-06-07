@@ -419,6 +419,8 @@ class SavingFragment : Fragment() {
                 binding.tvPerformancePercentage.text = "Get\nStarted!"
                 binding.tvPerformanceText.text = "Complete your goals to see your performance"
             }
+            binding.layoutLoading.visibility= View.GONE
+            binding.mainLayout.visibility = View.VISIBLE
             loadAudio(audio)
         }
     }

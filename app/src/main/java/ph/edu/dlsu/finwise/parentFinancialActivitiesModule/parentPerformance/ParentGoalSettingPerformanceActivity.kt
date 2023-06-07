@@ -168,6 +168,9 @@ class ParentGoalSettingPerformanceActivity : AppCompatActivity() {
                 binding.tvPerformanceText.text = "Uh oh! Encourage your child to follow the SMART framework!"
                 showPerformanceButton()
             }
+            binding.layoutLoading.visibility= View.GONE
+            binding.mainLayout.visibility = View.VISIBLE
+
 
             val ratingArray = ArrayList<GoalSettingPerformanceActivity.Rating>()
 

@@ -409,6 +409,9 @@ class ParentSavingFragment : Fragment() {
                 binding.tvPerformanceStatus.visibility = View.GONE
                 binding.tvPerformanceText.text = "Your child hasn't completed any goals. Come back soon!"
             }
+
+            binding.layoutLoading.visibility= View.GONE
+            binding.mainLayout.visibility = View.VISIBLE
         }
     }
 

@@ -320,6 +320,8 @@ class GoalSettingFragment : Fragment() {
                 binding.tvPerformanceStatus.text = "Get\nStarted!"
                 binding.tvPerformanceText.text = "Set goals to see your performance!"
             }
+            binding.layoutLoading.visibility= View.GONE
+            binding.mainLayout.visibility = View.VISIBLE
             loadOverallAudio(audio)
         }
 

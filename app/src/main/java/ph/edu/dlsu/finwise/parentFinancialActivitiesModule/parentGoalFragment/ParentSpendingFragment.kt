@@ -233,7 +233,7 @@ class ParentSpendingFragment : Fragment() {
     }
 
     private fun setOverall() {
-        binding.tvPerformancePercentage.text ="${DecimalFormat("##0.00").format(overallSpending)}%"
+        binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
 
         if (overallSpending >= 96) {
             binding.imgFace.setImageResource(R.drawable.excellent)
@@ -296,6 +296,8 @@ class ParentSpendingFragment : Fragment() {
             binding.tvPerformanceText.text = "Uh oh! Click the tips button to learn how to help them improve their spending!"
             showSeeMoreButton()
         }
+        binding.layoutLoading.visibility= View.GONE
+        binding.mainLayout.visibility = View.VISIBLE
     }
 
     private fun showSeeMoreButton() {

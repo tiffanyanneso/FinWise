@@ -213,6 +213,9 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
                 }
             }
 
+            binding.layoutLoading.visibility = View.GONE
+            binding.mainLayout.visibility = View.VISIBLE
+
 //            binding.progressBarSpecific.progress = (nSpecific/nRatings).roundToInt()
 //            binding.ratingSpecific.text = "${(nSpecific/nRatings)}/5"
 //            binding.progressBarMeasurable.progress = (nMeasurable/nRatings).roundToInt()
