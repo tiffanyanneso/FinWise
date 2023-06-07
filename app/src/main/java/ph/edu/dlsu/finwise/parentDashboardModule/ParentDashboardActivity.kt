@@ -215,6 +215,7 @@ class ParentDashboardActivity : AppCompatActivity(){
 
         binding.layoutLoading.visibility = View.GONE
         binding.layoutDashboard.visibility = View.VISIBLE
+        binding.bottomNavParent.visibility = View.VISIBLE
     }
 
     class ChildFilter (var childID:String, var childFirstName:String)

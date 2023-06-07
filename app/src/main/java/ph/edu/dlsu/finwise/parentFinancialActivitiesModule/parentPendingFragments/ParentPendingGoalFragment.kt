@@ -18,6 +18,7 @@ import ph.edu.dlsu.finwise.adapter.GoalToReviewNotificationAdapter
 import ph.edu.dlsu.finwise.adapter.ParentChildrenAdapter
 import ph.edu.dlsu.finwise.adapter.ParentPendingGoalsAdapter
 import ph.edu.dlsu.finwise.databinding.DialogNotifNewGoalToRateParentBinding
+import ph.edu.dlsu.finwise.databinding.FragmentFinactBudgetingBinding
 import ph.edu.dlsu.finwise.databinding.FragmentParentPendingGoalsBinding
 
 class ParentPendingGoalFragment: Fragment() {
@@ -27,10 +28,19 @@ class ParentPendingGoalFragment: Fragment() {
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
     private var childIDArrayList = ArrayList<String>()
+    private var newGoals = ArrayList<String>()
+
+    private lateinit var parentPendingGoalsAdapter:ParentPendingGoalsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var bundle = arguments
+        childIDArrayList.clear()
+        newGoals.clear()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         CoroutineScope(Dispatchers.Main).launch {
             loadChildren()
             getPendingGoals()
@@ -38,8 +48,6 @@ class ParentPendingGoalFragment: Fragment() {
     }
 
     private suspend fun getPendingGoals() {
-        var newGoals = ArrayList<String>()
-
         for (childID in childIDArrayList) {
             var goals = firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "For Review").get().await()
             for (goal in goals)
@@ -47,7 +55,7 @@ class ParentPendingGoalFragment: Fragment() {
         }
 
         if (!newGoals.isEmpty()) {
-            var parentPendingGoalsAdapter = ParentPendingGoalsAdapter(requireActivity().applicationContext, newGoals)
+            parentPendingGoalsAdapter = ParentPendingGoalsAdapter(requireActivity().applicationContext, newGoals)
             binding.rvGoals.adapter = parentPendingGoalsAdapter
             binding.rvGoals.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
             parentPendingGoalsAdapter.notifyDataSetChanged()

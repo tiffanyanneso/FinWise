@@ -92,11 +92,6 @@ class LoginActivity : AppCompatActivity() {
                         }
                     } else noAccountFound(task)
                 }
-            } else {
-                Toast.makeText(
-                    baseContext, "Please fill up all the fields.",
-                    Toast.LENGTH_SHORT
-                ).show()
             }
         }
     }
