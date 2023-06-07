@@ -68,7 +68,7 @@
             android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="You will see your transactions once you have deposited to your goal"
+            android:text="You will see your transactions here once you have them"
             android:layout_gravity="center"
             android:textSize="16dp"
             android:textColor="@color/black"

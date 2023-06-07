@@ -70,7 +70,8 @@ class EditGoal : AppCompatActivity() {
         }
 
         binding.btnSave.setOnClickListener {
-            updateGoal()
+            if (valid())
+                updateGoal()
         }
 
         binding.btnDelete.setOnClickListener {
@@ -84,7 +85,45 @@ class EditGoal : AppCompatActivity() {
             goToGoal.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             this.startActivity(goToGoal)
         }
+    }
 
+    private fun valid() : Boolean {
+        var valid = true
+        if (binding.etGoal.text.toString().isEmpty()) {
+            binding.goalContainer.helperText = "Input goal name"
+            valid = false
+        } else
+            binding.goalContainer.helperText = ""
+
+        if (binding.etAmount.text.toString().isEmpty()) {
+            binding.amountContainer.helperText = "Input target amount."
+            valid = false
+        } else {
+            //amount field is not empty
+            binding.amountContainer.helperText = ""
+            //check if amount is greater than 0
+            if (binding.etAmount.text.toString().toFloat() <= 0) {
+                binding.amountContainer.helperText = "Input a valid amount."
+                valid = false
+            } else {
+                binding.amountContainer.helperText = ""
+                //check if the amount is within max amount
+                if (binding.etAmount.text.toString().toFloat() > maxAmount) {
+                    binding.amountContainer.helperText = "Amount is greater than maximum allowed "
+                    valid = false
+                }
+                else
+                    binding.amountContainer.helperText = ""
+            }
+        }
+
+        if (binding.etTargetDate.text.toString().trim().isEmpty()) {
+            binding.dateContainer.helperText = "Select target date."
+            valid = false
+        } else
+            binding.dateContainer.helperText = ""
+
+        return valid
     }
 
     private fun getFinancialGoal() {

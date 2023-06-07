@@ -55,12 +55,36 @@ class BudgetCategoryTemplateAdapter : RecyclerView.Adapter<BudgetCategoryTemplat
             var viewHolder = recyclerView.findViewHolderForAdapterPosition(i)
             val itemView = viewHolder?.itemView!!
             val checkbox = itemView.findViewById<CheckBox>(R.id.cb_include)
-            if (checkbox.isChecked)
-                checkedItemsArrayList.add(CheckedItem(itemView.findViewById<TextView>(R.id.tv_budget_item_name).text.toString(),
-                    itemView.findViewById<TextInputEditText>(R.id.et_amount).text.toString().toFloat()))
+            val amount = itemView.findViewById<TextInputEditText>(R.id.et_amount).text.toString()
+            if (checkbox.isChecked && !amount.isEmpty()) {
+                itemView.findViewById<TextView>(R.id.tv_error_amount).visibility = View.GONE
+                checkedItemsArrayList.add(
+                    CheckedItem(itemView.findViewById<TextView>(R.id.tv_budget_item_name).text.toString(),
+                        itemView.findViewById<TextInputEditText>(R.id.et_amount).text.toString().toFloat()))
+            }
+            else if (checkbox.isChecked && amount.isEmpty())
+                itemView.findViewById<TextView>(R.id.tv_error_amount).visibility = View.VISIBLE
+
         }
 
         return checkedItemsArrayList
+    }
+
+    //checks if the items that are checked have an inputted amount
+    fun valid() : Boolean {
+        var valid = true
+        for (i in 0 until budgetCategoryArrayList.size) {
+            var viewHolder = recyclerView.findViewHolderForAdapterPosition(i)
+            val itemView = viewHolder?.itemView!!
+            val checkbox = itemView.findViewById<CheckBox>(R.id.cb_include)
+            val amount = itemView.findViewById<TextInputEditText>(R.id.et_amount).text.toString()
+            if (checkbox.isChecked && amount.isEmpty()) {
+                valid = false
+                itemView.findViewById<TextView>(R.id.tv_error_amount).visibility = View.VISIBLE
+            } else
+                itemView.findViewById<TextView>(R.id.tv_error_amount).visibility = View.GONE
+        }
+        return valid
     }
 
     inner class BudgetCategoryViewHolder(private val itemBinding: ItemBudgetCategorySelectBinding) : RecyclerView.ViewHolder(itemBinding.root), View.OnClickListener {

@@ -43,6 +43,10 @@ class BudgetActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityBudgetBinding
     private lateinit var dialogBinding:DialogNewBudgetItemBinding
+
+    private lateinit var budgetTemplateDialog:Dialog
+    private lateinit var budgetTemplateDialogBinding:DialogBudgetItemTemplateBinding
+
     private var firestore = Firebase.firestore
     private lateinit var budgetCategoryAdapter: BudgetCategoryAdapter
     private lateinit var budgetCategorySelectAdapter: BudgetCategoryTemplateAdapter
@@ -86,76 +90,17 @@ class BudgetActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             checkUser()
             getBalance()
-            getBudgetItems()
             loadBackButton()
             getExpenses()
+            setLayout()
         }
-
-        var allCompleted = true
-        firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
-            var budgetingActivity = it.toObject<FinancialActivities>()
-            if (budgetingActivity?.status == "Completed") {
-                isBudgetingCompleted = true
-                binding.tvAvailable.text = "Savings available to spend"
-                binding.layoutExpenses.visibility = View.VISIBLE
-                firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-                    if (it.toObject<Users>()!!.userType == "Child") {
-                        binding.btnDoneSettingBudget.visibility = View.GONE
-                        //checks if the user has recorded at least once expense before showing "done spending button"
-                        checkDoneSpendingButtonClickable()
-                    }
-                }
-                binding.topAppBar.title = "Spending"
-
-            }
-            else if (budgetingActivity?.status != "Completed"){
-                binding.topAppBar.title = "Budgeting"
-                binding.tvAvailable.text = "Savings available to budget"
-                allCompleted = false
-                binding.layoutExpenses.visibility = View.GONE
-                firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-                    if (it.toObject<Users>()!!.userType == "Child") {
-                        binding.btnDoneSettingBudget.visibility = View.VISIBLE
-                        binding.btnDoneSpending.visibility = View.GONE
-                        goToFinancialAssessmentActivity("Pre-Activity", "Budgeting")
-                    }
-                }
-            }
-
-            firestore.collection("FinancialGoals").document(budgetingActivity?.financialGoalID!!).get().addOnSuccessListener {
-                binding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
-            }
-        }.continueWith {
-            firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
-                var financialActivity = it.toObject<FinancialActivities>()
-                if (financialActivity?.status != "Completed") {
-                    allCompleted = false
-                    firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-                        if (it.toObject<Users>()!!.userType == "Child" && financialActivity?.status == "In Progress")
-                            goToFinancialAssessmentActivity("Pre-Activity", "Spending")
-
-                    }
-                }
-                //spending is done, hide buttons
-                else
-                    binding.linearLayoutButtons.visibility = View.GONE
-
-            }.continueWith {
-                if (allCompleted)
-                    binding.btnNewCategory.visibility = View.GONE
-
-                binding.layoutLoading.visibility = View.GONE
-                binding.mainLayout.visibility = View.VISIBLE
-            }
-        }
-
 
         binding.btnTransactions.setOnClickListener{
             var goToTransactions = Intent(this, ReasonExpensesActivity::class.java)
             var sendBundle = Bundle()
             sendBundle.putString("budgetingActivityID", budgetingActivityID)
             goToTransactions.putExtras(sendBundle)
-            this.startActivity(goToTransactions)
+            startActivity(goToTransactions)
         }
 
         binding.btnDeposit.setOnClickListener {
@@ -211,6 +156,61 @@ class BudgetActivity : AppCompatActivity() {
             sendBundle.putString("spendingActivityID", spendingActivityID)
             spendingTransactions.putExtras(sendBundle)
             startActivity(spendingTransactions)
+        }
+    }
+
+    private suspend fun setLayout() {
+        var allCompleted = true
+        firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
+            var budgetingActivity = it.toObject<FinancialActivities>()
+            if (budgetingActivity?.status == "Completed") {
+                isBudgetingCompleted = true
+                binding.tvAvailable.text = "Savings available to spend"
+                binding.layoutExpenses.visibility = View.VISIBLE
+                if (currentUserType== "Child") {
+                    binding.btnDoneSettingBudget.visibility = View.GONE
+                    //checks if the user has recorded at least once expense before showing "done spending button"
+                    checkDoneSpendingButtonClickable()
+                }
+                binding.topAppBar.title = "Spending"
+
+            }
+            else if (budgetingActivity?.status != "Completed"){
+                binding.topAppBar.title = "Budgeting"
+                binding.tvAvailable.text = "Savings available to budget"
+                allCompleted = false
+                binding.layoutExpenses.visibility = View.GONE
+                if (currentUserType == "Child") {
+                    binding.btnDoneSettingBudget.visibility = View.VISIBLE
+                    binding.btnDoneSpending.visibility = View.GONE
+                    goToFinancialAssessmentActivity("Pre-Activity", "Budgeting")
+                    getBudgetItems()
+                }
+            }
+
+            firestore.collection("FinancialGoals").document(budgetingActivity?.financialGoalID!!).get().addOnSuccessListener {
+                binding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
+            }
+        }.continueWith {
+            firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
+                var financialActivity = it.toObject<FinancialActivities>()
+                if (financialActivity?.status != "Completed") {
+                    allCompleted = false
+                    if (currentUserType == "Child" && financialActivity?.status == "In Progress")
+                        goToFinancialAssessmentActivity("Pre-Activity", "Spending")
+
+                }
+                //spending is done, hide buttons
+                else
+                    binding.linearLayoutButtons.visibility = View.GONE
+
+            }.continueWith {
+                if (allCompleted)
+                    binding.btnNewCategory.visibility = View.GONE
+
+                binding.layoutLoading.visibility = View.GONE
+                binding.mainLayout.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -337,8 +337,8 @@ class BudgetActivity : AppCompatActivity() {
                    budgetItemsList.add("Clothing")
                }
 
-               var budgetTemplateDialogBinding = DialogBudgetItemTemplateBinding.inflate(getLayoutInflater())
-               var budgetTemplateDialog= Dialog(this);
+               budgetTemplateDialogBinding = DialogBudgetItemTemplateBinding.inflate(getLayoutInflater())
+               budgetTemplateDialog= Dialog(this);
                budgetTemplateDialog.setContentView(budgetTemplateDialogBinding.getRoot())
                budgetTemplateDialog.window!!.setLayout(1000, 1300)
 
@@ -349,7 +349,6 @@ class BudgetActivity : AppCompatActivity() {
 
                budgetTemplateDialogBinding.btnSaveBudgetItems.setOnClickListener {
                    saveBudgetItems()
-                   budgetTemplateDialog.hide()
                }
 
                budgetTemplateDialog.setCancelable(false)
@@ -360,14 +359,20 @@ class BudgetActivity : AppCompatActivity() {
     }
 
     private fun saveBudgetItems() {
-        var checkedBudgetItems : ArrayList<BudgetCategoryTemplateAdapter.CheckedItem> = budgetCategorySelectAdapter.returnCheckedBudgetItems()
-        println("print save budget item " + checkedBudgetItems.size)
-        for (budgetItem in checkedBudgetItems) {
-            var budgetItem = BudgetItem(budgetItem.itemName, null,budgetingActivityID, budgetItem.amount,  "Active", "Before", childID)
-            firestore.collection("BudgetItems").add(budgetItem)
-        }
+        if (budgetCategorySelectAdapter.valid()) {
+            var checkedBudgetItems = budgetCategorySelectAdapter.returnCheckedBudgetItems()
+            if (!checkedBudgetItems.isEmpty()) {
+                budgetTemplateDialogBinding.tvError.visibility = View.GONE
+                for (budgetItem in checkedBudgetItems) {
+                    var budgetItem = BudgetItem(budgetItem.itemName, null, budgetingActivityID, budgetItem.amount, "Active", "Before", childID)
+                    firestore.collection("BudgetItems").add(budgetItem)
+                }
+                budgetTemplateDialog.dismiss()
+                getBudgetItems()
 
-        getBudgetItems()
+            } else
+                budgetTemplateDialogBinding.tvError.visibility = View.VISIBLE
+        }
     }
 
     private fun getExpenses() {

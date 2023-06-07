@@ -35,6 +35,7 @@ class SavingsDepositActivity : AppCompatActivity() {
 
     private lateinit var bundle:Bundle
 
+    private lateinit var childID:String
     private lateinit var financialGoalID:String
     private lateinit var savingActivityID:String
     private lateinit var budgetingActivityID:String
@@ -86,6 +87,15 @@ class SavingsDepositActivity : AppCompatActivity() {
                 goToDepositConfirmation.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(goToDepositConfirmation)
             }
+        }
+
+        binding.btnCancel.setOnClickListener {
+            var viewGoal = Intent(this, ViewGoalActivity::class.java)
+            var bundle = Bundle()
+            bundle.putString("financialGoalID", financialGoalID)
+            bundle.putString("childID", currentUser)
+            viewGoal.putExtras(bundle)
+            startActivity(viewGoal)
         }
     }
 

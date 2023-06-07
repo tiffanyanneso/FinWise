@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
@@ -30,6 +31,7 @@ class SavingsWithdrawActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivitySavingsWithdrawBinding
     private var firestore = Firebase.firestore
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private lateinit var financialGoalID:String
     private lateinit var savingActivityID:String
@@ -81,6 +83,15 @@ class SavingsWithdrawActivity : AppCompatActivity() {
                 confirmWithdraw.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 this.startActivity(confirmWithdraw)
             }
+        }
+
+        binding.btnCancel.setOnClickListener {
+            var viewGoal = Intent(this, ViewGoalActivity::class.java)
+            var bundle = Bundle()
+            bundle.putString("financialGoalID", financialGoalID)
+            bundle.putString("childID", currentUser)
+            viewGoal.putExtras(bundle)
+            startActivity(viewGoal)
         }
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
