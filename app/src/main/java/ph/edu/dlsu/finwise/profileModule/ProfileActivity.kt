@@ -104,10 +104,14 @@ class ProfileActivity : AppCompatActivity(){
 
         adapter.addFragment(profileCurrentGoalsFragment,"Current Goals")
         adapter.addFragment(profileBadgesFragment,"Badges")
-        setupTabIcons()
 
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
+
+        binding.tabLayout.getTabAt(0)?.text = "Current Goals"
+        binding.tabLayout.getTabAt(1)?.text = "Badges"
+
+        setupTabIcons()
 
     }
 

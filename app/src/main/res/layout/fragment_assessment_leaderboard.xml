@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".financialAssessmentModule.fragment.AssessmentLeaderboardFragment">
+    tools:context=".financialAssessmentModule.fragment.AssessmentLeaderboardFragment"
+    android:background="@color/very_light_green">
 
     <LinearLayout
         android:id="@+id/layout_loading"
@@ -23,7 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
 
         <ScrollView
             android:id="@+id/scroll"
@@ -72,6 +74,7 @@
                             app:layout_constraintStart_toStartOf="@+id/progress_bar"
                             app:layout_constraintTop_toTopOf="@+id/progress_bar"
                             tools:text="..."
+                            android:textSize="20dp"
                             android:textColor="@color/white"
                             android:textStyle="bold"/>
 
@@ -87,7 +90,8 @@
                             app:layout_constraintTop_toTopOf="@+id/progress_bar"
                             app:layout_constraintVertical_bias="0.75"
                             tools:text=""
-                            android:textSize="16dp"
+                            android:textAlignment="center"
+                            android:textSize="14dp"
                             />
 
 
@@ -102,7 +106,8 @@
                         android:text="Loading..."
                         android:textColor="@color/white"
                         android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:textAlignment="center"/>
                 </LinearLayout>
 
 

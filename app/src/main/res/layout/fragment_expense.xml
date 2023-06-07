@@ -124,10 +124,11 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:gravity="center"
-                                    android:orientation="vertical">
+                                    android:orientation="vertical"
+                                    android:layout_marginHorizontal="20dp">
 
                                     <TextView
-                                        android:layout_width="300dp"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:id="@+id/tv_summary"
                                         android:gravity="center"
@@ -137,8 +138,8 @@
                                         android:textColor="@color/white"/>
 
                                     <TextView
-                                        android:layout_width="300dp"
-                                        android:layout_height="40dp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
                                         android:id="@+id/tv_tips"
                                         android:gravity="center"
                                         android:textSize="16sp"
@@ -151,7 +152,6 @@
                                     <androidx.appcompat.widget.AppCompatButton
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginHorizontal="20dp"
                                         android:id="@+id/btn_action"
                                         android:gravity="center"
                                         android:layout_marginVertical="20dp"
@@ -173,12 +173,22 @@
 
                         </androidx.cardview.widget.CardView>
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Click space below to see graph!"
+                            android:textStyle="bold"
+                            android:textColor="@color/light_green"
+                            android:textSize="16sp"
+                            android:paddingTop="10dp"
+                            android:layout_margin="5dp"
+                            android:gravity="center" />
 
                         <com.github.mikephil.charting.charts.PieChart
                             android:id="@+id/pc_expense"
                             android:layout_width="350dp"
                             android:layout_height="350dp"
-                            android:layout_marginTop="20dp"
+                            android:layout_marginTop="10dp"
                             android:layout_marginBottom="15dp"
                             android:layout_gravity="center_horizontal"/>
 

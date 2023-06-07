@@ -53,7 +53,6 @@
         android:visibility="gone"
         >
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -439,7 +438,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:id="@+id/tv_performance"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     android:textAlignment="center"
                     android:text="..."

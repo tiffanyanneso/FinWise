@@ -127,7 +127,8 @@
                             android:text="Loading"
                             android:textColor="@color/light_green"
                             android:textStyle="bold"
-                            android:layout_gravity="center"/>
+                            android:layout_gravity="center"
+                            android:textAlignment="center"/>
                     </LinearLayout>
 
                     <TextView

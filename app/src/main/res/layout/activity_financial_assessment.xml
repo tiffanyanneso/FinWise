@@ -83,53 +83,22 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                     <!--   <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tv_what"
-                            android:textSize="20dp"
-                            android:text="What is this Assessment?"
-                            android:textStyle="bold"
-                            android:textColor="@color/white"
-                            />-->
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_gravity="center"
-                            android:gravity="center">
-
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/tv_what"
                                 android:textSize="18dp"
                                 android:text="What is this Assessment?"
-                                android:layout_marginBottom="10dp"
                                 android:textStyle="bold"
                                 android:textColor="@color/white" />
 
-
-                            <ImageView
-                                android:id="@+id/btn_audio_what_is_this_assessment"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/baseline_mic_24"
-                                app:tint="@color/light_grey"
-                                android:layout_marginBottom="10dp"
-                                />
-
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/tv_description"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:text="Loading..."
-                            android:textColor="@color/white"
-                            android:layout_marginTop="10dp"/>
+                                <TextView
+                                    android:id="@+id/tv_description"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="16sp"
+                                    android:text="Loading..."
+                                    android:textColor="@color/white"/>
                     </androidx.appcompat.widget.LinearLayoutCompat>
                 </LinearLayout>
 
@@ -172,7 +141,7 @@
                             app:layout_constraintRight_toRightOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.0"
-                            tools:progress="60" />
+                            tools:progress="0" />
 
                         <TextView
                             android:id="@+id/text_view_progress"

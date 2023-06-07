@@ -51,11 +51,13 @@
                 android:id="@+id/tv_performance_status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:layout_gravity="center"
                 android:text=""
                 android:textColor="@color/dark_green"
+                android:textSize="16sp"
                 android:textStyle="bold"
-                android:layout_gravity="center"/>
+                android:textAlignment="center"
+                />
         </LinearLayout>
 
         <TextView
