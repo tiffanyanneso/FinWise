@@ -128,7 +128,8 @@ class ParentDashboardActivity : AppCompatActivity(){
             newGoals()
             earningActivities()
             overThreshold()
-            loadDialogAndRecyclerView()
+            if (!isFinishing)
+                loadDialogAndRecyclerView()
         }
     }
 
@@ -169,7 +170,7 @@ class ParentDashboardActivity : AppCompatActivity(){
     }
 
     private fun loadDialogAndRecyclerView() {
-        if (!goalsArrayList.isEmpty() || !earningArrayList.isEmpty() || !transactionArrayList.isEmpty()) {
+            if (!goalsArrayList.isEmpty() || !earningArrayList.isEmpty() || !transactionArrayList.isEmpty()) {
             var dialogBinding = DialogNotifSummaryParentBinding.inflate(layoutInflater)
             dialog = Dialog(this)
             dialog.setContentView(dialogBinding.root)

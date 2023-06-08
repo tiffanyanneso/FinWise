@@ -104,32 +104,33 @@ class ParentDashboardFragment : Fragment() {
                 getPersonalFinancePerformance()
                 getFinancialActivitiesPerformance()
                 getFinancialAssessmentScore()
+
             }
         }
     }
 
 
 
-    private fun getPersonalFinancePerformance() {
+    private suspend fun getPersonalFinancePerformance() {
         var income = 0.00F
         var expense = 0.00F
-        firestore.collection("Transactions").whereEqualTo("userID", childID).whereIn("transactionType", listOf("Income", "Expense")).get().addOnSuccessListener { results ->
-            for (transaction in results) {
-                var transactionObject = transaction.toObject<Transactions>()
-                if (transactionObject.transactionType == "Income")
-                    income += transactionObject.amount!!
-                else if (transactionObject.transactionType == "Expense")
-                    expense += transactionObject.amount!!
-            }
-        }.continueWith {
-            var personalFinancePerformancePercent = income/expense * 100
-            if (personalFinancePerformancePercent > 200)
-                personalFinancePerformancePercent = 200F
-            personalFinancePerformance = personalFinancePerformancePercent / 2
-
-            binding.progressBarPersonalFinance.progress = personalFinancePerformance.toInt()
-            binding.tvPersonalFinancePercentage.text = DecimalFormat("##0.0").format(personalFinancePerformance) + "%"
+        var transactions = firestore.collection("Transactions").whereEqualTo("userID", childID).whereIn("transactionType", listOf("Income", "Expense")).get().await()
+        for (transaction in transactions) {
+            var transactionObject = transaction.toObject<Transactions>()
+            if (transactionObject.transactionType == "Income")
+                income += transactionObject.amount!!
+            else if (transactionObject.transactionType == "Expense")
+                expense += transactionObject.amount!!
         }
+
+        var personalFinancePerformancePercent = income/expense * 100
+        if (personalFinancePerformancePercent > 200)
+            personalFinancePerformancePercent = 200F
+        personalFinancePerformance = personalFinancePerformancePercent / 2
+
+        binding.progressBarPersonalFinance.progress = personalFinancePerformance.toInt()
+        binding.tvPersonalFinancePercentage.text = DecimalFormat("##0.0").format(personalFinancePerformance) + "%"
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -143,21 +144,17 @@ class ParentDashboardFragment : Fragment() {
             getSavingPerformanceScore()
             getBudgetingPerformanceScore()
             getSpendingPerformance()
-            getFinancialActivitiesScores()
-        }
-    }
-
-    private fun getFinancialActivitiesScores() {
-        if (age > 9 ) {
-            CoroutineScope(Dispatchers.Main).launch {
-                purchasePlanning()
+            if (age > 9 ) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    purchasePlanning()
+                }
             }
+            else spendingPercentage = (1-overspendingPercentage)*100
+
+            calculateFinancialActivitiesScore()
         }
-        else spendingPercentage = (1-overspendingPercentage)*100
-
-        calculateFinancialActivitiesScore()
-
     }
+
 
     private suspend fun getSpendingPerformance() {
         //get budgeting items to see if they overspent for a specific budget item
@@ -170,7 +167,6 @@ class ParentDashboardFragment : Fragment() {
             nSpendingCompleted = financialActivitiesDocuments.size()
             for (spending in financialActivitiesDocuments) {
                 val spendingActivity = spending.toObject<FinancialActivities>()
-                println("print " + spendingActivity.financialGoalID)
                 val financialActivityDocuments = firestore.collection("FinancialActivities")
                     .whereEqualTo("financialGoalID", spendingActivity.financialGoalID)
                     .whereEqualTo("financialActivityName", "Budgeting")
@@ -215,8 +211,6 @@ class ParentDashboardFragment : Fragment() {
             financialActivitiesPerformance = ((savingPercentage + budgetingPercentage + spendingPercentage) / 3)
         else if (age == 10 || age == 11)
             financialActivitiesPerformance = ((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4)
-
-        getFinancialAssessmentScore()
     }
 
 
@@ -393,28 +387,25 @@ class ParentDashboardFragment : Fragment() {
         }
     }
 
-    private fun getFinancialAssessmentScore() {
-
+    private suspend fun getFinancialAssessmentScore() {
         var nCorrect = 0
         var nQuestions = 0
-        firestore.collection("AssessmentAttempts").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
-            if (results.size()!=0) {
-                for (attempt in results) {
-                    val assessmentAttempt = attempt.toObject<FinancialAssessmentAttempts>()
-                    if (assessmentAttempt.nAnsweredCorrectly != null && assessmentAttempt.nQuestions != null) {
-                        nCorrect += assessmentAttempt.nAnsweredCorrectly!!
-                        nQuestions += assessmentAttempt.nQuestions!!
-                    }
+        var results = firestore.collection("AssessmentAttempts").whereEqualTo("childID", childID).get().await()
+        if (results.size() != 0) {
+            for (attempt in results) {
+                val assessmentAttempt = attempt.toObject<FinancialAssessmentAttempts>()
+                if (assessmentAttempt.nAnsweredCorrectly != null && assessmentAttempt.nQuestions != null) {
+                    nCorrect += assessmentAttempt.nAnsweredCorrectly!!
+                    nQuestions += assessmentAttempt.nQuestions!!
                 }
-                println("print correct " + nCorrect)
-                println("print nquestions"  + nQuestions)
-                financialAssessmentPerformance = (nCorrect.toFloat() / nQuestions.toFloat()) * 100
-                binding.progressBarFinancialAssessments.progress = financialAssessmentPerformance.toInt()
-                binding.tvFinancialAssessmentsPercentage.text = DecimalFormat("##0.00").format(financialAssessmentPerformance) + "%"
             }
-        }.continueWith {
-            getOverallFinancialHealth()
+//            println("print correct " + nCorrect)
+//            println("print nquestions" + nQuestions)
+            financialAssessmentPerformance = (nCorrect.toFloat() / nQuestions.toFloat()) * 100
+            binding.progressBarFinancialAssessments.progress = financialAssessmentPerformance.toInt()
+            binding.tvFinancialAssessmentsPercentage.text = DecimalFormat("##0.00").format(financialAssessmentPerformance) + "%"
         }
+        getOverallFinancialHealth()
     }
 
     private fun checkIfNaN() {
@@ -514,13 +505,18 @@ class ParentDashboardFragment : Fragment() {
 
             }
         }
-//        println("print personal finance" +  personalFinancePerformance)
-//        println("print finact goal setting " + goalSettingPercentage)
-//        println("print finact saving"  + savingPercentage)
-//        println("print finact budgeting " + budgetingPercentage)
-//        println("print finact spending " + spendingPercentage)
-//        println("print fin assessments" + financialAssessmentPerformance)
+        println("print personal finance" +  personalFinancePerformance)
+        println("print finact goal setting " + goalSettingPercentage)
+        println("print finact saving"  + savingPercentage)
+        println("print saving finsihed " + nSavingCompleted)
+        println("print finact budgeting " + budgetingPercentage)
+        println("print budgeting finished" + nBudgetingCompleted)
+        println("print finact spending " + spendingPercentage)
+        println("print spending finished" + nSpendingCompleted)
+        println("print fin assessments" + financialAssessmentPerformance)
         binding.tvFinancialHealthScore.text = DecimalFormat("##0.0").format(overallFinancialHealth) + "%"
+        binding.layoutLoading.visibility = View.GONE
+        binding.mainLayout.visibility = View.VISIBLE
     }
 
 }

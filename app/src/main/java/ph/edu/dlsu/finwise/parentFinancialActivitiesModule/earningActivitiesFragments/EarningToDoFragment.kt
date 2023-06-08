@@ -10,6 +10,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.adapter.EarningCompletedAdapter
 import ph.edu.dlsu.finwise.adapter.EarningOverdueAdapter
 import ph.edu.dlsu.finwise.adapter.EarningToDoAdapter
@@ -25,6 +29,7 @@ class EarningToDoFragment : Fragment() {
     private lateinit var binding:FragmentEarningToDoBinding
     private lateinit var earningToDoAdapter: EarningToDoAdapter
     private lateinit var childID:String
+    private lateinit var userType:String
 
     private var firestore = Firebase.firestore
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
@@ -47,7 +52,11 @@ class EarningToDoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getToDoEarning()
+        CoroutineScope(Dispatchers.IO).launch {
+            getCurrentUserType()
+            getToDoEarning()
+
+        }
     }
 
     private fun getToDoEarning() {
@@ -80,12 +89,20 @@ class EarningToDoFragment : Fragment() {
     private fun emptyList() {
         binding.rvViewActivitiesToDo.visibility = View.GONE
         binding.layoutEmptyActivity.visibility = View.VISIBLE
-        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-            var userType = it.toObject<Users>()?.userType
-            if (userType == "Parent")
-                binding.tvEmptyListMessage.text = "Your child doesn't have any chores now.\nCreate one to help them start earning!"
-            else if (userType == "Child")
-                binding.tvEmptyListMessage.text = "There are no chores at the moment.\nAsk your parents to create one for you"
-        }
+
+        if (userType == "Parent")
+            binding.tvEmptyListMessage.text = "Your child doesn't have any chores now.\nCreate one to help them start earning!"
+        else if (userType == "Child")
+            binding.tvEmptyListMessage.text = "There are no chores at the moment.\nAsk your parent to create one for you"
+
+    }
+
+    private suspend fun getCurrentUserType() {
+        userType =  firestore.collection("Users").document(currentUser).get().await().toObject<Users>()?.userType!!
+
+        if (userType == "Child")
+            binding.layoutPictureReminder.visibility = View.VISIBLE
+        else if (userType == "Parent")
+            binding.layoutPictureReminder.visibility = View.GONE
     }
 }

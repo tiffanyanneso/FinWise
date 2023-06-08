@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".parentFinancialActivitiesModule.earningActivitiesFragments.EarningToDoFragment"
     android:padding="20dp">
 
@@ -15,6 +16,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/layout_picture_reminder"
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toBottomOf="@+id/cb_goal_self"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="20dp"
+            android:background="@drawable/button_border_white"
+            android:backgroundTint="@color/teal"
+            android:layout_marginBottom="15dp">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/baseline_lightbulb_24"
+                android:layout_marginRight="15dp"
+                app:tint="@color/yellow"
+                android:layout_gravity="center"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="Don't forget to take a picture of yourself completing the chore because you will upload it later!"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/loading_items"
@@ -68,7 +98,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="There are no chores at the moment.\nAsk your parents to create one for you"
+                android:text="There are no chores at the moment.\nAsk your parent to create one for you"
                 android:layout_gravity="center"
                 android:textSize="16dp"
                 android:textColor="@color/black"
