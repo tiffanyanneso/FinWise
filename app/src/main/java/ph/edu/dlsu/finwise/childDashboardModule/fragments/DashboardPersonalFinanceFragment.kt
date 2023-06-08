@@ -476,8 +476,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
             if (selectedDatesSort == "quarterly")
                 date = "quarter"
             message = if (userType == "Parent")
-                "They have no data yet for this $date. Remind your child to update the app regularly!"
-            else  "You have no data yet for this $date. Click the income button above to add your money."
+                "They have no data for this $date. Remind your child to use the app regularly!"
+            else  "You have no data for this $date. Use the app regularly to see your progress!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
             binding.tvPerformancePercentage.visibility = View.GONE
         }

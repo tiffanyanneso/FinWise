@@ -326,8 +326,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             if (selectedDatesSort == "quarterly")
                 date = "quarter"
             message = if (userType == "Parent")
-                "Your child hasn't taken any assessments yet for this $date!"
-            else "You haven't taken any assessments yet for this $date!"
+                "Your child hasn't taken any assessments for this $date. Remind your child to use the app regularly!"
+            else "You haven't taken any assessments for this $date. Use the app regularly to see your progress!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
             binding.tvPerformancePercentage.visibility = View.GONE
         }

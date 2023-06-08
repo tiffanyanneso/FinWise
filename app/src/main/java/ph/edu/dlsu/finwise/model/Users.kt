@@ -12,6 +12,7 @@ class Users (
     val number:String?=null,
     var userType:String?=null,
     var lastLogin: Timestamp?=null,
+    var registeredDate: Timestamp?=null,
     //when notifs were last shown to the user, only show notifs once a day
     var lastShown:Timestamp?=null
 ) {

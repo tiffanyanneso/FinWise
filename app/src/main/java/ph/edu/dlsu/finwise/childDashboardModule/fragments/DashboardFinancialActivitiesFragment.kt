@@ -101,7 +101,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
     private var totalBudgetAccuracy = 0.00F
 
-    private var financialActivitiesPerformance = 0.00F
+    private var financialActivitiesPerformanceAverage = 0.00F
     private var goalSettingPercentageAverage = 0F
     private var savingPercentageTotalAverage = 0F
     private var budgetingPercentageAverage = 0F
@@ -766,7 +766,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 binding.tvPerformanceText.text =
                     "Complete financial activities to see your score here"
             } else if (nGoals == 0.00F)
-                financialActivitiesPerformance = goalSettingPercentage
+                financialActivitiesPerformanceAverage = goalSettingPercentage
             else if (nBudgetingCompleted == 0)
                 financialActivitiesPerformanceScore = (goalSettingPercentage + savingPercentage) / 2
             else if (nSpendingCompleted == 0)
@@ -778,7 +778,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             }
         }
         iteration++
-        financialActivitiesPerformance += financialActivitiesPerformanceScore
+        financialActivitiesPerformanceAverage += financialActivitiesPerformanceScore
         goalSettingPercentageAverage += goalSettingPercentage
         savingPercentageTotalAverage += savingPercentage
         budgetingPercentageAverage += budgetingPercentage
@@ -916,7 +916,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             return
         }
 
-        calculateTotals()
+        calculateAverage()
 
         val imageView = binding.ivScore
         val message: String
@@ -929,7 +929,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         //TODO: Change audio
         var audio = 0
 
-        if (financialActivitiesPerformance >= 96F) {
+        if (financialActivitiesPerformanceAverage >= 96F) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_excellent
             else
@@ -946,7 +946,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child is a financial superstar! Their skills in goal setting, saving, budgeting, and spending are commendable!"
             else "Excellent work superstar! Continue exploring and exercising your financial decision-making skills."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
-        } else if (financialActivitiesPerformance in 86.0..95.0) {
+        } else if (financialActivitiesPerformanceAverage in 86.0..95.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_amazing
             else
@@ -963,7 +963,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child's financial skills are exceptional. Encourage them to continue completing goals and financial activities!"
             else "Amazing work! Keep exploring and accomplishing different financial activities."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
-        } else if (financialActivitiesPerformance in 76.0..85.0) {
+        } else if (financialActivitiesPerformanceAverage in 76.0..85.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_great
             else
@@ -980,7 +980,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child's performance in activities showcases their strong financial decision-making skills. Encourage them to keep it up!"
             else "Keep mastering the art of financial decision-making through financial activities! Your financial future looks bright!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
-        } else if (financialActivitiesPerformance in 66.0..75.0) {
+        } else if (financialActivitiesPerformanceAverage in 66.0..75.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_good
             else
@@ -997,7 +997,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child is becoming better at performing financial activities. Encourage them to continue!"
             else "Good job! Continue building your experience in performing financial activities, it’ll be useful in the long run."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
-        } else if (financialActivitiesPerformance in 56.0..65.0) {
+        } else if (financialActivitiesPerformanceAverage in 56.0..65.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_average
             else
@@ -1014,7 +1014,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child has a solid performance in activities. Allow them to participate in financial activities at home!"
             else "Keep exploring new financial activities, tracking your progress, and making smart financial choices!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
-        } else if (financialActivitiesPerformance in 46.0..55.0) {
+        } else if (financialActivitiesPerformanceAverage in 46.0..55.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_nearly_there
             else
@@ -1031,7 +1031,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child's commitment to financial activities is paying off. They are developing valuable skills!"
             else "Keep honing your financial decision-making through financial activities. Through practice, you'll get there soon!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
-        } else if (financialActivitiesPerformance in 36.0..45.0) {
+        } else if (financialActivitiesPerformanceAverage in 36.0..45.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_almost_there
             else
@@ -1048,7 +1048,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child is gaining a better understanding of financial activities. Encourage them to set continue to set SMART goals!"
             else "Keep practicing goal setting, saving, budgeting, and spending. Your dedication will pay off!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
-        } else if (financialActivitiesPerformance in 26.0..35.0) {
+        } else if (financialActivitiesPerformanceAverage in 26.0..35.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_getting_there
             else
@@ -1065,7 +1065,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child is taking steps towards financial literacy. Encourage them to keep performing financial activities!"
             else "Keep exploring ways to better set goals, save, budget, and spend. You’ll get there!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
-        } else if (financialActivitiesPerformance in 16.0..25.0) {
+        } else if (financialActivitiesPerformanceAverage in 16.0..25.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_not_quite_there
             else
@@ -1082,7 +1082,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child is beginning to get the hang of things. Help them out by allowing them to participate in household financial activities!"
             else "You are beginning to get the hang of things. Keep practicing by accomplishing financial activities!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
-        } else if (financialActivitiesPerformance < 15) {
+        } else if (financialActivitiesPerformanceAverage < 15) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_needs_improvement
             else
@@ -1116,8 +1116,8 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             if (selectedDatesSort == "quarterly")
                 date = "quarter"*/
             message = if (userType == "Parent")
-                "Your child hasn't accomplished any financial activities yet!"
-            else "You haven't accomplished any financial activities. Click the button to start!"
+                "Your child hasn't accomplished any financial activities yet. Remind your child to use the app regularly!"
+            else "You haven't accomplished any financial activities. Use the app regularly to see your progress!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
             binding.tvPerformancePercentage.visibility = View.GONE
         }
@@ -1127,7 +1127,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         binding.tvPerformanceStatus.visibility = View.VISIBLE
         binding.tvPerformanceStatus.text = performance
         binding.tvPerformancePercentage.visibility = View.VISIBLE
-        binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(financialActivitiesPerformance)}%"
+        binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(financialActivitiesPerformanceAverage)}%"
 
 
         if (age in 10..11 && goalRatingObjectArray.isNotEmpty()) {
@@ -1140,20 +1140,20 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         binding.progressBarSaving.progress = savingPercentageTotalAverage.toInt()
 
         binding.tvBudgetingPerformance.text = DecimalFormat("##0.0").format(budgetingPercentageAverage) + "%"
-        binding.progressBarBudegting.progress = budgetingPercentage.toInt()
+        binding.progressBarBudegting.progress = budgetingPercentageAverage.toInt()
 
         binding.tvSpendingPerformance.text = DecimalFormat("##0.0").format(spendingPercentageAverage) + "%"
-        binding.progressBarSpending.progress = spendingPercentage.toInt()
+        binding.progressBarSpending.progress = spendingPercentageAverage.toInt()
 
         mediaPlayer = MediaPlayer.create(context, audio)
         loadOverallAudio()
         loadButton()
     }
 
-    private fun calculateTotals() {
+    private fun calculateAverage() {
         checkIfNaNTotals()
 
-        financialActivitiesPerformance /= iteration
+        financialActivitiesPerformanceAverage /= iteration
         budgetingPercentageAverage /= iteration
         goalSettingPercentageAverage /= iteration
         savingPercentageTotalAverage /= iteration
@@ -1163,8 +1163,8 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     }
 
     private fun checkIfNaNTotals() {
-        if (financialActivitiesPerformance.isNaN())
-            financialActivitiesPerformance = 0.0F
+        if (financialActivitiesPerformanceAverage.isNaN())
+            financialActivitiesPerformanceAverage = 0.0F
 
         if (budgetingPercentageAverage.isNaN())
             budgetingPercentageAverage = 0.0F
@@ -1285,7 +1285,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         if (date != null) {
             selectedDatesSort = date
             xAxisPoint = 0.00F
-            financialActivitiesPerformance = 0F
+            financialActivitiesPerformanceAverage = 0F
             goalRatingObjectArray.clear()
             savingObjectArray.clear()
             spendingObjectArray.clear()

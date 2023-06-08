@@ -81,6 +81,7 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                             "parentID" to parentuserID,
                             "userType" to "Child",
                             "number" to contactNumber,
+                            "registerDate" to Timestamp.now(),
                             "lastShown" to Timestamp.now())
                             //"lastLogin" to Timestamp.now())
 
