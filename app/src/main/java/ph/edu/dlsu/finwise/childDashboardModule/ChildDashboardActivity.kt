@@ -153,13 +153,20 @@ class ChildDashboardActivity : AppCompatActivity(){
 
         val filteredMonths = months.sliceArray(0..currentMonth)
 
-        val spinner = binding.monthSpinner
-        spinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, filteredMonths)
-        spinner.setSelection(currentMonth)
+//        val spinner = binding.monthSpinner
+//        spinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, filteredMonths)
 
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        val adapter = ArrayAdapter(this, R.layout.list_item, filteredMonths)
+        binding.monthSpinner.setAdapter(adapter)
+        binding.monthSpinner.setSelection(currentMonth)
+
+//        var activity = binding.dropdownActivity.text.toString()
+
+        binding.monthSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedMonth = months[position]
+//                val selectedMonth = months[position]
+
+                val selectedMonth = binding.monthSpinner.text.toString()
                 // Do something with the selected month
                 bundle.putString("date", selectedMonth)
                 initializeFragments()
