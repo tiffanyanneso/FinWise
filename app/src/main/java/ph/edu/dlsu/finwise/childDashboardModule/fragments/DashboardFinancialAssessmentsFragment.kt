@@ -48,6 +48,8 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     private lateinit var binding: FragmentDashboardFinancialAssessmentsBinding
     private var firestore = Firebase.firestore
 
+    private var isViewCreated = false
+
     private var mediaPlayer: MediaPlayer? = MediaPlayer()
 
     private lateinit var childID: String
@@ -88,6 +90,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDashboardFinancialAssessmentsBinding.bind(view)
+        isViewCreated = true
         binding.layoutLoading.visibility = View.VISIBLE
         binding.layoutMain.visibility = View.GONE
         binding.title.text = "Financial Assessment Performance"
@@ -155,6 +158,10 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     }
 
     private fun setPerformanceView() {
+        if (!isViewCreated || !isAdded) {
+            return
+        }
+
         if (financialAssessmentTotalPercentage.isNaN())
             financialAssessmentTotalPercentage = 0.0
 
@@ -378,6 +385,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         releaseMediaPlayer()
+        isViewCreated = false
     }
 
     private fun releaseMediaPlayer() {

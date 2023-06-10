@@ -40,6 +40,9 @@ class DashboardPersonalFinanceFragment : Fragment() {
 
     private var mediaPlayer: MediaPlayer? = MediaPlayer()
 
+    private var isViewCreated = false
+
+
     private lateinit var childID: String
 
     private var userType = "child"
@@ -64,6 +67,9 @@ class DashboardPersonalFinanceFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDashboardPersonalFinanceBinding.bind(view)
+
+        isViewCreated = true
+
         binding.layoutLoading.visibility = View.VISIBLE
         binding.layoutMain.visibility = View.GONE
         getArgumentsBundle()
@@ -312,6 +318,10 @@ class DashboardPersonalFinanceFragment : Fragment() {
     }
 
     private fun setTotals(totalPersonalFinancePerformance: Float) {
+        if (!isViewCreated || !isAdded) {
+            return
+        }
+
         var personalFinancePerformance = totalPersonalFinancePerformance
         if (totalPersonalFinancePerformance.isNaN())
             personalFinancePerformance = 0.00F
@@ -527,6 +537,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         releaseMediaPlayer()
+        isViewCreated = false
     }
 
     private fun releaseMediaPlayer() {
