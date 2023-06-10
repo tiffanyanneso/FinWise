@@ -186,6 +186,7 @@ class EditProfileActivity : AppCompatActivity() {
             editor.apply()
             sharedPrefs.edit().putInt("color", selectedColor).apply()
             finish()
+
             val intent = Intent (this, ProfileActivity::class.java)
             startActivity (intent)
         }.addOnFailureListener{
