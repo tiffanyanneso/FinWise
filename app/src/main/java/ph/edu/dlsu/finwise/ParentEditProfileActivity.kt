@@ -2,6 +2,9 @@ package ph.edu.dlsu.finwise
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.graphics.Color
+import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -22,11 +25,48 @@ class ParentEditProfileActivity : AppCompatActivity() {
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
     private lateinit var context: Context
 
+    private var isColorChanged = false // Flag to track if color is changed
+
+    private val colors = arrayOf(
+        Color.BLACK,
+        Color.BLUE,
+        Color.RED,
+        Color.parseColor("#058B47"), // Dark Green color
+        Color.parseColor("#FFA500"), // Orange color
+        Color.parseColor("#E75480") // Pink color
+    )
+
+    private var currentColorIndex = 0
+    private var selectedColor: Int = Color.BLACK
+    private lateinit var sharedPrefs: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityParentEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
         context= this
+
+        // Initialize SharedPreferences
+        sharedPrefs = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
+
+        // Check if the color is already stored in SharedPreferences
+        if (!sharedPrefs.contains("color")) {
+            // If color is not found, it means it's a new account, so set the default color to black and save it in SharedPreferences
+            val editor = sharedPrefs.edit()
+            editor.putInt("color", Color.BLACK)
+            editor.apply()
+        }
+
+        // Retrieve the existing color value from SharedPreferences
+        selectedColor = sharedPrefs.getInt("color", Color.BLACK)
+
+        // Apply the retrieved color to the circularImageView
+        binding.circularImageView.setColorFilter(selectedColor, PorterDuff.Mode.SRC_IN)
+
+
+        binding.changeColorButton.setOnClickListener {
+            changeColor()
+        }
 
         getProfileData()
 
@@ -34,6 +74,7 @@ class ParentEditProfileActivity : AppCompatActivity() {
 
         binding.btnSave.setOnClickListener{
             updateProfile()
+            isColorChanged = true // Set the flag to true when the Save button is clicked
             var goToProfile = Intent(this, ParentProfileActivity::class.java)
             context.startActivity(goToProfile)
         }
@@ -51,6 +92,27 @@ class ParentEditProfileActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        if (isColorChanged) {
+            resetColorAndNavigateBack()
+        } else {
+            super.onBackPressed()
+        }
+    }
+    private fun resetColorAndNavigateBack() {
+        // Reset the color to black
+        selectedColor = Color.BLACK
+        binding.circularImageView.setColorFilter(selectedColor, PorterDuff.Mode.SRC_IN)
+
+        // Store the color value in SharedPreferences
+        val editor = sharedPrefs.edit()
+        editor.putInt("color", selectedColor)
+        editor.apply()
+
+        // Navigate back to the previous activity
+        super.onBackPressed()
+    }
+
     fun getProfileData() {
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener { documentSnapshot ->
             var parent = documentSnapshot.toObject<Users>()
@@ -60,8 +122,31 @@ class ParentEditProfileActivity : AppCompatActivity() {
                 binding.etLastName.setText(parent?.lastName.toString())
             if (parent?.number!= null)
                 binding.etContactNumber.setText(parent.number.toString())
+
+            // Retrieve the color value from the "ColorPreferences" collection
+            val colorPreferencesRef = firestore.collection("ColorPreferences").document(currentUser)
+            colorPreferencesRef.get().addOnSuccessListener { documentSnapshot ->
+                val colorData = documentSnapshot.data
+                if (colorData != null && colorData.containsKey("color")) {
+                    val color = colorData["color"] as Long
+                    selectedColor = color.toInt()
+                    binding.circularImageView.setColorFilter(selectedColor, PorterDuff.Mode.SRC_IN)
+                }
+            }
         }
     }
+
+    private fun changeColor() {
+        selectedColor = colors[(currentColorIndex + 1) % colors.size]
+        binding.circularImageView.setColorFilter(selectedColor, PorterDuff.Mode.SRC_IN)
+        currentColorIndex = (currentColorIndex + 1) % colors.size
+
+        // Store the color value in SharedPreferences
+        val editor = sharedPrefs.edit()
+        editor.putInt("color", selectedColor)
+        editor.apply()
+    }
+
 
 
 
@@ -72,7 +157,15 @@ class ParentEditProfileActivity : AppCompatActivity() {
 
         firestore.collection("Users").document(currentUser).update("firstName", firstName, "lastName", lastName, "number", number).addOnSuccessListener {
             Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT)
+
+            // Store the color value in shared preferences
+            val sharedPrefs = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
+            val editor = sharedPrefs.edit()
+            editor.putInt("color", selectedColor)
+            editor.apply()
+            sharedPrefs.edit().putInt("color", selectedColor).apply()
             finish()
+
             val intent = Intent (this, ParentProfileActivity::class.java)
             startActivity (intent)
         }.addOnFailureListener{

@@ -192,6 +192,8 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
             audio = R.raw.expense_child_no_spend
             binding.tvSummary.text = "Wow! You've had no expenses for this $dateRange"
             binding.tvTips.text = "Remember, spending money is alright as long as you need something or have thought long and hard about it!"
+            binding.layoutPieChart.visibility = View.GONE
+            binding.layoutTopCategoriesAll.visibility = View.GONE
 
         }
 
@@ -507,40 +509,27 @@ class ExpenseFragment : Fragment(R.layout.fragment_expense) {
 
         val dec = DecimalFormat("#,###.00")
 
-        binding.tvTopExpense.text = if (top3Categories.isNotEmpty()) {
-            if (top3Categories[0].second == 0.0) "none" else top3Categories[0].first
-        } else {
-            "none"
-        }
-        binding.tvTopExpenseTotal.text = if (top3Categories.isNotEmpty()) {
-            val expenseTotal = top3Categories[0].second
-            if (expenseTotal != 0.0) "₱" + dec.format(expenseTotal) else ""
-        } else {
-            "None"
+        if (top3Categories.isNotEmpty()) {
+            binding.layoutTopCategory1.visibility = View.VISIBLE
+
+            binding.tvTopExpense.text = top3Categories[0].first
+            binding.tvTopExpenseTotal.text =  "₱" + dec.format(top3Categories[0].second)
         }
 
-        binding.tvTopExpense2.text = if (top3Categories.size >= 2) {
-            if (top3Categories[1].second == 0.0) "none" else top3Categories[1].first
-        } else {
-            "none"
-        }
-        binding.tvTopExpenseTotal2.text = if (top3Categories.size >= 2) {
-            val expenseTotal = top3Categories[1].second
-            if (expenseTotal != 0.0) "₱" + dec.format(expenseTotal) else ""
-        } else {
-            "None"
+        if (top3Categories.size >= 2) {
+            if (top3Categories[1].second != 0.0) {
+                binding.layoutTopCategory2.visibility = View.VISIBLE
+                binding.tvTopExpense2.text = top3Categories[1].first
+                binding.tvTopExpenseTotal2.text = "₱" + dec.format(top3Categories[1].second)
+            }
         }
 
-        binding.tvTopExpense3.text = if (top3Categories.size >= 3) {
-            if (top3Categories[2].second == 0.0) "None" else top3Categories[2].first
-        } else {
-            "None"
-        }
-        binding.tvTopExpenseTotal3.text = if (top3Categories.size >= 3) {
-            val expenseTotal = top3Categories[2].second
-            if (expenseTotal != 0.0) "₱" + dec.format(expenseTotal) else ""
-        } else {
-            "None"
+        if (top3Categories.size >= 3) {
+            if (top3Categories[2].second != 0.0) {
+                binding.layoutTopCategory3.visibility = View.VISIBLE
+                binding.tvTopExpense3.text = top3Categories[2].first
+                binding.tvTopExpenseTotal3.text = "₱" + dec.format(top3Categories[2].second)
+            }
         }
     }
 

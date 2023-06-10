@@ -45,6 +45,8 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private lateinit var context: Context
     private var mediaPlayer: MediaPlayer? = null
 
+    private var filter = "weekly"
+
     var balance = 0.00f
     var income = 0.00f
     var expense = 0.00f
@@ -302,7 +304,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-            bundle.putString("date", "weekly")
+            filter = "weekly"
             setUpChartTabs()
             //setUpBreakdownTabs()
         }
@@ -316,7 +318,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
             yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-            bundle.putString("date", "monthly")
+            filter = "monthly"
             setUpChartTabs()
             //setUpBreakdownTabs()
         }
@@ -330,7 +332,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
             quarterlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
-            bundle.putString("date", "quarterly")
+            filter = "quarterly"
             setUpChartTabs()
             //setUpBreakdownTabs()
         }
@@ -340,6 +342,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private fun setUpChartTabs() {
         val adapter = PFMAdapter(supportFragmentManager)
         val balanceFragment = BalanceFragment()
+        bundle.putString("date", filter)
         balanceFragment.arguments = bundle
         //val savingsFragment = SavingsFragment()
 

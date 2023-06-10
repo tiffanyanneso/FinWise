@@ -135,7 +135,7 @@
                         android:id="@+id/tv_performance_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:text="You will see here your total financial score combined from the other modules."
                         android:textColor="@color/white"
                         android:layout_gravity="center"
