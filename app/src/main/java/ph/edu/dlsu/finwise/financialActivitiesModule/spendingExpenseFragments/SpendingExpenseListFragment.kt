@@ -87,6 +87,11 @@ class SpendingExpenseListFragment : Fragment() {
             binding.rvViewItems.adapter = spendingExpensesAdapter
             binding.rvViewItems.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
             spendingExpensesAdapter.notifyDataSetChanged()
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
+            binding.rvViewItems.visibility = View.VISIBLE
+            binding.layoutLoading.visibility = View.GONE
+            binding.layoutMain.visibility = View.VISIBLE
         }
     }
 

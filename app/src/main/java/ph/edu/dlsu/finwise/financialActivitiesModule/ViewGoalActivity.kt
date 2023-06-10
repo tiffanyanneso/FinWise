@@ -210,12 +210,14 @@ class ViewGoalActivity : AppCompatActivity() {
                         binding.btnEditGoal.isEnabled = false
                         binding.btnEditGoal.isClickable = false
                         binding.btnEditGoal.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_grey)))
+                        binding.tvCurrentBalance.visibility = View.GONE
                     } else {
                         firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
                             if (it.toObject<Users>()!!.userType == "Child") {
                                 binding.btnEditGoal.isEnabled = true
                                 binding.btnEditGoal.isClickable = true
                                 binding.btnEditGoal.setBackgroundTintList(ColorStateList.valueOf(resources.getColor(R.color.light_green)))
+                                goToFinancialAssessmentActivity()
                                 allComplete = false
                             }
                         }
@@ -250,7 +252,6 @@ class ViewGoalActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getTransactions() {
         var transactionFilterArrayList = ArrayList<TransactionFilter>()
-        //TODO: INCLUDE IN QUERY SPENDING ACTIVITY ID
         firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
             for (transaction in results) {
                 var transactionObject = transaction.toObject<Transactions>()
@@ -448,8 +449,6 @@ class ViewGoalActivity : AppCompatActivity() {
                 binding.btnEditGoal.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_grey))
             }
             else if (it.toObject<Users>()!!.userType == "Child"){
-                goToFinancialAssessmentActivity()
-
                 binding.btnWithdraw.isEnabled = true
                 binding.btnWithdraw.isClickable = true
                 binding.btnWithdraw.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light_green))

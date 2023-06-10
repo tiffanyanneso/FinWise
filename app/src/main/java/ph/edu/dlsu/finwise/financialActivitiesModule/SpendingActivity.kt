@@ -7,6 +7,7 @@ import android.content.res.ColorStateList
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -27,10 +28,7 @@ import ph.edu.dlsu.finwise.databinding.DialogTakeAssessmentBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.spendingExpenseFragments.SpendingExpenseListFragment
 import ph.edu.dlsu.finwise.financialActivitiesModule.spendingExpenseFragments.SpendingShoppingListFragment
 import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
-import ph.edu.dlsu.finwise.model.BudgetItem
-import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
-import ph.edu.dlsu.finwise.model.Transactions
-import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -153,7 +151,13 @@ class SpendingActivity : AppCompatActivity() {
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
             if (it.toObject<Users>()!!.userType == "Child") {
                 childID = currentUser
-                goToFinancialAssessmentActivity()
+                firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
+                    if (it.toObject<FinancialActivities>()!!.status == "In Progress") {
+                        binding.layoutAmount.visibility = View.VISIBLE
+                        goToFinancialAssessmentActivity()
+                    } else
+                        binding.layoutAmount.visibility = View.GONE
+                }
             }
         }
     }

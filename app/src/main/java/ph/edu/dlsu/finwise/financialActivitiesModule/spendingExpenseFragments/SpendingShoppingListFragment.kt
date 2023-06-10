@@ -137,6 +137,8 @@ class SpendingShoppingListFragment : Fragment() {
             binding.loadingItems.stopShimmer()
             binding.loadingItems.visibility = View.GONE
             binding.rvViewItems.visibility = View.VISIBLE
+            binding.layoutLoading.visibility = View.GONE
+            binding.layoutMain.visibility = View.VISIBLE
         }
     }
 
