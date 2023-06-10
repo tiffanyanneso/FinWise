@@ -97,14 +97,32 @@ class ChildDashboardActivity : AppCompatActivity(){
         setContentView(binding.root)
 
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_dashboard)
-        getPerformance()
-        initializeDateSelectionSpinner()
+        CoroutineScope(Dispatchers.Main).launch {
+            getAge()
+            initializeDateSelectionSpinner()
+            getPersonalFinancePerformance()
+            //finact performance
+            if (age == 10 || age == 11)
+                getGoalSettingPerformance()
+
+
+            getSavingPerformanceScore()
+            getBudgetingPerformanceScore()
+            getSpendingPerformance()
+
+            if (age > 9 )
+                purchasePlanningPerformance()
+            else spendingPercentage = (1-overspendingPercentage)*100
+
+            getFinancialAssessmentScore()
+            getOverallFinancialHealth()
+        }
     //initializeDateButtons()
     }
 
     private fun loadView() {
         binding.layoutLoading.visibility = View.GONE
-        binding.llOverallFinancialHealth.visibility = View.VISIBLE
+        binding.layoutMain.visibility = View.VISIBLE
         binding.bottomNav.visibility = View.VISIBLE
     }
 
@@ -217,70 +235,41 @@ class ChildDashboardActivity : AppCompatActivity(){
         binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[2])
     }
 
-    private fun getPerformance() {
+    private suspend fun getAge() {
         //get the age of the child
-        firestore.collection("Users").document(childID).get().addOnSuccessListener {
-            val child = it.toObject<Users>()
+        var child = firestore.collection("Users").document(childID).get().await().toObject<Users>()
             //compute age
-            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
-            val from = LocalDate.now()
-            val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
-            val to = LocalDate.parse(date.toString(), dateFormatter)
-            val difference = Period.between(to, from)
+        val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+        val from = LocalDate.now()
+        val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+        val to = LocalDate.parse(date.toString(), dateFormatter)
+        val difference = Period.between(to, from)
 
-            age = difference.years
-            getPersonalFinancePerformance()
-        }
+        age = difference.years
     }
 
 
 
-    private fun getPersonalFinancePerformance() {
+    private suspend fun getPersonalFinancePerformance() {
         var income = 0.00F
         var expense = 0.00F
-        firestore.collection("Transactions").whereEqualTo("userID", childID).whereIn("transactionType", listOf("Income", "Expense")).get().addOnSuccessListener { results ->
-            for (transaction in results) {
-                var transactionObject = transaction.toObject<Transactions>()
-                if (transactionObject.transactionType == "Income")
-                    income += transactionObject.amount!!
-                else if (transactionObject.transactionType == "Expense")
-                    expense += transactionObject.amount!!}
-        }.continueWith {
-            var personalFinancePerformancePercent = income/expense * 100
-            if (personalFinancePerformancePercent > 200)
-                personalFinancePerformancePercent = 200F
-            personalFinancePerformance = personalFinancePerformancePercent / 2
 
-            /*binding.progressBarPersonalFinance.progress = personalFinancePerformance.toInt()
-            binding.tvPersonalFinancePercent.text = DecimalFormat("##0.00").format(personalFinancePerformance) + "%"*/
-            getFinancialActivitiesPerformance()
+        var transactions = firestore.collection("Transactions").whereEqualTo("userID", childID).whereIn("transactionType", listOf("Income", "Expense")).get().await()
+        for (transaction in transactions) {
+            var transactionObject = transaction.toObject<Transactions>()
+            if (transactionObject.transactionType == "Income")
+                income += transactionObject.amount!!
+            else if (transactionObject.transactionType == "Expense")
+                expense += transactionObject.amount!!
         }
+
+        var personalFinancePerformancePercent = income/expense * 100
+        if (personalFinancePerformancePercent > 200)
+            personalFinancePerformancePercent = 200F
+        personalFinancePerformance = personalFinancePerformancePercent / 2
+
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun getFinancialActivitiesPerformance() {
-        CoroutineScope(Dispatchers.Main).launch {
-            if (age == 10 || age == 11)
-                getGoalSettingPerformance()
-
-            getSavingPerformanceScore()
-            getBudgetingPerformanceScore()
-            getSpendingPerformance()
-            getFinancialActivitiesScores()
-        }
-    }
-
-    private fun getFinancialActivitiesScores() {
-        if (age > 9 ) {
-            CoroutineScope(Dispatchers.Main).launch {
-                purchasePlanningPerformance()
-            }
-        }
-        else spendingPercentage = (1-overspendingPercentage)*100
-
-        calculateFinancialActivitiesScore()
-
-    }
 
     private suspend fun getSpendingPerformance() {
         //get budgeting items to see if they overspent for a specific budget item
@@ -328,28 +317,18 @@ class ChildDashboardActivity : AppCompatActivity(){
         overspendingPercentage = (overSpending/nBudgetItems)
     }
 
-    private fun calculateFinancialActivitiesScore() {
-        checkIfNaNFinancialActivitiesScores()
-
-        if (age == 9 || age == 12)
-            financialActivitiesPerformance = ((savingPercentage + budgetingPercentage + spendingPercentage) / 3)
-        else if (age == 10 || age == 11)
-            financialActivitiesPerformance = ((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4)
-
-        getFinancialAssessmentScore()
-    }
-
-
 
     private suspend fun purchasePlanningPerformance() {
         //items planned / all the items they bought * 100
-        val financialActivitiesDocuments = firestore.collection("FinancialActivities")
+        val spendingActivities = firestore.collection("FinancialActivities")
             .whereEqualTo("childID", childID)
             .whereEqualTo("financialActivityName", "Spending")
             .whereEqualTo("status", "Completed").get().await()
-        for (spendingActivityID in financialActivitiesDocuments) {
+
+        for (spendingActivityID in spendingActivities) {
             val shoppingListItemsDocuments = firestore.collection("ShoppingListItems")
                 .whereEqualTo("spendingActivityID", spendingActivityID.id).get().await()
+
             for (shoppingListItem in shoppingListItemsDocuments) {
                 val shoppingListItemObject = shoppingListItem.toObject<ShoppingListItem>()
                 if (shoppingListItemObject.status == "Purchased")
@@ -360,9 +339,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 .whereEqualTo("transactionType", "Expense").get().await()
             nTotalPurchased += transactionsDocuments.size().toFloat()
             spendingPercentage = ((1-overspendingPercentage)*100 + ((nPlanned/nTotalPurchased)*100)) /2
-
         }
-
     }
 
     private suspend fun getBudgetingPerformanceScore() {
@@ -502,27 +479,21 @@ class ChildDashboardActivity : AppCompatActivity(){
         }
     }
 
-    private fun getFinancialAssessmentScore() {
-
+    private suspend fun getFinancialAssessmentScore() {
         var nCorrect = 0
         var nQuestions = 0
-        firestore.collection("AssessmentAttempts").whereEqualTo("childID", childID).get().addOnSuccessListener { results ->
-            if (results.size()!=0) {
-                for (attempt in results) {
-                    val assessmentAttempt = attempt.toObject<FinancialAssessmentAttempts>()
-                    if (assessmentAttempt.nAnsweredCorrectly != null && assessmentAttempt.nQuestions != null) {
-                        nCorrect += assessmentAttempt.nAnsweredCorrectly!!
-                        nQuestions += assessmentAttempt.nQuestions!!
-                    }
+        var results = firestore.collection("AssessmentAttempts").whereEqualTo("childID", childID).get().await()
+        if (results.size() != 0) {
+            for (attempt in results) {
+                val assessmentAttempt = attempt.toObject<FinancialAssessmentAttempts>()
+                if (assessmentAttempt.nAnsweredCorrectly != null && assessmentAttempt.nQuestions != null) {
+                    nCorrect += assessmentAttempt.nAnsweredCorrectly!!
+                    nQuestions += assessmentAttempt.nQuestions!!
                 }
-                println("print correct " + nCorrect)
-                println("print nquestions"  + nQuestions)
-                financialAssessmentPerformance = (nCorrect.toFloat() / nQuestions.toFloat()) * 100
-                /*binding.progressBarFinancialAssessments.progress = financialAssessmentPerformance.toInt()
-                binding.tvFinancialAssessmentPercentage.text = DecimalFormat("##0.00").format(financialAssessmentPerformance) + "%"*/
-                getOverallFinancialHealth()
-            } else
-                getOverallFinancialHealth()
+            }
+//            println("print correct " + nCorrect)
+//            println("print nquestions" + nQuestions)
+            financialAssessmentPerformance = (nCorrect.toFloat() / nQuestions.toFloat()) * 100
         }
     }
 
@@ -747,6 +718,17 @@ class ChildDashboardActivity : AppCompatActivity(){
         imageView.setImageBitmap(bitmap)
         binding.tvPerformanceText.text = message
         binding.tvPerformanceStatus.text = performance
+
+        println("print personal finance" +  personalFinancePerformance)
+        println("print finact goal setting " + goalSettingPercentage)
+        println("print finact saving"  + savingPercentage)
+        println("print saving finsihed " + nSavingCompleted)
+        println("print finact budgeting " + budgetingPercentage)
+        println("print budgeting finished" + nBudgetingCompleted)
+        println("print finact spending " + spendingPercentage)
+        println("print spending finished" + nSpendingCompleted)
+        println("print fin assessments" + financialAssessmentPerformance)
+
         binding.tvPerformancePercentage.text =  DecimalFormat("##0.00").format(overallFinancialHealth) + "%"
 
         loadAudio(audio)

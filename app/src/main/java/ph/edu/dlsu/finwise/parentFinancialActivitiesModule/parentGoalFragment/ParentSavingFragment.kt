@@ -144,7 +144,10 @@ class ParentSavingFragment : Fragment() {
         }
 
         loadSmartAudioDialog(dialogBinding)
-        dialog.setOnDismissListener { pauseMediaPlayer(mediaPlayerSmartDialog) }
+        dialog.setOnDismissListener {
+            if (this::mediaPlayerSmartDialog.isInitialized)
+                pauseMediaPlayer(mediaPlayerSmartDialog)
+        }
 
         dialog.show()
     }
