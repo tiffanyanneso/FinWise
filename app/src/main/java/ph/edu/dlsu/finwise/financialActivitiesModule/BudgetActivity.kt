@@ -161,6 +161,8 @@ class BudgetActivity : AppCompatActivity() {
 
     private suspend fun setLayout() {
         var allCompleted = true
+        getBudgetItems()
+
         firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
             var budgetingActivity = it.toObject<FinancialActivities>()
             if (budgetingActivity?.status == "Completed") {
@@ -184,7 +186,6 @@ class BudgetActivity : AppCompatActivity() {
                     binding.btnDoneSettingBudget.visibility = View.VISIBLE
                     binding.btnDoneSpending.visibility = View.GONE
                     goToFinancialAssessmentActivity("Pre-Activity", "Budgeting")
-                    getBudgetItems()
                 }
             }
 
@@ -201,8 +202,10 @@ class BudgetActivity : AppCompatActivity() {
 
                 }
                 //spending is done, hide buttons
-                else
+                else {
+                    binding.layoutBalance.visibility = View.GONE
                     binding.linearLayoutButtons.visibility = View.GONE
+                }
 
             }.continueWith {
                 if (allCompleted)

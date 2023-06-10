@@ -80,7 +80,7 @@
 
 
             <LinearLayout
-                android:id="@+id/linear_layout_2"
+                android:id="@+id/layout_balance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
