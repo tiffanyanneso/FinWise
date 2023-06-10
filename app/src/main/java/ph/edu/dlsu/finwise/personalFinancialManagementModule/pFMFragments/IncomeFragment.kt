@@ -104,6 +104,7 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
         }
 
         if (date != null) {
+            println("print date" + date)
             selectedDatesSort = date
             transactionsArrayList.clear()
         }
@@ -233,6 +234,8 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
             audio = R.raw.income_fragment_child_none
             binding.tvSummary.text = "Uh oh! You've earned nothing from $dateRange!"
             binding.tvTips.text = "To have income, you can accomplish chores, sell items, and decrease expenses!"
+            binding.layoutPieChart.visibility = View.GONE
+            binding.layoutTopCategoriesAll.visibility = View.GONE
             loadEarningParent()
         }
         loadAudio(audio)
@@ -347,40 +350,28 @@ class IncomeFragment : Fragment(R.layout.fragment_income) {
 
         val dec = DecimalFormat("#,###.00")
 
-        binding.tvTopIncome.text = if (top3Categories.isNotEmpty()) {
-            if (top3Categories[0].second == 0.0) "₱" else top3Categories[0].first
-        } else {
-            "None"
-        }
-        binding.tvTopIncomeTotal.text = if (top3Categories.isNotEmpty()) {
-            val incomeTotal = top3Categories[0].second
-            if (incomeTotal != 0.0) "₱" + dec.format(incomeTotal) else "None"
-        } else {
-            "None"
+
+        if (top3Categories.isNotEmpty()) {
+            binding.layoutTopCategory1.visibility = View.VISIBLE
+
+            binding.tvTopIncome.text = top3Categories[0].first
+            binding.tvTopIncomeTotal.text =  "₱" + dec.format(top3Categories[0].second)
         }
 
-        binding.tvTopIncome2.text = if (top3Categories.size >= 2) {
-            if (top3Categories[1].second == 0.0) "None" else top3Categories[1].first
-        } else {
-            "None"
-        }
-        binding.tvTopIncomeTotal2.text = if (top3Categories.size >= 2) {
-            val incomeTotal = top3Categories[1].second
-            if (incomeTotal != 0.0) "₱" + dec.format(incomeTotal) else "None"
-        } else {
-            "None"
+        if (top3Categories.size >= 2) {
+            if (top3Categories[1].second != 0.0) {
+                binding.layoutTopCategory2.visibility = View.VISIBLE
+                binding.tvTopIncome2.text = top3Categories[1].first
+                binding.tvTopIncomeTotal2.text = "₱" + dec.format(top3Categories[1].second)
+            }
         }
 
-        binding.tvTopIncome3.text = if (top3Categories.size >= 3) {
-            if (top3Categories[2].second == 0.0) "None" else top3Categories[2].first
-        } else {
-            "None"
-        }
-        binding.tvTopIncomeTotal3.text = if (top3Categories.size >= 3) {
-            val incomeTotal = top3Categories[2].second
-            if (incomeTotal != 0.0) "₱" + dec.format(incomeTotal) else "None"
-        } else {
-            "None"
+        if (top3Categories.size >= 3) {
+            if (top3Categories[2].second != 0.0) {
+                binding.layoutTopCategory3.visibility = View.VISIBLE
+                binding.tvTopIncome3.text = top3Categories[2].first
+                binding.tvTopIncomeTotal3.text = "₱" + dec.format(top3Categories[2].second)
+            }
         }
     }
 

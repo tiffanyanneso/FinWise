@@ -13,7 +13,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,10 +42,10 @@
                 android:text="This Week's Income Categories"
                 android:textSize="20sp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
                 android:textStyle="bold"
                 android:textColor="@color/dark_green"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="10dp"/>
+                android:layout_gravity="center_horizontal" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -52,7 +53,8 @@
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp"
                 android:layout_marginHorizontal="40dp"
-                android:layout_gravity="center_horizontal">
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="15dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -170,6 +172,12 @@
 
             </androidx.cardview.widget.CardView>
 
+
+            <LinearLayout
+                android:id="@+id/layout_pie_chart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -177,8 +185,6 @@
                 android:textStyle="bold"
                 android:textColor="@color/light_green"
                 android:textSize="16sp"
-                android:paddingTop="10dp"
-                android:layout_margin="5dp"
                 android:gravity="center" />
 
             <com.github.mikephil.charting.charts.PieChart
@@ -188,6 +194,13 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="15dp"
             android:layout_gravity="center_horizontal"/>
+        </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_top_categories_all"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_top_income_categories"
@@ -201,6 +214,7 @@
                 android:layout_gravity="center_horizontal"/>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/layout_top_category_1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="10dp"
@@ -208,7 +222,8 @@
                 app:cardBackgroundColor="@color/dark_green"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginVertical="10dp"
-                android:layout_gravity="center_horizontal">
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -252,6 +267,7 @@
 
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/layout_top_category_2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="10dp"
@@ -259,7 +275,8 @@
                 app:cardBackgroundColor="@color/white"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginBottom="10dp"
-                android:layout_gravity="center_horizontal">
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -302,14 +319,15 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/layout_top_category_3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="10dp"
                 app:cardElevation="5dp"
                 app:cardBackgroundColor="@color/white"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginBottom="10dp"
-                android:layout_gravity="center_horizontal">
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -350,6 +368,7 @@
                             tools:ignore="RtlCompat" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </LinearLayout>
