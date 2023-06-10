@@ -96,6 +96,7 @@ class ChildDashboardActivity : AppCompatActivity(){
         binding = ActivityChildDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.title.text = "Overall Performance"
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_dashboard)
         CoroutineScope(Dispatchers.Main).launch {
             getAge()

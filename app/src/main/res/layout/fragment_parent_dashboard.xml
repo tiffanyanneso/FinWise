@@ -5,25 +5,27 @@
     android:layout_height="match_parent"
     tools:context=".parentDashboardModule.ParentDashboardFragment">
 
-    <LinearLayout
-        android:id="@+id/layout_loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/layout_loading"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:gravity="center">-->
 
-        <ProgressBar
-            android:id="@+id/pb_loading"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            />
-    </LinearLayout>
+<!--        <ProgressBar-->
+<!--            android:id="@+id/pb_loading"-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="100dp"-->
+<!--            />-->
+<!--    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone">
+        >
+
+<!--        android:visibility="gone"-->
 
     <LinearLayout
         android:id="@+id/linear_layout_1"
@@ -38,29 +40,35 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_gravity="center"
             android:background="@drawable/button_border_white"
             android:backgroundTint="@color/white"
-            android:padding="10dp"
-            android:layout_gravity="center">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <ImageView
-                android:src="@drawable/peso_coin"                                android:id="@+id/img_face"
+                android:id="@+id/img_face"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:src="@drawable/peso_coin" />
 
             <TextView
                 android:id="@+id/tv_financial_health_score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                tools:text="Get Started!"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:layout_gravity="center"
-                android:textAlignment="center"/>
+                tools:text="Get Started!" />
 
             <TextView
                 android:id="@+id/tv_performance_status"
@@ -68,11 +76,21 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text=""
+                android:textAlignment="center"
                 android:textColor="@color/dark_green"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                />
+                android:textStyle="bold" />
+        </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_performance_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:text="You will see here your child's overall performance."
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"/>
         </LinearLayout>
 
         <TextView
