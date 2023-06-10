@@ -148,7 +148,7 @@
                         android:id="@+id/tv_performance_status"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:textSize="16sp"
                         android:text="Loading"
                         android:textColor="@color/light_green"
                         android:textStyle="bold"
@@ -230,47 +230,24 @@
                 android:layout_margin="5dp"
                 android:text="WEEKLY"/>-->
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/container_activity"
-                app:layout_constraintTop_toBottomOf="@+id/goal_container"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Month"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:layout_marginHorizontal="40dp"
-                android:layout_marginTop="10dp"
-                android:paddingBottom="10dp"
-                app:startIconDrawable="@drawable/baseline_calendar_today_24"
-                >
+                android:orientation="vertical">
 
-            <AutoCompleteTextView
-                android:id="@+id/month_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                android:backgroundTint="@color/white"
-                android:background="@color/white"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Month"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-            </com.google.android.material.textfield.TextInputLayout>
+                <Spinner
+                    android:id="@+id/month_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:orientation="vertical">-->
-
-<!--                <TextView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:gravity="center"-->
-<!--                    android:text="Month"-->
-<!--                    android:textAppearance="?android:attr/textAppearanceMedium"/>-->
-
-<!--                <Spinner-->
-<!--                    android:id="@+id/month_spinner"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content" />-->
-
-<!--            </LinearLayout>-->
+            </LinearLayout>
 
         </LinearLayout>
 
