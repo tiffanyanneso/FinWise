@@ -17,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentParentDashboardBinding
 import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
@@ -104,9 +105,6 @@ class ParentDashboardFragment : Fragment() {
             getOverallFinancialHealth()
         }
 
-
-       //TODO: Set views
-    //setPerformanceView()
     }
 
     private suspend fun getAge() {
@@ -340,6 +338,62 @@ class ParentDashboardFragment : Fragment() {
         }
     }
 
+    private fun setPerformanceView() {
+        var percentage = overallFinancialHealth * 100
+
+        if (percentage >= 96) {
+            binding.imgFace.setImageResource(R.drawable.excellent)
+            binding.tvPerformanceStatus.text = "Excellent"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.dark_green))
+            binding.tvPerformanceText.text = "Your child is a financial guru! Celebrate their accomplishments and encourage them to keep it up!"
+        } else if (percentage < 96 && percentage >= 86) {
+            binding.imgFace.setImageResource(R.drawable.amazing)
+            binding.tvPerformanceStatus.text = "Amazing"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
+            binding.tvPerformanceText.text = "Your child has a solid foundation in personal finance, financial activities, and concepts. Keep empowering them!"
+        } else if (percentage < 86 && percentage >= 76) {
+            binding.imgFace.setImageResource(R.drawable.great)
+            binding.tvPerformanceStatus.text = "Great"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.green))
+            binding.tvPerformanceText.text = "Your child has strong financial decision-making skills. Encourage them to keep this up!"
+        } else if (percentage < 76 && percentage >= 66) {
+            binding.imgFace.setImageResource(R.drawable.good)
+            binding.tvPerformanceStatus.text = "Good"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.light_green))
+            binding.tvPerformanceText.text = "Your child is good at real-life financial decision-making & has a good grasp of financial concepts!"
+        } else if (percentage < 66 && percentage >= 56) {
+            binding.imgFace.setImageResource(R.drawable.average)
+            binding.tvPerformanceStatus.text = "Average"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.yellow))
+            binding.tvPerformanceText.text = "Continue supporting your child in their development by having them participate in decision making activities at home!"
+        } else if (percentage < 56 && percentage >= 46) {
+            binding.imgFace.setImageResource(R.drawable.nearly_there)
+            binding.tvPerformanceStatus.text = "Nearly There"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
+            binding.tvPerformanceText.text = "Your child is nearly there. Have them participate in decision making activities at home!"
+        } else if (percentage < 46 && percentage >= 36) {
+            binding.imgFace.setImageResource(R.drawable.almost_there)
+            binding.tvPerformanceStatus.text = "Almost There"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
+            binding.tvPerformanceText.text = "Your child is developing their financial decision-making. Have them participate in decision making activities at home!"
+        } else if (percentage < 36 && percentage >= 26) {
+            binding.imgFace.setImageResource(R.drawable.getting_there)
+            binding.tvPerformanceStatus.text = "Getting There"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
+            binding.tvPerformanceText.text = "Your child is still developing their financial decision-making. Allow them to practice this skill at home!"
+        } else if (percentage < 26 && percentage >= 16) {
+            binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
+            binding.tvPerformanceStatus.text = "Not Quite\nThere"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceText.text = "Your child is still developing their financial decision-making. Allow them to practice this skill at home!"
+        } else if (percentage < 15) {
+            binding.imgFace.setImageResource(R.drawable.bad)
+            binding.tvPerformanceStatus.text = "Needs\nImprovement"
+            binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPerformanceText.text = "Your child is starting their financial journey! Encourage them to keep exploring financial decision-making!"
+        }
+    }
+
     private fun checkIfNaNFinancialActivitiesScores() {
         val percentages = mutableListOf(savingPercentage, spendingPercentage, budgetingPercentage,
             goalSettingPercentage)
@@ -475,6 +529,7 @@ class ParentDashboardFragment : Fragment() {
         println("print spending finished" + nSpendingCompleted)
         println("print fin assessments" + financialAssessmentPerformance)
         binding.tvFinancialHealthScore.text = DecimalFormat("##0.00").format(overallFinancialHealth) + "%"
+        setPerformanceView()
         binding.layoutLoading.visibility = View.GONE
         binding.mainLayout.visibility = View.VISIBLE
     }

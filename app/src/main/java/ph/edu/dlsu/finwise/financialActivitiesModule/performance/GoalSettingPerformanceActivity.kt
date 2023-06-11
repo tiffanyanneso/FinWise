@@ -145,21 +145,21 @@ class GoalSettingPerformanceActivity : AppCompatActivity() {
                 audio = R.raw.goal_setting_performance_overall_nearly_there
                 binding.imgFace.setImageResource(R.drawable.nearly_there)
                 binding.tvPerformanceStatus.text = "Nearly There"
-                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
                 binding.tvPerformanceText.text = "You're nearly there! Improve your SMART goal setting to get there!"
                 showPerformanceButton()
             } else if (percentage < 46 && percentage >= 36) {
                 audio = R.raw.goal_setting_performance_overall_almost_there
                 binding.imgFace.setImageResource(R.drawable.almost_there)
                 binding.tvPerformanceStatus.text = "Almost There"
-                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
                 binding.tvPerformanceText.text = "Almost there! You need to improve your SMART goal setting!"
                 showPerformanceButton()
             } else if (percentage < 36 && percentage >= 26) {
                 audio = R.raw.goal_setting_performance_overall_getting_there
                 binding.imgFace.setImageResource(R.drawable.getting_there)
                 binding.tvPerformanceStatus.text = "Getting There"
-                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.red))
+                binding.tvPerformanceStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
                 binding.tvPerformanceText.text = "Getting there! You need to improve your SMART goal setting!"
                 showPerformanceButton()
                 audio = R.raw.goal_setting_performance_overall_getting_there

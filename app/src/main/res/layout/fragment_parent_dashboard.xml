@@ -5,27 +5,27 @@
     android:layout_height="match_parent"
     tools:context=".parentDashboardModule.ParentDashboardFragment">
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/layout_loading"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:gravity="center">-->
+    <LinearLayout
+        android:id="@+id/layout_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
 
-<!--        <ProgressBar-->
-<!--            android:id="@+id/pb_loading"-->
-<!--            android:layout_width="100dp"-->
-<!--            android:layout_height="100dp"-->
-<!--            />-->
-<!--    </LinearLayout>-->
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:visibility="gone"
         >
 
-<!--        android:visibility="gone"-->
 
     <LinearLayout
         android:id="@+id/linear_layout_1"

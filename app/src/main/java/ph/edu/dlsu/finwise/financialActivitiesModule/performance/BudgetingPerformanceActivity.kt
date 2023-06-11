@@ -173,22 +173,22 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         } else if (parentalPercentage < 55 && parentalPercentage >= 45) {
             audio = R.raw.budgeting_performance_parental_involvement_nearly_there
             binding.textViewPerformanceTextParentalInvolvement.text = "Nearly There"
-            binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.red))
+            binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
             binding.tvParentalInvolvementText.text = "You're nearly there! Try to create your budget on your own before asking mom or dad to help!"
         } else if (parentalPercentage < 65 && parentalPercentage >= 55) {
             audio = R.raw.budgeting_performance_parental_involvement_almost_there
             binding.textViewPerformanceTextParentalInvolvement.text = "Almost There"
-            binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.red))
+            binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.almost_there_yellow))
             binding.tvParentalInvolvementText.text = "Almost there! Try to create your budget on your own before asking mom or dad to help!"
         } else if (parentalPercentage < 75 && parentalPercentage >= 65) {
             audio = R.raw.budgeting_performance_parental_involvement_getting_there
             binding.textViewPerformanceTextParentalInvolvement.text = "Getting There"
-            binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.red))
+            binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.getting_there_orange))
             binding.tvParentalInvolvementText.text = "Getting there! Try to create your budget on your own before asking mom or dad to help!"
         } else if (parentalPercentage < 85 && parentalPercentage >= 75) {
             audio = R.raw.budgeting_performance_parental_involvement_not_quite
             binding.textViewPerformanceTextParentalInvolvement.text = "Not Quite\nThere"
-            binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.red))
+            binding.textViewPerformanceTextParentalInvolvement.setTextColor(getResources().getColor(R.color.not_quite_there_red))
             binding.tvParentalInvolvementText.text = "Not quite there yet! Try to create your budget on your own before asking mom or dad to help!."
         } else if (parentalPercentage > 84) {
             audio = R.raw.budgeting_performance_parental_involvement_needs_improvement
