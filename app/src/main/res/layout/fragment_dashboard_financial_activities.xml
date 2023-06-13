@@ -8,31 +8,32 @@
     android:backgroundTint="@color/white">
 
     <LinearLayout
-        android:id="@+id/layout_loading"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:gravity="center">
-
-        <ProgressBar
-            android:id="@+id/pb_loading"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/layout_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="20dp"
         android:layout_marginBottom="10dp"
-        android:visibility="gone"
         >
+
+        <LinearLayout
+            android:id="@+id/layout_loading"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:gravity="center">
+
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                />
+        </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/cv_overall_score"
+            android:visibility="gone"
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp"
             android:layout_gravity="center_horizontal">
@@ -43,17 +44,6 @@
                 android:orientation="vertical"
                 android:padding="20dp"
                 android:background="@drawable/gradient_pfm_card">
-                <!--<TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="Financial Activities Score"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:textAlignment="center"
-                    android:layout_marginBottom="10dp"
-                    android:layout_gravity="center"/>-->
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -146,7 +136,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="visible">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -155,7 +145,6 @@
                         android:textColor="@color/white"
                         android:textStyle="bold"
                         android:layout_marginTop="5dp"/>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -180,6 +169,7 @@
                             android:textStyle="bold"
                             android:layout_marginLeft="8dp"/>
                     </LinearLayout>
+
                 </LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"
@@ -296,17 +286,207 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/ll_ongoing_activities"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Ongoing Activities"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:layout_marginBottom="5dp"/>
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/linear_layout_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="15dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/ll_goal_setting"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:visibility="gone"
+                    android:background="@drawable/layout_bg_green"
+                    android:backgroundTint="@color/dark_green"
+                    android:layout_weight="1"
+                    android:layout_marginRight="7dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_goal_setting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="X"
+                        android:textAllCaps = "true"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textAlignment="center"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:text="Goal Setting"
+                        android:textAllCaps = "true"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:background="@drawable/layout_bg_green"
+                    android:backgroundTint="@color/dark_green"
+                    android:layout_weight="1"
+                    android:layout_marginRight="7dp">
+
+                    <TextView
+                        android:id="@+id/tv_saving"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="X"
+                        android:textAllCaps = "true"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textAlignment="center"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:text="Saving"
+                        android:textAllCaps = "true"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:background="@drawable/layout_bg_green"
+                    android:backgroundTint="@color/dark_green"
+                    android:layout_weight="1"
+                    android:layout_marginRight="5dp">
+
+                    <TextView
+                        android:id="@+id/tv_budgeting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="X"
+                        android:textAllCaps = "true"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textAlignment="center"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:text="Budgeting"
+                        android:textAllCaps = "true"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:background="@drawable/layout_bg_green"
+                    android:backgroundTint="@color/dark_green"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tv_spending"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="X"
+                        android:textAllCaps = "true"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textAlignment="center"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:text="Spending"
+                        android:textAllCaps = "true"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"/>
+                </LinearLayout>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </LinearLayout>
+
+
         <TextView
             android:id="@+id/tv_balance_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="This Month's Financial Activities Score Trend"
+            android:text="Loading This Month's Financial Activities Score Trend"
             android:textStyle="bold"
             android:textColor="@color/dark_green"
             android:textSize="20sp"
             android:layout_marginTop="15dp"
             android:gravity="center"
             android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:gravity="center"
+                android:text="Select a Month"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/month_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:dropDownVerticalOffset="5dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:popupBackground="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_loading_chart"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:gravity="center">
+
+            <ProgressBar
+                android:id="@+id/pb_loading_chart"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                />
+        </LinearLayout>
 
 
         <com.github.mikephil.charting.charts.LineChart
@@ -315,149 +495,12 @@
             android:layout_height="450dp"
             android:layout_marginTop="5dp"
             android:layout_marginStart="5dp"
+            android:visibility="gone"
             android:layout_gravity="center"
             android:background="@color/white"
             android:layout_marginBottom="20dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Ongoing Activities"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:layout_marginBottom="5dp"/>
 
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/linear_layout_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="15dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/ll_goal_setting"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:visibility="gone"
-                android:background="@drawable/layout_bg_green"
-                android:backgroundTint="@color/dark_green"
-                android:layout_weight="1"
-                android:layout_marginRight="7dp"
-                >
-
-                <TextView
-                    android:id="@+id/tv_goal_setting"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:text="X"
-                    android:textAllCaps = "true"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textAlignment="center"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:text="Goal Setting"
-                    android:textAllCaps = "true"
-                    android:textColor="@color/white"
-                    android:textAlignment="center"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:background="@drawable/layout_bg_green"
-                android:backgroundTint="@color/dark_green"
-                android:layout_weight="1"
-                android:layout_marginRight="7dp">
-
-                <TextView
-                    android:id="@+id/tv_saving"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:text="X"
-                    android:textAllCaps = "true"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textAlignment="center"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:text="Saving"
-                    android:textAllCaps = "true"
-                    android:textColor="@color/white"
-                    android:textAlignment="center"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:background="@drawable/layout_bg_green"
-                android:backgroundTint="@color/dark_green"
-                android:layout_weight="1"
-                android:layout_marginRight="5dp">
-
-                <TextView
-                    android:id="@+id/tv_budgeting"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:text="X"
-                    android:textAllCaps = "true"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textAlignment="center"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:text="Budgeting"
-                    android:textAllCaps = "true"
-                    android:textColor="@color/white"
-                    android:textAlignment="center"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:background="@drawable/layout_bg_green"
-                android:backgroundTint="@color/dark_green"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/tv_spending"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:text="X"
-                    android:textAllCaps = "true"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textAlignment="center"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:text="Spending"
-                    android:textAllCaps = "true"
-                    android:textColor="@color/white"
-                    android:textAlignment="center"/>
-            </LinearLayout>
-        </androidx.appcompat.widget.LinearLayoutCompat>
 </LinearLayout>
 </FrameLayout>

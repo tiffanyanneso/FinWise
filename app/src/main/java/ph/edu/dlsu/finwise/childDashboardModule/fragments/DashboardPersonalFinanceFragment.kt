@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
@@ -18,15 +20,14 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardPersonalFinanceBinding
+import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.Transactions
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentFinancialActivity
 import ph.edu.dlsu.finwise.parentFinancialManagementModule.ParentFinancialManagementActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.text.DecimalFormat
@@ -56,6 +57,9 @@ class DashboardPersonalFinanceFragment : Fragment() {
     private lateinit var chart: LineChart
     var graphData = mutableListOf<Entry>()
 
+    private var totalIncome = 0.00f
+    private var totalExpense = 0.00f
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -73,19 +77,20 @@ class DashboardPersonalFinanceFragment : Fragment() {
         binding.layoutLoading.visibility = View.VISIBLE
         binding.layoutMain.visibility = View.GONE
         getArgumentsBundle()
-        initializeBalanceLineGraph()
+        initializeFragment()
         //getPersonalFinancePerformance()
 
         binding.title.text = "Personal Finance Performance"
     }
 
-    private fun initializeBalanceLineGraph() {
+    private fun initializeFragment() {
         firestore.collection("Transactions").whereEqualTo("userID", childID)
             .get().addOnSuccessListener { documents ->
                 initializeTransactions(documents)
                 sortedDate = getDatesOfTransactions(transactionsArrayList)
-                setData()
-                initializeGraph()
+                initializeDateSelectionSpinner()
+                val totalPersonalFinancePerformance = calculatePersonalFinancePerformance()
+                setTotals(totalPersonalFinancePerformance)
                 loadView()
             }
     }
@@ -123,7 +128,39 @@ class DashboardPersonalFinanceFragment : Fragment() {
         return uniqueDates.sorted()
     }
 
-    private fun  setData(): MutableList<Entry> {
+    private fun initializeDateSelectionSpinner() {
+        val calendar = Calendar.getInstance()
+        val currentMonth = calendar.get(Calendar.MONTH)
+
+        val months = arrayOf(
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        )
+
+        val filteredMonths = months.sliceArray(0..currentMonth)
+
+        val spinner = binding.monthSpinner
+        spinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, filteredMonths)
+        spinner.setSelection(currentMonth)
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedMonth = months[position]
+                // Do something with the selected month
+                selectedDatesSort = selectedMonth
+                setData()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Handle case when no month is selected
+                selectedDatesSort = "current"
+                setData()
+            }
+        }
+    }
+
+    private fun setData() {
+
         val month: Int
         if (selectedDatesSort == "current") {
             /*val group = groupDates(sortedDate, "month")
@@ -138,28 +175,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
         }
         weeks = getWeeksOfMonth(sortedDate, month)
         graphData = getDataOfWeeksOfCurrentMonth(weeks!!)
-
-        /*when (selectedDatesSort) {
-            *//*"weekly" -> {
-                selectedDates = getDaysOfWeek(sortedDate)
-                graphData = addWeeklyData(selectedDates)
-                binding.tvBalanceTitle.text = "This Week's Personal Financial Score Trend"
-            }*//*
-            "current" -> {
-                weeks = getWeeksOfCurrentMonth(sortedDate)
-                graphData = getDataOfWeeksOfCurrentMonth(weeks!!)
-                *//*val group = groupDates(sortedDate, "month")
-                iterateDatesByQuarter(group)*//*
-                binding.tvBalanceTitle.text = "This Month's Personal Financial Score Trend"
-            }
-            "quarterly" -> {
-                months = getMonthsOfQuarter(sortedDate)
-                graphData =  getDataOfMonthsOfCurrentQuarter(months!!)
-                Log.d("zaza", "QUARTER: "+graphData)
-                binding.tvBalanceTitle.text = "This Quarter's Personal Financial Score Trend"
-            }
-        }*/
-        return graphData
+        initializeGraph()
     }
 
     private fun getMonthIndex(selectedMonth: String): Int {
@@ -175,76 +191,6 @@ class DashboardPersonalFinanceFragment : Fragment() {
         val calendar = Calendar.getInstance()
         return calendar.get(Calendar.MONTH)
     }
-
-  /*  private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
-        // Get the current quarter
-        val currentQuarter = (Calendar.getInstance().get(Calendar.MONTH) / 3) + 1
-
-        // Group the dates by month for the current quarter
-        val groupedDates = dates.groupBy { date ->
-            val calendar = Calendar.getInstance()
-            calendar.time = date
-
-            // Check if the date falls within the current quarter
-            val quarter = (calendar.get(Calendar.MONTH) / 3) + 1
-            if (quarter == currentQuarter) {
-                // Get the month of the date
-                val month = calendar.get(Calendar.MONTH) + 1
-
-                // Return the month number as the key
-                month
-            } else {
-                // If the date does not fall within the current quarter, return null
-                null
-            }
-        }
-
-        return groupedDates.filterKeys { it != null } as Map<Int, List<Date>>
-    }
-
-    private fun getDataOfMonthsOfCurrentQuarter(months: Map<Int, List<Date>>): MutableList<Entry> {
-        val data = mutableListOf<Entry>()
-        var totalIncome = 0.00f
-        var income = 0.00f
-        var totalExpense= 0.00f
-        var expense= 0.00f
-        var xAxisPoint =0.00f
-
-        for ((month, datesInMonth) in months) {
-            //var totalAmount = 0.00F
-            for (date in datesInMonth) {
-                for (transaction in transactionsArrayList) {
-                    if (date.compareTo(transaction.date?.toDate()) == 0) {
-                        if (transaction.transactionType == "Income"){
-                            //totalAmount += transaction.amount!!
-                            totalIncome += transaction.amount!!
-                            income += transaction.amount!!
-                        }
-                        else {
-                            //totalAmount -= transaction.amount!!
-                            totalExpense += transaction.amount!!
-                            expense += transaction.amount!!
-                        }
-                    }
-                }
-            }
-            var personalFinancePerformancePercent = income/expense * 100
-            if (personalFinancePerformancePercent > 200)
-                personalFinancePerformancePercent = 200F
-
-            val personalFinancePerformance = personalFinancePerformancePercent / 2
-
-            data.add(Entry(xAxisPoint, personalFinancePerformance))
-            income = 0.00F
-            expense = 0.00F
-            xAxisPoint++
-        }
-
-        val totalPersonalFinancePerformance = calculatePersonalFinancePerformance(totalIncome, totalExpense)
-        setTotals(totalPersonalFinancePerformance)
-        return data
-    }*/
-
 
     private fun getWeeksOfMonth(dates: List<Date>, month: Int): Map<Int, List<Date>> {
         val calendar = Calendar.getInstance()
@@ -268,9 +214,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
 
     private fun getDataOfWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>): MutableList<Entry> {
         val data = mutableListOf<Entry>()
-        var totalIncome = 0.00f
         var income = 0.00f
-        var totalExpense= 0.00f
         var expense= 0.00f
         var xAxisPoint =0.00f
 
@@ -281,12 +225,10 @@ class DashboardPersonalFinanceFragment : Fragment() {
                     if (date.compareTo(transaction.date?.toDate()) == 0) {
                         if (transaction.transactionType == "Income"){
                             //totalAmount += transaction.amount!!
-                            totalIncome += transaction.amount!!
                             income += transaction.amount!!
                         }
                         else {
                             //totalAmount -= transaction.amount!!
-                            totalExpense += transaction.amount!!
                             expense += transaction.amount!!
                         }
                     }
@@ -303,13 +245,21 @@ class DashboardPersonalFinanceFragment : Fragment() {
             expense = 0.00F
             xAxisPoint++
         }
-
-        val totalPersonalFinancePerformance = calculatePersonalFinancePerformance(totalIncome, totalExpense)
-        setTotals(totalPersonalFinancePerformance)
         return data
     }
 
-    private fun calculatePersonalFinancePerformance(totalIncome: Float, totalExpense: Float): Float {
+    private fun addTotalIIncomeAndExpensePFM(transaction: Transactions) {
+        if (transaction.transactionType == "Income")
+            totalIncome += transaction.amount!!
+        else totalExpense += transaction.amount!!
+    }
+
+    private fun calculatePersonalFinancePerformance(): Float {
+        val copiedTransactionsArrayList: ArrayList<Transactions> =
+            transactionsArrayList.toMutableList() as ArrayList<Transactions>
+        for (transaction in copiedTransactionsArrayList)
+            addTotalIIncomeAndExpensePFM(transaction)
+
         var personalFinancePerformancePercent = totalIncome/totalExpense * 100
         if (personalFinancePerformancePercent > 200)
             personalFinancePerformancePercent = 200F
@@ -575,13 +525,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
         xAxis.granularity = 1f // Set a smaller granularity if there are fewer data points
 
         xAxis.position = XAxis.XAxisPosition.BOTTOM
-        Log.d("sabong", "selectedDatesSort: "+ selectedDatesSort)
-
-        when (selectedDatesSort) {
-            //"weekly" -> updateXAxisWeekly(xAxis)
-            "monthly" -> updateXAxisMonthly(xAxis)
-            "quarterly" -> updateXAxisQuarterly(xAxis)
-        }
+        updateXAxisMonthly(xAxis)
 
         val yAxis = chart.axisLeft
         yAxis.setDrawLabels(true) // Show X axis labels
@@ -627,16 +571,6 @@ class DashboardPersonalFinanceFragment : Fragment() {
         chart.invalidate()
     }
 
-    /*private fun updateXAxisWeekly(xAxis: XAxis?) {
-        val dateFormatter = SimpleDateFormat("EEE")
-        val dates = selectedDates.distinct()
-
-        if (dates.size < graphData.size) {
-            // There are fewer dates than xAxis entries, reduce the number of xAxis entries
-            graphData = graphData.take(dates.size) as MutableList<Entry>
-        }
-        xAxis?.valueFormatter = IndexAxisValueFormatter(dates.map { dateFormatter.format(it) }.toTypedArray())
-    }*/
 
     private fun updateXAxisMonthly(xAxis: XAxis) {
         xAxis.valueFormatter = object : ValueFormatter() {
@@ -679,7 +613,6 @@ class DashboardPersonalFinanceFragment : Fragment() {
     private fun getArgumentsBundle() {
         val args = arguments
 
-        val date = args?.getString("date")
         val childIDBundle = args?.getString("childID")
         val currUser = args?.getString("user")
         if (currUser != null) {
@@ -689,10 +622,6 @@ class DashboardPersonalFinanceFragment : Fragment() {
         if (childIDBundle != null)
             childID = childIDBundle
 
-        if (date != null) {
-            selectedDatesSort = date
-            transactionsArrayList.clear()
-        }
     }
 
    /* private fun getDaysOfWeek(dates: List<Date>): List<Date> {
@@ -724,6 +653,87 @@ class DashboardPersonalFinanceFragment : Fragment() {
 
         return currentWeekDates.sorted()
     }
+
+      /*  private fun getMonthsOfQuarter(dates: List<Date>): Map<Int, List<Date>> {
+      // Get the current quarter
+      val currentQuarter = (Calendar.getInstance().get(Calendar.MONTH) / 3) + 1
+
+      // Group the dates by month for the current quarter
+      val groupedDates = dates.groupBy { date ->
+          val calendar = Calendar.getInstance()
+          calendar.time = date
+
+          // Check if the date falls within the current quarter
+          val quarter = (calendar.get(Calendar.MONTH) / 3) + 1
+          if (quarter == currentQuarter) {
+              // Get the month of the date
+              val month = calendar.get(Calendar.MONTH) + 1
+
+              // Return the month number as the key
+              month
+          } else {
+              // If the date does not fall within the current quarter, return null
+              null
+          }
+      }
+
+      return groupedDates.filterKeys { it != null } as Map<Int, List<Date>>
+  }
+
+  private fun getDataOfMonthsOfCurrentQuarter(months: Map<Int, List<Date>>): MutableList<Entry> {
+      val data = mutableListOf<Entry>()
+      var totalIncome = 0.00f
+      var income = 0.00f
+      var totalExpense= 0.00f
+      var expense= 0.00f
+      var xAxisPoint =0.00f
+
+      for ((month, datesInMonth) in months) {
+          //var totalAmount = 0.00F
+          for (date in datesInMonth) {
+              for (transaction in transactionsArrayList) {
+                  if (date.compareTo(transaction.date?.toDate()) == 0) {
+                      if (transaction.transactionType == "Income"){
+                          //totalAmount += transaction.amount!!
+                          totalIncome += transaction.amount!!
+                          income += transaction.amount!!
+                      }
+                      else {
+                          //totalAmount -= transaction.amount!!
+                          totalExpense += transaction.amount!!
+                          expense += transaction.amount!!
+                      }
+                  }
+              }
+          }
+          var personalFinancePerformancePercent = income/expense * 100
+          if (personalFinancePerformancePercent > 200)
+              personalFinancePerformancePercent = 200F
+
+          val personalFinancePerformance = personalFinancePerformancePercent / 2
+
+          data.add(Entry(xAxisPoint, personalFinancePerformance))
+          income = 0.00F
+          expense = 0.00F
+          xAxisPoint++
+      }
+
+      val totalPersonalFinancePerformance = calculatePersonalFinancePerformance(totalIncome, totalExpense)
+      setTotals(totalPersonalFinancePerformance)
+      return data
+  }*/
+
+
+    /*private fun updateXAxisWeekly(xAxis: XAxis?) {
+        val dateFormatter = SimpleDateFormat("EEE")
+        val dates = selectedDates.distinct()
+
+        if (dates.size < graphData.size) {
+            // There are fewer dates than xAxis entries, reduce the number of xAxis entries
+            graphData = graphData.take(dates.size) as MutableList<Entry>
+        }
+        xAxis?.valueFormatter = IndexAxisValueFormatter(dates.map { dateFormatter.format(it) }.toTypedArray())
+    }*/
 
 
     private fun addWeeklyData(selectedDates: List<Date>): MutableList<Entry> {

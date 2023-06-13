@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.github.mikephil.charting.charts.LineChart
@@ -49,7 +51,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     private var isViewCreated = false
 
     private var xAxisPoint =0.00f
-    private var iteration =0.00f
     private val data = mutableListOf<Entry>()
     var mediaPlayer: MediaPlayer? = MediaPlayer()
 
@@ -129,8 +130,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         isViewCreated = true
 
         binding = FragmentDashboardFinancialActivitiesBinding.bind(view)
-        binding.layoutLoading.visibility = View.VISIBLE
-        binding.layoutMain.visibility = View.GONE
         getArgumentsBundle()
         initializeBalanceLineGraph()
     }
@@ -141,17 +140,112 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             getChildAge()
             getFinancialActivities()
             getUniqueDates()
-            setData()
-            initializeGraph()
-            setPerformanceView()
+            loadOverallScore()
+            initializeGraphDate()
+            //TODO: Load view of this code
             loadOnGoingActivities()
-            loadView()
         }
     }
 
+    private suspend fun loadOverallScore() {
+        if (age in 10..11 && goalRatingObjectArray.isNotEmpty()) {
+            for (goal in goalRatingObjectArray) {
+                getGoalSettingPerformance(goal)
+            }
+        }
+
+        if (savingObjectArray.isNotEmpty()) {
+            for (goal in savingObjectArray) {
+                getSavingPerformance(goal)
+            }
+        }
+
+        if (budgetingDocumentArray.isNotEmpty()) {
+            for (activity in budgetingDocumentArray) {
+                getBudgetingPerformanceScore(activity)
+            }
+        }
+
+        if (spendingObjectArray.isNotEmpty()) {
+            for (spending in spendingObjectArray) {
+                getOverspending(spending)
+            }
+        }
+
+        if (age > 9 && spendingDocumentArray.isNotEmpty()) {
+            for (spendingActivity in spendingDocumentArray) {
+                getPurchasePlanning(spendingActivity)
+            }
+        }
+        getPercentages()
+        computeForPercentages()
+        calculateFinancialActivitiesScore(true)
+        setPerformanceView()
+        resetFinActVariables()
+        loadView()
+    }
+
+    private fun initializeGraphDate() {
+        val calendar = Calendar.getInstance()
+        val currentMonth = calendar.get(Calendar.MONTH)
+
+        val months = arrayOf(
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        )
+
+        val filteredMonths = months.sliceArray(0..currentMonth)
+
+        val spinner = binding.monthSpinner
+        spinner.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, filteredMonths)
+        spinner.setSelection(currentMonth)
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                loadLoadingChart()
+                val selectedMonth = months[position]
+                // Do something with the selected month
+                selectedDatesSort = selectedMonth
+                CoroutineScope(Dispatchers.Main).launch {
+                    resetVariables()
+                    setData()
+                    hideLoadingChart()
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                loadLoadingChart()
+                // Handle case when no month is selected
+                selectedDatesSort = "current"
+                CoroutineScope(Dispatchers.Main).launch {
+                    resetVariables()
+                    setData()
+                    hideLoadingChart()
+                }
+            }
+        }
+    }
+
+    private fun resetVariables() {
+        data.clear()
+        xAxisPoint = 0.00F
+        //financialActivitiesPerformanceAverage = 0F
+    }
+ 
+    private fun loadLoadingChart() {
+        binding.llLoadingChart.visibility = View.VISIBLE
+        binding.financialActivitiesChart.visibility = View.GONE
+    }
+
+    private fun hideLoadingChart() {
+        binding.llLoadingChart.visibility = View.GONE
+        binding.financialActivitiesChart.visibility = View.VISIBLE
+    }
+
+
     private fun loadView() {
         binding.layoutLoading.visibility = View.GONE
-        binding.layoutMain.visibility = View.VISIBLE
+        binding.cvOverallScore.visibility = View.VISIBLE
     }
 
     private suspend fun loadOnGoingActivities() {
@@ -197,6 +291,9 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         if (ongoingBudgeting.isEmpty)
             numBudgeting = 0
         binding.tvBudgeting.text = numBudgeting.toString()
+
+        binding.llOngoingActivities.visibility = View.VISIBLE
+
     }
 
     private suspend fun getDataOfWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>) {
@@ -232,16 +329,16 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                         getPurchasePlanning(date, spendingActivity)
                     }
                 }
-
                 getPercentages()
             }
             computeForPercentages()
-            resetVariables()
+            calculateFinancialActivitiesScore()
+            resetFinActVariables()
         }
     }
 
 
-    private fun resetVariables() {
+    private fun resetFinActVariables() {
         nGoalSettingCompleted = 0
         nBudgetingCompleted = 0
         nSpendingCompleted = 0
@@ -250,6 +347,10 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         nParent = 0
         purchasedBudgetItemCount = 0F
         totalBudgetAccuracy = 0F
+        budgetItemCount = 0F
+        isSpendingActivityCompleted = true
+
+
 
         //Spending
         nPlanned = 0F
@@ -263,6 +364,11 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         nOnTime = 0.00F
         nRatings = 0
         overallRating = 0.00F
+
+        goalSettingPercentage = 0F
+        savingPercentage = 0F
+        budgetingPercentage = 0F
+        spendingPercentage = 0F
     }
 
     private fun getPercentages() {
@@ -319,7 +425,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     }
 
     private fun computeForPercentages() {
-
         // Calculate total percentages for each array
         savingPercentage = calculateAveragePercentage(savingPercentageArray)
         spendingPercentage = calculateAveragePercentage(spendingPercentageArray)
@@ -329,7 +434,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
         clearArrays()
         checkIfNaN()
-        calculateFinancialActivitiesScore()
     }
 
     private fun calculateAveragePercentage(percentageArray: ArrayList<Float?>): Float {
@@ -348,6 +452,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
         for (i in percentages.indices) {
             Log.d("hayabusa", "checkIfNaN: "+percentages[i])
+            Log.d("hayabusa", "percentages: "+percentages)
             if (percentages[i].isNaN()) {
                 when (i) {
                     0 -> savingPercentage = 0.00f
@@ -372,39 +477,16 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     private suspend fun setData() {
         val month: Int
         if (selectedDatesSort == "current") {
-            /*val group = groupDates(sortedDate, "month")
-            iterateDatesByQuarter(group)*/
             month = getCurrentMonth()
             binding.tvBalanceTitle.text = "This Month's Financial Activities Score Trend"
         } else {
             month = getMonthIndex(selectedDatesSort)
-            /*val group = groupDates(sortedDate, "month")
-            iterateDatesByQuarter(group)*/
             binding.tvBalanceTitle.text = "Financial Activities Score Trend of $selectedDatesSort"
         }
         weeks = getWeeksOfMonth(sortedDate, month)
         getDataOfWeeksOfCurrentMonth(weeks!!)
-        /*when (selectedDatesSort) {
-            *//*"weekly" -> {
-                selectedDates = getDaysOfWeek(sortedDate)
-                graphData = addWeeklyData(selectedDates)
-                binding.tvBalanceTitle.text = "This Week's Personal Financial Score Trend"
-            }*//*
-            "monthly" -> {
-                weeks = getWeeksOfCurrentMonth(sortedDate)
-                Log.d("lapos", "weeks: "+weeks)
-                getData(weeks!!)
-                *//*val group = groupDates(sortedDate, "month")
-                iterateDatesByQuarter(group)*//*
-                binding.tvBalanceTitle.text = "This Month's Financial Activities Score Trend"
-            }
-            "quarterly" -> {
-                months = getMonthsOfQuarter(sortedDate)
-                Log.d("lapos", "months: "+months)
-                getData(months!!)
-                binding.tvBalanceTitle.text = "This Quarter's Financial Activities Score Trend"
-            }
-        }*/
+        initializeGraph()
+
     }
 
     private fun getMonthIndex(selectedMonth: String): Int {
@@ -721,6 +803,26 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         }
     }
 
+    private suspend fun getOverspending(spending: FinancialActivities) {
+        nSpendingCompleted++
+        val financialActivityDocuments = firestore.collection("FinancialActivities")
+            .whereEqualTo("financialGoalID", spending.financialGoalID)
+            .whereEqualTo("financialActivityName", "Budgeting")
+            .whereEqualTo("status", "Completed").get().await()
+
+        val budgetingID = financialActivityDocuments.documents[0].id
+        val budgetItemsDocuments = firestore.collection("BudgetItems")
+            .whereEqualTo("financialActivityID", budgetingID)
+            .whereEqualTo("status", "Active").get().await()
+        nBudgetItems += budgetItemsDocuments.size()
+
+        for (budgetItem in budgetItemsDocuments) {
+            val budgetItemObject = budgetItem.toObject<BudgetItem>()
+            checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
+        }
+    }
+
+
     private suspend fun checkOverSpending(budgetItemID:String, budgetItemAmount:Float){
         Log.d("kelan", "budgetItemID: "+budgetItemID)
         Log.d("kelan", "budgetItemAmount: "+budgetItemAmount)
@@ -739,12 +841,12 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
     }
 
-    private fun calculateFinancialActivitiesScore() {
+    private fun calculateFinancialActivitiesScore(isOverallScore: Boolean) {
         checkIfNaNFinancialActivitiesScores()
         var financialActivitiesPerformanceScore = 0F
         if (age == 9 || age == 12) {
             if (nGoals == 0.00F) {
-                var bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
+                val bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
                 binding.ivScore.setImageBitmap(bitmap)
                 binding.tvPerformanceStatus.visibility = View.GONE
                 binding.tvPerformancePercentage.visibility = View.GONE
@@ -766,7 +868,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 binding.tvPerformanceText.text =
                     "Complete financial activities to see your score here"
             } else if (nGoals == 0.00F)
-                financialActivitiesPerformanceAverage = goalSettingPercentage
+                financialActivitiesPerformanceScore = goalSettingPercentage
             else if (nBudgetingCompleted == 0)
                 financialActivitiesPerformanceScore = (goalSettingPercentage + savingPercentage) / 2
             else if (nSpendingCompleted == 0)
@@ -777,17 +879,68 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                     ((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4)
             }
         }
-        iteration++
-        financialActivitiesPerformanceAverage += financialActivitiesPerformanceScore
-        goalSettingPercentageAverage += goalSettingPercentage
-        savingPercentageTotalAverage += savingPercentage
-        budgetingPercentageAverage += budgetingPercentage
-        spendingPercentageAverage += spendingPercentage
+        financialActivitiesPerformanceAverage = financialActivitiesPerformanceScore
+        goalSettingPercentageAverage = goalSettingPercentage
+        savingPercentageTotalAverage = savingPercentage
+        budgetingPercentageAverage = budgetingPercentage
+        spendingPercentageAverage = spendingPercentage
+
+        Log.d("kalot", "financialActivitiesPerformanceAverage: "+financialActivitiesPerformanceAverage)
+        Log.d("kalot", "goalSettingPercentage: "+goalSettingPercentage)
+        Log.d("kalot", "savingPercentage: "+savingPercentage)
+        Log.d("kalot", "budgetingPercentage: "+budgetingPercentage)
+        Log.d("kalot", "spendingPercentage: "+spendingPercentage)
+
+        /*data.add(Entry(xAxisPoint, roundedFinancialActivitiesPerformance.toFloat()))
+        xAxisPoint++*/
+    }
+
+    private fun calculateFinancialActivitiesScore() {
+        checkIfNaNFinancialActivitiesScores()
+        var financialActivitiesPerformanceScore = 0F
+        if (age == 9 || age == 12) {
+            if (nGoals == 0.00F) {
+                val bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
+                binding.ivScore.setImageBitmap(bitmap)
+                binding.tvPerformanceStatus.visibility = View.GONE
+                binding.tvPerformancePercentage.visibility = View.GONE
+                binding.tvPerformanceText.text = "Complete financial activities to see your score here"
+            }
+            else if (nBudgetingCompleted == 0)
+                financialActivitiesPerformanceScore =  savingPercentage
+            else if (nSpendingCompleted == 0)
+                financialActivitiesPerformanceScore = (savingPercentage + budgetingPercentage)/2
+            else
+                financialActivitiesPerformanceScore = ((savingPercentage + budgetingPercentage + spendingPercentage) / 3)
+        }
+        else if (age == 10 || age == 11) {
+            if (nGoalSettingCompleted == 0) {
+                var bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
+                binding.ivScore.setImageBitmap(bitmap)
+                binding.tvPerformanceStatus.visibility = View.GONE
+                binding.tvPerformancePercentage.visibility = View.GONE
+                binding.tvPerformanceText.text =
+                    "Complete financial activities to see your score here"
+            } else if (nGoals == 0.00F)
+                financialActivitiesPerformanceScore = goalSettingPercentage
+            else if (nBudgetingCompleted == 0)
+                financialActivitiesPerformanceScore = (goalSettingPercentage + savingPercentage) / 2
+            else if (nSpendingCompleted == 0)
+                financialActivitiesPerformanceScore =
+                    (goalSettingPercentage + savingPercentage + budgetingPercentage) / 3
+            else {
+                financialActivitiesPerformanceScore =
+                    ((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4)
+            }
+        }
 
         val roundedFinancialActivitiesPerformance = (financialActivitiesPerformanceScore * 10).roundToInt() / 10
         data.add(Entry(xAxisPoint, roundedFinancialActivitiesPerformance.toFloat()))
         xAxisPoint++
     }
+
+
+
 
     private suspend fun getPurchasePlanning(date: Date, spendingActivity: QueryDocumentSnapshot) {
         //items planned / all the items they bought * 100
@@ -812,6 +965,25 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         }
     }
 
+    private suspend fun getPurchasePlanning(spendingActivity: QueryDocumentSnapshot) {
+        //items planned / all the items they bought * 100
+        val spendingObject = spendingActivity.toObject<FinancialActivities>()
+        if (spendingObject.status == "Completed") {
+            val shoppingListItemsDocuments = firestore.collection("ShoppingListItems")
+                .whereEqualTo("spendingActivityID", spendingActivity.id).get().await()
+            for (shoppingListItem in shoppingListItemsDocuments) {
+                val shoppingListItemObject = shoppingListItem.toObject<ShoppingListItem>()
+                if (shoppingListItemObject.status == "Purchased")
+                    nPlanned++
+            }
+            val transactionsDocuments = firestore.collection("Transactions")
+                .whereEqualTo("financialActivityID", spendingActivity.id)
+                .whereEqualTo("transactionType", "Expense").get().await()
+            nTotalPurchased += transactionsDocuments.size().toFloat()
+        }
+    }
+
+
     private suspend fun getBudgetingPerformanceScore(date: Date, activity: QueryDocumentSnapshot) {
         val budgetingObject = activity.toObject<FinancialActivities>()
         val weekDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
@@ -822,6 +994,12 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             processBudgetItems(activity)
         }
     }
+
+    private suspend fun getBudgetingPerformanceScore(activity: QueryDocumentSnapshot) {
+        nBudgetingCompleted++
+        processBudgetItems(activity)
+    }
+
 
 
     private suspend fun processBudgetItems(activity: QueryDocumentSnapshot) {
@@ -894,6 +1072,13 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             }
     }
 
+    private fun getGoalSettingPerformance(goal: GoalRating) {
+        nGoalSettingCompleted++
+        nRatings++
+        overallRating += goal.overallRating!!
+    }
+
+
     private fun getSavingPerformance(date: Date, goal: FinancialGoals) {
         val weekDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val activityDate = goal.dateCompleted?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
@@ -910,14 +1095,24 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         }
     }
 
+    private fun getSavingPerformance(goal: FinancialGoals) {
+        nGoals++
+        if (goal.dateCompleted != null) {
+            val targetDate = goal.targetDate!!.toDate()
+            val completedDate = goal.dateCompleted!!.toDate()
+
+            //goal was completed before the target date, meaning it was completed on time
+            if (completedDate.before(targetDate) || completedDate == targetDate)
+                nOnTime++
+        }
+    }
+
+
 
     private fun setPerformanceView() {
         if (!isViewCreated || !isAdded) {
             return
         }
-
-        calculateAverage()
-
         val imageView = binding.ivScore
         val message: String
         val performance: String
@@ -928,6 +1123,9 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
         //TODO: Change audio
         var audio = 0
+
+        checkIfNaNTotals()
+
 
         if (financialActivitiesPerformanceAverage >= 96F) {
             audio = if (userType == "Parent")
@@ -1150,17 +1348,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         loadButton()
     }
 
-    private fun calculateAverage() {
-        checkIfNaNTotals()
-
-        financialActivitiesPerformanceAverage /= iteration
-        budgetingPercentageAverage /= iteration
-        goalSettingPercentageAverage /= iteration
-        savingPercentageTotalAverage /= iteration
-        spendingPercentageAverage /= iteration
-
-        checkIfNaNTotals()
-    }
 
     private fun checkIfNaNTotals() {
         if (financialActivitiesPerformanceAverage.isNaN())
@@ -1248,8 +1435,10 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         val percentages = mutableListOf(savingPercentage, spendingPercentage, budgetingPercentage,
             goalSettingPercentage)
 
-
-
+        Log.d("captaion", "savingPercentage: "+savingPercentage)
+        Log.d("captaion", "spendingPercentage: "+spendingPercentage)
+        Log.d("captaion", "budgetingPercentage: "+budgetingPercentage)
+        Log.d("captaion", "goalSettingPercentage: "+goalSettingPercentage)
         for (i in percentages.indices) {
             if (percentages[i].isNaN()) {
                 when (i) {
@@ -1279,19 +1468,9 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     private fun getArgumentsBundle() {
         val args = arguments
 
-        val date = args?.getString("date")
         userID = args?.getString("childID").toString()
 
-        if (date != null) {
-            selectedDatesSort = date
-            xAxisPoint = 0.00F
-            financialActivitiesPerformanceAverage = 0F
-            goalRatingObjectArray.clear()
-            savingObjectArray.clear()
-            spendingObjectArray.clear()
-            spendingDocumentArray.clear()
-            budgetingDocumentArray.clear()
-        }
+
     }
 
 

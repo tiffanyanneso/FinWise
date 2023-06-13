@@ -90,119 +90,43 @@ class ChildDashboardActivity : AppCompatActivity(){
         R.drawable.baseline_assessment_24
     )
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityChildDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.title.text = "Overall Performance"
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_dashboard)
         CoroutineScope(Dispatchers.Main).launch {
             getAge()
-            initializeDateSelectionSpinner()
+            initializeFragments()
             getPersonalFinancePerformance()
-            //finact performance
-            if (age == 10 || age == 11)
-                getGoalSettingPerformance()
-
-
-            getSavingPerformanceScore()
-            getBudgetingPerformanceScore()
-            getSpendingPerformance()
-
-            if (age > 9 )
-                purchasePlanningPerformance()
-            else spendingPercentage = (1-overspendingPercentage)*100
-
+            getFinactActPerformance()
             getFinancialAssessmentScore()
             getOverallFinancialHealth()
         }
-    //initializeDateButtons()
     }
+
+    private suspend fun getFinactActPerformance() {
+        if (age == 10 || age == 11)
+            getGoalSettingPerformance()
+
+        getSavingPerformanceScore()
+        getBudgetingPerformanceScore()
+        getSpendingPerformance()
+
+        if (age > 9 )
+            purchasePlanningPerformance()
+        else spendingPercentage = (1-overspendingPercentage)*100
+    }
+
 
     private fun loadView() {
         binding.layoutLoading.visibility = View.GONE
-        binding.layoutMain.visibility = View.VISIBLE
-        binding.bottomNav.visibility = View.VISIBLE
+        binding.llOverallFinancialHealth.visibility = View.VISIBLE
     }
 
-    private fun initializeDateButtons() {
-        //initializeWeeklyButton()
-        //initializeMonthlyButton()
-
-    }
-
-
-    /*private fun initializeWeeklyButton() {
-        val weeklyButton = binding.btnWeekly
-        val monthlyButton = binding.btnMonthly
-        val yearlyButton = binding.btnQuarterly
-        weeklyButton.setOnClickListener {
-            weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
-            monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-            yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-            bundle.putString("date", "weekly")
-            initializeFragments()
-            //setUpBreakdownTabs()
-        }
-    }*/
-
-    /*private fun initializeMonthlyButton() {
-        //val weeklyButton = binding.btnWeekly
-        val monthlyButton = binding.btnMonthly
-        monthlyButton.setOnClickListener {
-            //weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-            monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
-            *//*yearlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-            bundle.putString("date", "monthly")
-            initializeFragments()*//*
-            //setUpBreakdownTabs()
-        }
-    }*/
-
-    private fun initializeDateSelectionSpinner() {
-        val calendar = Calendar.getInstance()
-        val currentMonth = calendar.get(Calendar.MONTH)
-
-        val months = arrayOf(
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        )
-
-        val filteredMonths = months.sliceArray(0..currentMonth)
-
-        val spinner = binding.monthSpinner
-        spinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, filteredMonths)
-        spinner.setSelection(currentMonth)
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedMonth = months[position]
-                // Do something with the selected month
-                bundle.putString("date", selectedMonth)
-                initializeFragments()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // Handle case when no month is selected
-                bundle.putString("date", "current")
-                initializeFragments()
-            }
-        }
-
-
-        /*val weeklyButton = binding.btnWeekly
-        val monthlyButton = binding.btnMonthly
-        .setOnClickListener {
-            //weeklyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-            monthlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.white))
-            quarterlyButton.setBackgroundColor(ContextCompat.getColor(this, R.color.light_green))
-            bundle.putString("date", "quarterly")
-            initializeFragments()
-            //setUpBreakdownTabs()
-        }*/
-    }
 
     private fun initializeFragments() {
         setBundle()
