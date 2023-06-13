@@ -2,19 +2,24 @@ package ph.edu.dlsu.finwise.financialActivitiesModule
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.SpendingExpenseAdapter
 import ph.edu.dlsu.finwise.databinding.ActivitySpendingTransactionsBinding
 import ph.edu.dlsu.finwise.model.Transactions
+import ph.edu.dlsu.finwise.model.Users
 
 class SpendingTransactionsActivity : AppCompatActivity() {
 
@@ -31,8 +36,8 @@ class SpendingTransactionsActivity : AppCompatActivity() {
         binding = ActivitySpendingTransactionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initializes the navbar
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_profile)
+        setNavigationBar()
+        loadBackButton()
 
         var bundle = intent.extras!!
         spendingActivityID = bundle.getString("spendingActivityID").toString()
@@ -51,6 +56,38 @@ class SpendingTransactionsActivity : AppCompatActivity() {
                 R.drawable.baseline_arrow_back_24, null)
         }
 
+    }
+
+    private fun setNavigationBar() {
+
+        var navUser = FirebaseAuth.getInstance().currentUser!!.uid
+        firestore.collection("Users").document(navUser).get().addOnSuccessListener {
+
+            val bottomNavigationViewChild = binding.bottomNav
+            val bottomNavigationViewParent = binding.bottomNavParent
+
+            if (it.toObject<Users>()!!.userType == "Parent") {
+                bottomNavigationViewChild.visibility = View.GONE
+                bottomNavigationViewParent.visibility = View.VISIBLE
+                //sends the ChildID to the parent navbar
+                val bundle = intent.extras!!
+                val childID = bundle.getString("childID").toString()
+                val bundleNavBar = Bundle()
+                bundleNavBar.putString("childID", childID)
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal, bundleNavBar)
+            } else if (it.toObject<Users>()!!.userType == "Child") {
+                bottomNavigationViewChild.visibility = View.VISIBLE
+                bottomNavigationViewParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
+            }
+        }
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
 //    private val tabIcons = intArrayOf(
