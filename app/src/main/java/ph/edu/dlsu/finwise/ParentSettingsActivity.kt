@@ -17,7 +17,12 @@ import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.databinding.ActivityMainBinding
 import ph.edu.dlsu.finwise.databinding.ActivityParentSettingsBinding
 import ph.edu.dlsu.finwise.model.SettingsModel
+import ph.edu.dlsu.finwise.model.Users
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 class ParentSettingsActivity : AppCompatActivity() {
 
@@ -54,16 +59,32 @@ class ParentSettingsActivity : AppCompatActivity() {
     }
 
     private fun saveSettings() {
-        firestore.collection("Settings").document(settingsID).update(
-            "maxAmountActivities",  binding.etMaxAmount.text.toString().toFloat(),
-            "alertAmount",  binding.etAlertAmount.text.toString().toFloat(),
-            "buyingItem", binding.checkBuyingItems.isChecked,
-            "planingEvent",  binding.checkPlanningEvent.isChecked,
-            "emergencyFund", binding.checkEmergency.isChecked,
-            "donatingCharity", binding.checkDonating.isChecked,
-            "situationalShopping",  binding.checkSituational.isChecked
-        ).addOnSuccessListener {
-            Toast.makeText(this, "Settings have been updated", Toast.LENGTH_SHORT).show()
+        var maxAmount = binding.etMaxAmount.text.toString()
+        var alertAmount =  binding.etAlertAmount.text.toString()
+        if (maxAmount.isNotEmpty() && alertAmount.isNotEmpty()) {
+            binding.containerMaxAmount.helperText = ""
+            binding.containerAlertAmount.helperText = ""
+            firestore.collection("Settings").document(settingsID).update(
+                "maxAmountActivities", maxAmount.toFloat(),
+                "alertAmount", alertAmount.toFloat(),
+                "buyingItem", binding.checkBuyingItems.isChecked,
+                "planingEvent", binding.checkPlanningEvent.isChecked,
+                "emergencyFund", binding.checkEmergency.isChecked,
+                "donatingCharity", binding.checkDonating.isChecked,
+                "situationalShopping", binding.checkSituational.isChecked
+            ).addOnSuccessListener {
+                Toast.makeText(this, "Settings have been updated", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            if (maxAmount.isEmpty())
+                binding.containerMaxAmount.helperText = "Input a max amount for activities"
+            else
+                binding.containerMaxAmount.helperText = ""
+
+            if (alertAmount.isEmpty())
+                binding.containerAlertAmount.helperText = "Input a max amount for transactions"
+            else
+                binding.containerAlertAmount.helperText = ""
         }
     }
 
@@ -83,6 +104,27 @@ class ParentSettingsActivity : AppCompatActivity() {
             binding.checkDonating.isChecked = settings?.donatingCharity!!
             binding.checkSituational.isChecked = settings?.situationalShopping!!
         }
+
+        var child = firestore.collection("Users").document(childID).get().await().toObject<Users>()
+
+        //compute age
+        val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+        val from = LocalDate.now()
+        val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+        val to = LocalDate.parse(date.toString(), dateFormatter)
+        var difference = Period.between(to, from)
+
+        var age = difference.years
+        var maxAmount = 3000F
+
+        if (age == 9)
+            maxAmount = 3000F
+        else if (age == 10 || age == 11)
+            maxAmount = 5000F
+        else
+            maxAmount = 10000F
+
+        binding.tvRecommendedMax.text = "Recommended maximum for age is ₱${DecimalFormat("#,##0.00").format(maxAmount)}."
     }
 
     private fun loadBackButton() {

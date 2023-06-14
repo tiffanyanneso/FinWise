@@ -196,15 +196,20 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             var dialog = Dialog(this);
             dialog.setContentView(dialogBinding.getRoot())
             dialog.window!!.setLayout(900, 800)
+            dialogBinding.containerAmount.helperText = ""
 
             dialogBinding.btnSave.setOnClickListener {
-                amount = dialogBinding.etAmount.text.toString().toFloat()
-                firestore.collection("EarningActivities").document(earningActivityID).update("amount", amount)
+                var amount = dialogBinding.etAmount.text.toString()
+                if (amount.isNotEmpty()) {
+                    firestore.collection("EarningActivities").document(earningActivityID)
+                        .update("amount", amount)
 
-                if (paymentType == "Maya")
-                    payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
-                else if (paymentType == "Cash")
-                    logTransactions()
+                    if (paymentType == "Maya")
+                        payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
+                    else if (paymentType == "Cash")
+                        logTransactions()
+                } else
+                    dialogBinding.containerAmount.helperText = "Input an amount"
             }
 
             dialogBinding.btnCancel.setOnClickListener { dialog.dismiss() }

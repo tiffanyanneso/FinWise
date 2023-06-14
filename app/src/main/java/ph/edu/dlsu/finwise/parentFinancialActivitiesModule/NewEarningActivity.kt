@@ -258,19 +258,28 @@ class NewEarningActivity : AppCompatActivity() {
         dialog.window!!.setLayout(800, 1000)
 
         dialogBinding.btnSave.setOnClickListener {
+            dialogBinding.containerChoreName.helperText = ""
+            dialogBinding.containerDuration.helperText = ""
             var choreName  = dialogBinding.etChoreName.text.toString()
-            var duration  = dialogBinding.etDuration.text.toString().toInt()
-            var chore = hashMapOf(
-               "choreName" to choreName,
-               "duration" to duration,
-               "createdBy" to currentUser
-            )
-            firestore.collection("Chores").add(chore).addOnSuccessListener {
-                dialog.dismiss()
-                binding.dropdownChore.setText(choreName)
-                binding.etDuration.setText(duration.toString())
-                dropdownChores.add(choreName)
-                binding.dropdownChore.setAdapter(choresAdapter)
+            var duration  = dialogBinding.etDuration.text.toString()
+            if (choreName.isNotEmpty() && duration.isNotEmpty()) {
+                var chore = hashMapOf(
+                    "choreName" to choreName,
+                    "duration" to duration.toInt(),
+                    "createdBy" to currentUser
+                )
+                firestore.collection("Chores").add(chore).addOnSuccessListener {
+                    dialog.dismiss()
+                    binding.dropdownChore.setText(choreName)
+                    binding.etDuration.setText(duration.toString())
+                    dropdownChores.add(choreName)
+                    binding.dropdownChore.setAdapter(choresAdapter)
+                }
+            } else {
+                if (choreName.isEmpty())
+                    dialogBinding.containerChoreName.helperText = "Input chore name"
+                if (duration.isEmpty())
+                    dialogBinding.containerDuration.helperText = "Input duration"
             }
         }
 

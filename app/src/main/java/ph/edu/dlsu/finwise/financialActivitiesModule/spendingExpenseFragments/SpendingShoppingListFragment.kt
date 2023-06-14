@@ -158,7 +158,7 @@ class SpendingShoppingListFragment : Fragment() {
                     shoppingListArrayList.add(ShoppingListAdapterItem(newItem.id, dialogBinding.etShoppingListItemName.text.toString(), false))
                 }
             } else
-                dialogBinding.containerCategory.helperText = "Input name of item"
+                dialogBinding.containerCategory.helperText = "Input name of shopping list item"
         }
 
         dialogBinding.btnCancel.setOnClickListener {
@@ -179,9 +179,13 @@ class SpendingShoppingListFragment : Fragment() {
         }
 
         dialogBinding.btnSave.setOnClickListener {
-            firestore.collection("ShoppingListItems").document(shoppingListItemID).update("itemName", dialogBinding.etShoppingListItemName.text.toString())
-            shoppingListAdapter.notifyDataSetChanged()
-            dialog.dismiss()
+            if (!dialogBinding.etShoppingListItemName.text.toString().isEmpty()) {
+                firestore.collection("ShoppingListItems").document(shoppingListItemID)
+                    .update("itemName", dialogBinding.etShoppingListItemName.text.toString())
+                shoppingListAdapter.notifyDataSetChanged()
+                dialog.dismiss()
+            } else
+                dialogBinding.containerCategory.helperText = "Input name of shopping list   item"
         }
 
         dialogBinding.btnCancel.setOnClickListener {

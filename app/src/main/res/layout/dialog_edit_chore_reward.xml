@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"
-        android:text="@string/title_add_new_choice"
+        android:text="Edit Reward Amount"
         android:gravity="center"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -27,7 +27,7 @@
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/container_category"
+            android:id="@+id/container_amount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
