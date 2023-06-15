@@ -199,10 +199,10 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             dialogBinding.containerAmount.helperText = ""
 
             dialogBinding.btnSave.setOnClickListener {
-                var amount = dialogBinding.etAmount.text.toString()
-                if (amount.isNotEmpty()) {
-                    firestore.collection("EarningActivities").document(earningActivityID)
-                        .update("amount", amount)
+                var newAmount = dialogBinding.etAmount.text.toString()
+                if (newAmount.isNotEmpty()) {
+                    amount = newAmount.toFloat()
+                    firestore.collection("EarningActivities").document(earningActivityID).update("amount", newAmount.toFloat())
 
                     if (paymentType == "Maya")
                         payWithPayMayaClient.startSinglePaymentActivityForResult(this, buildSinglePaymentRequest())
@@ -384,7 +384,7 @@ class EarningSendMoneyActivity : AppCompatActivity() {
             //user is a child
             if (it.toObject<Users>()!!.userType == "Child")
                 binding.btnSendMoney.visibility = View.GONE
-
+            
             val user = it.toObject<Users>()!!
             //current user is a child
             val bottomNavigationViewChild = binding.bottomNav
@@ -400,8 +400,6 @@ class EarningSendMoneyActivity : AppCompatActivity() {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
                 //sends the ChildID to the parent navbar
-                val bundle = Bundle()
-                val childID = bundle.getString("childID").toString()
                 val bundleNavBar = Bundle()
                 bundleNavBar.putString("childID", childID)
                 NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal, bundleNavBar)

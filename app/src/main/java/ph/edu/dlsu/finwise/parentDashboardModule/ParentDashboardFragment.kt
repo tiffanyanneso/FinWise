@@ -529,9 +529,11 @@ class ParentDashboardFragment : Fragment() {
         println("print spending finished" + nSpendingCompleted)
         println("print fin assessments" + financialAssessmentPerformance)
         binding.tvFinancialHealthScore.text = DecimalFormat("##0.00").format(overallFinancialHealth) + "%"
-        setPerformanceView()
-        binding.layoutLoading.visibility = View.GONE
-        binding.mainLayout.visibility = View.VISIBLE
+        if (isAdded && !isDetached) {
+            setPerformanceView()
+            binding.layoutLoading.visibility = View.GONE
+            binding.mainLayout.visibility = View.VISIBLE
+        }
     }
 
 }
