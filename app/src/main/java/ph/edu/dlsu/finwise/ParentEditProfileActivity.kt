@@ -75,8 +75,6 @@ class ParentEditProfileActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener{
             updateProfile()
             isColorChanged = true // Set the flag to true when the Save button is clicked
-            var goToProfile = Intent(this, ParentProfileActivity::class.java)
-            context.startActivity(goToProfile)
         }
 
         binding.btnCancel.setOnClickListener {
@@ -154,22 +152,36 @@ class ParentEditProfileActivity : AppCompatActivity() {
         val firstName = binding.etFirstName.text.toString()
         val lastName = binding.etLastName.text.toString()
         val number = binding.etContactNumber.text.toString()
+        binding.containerFirstName.helperText = ""
+        binding.containerLastName.helperText = ""
+        binding.containerNumber.helperText = ""
 
-        firestore.collection("Users").document(currentUser).update("firstName", firstName, "lastName", lastName, "number", number).addOnSuccessListener {
-            Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT)
+        if (firstName.isNotEmpty() && lastName.isNotEmpty() && number.isNotEmpty()) {
+            firestore.collection("Users").document(currentUser)
+                .update("firstName", firstName, "lastName", lastName, "number", number)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Profile Updated", Toast.LENGTH_SHORT)
 
-            // Store the color value in shared preferences
-            val sharedPrefs = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
-            val editor = sharedPrefs.edit()
-            editor.putInt("color", selectedColor)
-            editor.apply()
-            sharedPrefs.edit().putInt("color", selectedColor).apply()
-            finish()
+                    // Store the color value in shared preferences
+                    val sharedPrefs = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
+                    val editor = sharedPrefs.edit()
+                    editor.putInt("color", selectedColor)
+                    editor.apply()
+                    sharedPrefs.edit().putInt("color", selectedColor).apply()
+                    finish()
 
-            val intent = Intent (this, ParentProfileActivity::class.java)
-            startActivity (intent)
-        }.addOnFailureListener{
-            Toast.makeText(this, "Profile Update Failed", Toast.LENGTH_SHORT)
+                    val intent = Intent(this, ParentProfileActivity::class.java)
+                    startActivity(intent)
+                }.addOnFailureListener {
+                Toast.makeText(this, "Profile Update Failed", Toast.LENGTH_SHORT)
+            }
+        } else {
+            if (firstName.isEmpty())
+                binding.containerFirstName.helperText = "Input first name"
+            if (lastName.isEmpty())
+                binding.containerLastName.helperText = "Input last name"
+            if (number.isEmpty())
+                binding.containerNumber.helperText = "Input contact number"
         }
     }
 }
