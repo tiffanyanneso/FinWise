@@ -47,9 +47,6 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, PersonalFinancialManagementActivity::class.java))
                     initializeDailyReminderChildNotif()
                     initializeNearDeadlineNotif()
-                    //scheduleFirestoreSyncJob(this)
-                    saveScores()
-                    //saveData()
                 }
                 else if (userObject?.userType == "Parent") {
                     startActivity(Intent(this, ParentDashboardActivity::class.java))
@@ -57,7 +54,6 @@ class MainActivity : AppCompatActivity() {
                         //there is a child under the parent, send daily reminder for them to check the app
                         if (!result.isEmpty)
                             initializeDailyReminderParentNotif()
-
                     }
                 }
                 else if (userObject?.userType == "Financial Expert")
@@ -130,83 +126,6 @@ class MainActivity : AppCompatActivity() {
         var  notificationIntent= Intent(this, GoalNotificationServices::class.java)
         notificationIntent.putExtra("notificationType", "checkForUpdatesParent")
         var pendingIntent = PendingIntent.getService(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )
-    }
-
-
-//    private fun saveData() {
-//        // Initialize WorkManager
-//        workManager = WorkManager.getInstance(applicationContext)
-//
-//        // Create a Constraints object to specify requirements for running the worker
-//        val constraints = Constraints.Builder()
-//            .setRequiredNetworkType(NetworkType.CONNECTED)
-//            .build()
-//
-//        // Create a OneTimeWorkRequest for the worker
-//        val workRequest = OneTimeWorkRequestBuilder<FirestoreSyncWorkManager>()
-//            .setConstraints(constraints)
-//            .setInitialDelay(calculateDelay(), TimeUnit.MILLISECONDS)
-//            .build()
-//
-//        // Enqueue the work request with WorkManager
-//        workManager.enqueue(workRequest)
-//    }
-//
-//    private fun calculateDelay(): Long {
-//        val currentTime = System.currentTimeMillis()
-//        val calendar = Calendar.getInstance().apply {
-//            timeInMillis = currentTime
-//            set(Calendar.HOUR_OF_DAY, 10)
-//            set(Calendar.MINUTE, 26)
-//            set(Calendar.SECOND, 0)
-//            set(Calendar.MILLISECOND, 0)
-//        }
-//        val scheduledTime = calendar.timeInMillis
-//        return scheduledTime - currentTime
-//    }
-
-//    fun scheduleFirestoreSyncJob(context: Context) {
-//        val jobId = 1 // Unique job ID
-//
-//        val componentName = ComponentName(context, FirestoreJobService::class.java)
-//        val jobInfo = JobInfo.Builder(jobId, componentName)
-//            .setRequiresCharging(false) // Set any additional constraints if needed
-//            .setPersisted(true) // Allow the job to survive device reboots
-//            .setMinimumLatency(getTimeUntilNextMidnight()) // Set the initial delay until 11:59 PM
-//            .setPeriodic(AlarmManager.INTERVAL_DAY) // Repeat the job daily
-//            .build()
-//
-//        val jobScheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-//        jobScheduler.schedule(jobInfo)
-//    }
-//
-//    fun getTimeUntilNextMidnight(): Long {
-//        val currentTime = System.currentTimeMillis()
-//        val midnight = (currentTime / 86400000L + 1) * 86400000L // Next midnight timestamp
-//        return midnight - currentTime
-//    }
-//
-    private fun saveScores() {
-        println("print in save main ")
-        val intent = Intent(applicationContext, FirestoreDataSyncService::class.java)
-        val pendingIntent = PendingIntent.getService(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val calendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 23)
-            set(Calendar.MINUTE, 59)
-        }
-
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,

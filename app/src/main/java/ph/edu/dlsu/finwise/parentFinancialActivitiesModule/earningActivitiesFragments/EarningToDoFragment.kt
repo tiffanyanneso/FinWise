@@ -29,7 +29,6 @@ class EarningToDoFragment : Fragment() {
     private lateinit var binding:FragmentEarningToDoBinding
     private lateinit var earningToDoAdapter: EarningToDoAdapter
     private lateinit var childID:String
-    private lateinit var userType:String
 
     private var firestore = Firebase.firestore
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
@@ -52,11 +51,8 @@ class EarningToDoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CoroutineScope(Dispatchers.IO).launch {
-            getCurrentUserType()
-            getToDoEarning()
-
-        }
+        getCurrentUserType()
+        getToDoEarning()
     }
 
     private fun getToDoEarning() {
@@ -73,6 +69,7 @@ class EarningToDoFragment : Fragment() {
                 loadRecyclerView(earningToDoArrayList)
             else
                 emptyList()
+
             binding.rvViewActivitiesToDo.visibility = View.VISIBLE
             binding.loadingItems.stopShimmer()
             binding.loadingItems.visibility = View.GONE
@@ -89,20 +86,22 @@ class EarningToDoFragment : Fragment() {
     private fun emptyList() {
         binding.rvViewActivitiesToDo.visibility = View.GONE
         binding.layoutEmptyActivity.visibility = View.VISIBLE
-
-        if (userType == "Parent")
-            binding.tvEmptyListMessage.text = "Your child doesn't have any chores now.\nCreate one to help them start earning!"
-        else if (userType == "Child")
-            binding.tvEmptyListMessage.text = "There are no chores at the moment.\nAsk your parent to create one for you"
-
     }
 
-    private suspend fun getCurrentUserType() {
-        userType =  firestore.collection("Users").document(currentUser).get().await().toObject<Users>()?.userType!!
+    private fun getCurrentUserType() {
+      firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+          var userType = it.toObject<Users>()?.userType!!
+          if (userType == "Parent") {
+              binding.layoutPictureReminder.visibility = View.GONE
+              binding.tvEmptyListMessage.text =
+                  "Your child doesn't have any chores now.\nCreate one to help them start earning!"
+          }
+          else if (userType == "Child") {
+              binding.layoutPictureReminder.visibility = View.VISIBLE
+              binding.tvEmptyListMessage.text =
+                  "There are no chores at the moment.\nAsk your parent to create one for you"
+          }
+      }
 
-        if (userType == "Child")
-            binding.layoutPictureReminder.visibility = View.VISIBLE
-        else if (userType == "Parent")
-            binding.layoutPictureReminder.visibility = View.GONE
     }
 }
