@@ -29,6 +29,7 @@ import ph.edu.dlsu.finwise.databinding.DialogProceedNextActivityBinding
 import ph.edu.dlsu.finwise.databinding.DialogTakeAssessmentBinding
 import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentActivity
 import ph.edu.dlsu.finwise.model.*
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -47,6 +48,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
     private lateinit var spendingActivityID:String
     private var nFinishedActivities = 0
 
+    private var proceedToNextActivity = true
 
     private lateinit var goalName:String
 
@@ -211,6 +213,7 @@ class GoalAccomplishedActivity : AppCompatActivity() {
             dialogBinding.btnProceed.setOnClickListener {
                 firestore.collection("FinancialActivities").document(budgetingActivityID).update("status", "In Progress", "dateStarted", Timestamp.now()).addOnSuccessListener {
                     dialog.dismiss()
+                    proceedToNextActivity = true
                     goToFinancialAssessmentActivity()
                 }
 //            val budgetActivity = Intent(this, BudgetActivity::class.java)
@@ -219,7 +222,10 @@ class GoalAccomplishedActivity : AppCompatActivity() {
             }
 
             dialogBinding.btnNo.setOnClickListener {
-                //withdrawal transaction from goal to wallet
+                adjustWalletBalances()
+                proceedToNextActivity = false
+                println("print proceed " + proceedToNextActivity)
+
                 goToFinancialAssessmentActivity()
                 dialog.dismiss()
             }
@@ -254,15 +260,20 @@ class GoalAccomplishedActivity : AppCompatActivity() {
                         if (difference.days >= 7)
                             buildAssessmentDialog()
                         else {
-                            val budgetActivity = Intent(this, BudgetActivity::class.java)
-                            var sendBundle = Bundle()
-                            sendBundle.putString("financialGoalID", financialGoalID)
-                            sendBundle.putString("savingActivityID", savingActivityID)
-                            sendBundle.putString("budgetingActivityID", budgetingActivityID)
-                            sendBundle.putString("spendingActivityID", spendingActivityID)
-                            sendBundle.putString("childID", FirebaseAuth.getInstance().currentUser!!.uid)
-                            budgetActivity.putExtras(sendBundle)
-                            startActivity(budgetActivity)
+                            if (proceedToNextActivity) {
+                                val budgetActivity = Intent(this, BudgetActivity::class.java)
+                                var sendBundle = Bundle()
+                                sendBundle.putString("financialGoalID", financialGoalID)
+                                sendBundle.putString("savingActivityID", savingActivityID)
+                                sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                                sendBundle.putString("spendingActivityID", spendingActivityID)
+                                sendBundle.putString("childID", FirebaseAuth.getInstance().currentUser!!.uid)
+                                budgetActivity.putExtras(sendBundle)
+                                startActivity(budgetActivity)
+                            } else {
+                                var personalFinance = Intent(this, PersonalFinancialManagementActivity::class.java)
+                                startActivity(personalFinance)
+                            }
                         }
                     } else
                         buildAssessmentDialog()
@@ -325,7 +336,10 @@ class GoalAccomplishedActivity : AppCompatActivity() {
                         mayaBalance -= transactionObject.amount!!
                 }
             }
-            adjustCashBalance(cashBalance)
+
+            if (cashBalance != 0.00F)
+                adjustCashBalance(cashBalance)
+            if (mayaBalance != 0.00F)
             adjustMayaBalance(mayaBalance)
         }
     }

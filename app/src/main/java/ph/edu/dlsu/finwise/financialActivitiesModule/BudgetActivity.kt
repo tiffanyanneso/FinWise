@@ -89,10 +89,10 @@ class BudgetActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.Main).launch {
             checkUser()
-            getBalance()
             loadBackButton()
             getExpenses()
             setLayout()
+            getBalance()
         }
 
         binding.btnTransactions.setOnClickListener{
@@ -163,90 +163,80 @@ class BudgetActivity : AppCompatActivity() {
         var allCompleted = true
         getBudgetItems()
 
-        firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
-            var budgetingActivity = it.toObject<FinancialActivities>()
-            if (budgetingActivity?.status == "Completed") {
-                isBudgetingCompleted = true
-                binding.tvAvailable.text = "Savings available to spend"
-                binding.layoutExpenses.visibility = View.VISIBLE
-                if (currentUserType== "Child") {
-                    binding.btnDoneSettingBudget.visibility = View.GONE
-                    //checks if the user has recorded at least once expense before showing "done spending button"
-                    checkDoneSpendingButtonClickable()
-                }
-                binding.topAppBar.title = "Spending"
-
+        var budgetingActivity = firestore.collection("FinancialActivities").document(budgetingActivityID).get().await().toObject<FinancialActivities>()
+        if (budgetingActivity?.status == "Completed") {
+            isBudgetingCompleted = true
+            binding.tvAvailable.text = "Savings available to spend"
+            binding.layoutExpenses.visibility = View.VISIBLE
+            if (currentUserType== "Child") {
+                binding.btnDoneSettingBudget.visibility = View.GONE
+                //checks if the user has recorded at least once expense before showing "done spending button"
+                checkDoneSpendingButtonClickable()
             }
-            else if (budgetingActivity?.status != "Completed"){
-                binding.topAppBar.title = "Budgeting"
-                binding.tvAvailable.text = "Savings available to budget"
-                allCompleted = false
-                binding.layoutExpenses.visibility = View.GONE
-                if (currentUserType == "Child") {
-                    binding.btnDoneSettingBudget.visibility = View.VISIBLE
-                    binding.btnDoneSpending.visibility = View.GONE
-                    goToFinancialAssessmentActivity("Pre-Activity", "Budgeting")
-                }
-            }
+            binding.topAppBar.title = "Spending"
 
-            firestore.collection("FinancialGoals").document(budgetingActivity?.financialGoalID!!).get().addOnSuccessListener {
-                binding.tvGoalName.text = it.toObject<FinancialGoals>()!!.goalName
-            }
-        }.continueWith {
-            firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
-                var financialActivity = it.toObject<FinancialActivities>()
-                if (financialActivity?.status != "Completed") {
-                    allCompleted = false
-                    if (currentUserType == "Child" && financialActivity?.status == "In Progress")
-                        goToFinancialAssessmentActivity("Pre-Activity", "Spending")
-
-                }
-                //spending is done, hide buttons
-                else {
-                    binding.layoutBalance.visibility = View.GONE
-                    binding.linearLayoutButtons.visibility = View.GONE
-                }
-
-            }.continueWith {
-                if (allCompleted)
-                    binding.btnNewCategory.visibility = View.GONE
-
-                binding.layoutLoading.visibility = View.GONE
-                binding.mainLayout.visibility = View.VISIBLE
+        }
+        else if (budgetingActivity?.status != "Completed"){
+            binding.topAppBar.title = "Budgeting"
+            binding.tvAvailable.text = "Savings available to budget"
+            allCompleted = false
+            binding.layoutExpenses.visibility = View.GONE
+            if (currentUserType == "Child") {
+                binding.btnDoneSettingBudget.visibility = View.VISIBLE
+                binding.btnDoneSpending.visibility = View.GONE
+                goToFinancialAssessmentActivity("Pre-Activity", "Budgeting")
             }
         }
+        binding.tvGoalName.text =  firestore.collection("FinancialGoals").document(budgetingActivity?.financialGoalID!!).get().await().toObject<FinancialGoals>()!!.goalName
+
+        var spendingActivity = firestore.collection("FinancialActivities").document(spendingActivityID).get().await().toObject<FinancialActivities>()
+        if (spendingActivity?.status != "Completed") {
+            allCompleted = false
+            if (currentUserType == "Child" && spendingActivity?.status == "In Progress")
+                goToFinancialAssessmentActivity("Pre-Activity", "Spending")
+        }
+        //spending is done, hide buttons
+        else {
+            binding.layoutBalance.visibility = View.GONE
+            binding.linearLayoutButtons.visibility = View.GONE
+        }
+
+        if (allCompleted)
+            binding.btnNewCategory.visibility = View.GONE
+
+        binding.layoutLoading.visibility = View.GONE
+        binding.mainLayout.visibility = View.VISIBLE
+
     }
 
-    private fun getBalance() {
-        firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().addOnSuccessListener { results ->
-            for (transaction in results) {
-                var transactionObject = transaction.toObject<Transactions>()
+    private suspend fun getBalance() {
+        balance = 0.00F
+        var transactions = firestore.collection("Transactions").whereEqualTo("financialActivityID", savingActivityID).whereIn("transactionType", Arrays.asList("Deposit", "Withdrawal")).get().await()
+        for (transaction in transactions) {
+            var transactionObject = transaction.toObject<Transactions>()
+            if (transactionObject.transactionType == "Deposit") {
+                balance += transactionObject.amount!!
 
-                if (transactionObject.transactionType == "Deposit") {
-                    balance += transactionObject.amount!!
-
-                    if (transactionObject.paymentType == "Cash")
-                        cashBalance += transactionObject?.amount!!
-                    else if (transactionObject.paymentType == "Maya")
-                        mayaBalance += transactionObject?.amount!!
-                }
-
-                else if (transactionObject.transactionType == "Withdrawal") {
-                    balance -= transactionObject.amount!!
-
-                    if (transactionObject.paymentType == "Cash")
-                        cashBalance -= transactionObject?.amount!!
-                    else if (transactionObject.paymentType == "Maya")
-                        mayaBalance -= transactionObject?.amount!!
-                }
+                if (transactionObject.paymentType == "Cash")
+                    cashBalance += transactionObject?.amount!!
+                else if (transactionObject.paymentType == "Maya")
+                    mayaBalance += transactionObject?.amount!!
             }
-        }.continueWith {
-            binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,##0.00").format(balance)
-            binding.tvCashSavings.text = "₱ " + DecimalFormat("#,##0.00").format(cashBalance)
-            binding.tvMayaSavings.text = "₱ " + DecimalFormat("#,##0.00").format(mayaBalance)
-            if (!isBudgetingCompleted)
-                getAvailableToBudget()
+
+            else if (transactionObject.transactionType == "Withdrawal") {
+                balance -= transactionObject.amount!!
+
+                if (transactionObject.paymentType == "Cash")
+                    cashBalance -= transactionObject?.amount!!
+                else if (transactionObject.paymentType == "Maya")
+                    mayaBalance -= transactionObject?.amount!!
+            }
         }
+        binding.tvSavingsAvailable.text = "₱ " +  DecimalFormat("#,##0.00").format(balance)
+        binding.tvCashSavings.text = "₱ " + DecimalFormat("#,##0.00").format(cashBalance)
+        binding.tvMayaSavings.text = "₱ " + DecimalFormat("#,##0.00").format(mayaBalance)
+        if (!isBudgetingCompleted)
+            getAvailableToBudget()
     }
 
     private fun getAvailableToBudget () {
@@ -363,14 +353,17 @@ class BudgetActivity : AppCompatActivity() {
 
     private fun saveBudgetItems() {
         if (budgetCategorySelectAdapter.valid()) {
+            var budgetItemsAmount = 0.00F
             var checkedBudgetItems = budgetCategorySelectAdapter.returnCheckedBudgetItems()
             if (!checkedBudgetItems.isEmpty()) {
                 budgetTemplateDialogBinding.tvError.visibility = View.GONE
                 for (budgetItem in checkedBudgetItems) {
+                    budgetItemsAmount += budgetItem.amount
                     var budgetItem = BudgetItem(budgetItem.itemName, null, budgetingActivityID, budgetItem.amount, "Active", "Before", childID)
                     firestore.collection("BudgetItems").add(budgetItem)
                 }
                 budgetTemplateDialog.dismiss()
+                getAvailableToBudget()
                 getBudgetItems()
 
             } else

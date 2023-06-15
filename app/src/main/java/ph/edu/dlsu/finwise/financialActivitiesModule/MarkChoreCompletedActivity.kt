@@ -89,6 +89,7 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
             binding.imageProof.setImageURI(null)
             val completedEarning = Intent(this, CompletedEarningActivity::class.java)
             firestore.collection("EarningActivities").document(earningActivityID).update("dateCompleted", Timestamp.now())
+            Toast.makeText(this, "Successfully uploaded picture", Toast.LENGTH_SHORT).show()
             val bundle = Bundle()
             bundle.putString("earningActivityID", earningActivityID)
             bundle.putString("childID", childID)

@@ -12,6 +12,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.databinding.DialogDeleteGoalWarningBinding
 import ph.edu.dlsu.finwise.databinding.FragmentGoalDetailsBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
@@ -32,6 +36,8 @@ class GoalDetailsFragment : Fragment() {
     private var cashBalance = 0.00F
     private var mayaBalance = 0.00F
 
+    private lateinit var currentUserType:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (getArguments() != null) {
@@ -40,7 +46,10 @@ class GoalDetailsFragment : Fragment() {
             cashBalance = arguments?.getFloat("cashBalance")!!
             mayaBalance = arguments?.getFloat("mayaBalance")!!
         }
-        getGoalDetails()
+        CoroutineScope(Dispatchers.IO).launch {
+            checkUser()
+            getGoalDetails()
+        }
     }
 
     override fun onCreateView(
@@ -54,7 +63,6 @@ class GoalDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        checkUser()
         binding.btnDelete.setOnClickListener {
             var dialogBinding= DialogDeleteGoalWarningBinding.inflate(getLayoutInflater())
             var dialog= Dialog(requireContext());
@@ -150,16 +158,12 @@ class GoalDetailsFragment : Fragment() {
             else
                 binding.tvIsForChild.text = "No"
 
+            if(goal.status == "Completed" || currentUserType == "Parent")
+                binding.btnDelete.visibility = View.GONE
         }
     }
 
-    private fun checkUser() {
-        var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-            if (it.toObject<Users>()!!.userType == "Parent")
-                binding.btnDelete.visibility = View.GONE
-            else if (it.toObject<Users>()!!.userType == "Child")
-                binding.btnDelete.visibility = View.VISIBLE
-        }
+    private suspend fun checkUser() {
+        currentUserType =  firestore.collection("Users").document(currentUser).get().await().toObject<Users>()!!.userType!!
     }
 }

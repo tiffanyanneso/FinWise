@@ -222,7 +222,7 @@ class SpendingFragment : Fragment(){
     }
 
     private fun setOverall() {
-        binding.tvPerformancePercentage.text ="${DecimalFormat("##0.00").format(overallSpending)}%"
+        binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
         //TODO: Change audio
         var audio = 0
         if (overallSpending >= 96) {

@@ -166,7 +166,7 @@ class ViewGoalActivity : AppCompatActivity() {
         }
 
         binding.layoutActivityName.setOnClickListener {
-            if (savingActivityStatus == "In Progress") {
+            if (savingActivityStatus == "In Progress" && budgetingActivityStatus == "Locked") {
                 var dialogBinding= DialogFinishSavingBinding.inflate(getLayoutInflater())
                 var dialog= Dialog(this);
                 dialog.setContentView(dialogBinding.getRoot())
