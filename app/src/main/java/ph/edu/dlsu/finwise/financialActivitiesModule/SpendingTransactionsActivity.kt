@@ -48,10 +48,16 @@ class SpendingTransactionsActivity : AppCompatActivity() {
 
             expenses.addAll(it.toObjects<Transactions>())
 
-            expenseAdapter = SpendingExpenseAdapter(this, expenses)
-            binding.rvExpenses.adapter = expenseAdapter
-            binding.rvExpenses.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-            expenseAdapter.notifyDataSetChanged()
+            if (expenses.isNotEmpty()) {
+                expenseAdapter = SpendingExpenseAdapter(this, expenses)
+                binding.rvExpenses.adapter = expenseAdapter
+                binding.rvExpenses.layoutManager =
+                    LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+                expenseAdapter.notifyDataSetChanged()
+            } else {
+                binding.layoutEmptyTransaction.visibility = View.VISIBLE
+                binding.rvExpenses.visibility = View.GONE
+            }
             binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
                 R.drawable.baseline_arrow_back_24, null)
         }

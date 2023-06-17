@@ -119,6 +119,7 @@ class RecordEarningSaleConfirmationActivity : AppCompatActivity() {
                         sendBundle.putString("savingActivityID", savingActivityID)
                         sellingActivity.putExtras(sendBundle)
                         startActivity(sellingActivity)
+                        finish()
                     }
                 }
             }

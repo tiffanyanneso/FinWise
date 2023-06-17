@@ -377,10 +377,16 @@ class BudgetActivity : AppCompatActivity() {
             for (transaction in results)
                 expenses.add(transaction.toObject())
 
-            expenseAdapter = SpendingExpenseAdapter(this, expenses)
-            binding.rvExpenses.adapter = expenseAdapter
-            binding.rvExpenses.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-            expenseAdapter.notifyDataSetChanged()
+            if (expenses.isNotEmpty()) {
+                expenseAdapter = SpendingExpenseAdapter(this, expenses)
+                binding.rvExpenses.adapter = expenseAdapter
+                binding.rvExpenses.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+                expenseAdapter.notifyDataSetChanged()
+            } else {
+                binding.layoutEmptyTransaction.visibility = View.VISIBLE
+                binding.rvExpenses.visibility = View.GONE
+            }
+
         }
     }
 
