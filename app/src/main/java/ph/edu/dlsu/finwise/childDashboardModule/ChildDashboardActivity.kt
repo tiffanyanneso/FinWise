@@ -26,6 +26,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.childDashboardModule.fragments.DashboardFinancialActivitiesFragment
 import ph.edu.dlsu.finwise.childDashboardModule.fragments.DashboardFinancialAssessmentsFragment
@@ -44,8 +45,9 @@ import java.util.*
 class ChildDashboardActivity : AppCompatActivity(){
 
     private var firestore = Firebase.firestore
-    private var childID = FirebaseAuth.getInstance().currentUser!!.uid
-    private var userType = "child"
+    private lateinit var childID :String
+    private lateinit var userType:String
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
     private var mediaPlayer: MediaPlayer? = null
 
@@ -97,8 +99,8 @@ class ChildDashboardActivity : AppCompatActivity(){
         binding = ActivityChildDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_dashboard)
         CoroutineScope(Dispatchers.Main).launch {
+            checkUser()
             getAge()
             initializeFragments()
             getPersonalFinancePerformance()
@@ -158,6 +160,28 @@ class ChildDashboardActivity : AppCompatActivity(){
         binding.tabLayout.getTabAt(0)?.setIcon(tabIcons[0])
         binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
         binding.tabLayout.getTabAt(2)?.setIcon(tabIcons[2])
+    }
+
+    private suspend fun checkUser() {
+        userType = firestore.collection("Users").document(currentUser).get().await().toObject<Users>()!!.userType!!
+        if (userType == "Child") {
+            childID = currentUser
+            binding.bottomNav.visibility = View.VISIBLE
+            binding.bottomNavParent.visibility = View.GONE
+            Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_dashboard)
+        }
+        else if (userType == "Parent") {
+            var getBundle = intent.extras!!
+            childID = getBundle.getString("childID").toString()
+
+            //nav bar
+            binding.bottomNav.visibility = View.GONE
+            binding.bottomNavParent.visibility = View.VISIBLE
+            //sends the ChildID to the parent navbar
+            val bundleNavBar = Bundle()
+            bundleNavBar.putString("childID", childID)
+            NavbarParent(findViewById(R.id.bottom_nav_parent), this,R.id.nav_parent_dashboard, bundleNavBar)
+        }
     }
 
     private suspend fun getAge() {
