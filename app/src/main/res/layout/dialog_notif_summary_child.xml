@@ -224,7 +224,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_view_all"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_border"
                 android:backgroundTint="@color/dark_green"
@@ -238,7 +238,7 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_close"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_border"
                 android:backgroundTint="@color/light_grey"
