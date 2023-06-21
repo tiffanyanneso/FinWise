@@ -52,6 +52,9 @@
             android:name=".ParentSettingsActivity"
             android:exported="false" />
         <activity
+            android:name=".ChildSettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".financialActivitiesModule.GoalSettingEditGoalActivity"
             android:exported="false" />
         <activity

@@ -9,6 +9,9 @@ class SettingsModel(
     var planingEvent:Boolean?=null,
     var emergencyFund:Boolean?=null,
     var donatingCharity:Boolean?=null,
-    var situationalShopping:Boolean?=null
+    var situationalShopping:Boolean?=null,
+    var pfmScore:String?=null,
+    var finactScore:String?=null,
+    var assessmentScore:String?=null
 ) {
 }

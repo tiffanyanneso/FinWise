@@ -6,7 +6,9 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.view.View
 import android.widget.DatePicker
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -152,7 +154,11 @@ class ParentRegisterChildActivity : AppCompatActivity() {
     }
 
     private fun createSettings(parentID:String, childID:String) {
-    //compute age
+        var pfmScore = binding.radioButtonsPfm.findViewById<RadioButton>(binding.radioButtonsPfm.checkedRadioButtonId).text.toString()
+        var finactScore = binding.radioButtonsFinact.findViewById<RadioButton>(binding.radioButtonsFinact.checkedRadioButtonId).text.toString()
+        var assessmentScore = binding.radioButtonsAssessments.findViewById<RadioButton>(binding.radioButtonsAssessments.checkedRadioButtonId).text.toString()
+
+        //compute age
         val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("M/d/yyyy")
         val from = LocalDate.now()
         val to = LocalDate.parse(birthday, dateFormatter)
@@ -169,7 +175,10 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                  "planingEvent" to false,
                  "emergencyFund" to false,
                  "donatingCharity" to false,
-                 "situationalShopping" to false
+                 "situationalShopping" to false,
+                 "pfmScore" to pfmScore,
+                 "finactScore" to finactScore,
+                 "assessmentScore" to assessmentScore
             )
             firestore.collection("Settings").add(settings)
         } else if (age == 10 || age == 11) {
@@ -182,7 +191,10 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                 "planingEvent" to false,
                 "emergencyFund" to false,
                 "donatingCharity" to true,
-                "situationalShopping" to true
+                "situationalShopping" to true,
+                "pfmScore" to pfmScore,
+                "finactScore" to finactScore,
+                "assessmentScore" to assessmentScore
             )
             firestore.collection("Settings").add(settings)
         } else if (age == 12) {
@@ -195,7 +207,10 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                 "planingEvent" to true,
                 "emergencyFund" to true,
                 "donatingCharity" to true,
-                "situationalShopping" to true
+                "situationalShopping" to true,
+                "pfmScore" to pfmScore,
+                "finactScore" to finactScore,
+                "assessmentScore" to assessmentScore
             )
             firestore.collection("Settings").add(settings)
         }
@@ -297,6 +312,24 @@ class ParentRegisterChildActivity : AppCompatActivity() {
             binding.etConfirmPassword.error = "Please enter the same password."
             valid = false
         } else password = binding.etConfirmPassword.text.toString().trim()
+        
+        if (binding.radioButtonsPfm.checkedRadioButtonId == -1) {
+            binding.tvErrorPfmRadio.visibility = View.VISIBLE
+            valid = false
+        } else
+            binding.tvErrorPfmRadio.visibility = View.GONE
+
+        if (binding.radioButtonsFinact.checkedRadioButtonId == -1) {
+            binding.tvErrorFinactRadio.visibility = View.VISIBLE
+            valid = false
+        } else
+            binding.tvErrorFinactRadio.visibility = View.GONE
+
+        if (binding.radioButtonsAssessments.checkedRadioButtonId == -1) {
+            binding.tvErrorAssessmentsRadio.visibility = View.VISIBLE
+            valid = false
+        } else
+            binding.tvErrorAssessmentsRadio.visibility = View.GONE
 
         return valid
     }

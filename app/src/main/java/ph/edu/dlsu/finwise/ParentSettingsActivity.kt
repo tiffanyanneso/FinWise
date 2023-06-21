@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.auth.FirebaseAuth
@@ -61,6 +62,11 @@ class ParentSettingsActivity : AppCompatActivity() {
     private fun saveSettings() {
         var maxAmount = binding.etMaxAmount.text.toString()
         var alertAmount =  binding.etAlertAmount.text.toString()
+
+        var pfmScore = binding.radioButtonsPfm.findViewById<RadioButton>(binding.radioButtonsPfm.checkedRadioButtonId).text.toString()
+        var finactScore = binding.radioButtonsFinact.findViewById<RadioButton>(binding.radioButtonsFinact.checkedRadioButtonId).text.toString()
+        var assessmentScore = binding.radioButtonsAssessments.findViewById<RadioButton>(binding.radioButtonsAssessments.checkedRadioButtonId).text.toString()
+
         if (maxAmount.isNotEmpty() && alertAmount.isNotEmpty()) {
             binding.containerMaxAmount.helperText = ""
             binding.containerAlertAmount.helperText = ""
@@ -71,7 +77,10 @@ class ParentSettingsActivity : AppCompatActivity() {
                 "planingEvent", binding.checkPlanningEvent.isChecked,
                 "emergencyFund", binding.checkEmergency.isChecked,
                 "donatingCharity", binding.checkDonating.isChecked,
-                "situationalShopping", binding.checkSituational.isChecked
+                "situationalShopping", binding.checkSituational.isChecked,
+                "pfmScore", pfmScore,
+                "finactScore", finactScore,
+                "assessmentScore", assessmentScore
             ).addOnSuccessListener {
                 Toast.makeText(this, "Settings have been updated", Toast.LENGTH_SHORT).show()
             }
@@ -103,6 +112,27 @@ class ParentSettingsActivity : AppCompatActivity() {
             binding.checkEmergency.isChecked = settings?.emergencyFund!!
             binding.checkDonating.isChecked = settings?.donatingCharity!!
             binding.checkSituational.isChecked = settings?.situationalShopping!!
+
+            when (settings?.pfmScore) {
+                "Excellent" -> binding.rbPfmExcellent.isChecked = true
+                "Amazing" -> binding.rbPfmAmazing.isChecked = true
+                "Great" -> binding.rbPfmGreat.isChecked = true
+                "Good" -> binding.rbPfmGood.isChecked = true
+            }
+
+            when (settings?.finactScore) {
+                "Excellent" -> binding.rbFinactExcellent.isChecked = true
+                "Amazing" -> binding.rbFinactAmazing.isChecked = true
+                "Great" -> binding.rbFinactGreat.isChecked = true
+                "Good" -> binding.rbFinactGood.isChecked = true
+            }
+
+            when (settings?.assessmentScore) {
+                "Excellent" -> binding.rbAssessmentsExcellent.isChecked = true
+                "Amazing" -> binding.rbAssessmentsAmazing.isChecked = true
+                "Great" -> binding.rbAssessmentsGreat.isChecked = true
+                "Good" -> binding.rbAssessmentsGood.isChecked = true
+            }
         }
 
         var child = firestore.collection("Users").document(childID).get().await().toObject<Users>()

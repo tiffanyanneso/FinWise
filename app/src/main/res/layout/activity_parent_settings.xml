@@ -26,6 +26,11 @@
             android:backgroundTint="@color/dark_green"/>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/topbar">
+
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -164,47 +169,202 @@
             android:text="Situational Shopping"
             android:textSize="16sp"
             android:padding="3dp"/>
-    </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="70dp">
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="15dp"
+            app:dividerColor="@color/light_grey"/>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_cancel"
-            android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:textAllCaps = "true"
+            android:text="Literacy Level Goal"
+            android:textStyle="bold"
+            android:textColor="@color/black"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:text="Personal Finance"
+                android:textStyle="bold"/>
+
+            <RadioGroup
+                android:id="@+id/radio_buttons_pfm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/rb_pfm_excellent"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Excellent" />
+
+                <RadioButton
+                    android:id="@+id/rb_pfm_amazing"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Amazing" />
+
+                <RadioButton
+                    android:id="@+id/rb_pfm_great"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Great" />
+
+                <RadioButton
+                    android:id="@+id/rb_pfm_good"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Good" />
+
+
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:text="Financial Activities"
+                android:textStyle="bold"/>
+
+            <RadioGroup
+                android:id="@+id/radio_buttons_finact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/rb_finact_excellent"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Excellent" />
+
+                <RadioButton
+                    android:id="@+id/rb_finact_amazing"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Amazing" />
+
+                <RadioButton
+                    android:id="@+id/rb_finact_great"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Great" />
+
+                <RadioButton
+                    android:id="@+id/rb_finact_good"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Good" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:text="Financial Assessments"
+                android:textStyle="bold"/>
+
+            <RadioGroup
+                android:id="@+id/radio_buttons_assessments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RadioButton
+                    android:id="@+id/rb_assessments_excellent"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Excellent" />
+
+                <RadioButton
+                    android:id="@+id/rb_assessments_amazing"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Amazing" />
+
+                <RadioButton
+                    android:id="@+id/rb_assessments_great"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Great" />
+
+                <RadioButton
+                    android:id="@+id/rb_assessments_good"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Good" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:text="@string/cancel"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/light_grey"
-            android:background="@drawable/button_border_grey"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="100dp">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:text="@string/save"
-            android:textColor="@color/off_white"
-            android:backgroundTint="@color/dark_green"
-            android:background="@drawable/button_border"
-            android:layout_weight="1"
-            />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:text="@string/cancel"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/light_grey"
+                android:background="@drawable/button_border_grey"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                />
 
-    </LinearLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="@string/save"
+                android:textColor="@color/off_white"
+                android:backgroundTint="@color/dark_green"
+                android:background="@drawable/button_border"
+                android:layout_weight="1"
+                />
+
+        </LinearLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    </ScrollView>
+
+
 <!--
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"

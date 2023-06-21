@@ -81,6 +81,11 @@ class ProfileActivity : AppCompatActivity(){
                     finish()
                     true
                 }
+                R.id.btn_settings -> {
+                    val intent = Intent (this, ChildSettingsActivity::class.java)
+                    startActivity (intent)
+                    true
+                }
                 else -> false
             }
         }
