@@ -5,6 +5,7 @@ import java.time.LocalDate
 
 class FinancialGoals(
     var childID:String?=null,
+    var childAge:Int?=null,
     var goalName:String?=null,
     var dateCreated: Timestamp?=null,
     var createdBy:String?=null,

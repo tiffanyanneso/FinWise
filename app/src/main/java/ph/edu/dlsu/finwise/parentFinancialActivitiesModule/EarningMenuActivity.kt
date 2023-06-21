@@ -22,6 +22,8 @@ class EarningMenuActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
     lateinit var module: String
 
+    private lateinit var childID:String
+
     private var financialGoalID:String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +35,7 @@ class EarningMenuActivity : AppCompatActivity() {
         setNavigationBar()
 
         val bundle = intent.extras!!
-        val childID = bundle.getString("childID").toString()
+        childID = bundle.getString("childID").toString()
         module = bundle.getString("module").toString()
 
 
@@ -73,8 +75,6 @@ class EarningMenuActivity : AppCompatActivity() {
                 bottomNavigationViewChild.visibility = View.GONE
                 bottomNavigationViewParent.visibility = View.VISIBLE
                 //sends the ChildID to the parent navbar
-                val bundle = Bundle()
-                val childID = bundle.getString("childID").toString()
                 val bundleNavBar = Bundle()
                 bundleNavBar.putString("childID", childID)
                 NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal, bundleNavBar)
@@ -84,8 +84,6 @@ class EarningMenuActivity : AppCompatActivity() {
                 if (module == "finact")
                     Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
                 else  Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_finance)
-
-
             }
         }
     }

@@ -109,7 +109,7 @@ class SavingFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getAssessmentStatus() {
-        firestore.collection("Assessments").whereEqualTo("assessmentType", "Pre-Activity").whereEqualTo("assessmentCategory", "Saving").get().addOnSuccessListener {
+        firestore.collection("Assessments").whereEqualTo("assessmentType", "Pre-Activity").whereEqualTo("assessmentCategory", "Goal Setting").get().addOnSuccessListener {
             if (it.size() != 0) {
                 var assessmentID = it.documents[0].id
                 firestore.collection("AssessmentAttempts").whereEqualTo("assessmentID", assessmentID).whereEqualTo("childID", currentUser).orderBy("dateTaken", Query.Direction.DESCENDING).get().addOnSuccessListener { results ->
@@ -188,7 +188,7 @@ class SavingFragment : Fragment() {
         dialogBinding.btnOk.setOnClickListener {
             val bundle = Bundle()
             bundle.putString("assessmentType", "Pre-Activity")
-            bundle.putString("assessmentCategory", "Saving")
+            bundle.putString("assessmentCategory", "Goal Setting")
 
             val assessmentQuiz = Intent(requireContext(), FinancialAssessmentActivity::class.java)
             assessmentQuiz.putExtras(bundle)

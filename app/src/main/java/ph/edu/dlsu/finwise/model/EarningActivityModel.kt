@@ -8,6 +8,7 @@ class EarningActivityModel (
     var requiredTime:Int?=null,
     var amount:Float?=null,
     var childID:String?=null,
+    var childAge:Int?=null,
     var savingActivityID:String?=null,
     var status:String?=null,
     //field to identify if the earning activity was made from pfm of goal

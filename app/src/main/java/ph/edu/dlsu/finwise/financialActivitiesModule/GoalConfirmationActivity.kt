@@ -82,6 +82,7 @@ class GoalConfirmationActivity : AppCompatActivity() {
 
             var goal = hashMapOf(
                 "childID" to childID,
+                "childAge" to bundle.getInt("currentChildAge"),
                 "goalName" to bundle.getString("goalName"),
                 "dateCreated" to Timestamp.now(),
                 "createdBy" to createdBy,

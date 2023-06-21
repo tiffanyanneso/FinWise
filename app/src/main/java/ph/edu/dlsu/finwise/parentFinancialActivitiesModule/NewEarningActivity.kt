@@ -54,7 +54,6 @@ class NewEarningActivity : AppCompatActivity() {
     private lateinit var choresAdapter:ArrayAdapter<String>
 
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,6 +121,7 @@ class NewEarningActivity : AppCompatActivity() {
                         "requiredTime" to binding.etDuration.text.toString().toInt(),
                         "amount" to binding.etAmount.text.toString().toFloat(),
                         "childID" to childID,
+                        "childAge" to currentChildAge,
                         "status" to "Ongoing",
                         "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
                         "depositTo" to binding.dropdownDestination.text.toString(),
@@ -293,49 +293,31 @@ class NewEarningActivity : AppCompatActivity() {
         var choreArrayList = ArrayList<String>()
         var choreCount = hashMapOf<String, Int>()
 
-        var chores = firestore.collection("EarningActivities").get().await()
+        var chores = firestore.collection("EarningActivities")
+            .whereEqualTo("childAge", currentChildAge)
+            .whereEqualTo("status", "Completed").get().await()
+
         if (!chores.isEmpty) {
+            for (chore in chores)
+                choreArrayList.add(chore.toObject<EarningActivityModel>().activityName!!)
+
+
+            //count how many times the chore appear in the array list
+            for (chore in choreArrayList) {
+                if (choreCount.containsKey(chore))
+                    choreCount[chore] = choreCount[chore]!! + 1
+                else
+                    choreCount[chore] = 1
+            }
+
+            var sortedList = choreCount.entries.sortedByDescending { it.value }.take(3)
+            val commonChoreText = sortedList.mapIndexed { index, (chore, _) ->
+                "${index + 1}. $chore"
+            }.joinToString("\n")
+
             binding.layoutCommonChores.visibility = View.VISIBLE
-            for (chore in chores) {
-                var choreObject = chore.toObject<EarningActivityModel>()
-                var childObject = firestore.collection("Users").document(choreObject.childID!!).get().await().toObject<Users>()
+            binding.tvCommonChores.text = commonChoreText
 
-                //compute age
-                val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
-                val from = LocalDate.now()
-                val date = SimpleDateFormat("MM/dd/yyyy").format(childObject?.birthday?.toDate())
-                val to = LocalDate.parse(date.toString(), dateFormatter)
-                var difference = Period.between(to, from)
-                var age = difference.years
-
-                //check if the age of the child who did the chore is the same age as the current child
-                if (currentChildAge == age)
-                    choreArrayList.add(choreObject.activityName!!)
-            }
-
-            if (!choreArrayList.isEmpty()) {
-                //count how many times the chore appear in the array list
-                for (chore in choreArrayList) {
-                    if (choreCount.containsKey(chore))
-                        choreCount[chore] = choreCount[chore]!! + 1
-                    else
-                        choreCount[chore] = 1
-                }
-
-                // Sort the HashMap by value in descending order
-                val sortedList = choreCount.entries.sortedByDescending { it.value }
-                val topThree = sortedList.take(3)
-
-                var commonChoreText = ""
-                topThree.forEachIndexed { index, (chore, count) ->
-                    commonChoreText += "${index+1}. ${chore}"
-                    if (!(index == topThree.size - 1))
-                        commonChoreText += "\n"
-                }
-                binding.tvCommonChores.text = commonChoreText
-            }
-            else
-                binding.layoutCommonChores.visibility = View.GONE
         } else
             binding.layoutCommonChores.visibility = View.GONE
     }

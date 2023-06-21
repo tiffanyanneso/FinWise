@@ -53,6 +53,7 @@ class NewGoal : AppCompatActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             setNavigationBar()
             getCurrentUserType()
+            initializeDropDownForReasons()
             loadBackButton()
             getCommonGoals()
         }
@@ -79,6 +80,7 @@ class NewGoal : AppCompatActivity() {
                 bundle.putSerializable("targetDate",  SimpleDateFormat("MM/dd/yyyy").parse(targetDate))
                 bundle.putBoolean("goalIsForSelf", goalIsForSelf)
                 bundle.putString("childID", childID)
+                bundle.putInt("currentChildAge", currentChildAge)
 
                 //TODO: reset spinner and date to default value
                 binding.etGoal.text?.clear()
@@ -148,22 +150,38 @@ class NewGoal : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getCurrentUserType() {
+    private suspend fun getCurrentUserType() {
         var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
-        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-            if (it.toObject<Users>()!!.userType == "Parent"){
-                currentUserType = "Parent"
-                var childIDBundle = intent.extras!!
-                childID = childIDBundle.getString("childID").toString()
-                binding.layoutCommonGoalsChild.visibility = View.GONE
-            }
-            else if (it.toObject<Users>()!!.userType == "Child"){
-                currentUserType = "Child"
-                childID = currentUser
-                binding.layoutCommonGoalsParents.visibility = View.GONE
-            }
-        }.continueWith {
-            initializeDropDownForReasons()
+
+        var user = firestore.collection("Users").document(currentUser).get().await().toObject<Users>()!!
+        if (user.userType == "Parent"){
+            currentUserType = "Parent"
+            var childIDBundle = intent.extras!!
+            childID = childIDBundle.getString("childID").toString()
+            binding.layoutCommonGoalsChild.visibility = View.GONE
+
+            var child = firestore.collection("Users").document(childID).get().await().toObject<Users>()!!
+            //compute age
+            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date = SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            var difference = Period.between(to, from)
+            currentChildAge = difference.years
+
+        }
+        else if (user.userType == "Child"){
+            currentUserType = "Child"
+            childID = currentUser
+            binding.layoutCommonGoalsParents.visibility = View.GONE
+
+            //compute age
+            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date = SimpleDateFormat("MM/dd/yyyy").format(user?.birthday?.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            var difference = Period.between(to, from)
+            currentChildAge = difference.years
         }
     }
 
@@ -171,27 +189,25 @@ class NewGoal : AppCompatActivity() {
         var goalArrayList = ArrayList<String>()
         var goalCount = hashMapOf<String, Int>()
 
-        var goals = firestore.collection("FinancialGoals").get().await()
+        //get all the users and place them in a map
+        val userMap = mutableMapOf<String, String>()
+        val users = firestore.collection("Users").get().await()
+        for (user in users)
+            userMap[user.id] = user.toObject<Users>().userType!!
+
+
+        var goals = firestore.collection("FinancialGoals")
+            .whereEqualTo("childAge", currentChildAge)
+            .whereEqualTo("status", "Completed").get().await()
+
         if (!goals.isEmpty) {
             for (goal in goals) {
                 var goalCreatedBy = goal.toObject<FinancialGoals>().createdBy
-                var goalChildID = goal.toObject<FinancialGoals>().childID
                 //get the user type of the user who created the goal
-                var userType = firestore.collection("Users").document(goalCreatedBy!!).get().await().toObject<Users>()!!.userType
 
-                if (currentUserType == userType) {
-                    //check if the age of the child and the child id in the goal is the same
-                    var childObject = firestore.collection("Users").document(goalChildID!!).get().await().toObject<Users>()
+                if (currentUserType == userMap[goalCreatedBy])
+                    goalArrayList.add(goal.toObject<FinancialGoals>().financialActivity!!)
 
-                    //compute age
-                    val date = SimpleDateFormat("MM/dd/yyyy").format(childObject?.birthday?.toDate())
-                    val to = LocalDate.parse(date.toString(), DateTimeFormatter.ofPattern("MM/dd/yyyy"))
-                    var difference = Period.between(to, LocalDate.now())
-                    var age = difference.years
-
-                    if (currentChildAge == age)
-                        goalArrayList.add(goal.toObject<FinancialGoals>().financialActivity!!)
-                }
 
                 if (!goalArrayList.isEmpty()) {
                     //count how many times the chore appear in the array list
@@ -203,22 +219,15 @@ class NewGoal : AppCompatActivity() {
                     }
 
                     // Sort the HashMap by value in descending order
-                    var sortedList = goalCount.entries.sortedByDescending { it.value }
-
-                    if (sortedList.size > 3)
-                        sortedList = sortedList.take(3)
-
-                    var commonChoreText = ""
-                    sortedList.forEachIndexed { index, (goal, count) ->
-                        commonChoreText += "${index+1}. ${goal}"
-                        if (!(index == sortedList.size - 1))
-                            commonChoreText += "\n"
-                    }
+                    var sortedList = goalCount.entries.sortedByDescending { it.value }.take(3)
+                    val commonGoalText = sortedList.mapIndexed { index, (goal, _) ->
+                        "${index + 1}. $goal"
+                    }.joinToString("\n")
 
                     if (currentUserType == "Parent")
-                        binding.tvCommonChoresParent.text = commonChoreText
+                        binding.tvCommonGoalsParent.text = commonGoalText
                     else if (currentUserType == "Child")
-                        binding.tvCommonChoresKids.text = commonChoreText
+                        binding. tvCommonGoalsKids.text = commonGoalText
                 } else {
                     binding.layoutCommonGoalsParents.visibility = View.GONE
                     binding.layoutCommonGoalsChild.visibility = View.GONE

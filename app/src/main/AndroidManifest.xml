@@ -83,12 +83,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".SavingNearingCompletionActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SavingNearingDeadlineActivity"
-            android:exported="false" />
-        <activity
             android:name=".financialActivitiesModule.UpdateGoalActivity"
             android:exported="false" />
         <activity
@@ -132,9 +126,6 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.TrendDetailsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ViewShoppingListItem"
             android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.performance.SavingPerformanceActivity"
@@ -208,9 +199,6 @@
             android:name=".financialActivitiesModule.SavingsWithdrawActivity"
             android:exported="false" />
         <activity
-            android:name=".TestFinancialActivity"
-            android:exported="false" />
-        <activity
             android:name=".profileModule.EditProfileActivity"
             android:exported="true" />
         <activity
@@ -238,14 +226,8 @@
             android:name=".parentFinancialActivitiesModule.ReviewGoalActivity"
             android:exported="true" />
         <activity
-            android:name=".SettingAGoalActivity"
-            android:exported="false" />
-        <activity
             android:name=".personalFinancialManagementModule.ViewTransactionActivity"
             android:exported="false" />
-        <activity
-            android:name=".TabbedActivityExample"
-            android:exported="true" />
         <activity
             android:name=".financialActivitiesModule.SpendingActivity"
             android:exported="false" />
