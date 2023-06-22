@@ -52,7 +52,6 @@ class OverdueChoreActivity : AppCompatActivity() {
         earningActivityID = bundle.getString("earningActivityID").toString()
         childID = bundle.getString("childID").toString()
 
-        checkUser()
         getDetails()
 
         binding.btnEdit.setOnClickListener {
@@ -194,16 +193,4 @@ class OverdueChoreActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkUser() {
-        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-            var userType = it.toObject<Users>()?.userType
-            if (userType == "Child") {
-                binding.layoutChild.visibility = View.VISIBLE
-                binding.layoutParentButtons.visibility = View.GONE
-            } else if (userType == "Parent") {
-                binding.layoutChild.visibility = View.GONE
-                binding.layoutParentButtons.visibility = View.VISIBLE
-            }
-        }
-    }
 }
