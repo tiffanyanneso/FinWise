@@ -7,11 +7,8 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -20,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -98,29 +96,17 @@ class ChildDashboardActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         binding = ActivityChildDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.title.text = "Overall Performance"
 
         CoroutineScope(Dispatchers.Main).launch {
             checkUser()
             getAge()
             initializeFragments()
-            getPersonalFinancePerformance()
+            /*getPersonalFinancePerformance()
             getFinactActPerformance()
-            getFinancialAssessmentScore()
+            getFinancialAssessmentScore()*/
             getOverallFinancialHealth()
         }
-    }
-
-    private suspend fun getFinactActPerformance() {
-        if (age == 10 || age == 11)
-            getGoalSettingPerformance()
-
-        getSavingPerformanceScore()
-        getBudgetingPerformanceScore()
-        getSpendingPerformance()
-
-        if (age > 9 )
-            purchasePlanningPerformance()
-        else spendingPercentage = (1-overspendingPercentage)*100
     }
 
 
@@ -197,6 +183,18 @@ class ChildDashboardActivity : AppCompatActivity(){
         age = difference.years
     }
 
+    private suspend fun getFinactActPerformance() {
+        if (age == 10 || age == 11)
+            getGoalSettingPerformance()
+
+        getSavingPerformanceScore()
+        getBudgetingPerformanceScore()
+        getSpendingPerformance()
+
+        if (age > 9 )
+            purchasePlanningPerformance()
+        else spendingPercentage = (1-overspendingPercentage)*100
+    }
 
 
     private suspend fun getPersonalFinancePerformance() {
@@ -431,7 +429,7 @@ class ChildDashboardActivity : AppCompatActivity(){
     private suspend fun getFinancialAssessmentScore() {
         var nCorrect = 0
         var nQuestions = 0
-        var results = firestore.collection("AssessmentAttempts").whereEqualTo("childID", childID).get().await()
+        val results = firestore.collection("AssessmentAttempts").whereEqualTo("childID", childID).get().await()
         if (results.size() != 0) {
             for (attempt in results) {
                 val assessmentAttempt = attempt.toObject<FinancialAssessmentAttempts>()
@@ -446,8 +444,14 @@ class ChildDashboardActivity : AppCompatActivity(){
         }
     }
 
-    private fun checkIfNaN() {
-        val percentages = mutableListOf(personalFinancePerformance, financialAssessmentPerformance,
+    private fun checkIfNaN(score: Double): Double {
+        var returnScore = score
+        if (returnScore.isNaN()) {
+                returnScore = 0.0
+            }
+        return returnScore
+
+        /*val percentages = mutableListOf(personalFinancePerformance, financialAssessmentPerformance,
             financialActivitiesPerformance, savingPercentage, spendingPercentage,
             budgetingPercentage, goalSettingPercentage)
 
@@ -466,12 +470,44 @@ class ChildDashboardActivity : AppCompatActivity(){
                     6 -> goalSettingPercentage = 0.00f
                 }
             }
-        }
+        }*/
     }
 
 
-    private fun getOverallFinancialHealth(){
-        checkIfNaN()
+    private suspend fun getOverallFinancialHealth(){
+        val pfmScoreDocument = firestore.collection("Scores").whereEqualTo("childID", childID)
+            .whereEqualTo("type", "pfm").get().await().toObjects<ScoreModel>()
+        val finActivitiesScoreDocument = firestore.collection("Scores").whereEqualTo("childID", childID)
+            .whereEqualTo("type", "finact").get().await().toObjects<ScoreModel>()
+        val finAssessmentsScoreDocument = firestore.collection("Scores").whereEqualTo("childID", childID)
+            .whereEqualTo("type", "assessments").get().await().toObjects<ScoreModel>()
+
+        Log.d("kulog", "pfmScoreDocument: "+pfmScoreDocument[0].score)
+        Log.d("kulog", "finActivitiesScoreDocument: "+finActivitiesScoreDocument[0].score)
+        Log.d("kulog", "finAssessmentsScoreDocument: "+finAssessmentsScoreDocument[0].score)
+
+        var pfmScore = (pfmScoreDocument[0].score?.times(0.35)) ?: 0.0
+        var finActivitiesScore = (finActivitiesScoreDocument[0].score?.times(0.35)) ?: 0.0
+        var finAssessmentsScore = (finAssessmentsScoreDocument[0].score?.times(0.30)) ?: 0.0
+
+        pfmScore = checkIfNaN(pfmScore)
+        finActivitiesScore = checkIfNaN(finActivitiesScore)
+        finAssessmentsScore = checkIfNaN(finAssessmentsScore)
+
+// Calculate the overall score without exceeding 100%
+        val totalWeight = 0.35 + 0.35 + 0.30
+        overallFinancialHealth = ((pfmScore.coerceAtMost(100.0) +
+                finActivitiesScore.coerceAtMost(100.0) +
+                finAssessmentsScore.coerceAtMost(100.0)) / totalWeight).toFloat()
+
+// Ensure the overall percentage does not exceed 100%
+        overallFinancialHealth = overallFinancialHealth.coerceAtMost(100.0F)
+        if (overallFinancialHealth.isNaN())
+            overallFinancialHealth = 0F
+
+        setPerformanceView()
+
+        /*checkIfNaN()
         if (age == 9 || age == 12) {
             //no saving completed yet, score will be personal finance and financial assessment (prelim)
             overallFinancialHealth = if(nSavingCompleted == 0)
@@ -506,8 +542,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             
             else
             overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4) * .35) + (financialAssessmentPerformance * .30)).toFloat()
-        }
-        setPerformanceView()
+        }*/
     }
 
 

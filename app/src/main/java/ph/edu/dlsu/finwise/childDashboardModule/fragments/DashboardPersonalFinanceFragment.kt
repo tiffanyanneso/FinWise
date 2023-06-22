@@ -51,14 +51,19 @@ class DashboardPersonalFinanceFragment : Fragment() {
     val transactionsArrayList = ArrayList<Transactions>()
     private lateinit var sortedDate: List<Date>
     //private lateinit var days: List<Date>
-    private var weeks: Map<Int, List<Date>>? = null
+    private var weeksPreviousMonth: Map<Int, List<Date>>? = null
+    private var weeksCurrentMonth: Map<Int, List<Date>>? = null
     private var months: Map<Int, List<Date>>? = null
     private var selectedDatesSort = "current"
     private lateinit var chart: LineChart
     var graphData = mutableListOf<Entry>()
 
-    private var totalIncome = 0.00f
-    private var totalExpense = 0.00f
+    private var pfmScoreCurrentMonth = 0.00f
+    private var totalIncomeCurrentMonth = 0.00f
+    private var totalExpenseCurrentMonth = 0.00f
+    private var pfmScorePreviousMonth = 0.00f
+    private var totalIncomePreviousMonth = 0.00f
+    private var totalExpensePreviousMonth = 0.00f
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,8 +94,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 initializeTransactions(documents)
                 sortedDate = getDatesOfTransactions(transactionsArrayList)
                 initializeDateSelectionSpinner()
-                val totalPersonalFinancePerformance = calculatePersonalFinancePerformance()
-                setTotals(totalPersonalFinancePerformance)
+                /*val totalPersonalFinancePerformance = calculatePersonalFinancePerformance()*/
                 loadView()
             }
     }
@@ -149,12 +153,14 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 // Do something with the selected month
                 selectedDatesSort = selectedMonth
                 setData()
+                setTotals()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 // Handle case when no month is selected
                 selectedDatesSort = "current"
                 setData()
+                setTotals()
             }
         }
     }
@@ -173,9 +179,19 @@ class DashboardPersonalFinanceFragment : Fragment() {
             iterateDatesByQuarter(group)*/
             binding.tvBalanceTitle.text = "Personal Financial Score Trend of $selectedDatesSort"
         }
-        weeks = getWeeksOfMonth(sortedDate, month)
-        graphData = getDataOfWeeksOfCurrentMonth(weeks!!)
+        val previousMonth = getPreviousMonth(month)
+        weeksCurrentMonth = getWeeksOfMonth(sortedDate, month - 1)
+        weeksPreviousMonth = getWeeksOfMonth(sortedDate, previousMonth - 1)
+        getDataOfWeeksOfCurrentMonth(weeksCurrentMonth!!, true)
+        getDataOfWeeksOfCurrentMonth(weeksPreviousMonth!!, false)
         initializeGraph()
+    }
+
+    private fun getPreviousMonth(month: Int): Int {
+        var previousMonth = month
+        if (previousMonth == 1)
+            previousMonth = 0
+        return previousMonth
     }
 
     private fun getMonthIndex(selectedMonth: String): Int {
@@ -212,7 +228,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
         }
     }
 
-    private fun getDataOfWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>): MutableList<Entry> {
+    private fun getDataOfWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>, isCurrentMonth: Boolean) {
         val data = mutableListOf<Entry>()
         var income = 0.00f
         var expense= 0.00f
@@ -226,29 +242,37 @@ class DashboardPersonalFinanceFragment : Fragment() {
                         if (transaction.transactionType == "Income"){
                             //totalAmount += transaction.amount!!
                             income += transaction.amount!!
+                            if (isCurrentMonth)
+                                totalIncomeCurrentMonth += transaction.amount!!
+                            else totalIncomePreviousMonth += transaction.amount!!
                         }
                         else {
                             //totalAmount -= transaction.amount!!
                             expense += transaction.amount!!
+                            if (isCurrentMonth)
+                                totalExpenseCurrentMonth += transaction.amount!!
+                            else totalExpensePreviousMonth += transaction.amount!!
                         }
                     }
                 }
             }
+            if (isCurrentMonth) {
             var personalFinancePerformancePercent = income/expense * 100
             if (personalFinancePerformancePercent > 200)
                 personalFinancePerformancePercent = 200F
 
             val personalFinancePerformance = personalFinancePerformancePercent / 2
 
-            data.add(Entry(xAxisPoint, personalFinancePerformance))
-            income = 0.00F
-            expense = 0.00F
-            xAxisPoint++
+                data.add(Entry(xAxisPoint, personalFinancePerformance))
+                income = 0.00F
+                expense = 0.00F
+                xAxisPoint++
+            }
         }
-        return data
+
     }
 
-    private fun addTotalIIncomeAndExpensePFM(transaction: Transactions) {
+   /* private fun addTotalIIncomeAndExpensePFM(transaction: Transactions) {
         if (transaction.transactionType == "Income")
             totalIncome += transaction.amount!!
         else totalExpense += transaction.amount!!
@@ -265,16 +289,16 @@ class DashboardPersonalFinanceFragment : Fragment() {
             personalFinancePerformancePercent = 200F
 
         return personalFinancePerformancePercent / 2
-    }
+    }*/
 
-    private fun setTotals(totalPersonalFinancePerformance: Float) {
+    private fun setTotals() {
         if (!isViewCreated || !isAdded) {
             return
         }
 
-        var personalFinancePerformance = totalPersonalFinancePerformance
-        if (totalPersonalFinancePerformance.isNaN())
-            personalFinancePerformance = 0.00F
+        calculatePFMScore()
+
+        val personalFinancePerformance = pfmScoreCurrentMonth
 
         val df = DecimalFormat("#.#")
         df.roundingMode = java.math.RoundingMode.UP
@@ -449,6 +473,52 @@ class DashboardPersonalFinanceFragment : Fragment() {
         mediaPlayer = MediaPlayer.create(context, audio)
         loadOverallAudio()
         loadButton()
+        loadPreviousMonth()
+    }
+
+    private fun loadPreviousMonth() {
+
+        var performance = ""
+        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.loading)
+        var difference = 0F
+
+        if (pfmScoreCurrentMonth > pfmScorePreviousMonth) {
+            difference = pfmScoreCurrentMonth - pfmScorePreviousMonth
+            performance = "Increase from previous selected month"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
+        } else if (pfmScoreCurrentMonth < pfmScorePreviousMonth) {
+            difference = pfmScorePreviousMonth - pfmScoreCurrentMonth
+            performance = "Decrease from previous selected month"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.loading)
+        }
+        val decimalFormat = DecimalFormat("#.#")
+        val roundedValue = decimalFormat.format(difference)
+
+        binding.ivPreviousMonthImg.setImageBitmap(bitmap)
+        binding.tvPreviousPerformancePercentage.text = roundedValue
+        binding.tvPreviousPerformanceStatus.text = performance
+    }
+
+    private fun calculatePFMScore() {
+        pfmScoreCurrentMonth = totalIncomeCurrentMonth/totalExpenseCurrentMonth * 100
+        if (pfmScoreCurrentMonth > 200)
+            pfmScoreCurrentMonth = 200F
+        pfmScorePreviousMonth = totalIncomePreviousMonth/totalExpensePreviousMonth * 100
+        if (pfmScorePreviousMonth > 200)
+            pfmScorePreviousMonth = 200F
+
+        pfmScoreCurrentMonth /= 2
+        pfmScorePreviousMonth /= 2
+        checkIfNaN()
+    }
+
+    private fun checkIfNaN() {
+        if (pfmScoreCurrentMonth.isNaN()) {
+            pfmScoreCurrentMonth = 0.0f
+        }
+        if (pfmScorePreviousMonth.isNaN()) {
+            pfmScorePreviousMonth = 0.0f
+        }
     }
 
     private fun loadOverallAudio() {

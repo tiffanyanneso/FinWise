@@ -483,7 +483,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             month = getMonthIndex(selectedDatesSort)
             binding.tvBalanceTitle.text = "Financial Activities Score Trend of $selectedDatesSort"
         }
-        weeks = getWeeksOfMonth(sortedDate, month)
+        weeks = getWeeksOfMonth(sortedDate, month - 1)
         getDataOfWeeksOfCurrentMonth(weeks!!)
         initializeGraph()
 

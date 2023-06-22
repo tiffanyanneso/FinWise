@@ -79,7 +79,12 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
                 expense += transaction.amount!!
         }
 
-        val pfmScore = (income / expense * 100)
+        var pfmScore = (income / expense * 100)
+        if (pfmScore > 200)
+            pfmScore = 200F
+        pfmScore /= 2
+        if (pfmScore.isNaN())
+            pfmScore = 0F
 
         var scores = firestore.collection("Scores").whereEqualTo("childID", currentUser).whereEqualTo("type", "pfm")
                 .orderBy("dateRecorded", Query.Direction.DESCENDING).get().await()
@@ -92,6 +97,8 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
             val date =
                 SimpleDateFormat("MM/dd/yyyy").format(latestScore.toObject<ScoreModel>()!!.dateRecorded!!.toDate())
             val to = LocalDate.parse(date.toString(), dateFormatter)
+            Log.d("kulog", "savePfmScore: "+pfmScore)
+            
             var difference = Period.between(to, from)
 
             var differenceDays = difference.days
@@ -177,8 +184,25 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
                    finactScore = (goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4
             }
 
+            checkIfNanFinancialActivities()
             saveFinactScore()
 
+        }
+    }
+
+    private fun checkIfNanFinancialActivities() {
+        val percentages = mutableListOf(savingPercentage, spendingPercentage, budgetingPercentage,
+            goalSettingPercentage)
+
+        for (i in percentages.indices) {
+            if (percentages[i].isNaN()) {
+                when (i) {
+                    0 -> savingPercentage = 0.00f
+                    1 -> spendingPercentage = 0.00f
+                    2 -> budgetingPercentage = 0.00f
+                    3 -> goalSettingPercentage = 0.00f
+                }
+            }
         }
     }
 
@@ -438,7 +462,9 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
         val totalSum = spendingPercentage + savingPercentage + financialGoalsPercentage + budgetingPercentage
         val maxPossibleSum = 4 * 100  // assuming the maximum possible value for each variable is 100
 
-        val financialAssessmentScore = (totalSum.toDouble() / maxPossibleSum) * 100
+        var financialAssessmentScore = (totalSum.toDouble() / maxPossibleSum) * 100
+        if (financialAssessmentScore.isNaN())
+            financialAssessmentScore = 0.0
 
         var scores = firestore.collection("Scores").whereEqualTo("childID", currentUser).whereEqualTo("type", "assessments")
             .orderBy("dateRecorded", Query.Direction.DESCENDING).get().await()
