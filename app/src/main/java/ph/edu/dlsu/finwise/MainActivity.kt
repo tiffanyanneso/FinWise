@@ -5,6 +5,9 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
@@ -18,7 +21,7 @@ import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
-import ph.edu.dlsu.finwise.services.FirestoreDataSyncService
+import ph.edu.dlsu.finwise.services.FirestoreSyncWorkManager
 import ph.edu.dlsu.finwise.services.GoalNotificationServices
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -30,8 +33,7 @@ class MainActivity : AppCompatActivity() {
     private var firestore = Firebase.firestore
 
     private lateinit var alarmManager:AlarmManager
-
-    //private lateinit var workManager: WorkManager
+    private lateinit var workManager: WorkManager
 
     override fun onCreate(savedInstanceState: Bundle?){
         super.onCreate(savedInstanceState)
@@ -47,6 +49,7 @@ class MainActivity : AppCompatActivity() {
                     startActivity(Intent(this, PersonalFinancialManagementActivity::class.java))
                     initializeDailyReminderChildNotif()
                     initializeNearDeadlineNotif()
+                    saveData()
                 }
                 else if (userObject?.userType == "Parent") {
                     startActivity(Intent(this, ParentDashboardActivity::class.java))
@@ -132,5 +135,37 @@ class MainActivity : AppCompatActivity() {
             AlarmManager.INTERVAL_DAY,
             pendingIntent
         )
+    }
+
+    private fun saveData() {
+        // Initialize WorkManager
+        workManager = WorkManager.getInstance(applicationContext)
+
+        // Create a Constraints object to specify requirements for running the worker
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        // Create a OneTimeWorkRequest for the worker
+        val workRequest = OneTimeWorkRequestBuilder<FirestoreSyncWorkManager>()
+            .setConstraints(constraints)
+            .setInitialDelay(calculateDelay(), TimeUnit.MILLISECONDS)
+            .build()
+
+        // Enqueue the work request with WorkManager
+        workManager.enqueue(workRequest)
+    }
+
+    private fun calculateDelay(): Long {
+        val currentTime = System.currentTimeMillis()
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = currentTime
+            set(Calendar.HOUR_OF_DAY, 10)
+            set(Calendar.MINUTE, 22)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        val scheduledTime = calendar.timeInMillis
+        return scheduledTime - currentTime
     }
 }
