@@ -154,9 +154,11 @@ class ParentRegisterChildActivity : AppCompatActivity() {
     }
 
     private fun createSettings(parentID:String, childID:String) {
-        var pfmScore = binding.radioButtonsPfm.findViewById<RadioButton>(binding.radioButtonsPfm.checkedRadioButtonId).text.toString()
-        var finactScore = binding.radioButtonsFinact.findViewById<RadioButton>(binding.radioButtonsFinact.checkedRadioButtonId).text.toString()
-        var assessmentScore = binding.radioButtonsAssessments.findViewById<RadioButton>(binding.radioButtonsAssessments.checkedRadioButtonId).text.toString()
+            var literacyScore = binding.radioButtonsOverall.findViewById<RadioButton>(binding.radioButtonsOverall.checkedRadioButtonId).text.toString()
+
+//        var pfmScore = binding.radioButtonsPfm.findViewById<RadioButton>(binding.radioButtonsPfm.checkedRadioButtonId).text.toString()
+//        var finactScore = binding.radioButtonsFinact.findViewById<RadioButton>(binding.radioButtonsFinact.checkedRadioButtonId).text.toString()
+//        var assessmentScore = binding.radioButtonsAssessments.findViewById<RadioButton>(binding.radioButtonsAssessments.checkedRadioButtonId).text.toString()
 
         //compute age
         val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("M/d/yyyy")
@@ -176,9 +178,10 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                  "emergencyFund" to false,
                  "donatingCharity" to false,
                  "situationalShopping" to false,
-                 "pfmScore" to pfmScore,
-                 "finactScore" to finactScore,
-                 "assessmentScore" to assessmentScore
+                 "literacyGoal" to literacyScore
+//                 "pfmScore" to pfmScore,
+//                 "finactScore" to finactScore,
+//                 "assessmentScore" to assessmentScore
             )
             firestore.collection("Settings").add(settings)
         } else if (age == 10 || age == 11) {
@@ -192,9 +195,9 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                 "emergencyFund" to false,
                 "donatingCharity" to true,
                 "situationalShopping" to true,
-                "pfmScore" to pfmScore,
-                "finactScore" to finactScore,
-                "assessmentScore" to assessmentScore
+//                "pfmScore" to pfmScore,
+//                "finactScore" to finactScore,
+//                "assessmentScore" to assessmentScore
             )
             firestore.collection("Settings").add(settings)
         } else if (age == 12) {
@@ -208,9 +211,9 @@ class ParentRegisterChildActivity : AppCompatActivity() {
                 "emergencyFund" to true,
                 "donatingCharity" to true,
                 "situationalShopping" to true,
-                "pfmScore" to pfmScore,
-                "finactScore" to finactScore,
-                "assessmentScore" to assessmentScore
+//                "pfmScore" to pfmScore,
+//                "finactScore" to finactScore,
+//                "assessmentScore" to assessmentScore
             )
             firestore.collection("Settings").add(settings)
         }
@@ -312,24 +315,31 @@ class ParentRegisterChildActivity : AppCompatActivity() {
             binding.etConfirmPassword.error = "Please enter the same password."
             valid = false
         } else password = binding.etConfirmPassword.text.toString().trim()
+
+        if (binding.radioButtonsOverall.checkedRadioButtonId == -1) {
+            binding.tvErrorOverallRadio.visibility = View.VISIBLE
+            valid = false
+        } else
+            binding.tvErrorOverallRadio.visibility = View.GONE
+
         
-        if (binding.radioButtonsPfm.checkedRadioButtonId == -1) {
-            binding.tvErrorPfmRadio.visibility = View.VISIBLE
-            valid = false
-        } else
-            binding.tvErrorPfmRadio.visibility = View.GONE
-
-        if (binding.radioButtonsFinact.checkedRadioButtonId == -1) {
-            binding.tvErrorFinactRadio.visibility = View.VISIBLE
-            valid = false
-        } else
-            binding.tvErrorFinactRadio.visibility = View.GONE
-
-        if (binding.radioButtonsAssessments.checkedRadioButtonId == -1) {
-            binding.tvErrorAssessmentsRadio.visibility = View.VISIBLE
-            valid = false
-        } else
-            binding.tvErrorAssessmentsRadio.visibility = View.GONE
+//        if (binding.radioButtonsPfm.checkedRadioButtonId == -1) {
+//            binding.tvErrorPfmRadio.visibility = View.VISIBLE
+//            valid = false
+//        } else
+//            binding.tvErrorPfmRadio.visibility = View.GONE
+//
+//        if (binding.radioButtonsFinact.checkedRadioButtonId == -1) {
+//            binding.tvErrorFinactRadio.visibility = View.VISIBLE
+//            valid = false
+//        } else
+//            binding.tvErrorFinactRadio.visibility = View.GONE
+//
+//        if (binding.radioButtonsAssessments.checkedRadioButtonId == -1) {
+//            binding.tvErrorAssessmentsRadio.visibility = View.VISIBLE
+//            valid = false
+//        } else
+//            binding.tvErrorAssessmentsRadio.visibility = View.GONE
 
         return valid
     }

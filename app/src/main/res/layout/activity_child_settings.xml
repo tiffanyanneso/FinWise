@@ -47,154 +47,182 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
 
-            <LinearLayout
+            <RadioGroup
+                android:id="@+id/radio_buttons_overall"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:orientation="vertical">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textSize="16dp"
-                    android:textColor="@color/black"
-                    android:text="Personal Finance"
-                    android:textStyle="bold"/>
-
-                <RadioGroup
-                    android:id="@+id/radio_buttons_pfm"
+                <RadioButton
+                    android:id="@+id/rb_overall_excellent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="40dp"
+                    android:text="Excellent" />
 
-                    <RadioButton
-                        android:id="@+id/rb_pfm_excellent"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="Excellent" />
-
-                    <RadioButton
-                        android:id="@+id/rb_pfm_amazing"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="Amazing" />
-
-                    <RadioButton
-                        android:id="@+id/rb_pfm_great"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="Great" />
-
-                    <RadioButton
-                        android:id="@+id/rb_pfm_good"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="Good" />
-
-
-                </RadioGroup>
-            </LinearLayout>
-
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                app:dividerColor="@color/light_grey"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textSize="16dp"
-                    android:textColor="@color/black"
-                    android:text="Personal Finance"
-                    android:textStyle="bold"/>
-
-                <RadioGroup
-                    android:id="@+id/radio_buttons_finact"
+                <RadioButton
+                    android:id="@+id/rb_overall_amazing"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="40dp"
+                    android:text="Amazing" />
 
-                    <RadioButton
-                        android:id="@+id/rb_finact_excellent"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="Excellent" />
-
-                    <RadioButton
-                        android:id="@+id/rb_finact_amazing"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="Amazing" />
-
-                    <RadioButton
-                        android:id="@+id/rb_finact_great"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="Great" />
-
-                    <RadioButton
-                        android:id="@+id/rb_finact_good"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="Good" />
-                </RadioGroup>
-            </LinearLayout>
-
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                app:dividerColor="@color/light_grey"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textSize="16dp"
-                    android:textColor="@color/black"
-                    android:text="Financial Assessments"
-                    android:textStyle="bold"/>
-
-                <RadioGroup
-                    android:id="@+id/radio_buttons_assessments"
+                <RadioButton
+                    android:id="@+id/rb_overall_great"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="40dp"
+                    android:text="Great" />
 
-                    <RadioButton
-                        android:id="@+id/rb_assessments_excellent"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="Excellent" />
+                <RadioButton
+                    android:id="@+id/rb_overall_good"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Good" />
+            </RadioGroup>
 
-                    <RadioButton
-                        android:id="@+id/rb_assessments_amazing"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="Amazing" />
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginVertical="10dp"-->
+<!--                android:orientation="vertical">-->
 
-                    <RadioButton
-                        android:id="@+id/rb_assessments_great"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="Great" />
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:textSize="16dp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:text="Personal Finance"-->
+<!--                    android:textStyle="bold"/>-->
 
-                    <RadioButton
-                        android:id="@+id/rb_assessments_good"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:text="Good" />
-                </RadioGroup>
-            </LinearLayout>
+<!--                <RadioGroup-->
+<!--                    android:id="@+id/radio_buttons_pfm"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content">-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rb_pfm_excellent"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:text="Excellent" />-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rb_pfm_amazing"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:text="Amazing" />-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rb_pfm_great"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:text="Great" />-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rb_pfm_good"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:text="Good" />-->
+<!--                </RadioGroup>-->
+<!--            </LinearLayout>-->
+
+<!--            <com.google.android.material.divider.MaterialDivider-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginVertical="10dp"-->
+<!--                app:dividerColor="@color/light_grey"/>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginVertical="10dp"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:textSize="16dp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:text="Personal Finance"-->
+<!--                    android:textStyle="bold"/>-->
+
+<!--                <RadioGroup-->
+<!--                    android:id="@+id/radio_buttons_finact"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content">-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rb_finact_excellent"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:text="Excellent" />-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rb_finact_amazing"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:text="Amazing" />-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rb_finact_great"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:text="Great" />-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rb_finact_good"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:text="Good" />-->
+<!--                </RadioGroup>-->
+<!--            </LinearLayout>-->
+
+<!--            <com.google.android.material.divider.MaterialDivider-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginVertical="10dp"-->
+<!--                app:dividerColor="@color/light_grey"/>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginVertical="10dp"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:textSize="16dp"-->
+<!--                    android:textColor="@color/black"-->
+<!--                    android:text="Financial Assessments"-->
+<!--                    android:textStyle="bold"/>-->
+
+<!--                <RadioGroup-->
+<!--                    android:id="@+id/radio_buttons_assessments"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content">-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rb_assessments_excellent"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:text="Excellent" />-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rb_assessments_amazing"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:text="Amazing" />-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rb_assessments_great"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:text="Great" />-->
+
+<!--                    <RadioButton-->
+<!--                        android:id="@+id/rb_assessments_good"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        android:text="Good" />-->
+<!--                </RadioGroup>-->
+<!--            </LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
