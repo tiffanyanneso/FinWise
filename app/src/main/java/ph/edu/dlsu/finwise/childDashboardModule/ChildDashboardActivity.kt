@@ -359,13 +359,45 @@ class ChildDashboardActivity : AppCompatActivity(){
     }
 
     private fun averageScores() {
-        pfmScoreCurrentMonth = ((pfmScoreCurrentMonth / nCountPFMCurrentMonth) * 0.35).toFloat()
-        finActScoreCurrentMonth = ((finActScoreCurrentMonth / nCountFinActCurrentMonth) * 0.35).toFloat()
-        finAssScoreCurrentMonth = ((finAssScoreCurrentMonth / nCountFinAssCurrentMonth) * 0.30).toFloat()
+        // Compute scores for the current month
+        pfmScoreCurrentMonth = if (nCountPFMCurrentMonth != 0) {
+            ((pfmScoreCurrentMonth / nCountPFMCurrentMonth) * 0.35).toFloat()
+        } else {
+            0F
+        }
 
-        pfmScorePreviousMonth = ((pfmScorePreviousMonth / nCountPFMPreviousMonth) * 0.35).toFloat()
-        finActScorePreviousMonth = ((finActScorePreviousMonth / nCountFinActPreviousMonth) * 0.35).toFloat()
-        finAssScorePreviousMonth = ((finAssScorePreviousMonth / nCountFinAssPreviousMonth) * 0.30).toFloat()
+        finActScoreCurrentMonth = if (nCountFinActCurrentMonth != 0) {
+            ((finActScoreCurrentMonth / nCountFinActCurrentMonth) * 0.35).toFloat()
+        } else {
+            0F
+        }
+
+        finAssScoreCurrentMonth = if (nCountFinAssCurrentMonth != 0) {
+            ((finAssScoreCurrentMonth / nCountFinAssCurrentMonth) * 0.30).toFloat()
+        } else {
+            0F
+        }
+
+        // Compute scores for the previous month
+        pfmScorePreviousMonth = if (nCountPFMPreviousMonth != 0) {
+            ((pfmScorePreviousMonth / nCountPFMPreviousMonth) * 0.35).toFloat()
+        } else {
+            0F
+        }
+
+        finActScorePreviousMonth = if (nCountFinActPreviousMonth != 0) {
+            ((finActScorePreviousMonth / nCountFinActPreviousMonth) * 0.35).toFloat()
+        } else {
+            0F
+        }
+
+        finAssScorePreviousMonth = if (nCountFinAssPreviousMonth != 0) {
+            ((finAssScorePreviousMonth / nCountFinAssPreviousMonth) * 0.30).toFloat()
+        } else {
+            0F
+        }
+
+
     }
 
     private fun checkIfNaNScores() {
@@ -444,7 +476,7 @@ class ChildDashboardActivity : AppCompatActivity(){
         if (performanceDate != null && weekDate == performanceDate) {
             if (isCurrentMonth) {
                 finActScoreCurrentMonth += score.score!!
-                nCountFinActPreviousMonth++
+                nCountFinActCurrentMonth++
             } else {
                 finActScorePreviousMonth += score.score!!
                 nCountFinActPreviousMonth++
@@ -458,7 +490,7 @@ class ChildDashboardActivity : AppCompatActivity(){
         if (performanceDate != null && weekDate == performanceDate) {
             if (isCurrentMonth) {
                 finAssScoreCurrentMonth += score.score!!
-                nCountFinAssPreviousMonth++
+                nCountFinAssCurrentMonth++
             } else {
                 finAssScorePreviousMonth += score.score!!
                 nCountFinAssPreviousMonth++
