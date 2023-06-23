@@ -98,6 +98,7 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
         android:paddingBottom="10dp"
+        app:helperTextTextColor="@color/red"
         app:startIconDrawable="@drawable/baseline_directions_run_24">
 
         <AutoCompleteTextView

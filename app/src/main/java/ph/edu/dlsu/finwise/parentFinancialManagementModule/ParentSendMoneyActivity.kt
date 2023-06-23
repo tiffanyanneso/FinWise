@@ -187,7 +187,6 @@ class ParentSendMoneyActivity :AppCompatActivity () {
         //isMayaPayment(nameFound)
 
         getCurrentTime()
-        Toast.makeText(this, ""+valid, Toast.LENGTH_SHORT).show()
         return valid
     }
 

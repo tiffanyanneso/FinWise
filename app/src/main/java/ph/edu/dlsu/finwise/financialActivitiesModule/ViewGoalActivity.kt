@@ -125,8 +125,10 @@ class ViewGoalActivity : AppCompatActivity() {
             var goalDeposit = Intent(this, SavingsDepositActivity::class.java)
             sendBundle.putString("source", "saving")
             sendBundle.putString("savingActivityID", savingActivityID)
-            sendBundle.putString("budgetingActivityID", budgetingActivityID)
-            sendBundle.putString("spendingActivityID", spendingActivityID)
+            if (::budgetingActivityID.isInitialized)
+                sendBundle.putString("budgetingActivityID", budgetingActivityID)
+            if (::spendingActivityID.isInitialized)
+                sendBundle.putString("spendingActivityID", spendingActivityID)
             goalDeposit.putExtras(sendBundle)
             this.startActivity(goalDeposit)
         }
@@ -138,8 +140,10 @@ class ViewGoalActivity : AppCompatActivity() {
                 var goalWithdraw = Intent(this, SavingsWithdrawActivity::class.java)
                 sendBundle.putString("source", "saving")
                 sendBundle.putString("savingActivityID", savingActivityID)
-                sendBundle.putString("budgetingActivityID", budgetingActivityID)
-                sendBundle.putString("spendingActivityID", spendingActivityID)
+                if (budgetingActivityID!=null)
+                    sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                if (spendingActivityID!=null)
+                    sendBundle.putString("spendingActivityID", spendingActivityID)
                 goalWithdraw.putExtras(sendBundle)
                 this.startActivity(goalWithdraw)
             }
@@ -166,33 +170,45 @@ class ViewGoalActivity : AppCompatActivity() {
         }
 
         binding.layoutActivityName.setOnClickListener {
-            if (savingActivityStatus == "In Progress" && budgetingActivityStatus == "Locked") {
-                var dialogBinding= DialogFinishSavingBinding.inflate(getLayoutInflater())
-                var dialog= Dialog(this);
-                dialog.setContentView(dialogBinding.getRoot())
-                dialog.window!!.setLayout(900, 800)
+            if (::budgetingActivityStatus.isInitialized) {
+                if (savingActivityStatus == "In Progress" && budgetingActivityStatus == "Locked") {
+                    var dialogBinding = DialogFinishSavingBinding.inflate(getLayoutInflater())
+                    var dialog = Dialog(this);
+                    dialog.setContentView(dialogBinding.getRoot())
+                    dialog.window!!.setLayout(900, 800)
 
-                dialog.show()
-                dialogBinding.btnOk.setOnClickListener{
-                    dialog.dismiss()
-                }
-            } else if (savingActivityStatus == "Completed" && budgetingActivityStatus == "Locked") {
-                var dialogBinding= DialogActivityLockedBinding.inflate(getLayoutInflater())
-                var dialog= Dialog(this);
-                dialog.setContentView(dialogBinding.getRoot())
-                dialog.window!!.setLayout(900, 900)
+                    dialog.show()
+                    dialogBinding.btnOk.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                } else if (savingActivityStatus == "Completed" && budgetingActivityStatus == "Locked") {
+                    var dialogBinding = DialogActivityLockedBinding.inflate(getLayoutInflater())
+                    var dialog = Dialog(this);
+                    dialog.setContentView(dialogBinding.getRoot())
+                    dialog.window!!.setLayout(900, 1000)
 
-                dialog.show()
-                dialogBinding.btnOk.setOnClickListener{
-                    dialog.dismiss()
+                    dialog.show()
+                    dialogBinding.btnOk.setOnClickListener {
+                        dialog.dismiss()
+                    }
+                } else {
+                    var budgeting = Intent(this, BudgetActivity::class.java)
+                    sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                    sendBundle.putString("savingActivityID", savingActivityID)
+                    sendBundle.putString("spendingActivityID", spendingActivityID)
+                    budgeting.putExtras(sendBundle)
+                    this.startActivity(budgeting)
                 }
             } else {
-                var budgeting  = Intent (this, BudgetActivity::class.java)
-                sendBundle.putString("budgetingActivityID", budgetingActivityID)
-                sendBundle.putString("savingActivityID", savingActivityID)
-                sendBundle.putString("spendingActivityID", spendingActivityID)
-                budgeting.putExtras(sendBundle)
-                this.startActivity(budgeting)
+                var dialogBinding = DialogActivityLockedBinding.inflate(getLayoutInflater())
+                var dialog = Dialog(this);
+                dialog.setContentView(dialogBinding.getRoot())
+                dialog.window!!.setLayout(900, 1000)
+
+                dialog.show()
+                dialogBinding.btnOk.setOnClickListener {
+                    dialog.dismiss()
+                }
             }
         }
     }

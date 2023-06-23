@@ -108,8 +108,10 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         binding.tvGoal.text= bundle.getString("goalName")
         financialGoalID = bundle.getString("financialGoalID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
-        budgetingActivityID = bundle.getString("budgetingActivityID").toString()
-        spendingActivityID = bundle.getString("spendingActivityID").toString()
+        if (bundle.containsKey("budgetingActivityID"))
+            budgetingActivityID = bundle.getString("budgetingActivityID").toString()
+        if (bundle.containsKey("spendingActivityID"))
+            spendingActivityID = bundle.getString("spendingActivityID").toString()
         source = bundle.getString("source").toString()
 
         paymentType = bundle.getString("paymentType").toString()
@@ -136,8 +138,10 @@ class FinancialActivityConfirmDeposit : AppCompatActivity() {
         val sendBundle = Bundle()
         sendBundle.putString("financialGoalID", financialGoalID)
         sendBundle.putString("savingActivityID", savingActivityID)
-        sendBundle.putString("budgetingActivityID", budgetingActivityID)
-        sendBundle.putString("spendingActivityID", spendingActivityID)
+        if (::budgetingActivityID.isInitialized)
+            sendBundle.putString("budgetingActivityID", budgetingActivityID)
+        if (::spendingActivityID.isInitialized)
+            sendBundle.putString("spendingActivityID", spendingActivityID)
         firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             val goal = it.toObject<FinancialGoals>()
             //goal is ongoing and target amount has already been met, update status of goal and fin activity to completed

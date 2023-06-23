@@ -407,6 +407,10 @@ class BudgetActivity : AppCompatActivity() {
                 var budgetItem = it.toObject<BudgetItem>()
                 amount = budgetItem?.amount!!.toInt()
                 dialogBinding.dialogDropdownCategoryName.setText(budgetItem?.budgetItemName.toString())
+                if (budgetItem?.budgetItemName.toString() == "Others") {
+                    dialogBinding.containerOtherCategoryName.visibility = View.VISIBLE
+                    dialogBinding.dialogEtOtherCategoryName.setText(budgetItem?.budgetItemNameOther.toString())
+                }
                 dialogBinding.dialogEtCategoryAmount.setText(budgetItem?.amount!!.toInt().toString())
             }
 
@@ -417,7 +421,7 @@ class BudgetActivity : AppCompatActivity() {
         }
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(900, 1000)
+        dialog.window!!.setLayout(900, 1100)
 
         //disable editing of category
         dialogBinding.dialogDropdownCategoryName.isClickable = false
@@ -431,32 +435,19 @@ class BudgetActivity : AppCompatActivity() {
             //check that the fields were changed
             if (dialogBinding.dialogEtCategoryAmount.text.toString().toInt() != amount) {
                 //budgeting is already completed
-                if (isBudgetingCompleted) {
-                    firestore.collection("BudgetItems").document(budgetItemID).update("status", "Edited").addOnSuccessListener {
-                        lateinit var budgetItem: BudgetItem
-                        if (itemName != "Others")
-                            budgetItem = BudgetItem(itemName, null, budgetingActivityID, itemAmount, "Active", "After", currentUser)
-                        else
-                            budgetItem = BudgetItem(itemName, dialogBinding.dialogEtOtherCategoryName.text.toString(), budgetingActivityID, itemAmount, "Active", "After", currentUser)
+                if (itemName == "Others")
+                    firestore.collection("BudgetItems").document(budgetItemID)
+                        .update("budgetItemNameOther", dialogBinding.dialogEtOtherCategoryName.text.toString(), "amount", itemAmount)
+                else
+                    firestore.collection("BudgetItems").document(budgetItemID)
+                        .update("amount", itemAmount)
 
-                        budgetCategoryIDArrayList.removeAt(position)
-                        budgetCategoryAdapter.notifyDataSetChanged()
-                        firestore.collection("BudgetItems").add(budgetItem)
-                            .addOnSuccessListener { newBudgetItem ->
-                                budgetCategoryIDArrayList.add(position, newBudgetItem.id)
-                                dialog.dismiss()
-                                updateTransactions(budgetItemID, newBudgetItem.id)
-                                budgetCategoryAdapter.notifyDataSetChanged()
-                            }
-                    }
-                    //budgeting is not yet done, so just update directly
-                } else {
-                    firestore.collection("BudgetItems").document(budgetItemID).update("amount", itemAmount)
-                    dialog.dismiss()
-                    budgetCategoryAdapter.notifyDataSetChanged()
+                dialog.dismiss()
+                //updateTransactions(budgetItemID, newBudgetItem.id)
+                budgetCategoryAdapter.notifyDataSetChanged()
+
+                if (!isBudgetingCompleted)
                     getAvailableToBudget()
-
-                }
             }
         }
 
