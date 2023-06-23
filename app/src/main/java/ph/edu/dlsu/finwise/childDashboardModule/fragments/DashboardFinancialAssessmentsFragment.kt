@@ -76,9 +76,9 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     //private lateinit var days: List<Date>
     private var weeksCurrentMonth: Map<Int, List<Date>>? = null
     private var weeksPreviousMonth: Map<Int, List<Date>>? = null
+    private var isCurrentMonth = true
     private var months: Map<Int, List<Date>>? = null
     private var selectedDatesSort = "current"
-    private var isCurrentMonth = true
     private lateinit var chart: LineChart
 
     private lateinit var endTimestampSelectedMonth: Timestamp
@@ -690,6 +690,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             month = getCurrentMonth()
             binding.tvBalanceTitle.text = "This Month's Financial Assessment Score Trend"
         } else {
+
             month = getMonthIndex(selectedDatesSort) - 1
             binding.tvBalanceTitle.text = "Financial Assessment Score Trend of $selectedDatesSort"
             binding.title.text = "Financial Assessment Score of $selectedDatesSort"

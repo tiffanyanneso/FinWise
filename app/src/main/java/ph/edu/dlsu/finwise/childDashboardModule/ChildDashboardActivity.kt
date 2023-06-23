@@ -9,12 +9,13 @@ import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
@@ -37,6 +38,7 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -54,6 +56,12 @@ class ChildDashboardActivity : AppCompatActivity(){
 
     private var age = 0
     private var personalFinancePerformance = 0.00F
+
+    private var pfmScoreDocument: List<ScoreModel> = listOf()
+    private var finActivitiesScoreDocument: List<ScoreModel> = listOf()
+    private var finAssessmentsScoreDocument: List<ScoreModel> = listOf()
+
+
 
     private var goalSettingPercentage = 0.00F
     private var savingPercentage = 0.00F
@@ -74,6 +82,19 @@ class ChildDashboardActivity : AppCompatActivity(){
     private var financialActivitiesPerformance = 0.00F
 
     private var financialAssessmentPerformance = 0.00F
+    private var pfmScoreCurrentMonth = 0.00F
+    private var pfmScorePreviousMonth = 0.00F
+    private var finActScoreCurrentMonth = 0.00F
+    private var finActScorePreviousMonth = 0.00F
+    private var finAssScoreCurrentMonth = 0.00F
+    private var finAssScorePreviousMonth = 0.00F
+
+    private var nCountPFMCurrentMonth = 0
+    private var nCountPFMPreviousMonth = 0
+    private var nCountFinActCurrentMonth = 0
+    private var nCountFinActPreviousMonth = 0
+    private var nCountFinAssCurrentMonth = 0
+    private var nCountFinAssPreviousMonth = 0
 
     private var nGoalSettingCompleted = 0
     private var nSavingCompleted = 0
@@ -82,7 +103,18 @@ class ChildDashboardActivity : AppCompatActivity(){
     //if there are no assessments taken yet, do not include in fin health computation
     private var nAssessmentsTaken = 0
 
-    private var overallFinancialHealth = 0.00F
+    private var overallFinancialHealthCurrentMonth = 0.00F
+    private var overallFinancialHealthPreviousMonth = 0.00F
+    private var currentMonth = 0
+
+    private lateinit var sortedDate: List<Date>
+    private lateinit var pfmUniqueDates: List<Date>
+    private lateinit var finActUniqueDates: List<Date>
+    private lateinit var finAssessmentsuniqueDates: List<Date>
+    private var isCurrentMonth = true
+
+    private lateinit var endTimestampSelectedMonth: Timestamp
+    private lateinit var startTimestampPreviousMonth: Timestamp
 
     private val tabIcons = intArrayOf(
         R.drawable.personalfinance,
@@ -100,7 +132,7 @@ class ChildDashboardActivity : AppCompatActivity(){
 
         CoroutineScope(Dispatchers.Main).launch {
             checkUser()
-            getAge()
+            //getAge()
             initializeFragments()
             /*getPersonalFinancePerformance()
             getFinactActPerformance()
@@ -183,7 +215,8 @@ class ChildDashboardActivity : AppCompatActivity(){
         age = difference.years
     }
 
-    private suspend fun getFinactActPerformance() {
+
+    /*private suspend fun getFinactActPerformance() {
         if (age == 10 || age == 11)
             getGoalSettingPerformance()
 
@@ -194,7 +227,7 @@ class ChildDashboardActivity : AppCompatActivity(){
         if (age > 9 )
             purchasePlanningPerformance()
         else spendingPercentage = (1-overspendingPercentage)*100
-    }
+    }*/
 
 
     private suspend fun getPersonalFinancePerformance() {
@@ -218,7 +251,570 @@ class ChildDashboardActivity : AppCompatActivity(){
     }
 
 
-    private suspend fun getSpendingPerformance() {
+    private fun checkIfNaN(score: Float): Float {
+        var returnScore = score
+        if (returnScore.isNaN()) {
+                returnScore = 0.0F
+            }
+        return returnScore
+
+        /*val percentages = mutableListOf(personalFinancePerformance, financialAssessmentPerformance,
+            financialActivitiesPerformance, savingPercentage, spendingPercentage,
+            budgetingPercentage, goalSettingPercentage)
+
+        for (ind in percentages)
+            Log.d("mastro", "checkIfNaN: "+ind)
+
+        for (i in percentages.indices) {
+            if (percentages[i].isNaN()) {
+                when (i) {
+                    0 -> personalFinancePerformance = 0.00f
+                    1 -> financialAssessmentPerformance = 0.00f
+                    2 -> financialActivitiesPerformance = 0.00f
+                    3 -> savingPercentage = 0.00f
+                    4 -> spendingPercentage = 0.00f
+                    5 -> budgetingPercentage = 0.00f
+                    6 -> goalSettingPercentage = 0.00f
+                }
+            }
+        }*/
+    }
+
+
+    private suspend fun getOverallFinancialHealth(){
+        getDate()
+        getDocuments()
+        getDatesOfScores()
+        getMonthData()
+        computeScores()
+        setPerformanceView()
+
+        /*checkIfNaN()
+        if (age == 9 || age == 12) {
+            //no saving completed yet, score will be personal finance and financial assessment (prelim)
+            overallFinancialHealth = if(nSavingCompleted == 0)
+                (((personalFinancePerformance * .5) + financialAssessmentPerformance*.5)*100).toFloat()
+
+            //no budgeting completed yet, score will be personal finance, saving performance,  financial assessment (prelim)
+            else if (nBudgetingCompleted == 0)
+                ((personalFinancePerformance * .35) + (savingPercentage  * .35) + (financialAssessmentPerformance * .30)).toFloat()
+
+            //no spending completed yet, score will be personal finance, saving performance, budgeting performance,  financial assessment (prelim)
+            else if (nSpendingCompleted == 0)
+                ((personalFinancePerformance * .35) + (((savingPercentage + budgetingPercentage) / 2) * .35) + (financialAssessmentPerformance * .30)).toFloat()
+            else
+                ((personalFinancePerformance * .35) + (((savingPercentage + budgetingPercentage + spendingPercentage) / 3) * .35) + (financialAssessmentPerformance * .30)).toFloat()
+
+        } else if (age == 10 || age == 11) {
+            //no goal setting completed yet, score will be personal finance, and  financial assessment (prelim)
+            if (nGoalSettingCompleted == 0)
+                overallFinancialHealth = (((personalFinancePerformance * .5) + financialAssessmentPerformance*.5)*100).toFloat()
+
+            //no saving completed yet, score will be personal finance, goal setting, and financial assessment (prelim)
+            else if(nSavingCompleted == 0)
+                overallFinancialHealth = ((personalFinancePerformance * .35) + (goalSettingPercentage  * .35) + (financialAssessmentPerformance * .30)).toFloat()
+
+            //no budgeting completed yet, score will be personal finance, saving performance,  financial assessment (prelim)
+            else if (nBudgetingCompleted == 0)
+                overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage)/2)  * .35) + (financialAssessmentPerformance * .30)).toFloat()
+
+            //no spending completed yet, score will be personal finance, saving performance, budgeting performance,  financial assessment (prelim)
+            else if (nSpendingCompleted == 0)
+                overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage + budgetingPercentage) / 3) * .35) + (financialAssessmentPerformance * .30)).toFloat()
+            
+            else
+            overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4) * .35) + (financialAssessmentPerformance * .30)).toFloat()
+        }*/
+    }
+
+    private fun computeScores() {
+        averageScores()
+        checkIfNaNScores()
+        computeOverallScores()
+    }
+
+    private fun computeOverallScores() {
+        // Calculate the overall score without exceeding 100%
+        overallFinancialHealthCurrentMonth = ((pfmScoreCurrentMonth.coerceAtMost(100.0F) +
+                finActScoreCurrentMonth.coerceAtMost(100.0F) +
+                finAssScoreCurrentMonth.coerceAtMost(100.0F))).toFloat()
+
+        // Ensure the overall percentage does not exceed 100%
+        overallFinancialHealthCurrentMonth = overallFinancialHealthCurrentMonth
+            .coerceAtMost(100.0F)
+        if (overallFinancialHealthCurrentMonth.isNaN())
+            overallFinancialHealthCurrentMonth = 0F
+
+        // Calculate the overall score without exceeding 100%
+        overallFinancialHealthPreviousMonth = ((pfmScorePreviousMonth.coerceAtMost(100.0F) +
+                finActScorePreviousMonth.coerceAtMost(100.0F) +
+                finAssScorePreviousMonth.coerceAtMost(100.0F))).toFloat()
+
+        // Ensure the overall percentage does not exceed 100%
+        overallFinancialHealthPreviousMonth = overallFinancialHealthPreviousMonth
+            .coerceAtMost(100.0F)
+        if (overallFinancialHealthPreviousMonth.isNaN())
+            overallFinancialHealthPreviousMonth = 0F
+
+    }
+
+    private fun averageScores() {
+        pfmScoreCurrentMonth = ((pfmScoreCurrentMonth / nCountPFMCurrentMonth) * 0.35).toFloat()
+        finActScoreCurrentMonth = ((finActScoreCurrentMonth / nCountFinActCurrentMonth) * 0.35).toFloat()
+        finAssScoreCurrentMonth = ((finAssScoreCurrentMonth / nCountFinAssCurrentMonth) * 0.30).toFloat()
+
+        pfmScorePreviousMonth = ((pfmScorePreviousMonth / nCountPFMPreviousMonth) * 0.35).toFloat()
+        finActScorePreviousMonth = ((finActScorePreviousMonth / nCountFinActPreviousMonth) * 0.35).toFloat()
+        finAssScorePreviousMonth = ((finAssScorePreviousMonth / nCountFinAssPreviousMonth) * 0.30).toFloat()
+    }
+
+    private fun checkIfNaNScores() {
+        pfmScoreCurrentMonth = checkIfNaN(pfmScoreCurrentMonth)
+        finActScoreCurrentMonth = checkIfNaN(finActScoreCurrentMonth)
+        finAssScoreCurrentMonth = checkIfNaN(finAssScoreCurrentMonth)
+
+        pfmScorePreviousMonth = checkIfNaN(pfmScorePreviousMonth)
+        finActScorePreviousMonth = checkIfNaN(finActScorePreviousMonth)
+        finAssScorePreviousMonth = checkIfNaN(finAssScorePreviousMonth)
+    }
+
+    private fun getMonthData() {
+        val previousMonth = getPreviousMonth()
+        val currentMonthDates = getDates(currentMonth)
+        val previousMonthDates = getDates(previousMonth)
+        isCurrentMonth = true
+        getDataOfMonth(currentMonthDates)
+        isCurrentMonth = false
+        getDataOfMonth(previousMonthDates)
+    }
+
+    private suspend fun getDocuments() {
+        pfmScoreDocument = firestore.collection("Scores").whereEqualTo("childID", childID)
+            .whereEqualTo("type", "pfm")
+            .whereGreaterThanOrEqualTo("dateRecorded", startTimestampPreviousMonth)
+            .whereLessThanOrEqualTo("dateRecorded", endTimestampSelectedMonth)
+            .get().await().toObjects()
+        finActivitiesScoreDocument = firestore.collection("Scores").whereEqualTo("childID", childID)
+            .whereEqualTo("type", "finact")
+            .whereGreaterThanOrEqualTo("dateRecorded", startTimestampPreviousMonth)
+            .whereLessThanOrEqualTo("dateRecorded", endTimestampSelectedMonth)
+            .get().await().toObjects()
+        finAssessmentsScoreDocument = firestore.collection("Scores").whereEqualTo("childID", childID)
+            .whereEqualTo("type", "assessments")
+            .whereGreaterThanOrEqualTo("dateRecorded", startTimestampPreviousMonth)
+            .whereLessThanOrEqualTo("dateRecorded", endTimestampSelectedMonth)
+            .get().await().toObjects()
+    }
+
+    private fun getDataOfMonth(monthDates: List<Date>) {
+        for (date in monthDates) {
+
+            for (pfm in pfmScoreDocument) {
+                getPFMScore(date, pfm)
+            }
+
+            for (finAct in finActivitiesScoreDocument) {
+                getFinActScore(date, finAct)
+            }
+
+            for (finAss in finAssessmentsScoreDocument) {
+                getFinAssScore(date, finAss)
+            }
+
+        }
+    }
+
+    private fun getPFMScore(date: Date, score: ScoreModel) {
+        val weekDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        val performanceDate = score.dateRecorded?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
+        if (performanceDate != null && weekDate == performanceDate) {
+            if (isCurrentMonth) {
+                pfmScoreCurrentMonth += score.score!!
+                nCountPFMCurrentMonth++
+            } else {
+                pfmScorePreviousMonth += score.score!!
+                nCountPFMPreviousMonth++
+            }
+        }
+    }
+
+    private fun getFinActScore(date: Date, score: ScoreModel) {
+        val weekDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        val performanceDate = score.dateRecorded?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
+        if (performanceDate != null && weekDate == performanceDate) {
+            if (isCurrentMonth) {
+                finActScoreCurrentMonth += score.score!!
+                nCountFinActPreviousMonth++
+            } else {
+                finActScorePreviousMonth += score.score!!
+                nCountFinActPreviousMonth++
+            }
+        }
+    }
+
+    private fun getFinAssScore(date: Date, score: ScoreModel) {
+        val weekDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+        val performanceDate = score.dateRecorded?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
+        if (performanceDate != null && weekDate == performanceDate) {
+            if (isCurrentMonth) {
+                finAssScoreCurrentMonth += score.score!!
+                nCountFinAssPreviousMonth++
+            } else {
+                finAssScorePreviousMonth += score.score!!
+                nCountFinAssPreviousMonth++
+            }
+        }
+    }
+
+    private fun getDates(month: Int): List<Date> {
+        return sortedDate.filter { date ->
+            val calendar = Calendar.getInstance()
+            calendar.time = date
+            calendar.get(Calendar.MONTH) == month
+        }
+    }
+
+    private fun getPreviousMonth(): Int {
+        var previousMonth = currentMonth
+        if (previousMonth == 1)
+            previousMonth = 0
+        else previousMonth -= 1
+        return previousMonth
+    }
+
+    private fun getDatesOfScores() {
+        val dates = mutableListOf<Date>()
+        val datesPFM = mutableListOf<Date>()
+        val datesFinAct = mutableListOf<Date>()
+        val datesFinAssessments = mutableListOf<Date>()
+
+        for (pfm in pfmScoreDocument) {
+            pfm.dateRecorded?.let { timestamp ->
+                val date = timestamp.toDate()
+                dates.add(date)
+                datesPFM.add(date)
+            }
+        }
+
+        for (finact in finActivitiesScoreDocument) {
+            finact.dateRecorded?.let { timestamp ->
+                val date = timestamp.toDate()
+                dates.add(date)
+                datesFinAct.add(date)
+            }
+        }
+
+        for (finass in finAssessmentsScoreDocument) {
+            finass.dateRecorded?.let { timestamp ->
+                val date = timestamp.toDate()
+                dates.add(date)
+                datesFinAssessments.add(date)
+            }
+        }
+        
+        sortedDate = dates.distinct().sorted()
+        pfmUniqueDates = datesPFM.distinct().sorted()
+        finActUniqueDates = datesFinAct.distinct().sorted()
+        finAssessmentsuniqueDates = datesFinAssessments.distinct().sorted()
+
+    }
+
+    private fun getDate() {
+        val calendar = Calendar.getInstance()
+        currentMonth = calendar.get(Calendar.MONTH)
+        getCurrentAndPreviousMonth(currentMonth)
+    }
+
+    private fun getCurrentAndPreviousMonth(selectedMonthIndex: Int) {
+        val months = arrayOf(
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        )
+
+        val calendar = Calendar.getInstance()
+// Calculate the month index based on the selected month
+
+// Calculate the previous month index, accounting for the case when the selected month is January
+        val previousMonthIndex = if (selectedMonthIndex == 0) {
+            months.size - 1 // December (last month in the list)
+        } else {
+            selectedMonthIndex - 1
+        }
+
+// Set the start and end dates for the selected and previous months
+        /*calendar.set(Calendar.MONTH, selectedMonthIndex)
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        val startDateSelectedMonth = calendar.time
+        val startTimestampSelectedMonth = Timestamp(startDateSelectedMonth)*/
+
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
+        val endDateSelectedMonth = calendar.time
+        endTimestampSelectedMonth = Timestamp(endDateSelectedMonth)
+
+        calendar.set(Calendar.MONTH, previousMonthIndex)
+        calendar.set(Calendar.DAY_OF_MONTH, 1)
+        val startDatePreviousMonth = calendar.time
+        startTimestampPreviousMonth = Timestamp(startDatePreviousMonth)
+
+        /*calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH))
+        val endDatePreviousMonth = calendar.time
+        val endTimestampPreviousMonth = Timestamp(endDatePreviousMonth)*/
+    }
+
+    private fun setPerformanceView() {
+        if (overallFinancialHealthCurrentMonth.isNaN())
+            overallFinancialHealthCurrentMonth = 0.00F
+
+        val df = DecimalFormat("#.#")
+        df.roundingMode = java.math.RoundingMode.UP
+        val roundedValue = df.format(overallFinancialHealthCurrentMonth)
+
+        binding.tvPerformancePercentage.text = "${roundedValue}%"
+        Log.d("kulog", "roundedValue: "+overallFinancialHealthCurrentMonth)
+
+
+        val imageView = binding.ivScore
+        val message: String
+        val performance: String
+        val bitmap: Bitmap
+
+        /*TODO: Change Audio file in mediaPlayer*/
+        var audio = 0
+
+        if (overallFinancialHealthCurrentMonth >= 96F) {
+            audio = if (userType == "Parent")
+                R.raw.child_dashboard_parent_excellent
+            else
+                R.raw.child_dashboard_excellent
+
+            performance = "Excellent!"
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.dark_green))
+            message = if (userType == "Parent")
+                "Your child is a financial guru! Celebrate their accomplishments and encourage them to keep it up!"
+            else "You've demonstrated exceptional knowledge and skills in personal finance, financial activities, and financial assessments!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
+        } else if (overallFinancialHealthCurrentMonth >= 86.0 && overallFinancialHealthCurrentMonth < 96.0) {
+            audio = if (userType == "Parent")
+                R.raw.child_dashboard_parent_amazing
+            else
+                R.raw.child_dashboard_amazing
+
+            performance = "Amazing!"
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.amazing_green))
+            message = if (userType == "Parent")
+                "Your child has a solid foundation in personal finance, financial activities, and concepts. Keep empowering them!"
+            else " You're a true financial whiz! Keep refining your skills, exploring financial concepts, and inspiring others with your expertise!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
+        } else if (overallFinancialHealthCurrentMonth >= 76.0 && overallFinancialHealthCurrentMonth < 86.0) {
+            audio = if (userType == "Parent")
+                R.raw.child_dashboard_parent_great
+            else
+                R.raw.child_dashboard_great
+
+            performance = "Great!"
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.green))
+            message = if (userType == "Parent")
+                "Your child has strong financial decision-making skills. Encourage them to keep this up!"
+            else "You have a strong grasp of finance concepts and know how to properly manage your money in day to day activities. Keep it up!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
+        } else if (overallFinancialHealthCurrentMonth >= 66.0 && overallFinancialHealthCurrentMonth < 76.0) {
+            audio = if (userType == "Parent")
+                R.raw.child_dashboard_parent_good
+            else
+                R.raw.child_dashboard_good
+
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.light_green))
+            performance = "Good!"
+            message = if (userType == "Parent")
+                "Your child is good at real-life financial decision-making & has a good grasp of financial concepts!"
+            else "Keep making great decisions in real-life financial situations and learning about financial concepts!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
+        } else if (overallFinancialHealthCurrentMonth >= 56.0 && overallFinancialHealthCurrentMonth < 66.0) {
+            audio = if (userType == "Parent")
+                R.raw.child_dashboard_parent_average
+            else
+                R.raw.child_dashboard_average
+
+            performance = "Average"
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.yellow))
+            message = if (userType == "Parent")
+                "Continue supporting your child in their development by having them participate in decision making activities at home!"
+            else "You're becoming a confident financial decision-maker. Keep doing financial activities & assessments to grow!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
+        } else if (overallFinancialHealthCurrentMonth >= 46.0 && overallFinancialHealthCurrentMonth < 56.0) {
+            audio = if (userType == "Parent")
+                R.raw.child_dashboard_parent_nearly_there
+            else
+                R.raw.child_dashboard_nearly_there
+
+            performance = "Nearly\nThere"
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.nearly_there_yellow))
+
+            message = if (userType == "Parent")
+                "Your child is nearly there. Have them participate in decision making activities at home!"
+            else "You're making significant strides in your financial literacy journey. Keep making wise financial decisions!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
+        } else if (overallFinancialHealthCurrentMonth >= 36.0 && overallFinancialHealthCurrentMonth < 46.0) {
+            audio = if (userType == "Parent")
+                R.raw.child_dashboard_parent_almost_there
+            else
+                R.raw.child_dashboard_almost_there
+
+            performance = "Almost\nThere"
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.almost_there_yellow))
+            message = if (userType == "Parent")
+                "Your child is developing their financial decision-making. Have them participate in decision making activities at home!"
+            else "You're becoming a savvy money manager. Keep exploring financial activities and assessments to strengthen your skills!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
+        } else if (overallFinancialHealthCurrentMonth >= 26.0 && overallFinancialHealthCurrentMonth < 36.0) {
+            audio = if (userType == "Parent")
+                R.raw.child_dashboard_parent_getting_there
+            else
+                R.raw.child_dashboard_getting_there
+
+            performance = "Getting\nThere"
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.getting_there_orange))
+            message = if (userType == "Parent")
+                "Your child is still developing their financial decision-making. Allow them to practice this skill at home!"
+            else "You're beginning to build a solid foundation in financial decision-making. Keep improving!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
+        } else if (overallFinancialHealthCurrentMonth >= 16.0 && overallFinancialHealthCurrentMonth < 26.0) {
+            audio = if (userType == "Parent")
+                R.raw.child_dashboard_parent_not_quite
+            else
+                R.raw.child_dashboard_not_quite
+
+            performance = "Not Quite\nThere"
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.not_quite_there_red))
+            message = if (userType == "Parent")
+                "Your child is still developing their financial decision-making. Allow them to practice this skill at home!"
+            else "You're developing your financial decision-making skills. Keep exercising financial decision making to improve!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
+        } else if (overallFinancialHealthCurrentMonth < 16.0) {
+            audio = if (userType == "Parent")
+                R.raw.child_dashboard_parent_needs_improement
+            else
+                R.raw.child_dashboard_needs_improvement
+
+            performance = "Needs\nImprovement"
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.red))
+            message = if (userType == "Parent")
+                "Your child is starting their financial journey! Encourage them to keep exploring financial decision-making!"
+            else "You're just getting started, and that's okay! Keep exercising your financial decision-making. Don't give up!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+        }
+        else {
+            audio = if (userType == "Parent")
+                R.raw.child_dashboard_parent_default
+            else
+                R.raw.child_dashboard_parent_default
+
+            performance = "Get\nStarted!"
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.black))
+            message = "Start using the app and go back to this module to view your performance!"
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
+            binding.tvPerformancePercentage.visibility = View.GONE
+        }
+
+        imageView.setImageBitmap(bitmap)
+        binding.tvPerformanceText.text = message
+        binding.tvPerformanceStatus.text = performance
+        loadAudio(audio)
+        loadPreviousMonth()
+        loadView()
+    }
+
+
+    private fun loadPreviousMonth() {
+
+        val performance: String
+        val bitmap: Bitmap
+        val difference: Float
+
+
+
+        if (overallFinancialHealthCurrentMonth > overallFinancialHealthPreviousMonth) {
+            difference = overallFinancialHealthCurrentMonth - overallFinancialHealthPreviousMonth
+            performance = "Increase from previous month"
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this,
+                R.color.dark_green))
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.up_arrow)
+        } else if (overallFinancialHealthCurrentMonth < overallFinancialHealthPreviousMonth) {
+            difference = overallFinancialHealthPreviousMonth - overallFinancialHealthCurrentMonth
+            performance = "Decrease from previous month"
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this,
+                R.color.red))
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.down_arrow)
+        } else {
+            difference = 0.0F
+            performance = "No Increase"
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this,
+                R.color.yellow))
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon_equal)
+        }
+        val decimalFormat = DecimalFormat("#.#")
+        val roundedValue = decimalFormat.format(difference)
+
+        binding.ivPreviousMonthImg.setImageBitmap(bitmap)
+        binding.tvPreviousPerformancePercentage.text = "$roundedValue%"
+        binding.tvPreviousPerformanceStatus.text = performance
+    }
+
+
+    private fun loadAudio(audio: Int) {
+        /*TODO: Change binding and Audio file in mediaPlayer*/
+        binding.btnAudioOverallFinancialLiteracyScore.setOnClickListener {
+            if (mediaPlayer == null) {
+                mediaPlayer = MediaPlayer.create(this, audio)
+            }
+
+            if (mediaPlayer?.isPlaying == true) {
+                mediaPlayer?.pause()
+                mediaPlayer?.seekTo(0)
+                return@setOnClickListener
+            }
+            mediaPlayer?.start()
+        }
+    }
+
+    override fun onPause() {
+        releaseMediaPlayer()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        releaseMediaPlayer()
+    }
+
+
+    private fun releaseMediaPlayer() {
+        mediaPlayer?.apply {
+            if (isPlaying) {
+                pause()
+                seekTo(0)
+            }
+            stop()
+            release()
+        }
+        mediaPlayer = null
+    }
+
+    class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){
+
+        private val mFragmentList = ArrayList<Fragment>()
+        private val mFragmentTitleList = ArrayList<String>()
+        override fun getCount() = mFragmentList.size
+        override fun getItem(position: Int) = mFragmentList[position]
+        override fun getPageTitle(position: Int) = mFragmentTitleList[position]
+
+        fun addFragment(fragment: Fragment, title:String){
+            mFragmentList.add(fragment)
+            mFragmentTitleList.add(title)
+        }
+    }
+
+    /*private suspend fun getSpendingPerformance() {
         //get budgeting items to see if they overspent for a specific budget item
         //get completed spending activities
         val financialActivitiesDocuments = firestore.collection("FinancialActivities")
@@ -264,7 +860,6 @@ class ChildDashboardActivity : AppCompatActivity(){
         overspendingPercentage = (overSpending/nBudgetItems)
     }
 
-
     private suspend fun purchasePlanningPerformance() {
         //items planned / all the items they bought * 100
         val spendingActivities = firestore.collection("FinancialActivities")
@@ -302,7 +897,6 @@ class ChildDashboardActivity : AppCompatActivity(){
             }
         }
     }
-
 
     private suspend fun processBudgetItems(activity: QueryDocumentSnapshot?) {
         val budgetItemsDocuments = firestore.collection("BudgetItems")
@@ -442,336 +1036,6 @@ class ChildDashboardActivity : AppCompatActivity(){
 //            println("print nquestions" + nQuestions)
             financialAssessmentPerformance = (nCorrect.toFloat() / nQuestions.toFloat()) * 100
         }
-    }
-
-    private fun checkIfNaN(score: Double): Double {
-        var returnScore = score
-        if (returnScore.isNaN()) {
-                returnScore = 0.0
-            }
-        return returnScore
-
-        /*val percentages = mutableListOf(personalFinancePerformance, financialAssessmentPerformance,
-            financialActivitiesPerformance, savingPercentage, spendingPercentage,
-            budgetingPercentage, goalSettingPercentage)
-
-        for (ind in percentages)
-            Log.d("mastro", "checkIfNaN: "+ind)
-
-        for (i in percentages.indices) {
-            if (percentages[i].isNaN()) {
-                when (i) {
-                    0 -> personalFinancePerformance = 0.00f
-                    1 -> financialAssessmentPerformance = 0.00f
-                    2 -> financialActivitiesPerformance = 0.00f
-                    3 -> savingPercentage = 0.00f
-                    4 -> spendingPercentage = 0.00f
-                    5 -> budgetingPercentage = 0.00f
-                    6 -> goalSettingPercentage = 0.00f
-                }
-            }
-        }*/
-    }
-
-
-    private suspend fun getOverallFinancialHealth(){
-        val pfmScoreDocument = firestore.collection("Scores").whereEqualTo("childID", childID)
-            .whereEqualTo("type", "pfm").get().await().toObjects<ScoreModel>()
-        val finActivitiesScoreDocument = firestore.collection("Scores").whereEqualTo("childID", childID)
-            .whereEqualTo("type", "finact").get().await().toObjects<ScoreModel>()
-        val finAssessmentsScoreDocument = firestore.collection("Scores").whereEqualTo("childID", childID)
-            .whereEqualTo("type", "assessments").get().await().toObjects<ScoreModel>()
-
-        Log.d("kulog", "pfmScoreDocument: "+pfmScoreDocument[0].score)
-        Log.d("kulog", "finActivitiesScoreDocument: "+finActivitiesScoreDocument[0].score)
-        Log.d("kulog", "finAssessmentsScoreDocument: "+finAssessmentsScoreDocument[0].score)
-
-        var pfmScore = (pfmScoreDocument[0].score?.times(0.35)) ?: 0.0
-        var finActivitiesScore = (finActivitiesScoreDocument[0].score?.times(0.35)) ?: 0.0
-        var finAssessmentsScore = (finAssessmentsScoreDocument[0].score?.times(0.30)) ?: 0.0
-
-        pfmScore = checkIfNaN(pfmScore)
-        finActivitiesScore = checkIfNaN(finActivitiesScore)
-        finAssessmentsScore = checkIfNaN(finAssessmentsScore)
-
-// Calculate the overall score without exceeding 100%
-        val totalWeight = 0.35 + 0.35 + 0.30
-        overallFinancialHealth = ((pfmScore.coerceAtMost(100.0) +
-                finActivitiesScore.coerceAtMost(100.0) +
-                finAssessmentsScore.coerceAtMost(100.0)) / totalWeight).toFloat()
-
-// Ensure the overall percentage does not exceed 100%
-        overallFinancialHealth = overallFinancialHealth.coerceAtMost(100.0F)
-        if (overallFinancialHealth.isNaN())
-            overallFinancialHealth = 0F
-
-        Log.d("kulog", "getOverallFinancialHealth: "+overallFinancialHealth)
-
-        setPerformanceView()
-
-        /*checkIfNaN()
-        if (age == 9 || age == 12) {
-            //no saving completed yet, score will be personal finance and financial assessment (prelim)
-            overallFinancialHealth = if(nSavingCompleted == 0)
-                (((personalFinancePerformance * .5) + financialAssessmentPerformance*.5)*100).toFloat()
-
-            //no budgeting completed yet, score will be personal finance, saving performance,  financial assessment (prelim)
-            else if (nBudgetingCompleted == 0)
-                ((personalFinancePerformance * .35) + (savingPercentage  * .35) + (financialAssessmentPerformance * .30)).toFloat()
-
-            //no spending completed yet, score will be personal finance, saving performance, budgeting performance,  financial assessment (prelim)
-            else if (nSpendingCompleted == 0)
-                ((personalFinancePerformance * .35) + (((savingPercentage + budgetingPercentage) / 2) * .35) + (financialAssessmentPerformance * .30)).toFloat()
-            else
-                ((personalFinancePerformance * .35) + (((savingPercentage + budgetingPercentage + spendingPercentage) / 3) * .35) + (financialAssessmentPerformance * .30)).toFloat()
-
-        } else if (age == 10 || age == 11) {
-            //no goal setting completed yet, score will be personal finance, and  financial assessment (prelim)
-            if (nGoalSettingCompleted == 0)
-                overallFinancialHealth = (((personalFinancePerformance * .5) + financialAssessmentPerformance*.5)*100).toFloat()
-
-            //no saving completed yet, score will be personal finance, goal setting, and financial assessment (prelim)
-            else if(nSavingCompleted == 0)
-                overallFinancialHealth = ((personalFinancePerformance * .35) + (goalSettingPercentage  * .35) + (financialAssessmentPerformance * .30)).toFloat()
-
-            //no budgeting completed yet, score will be personal finance, saving performance,  financial assessment (prelim)
-            else if (nBudgetingCompleted == 0)
-                overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage)/2)  * .35) + (financialAssessmentPerformance * .30)).toFloat()
-
-            //no spending completed yet, score will be personal finance, saving performance, budgeting performance,  financial assessment (prelim)
-            else if (nSpendingCompleted == 0)
-                overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage + budgetingPercentage) / 3) * .35) + (financialAssessmentPerformance * .30)).toFloat()
-            
-            else
-            overallFinancialHealth = ((personalFinancePerformance * .35) + (((goalSettingPercentage + savingPercentage + budgetingPercentage + spendingPercentage) / 4) * .35) + (financialAssessmentPerformance * .30)).toFloat()
-        }*/
-    }
-
-
-    private fun setPerformanceView() {
-        if (overallFinancialHealth.isNaN())
-            overallFinancialHealth = 0.00F
-
-        val df = DecimalFormat("#.#")
-        df.roundingMode = java.math.RoundingMode.UP
-        val roundedValue = df.format(overallFinancialHealth)
-
-        binding.tvPerformancePercentage.text = "${roundedValue}%"
-        Log.d("kulog", "roundedValue: "+overallFinancialHealth)
-
-
-        val imageView = binding.ivScore
-        val message: String
-        val performance: String
-        val bitmap: Bitmap
-
-        /*TODO: Change Audio file in mediaPlayer*/
-        var audio = 0
-
-        if (overallFinancialHealth >= 96F) {
-            audio = if (userType == "Parent")
-                R.raw.child_dashboard_parent_excellent
-            else
-                R.raw.child_dashboard_excellent
-
-            performance = "Excellent!"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.dark_green))
-            message = if (userType == "Parent")
-                "Your child is a financial guru! Celebrate their accomplishments and encourage them to keep it up!"
-            else "You've demonstrated exceptional knowledge and skills in personal finance, financial activities, and financial assessments!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
-        } else if (overallFinancialHealth >= 86.0 && overallFinancialHealth < 96.0) {
-            audio = if (userType == "Parent")
-                R.raw.child_dashboard_parent_amazing
-            else
-                R.raw.child_dashboard_amazing
-
-            performance = "Amazing!"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.amazing_green))
-            message = if (userType == "Parent")
-                "Your child has a solid foundation in personal finance, financial activities, and concepts. Keep empowering them!"
-            else " You're a true financial whiz! Keep refining your skills, exploring financial concepts, and inspiring others with your expertise!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
-        } else if (overallFinancialHealth >= 76.0 && overallFinancialHealth < 86.0) {
-            audio = if (userType == "Parent")
-                R.raw.child_dashboard_parent_great
-            else
-                R.raw.child_dashboard_great
-
-            performance = "Great!"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.green))
-            message = if (userType == "Parent")
-                "Your child has strong financial decision-making skills. Encourage them to keep this up!"
-            else "You have a strong grasp of finance concepts and know how to properly manage your money in day to day activities. Keep it up!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
-        } else if (overallFinancialHealth >= 66.0 && overallFinancialHealth < 76.0) {
-            audio = if (userType == "Parent")
-                R.raw.child_dashboard_parent_good
-            else
-                R.raw.child_dashboard_good
-
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.light_green))
-            performance = "Good!"
-            message = if (userType == "Parent")
-                "Your child is good at real-life financial decision-making & has a good grasp of financial concepts!"
-            else "Keep making great decisions in real-life financial situations and learning about financial concepts!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
-        } else if (overallFinancialHealth >= 56.0 && overallFinancialHealth < 66.0) {
-            audio = if (userType == "Parent")
-                R.raw.child_dashboard_parent_average
-            else
-                R.raw.child_dashboard_average
-
-            performance = "Average"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.yellow))
-            message = if (userType == "Parent")
-                "Continue supporting your child in their development by having them participate in decision making activities at home!"
-            else "You're becoming a confident financial decision-maker. Keep doing financial activities & assessments to grow!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
-        } else if (overallFinancialHealth >= 46.0 && overallFinancialHealth < 56.0) {
-            audio = if (userType == "Parent")
-                R.raw.child_dashboard_parent_nearly_there
-            else
-                R.raw.child_dashboard_nearly_there
-
-            performance = "Nearly\nThere"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.nearly_there_yellow))
-
-            message = if (userType == "Parent")
-                "Your child is nearly there. Have them participate in decision making activities at home!"
-            else "You're making significant strides in your financial literacy journey. Keep making wise financial decisions!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
-        } else if (overallFinancialHealth >= 36.0 && overallFinancialHealth < 46.0) {
-            audio = if (userType == "Parent")
-                R.raw.child_dashboard_parent_almost_there
-            else
-                R.raw.child_dashboard_almost_there
-
-            performance = "Almost\nThere"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.almost_there_yellow))
-            message = if (userType == "Parent")
-                "Your child is developing their financial decision-making. Have them participate in decision making activities at home!"
-            else "You're becoming a savvy money manager. Keep exploring financial activities and assessments to strengthen your skills!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
-        } else if (overallFinancialHealth >= 26.0 && overallFinancialHealth < 36.0) {
-            audio = if (userType == "Parent")
-                R.raw.child_dashboard_parent_getting_there
-            else
-                R.raw.child_dashboard_getting_there
-
-            performance = "Getting\nThere"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.getting_there_orange))
-            message = if (userType == "Parent")
-                "Your child is still developing their financial decision-making. Allow them to practice this skill at home!"
-            else "You're beginning to build a solid foundation in financial decision-making. Keep improving!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
-        } else if (overallFinancialHealth >= 16.0 && overallFinancialHealth < 26.0) {
-            audio = if (userType == "Parent")
-                R.raw.child_dashboard_parent_not_quite
-            else
-                R.raw.child_dashboard_not_quite
-
-            performance = "Not Quite\nThere"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.not_quite_there_red))
-            message = if (userType == "Parent")
-                "Your child is still developing their financial decision-making. Allow them to practice this skill at home!"
-            else "You're developing your financial decision-making skills. Keep exercising financial decision making to improve!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
-        } else if (overallFinancialHealth < 16.0) {
-            audio = if (userType == "Parent")
-                R.raw.child_dashboard_parent_needs_improement
-            else
-                R.raw.child_dashboard_needs_improvement
-
-            performance = "Needs\nImprovement"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.red))
-            message = if (userType == "Parent")
-                "Your child is starting their financial journey! Encourage them to keep exploring financial decision-making!"
-            else "You're just getting started, and that's okay! Keep exercising your financial decision-making. Don't give up!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
-        }
-        else {
-            audio = if (userType == "Parent")
-                R.raw.child_dashboard_parent_default
-            else
-                R.raw.child_dashboard_parent_default
-
-            performance = "Get\nStarted!"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.black))
-            message = "Start using the app and go back to this module to view your performance!"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
-            binding.tvPerformancePercentage.visibility = View.GONE
-        }
-
-        imageView.setImageBitmap(bitmap)
-        binding.tvPerformanceText.text = message
-        binding.tvPerformanceStatus.text = performance
-
-        println("print personal finance" +  personalFinancePerformance)
-        println("print finact goal setting " + goalSettingPercentage)
-        println("print finact saving"  + savingPercentage)
-        println("print saving finsihed " + nSavingCompleted)
-        println("print finact budgeting " + budgetingPercentage)
-        println("print budgeting finished" + nBudgetingCompleted)
-        println("print finact spending " + spendingPercentage)
-        println("print spending finished" + nSpendingCompleted)
-        println("print fin assessments" + financialAssessmentPerformance)
-
-        loadAudio(audio)
-        loadView()
-    }
-    private fun loadAudio(audio: Int) {
-        /*TODO: Change binding and Audio file in mediaPlayer*/
-        binding.btnAudioOverallFinancialLiteracyScore.setOnClickListener {
-            if (mediaPlayer == null) {
-                mediaPlayer = MediaPlayer.create(this, audio)
-            }
-
-            if (mediaPlayer?.isPlaying == true) {
-                mediaPlayer?.pause()
-                mediaPlayer?.seekTo(0)
-                return@setOnClickListener
-            }
-            mediaPlayer?.start()
-        }
-    }
-
-    override fun onPause() {
-        releaseMediaPlayer()
-        super.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        releaseMediaPlayer()
-    }
-
-
-    private fun releaseMediaPlayer() {
-        mediaPlayer?.apply {
-            if (isPlaying) {
-                pause()
-                seekTo(0)
-            }
-            stop()
-            release()
-        }
-        mediaPlayer = null
-    }
-
-    class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){
-
-        private val mFragmentList = ArrayList<Fragment>()
-        private val mFragmentTitleList = ArrayList<String>()
-        override fun getCount() = mFragmentList.size
-        override fun getItem(position: Int) = mFragmentList[position]
-        override fun getPageTitle(position: Int) = mFragmentTitleList[position]
-
-        fun addFragment(fragment: Fragment, title:String){
-            mFragmentList.add(fragment)
-            mFragmentTitleList.add(title)
-        }
-    }
-
+    }*/
 
 }

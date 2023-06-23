@@ -222,7 +222,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                     setData()
                     setPerformanceView()
                     Log.d("sfsaddafwwwdfwqsdqwe", "fsdfsdfdsddd: "+graphData)
-
                     resetVariables()
                     loadView()
                     hideLoadingChart()
