@@ -148,8 +148,8 @@ class ParentDashboardActivity : AppCompatActivity(){
             var earnings = firestore.collection("EarningActivities").whereEqualTo("childID", childID)
                 .whereEqualTo("status", "Pending").get().await()
             for (earning in earnings) {
-                var dateCompleted = earning.toObject<EarningActivityModel>().dateCompleted!!.toDate()
-                if (dateCompleted.after(lastLogin.toDate()))
+//                var dateCompleted = earning.toObject<EarningActivityModel>().dateCompleted!!.toDate()
+//                if (dateCompleted.after(lastLogin.toDate()))
                     earningArrayList.add(earning.id)
             }
         }

@@ -204,31 +204,39 @@ class GoalAccomplishedActivity : AppCompatActivity() {
 
     private fun initializeFinishButton() {
         binding.btnFinish.setOnClickListener {
-            val dialogBinding = DialogProceedNextActivityBinding.inflate(layoutInflater)
-            val dialog = Dialog(this);
-            dialog.setContentView(dialogBinding.root)
-            dialog.window!!.setLayout(900, 850)
-            dialog.show()
-
-            dialogBinding.btnProceed.setOnClickListener {
-                firestore.collection("FinancialActivities").document(budgetingActivityID).update("status", "In Progress", "dateStarted", Timestamp.now()).addOnSuccessListener {
-                    dialog.dismiss()
-                    proceedToNextActivity = true
-                    goToFinancialAssessmentActivity()
-                }
-//            val budgetActivity = Intent(this, BudgetActivity::class.java)
-//            budgetActivity.putExtras(sendBundle)
-//            startActivity(budgetActivity)
+            firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
+                var goal = it.toObject<FinancialGoals>()
+                if (goal?.financialActivity == "Saving For Emergency Funds" || goal?.financialActivity == "Donating To Charity") {
+                    var personalFinance = Intent(this, PersonalFinancialManagementActivity::class.java)
+                    startActivity(personalFinance)
+                } else
+                    activityHasBudgeting()
             }
+        }
+    }
 
-            dialogBinding.btnNo.setOnClickListener {
-                adjustWalletBalances()
-                proceedToNextActivity = false
-                println("print proceed " + proceedToNextActivity)
+    private fun activityHasBudgeting() {
+        val dialogBinding = DialogProceedNextActivityBinding.inflate(layoutInflater)
+        val dialog = Dialog(this);
+        dialog.setContentView(dialogBinding.root)
+        dialog.window!!.setLayout(900, 850)
+        dialog.show()
 
-                goToFinancialAssessmentActivity()
+        dialogBinding.btnProceed.setOnClickListener {
+            firestore.collection("FinancialActivities").document(budgetingActivityID).update("status", "In Progress", "dateStarted", Timestamp.now()).addOnSuccessListener {
                 dialog.dismiss()
+                proceedToNextActivity = true
+                goToFinancialAssessmentActivity()
             }
+        }
+
+        dialogBinding.btnNo.setOnClickListener {
+            adjustWalletBalances()
+            proceedToNextActivity = false
+            println("print proceed " + proceedToNextActivity)
+
+            goToFinancialAssessmentActivity()
+            dialog.dismiss()
         }
     }
 

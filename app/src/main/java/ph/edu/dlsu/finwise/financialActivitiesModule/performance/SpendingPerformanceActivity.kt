@@ -214,8 +214,6 @@ class SpendingPerformanceActivity : AppCompatActivity() {
                 binding.tvOverspendingText.text = "Don't give up! Work on improving your performance by using your budget as a guide and thinking before you buy."
                 showOverspendingButton()
             }
-            binding.layoutLoading.visibility = View.GONE
-            binding.mainLayout.visibility = View.VISIBLE
             loadOverspendingAudio(audio)
         }
     }
@@ -423,6 +421,8 @@ class SpendingPerformanceActivity : AppCompatActivity() {
         binding.tvPerformanceStatus.text = ""
         binding.tvPerformanceText.text = "Finish spending to see your performance."
         }
+        binding.layoutLoading.visibility = View.GONE
+        binding.mainLayout.visibility = View.VISIBLE
         loadOverallAudio(audio)
     }
 

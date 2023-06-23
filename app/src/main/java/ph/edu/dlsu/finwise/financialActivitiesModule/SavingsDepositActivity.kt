@@ -77,8 +77,10 @@ class SavingsDepositActivity : AppCompatActivity() {
                 //bundle.putString("source", "DirectGoalDeposit")
                 sendBundle.putSerializable("date", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()))
                 sendBundle.putString("savingActivityID", savingActivityID)
-                sendBundle.putString("budgetingActivityID", budgetingActivityID)
-                sendBundle.putString("spendingActivityID", spendingActivityID)
+                if (::budgetingActivityID.isInitialized)
+                    sendBundle.putString("budgetingActivityID", budgetingActivityID)
+                if (::spendingActivityID.isInitialized)
+                    sendBundle.putString("spendingActivityID", spendingActivityID)
                 sendBundle.putString("paymentType", binding.dropPaymentType.text.toString())
                 sendBundle.putString("source", source)
 
@@ -111,8 +113,10 @@ class SavingsDepositActivity : AppCompatActivity() {
         bundle = intent.extras!!
         financialGoalID = bundle.getString("financialGoalID").toString()
         savingActivityID = bundle.getString("savingActivityID").toString()
-        budgetingActivityID = bundle.getString("budgetingActivityID").toString()
-        spendingActivityID = bundle.getString("spendingActivityID").toString()
+        if (bundle.containsKey("budgetingActivityID"))
+            budgetingActivityID = bundle.getString("budgetingActivityID").toString()
+        if (bundle.containsKey("spendingActivityID"))
+            spendingActivityID = bundle.getString("spendingActivityID").toString()
         source = bundle.getString("source").toString()
         if(source == "budgeting")
             binding.layoutProgress.visibility = View.GONE

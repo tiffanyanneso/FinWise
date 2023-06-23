@@ -41,7 +41,7 @@
             android:layout_marginTop="10dp"
             android:textAlignment="center"
             android:textSize="16dp"
-            android:text="Any updates made to budget after will be tracked. Proceed?"
+            android:text="Don't worry! You can still update your budget later if you need to!"
             android:textColor="@color/black" />
 
     </LinearLayout>
