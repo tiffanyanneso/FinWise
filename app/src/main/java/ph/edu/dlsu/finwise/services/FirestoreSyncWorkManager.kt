@@ -98,7 +98,7 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
                 SimpleDateFormat("MM/dd/yyyy").format(latestScore.toObject<ScoreModel>()!!.dateRecorded!!.toDate())
             val to = LocalDate.parse(date.toString(), dateFormatter)
             Log.d("kulog", "savePfmScore: "+pfmScore)
-            
+
             var difference = Period.between(to, from)
 
             var differenceDays = difference.days

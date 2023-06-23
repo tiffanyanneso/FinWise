@@ -96,14 +96,16 @@
                     <LinearLayout
                         android:layout_width="180dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:orientation="vertical"
                         android:background="@drawable/button_border_white"
                         android:backgroundTint="@color/white"
                         android:padding="10dp">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
+                            android:layout_gravity="center"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
                             android:orientation="vertical">
                             <ImageView
                                 android:src="@drawable/loading"
@@ -118,8 +120,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:textAlignment="center"
+                                android:textColor="@color/black"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                                android:textSize="20sp"
+                                android:textSize="18sp"
                                 android:textStyle="bold"
                                 tools:text="0%" />
 
@@ -127,7 +130,7 @@
                                 android:id="@+id/tv_performance_status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="16sp"
+                                android:textSize="14sp"
                                 android:text="Loading"
                                 android:textColor="@color/light_green"
                                 android:textStyle="bold"
@@ -139,6 +142,7 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:orientation="vertical">
                             <ImageView
                                 android:src="@drawable/loading"
@@ -154,7 +158,8 @@
                                 android:layout_gravity="center"
                                 android:textAlignment="center"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                                android:textSize="20sp"
+                                android:textSize="18sp"
+                                android:textColor="@color/dark_grey"
                                 android:textStyle="bold"
                                 tools:text="0%" />
 
@@ -162,7 +167,7 @@
                                 android:id="@+id/tv_previous_performance_status"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="16sp"
+                                android:textSize="14sp"
                                 android:text="Increase from previous month"
                                 android:textColor="@color/light_green"
                                 android:textStyle="bold"

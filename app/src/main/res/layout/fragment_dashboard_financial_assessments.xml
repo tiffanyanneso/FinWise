@@ -95,42 +95,92 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="120dp"
+                        android:layout_width="180dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:background="@drawable/button_border_white"
                         android:backgroundTint="@color/white"
                         android:padding="10dp">
 
-                        <ImageView
-                            android:src="@drawable/loading"
-                            android:id="@+id/iv_score"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center"/>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:orientation="vertical">
+                            <ImageView
+                                android:src="@drawable/loading"
+                                android:id="@+id/iv_score"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"/>
 
-                        <TextView
-                            android:id="@+id/tv_performance_percentage"
+                            <TextView
+                                android:id="@+id/tv_performance_percentage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                                android:textSize="18sp"
+                                android:textStyle="bold"
+                                tools:text="0%" />
+
+                            <TextView
+                                android:id="@+id/tv_performance_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:text="Loading"
+                                android:textColor="@color/light_green"
+                                android:textStyle="bold"
+                                android:textAlignment="center"
+                                android:layout_gravity="center"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:textAlignment="center"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            tools:text="" />
+                            android:orientation="vertical">
+                            <ImageView
+                                android:src="@drawable/loading"
+                                android:id="@+id/iv_previous_month_img"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"/>
 
-                        <TextView
-                            android:id="@+id/tv_performance_status"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:text="Loading"
-                            android:textColor="@color/light_green"
-                            android:textStyle="bold"
-                            android:layout_gravity="center"
-                            android:textAlignment="center"/>
+                            <TextView
+                                android:id="@+id/tv_previous_performance_percentage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:textAlignment="center"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                                android:textSize="18sp"
+                                android:textColor="@color/dark_grey"
+                                android:textStyle="bold"
+                                tools:text="0%" />
+
+                            <TextView
+                                android:id="@+id/tv_previous_performance_status"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:text="Increase from previous month"
+                                android:textColor="@color/light_green"
+                                android:textStyle="bold"
+                                android:textAlignment="center"
+                                android:layout_gravity="center"/>
+
+                        </LinearLayout>
+
+
                     </LinearLayout>
+
+
+
 
                     <TextView
                         android:id="@+id/tv_performance_text"

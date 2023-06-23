@@ -68,7 +68,7 @@
             android:background="@drawable/button_border_white"
             android:backgroundTint="@color/teal"
             android:layout_marginBottom="10dp"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -182,7 +182,7 @@
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
-            android:layout_height="1300dp"
+            android:layout_height="1400dp"
             />
 
 

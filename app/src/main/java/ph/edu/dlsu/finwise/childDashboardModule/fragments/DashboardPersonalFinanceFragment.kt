@@ -166,6 +166,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
     }
 
     private fun setData() {
+        clearData()
 
         val month: Int
         if (selectedDatesSort == "current") {
@@ -174,23 +175,33 @@ class DashboardPersonalFinanceFragment : Fragment() {
             month = getCurrentMonth()
             binding.tvBalanceTitle.text = "This Month's Personal Financial Score Trend"
         } else {
-            month = getMonthIndex(selectedDatesSort)
+            month = getMonthIndex(selectedDatesSort) - 1
             /*val group = groupDates(sortedDate, "month")
             iterateDatesByQuarter(group)*/
             binding.tvBalanceTitle.text = "Personal Financial Score Trend of $selectedDatesSort"
+            binding.title.text = "Personal Financial Score of $selectedDatesSort"
         }
         val previousMonth = getPreviousMonth(month)
-        weeksCurrentMonth = getWeeksOfMonth(sortedDate, month - 1)
-        weeksPreviousMonth = getWeeksOfMonth(sortedDate, previousMonth - 1)
+        weeksCurrentMonth = getWeeksOfMonth(sortedDate, month)
+        weeksPreviousMonth = getWeeksOfMonth(sortedDate, previousMonth)
         getDataOfWeeksOfCurrentMonth(weeksCurrentMonth!!, true)
         getDataOfWeeksOfCurrentMonth(weeksPreviousMonth!!, false)
         initializeGraph()
+    }
+
+    private fun clearData() {
+        totalIncomeCurrentMonth = 0f
+        totalExpenseCurrentMonth = 0f
+        totalIncomePreviousMonth = 0f
+        totalExpensePreviousMonth = 0f
+        graphData.clear()
     }
 
     private fun getPreviousMonth(month: Int): Int {
         var previousMonth = month
         if (previousMonth == 1)
             previousMonth = 0
+        else previousMonth -= 1
         return previousMonth
     }
 
@@ -229,7 +240,6 @@ class DashboardPersonalFinanceFragment : Fragment() {
     }
 
     private fun getDataOfWeeksOfCurrentMonth(weeks: Map<Int, List<Date>>, isCurrentMonth: Boolean) {
-        val data = mutableListOf<Entry>()
         var income = 0.00f
         var expense= 0.00f
         var xAxisPoint =0.00f
@@ -257,13 +267,13 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 }
             }
             if (isCurrentMonth) {
-            var personalFinancePerformancePercent = income/expense * 100
-            if (personalFinancePerformancePercent > 200)
-                personalFinancePerformancePercent = 200F
+                var personalFinancePerformancePercent = income/expense * 100
+                if (personalFinancePerformancePercent > 200)
+                    personalFinancePerformancePercent = 200F
 
-            val personalFinancePerformance = personalFinancePerformancePercent / 2
+                val personalFinancePerformance = personalFinancePerformancePercent / 2
 
-                data.add(Entry(xAxisPoint, personalFinancePerformance))
+                graphData.add(Entry(xAxisPoint, personalFinancePerformance))
                 income = 0.00F
                 expense = 0.00F
                 xAxisPoint++
@@ -300,12 +310,6 @@ class DashboardPersonalFinanceFragment : Fragment() {
 
         val personalFinancePerformance = pfmScoreCurrentMonth
 
-        val df = DecimalFormat("#.#")
-        df.roundingMode = java.math.RoundingMode.UP
-        val roundedValue = df.format(personalFinancePerformance)
-
-        binding.tvPerformancePercentage.text = "${roundedValue}%"
-
         val imageView = binding.ivScore
         val message: String
         val performance: String
@@ -330,7 +334,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 "Your child is excellent at personal finance! They make exceptional financial decisions."
             else  "You are excellent at personal finance! Keep making exceptional financial decisions."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
-        } else if (personalFinancePerformance in 86.0..95.0) {
+        } else if (personalFinancePerformance >= 86.0 && personalFinancePerformance < 96.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_pfm_amazing
             else
@@ -343,7 +347,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 "Your child's dedication to managing money is paying off. Continue to encourage them to make financial decisions!"
             else  "Your dedication to managing money is paying off. Continue to make amazing financial decisions!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
-        } else if (personalFinancePerformance in 76.0..85.0) {
+        } else if (personalFinancePerformance >= 76.0 && personalFinancePerformance < 86.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_pfm_great
             else
@@ -356,7 +360,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 "Your child is making wise choices with their money. Keep encouraging them to seek opportunities to grow their savings!"
             else  "You're making wise choices with your money, and it shows. Keep seeking opportunities to grow your savings!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
-        } else if (personalFinancePerformance in 66.0..75.0) {
+        } else if (personalFinancePerformance >= 66.0 && personalFinancePerformance < 76.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_pfm_good
             else
@@ -369,7 +373,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 "Your child has a good grasp of managing their income and expenses. Encourage them to keep it up!"
             else  "You have a good grasp of managing your income and expenses. Keep up the good work!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.good)
-        } else if (personalFinancePerformance in 56.0..65.0) {
+        } else if (personalFinancePerformance >= 56.0 && personalFinancePerformance < 66.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_pfm_average
             else
@@ -382,7 +386,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 "Your child's financial skills are improving, and they're becoming more confident in managing their money!"
             else  "Your financial skills are improving, and you're becoming more confident in managing your money!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
-        } else if (personalFinancePerformance in 46.0..55.0) {
+        } else if (personalFinancePerformance >= 46.0 && personalFinancePerformance < 56.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_pfm_nearly_there
             else
@@ -395,7 +399,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 "Your child is making balanced choices with their money. Encourage them to practice their financial decision making!"
             else  "You're making balanced choices with your money. Continue practicing your financial decision making!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
-        } else if (personalFinancePerformance in 36.0..45.0) {
+        } else if (personalFinancePerformance >= 36.0 && personalFinancePerformance < 46.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_pfm_almost_there
             else
@@ -407,7 +411,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 "Your child is becoming more mindful of their money choices. Encourage them to keep making smart decisions!"
             else  "You're becoming more mindful of your money choices. Keep making smart decisions to improve!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
-        } else if (personalFinancePerformance in 26.0..35.0) {
+        } else if (personalFinancePerformance >= 26.0 && personalFinancePerformance < 36.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_pfm_getting_there
             else
@@ -420,7 +424,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 "They're getting the hang of managing their income and expenses. Encourage them to explore different ways to save and budget their money!"
             else  "You're getting the hang of managing your income and expenses. Explore different ways to save and budget your money!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
-        } else if (personalFinancePerformance in 16.0..25.0) {
+        } else if (personalFinancePerformance >= 16.0 && personalFinancePerformance < 26.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_pfm_not_quite_there
             else
@@ -433,7 +437,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 "They're making progress in understanding how money works. Remind them to track their expenses and save money for their future!"
             else  "You're making progress in understanding how money works. Remember to track your expenses and save money for the future!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
-        } else if (personalFinancePerformance < 15) {
+        } else if (personalFinancePerformance < 16.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_pfm_needs_improvement
             else
@@ -467,35 +471,55 @@ class DashboardPersonalFinanceFragment : Fragment() {
         }
 
         imageView.setImageBitmap(bitmap)
+        binding.tvPerformancePercentage.setTextColor(ContextCompat.getColor(context,
+            R.color.black))
+        val roundedValue = String.format("%.1f", personalFinancePerformance)
+        binding.tvPerformancePercentage.text = "$roundedValue%"
         binding.tvPerformanceText.text = message
         binding.tvPerformanceStatus.text = performance
 
         mediaPlayer = MediaPlayer.create(context, audio)
         loadOverallAudio()
-        loadButton()
         loadPreviousMonth()
+        loadButton()
     }
 
     private fun loadPreviousMonth() {
+        if (!isViewCreated || !isAdded) {
+            return
+        }
+        val context = requireContext()
 
-        var performance = ""
-        var bitmap = BitmapFactory.decodeResource(resources, R.drawable.loading)
-        var difference = 0F
+        val performance: String
+        val bitmap: Bitmap
+        val difference: Float
 
         if (pfmScoreCurrentMonth > pfmScorePreviousMonth) {
             difference = pfmScoreCurrentMonth - pfmScorePreviousMonth
-            performance = "Increase from previous selected month"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
+            performance = "Increase from previous month"
+            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.dark_green))
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.up_arrow)
         } else if (pfmScoreCurrentMonth < pfmScorePreviousMonth) {
             difference = pfmScorePreviousMonth - pfmScoreCurrentMonth
-            performance = "Decrease from previous selected month"
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.loading)
+            performance = "Decrease from previous month"
+            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.red))
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.down_arrow)
+        } else {
+            difference = 0.0F
+            performance = "No Increase"
+            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+                R.color.yellow))
+            bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon_equal)
         }
-        val decimalFormat = DecimalFormat("#.#")
-        val roundedValue = decimalFormat.format(difference)
 
+
+        binding.tvPreviousPerformancePercentage.setTextColor(ContextCompat.getColor(context,
+            R.color.dark_grey))
         binding.ivPreviousMonthImg.setImageBitmap(bitmap)
-        binding.tvPreviousPerformancePercentage.text = roundedValue
+        val roundedValue = String.format("%.1f", difference)
+        binding.tvPreviousPerformancePercentage.text = "$roundedValue%"
         binding.tvPreviousPerformanceStatus.text = performance
     }
 
@@ -507,8 +531,18 @@ class DashboardPersonalFinanceFragment : Fragment() {
         if (pfmScorePreviousMonth > 200)
             pfmScorePreviousMonth = 200F
 
+        Log.d("wathcy", "totalIncomeCurrentMonth: "+totalIncomeCurrentMonth)
+        Log.d("wathcy", "totalExpenseCurrentMonth: "+totalExpenseCurrentMonth)
+        Log.d("wathcy", "totalIncomePreviousMonth: "+totalIncomePreviousMonth)
+        Log.d("wathcy", "totalExpensePreviousMonth: "+totalExpensePreviousMonth)
+
         pfmScoreCurrentMonth /= 2
         pfmScorePreviousMonth /= 2
+
+        Log.d("wathcy", "pfmScoreCurrentMonth: "+pfmScoreCurrentMonth)
+        Log.d("wathcy", "pfmScorePreviousMonth: "+pfmScorePreviousMonth)
+
+
         checkIfNaN()
     }
 
@@ -590,7 +624,6 @@ class DashboardPersonalFinanceFragment : Fragment() {
     private fun initializeGraph() {
         chart = view?.findViewById(R.id.balance_chart)!!
 
-
         val xAxis = chart.xAxis
         xAxis.granularity = 1f // Set a smaller granularity if there are fewer data points
 
@@ -650,7 +683,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
         }
     }
 
-    private fun updateXAxisQuarterly(xAxis: XAxis?) {
+    /*private fun updateXAxisQuarterly(xAxis: XAxis?) {
 
 // Get the current quarter's months as an array
         val currentQuarterMonthLabels = months?.values?.flatten()?.distinct()?.sorted()?.map { date ->
@@ -676,7 +709,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
                 }
             }
         }
-    }
+    }*/
 
 
 
