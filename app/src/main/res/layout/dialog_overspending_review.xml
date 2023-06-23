@@ -118,7 +118,7 @@
             android:layout_height="wrap_content"
             android:textSize="16dp"
             android:layout_marginLeft="10dp"
-            android:text="1. Checking your budget to see if you can afford it.\n2. Thinking twice before you buy.\n3. Determining if it is a need or want.\n4. Planning your purchases."
+            android:text="1. Checking your budget to see if you can afford it.\n2. Thinking twice before you buy.\n3. Planning your purchases through the Shopping List feature."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"/>
 

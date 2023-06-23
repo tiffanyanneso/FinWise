@@ -76,7 +76,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1. Think about all the things you need to buy and divide them into budget items\n2. Use your past purchases as reference.\n3. If needed, use other sources as reference (Internet, parents, friends)."
+            android:text="1. Think about all the things you need to buy and divide them into budget items\n2. Use the budget template and your past purchases as reference."
             android:textColor="@color/black"
             android:textSize="16dp"
             android:layout_marginLeft="10dp"/>

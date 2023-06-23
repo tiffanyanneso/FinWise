@@ -74,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Ask them to think about the things they need to buy and divide them into budget items\n2. They can use their past purchases as reference.\n3. If needed, encourage them to use other sources as reference (Internet, parents, friends)."
+            android:text="1. Remind them to think about the things they need to buy and divide them into budget items.\n2. Inform them that they can use the budget templates or their past purchases as reference."
             android:textColor="@color/black"
             android:layout_marginLeft="10dp"/>
 <!--        <LinearLayout-->

@@ -109,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Encourage them to review their budget to see if they can afford items.\n2. Remind them to think twice before they buy.\n3. Help them determine if it is a need or want.\n4. Remind them to plan their purchases."
+            android:text="1. Encourage them to review their budget to see if they can afford items.\n2. Remind them to think twice before they buy.\n3. Help them determine if it is a need or want.\n4. Remind them to plan their purchases through the app."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"/>

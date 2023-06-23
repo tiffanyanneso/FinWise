@@ -186,7 +186,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Review: Encourage them to review their goals "
+            android:text="1. Review: Encourage them to review their goals before submitting"
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"/>
@@ -195,7 +195,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="2. Start Small: Encourage them to start with small goals"
+            android:text="2. Give comprehensive feedback on what they can improve."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"/>

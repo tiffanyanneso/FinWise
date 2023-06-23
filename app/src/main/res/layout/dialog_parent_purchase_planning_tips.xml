@@ -109,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Encourage them to think about all the things they need to buy.\n2. Remind them to list these down through the “Shopping List” feature.\n3. Remind them that they can use their past purchases as reference.\n4. If needed, remind them that they can consult other sources (Internet, friends, family)."
+            android:text="1. Encourage them to think about all the things they need to buy.\n2. Remind them to list these down through the “Shopping List” feature.\n3. Remind them that they can use their past purchases as reference."
             android:textColor="@color/black"
             android:layout_marginLeft="10dp"
             android:layout_gravity="center_vertical"/>
