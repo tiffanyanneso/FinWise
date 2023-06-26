@@ -56,8 +56,6 @@ class AssessmentQuestionsAdapter : RecyclerView.Adapter<AssessmentQuestionsAdapt
                 var question = it.toObject<FinancialAssessmentQuestions>()
                 itemBinding.tvQuestion.text = "Question: " +  question?.question
                 itemBinding.tvDifficulty.text = "Difficulty: " + question?.difficulty
-                println("print " + question?.nAnsweredCorrectly)
-                println("print " + question?.nAssessments)
                 var answeredCorrectly  = question?.nAnsweredCorrectly?.toFloat()
                 var nAssessment =  question?.nAssessments!!?.toFloat()
                 var correctPercentage = 0.00F

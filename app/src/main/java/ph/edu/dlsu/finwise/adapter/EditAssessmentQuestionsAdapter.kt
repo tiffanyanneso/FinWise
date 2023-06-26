@@ -64,6 +64,7 @@ class EditAssessmentQuestionsAdapter : RecyclerView.Adapter<EditAssessmentQuesti
                 bundle.putString("questionID", itemBinding.tvQuestionsId.text.toString())
                 bundle.putString("assessmentID", assessmentID)
                 editQuestion.putExtras(bundle)
+                editQuestion.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 context.startActivity(editQuestion)
             }
             itemBinding.tvQuestionsId.text = questionStatusObject.questionID
