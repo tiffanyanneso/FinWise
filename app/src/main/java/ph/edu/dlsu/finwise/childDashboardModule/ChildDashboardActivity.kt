@@ -767,13 +767,13 @@ class ChildDashboardActivity : AppCompatActivity(){
 
         if (overallFinancialHealthCurrentMonth > overallFinancialHealthPreviousMonth) {
             difference = overallFinancialHealthCurrentMonth - overallFinancialHealthPreviousMonth
-            performance = "Increase from previous month"
+            performance = "Month's Increase"
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this,
                 R.color.dark_green))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.up_arrow)
         } else if (overallFinancialHealthCurrentMonth < overallFinancialHealthPreviousMonth) {
             difference = overallFinancialHealthPreviousMonth - overallFinancialHealthCurrentMonth
-            performance = "Decrease from previous month"
+            performance = "Month's Decrease"
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this,
                 R.color.red))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.down_arrow)

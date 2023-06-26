@@ -496,13 +496,13 @@ class DashboardPersonalFinanceFragment : Fragment() {
 
         if (pfmScoreCurrentMonth > pfmScorePreviousMonth) {
             difference = pfmScoreCurrentMonth - pfmScorePreviousMonth
-            performance = "Increase from previous month"
+            performance = "Month's Increase"
             binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
                 R.color.dark_green))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.up_arrow)
         } else if (pfmScoreCurrentMonth < pfmScorePreviousMonth) {
             difference = pfmScorePreviousMonth - pfmScoreCurrentMonth
-            performance = "Decrease from previous month"
+            performance = "Month's Decrease"
             binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
                 R.color.red))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.down_arrow)

@@ -458,13 +458,13 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
 
         if (finAssessmentPerformanceCurrentMonth > finAssessmentPerformancePreviousMonth) {
             difference = finAssessmentPerformanceCurrentMonth - finAssessmentPerformancePreviousMonth
-            performance = "Increase from previous month"
+            performance = "Month's Increase"
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
                 R.color.dark_green))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.up_arrow)
         } else if (finAssessmentPerformanceCurrentMonth < finAssessmentPerformancePreviousMonth) {
             difference = finAssessmentPerformancePreviousMonth - finAssessmentPerformanceCurrentMonth
-            performance = "Decrease from previous month"
+            performance = "Month's Decrease"
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
                 R.color.red))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.down_arrow)

@@ -33,10 +33,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/cv_overall_score"
-            android:visibility="gone"
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp"
-            android:layout_gravity="center_horizontal">
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+        >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,23 +80,25 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="15dp">
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp">
 
                     <LinearLayout
-                        android:layout_width="180dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:orientation="horizontal"
                         android:background="@drawable/button_border_white"
                         android:backgroundTint="@color/white"
-                        android:padding="10dp">
+                        android:paddingTop="10dp"
+                        >
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_gravity="center"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+
                             <ImageView
                                 android:src="@drawable/loading"
                                 android:id="@+id/iv_score"
@@ -119,7 +122,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="14sp"
-                                android:text="Loading"
                                 android:textColor="@color/light_green"
                                 android:textStyle="bold"
                                 android:textAlignment="center"
@@ -128,10 +130,11 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:layout_weight="1">
+
                             <ImageView
                                 android:src="@drawable/loading"
                                 android:id="@+id/iv_previous_month_img"
@@ -156,7 +159,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textSize="14sp"
-                                android:text="Increase from previous month"
                                 android:textColor="@color/light_green"
                                 android:textStyle="bold"
                                 android:textAlignment="center"
@@ -171,10 +173,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        android:text="You will see here your total financial score combined from the other modules."
+                        android:text="View overall financial activities score!"
                         android:textColor="@color/white"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="15dp"/>
+                        android:layout_marginTop="5dp"
+                        android:textAlignment="center"/>
                 </LinearLayout>
 
                 <LinearLayout

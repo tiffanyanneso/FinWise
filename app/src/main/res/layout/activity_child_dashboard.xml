@@ -68,7 +68,8 @@
             android:background="@drawable/button_border_white"
             android:backgroundTint="@color/teal"
             android:layout_marginBottom="10dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            >
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -104,10 +105,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="180dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:background="@drawable/button_border_white"
@@ -115,11 +116,17 @@
                     android:padding="10dp">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
                         <ImageView
                             android:src="@drawable/loading"
                             android:id="@+id/iv_score"
@@ -143,7 +150,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
-                            android:text="Loading"
                             android:textColor="@color/light_green"
                             android:textStyle="bold"
                             android:textAlignment="center"
@@ -152,10 +158,12 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:layout_weight="1"
+                        android:layout_gravity="center">
+
                         <ImageView
                             android:src="@drawable/loading"
                             android:id="@+id/iv_previous_month_img"
@@ -180,14 +188,13 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="14sp"
-                            android:text="Increase from previous month"
                             android:textColor="@color/light_green"
                             android:textStyle="bold"
                             android:textAlignment="center"
                             android:layout_gravity="center"/>
 
                     </LinearLayout>
-
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -196,10 +203,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="You will see here your total financial score combined from the other modules."
+                    android:textAlignment="center"
+                    android:text="View overall financial score!"
                     android:textColor="@color/white"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="15dp"/>
+                    android:layout_marginTop="5dp"/>
             </LinearLayout>
 
         </LinearLayout>
