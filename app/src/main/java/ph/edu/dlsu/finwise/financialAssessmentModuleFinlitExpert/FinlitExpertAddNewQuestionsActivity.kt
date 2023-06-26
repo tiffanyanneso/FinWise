@@ -145,6 +145,9 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
     private fun goToFinlitExpertEditAssessment() {
         binding.btnCancel.setOnClickListener() {
             val goToFinlitExpertEditAssessmentActivity = Intent(applicationContext, FinlitExpertEditAssessmentActivity::class.java)
+            var sendBundle = Bundle()
+            sendBundle.putString("assessmentID", assessmentID)
+            goToFinlitExpertEditAssessmentActivity.putExtras(sendBundle)
             startActivity(goToFinlitExpertEditAssessmentActivity)
         }
     }
