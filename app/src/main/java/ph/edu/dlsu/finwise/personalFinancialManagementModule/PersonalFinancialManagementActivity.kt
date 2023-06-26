@@ -28,6 +28,9 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.*
 import ph.edu.dlsu.finwise.databinding.ActivityPersonalFinancialManagementBinding
 import ph.edu.dlsu.finwise.databinding.DialogNotifSummaryChildBinding
+import ph.edu.dlsu.finwise.databinding.DialogPfmReviewBinding
+import ph.edu.dlsu.finwise.databinding.DialogPurchasePlanningReviewBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.model.*
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.BalanceFragment
@@ -91,6 +94,10 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 }
                 else -> false
             }
+        }
+
+        binding.btnReview.setOnClickListener {
+            showReviewButton()
         }
 
         checkNotifications()
@@ -201,7 +208,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             audio = R.raw.financial_management_great
             performance = "Great!"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.green))
-            grade = "Your income is much more than your expenses, and you're saving a good amount of money. You're on the right track!"
+            grade = "Your income is more than your expenses, and you're saving money. You're on the right track!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (ratio in 120..139) {
             audio = R.raw.financial_management_good
@@ -213,38 +220,44 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             audio = R.raw.financial_management_average
             performance = "Average"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.yellow))
-            grade = "Your income is slightly more than your expenses, and you're saving money. Keep it up and look for ways to increase your income and savings."
+            grade = "Your income is slightly more than your expenses, and you're saving money. Keep it up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
+            showPerformanceButton()
         } else if (ratio in 80..99) {
             audio = R.raw.financial_management_nearly_there
             performance = "Nearly There"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.nearly_there_yellow))
-            grade = "Your income and expenses are about the same, and you're saving some money. Look for ways to increase your income and reduce your expenses."
+            grade = "Your income and expenses are about the same, and you're saving some money. Keep it up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
+            showPerformanceButton()
         } else if (ratio in 60..79) {
             audio = R.raw.financial_management_almost_there
             performance = "Almost There"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.almost_there_yellow))
-            grade = "Your expenses are slightly more than your income, and you're saving a bit of money. Try to reduce your expenses further to save more."
+            grade = "Your expenses are slightly more than your income, and you're saving a bit of money. Keep it up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
+            showPerformanceButton()
         } else if (ratio in 40..59) {
             audio = R.raw.financial_management_getting_there
             performance = "Getting There"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.getting_there_orange))
-            grade = "Your expenses are more than your income, and you're barely saving money. Try cutting down on your expenses to save money."
+            grade = "Your expenses are more than your income, and you're barely saving money. Keep it up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
+            showPerformanceButton()
         } else if (ratio in 20..39) {
             audio = R.raw.financial_management_not_quite
             performance = "Not Quite There"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.not_quite_there_red))
-            grade = "Your expenses are much more than your income, and you're not saving money. Try cutting down on your expenses and thinking before you buy!"
+            grade = "Your expenses are much more than your income, and you're not saving money. Keep it up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
+            showPerformanceButton()
         } else if (ratio in 1..19) {
             audio = R.raw.financial_management_needs_improvement
             performance = "Needs Improvement"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
-            grade = "Your expenses are more than your income. Try cutting down on your expenses and earning money through chores or selling!"
+            grade = "Your expenses are more than your income. Keep it up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+            showPerformanceButton()
         }
         else {
             audio = R.raw.financial_management_default
@@ -259,6 +272,39 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         binding.tvScore.text = grade
         binding.tvPerformance.text = performance
 
+    }
+
+    private fun showPerformanceButton(){
+        binding.btnReview.visibility = View.VISIBLE
+    }
+
+    private fun showReviewButton() {
+
+        var dialogBinding= DialogPfmReviewBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnTopExpenses.setOnClickListener {
+            dialog.dismiss()
+            var goToTopExpenses = Intent(this, TrendDetailsActivity::class.java)
+            this.startActivity(goToTopExpenses)
+        }
+
+        dialogBinding.btnHomeRewards.setOnClickListener {
+            dialog.dismiss()
+            var goToHomeRewards = Intent(this, EarningMenuActivity::class.java)
+            this.startActivity(goToHomeRewards)
+        }
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.setOnDismissListener {}
+
+        dialog.show()
     }
 
     private fun getIncomeAndExpense(transactionsArrayList: ArrayList<Transactions>) {

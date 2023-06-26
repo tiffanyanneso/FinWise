@@ -40,8 +40,8 @@
                 android:id="@+id/dialog_et_new_choice"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:lines="1"
-                android:inputType="text"
+                android:lines="3"
+                android:inputType="textMultiLine"
                 android:textSize="16dp"
                 android:hint="@string/input_choice"
                 />

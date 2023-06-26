@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.parentFinancialManagementModule
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -21,6 +22,8 @@ import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.PFMAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityParentFinancialManagementBinding
+import ph.edu.dlsu.finwise.databinding.DialogPfmParentTipsBinding
+import ph.edu.dlsu.finwise.databinding.DialogPfmReviewBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.model.Users
@@ -30,6 +33,7 @@ import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentPendingForRevie
 import ph.edu.dlsu.finwise.parentFinancialManagementModule.pFMFragments.ExplanationParentFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.CashMayaBalanceBreakdownActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
+import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.BalanceFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.SavingsFragment
 import java.text.DecimalFormat
@@ -78,6 +82,11 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        binding.btnReview.setOnClickListener {
+            showReviewButton()
+        }
+
     }
 
     private fun initializeChildID() {
@@ -115,6 +124,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         }
         super.onDestroy()
     }*/
+
 
     private fun initializeParentNavbar() {
         val bundleNavBar = Bundle()
@@ -275,6 +285,38 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         }
     }
 
+    private fun showPerformanceButton(){
+        binding.btnReview.visibility = View.VISIBLE
+    }
+
+    private fun showReviewButton() {
+
+        var dialogBinding= DialogPfmParentTipsBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1700)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogBinding.btnTopExpenses.setOnClickListener {
+            dialog.dismiss()
+            var goToTopExpenses = Intent(this, TrendDetailsActivity::class.java)
+            this.startActivity(goToTopExpenses)
+        }
+
+        dialogBinding.btnHomeRewards.setOnClickListener {
+            dialog.dismiss()
+            var goToHomeRewards = Intent(this, EarningMenuActivity::class.java)
+            this.startActivity(goToHomeRewards)
+        }
+
+        dialog.setOnDismissListener {}
+
+        dialog.show()
+    }
 
     private fun computeIncomeExpenseRatio() {
         val ratio = (income / expense * 100).toInt() // convert to percentage and round down to nearest integer
@@ -313,38 +355,44 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
             //audio = R.raw.parent_financial_management_average
             performance = "Average"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.yellow))
-            grade = "Your child's income is slightly more than their expenses, and they're saving a small amount of money. They should keep it up and look for ways to increase their income and savings."
+            grade = "Your child's income is slightly more than their expenses, and they're saving a small amount of money. See how you can help them out!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
+            showPerformanceButton()
         } else if (ratio in 80..99) {
             //audio = R.raw.parent_financial_management_nearly_there
             performance = "Nearly There"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.nearly_there_yellow))
-            grade = "Your child's income and expenses are about the same, and they're not saving much money. They need to look for ways to increase their income and reduce their expenses."
+            grade = "Your child's income and expenses are about the same, and they're not saving much money. See how you can help them out!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
+            showPerformanceButton()
         } else if (ratio in 60..79) {
             //audio = R.raw.parent_financial_management_almost_there
             performance = "Almost There"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.almost_there_yellow))
-            grade = "Your child's expenses are slightly more than their income, and they're saving a little bit of money. They should try to reduce their expenses further to save more money."
+            grade = "Your child's expenses are slightly more than their income, and they're saving a little bit of money. TSee how you can help them out!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
+            showPerformanceButton()
         } else if (ratio in 40..59) {
             //audio = R.raw.parent_financial_management_getting_there
             performance = "Getting There"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.getting_there_orange))
-            grade = "Your child's expenses are more than their income, and they're barely saving any money. They need to cut down on their expenses to start saving money."
+            grade = "Your child's expenses are more than their income, and they're barely saving any money. See how you can help them out!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
+            showPerformanceButton()
         } else if (ratio in 20..39) {
             //audio = R.raw.parent_financial_management_not_quite
             performance = "Not Quite There"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.not_quite_there_red))
-            grade = "Your child's expenses are much more than their income, and they're not saving any money. They need to make some changes to their saving and spending habits."
+            grade = "Your child's expenses are much more than their income, and they're not saving any money. See how you can help them out!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
+            showPerformanceButton()
         } else if (ratio in 1..19) {
             //audio = R.raw.parent_financial_management_needs_improvement
             performance = "Needs Improvement"
             binding.tvPerformance.setTextColor(resources.getColor(R.color.red))
-            grade = "Your child's expenses are more than their income. This means that they're in trouble and need to take action right away to cut down their expenses."
+            grade = "Your child's expenses are more than their income. This means that they're in trouble and need to take action right away!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
+            showPerformanceButton()
         }
         else {
             //audio = R.raw.parent_financial_management_default

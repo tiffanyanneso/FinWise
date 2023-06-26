@@ -50,8 +50,8 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_nav"
         android:layout_marginTop="70dp"
         android:layout_marginBottom="60dp"
-            android:visibility="gone"
-        >
+        android:visibility="gone"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -377,30 +377,29 @@
                 android:padding="20dp">
 
                 <ImageView
-                    android:src="@drawable/icon_financial_health"
-                    android:contentDescription="Profit"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:layout_marginBottom="5dp"
-                    />
+                    android:contentDescription="Profit"
+                    android:src="@drawable/icon_financial_health" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_gravity="center"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:text="Personal Finance Score"
+                        android:layout_marginRight="5dp"
                         android:gravity="center"
-                        android:textStyle="bold"
+                        android:text="Personal Finance Score"
                         android:textColor="@color/white"
-                        android:layout_marginRight="5dp"/>
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
 
                     <ImageView
@@ -409,42 +408,49 @@
                         android:layout_height="20dp"
                         android:src="@drawable/baseline_mic_24"
                         app:tint="@color/light_grey" />
+
+                    <ImageView
+                        android:id="@+id/btn_explanation"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/info_light"
+                        app:tint="@color/white" />
                 </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
                 <LinearLayout
-                    android:layout_width="120dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/button_border_white"
-                    android:backgroundTint="@color/white"
-                    android:padding="10dp"
-                    android:layout_marginTop="10dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:src="@drawable/loading"
-                    android:contentDescription="Profit"
-                    android:id="@+id/iv_score"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"/>
+                    <LinearLayout
+                        android:layout_width="120dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/button_border_white"
+                        android:backgroundTint="@color/white"
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:id="@+id/tv_performance"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textAlignment="center"
-                    android:text="..."
-                    android:textColor="@color/black"/>
+                        <ImageView
+                            android:id="@+id/iv_score"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_gravity="center"
+                            android:contentDescription="Profit"
+                            android:src="@drawable/loading" />
 
-                <!--<TextView
+                        <TextView
+                            android:id="@+id/tv_performance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="..."
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <!--<TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -454,18 +460,19 @@
                     android:textStyle="bold"
                     android:text=""
                     android:textColor="@color/cream"/>-->
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_score"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
                 </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_score"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    android:layout_marginTop="5dp"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="15dp"/>
-            </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/linear_layout_text5"
@@ -475,25 +482,15 @@
                     android:orientation="vertical">
 
                     <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btn_review"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/btn_explanation"
-                        android:gravity="center"
-                        android:text="View Explanation"
-                        android:background="@drawable/button_border_white"
-                        android:backgroundTint="@color/dark_green"
-                        android:textColor="@color/white"
-                        android:layout_marginTop="15dp"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:text="Scroll down to see more!"
+                        android:layout_height="40dp"
+                        android:text="How Can I Improve?"
                         android:textColor="@color/off_white"
-                        android:textStyle="bold"/>
+                        android:backgroundTint="@color/dark_green"
+                        android:background="@drawable/button_border"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone"/>
                 </LinearLayout>
             </LinearLayout>
 
