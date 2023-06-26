@@ -80,7 +80,6 @@ class SpendingActivity : AppCompatActivity() {
         checkUser()
         bundle.putString("source", "viewGoal")
         getInfo()
-        initializeFragments()
 
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, R.drawable.baseline_arrow_back_24, null)
@@ -245,6 +244,9 @@ class SpendingActivity : AppCompatActivity() {
                 binding.viewPager.adapter = adapter
                 binding.tabLayout.setupWithViewPager(binding.viewPager)
                 adapter.notifyDataSetChanged()
+
+                binding.mainLayout.visibility = View.VISIBLE
+                binding.layoutLoading.visibility = View.GONE
             }
         }
     }

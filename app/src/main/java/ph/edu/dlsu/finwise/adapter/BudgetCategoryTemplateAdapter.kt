@@ -24,6 +24,9 @@ class BudgetCategoryTemplateAdapter : RecyclerView.Adapter<BudgetCategoryTemplat
 
     class CheckedItem(var itemName:String, var amount:Float)
 
+    class OtherBudgetItem(var itemName:String, var otherBudgetItemName:String, var amount:Float)
+
+
     constructor(context: Context, budgetCategoryArrayList: ArrayList<String>, recyclerView: RecyclerView) {
         this.context = context
         this.budgetCategoryArrayList = budgetCategoryArrayList
@@ -55,19 +58,32 @@ class BudgetCategoryTemplateAdapter : RecyclerView.Adapter<BudgetCategoryTemplat
             var viewHolder = recyclerView.findViewHolderForAdapterPosition(i)
             val itemView = viewHolder?.itemView!!
             val checkbox = itemView.findViewById<CheckBox>(R.id.cb_include)
+            var item = itemView.findViewById<TextView>(R.id.tv_budget_item_name).text.toString()
             val amount = itemView.findViewById<TextInputEditText>(R.id.et_amount).text.toString()
-            if (checkbox.isChecked && !amount.isEmpty()) {
+            if (item != "Others" && checkbox.isChecked && !amount.isEmpty()) {
                 itemView.findViewById<TextView>(R.id.tv_error_amount).visibility = View.GONE
-                checkedItemsArrayList.add(
-                    CheckedItem(itemView.findViewById<TextView>(R.id.tv_budget_item_name).text.toString(),
-                        itemView.findViewById<TextInputEditText>(R.id.et_amount).text.toString().toFloat()))
+                checkedItemsArrayList.add(CheckedItem(item, amount.toFloat()))
             }
-            else if (checkbox.isChecked && amount.isEmpty())
+            else if (item != "Others" && checkbox.isChecked && amount.isEmpty())
                 itemView.findViewById<TextView>(R.id.tv_error_amount).visibility = View.VISIBLE
 
         }
 
         return checkedItemsArrayList
+    }
+
+    fun otherBudgetItem():OtherBudgetItem? {
+        var viewHolder = recyclerView.findViewHolderForAdapterPosition(budgetCategoryArrayList.size-1)
+        val itemView = viewHolder?.itemView!!
+        val checkbox = itemView.findViewById<CheckBox>(R.id.cb_include)
+        var item = itemView.findViewById<TextView>(R.id.tv_budget_item_name).text.toString()
+        var otherName = itemView.findViewById<TextView>(R.id.et_other_name).text.toString()
+        val amount = itemView.findViewById<TextInputEditText>(R.id.et_amount).text.toString()
+
+        if (item == "Others" && checkbox.isChecked && !otherName.isEmpty() && !amount.isEmpty())
+            return OtherBudgetItem(item, otherName, amount.toFloat())
+        else
+            return null
     }
 
     //checks if the items that are checked have an inputted amount
@@ -77,12 +93,21 @@ class BudgetCategoryTemplateAdapter : RecyclerView.Adapter<BudgetCategoryTemplat
             var viewHolder = recyclerView.findViewHolderForAdapterPosition(i)
             val itemView = viewHolder?.itemView!!
             val checkbox = itemView.findViewById<CheckBox>(R.id.cb_include)
+            val item = itemView.findViewById<TextView>(R.id.tv_budget_item_name).text.toString()
             val amount = itemView.findViewById<TextInputEditText>(R.id.et_amount).text.toString()
             if (checkbox.isChecked && amount.isEmpty()) {
                 valid = false
                 itemView.findViewById<TextView>(R.id.tv_error_amount).visibility = View.VISIBLE
             } else
                 itemView.findViewById<TextView>(R.id.tv_error_amount).visibility = View.GONE
+
+            if (checkbox.isChecked && item == "Others") {
+                if (itemView.findViewById<TextView>(R.id.et_other_name).text.toString().isEmpty()) {
+                    valid = false
+                    itemView.findViewById<TextView>(R.id.tv_error_other_name).visibility = View.VISIBLE
+                } else
+                    itemView.findViewById<TextView>(R.id.tv_error_other_name).visibility = View.GONE
+            }
         }
         return valid
     }
@@ -98,8 +123,19 @@ class BudgetCategoryTemplateAdapter : RecyclerView.Adapter<BudgetCategoryTemplat
             itemBinding.cbInclude.setOnClickListener {
                 if (itemBinding.cbInclude.isChecked)
                     itemBinding.amountContainer.visibility = View.VISIBLE
-                else
+                else {
                     itemBinding.amountContainer.visibility = View.GONE
+                    itemBinding.otherNameContainer.visibility = View.GONE
+                }
+
+                if (itemBinding.tvBudgetItemName.text.toString() == "Others") {
+                    if (itemBinding.cbInclude.isChecked)
+                        itemBinding.otherNameContainer.visibility = View.VISIBLE
+                    else
+                        itemBinding.otherNameContainer.visibility = View.GONE
+                }
+                else
+                    itemBinding.otherNameContainer.visibility = View.GONE
             }
         }
 

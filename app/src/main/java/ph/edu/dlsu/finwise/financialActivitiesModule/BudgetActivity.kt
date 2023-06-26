@@ -81,11 +81,11 @@ class BudgetActivity : AppCompatActivity() {
 
         Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
-        bundle = intent.extras!!
-        savingActivityID = bundle.getString("savingActivityID").toString()
-        budgetingActivityID = bundle.getString("budgetingActivityID").toString()
-        spendingActivityID = bundle.getString("spendingActivityID").toString()
-        childID = bundle.getString("childID").toString()
+            bundle = intent.extras!!
+            savingActivityID = bundle.getString("savingActivityID").toString()
+            budgetingActivityID = bundle.getString("budgetingActivityID").toString()
+            spendingActivityID = bundle.getString("spendingActivityID").toString()
+            childID = bundle.getString("childID").toString()
 
         CoroutineScope(Dispatchers.Main).launch {
             checkUser()
@@ -252,8 +252,14 @@ class BudgetActivity : AppCompatActivity() {
 
     private fun getBudgetItems() {
         firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingActivityID).whereEqualTo("status", "Active").get().addOnSuccessListener { budgetItems ->
-            if (budgetItems.isEmpty && currentUserType == "Child")
-                createBudgetTemplate()
+            if (budgetItems.isEmpty && currentUserType == "Child"){
+                var budgetTemplate = Intent(this, ActivitySelectBudgetItemTemplate::class.java)
+                var bundle = Bundle()
+                bundle.putString("budgetingActivityID", budgetingActivityID)
+                budgetTemplate.putExtras(bundle)
+                startActivity(budgetTemplate)
+            }
+                //createBudgetTemplate()
             else {
                 for (item in budgetItems)
                     budgetCategoryIDArrayList.add(item.id)
@@ -308,68 +314,68 @@ class BudgetActivity : AppCompatActivity() {
         }
     }
 
-    private fun createBudgetTemplate() {
-       firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
-           firestore.collection("FinancialGoals").document(it.toObject<FinancialActivities>()?.financialGoalID!!).get().addOnSuccessListener { goalResult ->
-               var budgetItemsList = ArrayList<String>()
-
-               var goal = goalResult.toObject<FinancialGoals>()
-               if (goal?.financialActivity == "Buying Items") {
-                   budgetItemsList.add("Food & Drinks")
-                   budgetItemsList.add("Toys & Games")
-                   budgetItemsList.add("Gift")
-               } else if (goal?.financialActivity == "Planning An Event") {
-                   budgetItemsList.add("Food & Drinks")
-                   budgetItemsList.add("Gift")
-                   budgetItemsList.add("Decorations")
-                   budgetItemsList.add("Rental")
-                   budgetItemsList.add("Transportation")
-                   budgetItemsList.add("Party Favors")
-               } else if (goal?.financialActivity == "Situational Shopping") {
-                   budgetItemsList.add("Food & Drinks")
-                   budgetItemsList.add("Clothing")
-               }
-
-               budgetTemplateDialogBinding = DialogBudgetItemTemplateBinding.inflate(getLayoutInflater())
-               budgetTemplateDialog= Dialog(this);
-               budgetTemplateDialog.setContentView(budgetTemplateDialogBinding.getRoot())
-               budgetTemplateDialog.window!!.setLayout(1000, 1300)
-
-               budgetCategorySelectAdapter = BudgetCategoryTemplateAdapter(this, budgetItemsList, budgetTemplateDialogBinding.rvBudgetItemTemplate)
-               budgetTemplateDialogBinding.rvBudgetItemTemplate.adapter = budgetCategorySelectAdapter
-               budgetTemplateDialogBinding.rvBudgetItemTemplate.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
-               budgetCategorySelectAdapter.notifyDataSetChanged()
-
-               budgetTemplateDialogBinding.btnSaveBudgetItems.setOnClickListener {
-                   saveBudgetItems()
-               }
-
-               budgetTemplateDialog.setCancelable(false)
-               budgetTemplateDialog.show()
-
-           }
-       }
-    }
-
-    private fun saveBudgetItems() {
-        if (budgetCategorySelectAdapter.valid()) {
-            var budgetItemsAmount = 0.00F
-            var checkedBudgetItems = budgetCategorySelectAdapter.returnCheckedBudgetItems()
-            if (!checkedBudgetItems.isEmpty()) {
-                budgetTemplateDialogBinding.tvError.visibility = View.GONE
-                for (budgetItem in checkedBudgetItems) {
-                    budgetItemsAmount += budgetItem.amount
-                    var budgetItem = BudgetItem(budgetItem.itemName, null, budgetingActivityID, budgetItem.amount, "Active", "Before", childID)
-                    firestore.collection("BudgetItems").add(budgetItem)
-                }
-                budgetTemplateDialog.dismiss()
-                getAvailableToBudget()
-                getBudgetItems()
-
-            } else
-                budgetTemplateDialogBinding.tvError.visibility = View.VISIBLE
-        }
-    }
+//    private fun createBudgetTemplate() {
+//       firestore.collection("FinancialActivities").document(budgetingActivityID).get().addOnSuccessListener {
+//           firestore.collection("FinancialGoals").document(it.toObject<FinancialActivities>()?.financialGoalID!!).get().addOnSuccessListener { goalResult ->
+//               var budgetItemsList = ArrayList<String>()
+//
+//               var goal = goalResult.toObject<FinancialGoals>()
+//               if (goal?.financialActivity == "Buying Items") {
+//                   budgetItemsList.add("Food & Drinks")
+//                   budgetItemsList.add("Toys & Games")
+//                   budgetItemsList.add("Gift")
+//               } else if (goal?.financialActivity == "Planning An Event") {
+//                   budgetItemsList.add("Food & Drinks")
+//                   budgetItemsList.add("Gift")
+//                   budgetItemsList.add("Decorations")
+//                   budgetItemsList.add("Rental")
+//                   budgetItemsList.add("Transportation")
+//                   budgetItemsList.add("Party Favors")
+//               } else if (goal?.financialActivity == "Situational Shopping") {
+//                   budgetItemsList.add("Food & Drinks")
+//                   budgetItemsList.add("Clothing")
+//               }
+//
+//               budgetTemplateDialogBinding = DialogBudgetItemTemplateBinding.inflate(getLayoutInflater())
+//               budgetTemplateDialog= Dialog(this);
+//               budgetTemplateDialog.setContentView(budgetTemplateDialogBinding.getRoot())
+//               budgetTemplateDialog.window!!.setLayout(1000, 1300)
+//
+//               budgetCategorySelectAdapter = BudgetCategoryTemplateAdapter(this, budgetItemsList, budgetTemplateDialogBinding.rvBudgetItemTemplate)
+//               budgetTemplateDialogBinding.rvBudgetItemTemplate.adapter = budgetCategorySelectAdapter
+//               budgetTemplateDialogBinding.rvBudgetItemTemplate.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+//               budgetCategorySelectAdapter.notifyDataSetChanged()
+//
+//               budgetTemplateDialogBinding.btnSaveBudgetItems.setOnClickListener {
+//                   saveBudgetItems()
+//               }
+//
+//               budgetTemplateDialog.setCancelable(false)
+//               budgetTemplateDialog.show()
+//
+//           }
+//       }
+//    }
+//
+//    private fun saveBudgetItems() {
+//        if (budgetCategorySelectAdapter.valid()) {
+//            var budgetItemsAmount = 0.00F
+//            var checkedBudgetItems = budgetCategorySelectAdapter.returnCheckedBudgetItems()
+//            if (!checkedBudgetItems.isEmpty()) {
+//                budgetTemplateDialogBinding.tvError.visibility = View.GONE
+//                for (budgetItem in checkedBudgetItems) {
+//                    budgetItemsAmount += budgetItem.amount
+//                    var budgetItem = BudgetItem(budgetItem.itemName, null, budgetingActivityID, budgetItem.amount, "Active", "Before", childID)
+//                    firestore.collection("BudgetItems").add(budgetItem)
+//                }
+//                budgetTemplateDialog.dismiss()
+//                getAvailableToBudget()
+//                getBudgetItems()
+//
+//            } else
+//                budgetTemplateDialogBinding.tvError.visibility = View.VISIBLE
+//        }
+//    }
 
     private fun getExpenses() {
         var expenses = ArrayList<Transactions>()

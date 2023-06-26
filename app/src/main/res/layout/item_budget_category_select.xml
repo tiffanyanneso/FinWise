@@ -61,13 +61,43 @@
 
         </LinearLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/other_name_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style= "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            app:helperTextEnabled="true"
+            app:helperText=""
+            app:helperTextTextColor="@color/red"
+            android:visibility="gone"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_other_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:lines="1"
+                android:inputType="text"
+                android:textSize="14sp"
+                android:hint="Budget Item Name" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/tv_error_other_name"
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:text="Input budget name"
+            android:visibility="gone"/>
+
         <TextView
             android:id="@+id/tv_error_amount"
             android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/red"
-            android:text="Input the budget amount"
+            android:text="Input budget amount"
             android:visibility="gone"/>
 
     </LinearLayout>

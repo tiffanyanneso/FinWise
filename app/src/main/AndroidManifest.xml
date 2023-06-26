@@ -26,6 +26,11 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <activity
+            android:name=".financialActivitiesModule.ActivitySelectBudgetItemTemplate"
+            android:exported="false" />
+
         <activity
             android:name=".childDashboardModule.FinancialAssessmentsDetailsActivity"
             android:exported="false" />
