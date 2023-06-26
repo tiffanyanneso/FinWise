@@ -50,8 +50,8 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
         app:layout_constraintBottom_toTopOf="@id/bottom_nav_parent"
         android:layout_marginTop="70dp"
         android:layout_marginBottom="60dp"
-        android:visibility="gone">
-
+        android:visibility="gone"
+   >
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -326,15 +326,23 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                             android:gravity="center"
                             android:textStyle="bold"
                             android:textColor="@color/white" />
+
+<!--                        <ImageView-->
+<!--                            android:id="@+id/btn_explanation"-->
+<!--                            android:layout_width="20dp"-->
+<!--                            android:layout_height="20dp"-->
+<!--                            android:src="@drawable/baseline_mic_24"-->
+<!--                            app:tint="@color/light_grey" />-->
                         <!--android:layout_marginRight="5dp"-->
 
-<!--
+
                         <ImageView
-                            android:id="@+id/btn_audio_personal_finance_score"
+                            android:id="@+id/btn_explanation"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:src="@drawable/baseline_mic_24"
-                            app:tint="@color/light_grey" />-->
+                            app:tint="@color/white"
+                            android:layout_marginLeft="10dp"/>
                     </LinearLayout>
 
 
@@ -342,8 +350,16 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                         android:id="@+id/linear_layout_text5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/button_border_white"
+                            android:backgroundTint="@color/white"
+                            android:orientation="vertical"
+                            android:padding="10dp">
 
                         <ImageView
                             android:src="@drawable/loading"
@@ -351,7 +367,6 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                             android:id="@+id/iv_score"
                             android:layout_width="80dp"
                             android:layout_height="80dp"
-                            android:layout_marginTop="20dp"
                             android:layout_gravity="center"
                             />
 
@@ -363,31 +378,32 @@ tools:context=".parentFinancialManagementModule.ParentFinancialManagementActivit
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:text="Loading..."
-                            android:layout_marginTop="15dp"
                             android:textColor="@color/white"/>
+                        </LinearLayout>
 
                         <TextView
+                            android:id="@+id/tv_score"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:id="@+id/tv_score"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginTop="5dp"
                             android:gravity="center"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:text=""
-                            android:layout_marginBottom="10dp"
-                            android:textColor="@color/white"/>
+                            android:textColor="@color/white"
+                            android:textSize="16sp" />
+                    </LinearLayout>
 
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btn_review"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/btn_explanation"
-                            android:gravity="center"
-                            android:text="View Explanation"
-                            android:background="@drawable/button_border_white"
-                            android:backgroundTint="@color/light_green"
-                            android:textColor="@color/white"/>
+                            android:layout_height="40dp"
+                            android:text="How can i help child improve?"
+                            android:textColor="@color/off_white"
+                            android:backgroundTint="@color/dark_green"
+                            android:background="@drawable/button_border"
+                            android:layout_marginTop="10dp"
+                            android:visibility="gone"/>
                     </LinearLayout>
-                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
