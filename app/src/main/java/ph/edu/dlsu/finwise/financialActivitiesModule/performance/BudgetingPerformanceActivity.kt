@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.financialActivitiesModule.performance
 
 import android.app.Dialog
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
@@ -16,11 +17,13 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityBudgetingPerformanceBinding
 import ph.edu.dlsu.finwise.databinding.DialogBudgetAccuracyAmountReviewBinding
 import ph.edu.dlsu.finwise.databinding.DialogBudgetingReviewBinding
+import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.BudgetingFragment
 import ph.edu.dlsu.finwise.model.BudgetItem
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentPendingForReviewActivity
 import java.text.DecimalFormat
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -458,13 +461,20 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         var dialog = Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1600)
+        dialog.window!!.setLayout(1000, 1700)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }
 
-        //TODO: Change audio and dialogBinding
+        dialogBinding.btnReviewBudgets.setOnClickListener {
+            var intent = Intent(this, FinancialActivity::class.java)
+            var bundle = Bundle()
+            bundle.putString("view", "goal")
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
+
         val audio = R.raw.dialog_budgeting_review
         dialogBinding.btnSoundBudgetReview.setOnClickListener {
             if (mediaPlayerBudgetingReviewDialog == null) {

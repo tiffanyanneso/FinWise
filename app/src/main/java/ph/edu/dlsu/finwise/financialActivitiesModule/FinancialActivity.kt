@@ -219,6 +219,16 @@ class FinancialActivity : AppCompatActivity() {
 
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
+
+//        var bundle = intent.extras
+//
+//        if (bundle != null) {
+//            if (adapter.count == 5)
+//                binding.viewPager.currentItem = 2
+//            else if (adapter.count ==6)
+//                binding.viewPager.currentItem = 3
+//        }
+
         setupTabIcons()
     }
 
