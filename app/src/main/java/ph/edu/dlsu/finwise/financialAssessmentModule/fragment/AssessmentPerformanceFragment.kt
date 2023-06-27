@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.financialAssessmentModule.fragment
 
+import android.app.Dialog
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
+import ph.edu.dlsu.finwise.databinding.DialogParentAssessmentBinding
+import ph.edu.dlsu.finwise.databinding.DialogSmartGoalInfoBinding
+import ph.edu.dlsu.finwise.databinding.DialogSmartIndividualBinding
 import ph.edu.dlsu.finwise.databinding.FragmentAssessmentPerformanceBinding
 import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
@@ -37,6 +41,8 @@ class AssessmentPerformanceFragment : Fragment() {
     private var spendingPercentage = 0.00F
     private var spendingScores = ArrayList<Double?>()
 
+    private var concept = "Goal Setting"
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +57,10 @@ class AssessmentPerformanceFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentAssessmentPerformanceBinding.bind(view)
         binding.title.text = "Overall Assessment Performance"
+
+        binding.btnReviewConcept.setOnClickListener {
+            showParentAssessmentDialog()
+        }
 
         getBundles()
         getAssessments()
@@ -159,6 +169,7 @@ class AssessmentPerformanceFragment : Fragment() {
 
         binding.tvConcept4th.text = topCategories[3].key
         binding.tvConcept4Percentage.text = String.format("%.1f%%", topCategories[3].value)
+        concept = topCategories[3].key
 
         binding.layoutLoading.visibility = View.GONE
         binding.layoutMain.visibility = View.VISIBLE
@@ -208,7 +219,7 @@ class AssessmentPerformanceFragment : Fragment() {
             binding.textViewPerformanceText.text = "Good"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.light_green))
             binding.tvPerformanceText.text =
-                "Good! Your child has a good grasp of important financial concepts and can make simple financial decisions, but may make occasional mistakes and need some guidance in certain areas."
+                "Good! Your child has a good grasp of financial concepts, but may make occasional mistakes and need some guidance."
         } else if (percentage < 66 && percentage >= 56) {
             binding.ivScore.setImageResource(R.drawable.average)
             binding.textViewPerformanceText.text = "Average"
@@ -226,19 +237,19 @@ class AssessmentPerformanceFragment : Fragment() {
             binding.textViewPerformanceText.text = "Almost There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.almost_there_yellow))
             binding.tvPerformanceText.text =
-                "Almost there! Your child needs an extra push to better grasp financial concepts. Encourage them to continue doing financial activities."
+                "Almost there! Your child needs an extra push to better grasp financial concepts. Encourage them to continue."
         } else if (percentage < 36 && percentage >= 26) {
             binding.ivScore.setImageResource(R.drawable.getting_there)
             binding.textViewPerformanceText.text = "Getting There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.getting_there_orange))
             binding.tvPerformanceText.text =
-                "Getting there! Your child needs an extra push to better grasp financial concepts. Encourage them to continue doing financial activities."
+                "Getting there! Your child needs an extra push to better grasp financial concepts. Encourage them to continue."
         } else if (percentage < 26 && percentage >= 16) {
             binding.ivScore.setImageResource(R.drawable.not_quite_there_yet)
             binding.textViewPerformanceText.text = "Not Quite There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.not_quite_there_red))
             binding.tvPerformanceText.text =
-                "Not quite there! Your child needs an extra push to better grasp financial concepts. Encourage and guide them to continue doing financial activities."
+                "Not quite there! Your child needs an extra push to better grasp financial concepts. Encourage them to continue."
         } else if (percentage < 15) {
             binding.ivScore.setImageResource(R.drawable.bad)
             binding.textViewPerformanceText.text = "Needs Improvement"
@@ -327,7 +338,7 @@ class AssessmentPerformanceFragment : Fragment() {
             binding.textViewPerformanceText.text = "Average"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.yellow))
             binding.tvPerformanceText.text =
-                "Nice work! You have basic knowledge of financial concepts. Keep performing financial activities to improve!"
+                "Nice work! You have basic knowledge of financial concepts. Keep it up!"
             //showReviewButton()
         } else if (percentage < 56 && percentage >= 46) {
             audio = R.raw.assessment_performance_nearly_there
@@ -335,7 +346,7 @@ class AssessmentPerformanceFragment : Fragment() {
             binding.textViewPerformanceText.text = "Nearly There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.nearly_there_yellow))
             binding.tvPerformanceText.text =
-                "Nearly there! You have some knowledge of financial concepts. Keep performing financial activities to improve!"
+                "Nearly there! You have some knowledge of financial concepts. Keep it up!"
             //showReviewButton()
         }  else if (percentage < 46 && percentage >= 36) {
             audio = R.raw.assessment_performance_almost_there
@@ -343,7 +354,7 @@ class AssessmentPerformanceFragment : Fragment() {
             binding.textViewPerformanceText.text = "Almost There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.almost_there_yellow))
             binding.tvPerformanceText.text =
-                "Almost there! Improve your knowledge of financial concepts by performing financial activities!"
+                "Almost there! Improve your knowledge of financial concepts. Click on Tips!"
             //showReviewButton()
         } else if (percentage < 36 && percentage >= 26) {
             audio = R.raw.assessment_performance_getting_there
@@ -351,7 +362,7 @@ class AssessmentPerformanceFragment : Fragment() {
             binding.textViewPerformanceText.text = "Getting There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.getting_there_orange))
             binding.tvPerformanceText.text =
-                "Getting there! Improve your knowledge of financial concepts by performing financial activities!"
+                "Getting there! Improve your knowledge of financial concepts. Click on Tips!"
             //showReviewButton()
         } else if (percentage < 26 && percentage >= 16) {
             audio = R.raw.assessment_performance_not_quite_needs_improvement
@@ -359,7 +370,7 @@ class AssessmentPerformanceFragment : Fragment() {
             binding.textViewPerformanceText.text = "Not Quite\n There"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.not_quite_there_red))
             binding.tvPerformanceText.text =
-                "Uh oh! Improve your knowledge of financial concepts by performing financial activities!"
+                "Uh oh! Improve your knowledge of financial concepts. Click on Tips!"
             //showReviewButton()
         } else if (percentage < 15 ) {
             audio = R.raw.assessment_performance_not_quite_needs_improvement
@@ -367,10 +378,45 @@ class AssessmentPerformanceFragment : Fragment() {
             binding.textViewPerformanceText.text = "Needs\nImprovement"
             binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.red))
             binding.tvPerformanceText.text =
-                "Uh oh! Improve your knowledge of financial concepts by performing financial activities!"
+                "Uh oh! Improve your knowledge of financial concepts. Click on Tips!"
             //showReviewButton()
         }
         loadAudio(audio)
+    }
+
+    private fun showParentAssessmentDialog() {
+
+        var dialogBinding= DialogParentAssessmentBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(requireContext());
+        dialog.setContentView(dialogBinding.getRoot())
+
+        if (concept == "Goal Setting") {
+            dialogBinding.tvConcept.text = "Goal Setting"
+            dialogBinding.tvDefinition.text = "Creating SMART Goals to achieve a financial target."
+            dialogBinding.tvConcepts.text = "1. Concept of Goal Setting\n2. Types of Goals (Short, Medium, Long Term)\n3. SMART Goals"
+        } else if (concept == "Saving") {
+            dialogBinding.tvConcept.text = "Saving"
+            dialogBinding.tvDefinition.text = "Setting aside money to meet financial goals, have money for the future, and afford bigger purchases.."
+            dialogBinding.tvConcepts.text = "1. Concept of Saving\n2. Saving Strategies\n3. Earning\n4. Delayed Gratification"
+        } else if (concept == "Budgeting") {
+            dialogBinding.tvConcept.text = "Budgeting"
+            dialogBinding.tvDefinition.text = "Achievable goals are realistic."
+            dialogBinding.tvConcepts.text = "1. Concept of Budgeting\n2. Creating a Budget"
+        } else if (concept == "Spending") {
+            dialogBinding.tvConcept.text = "Spending"
+            dialogBinding.tvDefinition.text = "Relevant goals are important to you and with what you want to do."
+            dialogBinding.tvConcepts.text = "1. Concept of Spending\n2. Comparison Shopping\n3. Spending Within a Budget\n4. Needs vs Wants\n5. Impulse Buying"
+        }
+
+        dialog.setContentView(dialogBinding.getRoot())
+
+        dialog.window!!.setLayout(1000, 1200)
+
+        dialogBinding.btnGotIt.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun setEmptyAssessmentText() {

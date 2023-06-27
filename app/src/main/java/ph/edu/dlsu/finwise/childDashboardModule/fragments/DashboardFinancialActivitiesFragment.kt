@@ -1252,7 +1252,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 )
             )
             message = if (userType == "Parent")
-                "Your child is a financial superstar! Their skills in goal setting, saving, budgeting, and spending are commendable!"
+                "Your child is a financial superstar! Their financial activity skills are commendable!"
             else "Excellent work superstar! Continue exploring and exercising your financial decision-making skills."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (finActPerformanceCurrentMonth >= 86.0 && finActPerformanceCurrentMonth < 96.0) {
@@ -1269,7 +1269,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 )
             )
             message = if (userType == "Parent")
-                "Your child's financial skills are exceptional. Encourage them to continue completing goals and financial activities!"
+                "Your child's financial skills are exceptional. Encourage them to continue completing financial activities!"
             else "Amazing work! Keep exploring and accomplishing different financial activities."
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
         } else if (finActPerformanceCurrentMonth >= 76.0 && finActPerformanceCurrentMonth < 86.0) {
@@ -1286,7 +1286,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 )
             )
             message = if (userType == "Parent")
-                "Your child's performance in activities showcases their strong financial decision-making skills. Encourage them to keep it up!"
+                "Your child's performance showcases their strong financial decision-making skills. Encourage them to keep it up!"
             else "Keep mastering the art of financial decision-making through financial activities! Your financial future looks bright!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (finActPerformanceCurrentMonth >= 66.0 && finActPerformanceCurrentMonth < 76.0) {
