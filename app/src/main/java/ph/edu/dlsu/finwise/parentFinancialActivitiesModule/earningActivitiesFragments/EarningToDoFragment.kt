@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments
 
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.adapter.EarningCompletedAdapter
 import ph.edu.dlsu.finwise.adapter.EarningOverdueAdapter
 import ph.edu.dlsu.finwise.adapter.EarningToDoAdapter
+import ph.edu.dlsu.finwise.databinding.DialogChoreRequestSentBinding
 import ph.edu.dlsu.finwise.databinding.FragmentEarningCompletedBinding
 import ph.edu.dlsu.finwise.databinding.FragmentEarningToDoBinding
 import ph.edu.dlsu.finwise.model.EarningActivityModel
@@ -53,6 +55,10 @@ class EarningToDoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getCurrentUserType()
         getToDoEarning()
+
+        binding.btnRequestChore.setOnClickListener {
+            requestChore()
+        }
     }
 
     private fun getToDoEarning() {
@@ -76,6 +82,28 @@ class EarningToDoFragment : Fragment() {
         }
     }
 
+    private fun requestChore() {
+        var dialogBinding= DialogChoreRequestSentBinding.inflate(getLayoutInflater())
+        var dialog= Dialog(requireContext());
+        dialog.setContentView(dialogBinding.getRoot())
+        dialog.window!!.setLayout(900, 800)
+
+        dialogBinding.btnOk.setOnClickListener {
+            var choreRequest = hashMapOf(
+                "childID" to currentUser,
+                "status" to "Request"
+            )
+            firestore.collection("EarningActivities").add(choreRequest)
+            binding.btnRequestChore.visibility = View.GONE
+            binding.tvEmptyListMessage.text = "There are no chores for you to complete at the moment."
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+
+
     private fun loadRecyclerView(earningToDoArrayList: ArrayList<String>) {
         earningToDoAdapter = EarningToDoAdapter(requireActivity().applicationContext, earningToDoArrayList)
         binding.rvViewActivitiesToDo.adapter = earningToDoAdapter
@@ -95,11 +123,20 @@ class EarningToDoFragment : Fragment() {
               binding.layoutPictureReminder.visibility = View.GONE
               binding.tvEmptyListMessage.text =
                   "Your child doesn't have any chores now.\nCreate one to help them start earning!"
+              binding.btnRequestChore.visibility = View.GONE
           }
           else if (userType == "Child") {
               binding.layoutPictureReminder.visibility = View.VISIBLE
-              binding.tvEmptyListMessage.text =
-                  "There are no chores at the moment.\nAsk your parent to create one for you"
+              //check if the child has any pending requests. do not allow them to have 2 open requests
+              firestore.collection("EarningActivities").whereEqualTo("childID", currentUser).whereEqualTo("status", "Request").get().addOnSuccessListener {
+                  if (it.isEmpty) {
+                      binding.tvEmptyListMessage.text = "There are no chores for you to complete at the moment.\nRequest a chore from your parent!"
+                      binding.btnRequestChore.visibility = View.VISIBLE
+                  } else {
+                      binding.tvEmptyListMessage.text = "There are no chores for you to complete at the moment."
+                      binding.btnRequestChore.visibility = View.GONE
+                  }
+              }
           }
       }
 

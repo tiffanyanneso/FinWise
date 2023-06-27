@@ -346,7 +346,8 @@
                     android:textColor="@color/off_white"
                     android:backgroundTint="@color/dark_green"
                     android:background="@drawable/button_border"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    android:visibility="gone"/>
             </LinearLayout>
 
             <LinearLayout

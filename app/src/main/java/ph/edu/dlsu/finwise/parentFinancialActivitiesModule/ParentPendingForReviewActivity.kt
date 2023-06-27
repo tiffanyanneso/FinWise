@@ -26,6 +26,7 @@ import ph.edu.dlsu.finwise.financialActivitiesModule.goalTransactionsFragments.G
 import ph.edu.dlsu.finwise.financialActivitiesModule.goalTransactionsFragments.GoalWithdrawalFragment
 import ph.edu.dlsu.finwise.model.Users
 import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPendingFragments.ParentChoreRequestFragment
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPendingFragments.ParentPendingEarningFragment
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPendingFragments.ParentPendingGoalFragment
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPendingFragments.ParentTransactionReviewFragment
@@ -83,11 +84,16 @@ class ParentPendingForReviewActivity : AppCompatActivity() {
         var pendingEarningFragment = ParentPendingEarningFragment()
         pendingEarningFragment.arguments = fragmentBundle
 
+
+        var pendingRequestFragment = ParentChoreRequestFragment()
+        pendingRequestFragment.arguments = fragmentBundle
+
         var transactionReviewFragment = ParentTransactionReviewFragment()
         transactionReviewFragment.arguments = fragmentBundle
 
         adapter.addFragment(pendingGoalFragment,"Goals")
-        adapter.addFragment(pendingEarningFragment,"Chores")
+        adapter.addFragment(pendingEarningFragment,"Chores Completed")
+        adapter.addFragment(pendingRequestFragment,"Chores Request")
         adapter.addFragment(transactionReviewFragment,"Transactions")
         binding.viewPager.adapter = adapter
         binding.tabLayout.setupWithViewPager(binding.viewPager)
@@ -99,7 +105,7 @@ class ParentPendingForReviewActivity : AppCompatActivity() {
         else if (bundle.getString("view") == "earning")
             binding.viewPager.currentItem = 1
         else if (bundle.getString("view") == "transaction")
-            binding.viewPager.currentItem = 2
+            binding.viewPager.currentItem = 3
     }
 
 

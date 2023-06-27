@@ -133,6 +133,8 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
             //current user is a parent
             if (it.toObject<Users>()!!.userType == "Parent")
                 binding.btnCompleted.visibility = View.GONE
+            else if (it.toObject<Users>()!!.userType == "Child")
+                binding.btnCompleted.visibility = View.VISIBLE
         }
     }
 

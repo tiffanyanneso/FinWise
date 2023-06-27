@@ -53,6 +53,8 @@ class NewEarningActivity : AppCompatActivity() {
     private var dropdownChores = ArrayList<String>()
     private lateinit var choresAdapter:ArrayAdapter<String>
 
+    private lateinit var earningActivityID:String
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,49 +116,72 @@ class NewEarningActivity : AppCompatActivity() {
 
         binding.btnConfirm.setOnClickListener {
             if (filledUp() && validAmount()) {
-                if (binding.dropdownDestination.text.toString() == "Personal Finance") {
-                    val earningActivity = hashMapOf(
-                        "activityName" to binding.dropdownChore.text.toString(),
-                        "targetDate" to SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()),
-                        "requiredTime" to binding.etDuration.text.toString().toInt(),
-                        "amount" to binding.etAmount.text.toString().toFloat(),
-                        "childID" to childID,
-                        "childAge" to currentChildAge,
-                        "status" to "Ongoing",
-                        "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
-                        "depositTo" to binding.dropdownDestination.text.toString(),
-                        "dateAdded" to Timestamp.now()
-                    )
-                    firestore.collection("EarningActivities").add(earningActivity)
-                        .addOnSuccessListener {
-                            Toast.makeText(this, "Earning activity saved", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                } else if (binding.dropdownDestination.text.toString() == "Financial Goal") {
-                    var earningActivity = hashMapOf(
-                        "activityName" to binding.dropdownChore.text.toString(),
-                        "targetDate" to SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()),
-                        "requiredTime" to binding.etDuration.text.toString().toInt(),
-                        "amount" to binding.etAmount.text.toString().toFloat(),
-                        "childID" to childID,
-                        "savingActivityID" to savingActivityID,
-                        "status" to "Ongoing",
-                        "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
-                        "depositTo" to binding.dropdownDestination.text.toString(),
-                        "dateAdded" to Timestamp.now()
-                    )
-                    firestore.collection("EarningActivities").add(earningActivity)
-                        .addOnSuccessListener {
-                            Toast.makeText(this, "Earning activity saved", Toast.LENGTH_SHORT)
-                                .show()
-                        }
+                if (bundle.containsKey("earningActivityID")) {
+                    earningActivityID = bundle.getString("earningActivityID").toString()
+                    updateChore()
                 }
+                else
+                    saveNewChore()
                 val earning = Intent(this, EarningActivity::class.java)
                 val sendBundle = Bundle()
                 sendBundle.putString("childID", childID)
                 earning.putExtras(sendBundle)
                 startActivity(earning)
             }
+        }
+    }
+
+    private fun updateChore() {
+        firestore.collection("EarningActivities").document(earningActivityID).update(
+            "activityName", binding.dropdownChore.text.toString(),
+            "targetDate", SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()),
+            "requiredTime", binding.etDuration.text.toString().toInt(),
+            "amount", binding.etAmount.text.toString().toFloat(),
+            "childAge", currentChildAge,
+            "status", "Ongoing",
+            "paymentType", binding.dropdownTypeOfPayment.text.toString(),
+            "depositTo", binding.dropdownDestination.text.toString(),
+            "dateAdded", Timestamp.now()
+        )
+    }
+
+    private fun saveNewChore() {
+        if (binding.dropdownDestination.text.toString() == "Personal Finance") {
+            val earningActivity = hashMapOf(
+                "activityName" to binding.dropdownChore.text.toString(),
+                "targetDate" to SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()),
+                "requiredTime" to binding.etDuration.text.toString().toInt(),
+                "amount" to binding.etAmount.text.toString().toFloat(),
+                "childID" to childID,
+                "childAge" to currentChildAge,
+                "status" to "Ongoing",
+                "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
+                "depositTo" to binding.dropdownDestination.text.toString(),
+                "dateAdded" to Timestamp.now()
+            )
+            firestore.collection("EarningActivities").add(earningActivity)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Earning activity saved", Toast.LENGTH_SHORT)
+                        .show()
+                }
+        } else if (binding.dropdownDestination.text.toString() == "Financial Goal") {
+            var earningActivity = hashMapOf(
+                "activityName" to binding.dropdownChore.text.toString(),
+                "targetDate" to SimpleDateFormat("MM/dd/yyyy").parse(binding.etDate.text.toString()),
+                "requiredTime" to binding.etDuration.text.toString().toInt(),
+                "amount" to binding.etAmount.text.toString().toFloat(),
+                "childID" to childID,
+                "savingActivityID" to savingActivityID,
+                "status" to "Ongoing",
+                "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
+                "depositTo" to binding.dropdownDestination.text.toString(),
+                "dateAdded" to Timestamp.now()
+            )
+            firestore.collection("EarningActivities").add(earningActivity)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Earning activity saved", Toast.LENGTH_SHORT)
+                        .show()
+                }
         }
     }
 

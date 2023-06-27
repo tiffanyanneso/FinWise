@@ -18,10 +18,7 @@ import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityEarningBinding
 import ph.edu.dlsu.finwise.model.Users
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningCompletedFragment
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningOverdueFragment
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningPendingConfirmationFragment
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.EarningToDoFragment
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.earningActivitiesFragments.*
 
 class EarningActivity : AppCompatActivity() {
     private lateinit var binding:ActivityEarningBinding
@@ -85,6 +82,9 @@ class EarningActivity : AppCompatActivity() {
         var earningPendingFragment = EarningPendingConfirmationFragment()
         earningPendingFragment.arguments = fragmentBundle
 
+        var earningRequestFragment = EarningChoreRequestFragment()
+        earningRequestFragment.arguments = fragmentBundle
+
         var earningCompletedFragment = EarningCompletedFragment()
         earningCompletedFragment.arguments = fragmentBundle
 
@@ -97,13 +97,15 @@ class EarningActivity : AppCompatActivity() {
             //current user is a child
             if (user.userType == "Child") {
                 adapter.addFragment(earningToDoFragment,"To Do")
-                adapter.addFragment(earningPendingFragment,"Pending")
+                adapter.addFragment(earningRequestFragment,"Chore Requests")
+                adapter.addFragment(earningPendingFragment,"Waiting Reward")
                 adapter.addFragment(earningOverdueFragment,"Overdue")
                 adapter.addFragment(earningCompletedFragment,"Completed")
                 setupTabIconsChild()
             } else  if (user.userType == "Parent"){
-                adapter.addFragment(earningPendingFragment,"Pending")
-                adapter.addFragment(earningToDoFragment,"To Do")
+                adapter.addFragment(earningPendingFragment,"To Review")
+                adapter.addFragment(earningRequestFragment,"Chore Requests")
+                adapter.addFragment(earningToDoFragment,"In Progress")
                 adapter.addFragment(earningOverdueFragment,"Overdue")
                 adapter.addFragment(earningCompletedFragment,"Completed")
                 setupTabIconsParent()

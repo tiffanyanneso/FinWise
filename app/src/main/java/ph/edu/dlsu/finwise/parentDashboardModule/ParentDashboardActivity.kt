@@ -22,17 +22,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.*
-import ph.edu.dlsu.finwise.adapter.EarningReviewNotifAdapter
-import ph.edu.dlsu.finwise.adapter.GoalToReviewNotificationAdapter
-import ph.edu.dlsu.finwise.adapter.ParentChildrenAdapter
-import ph.edu.dlsu.finwise.adapter.TransactionNotifAdapter
+import ph.edu.dlsu.finwise.adapter.*
 import ph.edu.dlsu.finwise.databinding.ActivityParentDashboardBinding
 import ph.edu.dlsu.finwise.databinding.ActivityParentLandingPageBinding
+import ph.edu.dlsu.finwise.databinding.DialogChoreRequestBinding
 import ph.edu.dlsu.finwise.databinding.DialogNotifSummaryParentBinding
 import ph.edu.dlsu.finwise.loginRegisterModule.ParentRegisterChildActivity
 import ph.edu.dlsu.finwise.model.EarningActivityModel
 import ph.edu.dlsu.finwise.model.OverThresholdExpenseModel
 import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.NewEarningActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentPendingForReviewActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPendingFragments.ParentPendingGoalFragment
 
@@ -50,6 +49,7 @@ class ParentDashboardActivity : AppCompatActivity(){
 
     private var goalsArrayList = ArrayList<String>()
     private var earningArrayList = ArrayList<String>()
+    private var earningRequestArrayList = ArrayList<String>()
     private var transactionArrayList = ArrayList<String>()
 
     private lateinit var dialog:Dialog
@@ -127,6 +127,7 @@ class ParentDashboardActivity : AppCompatActivity(){
         CoroutineScope(Dispatchers.Main).launch {
             newGoals()
             earningActivities()
+            earningRequests()
             overThreshold()
             if (!isFinishing)
                 loadDialogAndRecyclerView()
@@ -156,6 +157,19 @@ class ParentDashboardActivity : AppCompatActivity(){
         binding.tvNumberPendingEarning.text = earningArrayList.size.toString()
     }
 
+    private suspend fun earningRequests() {
+        for (childID in childIDArrayList) {
+            var earnings =
+                firestore.collection("EarningActivities").whereEqualTo("childID", childID)
+                    .whereEqualTo("status", "Request").get().await()
+            for (earning in earnings) {
+//                var dateCompleted = earning.toObject<EarningActivityModel>().dateCompleted!!.toDate()
+//                if (dateCompleted.after(lastLogin.toDate()))
+                earningRequestArrayList.add(earning.id)
+            }
+        }
+    }
+
 
     private suspend fun overThreshold() {
         for (childID in childIDArrayList) {
@@ -170,7 +184,7 @@ class ParentDashboardActivity : AppCompatActivity(){
     }
 
     private fun loadDialogAndRecyclerView() {
-            if (!goalsArrayList.isEmpty() || !earningArrayList.isEmpty() || !transactionArrayList.isEmpty()) {
+            if (!goalsArrayList.isEmpty() || !earningArrayList.isEmpty() || !earningRequestArrayList.isEmpty() || !transactionArrayList.isEmpty()) {
             var dialogBinding = DialogNotifSummaryParentBinding.inflate(layoutInflater)
             dialog = Dialog(this)
             dialog.setContentView(dialogBinding.root)
@@ -191,6 +205,20 @@ class ParentDashboardActivity : AppCompatActivity(){
                 earningReviewAdapter.notifyDataSetChanged()
             } else
                 dialogBinding.layoutEarning.visibility = View.GONE
+
+            if (!earningRequestArrayList.isEmpty()) {
+                var earningRequestAdapter = EarningChoreRequestAdapter(this, earningRequestArrayList, object:EarningChoreRequestAdapter.ChoreClick {
+                    override fun clickRequest(earningID:String, childID:String) {
+                        //only show dialog to approve chore if the user is a parent
+                        earningRequestDialogAction(earningID, childID)
+                    }
+                })
+                dialogBinding.rvEarningRequests.adapter = earningRequestAdapter
+                dialogBinding.rvEarningRequests.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+                earningRequestAdapter.notifyDataSetChanged()
+            } else
+                dialogBinding.layoutEarningRequests.visibility = View.GONE
+
 
             if (!transactionArrayList.isEmpty()) {
                 var transactionsAdapter = TransactionNotifAdapter(this, transactionArrayList)
@@ -217,6 +245,28 @@ class ParentDashboardActivity : AppCompatActivity(){
         binding.layoutLoading.visibility = View.GONE
         binding.layoutDashboard.visibility = View.VISIBLE
         binding.bottomNavParent.visibility = View.VISIBLE
+    }
+
+    private fun earningRequestDialogAction(earningID:String, childID:String) {
+        val dialogBinding= DialogChoreRequestBinding.inflate(layoutInflater)
+        val dialog= Dialog(this)
+        dialog.setContentView(dialogBinding.root)
+        dialog.window!!.setLayout(950, 900)
+        dialogBinding.btnApprove.setOnClickListener {
+            val newChore = Intent (this, NewEarningActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("earningActivityID", earningID)
+            bundle.putString("childID", childID)
+            newChore.putExtras(bundle)
+            startActivity(newChore)
+            dialog.dismiss()
+        }
+
+        dialogBinding.btnDecline.setOnClickListener {
+            firestore.collection("EarningActivities").document(earningID).delete()
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     class ChildFilter (var childID:String, var childFirstName:String)
