@@ -44,6 +44,7 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
 
         NavbarFinlitExpert(findViewById(R.id.bottom_nav_finlit_expert), this, R.id.nav_finlit_assessment)
 
+        goToFinlitExpertEditAssessment()
         setFields()
         loadBackButton()
         binding.btnAddNewChoices.setOnClickListener {
@@ -168,10 +169,28 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
             binding.rvViewChoice.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         }
     }
+
+    private fun goToFinlitExpertEditAssessment() {
+        binding.btnCancel.setOnClickListener() {
+            val specificAssessment = Intent(applicationContext, FinlitExpertEditAssessmentActivity::class.java)
+            var sendBundle = Bundle()
+            sendBundle.putString("assessmentID", assessmentID)
+            specificAssessment.putExtras(sendBundle)
+            startActivity(specificAssessment)
+        }
+    }
     private fun loadBackButton() {
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
             onBackPressed()
         }
+    }
+
+    override fun onBackPressed() {
+        val specificAssessment = Intent(applicationContext, FinlitExpertEditAssessmentActivity::class.java)
+        val sendBundle = Bundle()
+        sendBundle.putString("assessmentID", assessmentID)
+        specificAssessment.putExtras(sendBundle)
+        startActivity(specificAssessment)
     }
 }

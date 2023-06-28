@@ -117,6 +117,7 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
             sendBundle.putString("assessmentID", assessmentID)
             specificAssessment.putExtras(sendBundle)
             startActivity(specificAssessment)
+            finish()
         }
     }
     private fun loadBackButton() {
@@ -125,6 +126,14 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
             onBackPressed()
         }
     }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, FinlitExpertSpecificAssessmentActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        startActivity(intent)
+        finish()
+    }
+
 
     class QuestionStatus (var questionID:String, var question:String, var difficulty:String, var isActive:Boolean) {}
 }
