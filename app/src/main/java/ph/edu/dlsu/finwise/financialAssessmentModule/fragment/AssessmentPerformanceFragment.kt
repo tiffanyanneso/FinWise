@@ -398,7 +398,7 @@ class AssessmentPerformanceFragment : Fragment() {
             dialogBinding.tvConcepts.text = "1. Concept of Goal Setting\n2. Types of Goals (Short, Medium, Long Term)\n3. SMART Goals"
         } else if (concept == "Saving") {
             dialogBinding.tvConcept.text = "Saving"
-            dialogBinding.tvDefinition.text = "Setting aside money to meet financial goals, have money for the future, and afford bigger purchases.."
+            dialogBinding.tvDefinition.text = "Setting aside money to meet financial goals, have money for the future, and afford bigger purchases."
             dialogBinding.tvConcepts.text = "1. Concept of Saving\n2. Saving Strategies\n3. Earning\n4. Delayed Gratification"
         } else if (concept == "Budgeting") {
             dialogBinding.tvConcept.text = "Budgeting"

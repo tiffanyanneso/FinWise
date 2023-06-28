@@ -188,7 +188,7 @@ class ParentDashboardActivity : AppCompatActivity(){
             var dialogBinding = DialogNotifSummaryParentBinding.inflate(layoutInflater)
             dialog = Dialog(this)
             dialog.setContentView(dialogBinding.root)
-            dialog.window!!.setLayout(1100, 2000)
+            dialog.window!!.setLayout(1100, 1700)
 
             if (!goalsArrayList.isEmpty()) {
                 var goalsToReviewAdapter = GoalToReviewNotificationAdapter(this, goalsArrayList)
