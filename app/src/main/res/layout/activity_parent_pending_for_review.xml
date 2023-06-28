@@ -35,6 +35,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/topbar"
         app:tabGravity="fill"
+        app:tabMode="scrollable"
         app:tabSelectedTextColor="@color/dark_green"
         app:tabIndicatorColor="@color/dark_green" />
 

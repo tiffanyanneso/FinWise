@@ -14,7 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactSpendingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogSpendingReviewBinding
@@ -41,7 +46,7 @@ class SpendingFragment : Fragment(){
 
 
     var spendingActivityIDArrayList = ArrayList<String>()
-    var budgetItemsIDArrayList = ArrayList<BudgetItemAmount>()
+    var budgetItemsIDArrayList = ArrayList<String>()
     var goalFilterArrayList = ArrayList<GoalFilter>()
 
     private var overSpending = 0.00F
@@ -56,6 +61,7 @@ class SpendingFragment : Fragment(){
 
 
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
+    private var age = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +70,19 @@ class SpendingFragment : Fragment(){
         budgetItemsIDArrayList.clear()
         getSpending()
         //need to get the budgeting activities to be able to get the budget items
-        getBudgeting()
+        CoroutineScope(Dispatchers.Main).launch {
+            checkAge()
+            getBudgeting()
+            checkOverSpending()
+            if (age > 9 )
+                purchasePlanning()
+
+            else {
+                overallSpending = (100-overspendingPercentage)*100
+                binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
+                setOverall()
+            }
+        }
     }
 
     override fun onCreateView(
@@ -127,103 +145,66 @@ class SpendingFragment : Fragment(){
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getBudgeting() {
-        //get completed spending activities
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
-            if (!results.isEmpty) {
-                for (spending in results) {
-                    var spendingActivity = spending.toObject<FinancialActivities>()
-                    println("print " + spendingActivity.financialGoalID)
-                    firestore.collection("FinancialActivities")
-                        .whereEqualTo("financialGoalID", spendingActivity.financialGoalID)
-                        .whereEqualTo("financialActivityName", "Budgeting")
-                        .whereEqualTo("status", "Completed").get()
-                        .addOnSuccessListener { budgeting ->
-                            var budgetingID = budgeting.documents[0].id
-                            firestore.collection("BudgetItems")
-                                .whereEqualTo("financialActivityID", budgetingID)
-                                .whereEqualTo("status", "Active").get()
-                                .addOnSuccessListener { results ->
-                                    nBudgetItems += results.size()
-                                    for (budgetItem in results) {
+    private suspend fun getBudgeting() {
+        //get only completed budgeting activities because they should complete budgeting first before they are able to spend
+        var budgetingActivity = firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().await()
 
-                                        var budgetItemObject = budgetItem.toObject<BudgetItem>()
-                                        checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
-                                    }
-                                }
-                        }
-                }
-            } else {
-                binding.imgFace.setImageResource(R.drawable.peso_coin)
-                binding.tvPerformancePercentage.text = "Get\nStarted!"
-                binding.tvPerformanceText.text = "Complete your goals to see your performance"
-                binding.layoutLoading.visibility = View.GONE
-                binding.mainLayout.visibility = View.VISIBLE
-            }
+        for (budgeting in budgetingActivity) {
+            //get budget items
+            var budgetItems = firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgeting.id).whereEqualTo("status", "Active").get().await()
+            nBudgetItems += budgetItems.size()
+
+            for (budgetItem in budgetItems)
+                budgetItemsIDArrayList.add(budgetItem.id)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun checkOverSpending(budgetItemID:String, budgetItemAmount:Float){
-        firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { spendingTransactions ->
+    private suspend fun checkOverSpending(){
+
+        for (budgetItemID in budgetItemsIDArrayList) {
+            var spendingTransactions = firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).whereEqualTo("transactionType", "Expense").get().await().toObjects<Transactions>()
             var amountSpent = 0.00F
             for (expense in spendingTransactions) {
-                var expenseObject = expense.toObject<Transactions>()
-                amountSpent+= expenseObject.amount!!
+                amountSpent+= expense.amount!!
             }
             //they spent more than their allocated budget
+            var budgetItemAmount = firestore.collection("BudgetItems").document(budgetItemID).get().await().toObject<BudgetItem>()?.amount!!
             if (amountSpent > budgetItemAmount)
                 overSpending++
-
-        }.continueWith {
-            overspendingPercentage = (overSpending/nBudgetItems)
-
-            firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-                var child = it.toObject<Users>()
-                //compute age
-                val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
-                val from = LocalDate.now()
-                val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
-                val to = LocalDate.parse(date.toString(), dateFormatter)
-                var difference = Period.between(to, from)
-
-                var age = difference.years
-                if (age > 9 ) {
-                    purchasePlanning()
-                }
-                else {
-                    overallSpending = (1-overspendingPercentage)*100
-                    setOverall()
-                }
-            }
         }
+
+        overspendingPercentage = (overSpending/nBudgetItems)
     }
 
 
-
-    private fun purchasePlanning() {
+    private suspend fun purchasePlanning() {
         //items planned / all the items they bought * 100
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { allSpendingActivities ->
-            for (spendingActivityID in allSpendingActivities) {
-                firestore.collection("ShoppingListItems").whereEqualTo("spendingActivityID", spendingActivityID.id).get().addOnSuccessListener { shoppingListItems ->
-                    for (shoppingListItem in shoppingListItems) {
-                        var shoppingListItemObject = shoppingListItem.toObject<ShoppingListItem>()
-                        if (shoppingListItemObject.status == "Purchased")
-                            nPlanned++
-                    }
-                }.continueWith {
-                    firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID.id).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { expenseTransactions ->
-                        nTotalPurchased += expenseTransactions.size().toFloat()
-                    }.continueWith {
-                        overallSpending = (((1-overspendingPercentage)*100) + ((nPlanned/nTotalPurchased)*100)) /2
-                        setOverall()
-                    }
-                }
+        var nPlanned = 0.00F
+        var nTotalPurchased = 0.00F
+        var spendingActivities = firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().await()
+
+        for (spendingActivityID in spendingActivities) {
+            var shoppingListItems = firestore.collection("ShoppingListItems").whereEqualTo("spendingActivityID", spendingActivityID.id).get().await().toObjects<ShoppingListItem>()
+            for (shoppingListItem in shoppingListItems) {
+                if (shoppingListItem.status == "Purchased")
+                    nPlanned++
             }
+
+            nTotalPurchased += firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID.id).whereEqualTo("transactionType", "Expense").get().await().size().toFloat()
         }
+
+        val purchasePlanningPercentage = (nPlanned/nTotalPurchased)*100
+        overallSpending = (((1-overspendingPercentage)*100) + purchasePlanningPercentage) /2
+        binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
+
+        setOverall()
+
     }
 
     private fun setOverall() {
+        println("print overspending " + ((1-overspendingPercentage)*100))
+        println("print purchase planning" + (nPlanned/nTotalPurchased)*100)
         binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
         //TODO: Change audio
         var audio = 0
@@ -404,6 +385,16 @@ class SpendingFragment : Fragment(){
         mediaPlayer.release()
     }
 
+    private suspend fun checkAge() {
+        var child = firestore.collection("Users").document(currentUser).get().await().toObject<Users>()
+        //compute age
+        val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+        val from = LocalDate.now()
+        val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+        val to = LocalDate.parse(date.toString(), dateFormatter)
+        var difference = Period.between(to, from)
 
+        age = difference.years
+    }
 
 }
