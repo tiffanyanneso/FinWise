@@ -13,6 +13,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.adapter.ParentPendingEarningAdapter
@@ -32,6 +33,9 @@ class ParentPendingEarningFragment: Fragment() {
 
     private lateinit var earningReviewAdapter: ParentPendingEarningAdapter
 
+    private var coroutineScope =  CoroutineScope(Dispatchers.Main)
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var bundle = arguments
@@ -41,11 +45,16 @@ class ParentPendingEarningFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CoroutineScope(Dispatchers.Main).launch {
+        coroutineScope.launch {
             earningActivitiesArrayList.clear()
             loadChildren()
             getPendingEarning()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        coroutineScope.cancel()
     }
 
     private suspend fun getPendingEarning() {
@@ -55,18 +64,20 @@ class ParentPendingEarningFragment: Fragment() {
                 earningActivitiesArrayList.add(earning.id)
         }
 
-        if (!earningActivitiesArrayList.isEmpty()) {
-            binding.rvEarning.adapter = null
-            earningReviewAdapter = ParentPendingEarningAdapter(requireActivity().applicationContext, earningActivitiesArrayList)
-            binding.rvEarning.adapter = earningReviewAdapter
-            binding.rvEarning.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
-            earningReviewAdapter.notifyDataSetChanged()
-        } else
-            binding.layoutEmptyActivity.visibility = View.VISIBLE
+        if (isAdded) {
+            if (!earningActivitiesArrayList.isEmpty()) {
+                binding.rvEarning.adapter = null
+                earningReviewAdapter = ParentPendingEarningAdapter(requireActivity().applicationContext, earningActivitiesArrayList)
+                binding.rvEarning.adapter = earningReviewAdapter
+                binding.rvEarning.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
+                earningReviewAdapter.notifyDataSetChanged()
+            } else
+                binding.layoutEmptyActivity.visibility = View.VISIBLE
 
-        binding.loadingItems.stopShimmer()
-        binding.loadingItems.visibility = View.GONE
-        binding.rvEarning.visibility = View.VISIBLE
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
+            binding.rvEarning.visibility = View.VISIBLE
+        }
     }
 
     private suspend fun loadChildren() {

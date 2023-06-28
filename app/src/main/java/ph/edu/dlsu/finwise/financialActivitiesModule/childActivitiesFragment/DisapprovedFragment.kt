@@ -40,7 +40,8 @@ class DisapprovedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getDisapprovedGoals()
+        if (isAdded)
+            getDisapprovedGoals()
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){

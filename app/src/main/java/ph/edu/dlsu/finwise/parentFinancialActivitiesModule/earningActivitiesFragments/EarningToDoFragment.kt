@@ -71,14 +71,16 @@ class EarningToDoFragment : Fragment() {
                     earningToDoArrayList.add(earning.id)
             }
 
-            if (!earningToDoArrayList.isEmpty())
-                loadRecyclerView(earningToDoArrayList)
-            else
-                emptyList()
+            if (isAdded) {
+                if (!earningToDoArrayList.isEmpty())
+                    loadRecyclerView(earningToDoArrayList)
+                else
+                    emptyList()
 
-            binding.rvViewActivitiesToDo.visibility = View.VISIBLE
-            binding.loadingItems.stopShimmer()
-            binding.loadingItems.visibility = View.GONE
+                binding.rvViewActivitiesToDo.visibility = View.VISIBLE
+                binding.loadingItems.stopShimmer()
+                binding.loadingItems.visibility = View.GONE
+            }
         }
     }
 

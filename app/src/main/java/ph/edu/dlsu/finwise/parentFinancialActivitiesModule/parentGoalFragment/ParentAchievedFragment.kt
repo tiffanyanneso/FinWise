@@ -25,7 +25,6 @@ class ParentAchievedFragment : Fragment() {
         super.onCreate(savedInstanceState)
         var bundle = arguments
         childID = bundle?.getString("childID").toString()
-        getAchievedGoals()
     }
 
     override fun onCreateView(
@@ -35,6 +34,12 @@ class ParentAchievedFragment : Fragment() {
         binding = FragmentParentAchievedBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (isAdded)
+            getAchievedGoals()
     }
 
     private fun getAchievedGoals() {

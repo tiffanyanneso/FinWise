@@ -12,6 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.parentPerformance.ParentBudgetingPerformanceActivity
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactBudgetingAdapter
@@ -52,6 +56,9 @@ class ParentBudgetingFragment : Fragment() {
 
     private lateinit var childID:String
 
+    private var coroutineScope = CoroutineScope(Dispatchers.Main)
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var bundle = arguments
@@ -72,9 +79,14 @@ class ParentBudgetingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvPerformancePercentage.text = "0.00%"
-        binding.title.text = "Overall Budgeting Performance"
-        getBudgeting()
+        if (isAdded) {
+            binding.tvPerformancePercentage.text = "0.00%"
+            binding.title.text = "Overall Budgeting Performance"
+            coroutineScope.launch {
+                getBudgeting()
+                getOverallBudgeting()
+            }
+        }
 
         binding.btnSeeMore.setOnClickListener {
             var goToPerformance = Intent(requireContext().applicationContext, ParentBudgetingPerformanceActivity::class.java)
@@ -105,6 +117,11 @@ class ParentBudgetingFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        coroutineScope.cancel()
+    }
+
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
     }
 
@@ -117,7 +134,6 @@ class ParentBudgetingFragment : Fragment() {
                 var budgetingActivity = budgeting.toObject<FinancialActivities>()
                 goalIDArrayList.add(budgetingActivity.financialGoalID.toString())
             }
-            getOverallBudgeting()
             if (!goalIDArrayList.isEmpty())
                 loadRecyclerView(goalIDArrayList)
             else {
@@ -181,10 +197,12 @@ class ParentBudgetingFragment : Fragment() {
                         if (budgetItemObject.amount!! !=0.00F)
                             totalBudgetAccuracy += (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100)
                     }.continueWith {
-                        setOverall()
+                        if (isAdded)
+                            setOverall()
                     }
                 } else
-                    setOverall()
+                    if (isAdded)
+                        setOverall()
             }
         }
     }

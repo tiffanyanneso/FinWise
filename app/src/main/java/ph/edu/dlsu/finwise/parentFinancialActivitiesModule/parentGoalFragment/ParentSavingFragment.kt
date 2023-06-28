@@ -87,8 +87,15 @@ class ParentSavingFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.title.text = "Overall Saving Performance"
-        binding.tvPerformancePercentage.text = "0.00%"
+        if (isAdded) {
+            binding.title.text = "Overall Saving Performance"
+            binding.tvPerformancePercentage.text = "0.00%"
+            getGoals()
+            getSavingActivities()
+            if (isAdded)
+                computeOverallScore()
+        }
+
         binding.btnNewGoal.setOnClickListener {
             if (ongoingGoals >= 5)
                 buildDialog()
@@ -120,10 +127,6 @@ class ParentSavingFragment : Fragment() {
 
             startActivity(goToPerformance)
         }
-
-        getGoals()
-        getSavingActivities()
-        computeOverallScore()
     }
 
     private fun showSMARTGoalsDialog() {

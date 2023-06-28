@@ -85,11 +85,13 @@ class GoalSettingFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.title.text = "Overall Goal Setting Performance"
-        getAssessmentStatus()
-        getForReviewGoals()
-        getOnGoingGoals()
-        initializeRating()
+        if (isAdded) {
+            binding.title.text = "Overall Goal Setting Performance"
+            getAssessmentStatus()
+            getForReviewGoals()
+            getOnGoingGoals()
+            initializeRating()
+        }
 
 
         binding.btnViewSMARTGoalsInfo.setOnClickListener{

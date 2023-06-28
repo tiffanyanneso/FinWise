@@ -55,13 +55,16 @@ class GoalFeedbackFragment : Fragment() {
             var goalReviewObjects= result.toObjects<GoalRating>()
             goalReviewObjects = goalReviewObjects.sortedByDescending { it.lastUpdated }
             var goalReview = goalReviewObjects[0]
-            binding.tvOverallRating.text = "${goalReview?.overallRating} / 5.0"
-            binding.ratingBarSpecific.rating = goalReview?.specific!!
-            binding.ratingBarMeasurable.rating = goalReview.measurable!!
-            binding.ratingBarAchievable.rating = goalReview.achievable!!
-            binding.ratingBarRelevant.rating = goalReview.relevant!!
-            binding.ratingBarTimeBound.rating = goalReview.timeBound!!
-            binding.tvComment.text = goalReview.comment
+
+            if (isAdded) {
+                binding.tvOverallRating.text = "${goalReview?.overallRating} / 5.0"
+                binding.ratingBarSpecific.rating = goalReview?.specific!!
+                binding.ratingBarMeasurable.rating = goalReview.measurable!!
+                binding.ratingBarAchievable.rating = goalReview.achievable!!
+                binding.ratingBarRelevant.rating = goalReview.relevant!!
+                binding.ratingBarTimeBound.rating = goalReview.timeBound!!
+                binding.tvComment.text = goalReview.comment
+            }
         }.continueWith {
             firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
                 var goal = it.toObject<FinancialGoals>()

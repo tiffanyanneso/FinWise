@@ -69,10 +69,13 @@ class ParentGoalSettingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.title.text = "Overall Goal Setting Performance"
-        getForReviewGoals()
-        getOnGoingGoals()
-        initializeRating()
+        if (isAdded) {
+            binding.title.text = "Overall Goal Setting Performance"
+            getForReviewGoals()
+            getOnGoingGoals()
+            initializeRating()
+        }
+
         binding.btnNewGoal.setOnClickListener {
             if (ongoingGoals >= 5)
                 buildDialog()

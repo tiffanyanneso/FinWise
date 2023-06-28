@@ -191,10 +191,12 @@ class AssessmentLeaderboardFragment : Fragment() {
     }
 
     private fun loadProgressBarOfCurrentUser() {
-        if (userScoresArray.isNotEmpty()) {
-            binding.progressBar.progress = userScoresArray[0].assessmentPercentage?.toInt()!!
-            binding.textViewProgress.text =
-                String.format("%.1f%%", userScoresArray[0].assessmentPercentage)
+        if (isAdded) {
+            if (userScoresArray.isNotEmpty()) {
+                binding.progressBar.progress = userScoresArray[0].assessmentPercentage?.toInt()!!
+                binding.textViewProgress.text =
+                    String.format("%.1f%%", userScoresArray[0].assessmentPercentage)
+            }
         }
     }
 
@@ -206,11 +208,13 @@ class AssessmentLeaderboardFragment : Fragment() {
             FriendRanking(index + 1, value)
         }
 
-        setRankOfChildUser(rankedFriends)
+        if (isAdded) {
+            setRankOfChildUser(rankedFriends)
 
-        loadRecyclerView(rankedFriends)
-        binding.layoutLoading.visibility = View.GONE
-        binding.layoutMain.visibility = View.VISIBLE
+            loadRecyclerView(rankedFriends)
+            binding.layoutLoading.visibility = View.GONE
+            binding.layoutMain.visibility = View.VISIBLE
+        }
     }
 
     private fun setRankOfChildUser(rankedFriends: List<FriendRanking>) {
@@ -220,15 +224,14 @@ class AssessmentLeaderboardFragment : Fragment() {
             val result = rankedFriends.find { it.childUsers.id == childID }
             "You are rank ${result?.rank}!"
         }
-        binding.tvRank.text = message
+        if (isAdded)
+            binding.tvRank.text = message
     }
 
     private fun loadRecyclerView(rankedFriends: List<FriendRanking>) {
         val leaderboardAdapter = LeaderboardRankingAdapter(rankedFriends)
         binding.rvRanking.adapter = leaderboardAdapter
-        binding.rvRanking.layoutManager = LinearLayoutManager(requireContext().applicationContext,
-            LinearLayoutManager.VERTICAL,
-            false)
+        binding.rvRanking.layoutManager = LinearLayoutManager(requireContext().applicationContext, LinearLayoutManager.VERTICAL, false)
     }
 
     private fun getBundles() {

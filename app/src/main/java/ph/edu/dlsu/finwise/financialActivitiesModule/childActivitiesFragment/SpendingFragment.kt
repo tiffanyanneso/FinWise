@@ -18,6 +18,7 @@ import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
@@ -63,26 +64,13 @@ class SpendingFragment : Fragment(){
     private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
     private var age = 0
 
+    private var coroutineScope = CoroutineScope(Dispatchers.Main)
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         spendingActivityIDArrayList.clear()
         budgetItemsIDArrayList.clear()
-        getSpending()
-        //need to get the budgeting activities to be able to get the budget items
-        CoroutineScope(Dispatchers.Main).launch {
-            checkAge()
-            getBudgeting()
-            checkOverSpending()
-            if (age > 9 )
-                purchasePlanning()
-
-            else {
-                overallSpending = (100-overspendingPercentage)*100
-                binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
-                setOverall()
-            }
-        }
     }
 
     override fun onCreateView(
@@ -95,7 +83,26 @@ class SpendingFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.title.text= "Overall Spending Performance"
+
+        if (isAdded) {
+            binding.title.text= "Overall Spending Performance"
+            getSpending()
+            //need to get the budgeting activities to be able to get the budget items
+            coroutineScope.launch {
+                checkAge()
+                getBudgeting()
+                checkOverSpending()
+                if (age > 9 )
+                    purchasePlanning()
+
+                else {
+                    overallSpending = (100-overspendingPercentage)*100
+                    binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
+                    if (isAdded)
+                        setOverall()
+                }
+            }
+        }
 
         binding.btnSpendingReview.setOnClickListener {
             if (this::mediaPlayer.isInitialized)
@@ -116,6 +123,11 @@ class SpendingFragment : Fragment(){
             var goToPerformance = Intent(requireContext().applicationContext, SpendingPerformanceActivity::class.java)
             this.startActivity(goToPerformance)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        coroutineScope.cancel()
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
@@ -198,7 +210,8 @@ class SpendingFragment : Fragment(){
         overallSpending = (((1-overspendingPercentage)*100) + purchasePlanningPercentage) /2
         binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
 
-        setOverall()
+        if (isAdded)
+            setOverall()
 
     }
 

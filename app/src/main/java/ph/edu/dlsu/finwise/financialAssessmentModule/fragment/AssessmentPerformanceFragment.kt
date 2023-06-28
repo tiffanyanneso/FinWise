@@ -185,11 +185,13 @@ class AssessmentPerformanceFragment : Fragment() {
         //Update to be used in the leaderboard
         /*firestore.collection("ChildUser").document(childID).update("assessmentPerformance", percentage)*/
 
-        binding.textViewProgress.text = String.format("%.1f%%", percentage)
+        if (isAdded) {
+            binding.textViewProgress.text = String.format("%.1f%%", percentage)
 
-        if (user == "Child")
-            setTextPerformanceChild(percentage)
-        else setTextPerformanceParent(percentage)
+            if (user == "Child")
+                setTextPerformanceChild(percentage)
+            else setTextPerformanceParent(percentage)
+        }
 
     }
 

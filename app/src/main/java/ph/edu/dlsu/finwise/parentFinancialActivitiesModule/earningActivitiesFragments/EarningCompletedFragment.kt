@@ -52,13 +52,15 @@ class EarningCompletedFragment : Fragment() {
             for (earning in results)
                 earningCompleteArrayList.add(earning.id)
 
-            if (!earningCompleteArrayList.isEmpty())
-                loadRecyclerView(earningCompleteArrayList)
-            else
-                emptyList()
-            binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
-            binding.loadingItems.stopShimmer()
-            binding.loadingItems.visibility = View.GONE
+            if (isAdded) {
+                if (!earningCompleteArrayList.isEmpty())
+                    loadRecyclerView(earningCompleteArrayList)
+                else
+                    emptyList()
+                binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
+                binding.loadingItems.stopShimmer()
+                binding.loadingItems.visibility = View.GONE
+            }
         }
     }
 

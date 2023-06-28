@@ -15,6 +15,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactBudgetingAdapter
@@ -60,6 +61,9 @@ class BudgetingFragment : Fragment() {
     var nUpdates = 0.00F
     var nItems = 0.00F
 
+    private var coroutineScope = CoroutineScope(Dispatchers.Main)
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         goalIDArrayList.clear()
@@ -76,10 +80,13 @@ class BudgetingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.title.text = "Overall Budgeting Performance"
-        CoroutineScope(Dispatchers.Main).launch {
-            getBudgeting()
-            getOverallBudgeting()
+
+        if (isAdded) {
+            binding.title.text = "Overall Budgeting Performance"
+            coroutineScope.launch {
+                getBudgeting()
+                getOverallBudgeting()
+            }
         }
 
         binding.btnSeeMore.setOnClickListener {
@@ -101,6 +108,11 @@ class BudgetingFragment : Fragment() {
                 pauseMediaPlayer(mediaPlayer)
             showBudgetingReviewDialog()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        coroutineScope.cancel()
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){
@@ -141,11 +153,6 @@ class BudgetingFragment : Fragment() {
                             for (budgetItem in budgetItems) {
                                 budgetItemCount++
                                 var budgetItemObject = budgetItem.toObject<BudgetItem>()
-                                if (budgetItemObject.status == "Edited")
-                                    nUpdates++
-                                //TODO: can't find this
-                                //binding.tvAverageUpdates.text = (nUpdates / budgetItemCount).roundToInt().toString()
-
 
                                 //parental involvement
                                 firestore.collection("Users")
@@ -185,10 +192,12 @@ class BudgetingFragment : Fragment() {
                         if (budgetItemObject.amount!! !=0.00F)
                             totalBudgetAccuracy += (100 - (abs(budgetItemObject.amount!! - spent) / budgetItemObject.amount!!) * 100)
                     }.continueWith {
-                        setOverall()
+                        if (isAdded)
+                            setOverall()
                     }
                 } else
-                    setOverall()
+                    if (isAdded)
+                        setOverall()
             }
         }
     }

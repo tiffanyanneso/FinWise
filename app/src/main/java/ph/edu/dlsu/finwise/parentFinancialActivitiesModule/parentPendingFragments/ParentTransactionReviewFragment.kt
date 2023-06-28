@@ -13,6 +13,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.adapter.ParentPendingEarningAdapter
@@ -34,6 +35,9 @@ class ParentTransactionReviewFragment: Fragment() {
 
     private lateinit var transactionsAdapter:TransactionNotifAdapter
 
+    private var coroutineScope =  CoroutineScope(Dispatchers.Main)
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var bundle = arguments
@@ -43,11 +47,17 @@ class ParentTransactionReviewFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CoroutineScope(Dispatchers.Main).launch {
+        coroutineScope.launch {
             transactionArrayList.clear()
             loadChildren()
             getPendingEarning()
-        }}
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        coroutineScope.cancel()
+    }
 
     private suspend fun getPendingEarning() {
         for (childID in childIDArrayList) {
@@ -60,17 +70,19 @@ class ParentTransactionReviewFragment: Fragment() {
             }
         }
 
-        if (!transactionArrayList.isEmpty()) {
-            transactionsAdapter = TransactionNotifAdapter(requireActivity().applicationContext, transactionArrayList)
-            binding.rvTransactions.adapter = transactionsAdapter
-            binding.rvTransactions.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
-            transactionsAdapter.notifyDataSetChanged()
-        } else
-            binding.layoutEmptyActivity.visibility = View.VISIBLE
+        if (isAdded) {
+            if (!transactionArrayList.isEmpty()) {
+                transactionsAdapter = TransactionNotifAdapter(requireActivity().applicationContext, transactionArrayList)
+                binding.rvTransactions.adapter = transactionsAdapter
+                binding.rvTransactions.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
+                transactionsAdapter.notifyDataSetChanged()
+            } else
+                binding.layoutEmptyActivity.visibility = View.VISIBLE
 
-        binding.loadingItems.stopShimmer()
-        binding.loadingItems.visibility = View.GONE
-        binding.rvTransactions.visibility = View.VISIBLE
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
+            binding.rvTransactions.visibility = View.VISIBLE
+        }
     }
 
     private suspend fun loadChildren() {

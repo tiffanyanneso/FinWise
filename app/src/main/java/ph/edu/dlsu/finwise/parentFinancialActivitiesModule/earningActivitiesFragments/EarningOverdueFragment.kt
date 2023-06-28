@@ -61,14 +61,15 @@ class EarningOverdueFragment : Fragment() {
                 if (dateToday.after(earningObject.targetDate!!.toDate()))
                     earningOverdueArrayList.add(earning.id)
             }
-
-            if (!earningOverdueArrayList.isEmpty())
-                loadRecyclerView(earningOverdueArrayList)
-            else
-                emptyList()
-            binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
-            binding.loadingItems.stopShimmer()
-            binding.loadingItems.visibility = View.GONE
+            if (isAdded) {
+                if (!earningOverdueArrayList.isEmpty())
+                    loadRecyclerView(earningOverdueArrayList)
+                else
+                    emptyList()
+                binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
+                binding.loadingItems.stopShimmer()
+                binding.loadingItems.visibility = View.GONE
+            }
         }
     }
 

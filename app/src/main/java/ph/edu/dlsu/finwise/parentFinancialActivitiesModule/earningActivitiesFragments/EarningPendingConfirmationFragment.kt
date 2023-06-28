@@ -55,13 +55,15 @@ class EarningPendingConfirmationFragment : Fragment() {
             for (earning in results)
                 earningPendingArrayList.add(earning.id)
 
-            if (!earningPendingArrayList.isEmpty())
-                loadRecyclerView(earningPendingArrayList)
-            else
-                emptyList()
-            binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
-            binding.loadingItems.stopShimmer()
-            binding.loadingItems.visibility = View.GONE
+            if (isAdded) {
+                if (!earningPendingArrayList.isEmpty())
+                    loadRecyclerView(earningPendingArrayList)
+                else
+                    emptyList()
+                binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
+                binding.loadingItems.stopShimmer()
+                binding.loadingItems.visibility = View.GONE
+            }
         }
     }
 

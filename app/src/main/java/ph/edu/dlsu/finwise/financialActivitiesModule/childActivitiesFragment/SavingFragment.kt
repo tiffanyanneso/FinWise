@@ -78,7 +78,6 @@ class SavingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getAssessmentStatus()
-        binding.title.text = "Overall Saving Performance"
 
         binding.btnReviewSaving.setOnClickListener{
             if (this::mediaPlayer.isInitialized)
@@ -100,11 +99,15 @@ class SavingFragment : Fragment() {
                 pauseMediaPlayer(mediaPlayer)
         }
 
+        if (isAdded) {
+            binding.title.text = "Overall Saving Performance"
 
-        checkAge()
-        getGoals()
-        getSavingActivities()
-        computeOverallScore()
+            checkAge()
+            getGoals()
+            getSavingActivities()
+            if (isAdded)
+                computeOverallScore()
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

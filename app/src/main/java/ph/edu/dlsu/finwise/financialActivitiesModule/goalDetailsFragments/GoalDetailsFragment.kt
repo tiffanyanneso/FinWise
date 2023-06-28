@@ -145,21 +145,24 @@ class GoalDetailsFragment : Fragment() {
 
         firestore.collection("FinancialGoals").document(financialGoalID).get().addOnSuccessListener {
             var goal = it.toObject<FinancialGoals>()
-            binding.tvGoalAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount!!)
-            binding.tvGoalName.text = goal.goalName
-            binding.tvActivity.text = goal.financialActivity.toString()
 
-            //convert timestamp to string date
-            binding.tvDateSet.text = SimpleDateFormat("MM/dd/yyyy").format(goal.dateCreated?.toDate()).toString()
-            binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(goal.targetDate?.toDate()).toString()
-            binding.tvStatus.text = goal?.status.toString()
-            if (goal?.goalIsForSelf == true)
-                binding.tvIsForChild.text = "Yes"
-            else
-                binding.tvIsForChild.text = "No"
+            if (isAdded) {
+                binding.tvGoalAmount.text = "₱ " + DecimalFormat("#,##0.00").format(goal?.targetAmount!!)
+                binding.tvGoalName.text = goal.goalName
+                binding.tvActivity.text = goal.financialActivity.toString()
 
-            if(goal.status == "Completed" || currentUserType == "Parent")
-                binding.btnDelete.visibility = View.GONE
+                //convert timestamp to string date
+                binding.tvDateSet.text = SimpleDateFormat("MM/dd/yyyy").format(goal.dateCreated?.toDate()).toString()
+                binding.tvTargetDate.text = SimpleDateFormat("MM/dd/yyyy").format(goal.targetDate?.toDate()).toString()
+                binding.tvStatus.text = goal?.status.toString()
+                if (goal?.goalIsForSelf == true)
+                    binding.tvIsForChild.text = "Yes"
+                else
+                    binding.tvIsForChild.text = "No"
+
+                if (goal.status == "Completed" || currentUserType == "Parent")
+                    binding.btnDelete.visibility = View.GONE
+            }
         }
     }
 

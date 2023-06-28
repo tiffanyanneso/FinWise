@@ -60,13 +60,15 @@ class EarningChoreRequestFragment : Fragment() {
             for (earning in results)
                 earningRequests.add(earning.id)
 
-            if (!earningRequests.isEmpty())
-                loadRecyclerView(earningRequests)
-            else
-                emptyList()
-            binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
-            binding.loadingItems.stopShimmer()
-            binding.loadingItems.visibility = View.GONE
+            if (isAdded) {
+                if (!earningRequests.isEmpty())
+                    loadRecyclerView(earningRequests)
+                else
+                    emptyList()
+                binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
+                binding.loadingItems.stopShimmer()
+                binding.loadingItems.visibility = View.GONE
+            }
         }
     }
 

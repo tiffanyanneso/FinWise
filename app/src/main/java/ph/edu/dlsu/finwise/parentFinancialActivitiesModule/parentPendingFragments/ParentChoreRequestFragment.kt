@@ -14,6 +14,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.adapter.EarningChoreRequestAdapter
@@ -36,6 +37,9 @@ class ParentChoreRequestFragment: Fragment() {
 
     private lateinit var earningRequestAdapter: EarningChoreRequestAdapter
 
+    private var coroutineScope =  CoroutineScope(Dispatchers.Main)
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var bundle = arguments
@@ -45,11 +49,16 @@ class ParentChoreRequestFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CoroutineScope(Dispatchers.Main).launch {
+        coroutineScope.launch {
             earningActivitiesArrayList.clear()
             loadChildren()
             getEarningRequests()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        coroutineScope.cancel()
     }
 
     private suspend fun getEarningRequests() {
@@ -59,24 +68,29 @@ class ParentChoreRequestFragment: Fragment() {
                 earningActivitiesArrayList.add(earning.id)
         }
 
-        if (!earningActivitiesArrayList.isEmpty()) {
-            binding.rvEarning.adapter = null
-            earningRequestAdapter = EarningChoreRequestAdapter(requireActivity().applicationContext, earningActivitiesArrayList, object:EarningChoreRequestAdapter.ChoreClick {
-                override fun clickRequest(earningID:String, childID:String) {
-                    //only show dialog to approve chore if the user is a parent
-                    requestAction(earningID, childID)
-                }
-            })
-            binding.rvEarning.adapter = earningRequestAdapter
-            binding.rvEarning.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
-            earningRequestAdapter.notifyDataSetChanged()
+        if (isAdded) {
+            if (!earningActivitiesArrayList.isEmpty()) {
+                binding.rvEarning.adapter = null
+                earningRequestAdapter = EarningChoreRequestAdapter(
+                    requireActivity().applicationContext,
+                    earningActivitiesArrayList,
+                    object : EarningChoreRequestAdapter.ChoreClick {
+                        override fun clickRequest(earningID: String, childID: String) {
+                            //only show dialog to approve chore if the user is a parent
+                            requestAction(earningID, childID)
+                        }
+                    })
+                binding.rvEarning.adapter = earningRequestAdapter
+                binding.rvEarning.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
+                earningRequestAdapter.notifyDataSetChanged()
 
-        }else
-            binding.layoutEmptyActivity.visibility = View.VISIBLE
+            } else
+                binding.layoutEmptyActivity.visibility = View.VISIBLE
 
-        binding.loadingItems.stopShimmer()
-        binding.loadingItems.visibility = View.GONE
-        binding.rvEarning.visibility = View.VISIBLE
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
+            binding.rvEarning.visibility = View.VISIBLE
+        }
     }
 
     private fun requestAction(earningID:String, childID:String) {

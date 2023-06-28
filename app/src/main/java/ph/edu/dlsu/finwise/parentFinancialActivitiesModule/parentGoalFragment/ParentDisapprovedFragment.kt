@@ -29,7 +29,6 @@ class ParentDisapprovedFragment : Fragment() {
         super.onCreate(savedInstanceState)
         var bundle = arguments
         childID = bundle?.getString("childID").toString()
-        getDisapprovedGoals()
     }
 
     override fun onCreateView(
@@ -39,6 +38,12 @@ class ParentDisapprovedFragment : Fragment() {
         binding = FragmentParentDisapprovedBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (isAdded)
+            getDisapprovedGoals()
     }
 
     class GoalFilter(var financialGoalID: String?=null, var goalTargetDate: Date?=null){

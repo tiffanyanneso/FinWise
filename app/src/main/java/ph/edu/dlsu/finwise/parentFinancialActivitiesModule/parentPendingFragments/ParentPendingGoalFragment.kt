@@ -12,6 +12,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.adapter.GoalToReviewNotificationAdapter
@@ -32,6 +33,8 @@ class ParentPendingGoalFragment: Fragment() {
 
     private lateinit var parentPendingGoalsAdapter:ParentPendingGoalsAdapter
 
+    private var coroutineScope =  CoroutineScope(Dispatchers.Main)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var bundle = arguments
@@ -41,10 +44,15 @@ class ParentPendingGoalFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        CoroutineScope(Dispatchers.Main).launch {
+        coroutineScope.launch {
             loadChildren()
             getPendingGoals()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        coroutineScope.cancel()
     }
 
     private suspend fun getPendingGoals() {
@@ -54,17 +62,19 @@ class ParentPendingGoalFragment: Fragment() {
                 newGoals.add(goal.id)
         }
 
-        if (!newGoals.isEmpty()) {
-            parentPendingGoalsAdapter = ParentPendingGoalsAdapter(requireActivity().applicationContext, newGoals)
-            binding.rvGoals.adapter = parentPendingGoalsAdapter
-            binding.rvGoals.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
-            parentPendingGoalsAdapter.notifyDataSetChanged()
-        } else
-            binding.layoutEmptyActivity.visibility = View.VISIBLE
+        if (isAdded) {
+            if (!newGoals.isEmpty()) {
+                parentPendingGoalsAdapter = ParentPendingGoalsAdapter(requireActivity().applicationContext, newGoals)
+                binding.rvGoals.adapter = parentPendingGoalsAdapter
+                binding.rvGoals.layoutManager = LinearLayoutManager(requireActivity().applicationContext, LinearLayoutManager.VERTICAL, false)
+                parentPendingGoalsAdapter.notifyDataSetChanged()
+            } else
+                binding.layoutEmptyActivity.visibility = View.VISIBLE
 
-        binding.loadingItems.stopShimmer()
-        binding.loadingItems.visibility = View.GONE
-        binding.rvGoals.visibility = View.VISIBLE
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
+            binding.rvGoals.visibility = View.VISIBLE
+        }
     }
 
     private suspend fun loadChildren() {
