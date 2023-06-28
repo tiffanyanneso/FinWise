@@ -44,11 +44,14 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
     var nPlanned = 0.00F
     var nTotalPurchased = 0.00F
 
+    private var budgetItemsIDArrayList = ArrayList<String>()
+
      var nGoalSettingCompleted = 0
      var nSavingCompleted = 0
      var nBudgetingCompleted = 0
      var nSpendingCompleted = 0
 
+    private var age = 0
     override fun doWork(): Result {
         // TODO: Implement your data-saving logic here (e.g., saving data to Firestore)
         CoroutineScope(Dispatchers.Main).launch {
@@ -135,7 +138,7 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
         val to = LocalDate.parse(date.toString(), dateFormatter)
         val difference = Period.between(to, from)
 
-        var age = difference.years
+        age = difference.years
 
         CoroutineScope(Dispatchers.Main).launch {
             if (age == 10 || age == 11)
@@ -230,9 +233,14 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
                     "dateRecorded" to Timestamp.now()
                 )
                 firestore.collection("Scores").add(score)
-            } else
+                saveSeparateFinActScores()
+            } else {
                 firestore.collection("Scores").document(latestScore.id)
                     .update("score", finactScore, "dateRecorded", Timestamp.now())
+                CoroutineScope(Dispatchers.Main).launch {
+                    updateFinActScore()
+                }
+            }
         } else {
             var score = hashMapOf(
                 "childID" to currentUser,
@@ -241,7 +249,108 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
                 "dateRecorded" to Timestamp.now()
             )
             firestore.collection("Scores").add(score)
+            saveSeparateFinActScores()
         }
+    }
+
+    private suspend fun updateFinActScore() {
+        if (age == 10 || age == 11) {
+            var goalSettingScoreID = firestore.collection("Scores").whereEqualTo("childID", currentUser)
+                .whereEqualTo("type", "goal setting")
+                .orderBy("dateRecorded", Query.Direction.DESCENDING).get().await()
+            if (!goalSettingScoreID.isEmpty)
+                firestore.collection("Scores").document(goalSettingScoreID.documents[0].id).update("score", goalSettingPercentage)
+            else {
+                var goalSetting = hashMapOf(
+                    "childID" to currentUser,
+                    "score" to goalSettingPercentage,
+                    "type" to "goal setting",
+                    "dateRecorded" to Timestamp.now()
+                )
+                firestore.collection("Scores").add(goalSetting)
+            }
+        }
+
+        var savingScore = firestore.collection("Scores").whereEqualTo("childID", currentUser)
+            .whereEqualTo("type", "saving")
+            .orderBy("dateRecorded", Query.Direction.DESCENDING).get().await()
+        if (!savingScore.isEmpty)
+            firestore.collection("Scores").document(savingScore.documents[0].id).update("score", savingPercentage)
+        else {
+            var saving = hashMapOf(
+                "childID" to currentUser,
+                "score" to savingPercentage,
+                "type" to "saving",
+                "dateRecorded" to Timestamp.now()
+            )
+            firestore.collection("Scores").add(saving)
+        }
+
+        var budgetingScore = firestore.collection("Scores").whereEqualTo("childID", currentUser)
+            .whereEqualTo("type", "budgeting")
+            .orderBy("dateRecorded", Query.Direction.DESCENDING).get().await()
+        if (!budgetingScore.isEmpty)
+            firestore.collection("Scores").document(budgetingScore.documents[0].id).update("score", budgetingPercentage)
+        else {
+            var budgeting = hashMapOf(
+                "childID" to currentUser,
+                "score" to budgetingPercentage,
+                "type" to "budgeting",
+                "dateRecorded" to Timestamp.now()
+            )
+            firestore.collection("Scores").add(budgeting)
+        }
+
+        var spendingScore = firestore.collection("Scores").whereEqualTo("childID", currentUser)
+            .whereEqualTo("type", "spending")
+            .orderBy("dateRecorded", Query.Direction.DESCENDING).get().await()
+        if (!spendingScore.isEmpty)
+            firestore.collection("Scores").document(spendingScore.documents[0].id).update("score", spendingPercentage)
+        else {
+            var spending = hashMapOf(
+                "childID" to currentUser,
+                "score" to spendingPercentage,
+                "type" to "spending",
+                "dateRecorded" to Timestamp.now()
+            )
+            firestore.collection("Scores").add(spending)
+        }
+    }
+
+    private fun saveSeparateFinActScores() {
+        if (age == 10 || age == 11) {
+            var goalSetting = hashMapOf(
+                "childID" to currentUser,
+                "score" to goalSettingPercentage,
+                "type" to "goal setting",
+                "dateRecorded" to Timestamp.now()
+            )
+            firestore.collection("Scores").add(goalSetting)
+        }
+
+        var saving = hashMapOf(
+            "childID" to currentUser,
+            "score" to savingPercentage,
+            "type" to "saving",
+            "dateRecorded" to Timestamp.now()
+        )
+        firestore.collection("Scores").add(saving)
+
+        var budgeting = hashMapOf(
+            "childID" to currentUser,
+            "score" to budgetingPercentage,
+            "type" to "budgeting",
+            "dateRecorded" to Timestamp.now()
+        )
+        firestore.collection("Scores").add(budgeting)
+
+        var spending = hashMapOf(
+            "childID" to currentUser,
+            "score" to spendingPercentage,
+            "type" to "spending",
+            "dateRecorded" to Timestamp.now()
+        )
+        firestore.collection("Scores").add(spending)
     }
 
     private suspend fun getGoalSettingPerformance() {
@@ -376,26 +485,26 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
                     .whereEqualTo("status", "Active").get().await()
                 nBudgetItems += budgetItemsDocuments.size()
 
-                for (budgetItem in budgetItemsDocuments) {
-                    val budgetItemObject = budgetItem.toObject<BudgetItem>()
-                    checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
-                }
+                for (budgetItem in budgetItemsDocuments)
+                    budgetItemsIDArrayList.add(budgetItem.id)
             }
+
+            checkOverSpending()
         }
     }
 
-    private suspend fun checkOverSpending(budgetItemID:String, budgetItemAmount:Float){
-        val transactionsDocuments = firestore.collection("Transactions")
-            .whereEqualTo("budgetItemID", budgetItemID)
-            .whereEqualTo("transactionType", "Expense").get().await()
-        var amountSpent = 0.00F
-        for (expense in transactionsDocuments) {
-            val expenseObject = expense.toObject<Transactions>()
-            amountSpent+= expenseObject.amount!!
+    private suspend fun checkOverSpending(){
+        for (budgetItemID in budgetItemsIDArrayList) {
+            var spendingTransactions = firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).whereEqualTo("transactionType", "Expense").get().await().toObjects<Transactions>()
+            var amountSpent = 0.00F
+            for (expense in spendingTransactions) {
+                amountSpent+= expense.amount!!
+            }
+            //they spent more than their allocated budget
+            var budgetItemAmount = firestore.collection("BudgetItems").document(budgetItemID).get().await().toObject<BudgetItem>()?.amount!!
+            if (amountSpent > budgetItemAmount)
+                overSpending++
         }
-        //they spent more than their allocated budget
-        if (amountSpent > budgetItemAmount)
-            overSpending++
 
         overspendingPercentage = (overSpending/nBudgetItems)
     }
@@ -403,26 +512,23 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
 
     private suspend fun purchasePlanningPerformance() {
         //items planned / all the items they bought * 100
-        val spendingActivities = firestore.collection("FinancialActivities")
-            .whereEqualTo("childID", currentUser)
-            .whereEqualTo("financialActivityName", "Spending")
-            .whereEqualTo("status", "Completed").get().await()
+        //items planned / all the items they bought * 100
+        var nPlanned = 0.00F
+        var nTotalPurchased = 0.00F
+        var spendingActivities = firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().await()
 
         for (spendingActivityID in spendingActivities) {
-            val shoppingListItemsDocuments = firestore.collection("ShoppingListItems")
-                .whereEqualTo("spendingActivityID", spendingActivityID.id).get().await()
-
-            for (shoppingListItem in shoppingListItemsDocuments) {
-                val shoppingListItemObject = shoppingListItem.toObject<ShoppingListItem>()
-                if (shoppingListItemObject.status == "Purchased")
+            var shoppingListItems = firestore.collection("ShoppingListItems").whereEqualTo("spendingActivityID", spendingActivityID.id).get().await().toObjects<ShoppingListItem>()
+            for (shoppingListItem in shoppingListItems) {
+                if (shoppingListItem.status == "Purchased")
                     nPlanned++
             }
-            val transactionsDocuments = firestore.collection("Transactions")
-                .whereEqualTo("financialActivityID", spendingActivityID.id)
-                .whereEqualTo("transactionType", "Expense").get().await()
-            nTotalPurchased += transactionsDocuments.size().toFloat()
-            spendingPercentage = ((1-overspendingPercentage)*100 + ((nPlanned/nTotalPurchased)*100)) /2
+
+            nTotalPurchased += firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID.id).whereEqualTo("transactionType", "Expense").get().await().size().toFloat()
         }
+
+        val purchasePlanningPercentage = (nPlanned/nTotalPurchased)*100
+        spendingPercentage = (((1-overspendingPercentage)*100) + purchasePlanningPercentage) /2
     }
 
     private suspend fun saveAssessmentScore() {
