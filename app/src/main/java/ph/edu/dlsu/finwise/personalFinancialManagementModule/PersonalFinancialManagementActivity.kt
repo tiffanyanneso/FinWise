@@ -284,18 +284,30 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1700)
+        dialog.window!!.setLayout(1000, 1500)
 
         dialogBinding.btnTopExpenses.setOnClickListener {
             dialog.dismiss()
-            var goToTopExpenses = Intent(this, TrendDetailsActivity::class.java)
-            this.startActivity(goToTopExpenses)
+
+            val goToDetails = Intent(context, TrendDetailsActivity::class.java)
+            bundle.putString("date", "weekly")
+            bundle.putString("user", "child")
+            childID  = FirebaseAuth.getInstance().currentUser!!.uid
+
+            bundle.putString("childID", childID)
+            goToDetails.putExtras(bundle)
+            this.startActivity(goToDetails)
         }
 
         dialogBinding.btnHomeRewards.setOnClickListener {
             dialog.dismiss()
-            var goToHomeRewards = Intent(this, EarningMenuActivity::class.java)
-            this.startActivity(goToHomeRewards)
+
+            val goToEarningActivity = Intent(applicationContext, EarningMenuActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("childID", childID)
+            bundle.putString("module", "pfm")
+            goToEarningActivity.putExtras(bundle)
+            this.startActivity(goToEarningActivity)
         }
 
         dialogBinding.btnGotIt.setOnClickListener {

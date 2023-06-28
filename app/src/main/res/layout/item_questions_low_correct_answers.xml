@@ -19,8 +19,12 @@
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:layout_gravity="center"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp">
+        android:layout_marginHorizontal="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/linear_layout"
@@ -32,10 +36,10 @@
             <TextView
                 android:id="@+id/tv_question"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:text="# Question"
+                android:text="# Quesrion"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -65,10 +69,9 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:text="Difficulty"
-            android:layout_gravity="center_vertical"
             android:textSize="16sp"
             android:paddingLeft="14dp"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="5dp"/>
 
         <TextView
             android:id="@+id/tv_correct_percentage"
@@ -80,6 +83,7 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:layout_below="@+id/tv_difficulty"/>
+        </LinearLayout>
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

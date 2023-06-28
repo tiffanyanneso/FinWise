@@ -115,6 +115,7 @@
                             android:inputType="textMultiLine"
                             android:textSize="16dp"
                             android:hint="Description"
+                            android:lines="3"
                             android:background="@drawable/border_grey_bg_white"
                             android:backgroundTint="@color/white"/>
                     </com.google.android.material.textfield.TextInputLayout>

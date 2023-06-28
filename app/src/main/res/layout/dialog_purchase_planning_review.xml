@@ -117,7 +117,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16dp"
-            android:text="1. Think about all the things you need to buy.\n2. List them down through the “Shopping List” feature.\n3. Use your past purchases as reference.\n4. If needed, consult other sources (Internet, friends, family)."
+            android:text="1. Think about all the things you need to buy.\n2. List them down through the “Shopping List” feature.\n3. Use your past purchases as reference."
             android:textColor="@color/black"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"/>

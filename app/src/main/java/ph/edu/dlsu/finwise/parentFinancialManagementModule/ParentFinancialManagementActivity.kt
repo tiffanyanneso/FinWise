@@ -295,22 +295,25 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1700)
+        dialog.window!!.setLayout(1000, 1500)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
         }
 
-        dialogBinding.btnTopExpenses.setOnClickListener {
-            dialog.dismiss()
-            var goToTopExpenses = Intent(this, TrendDetailsActivity::class.java)
-            this.startActivity(goToTopExpenses)
-        }
+//        dialogBinding.btnTopExpenses.setOnClickListener {
+//            dialog.dismiss()
+//            var goToTopExpenses = Intent(this, TrendDetailsActivity::class.java)
+//            this.startActivity(goToTopExpenses)
+//        }
 
         dialogBinding.btnHomeRewards.setOnClickListener {
             dialog.dismiss()
-            var goToHomeRewards = Intent(this, EarningMenuActivity::class.java)
-            this.startActivity(goToHomeRewards)
+            val goToHomeRewardsActivity = Intent(this, EarningMenuActivity::class.java)
+            bundle.putString("childID", childID)
+            bundle.putString("module", "pfm")
+            goToHomeRewardsActivity.putExtras(bundle)
+            this.startActivity(goToHomeRewardsActivity)
         }
 
         dialog.setOnDismissListener {}

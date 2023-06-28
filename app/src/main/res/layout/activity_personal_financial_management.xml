@@ -27,18 +27,18 @@
             />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center">
+<!--    <LinearLayout-->
+<!--        android:id="@+id/layout_loading"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:gravity="center">-->
 
-        <ProgressBar
-            android:id="@+id/pb_loading"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            />
-    </LinearLayout>
+<!--        <ProgressBar-->
+<!--            android:id="@+id/pb_loading"-->
+<!--            android:layout_width="100dp"-->
+<!--            android:layout_height="100dp"-->
+<!--            />-->
+<!--    </LinearLayout>-->
 
     <ScrollView
         android:id="@+id/layout_pfm"
@@ -50,10 +50,11 @@
         app:layout_constraintBottom_toTopOf="@id/bottom_nav"
         android:layout_marginTop="70dp"
         android:layout_marginBottom="60dp"
-        android:visibility="gone"
     >
+<!--        android:visibility="gone"-->
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+        <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
