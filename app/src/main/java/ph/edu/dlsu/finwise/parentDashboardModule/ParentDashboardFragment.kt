@@ -15,6 +15,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
@@ -67,6 +68,8 @@ class ParentDashboardFragment : Fragment() {
 
     private var overallFinancialHealth = 0.00F
 
+    private var coroutineScope = CoroutineScope(Dispatchers.Main)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var bundle = requireArguments()
@@ -84,7 +87,7 @@ class ParentDashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        CoroutineScope(Dispatchers.Main).launch {
+        coroutineScope.launch {
             getAge()
             getPersonalFinancePerformance()
             //finact performance
@@ -102,9 +105,15 @@ class ParentDashboardFragment : Fragment() {
             else spendingPercentage = (1-overspendingPercentage)*100
 
             getFinancialAssessmentScore()
-            getOverallFinancialHealth()
-        }
 
+            if (isAdded)
+                getOverallFinancialHealth()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        coroutineScope.cancel()
     }
 
     private suspend fun getAge() {
@@ -425,8 +434,10 @@ class ParentDashboardFragment : Fragment() {
 //            println("print correct " + nCorrect)
 //            println("print nquestions" + nQuestions)
             financialAssessmentPerformance = (nCorrect.toFloat() / nQuestions.toFloat()) * 100
-            binding.progressBarFinancialAssessments.progress = financialAssessmentPerformance.toInt()
-            binding.tvFinancialAssessmentsPercentage.text = DecimalFormat("##0.00").format(financialAssessmentPerformance) + "%"
+            if (isAdded) {
+                binding.progressBarFinancialAssessments.progress = financialAssessmentPerformance.toInt()
+                binding.tvFinancialAssessmentsPercentage.text = DecimalFormat("##0.00").format(financialAssessmentPerformance) + "%"
+            }
         }
     }
 

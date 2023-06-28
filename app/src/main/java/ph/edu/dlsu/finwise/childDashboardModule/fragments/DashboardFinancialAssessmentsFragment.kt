@@ -28,6 +28,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
@@ -84,6 +85,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     private lateinit var endTimestampSelectedMonth: Timestamp
     private lateinit var startTimestampPreviousMonth: Timestamp
 
+    private var coroutineScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -101,7 +103,6 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         getArgumentsBundle()
         getFinancialAssessmentScore()
     }
-
 
     private fun getArgumentsBundle() {
         val args = arguments
@@ -121,7 +122,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     }
 
     private fun getFinancialAssessmentScore() {
-        CoroutineScope(Dispatchers.Main).launch {
+      coroutineScope.launch {
             //loadOverallScore()
             initializeGraphDate()
             //initializeDetailsButton()
@@ -175,12 +176,13 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 // Do something with the selected month
                 selectedDatesSort = selectedMonth
                 getCurrentAndPreviousMonth(selectedMonth, months)
-                CoroutineScope(Dispatchers.Main).launch {
+               coroutineScope.launch {
                     getAssessmentAttempts()
                     getDatesOfAttempts()
                     clearData()
                     setData()
-                    setPerformanceView()
+                    if (isAdded)
+                        setPerformanceView()
                     loadView()
                     hideLoadingChart()
                 }
@@ -191,10 +193,11 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 hideView()
                 // Handle case when no month is selected
                 selectedDatesSort = "current"
-                CoroutineScope(Dispatchers.Main).launch {
+                coroutineScope.launch {
                     resetVariables()
                     setData()
-                    setPerformanceView()
+                    if (isAdded)
+                        setPerformanceView()
                     loadView()
                     hideLoadingChart()
                 }
@@ -543,6 +546,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         super.onDestroyView()
         releaseMediaPlayer()
         isViewCreated = false
+        coroutineScope.cancel()
     }
 
     private fun releaseMediaPlayer() {

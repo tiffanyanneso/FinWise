@@ -24,6 +24,8 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardPersonalFinanceBinding
 import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
@@ -65,6 +67,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
     private var totalIncomePreviousMonth = 0.00f
     private var totalExpensePreviousMonth = 0.00f
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,13 +82,16 @@ class DashboardPersonalFinanceFragment : Fragment() {
 
         isViewCreated = true
 
-        binding.layoutLoading.visibility = View.VISIBLE
-        binding.layoutMain.visibility = View.GONE
+        if (isAdded) {
+            binding.title.text = "Personal Finance Performance"
+            binding.layoutLoading.visibility = View.VISIBLE
+            binding.layoutMain.visibility = View.GONE
+        }
+
         getArgumentsBundle()
         initializeFragment()
         //getPersonalFinancePerformance()
 
-        binding.title.text = "Personal Finance Performance"
     }
 
     private fun initializeFragment() {

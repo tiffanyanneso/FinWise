@@ -28,6 +28,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
@@ -125,6 +126,8 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     private lateinit var sortedDateBudgeting: List<Date>
     private lateinit var sortedDate: List<Date>
 
+    private var coroutineScope = CoroutineScope(Dispatchers.Main)
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -147,7 +150,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
 
     private fun initializeBalanceLineGraph() {
-        CoroutineScope(Dispatchers.Main).launch {
+        coroutineScope.launch {
             getChildAge()
             //loadOverallScore()
             initializeGraphDate()
@@ -216,11 +219,12 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 // Do something with the selected month
                 selectedDatesSort = selectedMonth
                 getCurrentAndPreviousMonth(selectedMonth, months)
-                CoroutineScope(Dispatchers.Main).launch {
+                coroutineScope.launch {
                     getFinancialActivities()
                     getUniqueDates()
                     setData()
-                    setPerformanceView()
+                    if (isAdded)
+                        setPerformanceView()
                     Log.d("sfsaddafwwwdfwqsdqwe", "fsdfsdfdsddd: "+graphData)
                     resetVariables()
                     loadView()
@@ -232,10 +236,11 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 loadLoadingChart()
                 // Handle case when no month is selected
                 selectedDatesSort = "current"
-                CoroutineScope(Dispatchers.Main).launch {
+                coroutineScope.launch {
                     resetVariables()
                     setData()
-                    setPerformanceView()
+                    if (isAdded)
+                        setPerformanceView()
                     loadView()
                     hideLoadingChart()
                 }
@@ -1604,6 +1609,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         super.onDestroyView()
         releaseMediaPlayer()
         isViewCreated = false
+        coroutineScope.cancel()
     }
 
     private fun releaseMediaPlayer() {

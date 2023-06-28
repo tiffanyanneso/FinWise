@@ -714,8 +714,7 @@
     android:background="#FFFFFF"
     app:labelVisibilityMode="labeled"
     app:itemIconSize="36dp"
-    app:itemIconTint="@drawable/selector"
-        android:visibility="gone"/>
+    app:itemIconTint="@drawable/selector" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
