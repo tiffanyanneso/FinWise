@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="10dp"
     android:foreground="@drawable/border"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="5dp"
     android:backgroundTint="@color/white">
 
     <RelativeLayout
@@ -36,6 +36,25 @@
                 android:textSize="16sp"
                 android:gravity="center_vertical"
                 android:text="@string/username"/>
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/baseline_gpp_maybe_24"
+                card_view:tint="@color/red"
+                android:layout_gravity="center"/>
+
+            <TextView
+                android:id="@+id/tv_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dark_green"
+                android:text="Percent"
+                android:layout_margin="5dp"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                />
 
             <ImageView
                 android:id="@+id/btn_settings"

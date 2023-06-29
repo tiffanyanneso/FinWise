@@ -544,21 +544,21 @@ class DashboardPersonalFinanceFragment : Fragment() {
 
         if (pfmScoreCurrentMonth > pfmScorePreviousMonth) {
             difference = pfmScoreCurrentMonth - pfmScorePreviousMonth
-            performance = "Month's Increase"
-            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
-                R.color.dark_green))
+            performance = "Increase from Last Month"
+//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+//                R.color.dark_green))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.up_arrow)
         } else if (pfmScoreCurrentMonth < pfmScorePreviousMonth) {
             difference = pfmScorePreviousMonth - pfmScoreCurrentMonth
-            performance = "Month's Decrease"
-            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
-                R.color.red))
+            performance = "Decrease from Last Month"
+//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+//                R.color.red))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.down_arrow)
         } else {
             difference = 0.0F
-            performance = "No Increase"
-            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
-                R.color.yellow))
+            performance = "No Increase from Last Month"
+//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+//                R.color.yellow))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon_equal)
         }
 

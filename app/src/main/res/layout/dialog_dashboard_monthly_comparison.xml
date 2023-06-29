@@ -71,8 +71,9 @@
             android:textSize="16dp"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"
-            android:text="This shows the difference between the performance of the current month and previous month"
-            android:textColor="@color/black"/>
+            android:text="Shows how well performance this month is compared to last month. An increase is great!"
+            android:textColor="@color/black"
+            android:textAlignment="center"/>
 
         <LinearLayout
             android:layout_width="match_parent"

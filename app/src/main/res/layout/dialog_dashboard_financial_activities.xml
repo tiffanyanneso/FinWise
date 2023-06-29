@@ -71,8 +71,9 @@
             android:textSize="16dp"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"
-            android:text="This score shows how well Financial Activities are being performed in the application.\nThese performances include Goal Setting (for ages 10-11), Saving , Budgeting, Spending"
-            android:textColor="@color/black"/>
+            android:text="Score shows how well Financial Activities (Goal Setting, Saving, Budgeting, Spending) are being performed in the application. High scores are great!!"
+            android:textColor="@color/black"
+            android:textAlignment="center"/>
 
         <LinearLayout
             android:layout_width="match_parent"

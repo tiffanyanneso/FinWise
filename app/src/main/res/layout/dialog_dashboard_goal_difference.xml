@@ -71,8 +71,9 @@
             android:textSize="16dp"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp"
-            android:text="This percentage shows how far the current performance is from the target performancen\nThe target can be changed from the settings. "
-            android:textColor="@color/black"/>
+            android:text="Shows how far the current performance is from target performance. The smaller the difference, the better!"
+            android:textColor="@color/black"
+            android:textAlignment="center"/>
 
         <LinearLayout
             android:layout_width="match_parent"
