@@ -115,6 +115,12 @@ class ParentDashboardFragment : Fragment() {
                 getOverallFinancialHealth()
                 loadDifferenceFromGoal()
             }
+
+            if (isAdded && !isDetached) {
+                setPerformanceView()
+                binding.layoutLoading.visibility = View.GONE
+                binding.mainLayout.visibility = View.VISIBLE
+            }
         }
 
         binding.layoutFinancialHealthScore.setOnClickListener {
@@ -571,59 +577,53 @@ class ParentDashboardFragment : Fragment() {
 //        println("print spending finished" + nSpendingCompleted)
 //        println("print fin assessments" + financialAssessmentPerformance)
         binding.tvFinancialHealthScore.text = DecimalFormat("##0.00").format(overallFinancialHealth) + "%"
-        if (isAdded && !isDetached) {
-            setPerformanceView()
-            binding.layoutLoading.visibility = View.GONE
-            binding.mainLayout.visibility = View.VISIBLE
-        }
     }
 
-    private fun loadDifferenceFromGoal() {
-        firestore.collection("Settings").whereEqualTo("childID", childID).get().addOnSuccessListener {
-            if (!it.isEmpty) {
-                var literacyGoal =it.documents[0].toObject<SettingsModel>()?.literacyGoal
-                var lower = 0.00F
-                var upper = 0.00F
-                when (literacyGoal) {
-                    "Excellent" -> {
-                        lower = 90.0F
-                        upper = 100F
-                    }
-
-                    "Amazing" -> {
-                        lower = 80.0F
-                        upper = 89.99F
-                    }
-
-                    "Great" -> {
-                        lower = 70.0F
-                        upper = 79.9F
-                    }
-
-                    "Good" -> {
-                        lower = 60.0F
-                        upper = 69.9F
-                    }
+    private suspend fun loadDifferenceFromGoal() {
+        var settings = firestore.collection("Settings").whereEqualTo("childID", childID).get().await()
+        if (!settings.isEmpty) {
+            var literacyGoal =settings.documents[0].toObject<SettingsModel>()?.literacyGoal
+            var lower = 0.00F
+            var upper = 0.00F
+            when (literacyGoal) {
+                "Excellent" -> {
+                    lower = 90.0F
+                    upper = 100F
                 }
 
+                "Amazing" -> {
+                    lower = 80.0F
+                    upper = 89.99F
+                }
 
-                if (isAdded) {
-                    if (overallFinancialHealth > upper) {
-                        binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(overallFinancialHealth - upper)}%"
-                        binding.tvGoalDiffStatus.text = "Above the target"
-                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
-                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
-                    } else if (overallFinancialHealth in lower..upper) {
-                        //binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(overallFinancialHealthCurrentMonth - upper)}%"
-                        binding.tvGoalDiffStatus.text = "Within Target"
-                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
-                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
-                    } else if (overallFinancialHealth < lower) {
-                        binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - overallFinancialHealth)}%"
-                        binding.tvGoalDiffStatus.text = "Below the target"
-                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
-                    }
+                "Great" -> {
+                    lower = 70.0F
+                    upper = 79.9F
+                }
+
+                "Good" -> {
+                    lower = 60.0F
+                    upper = 69.9F
+                }
+            }
+
+
+            if (isAdded) {
+                if (overallFinancialHealth > upper) {
+                    binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(overallFinancialHealth - upper)}%"
+                    binding.tvGoalDiffStatus.text = "Above the target"
+                    binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
+                    binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
+                } else if (overallFinancialHealth in lower..upper) {
+                    //binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(overallFinancialHealthCurrentMonth - upper)}%"
+                    binding.tvGoalDiffStatus.text = "Within Target"
+                    binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+                    binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
+                } else if (overallFinancialHealth < lower) {
+                    binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - overallFinancialHealth)}%"
+                    binding.tvGoalDiffStatus.text = "Below the target"
+                    binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                    binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
                 }
             }
         }
