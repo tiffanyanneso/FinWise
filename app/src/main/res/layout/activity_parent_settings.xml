@@ -195,29 +195,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RadioButton
-                android:id="@+id/rb_overall_excellent"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:text="Excellent" />
+                <RadioButton
+                    android:id="@+id/rb_overall_excellent"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Excellent (90% - 100%)" />
 
-            <RadioButton
-                android:id="@+id/rb_overall_amazing"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:text="Amazing" />
+                <RadioButton
+                    android:id="@+id/rb_overall_amazing"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Amazing (80% - 89%)" />
 
-            <RadioButton
-                android:id="@+id/rb_overall_great"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:text="Great" />
+                <RadioButton
+                    android:id="@+id/rb_overall_great"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Great (70% - 79%)" />
 
-            <RadioButton
-                android:id="@+id/rb_overall_good"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:text="Good" />
+                <RadioButton
+                    android:id="@+id/rb_overall_good"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:text="Good (60% - 69%)" />
         </RadioGroup>
         </LinearLayout>
 

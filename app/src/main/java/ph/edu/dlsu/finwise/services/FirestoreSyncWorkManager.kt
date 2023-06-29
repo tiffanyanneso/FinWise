@@ -55,14 +55,12 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
     override fun doWork(): Result {
         // TODO: Implement your data-saving logic here (e.g., saving data to Firestore)
         CoroutineScope(Dispatchers.Main).launch {
-            println("print in firestore work manager")
             addDataToFirestore()
         }
         return Result.success()
     }
 
     private suspend fun addDataToFirestore() {
-        println("print in add adata to firestore function")
         CoroutineScope(Dispatchers.Main).launch {
             savePfmScore()
             computeFinactScore()

@@ -361,25 +361,25 @@
                             android:id="@+id/rb_overall_excellent"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:text="Excellent" />
+                            android:text="Excellent (90% - 100%)" />
 
                         <RadioButton
                             android:id="@+id/rb_overall_amazing"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:text="Amazing" />
+                            android:text="Amazing (80% - 89%)" />
 
                         <RadioButton
                             android:id="@+id/rb_overall_great"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:text="Great" />
+                            android:text="Great (70% - 79%)" />
 
                         <RadioButton
                             android:id="@+id/rb_overall_good"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:text="Good" />
+                            android:text="Good (60% - 69%)" />
                     </RadioGroup>
                     </LinearLayout>
 

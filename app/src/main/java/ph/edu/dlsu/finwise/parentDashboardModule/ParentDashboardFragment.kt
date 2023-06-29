@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.parentDashboardModule
 
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import com.google.firebase.firestore.QueryDocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -106,15 +108,17 @@ class ParentDashboardFragment : Fragment() {
 
             getFinancialAssessmentScore()
 
-            if (isAdded)
+            if (isAdded) {
                 getOverallFinancialHealth()
+                loadDifferenceFromGoal()
+            }
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        coroutineScope.cancel()
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+//        coroutineScope.cancel()
+//    }
 
     private suspend fun getAge() {
         //get the age of the child
@@ -530,20 +534,71 @@ class ParentDashboardFragment : Fragment() {
 
             }
         }
-        println("print personal finance" +  personalFinancePerformance)
-        println("print finact goal setting " + goalSettingPercentage)
-        println("print finact saving"  + savingPercentage)
-        println("print saving finsihed " + nSavingCompleted)
-        println("print finact budgeting " + budgetingPercentage)
-        println("print budgeting finished" + nBudgetingCompleted)
-        println("print finact spending " + spendingPercentage)
-        println("print spending finished" + nSpendingCompleted)
-        println("print fin assessments" + financialAssessmentPerformance)
+//        println("print personal finance" +  personalFinancePerformance)
+//        println("print finact goal setting " + goalSettingPercentage)
+//        println("print finact saving"  + savingPercentage)
+//        println("print saving finsihed " + nSavingCompleted)
+//        println("print finact budgeting " + budgetingPercentage)
+//        println("print budgeting finished" + nBudgetingCompleted)
+//        println("print finact spending " + spendingPercentage)
+//        println("print spending finished" + nSpendingCompleted)
+//        println("print fin assessments" + financialAssessmentPerformance)
         binding.tvFinancialHealthScore.text = DecimalFormat("##0.00").format(overallFinancialHealth) + "%"
         if (isAdded && !isDetached) {
             setPerformanceView()
             binding.layoutLoading.visibility = View.GONE
             binding.mainLayout.visibility = View.VISIBLE
+        }
+    }
+
+    private fun loadDifferenceFromGoal() {
+        firestore.collection("Settings").whereEqualTo("childID", childID).get().addOnSuccessListener {
+            if (!it.isEmpty) {
+                var literacyGoal =it.documents[0].toObject<SettingsModel>()?.literacyGoal
+                var lower = 0.00F
+                var upper = 0.00F
+                when (literacyGoal) {
+                    "Excellent" -> {
+                        lower = 90.0F
+                        upper = 100F
+                    }
+
+                    "Amazing" -> {
+                        lower = 80.0F
+                        upper = 89.99F
+                    }
+
+                    "Great" -> {
+                        lower = 70.0F
+                        upper = 79.9F
+                    }
+
+                    "Good" -> {
+                        lower = 60.0F
+                        upper = 69.9F
+                    }
+                }
+
+
+                if (isAdded) {
+                    if (overallFinancialHealth > upper) {
+                        binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(overallFinancialHealth - upper)}%"
+                        binding.tvGoalDiffStatus.text = "Above the target"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
+                    } else if (overallFinancialHealth in lower..upper) {
+                        //binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(overallFinancialHealthCurrentMonth - upper)}%"
+                        binding.tvGoalDiffStatus.text = "Within Target"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
+                    } else if (overallFinancialHealth < lower) {
+                        binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - overallFinancialHealth)}%"
+                        binding.tvGoalDiffStatus.text = "Below the target"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+                    }
+                }
+            }
         }
     }
 

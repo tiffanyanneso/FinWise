@@ -753,6 +753,7 @@ class ChildDashboardActivity : AppCompatActivity(){
         binding.tvPerformanceStatus.text = performance
         loadAudio(audio)
         loadPreviousMonth()
+        loadDifferenceFromGoal()
         loadView()
     }
 
@@ -790,6 +791,56 @@ class ChildDashboardActivity : AppCompatActivity(){
         binding.ivPreviousMonthImg.setImageBitmap(bitmap)
         binding.tvPreviousPerformancePercentage.text = "$roundedValue%"
         binding.tvPreviousPerformanceStatus.text = performance
+    }
+
+    private fun loadDifferenceFromGoal() {
+        firestore.collection("Settings").whereEqualTo("childID", childID).get().addOnSuccessListener {
+            if (!it.isEmpty) {
+                var literacyGoal =it.documents[0].toObject<SettingsModel>()?.literacyGoal
+                var lower = 0.00F
+                var upper = 0.00F
+                when (literacyGoal) {
+                    "Excellent" -> {
+                        lower = 90.0F
+                        upper = 100F
+                    }
+
+                    "Amazing" -> {
+                        lower = 80.0F
+                        upper = 89.99F
+                    }
+
+                    "Great" -> {
+                        lower = 70.0F
+                        upper = 79.9F
+                    }
+
+                    "Good" -> {
+                        lower = 60.0F
+                        upper = 69.9F
+                    }
+                }
+
+
+                if (overallFinancialHealthCurrentMonth > upper) {
+                    binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(overallFinancialHealthCurrentMonth - upper)}%"
+                    binding.tvGoalDiffStatus.text = "Above your target"
+                    binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(this, R.color.dark_green))
+                    binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
+                }
+                else if (overallFinancialHealthCurrentMonth in lower..upper) {
+                    //binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(overallFinancialHealthCurrentMonth - upper)}%"
+                    binding.tvGoalDiffStatus.text = "Within Target"
+                    binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(this, R.color.yellow))
+                    binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
+                } else if (overallFinancialHealthCurrentMonth < lower) {
+                    binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - overallFinancialHealthCurrentMonth)}%"
+                    binding.tvGoalDiffStatus.text = "Below your target"
+                    binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(this, R.color.red))
+                    binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+                }
+            }
+        }
     }
 
 

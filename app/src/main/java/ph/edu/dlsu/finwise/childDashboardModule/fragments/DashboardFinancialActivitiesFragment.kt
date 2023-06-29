@@ -1463,6 +1463,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         mediaPlayer = MediaPlayer.create(context, audio)
         loadOverallAudio()
         loadButton()
+        loadDifferenceFromGoal()
         loadPreviousMonth()
     }
 
@@ -1501,6 +1502,59 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         binding.ivPreviousMonthImg.setImageBitmap(bitmap)
         binding.tvPreviousPerformancePercentage.text = "$roundedValue%"
         binding.tvPreviousPerformanceStatus.text = performance
+    }
+
+    private fun loadDifferenceFromGoal() {
+        firestore.collection("Settings").whereEqualTo("childID", userID).get().addOnSuccessListener {
+            if (!it.isEmpty) {
+                var literacyGoal =it.documents[0].toObject<SettingsModel>()?.literacyGoal
+                var lower = 0.00F
+                var upper = 0.00F
+                when (literacyGoal) {
+                    "Excellent" -> {
+                        lower = 90.0F
+                        upper = 100F
+                    }
+
+                    "Amazing" -> {
+                        lower = 80.0F
+                        upper = 89.99F
+                    }
+
+                    "Great" -> {
+                        lower = 70.0F
+                        upper = 79.9F
+                    }
+
+                    "Good" -> {
+                        lower = 60.0F
+                        upper = 69.9F
+                    }
+                }
+
+                println("print finact performance " + finActPerformanceCurrentMonth)
+                println("print upper " + upper)
+                println("print lower " + lower)
+                if (isAdded) {
+                    if (finActPerformanceCurrentMonth > upper) {
+                        binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(finActPerformanceCurrentMonth - upper)}%"
+                        binding.tvGoalDiffStatus.text = "Above your target"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
+                    } else if (finActPerformanceCurrentMonth in lower..upper) {
+                        //binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(overallFinancialHealthCurrentMonth - upper)}%"
+                        binding.tvGoalDiffStatus.text = "Within Target"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
+                    } else if (finActPerformanceCurrentMonth < lower) {
+                        binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - finActPerformanceCurrentMonth)}%"
+                        binding.tvGoalDiffStatus.text = "Below your target"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+                    }
+                }
+            }
+        }
     }
 
     private fun computeFinActivitiesPerformance() {

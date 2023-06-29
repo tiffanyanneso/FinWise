@@ -36,6 +36,7 @@ import ph.edu.dlsu.finwise.databinding.FragmentDashboardFinancialAssessmentsBind
 import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentLandingPageActivity
 import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
 import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
+import ph.edu.dlsu.finwise.model.SettingsModel
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -445,6 +446,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
 
         mediaPlayer = MediaPlayer.create(context, audio)
         loadOverallAudio()
+        loadDifferenceFromGoal()
         loadPreviousMonth()
         loadButton()
     }
@@ -484,6 +486,57 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         binding.ivPreviousMonthImg.setImageBitmap(bitmap)
         binding.tvPreviousPerformancePercentage.text = "$roundedValue%"
         binding.tvPreviousPerformanceStatus.text = performance
+    }
+
+    private fun loadDifferenceFromGoal() {
+        firestore.collection("Settings").whereEqualTo("childID", childID).get().addOnSuccessListener {
+            if (!it.isEmpty) {
+                var literacyGoal =it.documents[0].toObject<SettingsModel>()?.literacyGoal
+                var lower = 0.00F
+                var upper = 0.00F
+                when (literacyGoal) {
+                    "Excellent" -> {
+                        lower = 90.0F
+                        upper = 100F
+                    }
+
+                    "Amazing" -> {
+                        lower = 80.0F
+                        upper = 89.99F
+                    }
+
+                    "Great" -> {
+                        lower = 70.0F
+                        upper = 79.9F
+                    }
+
+                    "Good" -> {
+                        lower = 60.0F
+                        upper = 69.9F
+                    }
+                }
+
+
+                if (isAdded) {
+                    if (finAssessmentPerformanceCurrentMonth > upper) {
+                        binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(finAssessmentPerformanceCurrentMonth - upper)}%"
+                        binding.tvGoalDiffStatus.text = "Above your target"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
+                    } else if (finAssessmentPerformanceCurrentMonth in lower..upper) {
+                        //binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(overallFinancialHealthCurrentMonth - upper)}%"
+                        binding.tvGoalDiffStatus.text = "Within Target"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
+                    } else if (finAssessmentPerformanceCurrentMonth < lower) {
+                        binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - finAssessmentPerformanceCurrentMonth)}%"
+                        binding.tvGoalDiffStatus.text = "Below your target"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+                    }
+                }
+            }
+        }
     }
 
 

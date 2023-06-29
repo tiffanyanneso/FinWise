@@ -29,6 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardPersonalFinanceBinding
 import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
+import ph.edu.dlsu.finwise.model.SettingsModel
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.parentFinancialManagementModule.ParentFinancialManagementActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.PersonalFinancialManagementActivity
@@ -486,6 +487,7 @@ class DashboardPersonalFinanceFragment : Fragment() {
 
         mediaPlayer = MediaPlayer.create(context, audio)
         loadOverallAudio()
+        loadDifferenceFromGoal()
         loadPreviousMonth()
         loadButton()
     }
@@ -521,12 +523,62 @@ class DashboardPersonalFinanceFragment : Fragment() {
         }
 
 
-        binding.tvPreviousPerformancePercentage.setTextColor(ContextCompat.getColor(context,
-            R.color.dark_grey))
+        binding.tvPreviousPerformancePercentage.setTextColor(ContextCompat.getColor(context, R.color.dark_grey))
         binding.ivPreviousMonthImg.setImageBitmap(bitmap)
         val roundedValue = String.format("%.1f", difference)
         binding.tvPreviousPerformancePercentage.text = "$roundedValue%"
         binding.tvPreviousPerformanceStatus.text = performance
+    }
+
+    private fun loadDifferenceFromGoal() {
+        firestore.collection("Settings").whereEqualTo("childID", childID).get().addOnSuccessListener {
+            if (!it.isEmpty) {
+                var literacyGoal =it.documents[0].toObject<SettingsModel>()?.literacyGoal
+                var lower = 0.00F
+                var upper = 0.00F
+                when (literacyGoal) {
+                    "Excellent" -> {
+                        lower = 90.0F
+                        upper = 100F
+                    }
+
+                    "Amazing" -> {
+                        lower = 80.0F
+                        upper = 89.99F
+                    }
+
+                    "Great" -> {
+                        lower = 70.0F
+                        upper = 79.9F
+                    }
+
+                    "Good" -> {
+                        lower = 60.0F
+                        upper = 69.9F
+                    }
+                }
+
+
+                if (isAdded) {
+                    if (pfmScoreCurrentMonth > upper) {
+                        binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(pfmScoreCurrentMonth - upper)}%"
+                        binding.tvGoalDiffStatus.text = "Above your target"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
+                    } else if (pfmScoreCurrentMonth in lower..upper) {
+                        //binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(overallFinancialHealthCurrentMonth - upper)}%"
+                        binding.tvGoalDiffStatus.text = "Within Target"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
+                    } else if (pfmScoreCurrentMonth < lower) {
+                        binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - pfmScoreCurrentMonth)}%"
+                        binding.tvGoalDiffStatus.text = "Below your target"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+                    }
+                }
+            }
+        }
     }
 
     private fun calculatePFMScore() {
