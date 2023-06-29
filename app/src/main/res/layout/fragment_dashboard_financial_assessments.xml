@@ -35,8 +35,8 @@
             android:id="@+id/cv_overall_score"
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp"
-            android:visibility="gone"
             android:layout_gravity="center_horizontal"
+            android:visibility="gone"
             >
 
             <LinearLayout
@@ -111,6 +111,7 @@
                         android:backgroundTint="@color/white">
 
                         <LinearLayout
+                            android:id="@+id/layout_financial_assessment_score"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
@@ -147,6 +148,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/layout_goal_difference"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
@@ -185,6 +187,7 @@
 
                     </LinearLayout>
                         <LinearLayout
+                            android:id="@+id/layout_monthly_increase"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">

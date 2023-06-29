@@ -1,6 +1,7 @@
 package ph.edu.dlsu.finwise.childDashboardModule.fragments
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -32,6 +33,10 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
+import ph.edu.dlsu.finwise.databinding.DialogDashboardFinancialActivitiesBinding
+import ph.edu.dlsu.finwise.databinding.DialogDashboardFinancialAssessmentsBinding
+import ph.edu.dlsu.finwise.databinding.DialogDashboardGoalDifferenceBinding
+import ph.edu.dlsu.finwise.databinding.DialogDashboardMonthlyComparisonBinding
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardFinancialAssessmentsBinding
 import ph.edu.dlsu.finwise.financialAssessmentModule.FinancialAssessmentLandingPageActivity
 import ph.edu.dlsu.finwise.model.FinancialAssessmentAttempts
@@ -103,6 +108,42 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         binding.title.text = "Financial Assessment Performance"
         getArgumentsBundle()
         getFinancialAssessmentScore()
+
+        binding.layoutFinancialAssessmentScore.setOnClickListener {
+            var dialogBinding= DialogDashboardFinancialAssessmentsBinding.inflate(getLayoutInflater())
+            var dialog= Dialog(requireContext());
+            dialog.setContentView(dialogBinding.getRoot())
+            dialog.window!!.setLayout(1000, 900)
+            dialog.show()
+
+            dialogBinding.btnGotIt.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+
+        binding.layoutGoalDifference.setOnClickListener {
+            var dialogBinding= DialogDashboardGoalDifferenceBinding.inflate(getLayoutInflater())
+            var dialog= Dialog(requireContext());
+            dialog.setContentView(dialogBinding.getRoot())
+            dialog.window!!.setLayout(1000, 900)
+            dialog.show()
+
+            dialogBinding.btnGotIt.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+
+        binding.layoutMonthlyIncrease.setOnClickListener {
+            var dialogBinding= DialogDashboardMonthlyComparisonBinding.inflate(getLayoutInflater())
+            var dialog= Dialog(requireContext());
+            dialog.setContentView(dialogBinding.getRoot())
+            dialog.window!!.setLayout(1000, 900)
+            dialog.show()
+
+            dialogBinding.btnGotIt.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
     }
 
     private fun getArgumentsBundle() {
@@ -332,8 +373,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             else
                 R.raw.dashboard_financial_assessments_good
 
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
-                R.color.light_green))
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.light_green))
             performance = "Good!"
             message = if (userType == "Parent")
                 "Your child is demonstrating a solid understanding of financial concepts. Support them in applying this in real life!"
@@ -464,20 +504,17 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         if (finAssessmentPerformanceCurrentMonth > finAssessmentPerformancePreviousMonth) {
             difference = finAssessmentPerformanceCurrentMonth - finAssessmentPerformancePreviousMonth
             performance = "Month's Increase"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
-                R.color.dark_green))
+            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.dark_green))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.up_arrow)
         } else if (finAssessmentPerformanceCurrentMonth < finAssessmentPerformancePreviousMonth) {
             difference = finAssessmentPerformancePreviousMonth - finAssessmentPerformanceCurrentMonth
             performance = "Month's Decrease"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
-                R.color.red))
+            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.red))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.down_arrow)
         } else {
             difference = 0.0F
             performance = "No Increase"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
-                R.color.yellow))
+            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.yellow))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon_equal)
         }
         val decimalFormat = DecimalFormat("#.#")

@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.childDashboardModule
 
+import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaPlayer
@@ -31,6 +32,9 @@ import ph.edu.dlsu.finwise.childDashboardModule.fragments.DashboardFinancialActi
 import ph.edu.dlsu.finwise.childDashboardModule.fragments.DashboardFinancialAssessmentsFragment
 import ph.edu.dlsu.finwise.childDashboardModule.fragments.DashboardPersonalFinanceFragment
 import ph.edu.dlsu.finwise.databinding.ActivityChildDashboardBinding
+import ph.edu.dlsu.finwise.databinding.DialogDashboardFinancialHealthScoreBinding
+import ph.edu.dlsu.finwise.databinding.DialogDashboardGoalDifferenceBinding
+import ph.edu.dlsu.finwise.databinding.DialogDashboardMonthlyComparisonBinding
 import ph.edu.dlsu.finwise.financialActivitiesModule.FinancialActivity
 import ph.edu.dlsu.finwise.financialActivitiesModule.childActivitiesFragment.*
 import ph.edu.dlsu.finwise.model.*
@@ -138,6 +142,42 @@ class ChildDashboardActivity : AppCompatActivity(){
             getFinactActPerformance()
             getFinancialAssessmentScore()*/
             getOverallFinancialHealth()
+        }
+
+        binding.layoutFinancialHealthScore.setOnClickListener {
+            var dialogBinding= DialogDashboardFinancialHealthScoreBinding.inflate(getLayoutInflater())
+            var dialog= Dialog(this);
+            dialog.setContentView(dialogBinding.getRoot())
+            dialog.window!!.setLayout(1000, 900)
+            dialog.show()
+
+            dialogBinding.btnGotIt.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+
+        binding.layoutGoalDifference.setOnClickListener {
+            var dialogBinding= DialogDashboardGoalDifferenceBinding.inflate(getLayoutInflater())
+            var dialog= Dialog(this);
+            dialog.setContentView(dialogBinding.getRoot())
+            dialog.window!!.setLayout(1000, 1000)
+            dialog.show()
+
+            dialogBinding.btnGotIt.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+
+        binding.layoutMonthlyIncrease.setOnClickListener {
+            var dialogBinding= DialogDashboardMonthlyComparisonBinding.inflate(getLayoutInflater())
+            var dialog= Dialog(this);
+            dialog.setContentView(dialogBinding.getRoot())
+            dialog.window!!.setLayout(1000, 900)
+            dialog.show()
+
+            dialogBinding.btnGotIt.setOnClickListener {
+                dialog.dismiss()
+            }
         }
     }
 

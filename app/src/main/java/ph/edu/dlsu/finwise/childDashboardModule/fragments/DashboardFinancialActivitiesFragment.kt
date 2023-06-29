@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.childDashboardModule.fragments
 
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -32,6 +33,10 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
+import ph.edu.dlsu.finwise.databinding.DialogDashboardFinancialActivitiesBinding
+import ph.edu.dlsu.finwise.databinding.DialogDashboardFinancialHealthScoreBinding
+import ph.edu.dlsu.finwise.databinding.DialogDashboardGoalDifferenceBinding
+import ph.edu.dlsu.finwise.databinding.DialogDashboardMonthlyComparisonBinding
 import ph.edu.dlsu.finwise.databinding.FragmentDashboardFinancialActivitiesBinding
 import ph.edu.dlsu.finwise.model.*
 import ph.edu.dlsu.finwise.parentFinancialManagementModule.ParentFinancialManagementActivity
@@ -146,6 +151,42 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         binding = FragmentDashboardFinancialActivitiesBinding.bind(view)
         getArgumentsBundle()
         initializeBalanceLineGraph()
+
+        binding.layoutFinactScore.setOnClickListener {
+            var dialogBinding= DialogDashboardFinancialActivitiesBinding.inflate(getLayoutInflater())
+            var dialog= Dialog(requireContext());
+            dialog.setContentView(dialogBinding.getRoot())
+            dialog.window!!.setLayout(1000, 900)
+            dialog.show()
+
+            dialogBinding.btnGotIt.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+
+        binding.layoutGoalDifference.setOnClickListener {
+            var dialogBinding= DialogDashboardGoalDifferenceBinding.inflate(getLayoutInflater())
+            var dialog= Dialog(requireContext());
+            dialog.setContentView(dialogBinding.getRoot())
+            dialog.window!!.setLayout(1000, 1000)
+            dialog.show()
+
+            dialogBinding.btnGotIt.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+
+        binding.layoutMonthlyIncrease.setOnClickListener {
+            var dialogBinding= DialogDashboardMonthlyComparisonBinding.inflate(getLayoutInflater())
+            var dialog= Dialog(requireContext());
+            dialog.setContentView(dialogBinding.getRoot())
+            dialog.window!!.setLayout(1000, 900)
+            dialog.show()
+
+            dialogBinding.btnGotIt.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
     }
 
 
@@ -1480,19 +1521,19 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         if (finActPerformanceCurrentMonth > finActPerformancePreviousMonth) {
             difference = finActPerformanceCurrentMonth - finActPerformancePreviousMonth
             performance = "Month's Increase"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
                 R.color.dark_green))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.up_arrow)
         } else if (finActPerformanceCurrentMonth < finActPerformancePreviousMonth) {
             difference = finActPerformancePreviousMonth - finActPerformanceCurrentMonth
             performance = "Month's Decrease"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
                 R.color.red))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.down_arrow)
         } else {
             difference = 0.0F
             performance = "No Increase"
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
+            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
                 R.color.yellow))
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon_equal)
         }

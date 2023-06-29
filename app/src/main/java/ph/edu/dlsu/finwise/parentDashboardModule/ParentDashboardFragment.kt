@@ -1,5 +1,6 @@
 package ph.edu.dlsu.finwise.parentDashboardModule
 
+import android.app.Dialog
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +22,8 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
+import ph.edu.dlsu.finwise.databinding.DialogDashboardFinancialHealthScoreBinding
+import ph.edu.dlsu.finwise.databinding.DialogDashboardGoalDifferenceBinding
 import ph.edu.dlsu.finwise.databinding.FragmentParentDashboardBinding
 import ph.edu.dlsu.finwise.model.*
 import java.text.DecimalFormat
@@ -111,6 +114,30 @@ class ParentDashboardFragment : Fragment() {
             if (isAdded) {
                 getOverallFinancialHealth()
                 loadDifferenceFromGoal()
+            }
+        }
+
+        binding.layoutFinancialHealthScore.setOnClickListener {
+            var dialogBinding= DialogDashboardFinancialHealthScoreBinding.inflate(getLayoutInflater())
+            var dialog= Dialog(requireContext());
+            dialog.setContentView(dialogBinding.getRoot())
+            dialog.window!!.setLayout(1000, 900)
+            dialog.show()
+
+            dialogBinding.btnGotIt.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+
+        binding.layoutGoalDifference.setOnClickListener {
+            var dialogBinding= DialogDashboardGoalDifferenceBinding.inflate(getLayoutInflater())
+            var dialog= Dialog(requireContext());
+            dialog.setContentView(dialogBinding.getRoot())
+            dialog.window!!.setLayout(1000, 1000)
+            dialog.show()
+
+            dialogBinding.btnGotIt.setOnClickListener {
+                dialog.dismiss()
             }
         }
     }
