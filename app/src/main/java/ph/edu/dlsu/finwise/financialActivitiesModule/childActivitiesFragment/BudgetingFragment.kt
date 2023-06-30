@@ -17,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.FinactBudgetingAdapter
 import ph.edu.dlsu.finwise.databinding.DialogBudgetingReviewBinding
@@ -141,39 +142,31 @@ class BudgetingFragment : Fragment() {
         }
     }
 
-    private fun getOverallBudgeting() {
-        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
-            if (!results.isEmpty) {
-                for (activity in results) {
-                    firestore.collection("BudgetItems")
-                        .whereEqualTo("financialActivityID", activity.id)
-                        .whereEqualTo("status", "Active").get()
-                        .addOnSuccessListener { budgetItems ->
-                            println("print number of budget items" + budgetItems.size())
-                            for (budgetItem in budgetItems) {
-                                budgetItemCount++
-                                var budgetItemObject = budgetItem.toObject<BudgetItem>()
+    private suspend fun getOverallBudgeting() {
+        var budgetingActivities = firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().await()
+        if (!budgetingActivities.isEmpty) {
+            for (activity in budgetingActivities) {
+                var budgetItems = firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).whereEqualTo("status", "Active").get().await()
+                println("print number of budget items" + budgetItems.size())
+                for (budgetItem in budgetItems) {
+                    budgetItemCount++
+                    var budgetItemObject = budgetItem.toObject<BudgetItem>()
 
-                                //parental involvement
-                                firestore.collection("Users")
-                                    .document(budgetItemObject.createdBy.toString()).get()
-                                    .addOnSuccessListener { user ->
-                                        //parent is the one who added the budget item
-                                        if (user.toObject<Users>()!!.userType == "Parent")
-                                            nParent++
-                                    }.continueWith {
-                                    getBudgetAccuracy(activity.id, budgetItem.id, budgetItemObject)
-                                }
-                            }
-                        }
+                    //parental involvement
+                    var user = firestore.collection("Users").document(budgetItemObject.createdBy.toString()).get().await().toObject<Users>()!!
+                    //parent is the one who added the budget item
+                    if (user.userType == "Parent")
+                        nParent++
+
+                    getBudgetAccuracy(activity.id, budgetItem.id, budgetItemObject)
                 }
-            } else {
-                binding.imgFace.setImageResource(R.drawable.peso_coin)
-                binding.tvPerformancePercentage.text = "Get\nStarted!"
-                binding.tvPerformanceText.text = "Complete budgeting activities to see your performance!"
-                binding.layoutLoading.visibility = View.GONE
-                binding.mainLayout.visibility = View.VISIBLE
             }
+        } else {
+            binding.imgFace.setImageResource(R.drawable.peso_coin)
+            binding.tvPerformancePercentage.text = "Get\nStarted!"
+            binding.tvPerformanceText.text = "Complete budgeting activities to see your performance!"
+            binding.layoutLoading.visibility = View.GONE
+            binding.mainLayout.visibility = View.VISIBLE
         }
     }
 

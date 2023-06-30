@@ -149,9 +149,14 @@ class ActivitySelectBudgetItemTemplate : AppCompatActivity() {
                 commonText += "${budgetItem} : ₱ ${DecimalFormat("#,##0.00").format(budgetAmount/budgetItems.size())} \n"
         }
 
+        if (commonText.isEmpty())
+            binding.layoutCommonBudgetItems.visibility = View.GONE
+
         binding.tvCommonBudgetItemsKids.text = commonText
         binding.mainLayout.visibility = View.VISIBLE
         binding.layoutLoading.visibility = View.GONE
+
+
     }
 
 

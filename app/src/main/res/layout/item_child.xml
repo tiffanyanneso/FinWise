@@ -38,11 +38,13 @@
                 android:text="@string/username"/>
 
             <ImageView
+                android:id="@+id/img_warning"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:src="@drawable/baseline_gpp_maybe_24"
                 card_view:tint="@color/red"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tv_score"
