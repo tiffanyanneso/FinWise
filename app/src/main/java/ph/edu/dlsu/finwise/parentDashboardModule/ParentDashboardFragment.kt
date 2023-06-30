@@ -209,44 +209,10 @@ class ParentDashboardFragment : Fragment() {
             if (isAdded) {
                 loadDifferenceFromGoal()
                 setPerformanceView()
-
             }
         } else {
-            binding.imgFace.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.peso_coin))
-            binding.tvFinancialHealthScore.visibility = View.GONE
-            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-            binding.tvPerformanceStatus.text = "Get Started"
-            binding.ivGoalDiffImg.visibility = View.GONE
-            var settings = firestore.collection("Settings").whereEqualTo("childID", childID).get().await()
-            if (!settings.isEmpty) {
-                var literacyGoal = settings.documents[0].toObject<SettingsModel>()?.literacyGoal
-                var lower = 0.00F
-                var upper = 0.00F
-                when (literacyGoal) {
-                    "Excellent" -> {
-                        lower = 90.0F
-                        upper = 100F
-                    }
-
-                    "Amazing" -> {
-                        lower = 80.0F
-                        upper = 89.99F
-                    }
-
-                    "Great" -> {
-                        lower = 70.0F
-                        upper = 79.9F
-                    }
-
-                    "Good" -> {
-                        lower = 60.0F
-                        upper = 69.9F
-                    }
-                }
-                binding.tvGoalDiffPercentage.text = "${lower} -  ${upper}"
-            }
-            binding.tvGoalDiffStatus.text = "Target Score"
-            binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+            if (isAdded)
+                noScoreLayout()
         }
     }
 
@@ -355,6 +321,49 @@ class ParentDashboardFragment : Fragment() {
             binding.tvPerformanceText.text = "Your child is starting their financial journey! Encourage them to keep exploring financial decision-making!"
         }
 
+        binding.layoutLoading.visibility = View.GONE
+        binding.mainLayout.visibility = View.VISIBLE
+    }
+
+    private suspend fun noScoreLayout() {
+        binding.imgFace.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.peso_coin))
+        binding.tvFinancialHealthScore.visibility = View.GONE
+        binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        binding.tvPerformanceStatus.text = "Get\nStarted"
+        var settings = firestore.collection("Settings").whereEqualTo("childID", childID).get().await()
+        if (!settings.isEmpty) {
+            var literacyGoal = settings.documents[0].toObject<SettingsModel>()?.literacyGoal
+            var lower = 0.00F
+            var upper = 0.00F
+            when (literacyGoal) {
+                "Excellent" -> {
+                    lower = 90.0F
+                    upper = 100F
+                }
+
+                "Amazing" -> {
+                    lower = 80.0F
+                    upper = 89.99F
+                }
+
+                "Great" -> {
+                    lower = 70.0F
+                    upper = 79.9F
+                }
+
+                "Good" -> {
+                    lower = 60.0F
+                    upper = 69.9F
+                }
+            }
+            binding.tvGoalDiffPercentage.text = "${lower} -  ${upper}"
+        }
+        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.goal))
+        binding.tvGoalDiffStatus.text = "Target Score"
+        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        binding.tvPersonalFinancePercentage.text = "0.0%"
+        binding.tvFinancialActivitiesPercentage.text = "0.0%"
+        binding.tvFinancialAssessmentsPercentage.text = "0.0%"
         binding.layoutLoading.visibility = View.GONE
         binding.mainLayout.visibility = View.VISIBLE
     }
