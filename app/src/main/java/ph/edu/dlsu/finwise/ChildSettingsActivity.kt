@@ -50,7 +50,7 @@ class ChildSettingsActivity : AppCompatActivity() {
 //        var pfmScore = binding.radioButtonsPfm.findViewById<RadioButton>(binding.radioButtonsPfm.checkedRadioButtonId).text.toString()
 //        var finactScore = binding.radioButtonsFinact.findViewById<RadioButton>(binding.radioButtonsFinact.checkedRadioButtonId).text.toString()
 //        var assessmentScore = binding.radioButtonsAssessments.findViewById<RadioButton>(binding.radioButtonsAssessments.checkedRadioButtonId).text.toString()
-        var literacyScore = binding.radioButtonsOverall.findViewById<RadioButton>(binding.radioButtonsOverall.checkedRadioButtonId).text.toString()
+        var literacyScore = binding.radioButtonsOverall.findViewById<RadioButton>(binding.radioButtonsOverall.checkedRadioButtonId).tag.toString()
 
         firestore.collection("Settings").document(settingsID).update("literacyGoal", literacyScore).addOnSuccessListener {
             Toast.makeText(this, "Settings successfully updated", Toast.LENGTH_SHORT).show()

@@ -62,7 +62,7 @@ class ParentSettingsActivity : AppCompatActivity() {
     private fun saveSettings() {
         var maxAmount = binding.etMaxAmount.text.toString()
         var alertAmount =  binding.etAlertAmount.text.toString()
-        var literacyScore = binding.radioButtonsOverall.findViewById<RadioButton>(binding.radioButtonsOverall.checkedRadioButtonId).text.toString()
+        var literacyScore = binding.radioButtonsOverall.findViewById<RadioButton>(binding.radioButtonsOverall.checkedRadioButtonId).tag.toString()
 
 //        var pfmScore = binding.radioButtonsPfm.findViewById<RadioButton>(binding.radioButtonsPfm.checkedRadioButtonId).text.toString()
 //        var finactScore = binding.radioButtonsFinact.findViewById<RadioButton>(binding.radioButtonsFinact.checkedRadioButtonId).text.toString()
