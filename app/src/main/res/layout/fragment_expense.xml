@@ -218,6 +218,16 @@
                             android:textColor="@color/dark_green"
                             android:layout_gravity="center_horizontal"/>
 
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Try spending less on these items!"
+                            android:textStyle="bold"
+                            android:textColor="@color/teal_700"
+                            android:textSize="16sp"
+                            android:layout_margin="5dp"
+                            android:gravity="center" />
+
                         <androidx.cardview.widget.CardView
                             android:id="@+id/layout_top_category_1"
                             android:layout_width="match_parent"

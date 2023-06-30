@@ -248,7 +248,7 @@ class ParentDashboardFragment : Fragment() {
             if (isAdded) {
                 if (overallFinancialHealth > upper) {
                     binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(overallFinancialHealth - upper)}%"
-                    binding.tvGoalDiffStatus.text = "Above the target"
+                    binding.tvGoalDiffStatus.text = "Above Target"
                     binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
                     binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
                 } else if (overallFinancialHealth in lower..upper) {
@@ -258,7 +258,7 @@ class ParentDashboardFragment : Fragment() {
                     binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
                 } else if (overallFinancialHealth < lower) {
                     binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - overallFinancialHealth)}%"
-                    binding.tvGoalDiffStatus.text = "Below the target"
+                    binding.tvGoalDiffStatus.text = "Below Target"
                     binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
                     binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
                 }

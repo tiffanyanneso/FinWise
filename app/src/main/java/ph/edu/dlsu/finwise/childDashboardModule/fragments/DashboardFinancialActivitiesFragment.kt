@@ -1400,7 +1400,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 )
             )
             message = if (userType == "Parent")
-                "Your child is gaining a better understanding of financial activities. Encourage them to set continue to set SMART goals!"
+                "Your child is gaining a better understanding of financial activities. Encourage them to keep it up!"
             else "Keep practicing goal setting, saving, budgeting, and spending. Your dedication will pay off!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
         } else if (finActPerformanceCurrentMonth >= 26.0 && finActPerformanceCurrentMonth < 36.0) {
@@ -1417,7 +1417,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 )
             )
             message = if (userType == "Parent")
-                "Your child is taking steps towards financial literacy. Encourage them to keep performing financial activities!"
+                "Your child is taking steps towards financial literacy. Encourage them to keep it up!"
             else "Keep exploring ways to better set goals, save, budget, and spend. You’ll get there!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
         } else if (finActPerformanceCurrentMonth >= 16.0 && finActPerformanceCurrentMonth < 26.0) {
@@ -1434,7 +1434,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 )
             )
             message = if (userType == "Parent")
-                "Your child is beginning to get the hang of things. Help them out by allowing them to participate in household financial activities!"
+                "Your child is beginning to get the hang of things. Go to financial activities to see how you can help!"
             else "You are beginning to get the hang of things. Keep practicing by accomplishing financial activities!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
         } else if (finActPerformanceCurrentMonth < 16.0) {
@@ -1579,7 +1579,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 if (isAdded) {
                     if (finActPerformanceCurrentMonth > upper) {
                         binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(finActPerformanceCurrentMonth - upper)}%"
-                        binding.tvGoalDiffStatus.text = "Above your target"
+                        binding.tvGoalDiffStatus.text = "Above Target"
                         binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
                         binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
                     } else if (finActPerformanceCurrentMonth in lower..upper) {
@@ -1589,7 +1589,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                         binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
                     } else if (finActPerformanceCurrentMonth < lower) {
                         binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - finActPerformanceCurrentMonth)}%"
-                        binding.tvGoalDiffStatus.text = "Below your target"
+                        binding.tvGoalDiffStatus.text = "Below Target"
                         binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
                         binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
                     }

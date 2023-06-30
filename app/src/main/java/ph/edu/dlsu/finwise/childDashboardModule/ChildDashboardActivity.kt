@@ -663,7 +663,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.dark_green))
             message = if (userType == "Parent")
                 "Your child is a financial guru! Celebrate their accomplishments and encourage them to keep it up!"
-            else "You've demonstrated exceptional knowledge and skills in personal finance, financial activities, and financial assessments!"
+            else "You've demonstrated exceptional knowledge and skills in personal finance, activities, and assessments!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.excellent)
         } else if (overallFinancialHealthCurrentMonth >= 86.0 && overallFinancialHealthCurrentMonth < 96.0) {
             audio = if (userType == "Parent")
@@ -675,7 +675,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.amazing_green))
             message = if (userType == "Parent")
                 "Your child has a solid foundation in personal finance, financial activities, and concepts. Keep empowering them!"
-            else " You're a true financial whiz! Keep refining your skills, exploring financial concepts, and inspiring others with your expertise!"
+            else " You're a true financial whiz! Keep refining your skills, and inspiring others with your expertise!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.amazing)
         } else if (overallFinancialHealthCurrentMonth >= 76.0 && overallFinancialHealthCurrentMonth < 86.0) {
             audio = if (userType == "Parent")
@@ -687,7 +687,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.green))
             message = if (userType == "Parent")
                 "Your child has strong financial decision-making skills. Encourage them to keep this up!"
-            else "You have a strong grasp of finance concepts and know how to properly manage your money in day to day activities. Keep it up!"
+            else "You have a strong grasp of finance concepts and know how to manage your money. Keep it up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.great)
         } else if (overallFinancialHealthCurrentMonth >= 66.0 && overallFinancialHealthCurrentMonth < 76.0) {
             audio = if (userType == "Parent")
@@ -710,7 +710,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             performance = "Average"
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.yellow))
             message = if (userType == "Parent")
-                "Continue supporting your child in their development by having them participate in decision making activities at home!"
+                "Continue supporting your child by having them participate in decision making activities!"
             else "You're becoming a confident financial decision-maker. Keep doing financial activities & assessments to grow!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.average)
         } else if (overallFinancialHealthCurrentMonth >= 46.0 && overallFinancialHealthCurrentMonth < 56.0) {
@@ -723,7 +723,7 @@ class ChildDashboardActivity : AppCompatActivity(){
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.nearly_there_yellow))
 
             message = if (userType == "Parent")
-                "Your child is nearly there. Have them participate in decision making activities at home!"
+                "Your child is nearly there. Have them participate in decision making activities!!"
             else "You're making significant strides in your financial literacy journey. Keep making wise financial decisions!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.nearly_there)
         } else if (overallFinancialHealthCurrentMonth >= 36.0 && overallFinancialHealthCurrentMonth < 46.0) {
@@ -735,8 +735,8 @@ class ChildDashboardActivity : AppCompatActivity(){
             performance = "Almost\nThere"
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(this, R.color.almost_there_yellow))
             message = if (userType == "Parent")
-                "Your child is developing their financial decision-making. Have them participate in decision making activities at home!"
-            else "You're becoming a savvy money manager. Keep exploring financial activities and assessments to strengthen your skills!"
+                "Your child is developing their financial decision-making. Have them participate in decision making activities!"
+            else "You're becoming a savvy money manager. explore financial activities and assessments to strengthen your skills!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.almost_there)
         } else if (overallFinancialHealthCurrentMonth >= 26.0 && overallFinancialHealthCurrentMonth < 36.0) {
             audio = if (userType == "Parent")
@@ -864,7 +864,7 @@ class ChildDashboardActivity : AppCompatActivity(){
 
                 if (overallFinancialHealthCurrentMonth > upper) {
                     binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(overallFinancialHealthCurrentMonth - upper)}%"
-                    binding.tvGoalDiffStatus.text = "Above your target"
+                    binding.tvGoalDiffStatus.text = "Above Target"
                     binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(this, R.color.dark_green))
                     binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
                 }
@@ -875,7 +875,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                     binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
                 } else if (overallFinancialHealthCurrentMonth < lower) {
                     binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - overallFinancialHealthCurrentMonth)}%"
-                    binding.tvGoalDiffStatus.text = "Below your target"
+                    binding.tvGoalDiffStatus.text = "Below Target"
                     binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(this, R.color.red))
                     binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
                 }

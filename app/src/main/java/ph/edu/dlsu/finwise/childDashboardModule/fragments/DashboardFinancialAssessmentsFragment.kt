@@ -429,7 +429,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
                 R.color.getting_there_orange))
             message = if (userType == "Parent")
-                "Your child is on the path to great financial knowledge. Continue to guide them in making informed financial choices!"
+                "Your child is on the path to great financial knowledge. Encourage them to keep it up!"
             else "You're gaining a better understanding of financial concepts. Keep learning and practicing to improve even more!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.getting_there)
         } else if (financialAssessmentTotalPercentage >= 16.0 && financialAssessmentTotalPercentage < 26.0) {
@@ -442,7 +442,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
                 R.color.not_quite_there_red))
             message = if (userType == "Parent")
-                "Uh oh! Help expand your child's financial knowledge by encouraging them to perform financial activities!"
+                "Uh oh! Help expand your child's financial knowledge by checking out the concepts they can review!"
             else "Keep exploring and learning about financial concepts! Don't give up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
         } else if (financialAssessmentTotalPercentage < 16.0) {
@@ -455,7 +455,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context,
                 R.color.red))
             message = if (userType == "Parent")
-                "Your child needs support developing their financial knowledge. Encourage them to continue performing financial activities!"
+                "Your child needs support developing their financial knowledge. Check out the concepts they can review!"
             else "Keep exploring and learning about financial concepts! Don't give up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
         }
@@ -557,7 +557,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 if (isAdded) {
                     if (finAssessmentPerformanceCurrentMonth > upper) {
                         binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(finAssessmentPerformanceCurrentMonth - upper)}%"
-                        binding.tvGoalDiffStatus.text = "Above your target"
+                        binding.tvGoalDiffStatus.text = "Above Target"
                         binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
                         binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
                     } else if (finAssessmentPerformanceCurrentMonth in lower..upper) {
@@ -567,7 +567,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                         binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
                     } else if (finAssessmentPerformanceCurrentMonth < lower) {
                         binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - finAssessmentPerformanceCurrentMonth)}%"
-                        binding.tvGoalDiffStatus.text = "Below your target"
+                        binding.tvGoalDiffStatus.text = "Below Target"
                         binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
                         binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
                     }
