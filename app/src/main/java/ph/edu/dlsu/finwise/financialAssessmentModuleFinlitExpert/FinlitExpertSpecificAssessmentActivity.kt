@@ -22,6 +22,8 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFinancialAssessmentFinlitExpertSpecificAssessmentBinding
     private lateinit var assessmentID:String
+    private lateinit var assessmentCategory: String // Add this line
+    private lateinit var assessmentType: String // Add this line
 
     private val tabIcons = intArrayOf(
         ph.edu.dlsu.finwise.R.drawable.baseline_list_24,
@@ -34,9 +36,9 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         var bundle = intent.extras!!
-         assessmentID = bundle.getString("assessmentID").toString()
-        var assessmentCategory = bundle.getString("assessmentCategory")
-        var assessmentType = bundle.getString("assessmentType")
+        assessmentID = bundle.getString("assessmentID").toString()
+        assessmentCategory = bundle.getString("assessmentCategory").toString() // Initialize assessmentCategory
+        assessmentType = bundle.getString("assessmentType").toString() // Initialize assessmentType
         binding.tvAssessmentName.text = "$assessmentCategory - $assessmentType"
 
 
@@ -93,6 +95,8 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
            val goToFinlitExpertEditAssessmentActivity = Intent(applicationContext, FinlitExpertEditAssessmentActivity::class.java)
            var bundle = Bundle()
            bundle.putString("assessmentID", assessmentID)
+           bundle.putString("assessmentCategory", assessmentCategory)
+           bundle.putString("assessmentType", assessmentType)
            goToFinlitExpertEditAssessmentActivity.putExtras(bundle)
            startActivity(goToFinlitExpertEditAssessmentActivity)
         }
@@ -103,6 +107,13 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
             onBackPressed()
         }
     }
+/*    override fun onBackPressed() {
+        val specificAssessment = Intent(applicationContext, FinlitExpertAssessmentTypeActivity::class.java)
+        var sendBundle = Bundle()
+        sendBundle.putString("assessmentID", assessmentID)
+        specificAssessment.putExtras(sendBundle)
+        startActivity(specificAssessment)
+    }*/
 
 }
 

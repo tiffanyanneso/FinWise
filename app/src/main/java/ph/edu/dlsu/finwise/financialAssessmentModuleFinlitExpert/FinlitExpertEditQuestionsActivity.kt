@@ -83,7 +83,7 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
             var sendBundle = Bundle()
             sendBundle.putString("assessmentID", assessmentID)
             editAssessment.putExtras(sendBundle)
-            startActivity(editAssessment)
+            this.startActivity(editAssessment)
         }
     }
 
@@ -177,6 +177,7 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
             sendBundle.putString("assessmentID", assessmentID)
             specificAssessment.putExtras(sendBundle)
             startActivity(specificAssessment)
+            //finish()
         }
     }
     private fun loadBackButton() {
@@ -192,5 +193,6 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
         sendBundle.putString("assessmentID", assessmentID)
         specificAssessment.putExtras(sendBundle)
         startActivity(specificAssessment)
+        //finish()
     }
 }

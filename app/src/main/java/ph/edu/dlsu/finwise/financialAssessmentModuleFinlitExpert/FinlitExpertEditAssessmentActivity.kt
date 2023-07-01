@@ -27,6 +27,8 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
     private var questionStatusArrayList = ArrayList<QuestionStatus>()
 
     private lateinit var assessmentID:String
+    private lateinit var assessmentCategory: String // Add this line
+    private lateinit var assessmentType: String // Add this line
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialAssessmentFinlitExpertEditAssessmentBinding.inflate(layoutInflater)
@@ -34,6 +36,8 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         assessmentID = bundle.getString("assessmentID").toString()
+       assessmentCategory = bundle.getString("assessmentCategory").toString() // Initialize assessmentCategory
+        assessmentType = bundle.getString("assessmentType").toString() // Initialize assessmentType
 
         loadAssessmentDetails()
         loadQuestions()
@@ -112,27 +116,42 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
 
     private fun goToFinlitExpertSpecificAssessment() {
         binding.btnCancel.setOnClickListener() {
-            val specificAssessment = Intent(applicationContext, FinlitExpertSpecificAssessmentActivity::class.java)
+            val goToFinlitExpertSpecificAssessmentActivity = Intent(applicationContext, FinlitExpertSpecificAssessmentActivity::class.java)
             var sendBundle = Bundle()
             sendBundle.putString("assessmentID", assessmentID)
-            specificAssessment.putExtras(sendBundle)
-            startActivity(specificAssessment)
-            finish()
+            sendBundle.putString("assessmentCategory", assessmentCategory)
+            sendBundle.putString("assessmentType", assessmentType)
+            goToFinlitExpertSpecificAssessmentActivity.putExtras(sendBundle)
+            startActivity(goToFinlitExpertSpecificAssessmentActivity)
         }
     }
     private fun loadBackButton() {
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(
+            resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24,
+            null)
         binding.topAppBar.setNavigationOnClickListener {
-            onBackPressed()
+            FinlitExpertSpecificAssessmentActivity() // Navigate back to FinlitExpertAssessmentTypeActivity
         }
     }
 
-    override fun onBackPressed() {
-        val intent = Intent(this, FinlitExpertSpecificAssessmentActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        startActivity(intent)
-        finish()
+    private fun FinlitExpertSpecificAssessmentActivity(){
+        val specificAssessment = Intent(applicationContext, FinlitExpertSpecificAssessmentActivity::class.java)
+        var sendBundle = Bundle()
+        sendBundle.putString("assessmentID", assessmentID)
+        sendBundle.putString("assessmentCategory", assessmentCategory)
+        sendBundle.putString("assessmentType", assessmentType)
+        specificAssessment.putExtras(sendBundle)
+        startActivity(specificAssessment)
+        finish() // Add this line to finish the current activity
     }
+
+ /*   override fun onBackPressed() {
+        val specificAssessment = Intent(applicationContext, FinlitExpertSpecificAssessmentActivity::class.java)
+        var sendBundle = Bundle()
+        sendBundle.putString("assessmentID", assessmentID)
+        specificAssessment.putExtras(sendBundle)
+        startActivity(specificAssessment)
+    }*/
 
 
     class QuestionStatus (var questionID:String, var question:String, var difficulty:String, var isActive:Boolean) {}
