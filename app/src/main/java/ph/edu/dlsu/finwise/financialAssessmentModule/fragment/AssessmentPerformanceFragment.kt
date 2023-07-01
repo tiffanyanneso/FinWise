@@ -302,6 +302,8 @@ class AssessmentPerformanceFragment : Fragment() {
     private fun setTextPerformanceChild(percentage: Double) {
         //TODO: Change audio
         var audio = 0
+        binding.layoutConceptPerformance.visibility = View.VISIBLE
+
         if (percentage >= 90) {
             audio = R.raw.assessment_performance_excellent
             binding.ivScore.setImageResource(R.drawable.excellent)
@@ -422,23 +424,18 @@ class AssessmentPerformanceFragment : Fragment() {
     }
 
     private fun setEmptyAssessmentText() {
-        binding.btnAudio.setImageResource(R.drawable.bad)
         binding.textViewProgress.visibility = View.GONE
 
-        binding.textViewPerformanceText.text = "Bad"
-        binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.red))
+        binding.textViewPerformanceText.text = "No Results Yet"
+        binding.ivScore.setImageResource(R.drawable.peso_coin)
+        binding.textViewPerformanceText.setTextColor(resources.getColor(R.color.black))
         val message = if (user == "Child")
             "You haven't taken any assessments yet!"
         else "Your child hasn't taken any assessments yet!"
         binding.tvPerformanceText.text = message
-
-        binding.tvTopPerformingConcept.text = "N/A"
-
-        binding.tvConcept2nd.text = "N/A"
-
-        binding.tvConcept3rd.text = "N/A"
-
-        binding.tvConcept4th.text = "N/A"
+        binding.layoutConceptPerformance.visibility = View.GONE
+        binding.layoutLoading.visibility = View.GONE
+        binding.layoutMain.visibility = View.VISIBLE
     }
 
 

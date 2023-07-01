@@ -445,7 +445,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 "Uh oh! Help expand your child's financial knowledge by checking out the concepts they can review!"
             else "Keep exploring and learning about financial concepts! Don't give up!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
-        } else if (financialAssessmentTotalPercentage < 16.0) {
+        } else if (financialAssessmentTotalPercentage < 16.0 && financialAssessmentTotalPercentage > 0.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_assessments_needs_improvement
             else
@@ -497,32 +497,30 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
         }
         val context = requireContext()
 
-        val performance: String
-        val bitmap: Bitmap
         val difference: Float
 
         if (finAssessmentPerformanceCurrentMonth > finAssessmentPerformancePreviousMonth) {
             difference = finAssessmentPerformanceCurrentMonth - finAssessmentPerformancePreviousMonth
-            performance = "Increase from Last Month"
 //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.dark_green))
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.up_arrow)
+            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
+            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+            binding.tvPreviousPerformanceStatus.text = "Increase from Last Month"
         } else if (finAssessmentPerformanceCurrentMonth < finAssessmentPerformancePreviousMonth) {
             difference = finAssessmentPerformancePreviousMonth - finAssessmentPerformanceCurrentMonth
-            performance = "Decrease from Last Month"
 //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.red))
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.down_arrow)
-        } else {
-            difference = 0.0F
-            performance = "No Increase from Last Month"
-//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.yellow))
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon_equal)
-        }
-        val decimalFormat = DecimalFormat("#.#")
-        val roundedValue = decimalFormat.format(difference)
 
-        binding.ivPreviousMonthImg.setImageBitmap(bitmap)
-        binding.tvPreviousPerformancePercentage.text = "$roundedValue%"
-        binding.tvPreviousPerformanceStatus.text = performance
+            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+            binding.tvPreviousPerformanceStatus.text = "Decrease from Last Month"
+        } else if (finAssessmentPerformanceCurrentMonth == finAssessmentPerformancePreviousMonth && finAssessmentPerformanceCurrentMonth > 0){
+            difference = 0.0F
+//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.yellow))
+
+            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
+            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+            binding.tvPreviousPerformanceStatus.text = "No Increase from Last Month"
+        } else
+            binding.layoutMonthlyIncrease.visibility = View.GONE
     }
 
     private fun loadDifferenceFromGoal() {
@@ -566,10 +564,18 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                         binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
                         binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
                     } else if (finAssessmentPerformanceCurrentMonth < lower) {
-                        binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - finAssessmentPerformanceCurrentMonth)}%"
-                        binding.tvGoalDiffStatus.text = "Below Target"
-                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+                        if (finAssessmentPerformanceCurrentMonth > 0.0) {
+                            binding.tvGoalDiffPercentage.text =
+                                "${DecimalFormat("##0.0").format(lower - finAssessmentPerformanceCurrentMonth)}%"
+                            binding.tvGoalDiffStatus.text = "Below Target"
+                            binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                            binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+                        } else {
+                            binding.tvGoalDiffPercentage.text = "${lower} -  ${upper}"
+                            binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.goal))
+                            binding.tvGoalDiffStatus.text = "Target Score"
+                            binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                        }
                     }
                 }
             }

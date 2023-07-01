@@ -762,7 +762,7 @@ class ChildDashboardActivity : AppCompatActivity(){
                 "Your child is still developing their financial decision-making. Allow them to practice this skill at home!"
             else "You're developing your financial decision-making skills. Keep exercising financial decision making to improve!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
-        } else if (overallFinancialHealthCurrentMonth < 16.0) {
+        } else if (overallFinancialHealthCurrentMonth < 16.0 && overallFinancialHealthCurrentMonth > 0.0) {
             audio = if (userType == "Parent")
                 R.raw.child_dashboard_parent_needs_improement
             else
@@ -799,38 +799,30 @@ class ChildDashboardActivity : AppCompatActivity(){
 
 
     private fun loadPreviousMonth() {
-
-        val performance: String
-        val bitmap: Bitmap
         val difference: Float
 
+        if (pfmScoreCurrentMonth > pfmScorePreviousMonth) {
+            difference = pfmScoreCurrentMonth - pfmScorePreviousMonth
+//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.dark_green))
+            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
+            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+            binding.tvPreviousPerformanceStatus.text = "Increase from Last Month"
+        } else if (pfmScoreCurrentMonth < pfmScorePreviousMonth) {
+            difference = pfmScorePreviousMonth - pfmScoreCurrentMonth
+//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.red))
 
-
-        if (overallFinancialHealthCurrentMonth > overallFinancialHealthPreviousMonth) {
-            difference = overallFinancialHealthCurrentMonth - overallFinancialHealthPreviousMonth
-            performance = "Increase from Last Month"
-//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(this,
-//                R.color.dark_green))
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.up_arrow)
-        } else if (overallFinancialHealthCurrentMonth < overallFinancialHealthPreviousMonth) {
-            difference = overallFinancialHealthPreviousMonth - overallFinancialHealthCurrentMonth
-            performance = "Decrease from Last Month"
-//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(this,
-//                R.color.red))
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.down_arrow)
-        } else {
+            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+            binding.tvPreviousPerformanceStatus.text = "Decrease from Last Month"
+        } else if (pfmScoreCurrentMonth == pfmScorePreviousMonth && pfmScoreCurrentMonth > 0){
             difference = 0.0F
-            performance = "No Increase from Last Month"
-//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(this,
-//                R.color.yellow))
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon_equal)
-        }
-        val decimalFormat = DecimalFormat("#.#")
-        val roundedValue = decimalFormat.format(difference)
+//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.yellow))
 
-        binding.ivPreviousMonthImg.setImageBitmap(bitmap)
-        binding.tvPreviousPerformancePercentage.text = "$roundedValue%"
-        binding.tvPreviousPerformanceStatus.text = performance
+            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
+            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+            binding.tvPreviousPerformanceStatus.text = "No Increase from Last Month"
+        } else
+            binding.layoutMonthlyIncrease.visibility = View.GONE
     }
 
     private fun loadDifferenceFromGoal() {
@@ -874,10 +866,18 @@ class ChildDashboardActivity : AppCompatActivity(){
                     binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(this, R.color.yellow))
                     binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
                 } else if (overallFinancialHealthCurrentMonth < lower) {
-                    binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - overallFinancialHealthCurrentMonth)}%"
-                    binding.tvGoalDiffStatus.text = "Below Target"
-                    binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(this, R.color.red))
-                    binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+                    if (overallFinancialHealthCurrentMonth > 0.0) {
+                        binding.tvGoalDiffPercentage.text =
+                            "${DecimalFormat("##0.0").format(lower - overallFinancialHealthCurrentMonth)}%"
+                        binding.tvGoalDiffStatus.text = "Below Target"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(this, R.color.red))
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+                    } else {
+                        binding.tvGoalDiffPercentage.text = "${lower} -  ${upper}"
+                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.goal))
+                        binding.tvGoalDiffStatus.text = "Target Score"
+                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(this, R.color.black))
+                    }
                 }
             }
         }

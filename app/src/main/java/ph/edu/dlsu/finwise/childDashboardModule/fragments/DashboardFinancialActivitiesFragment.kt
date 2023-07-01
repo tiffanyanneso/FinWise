@@ -959,26 +959,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         }
     }
 
-    private suspend fun getOverspending(spending: FinancialActivities) {
-        nSpendingCompleted++
-        val financialActivityDocuments = firestore.collection("FinancialActivities")
-            .whereEqualTo("financialGoalID", spending.financialGoalID)
-            .whereEqualTo("financialActivityName", "Budgeting")
-            .whereEqualTo("status", "Completed").get().await()
-
-        val budgetingID = financialActivityDocuments.documents[0].id
-        val budgetItemsDocuments = firestore.collection("BudgetItems")
-            .whereEqualTo("financialActivityID", budgetingID)
-            .whereEqualTo("status", "Active").get().await()
-        nBudgetItems += budgetItemsDocuments.size()
-
-        for (budgetItem in budgetItemsDocuments) {
-            val budgetItemObject = budgetItem.toObject<BudgetItem>()
-            checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
-        }
-    }
-
-
     private suspend fun checkOverSpending(budgetItemID:String, budgetItemAmount:Float){
         Log.d("kelan", "budgetItemID: "+budgetItemID)
         Log.d("kelan", "budgetItemAmount: "+budgetItemAmount)
@@ -1123,25 +1103,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         }
     }
 
-    private suspend fun getPurchasePlanning(spendingActivity: QueryDocumentSnapshot) {
-        //items planned / all the items they bought * 100
-        val spendingObject = spendingActivity.toObject<FinancialActivities>()
-        if (spendingObject.status == "Completed") {
-            val shoppingListItemsDocuments = firestore.collection("ShoppingListItems")
-                .whereEqualTo("spendingActivityID", spendingActivity.id).get().await()
-            for (shoppingListItem in shoppingListItemsDocuments) {
-                val shoppingListItemObject = shoppingListItem.toObject<ShoppingListItem>()
-                if (shoppingListItemObject.status == "Purchased")
-                    nPlanned++
-            }
-            val transactionsDocuments = firestore.collection("Transactions")
-                .whereEqualTo("financialActivityID", spendingActivity.id)
-                .whereEqualTo("transactionType", "Expense").get().await()
-            nTotalPurchased += transactionsDocuments.size().toFloat()
-        }
-    }
-
-
     private suspend fun getBudgetingPerformanceScore(date: Date, activity: QueryDocumentSnapshot) {
         val budgetingObject = activity.toObject<FinancialActivities>()
         val weekDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
@@ -1152,13 +1113,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             processBudgetItems(activity)
         }
     }
-
-    private suspend fun getBudgetingPerformanceScore(activity: QueryDocumentSnapshot) {
-        nBudgetingCompleted++
-        processBudgetItems(activity)
-    }
-
-
 
     private suspend fun processBudgetItems(activity: QueryDocumentSnapshot) {
         val budgetItemsDocuments = firestore.collection("BudgetItems")
@@ -1230,13 +1184,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         }
     }
 
-    private fun getGoalSettingPerformance(goal: GoalRating) {
-        nGoalSettingCompleted++
-        nRatings++
-        overallRating += goal.overallRating!!
-    }
-
-
     private fun getSavingPerformance(date: Date, goal: FinancialGoals) {
         val weekDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
         val activityDate = goal.dateCompleted?.toDate()?.toInstant()?.atZone(ZoneId.systemDefault())?.toLocalDate()
@@ -1252,20 +1199,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             }
         }
     }
-
-    private fun getSavingPerformance(goal: FinancialGoals) {
-        nGoals++
-        if (goal.dateCompleted != null) {
-            val targetDate = goal.targetDate!!.toDate()
-            val completedDate = goal.dateCompleted!!.toDate()
-
-            //goal was completed before the target date, meaning it was completed on time
-            if (completedDate.before(targetDate) || completedDate == targetDate)
-                nOnTime++
-        }
-    }
-
-
 
     private fun setPerformanceView() {
         if (!isViewCreated || !isAdded) {
@@ -1283,7 +1216,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         var audio = 0
 
         computeFinActivitiesPerformance()
-
+        binding.tvPerformancePercentage.visibility = View.VISIBLE
         if (finActPerformanceCurrentMonth >= 96F) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_excellent
@@ -1437,7 +1370,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 "Your child is beginning to get the hang of things. Go to financial activities to see how you can help!"
             else "You are beginning to get the hang of things. Keep practicing by accomplishing financial activities!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.not_quite_there_yet)
-        } else if (finActPerformanceCurrentMonth < 16.0) {
+        } else if (finActPerformanceCurrentMonth < 16.0 && finActPerformanceCurrentMonth > 0.0) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_needs_improvement
             else
@@ -1461,15 +1394,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 R.raw.dashboard_financial_activities_default
 
             performance = "Get\nStarted!"
-            binding.tvPerformanceStatus.setTextColor(
-                ContextCompat.getColor(
-                    context,
-                    R.color.black
-                )
-            )
-            /*var date = "month"
-            if (selectedDatesSort == "quarterly")
-                date = "quarter"*/
+            binding.tvPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.black))
             message = if (userType == "Parent")
                 "Your child hasn't accomplished any financial activities yet. Remind your child to use the app regularly!"
             else "You haven't accomplished any financial activities. Use the app regularly to see your progress!"
@@ -1481,7 +1406,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         binding.tvPerformanceText.text = message
         binding.tvPerformanceStatus.visibility = View.VISIBLE
         binding.tvPerformanceStatus.text = performance
-        binding.tvPerformancePercentage.visibility = View.VISIBLE
         binding.tvPerformancePercentage.text = "${DecimalFormat("##0.0").format(finActPerformanceCurrentMonth)}%"
 
         checkIfNaNAverage()
@@ -1516,33 +1440,32 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
         val performance: String
         val bitmap: Bitmap
-        val difference: Float
+        var difference = 0.00F
+        binding.layoutMonthlyIncrease.visibility = View.VISIBLE
 
         if (finActPerformanceCurrentMonth > finActPerformancePreviousMonth) {
             difference = finActPerformanceCurrentMonth - finActPerformancePreviousMonth
-            performance = "Increase from Last Month"
 //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
 //                R.color.dark_green))
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.up_arrow)
+            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
+            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+            binding.tvPreviousPerformanceStatus.text = "Increase from Last Month"
         } else if (finActPerformanceCurrentMonth < finActPerformancePreviousMonth) {
             difference = finActPerformancePreviousMonth - finActPerformanceCurrentMonth
-            performance = "Decrease from Last Month"
 //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
 //                R.color.red))
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.down_arrow)
-        } else {
+            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+            binding.tvPreviousPerformanceStatus.text = "Decrease from Last Month"
+        } else if (finActPerformanceCurrentMonth == finActPerformancePreviousMonth && finActPerformancePreviousMonth > 0){
             difference = 0.0F
-            performance = "No Increase from Last Month"
 //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
 //                R.color.yellow))
-            bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon_equal)
-        }
-        val decimalFormat = DecimalFormat("#.#")
-        val roundedValue = decimalFormat.format(difference)
-
-        binding.ivPreviousMonthImg.setImageBitmap(bitmap)
-        binding.tvPreviousPerformancePercentage.text = "$roundedValue%"
-        binding.tvPreviousPerformanceStatus.text = performance
+            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
+            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+            binding.tvPreviousPerformanceStatus.text = "No Increase from Last Month"
+        } else
+            binding.layoutMonthlyIncrease.visibility = View.GONE
     }
 
     private fun loadDifferenceFromGoal() {
@@ -1577,7 +1500,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 println("print upper " + upper)
                 println("print lower " + lower)
                 if (isAdded) {
-                    if (finActPerformanceCurrentMonth > upper) {
+                    if (finActPerformanceCurrentMonth > upper ) {
                         binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(finActPerformanceCurrentMonth - upper)}%"
                         binding.tvGoalDiffStatus.text = "Above Target"
                         binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.dark_green))
@@ -1588,10 +1511,17 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                         binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.yellow))
                         binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
                     } else if (finActPerformanceCurrentMonth < lower) {
-                        binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - finActPerformanceCurrentMonth)}%"
-                        binding.tvGoalDiffStatus.text = "Below Target"
-                        binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-                        binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+                        if (finActPerformanceCurrentMonth > 0.0) {
+                            binding.tvGoalDiffPercentage.text = "${DecimalFormat("##0.0").format(lower - finActPerformanceCurrentMonth)}%"
+                            binding.tvGoalDiffStatus.text = "Below Target"
+                            binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+                            binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+                        } else {
+                            binding.tvGoalDiffPercentage.text = "${lower} -  ${upper}"
+                            binding.ivGoalDiffImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.goal))
+                            binding.tvGoalDiffStatus.text = "Target Score"
+                            binding.tvGoalDiffStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+                        }
                     }
                 }
             }
