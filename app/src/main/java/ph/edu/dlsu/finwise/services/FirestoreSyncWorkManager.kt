@@ -148,7 +148,10 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
 
             if (age > 9 )
                 purchasePlanningPerformance()
-            else spendingPercentage = (1-overspendingPercentage)*100
+            else {
+                if (nSpendingCompleted > 0)
+                    spendingPercentage = (1 - overspendingPercentage) * 100
+            }
 
             println("print finact goal setting " + goalSettingPercentage)
             println("print finact saving"  + savingPercentage)

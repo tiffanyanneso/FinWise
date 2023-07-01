@@ -125,7 +125,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
             var dialogBinding= DialogDashboardGoalDifferenceBinding.inflate(getLayoutInflater())
             var dialog= Dialog(requireContext());
             dialog.setContentView(dialogBinding.getRoot())
-            dialog.window!!.setLayout(1000, 900)
+            dialog.window!!.setLayout(1000, 1500)
             dialog.show()
 
             dialogBinding.btnGotIt.setOnClickListener {

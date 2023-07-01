@@ -117,7 +117,7 @@ class ParentDashboardFragment : Fragment() {
             var dialogBinding= DialogDashboardGoalDifferenceBinding.inflate(getLayoutInflater())
             var dialog= Dialog(requireContext());
             dialog.setContentView(dialogBinding.getRoot())
-            dialog.window!!.setLayout(1000, 1000)
+            dialog.window!!.setLayout(1000, 1500)
             dialog.show()
 
             dialogBinding.btnGotIt.setOnClickListener {
