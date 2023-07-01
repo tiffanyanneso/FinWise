@@ -10,7 +10,12 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
@@ -33,15 +38,18 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
     private var mediaPlayerOverspendingDialog: MediaPlayer? = null
     private var mediaPlayerSpendingPurchasePlanningDialog: MediaPlayer? = null
 
-    var budgetItemsIDArrayList = ArrayList<SpendingFragment.BudgetItemAmount>()
+    var budgetItemsIDArrayList = ArrayList<String>()
     var goalFilterArrayList = ArrayList<SpendingFragment.GoalFilter>()
 
     private var overSpending = 0.00F
     private var nBudgetItems = 0.00F
+    private var nSpendingCompleted = 0
 
     var overspendingPercentage = 0.00F
     var purchasePlanningPercentage = 0.00F
     var overallSpending = 0.00F
+
+    private var age = 0
 
     private lateinit var childID: String
 
@@ -57,7 +65,24 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
         initializeParentNavbar()
 
         budgetItemsIDArrayList.clear()
-        getBudgeting()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            checkAge()
+            getBudgeting()
+            checkOverSpending()
+            if (age > 9 ) {
+                binding.linearLayoutOverspending.visibility = View.VISIBLE
+                binding.linearLayoutPurchasePlanning.visibility = View.VISIBLE
+                purchasePlanning()
+            }
+            else {
+                overallSpending = (100-overspendingPercentage)*100
+                binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
+                overallPercentage()
+                binding.linearLayoutOverspending.visibility = View.VISIBLE
+                binding.linearLayoutPurchasePlanning.visibility = View.GONE
+            }
+        }
 
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources,
             R.drawable.baseline_arrow_back_24, null)
@@ -90,199 +115,171 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
 
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun getBudgeting() {
-        val budgetingActivityIDArrayList = ArrayList<String>()
-        //get only completed budgeting activities because they should complete budgeting first before they are able to spend
-        firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
-            for (spending in results) {
-                var spendingActivity = spending.toObject<FinancialActivities>()
-    //                budgetingActivityIDArrayList.add(activity.id)
-                println("print number of budgeting activity " + budgetingActivityIDArrayList.size)
+    private suspend fun getBudgeting() {
+        var spendingCompleted = firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().await()
+        nSpendingCompleted = spendingCompleted.size()
+        if (nSpendingCompleted > 0) {
+            //get only completed budgeting activities because they should complete budgeting first before they are able to spend
+            var budgetingActivity =
+                firestore.collection("FinancialActivities").whereEqualTo("childID", childID)
+                    .whereEqualTo("financialActivityName", "Budgeting")
+                    .whereEqualTo("status", "Completed").get().await()
 
-                firestore.collection("FinancialActivities").whereEqualTo("financialGoalID", spendingActivity.financialGoalID).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { budgeting ->
-                    var budgetingID = budgeting.documents[0].id
-                    firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgetingID)
-                        .whereEqualTo("status", "Active").get().addOnSuccessListener { results ->
-                        nBudgetItems += results.size()
-                        for (budgetItem in results) {
+            for (budgeting in budgetingActivity) {
+                //get budget items
+                var budgetItems = firestore.collection("BudgetItems")
+                    .whereEqualTo("financialActivityID", budgeting.id)
+                    .whereEqualTo("status", "Active").get().await()
+                nBudgetItems += budgetItems.size()
 
-                            var budgetItemObject = budgetItem.toObject<BudgetItem>()
-                            checkOverSpending(budgetItem.id, budgetItemObject.amount!!)
-                        }
-                    }
-                }
+                for (budgetItem in budgetItems)
+                    budgetItemsIDArrayList.add(budgetItem.id)
             }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun checkOverSpending(budgetItemID:String, budgetItemAmount:Float){
-        firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { spendingTransactions ->
+    private suspend fun checkOverSpending(){
+        for (budgetItemID in budgetItemsIDArrayList) {
+            var spendingTransactions = firestore.collection("Transactions").whereEqualTo("budgetItemID", budgetItemID).whereEqualTo("transactionType", "Expense").get().await().toObjects<Transactions>()
             var amountSpent = 0.00F
             for (expense in spendingTransactions) {
-                var expenseObject = expense.toObject<Transactions>()
-                amountSpent+= expenseObject.amount!!
+                amountSpent+= expense.amount!!
             }
             //they spent more than their allocated budget
+            var budgetItemAmount = firestore.collection("BudgetItems").document(budgetItemID).get().await().toObject<BudgetItem>()?.amount!!
             if (amountSpent > budgetItemAmount)
                 overSpending++
+        }
 
-        }.continueWith {
-            overspendingPercentage = (overSpending/nBudgetItems)
+        overspendingPercentage = (overSpending/nBudgetItems)
+        var overspendingDisplay = overspendingPercentage*100
 
-            firestore.collection("Users").document(childID).get().addOnSuccessListener {
-                var child = it.toObject<Users>()
-                //compute age
-                val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
-                val from = LocalDate.now()
-                val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
-                val to = LocalDate.parse(date.toString(), dateFormatter)
-                var difference = Period.between(to, from)
+        binding.progressBarOverspending.progress = overspendingDisplay.toInt()
+        binding.textOverspendingProgress.text  = DecimalFormat("##0.00").format(overspendingDisplay) + "%"
 
-                var age = difference.years
-                if (age > 9 ) {
-                    binding.linearLayoutOverspending.visibility = View.VISIBLE
-                    binding.linearLayoutPurchasePlanning.visibility = View.VISIBLE
-                    purchasePlanning()
-                }
-                else {
-                    overallSpending = (1-overspendingPercentage)*100
-                    binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
-                    overallPercentage()
-                    binding.linearLayoutOverspending.visibility = View.VISIBLE
-                    binding.linearLayoutPurchasePlanning.visibility = View.GONE
-                }
-            }
-
-            binding.progressBarOverspending.progress = overspendingPercentage.toInt()
-            binding.textOverspendingProgress.text  = DecimalFormat("##0.00").format(overspendingPercentage) + "%"
-
-            if (overspendingPercentage < 5) {
-                binding.textOverspendingText.text = "Excellent"
-                binding.textOverspendingText.setTextColor(getResources().getColor(R.color.dark_green))
-                binding.tvOverspendingText.text = "Your child is excellent at spending within their budget!"
-            } else if (overspendingPercentage < 15 && overspendingPercentage >= 5) {
-                binding.textOverspendingText.text = "Amazing"
-                binding.textOverspendingText.setTextColor(getResources().getColor(R.color.amazing_green))
-                binding.tvOverspendingText.text = "Your child is amazing at spending within their budget!"
-            } else if (overspendingPercentage < 25 && overspendingPercentage >= 15) {
-                binding.textOverspendingText.text = "Great"
-                binding.textOverspendingText.setTextColor(getResources().getColor(R.color.green))
-                binding.tvOverspendingText.text = "Great! Your child often spends within their budget."
-            } else if (overspendingPercentage < 35 && overspendingPercentage >= 25) {
-                binding.textOverspendingText.text = "Good"
-                binding.textOverspendingText.setTextColor(getResources().getColor(R.color.light_green))
-                binding.tvOverspendingText.text = "Good! Remind your child to keep their budget in mind when spending."
-            } else if (overspendingPercentage < 45 && overspendingPercentage >= 35) {
-                binding.textOverspendingText.text = "Average"
-                binding.textOverspendingText.setTextColor(getResources().getColor(R.color.yellow))
-                binding.tvOverspendingText.text = "Nice work! Remind your child to keep their budget in mind when spending."
-                showOverspendingeButton()
-            } else if (overspendingPercentage < 55 && overspendingPercentage >= 45) {
-                binding.textOverspendingText.text = "Nearly There"
-                binding.textOverspendingText.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
-                binding.tvOverspendingText.text = "Your child is nearly there! Click the tips button to learn how to help them there!"
-                showOverspendingeButton()
-            }  else if (overspendingPercentage < 65 && overspendingPercentage >= 55) {
-                binding.textOverspendingText.text = "Almost There"
-                binding.textOverspendingText.setTextColor(getResources().getColor(R.color.almost_there_yellow))
-                binding.tvOverspendingText.text = "Your child is almost there! Click the tips button to learn how to help them there!"
-                showOverspendingeButton()
-            } else if (overspendingPercentage < 75 && overspendingPercentage >= 65) {
-                binding.textOverspendingText.text = "Getting There"
-                binding.textOverspendingText.setTextColor(getResources().getColor(R.color.getting_there_orange))
-                binding.tvOverspendingText.text = "Your child is getting there! Encourage them to always refer to their budget. Click the tips button to learn how to help them get there!"
-                showOverspendingeButton()
-            } else if (overspendingPercentage < 85 && overspendingPercentage >= 75) {
-                binding.textOverspendingText.text  = "Not Quite\nThere"
-                binding.textOverspendingText.setTextColor(getResources().getColor(R.color.not_quite_there_red))
-                binding.tvOverspendingText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
-                showOverspendingeButton()
-            } else if (overspendingPercentage > 84) {
-                binding.textOverspendingText.text = "Needs\nImprovement"
-                binding.textOverspendingText.setTextColor(getResources().getColor(R.color.red))
-                binding.tvOverspendingText.text = "Uh oh! Click the tips button to learn how to help them get there!"
-                showOverspendingeButton()
-            }
+        if (overspendingPercentage < 5) {
+            binding.textOverspendingText.text = "Excellent"
+            binding.textOverspendingText.setTextColor(getResources().getColor(R.color.dark_green))
+            binding.tvOverspendingText.text = "Your child is excellent at spending within their budget!"
+        } else if (overspendingPercentage < 15 && overspendingPercentage >= 5) {
+            binding.textOverspendingText.text = "Amazing"
+            binding.textOverspendingText.setTextColor(getResources().getColor(R.color.amazing_green))
+            binding.tvOverspendingText.text = "Your child is amazing at spending within their budget!"
+        } else if (overspendingPercentage < 25 && overspendingPercentage >= 15) {
+            binding.textOverspendingText.text = "Great"
+            binding.textOverspendingText.setTextColor(getResources().getColor(R.color.green))
+            binding.tvOverspendingText.text = "Great! Your child often spends within their budget."
+        } else if (overspendingPercentage < 35 && overspendingPercentage >= 25) {
+            binding.textOverspendingText.text = "Good"
+            binding.textOverspendingText.setTextColor(getResources().getColor(R.color.light_green))
+            binding.tvOverspendingText.text = "Good! Remind your child to keep their budget in mind when spending."
+        } else if (overspendingPercentage < 45 && overspendingPercentage >= 35) {
+            binding.textOverspendingText.text = "Average"
+            binding.textOverspendingText.setTextColor(getResources().getColor(R.color.yellow))
+            binding.tvOverspendingText.text = "Nice work! Remind your child to keep their budget in mind when spending."
+            showOverspendingeButton()
+        } else if (overspendingPercentage < 55 && overspendingPercentage >= 45) {
+            binding.textOverspendingText.text = "Nearly There"
+            binding.textOverspendingText.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
+            binding.tvOverspendingText.text = "Your child is nearly there! Click the tips button to learn how to help them there!"
+            showOverspendingeButton()
+        }  else if (overspendingPercentage < 65 && overspendingPercentage >= 55) {
+            binding.textOverspendingText.text = "Almost There"
+            binding.textOverspendingText.setTextColor(getResources().getColor(R.color.almost_there_yellow))
+            binding.tvOverspendingText.text = "Your child is almost there! Click the tips button to learn how to help them there!"
+            showOverspendingeButton()
+        } else if (overspendingPercentage < 75 && overspendingPercentage >= 65) {
+            binding.textOverspendingText.text = "Getting There"
+            binding.textOverspendingText.setTextColor(getResources().getColor(R.color.getting_there_orange))
+            binding.tvOverspendingText.text = "Your child is getting there! Encourage them to always refer to their budget. Click the tips button to learn how to help them get there!"
+            showOverspendingeButton()
+        } else if (overspendingPercentage < 85 && overspendingPercentage >= 75) {
+            binding.textOverspendingText.text  = "Not Quite\nThere"
+            binding.textOverspendingText.setTextColor(getResources().getColor(R.color.not_quite_there_red))
+            binding.tvOverspendingText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
+            showOverspendingeButton()
+        } else if (overspendingPercentage > 84) {
+            binding.textOverspendingText.text = "Needs\nImprovement"
+            binding.textOverspendingText.setTextColor(getResources().getColor(R.color.red))
+            binding.tvOverspendingText.text = "Uh oh! Click the tips button to learn how to help them get there!"
+            showOverspendingeButton()
         }
     }
 
-    private fun purchasePlanning() {
+    private suspend fun purchasePlanning() {
+        //items planned / all the items they bought * 100
         //items planned / all the items they bought * 100
         var nPlanned = 0.00F
         var nTotalPurchased = 0.00F
-        firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Spending").get().addOnSuccessListener { allSpendingActivities ->
-            for (spendingActivityID in allSpendingActivities) {
-                firestore.collection("ShoppingListItems").whereEqualTo("spendingActivityID", spendingActivityID.id).get().addOnSuccessListener { shoppingListItems ->
-                    for (shoppingListItem in shoppingListItems) {
-                        var shoppingListItemObject = shoppingListItem.toObject<ShoppingListItem>()
-                        if (shoppingListItemObject.status == "Purchased")
-                            nPlanned++
-                    }
-                }.continueWith {
-                    firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID.id).whereEqualTo("transactionType", "Expense").get().addOnSuccessListener { expenseTransactions ->
-                        nTotalPurchased += expenseTransactions.size().toFloat()
-                    }.continueWith {
-                        val purchasePlanningPercentage = (nPlanned/nTotalPurchased)*100
-                        binding.progressBarPurchasePlanning.progress = purchasePlanningPercentage.toInt()
-                        binding.textPurchasePlanning.text  = DecimalFormat("##0.00").format(purchasePlanningPercentage) + "%"
+        var spendingActivities = firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().await()
 
-                        if (purchasePlanningPercentage >= 96) {
-                            binding.textPurchasePlanningText.text = "Excellent"
-                            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.dark_green))
-                            binding.tvPurchasePlanningText.text = "Excellent! Your child always plans for their expenses."
-                        } else if (purchasePlanningPercentage < 96 && purchasePlanningPercentage >= 86) {
-                            binding.textPurchasePlanningText.text = "Amazing"
-                            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.amazing_green))
-                            binding.tvPurchasePlanningText.text = "Your child is doing an amazing job! They always plan for your expenses."
-                        } else if (purchasePlanningPercentage < 86 && purchasePlanningPercentage >= 76) {
-                            binding.textPurchasePlanningText.text = "Great"
-                            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.green))
-                            binding.tvPurchasePlanningText.text = "Your child is doing a great job planning their purchases."
-                        } else if (purchasePlanningPercentage < 76 && purchasePlanningPercentage >= 66) {
-                            binding.textPurchasePlanningText.text = "Good"
-                            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.light_green))
-                            binding.tvPurchasePlanningText.text = "Your child is doing a good job! Encourage them to list down the items they wanna buy in their shopping list."
-                        } else if (purchasePlanningPercentage < 66 && purchasePlanningPercentage >= 56) {
-                            binding.textPurchasePlanningText.text = "Average"
-                            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.yellow))
-                            binding.tvPurchasePlanningText.text = "Nice Work! To help your child improve, encourage them to plan thei expenses more via the shopping list."
-                            showPurchasePlanningButton()
-                        } else if (purchasePlanningPercentage < 56 && purchasePlanningPercentage >= 46) {
-                            binding.textPurchasePlanningText.text = "Nearly There"
-                            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
-                            binding.tvPurchasePlanningText.text = "Your child is nearly there! Click the tips button to learn how to help them get there!"
-                            showPurchasePlanningButton()
-                        }  else if (purchasePlanningPercentage < 46 && purchasePlanningPercentage >= 36) {
-                            binding.textPurchasePlanningText.text = "Almost There"
-                            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.almost_there_yellow))
-                            binding.tvPurchasePlanningText.text = "Almost there! You need to work on your spending. Click review to learn how!"
-                            showPurchasePlanningButton()
-                        } else if (purchasePlanningPercentage < 36 && purchasePlanningPercentage >= 26) {
-                            binding.textPurchasePlanningText.text = "Getting\nThere"
-                            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.getting_there_orange))
-                            binding.tvPurchasePlanningText.text = "Your child is getting there! Click the tips button to learn how to help them get there!"
-                            showPurchasePlanningButton()
-                        } else if (purchasePlanningPercentage < 26 && purchasePlanningPercentage >= 16) {
-                            binding.textPurchasePlanningText.text  = "Not Quite\nThere"
-                            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.not_quite_there_red))
-                            binding.tvPurchasePlanningText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
-                            showPurchasePlanningButton()
-                        } else if (purchasePlanningPercentage < 15) {
-                            binding.textPurchasePlanningText.text = "Needs\nImprovement"
-                            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.red))
-                            binding.tvPurchasePlanningText.text = "Uh oh! Click the tips button to learn how to help them improve their expense planning!"
-                            showPurchasePlanningButton()
-                        }
-
-                        overallSpending = (((1-overspendingPercentage)*100) + ((nPlanned/nTotalPurchased)*100)) /2
-                        binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
-
-                        overallPercentage()
-                    }
-                }
+        for (spendingActivityID in spendingActivities) {
+            var shoppingListItems = firestore.collection("ShoppingListItems").whereEqualTo("spendingActivityID", spendingActivityID.id).get().await().toObjects<ShoppingListItem>()
+            for (shoppingListItem in shoppingListItems) {
+                if (shoppingListItem.status == "Purchased")
+                    nPlanned++
             }
+
+            nTotalPurchased += firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID.id).whereEqualTo("transactionType", "Expense").get().await().size().toFloat()
         }
+
+        val purchasePlanningPercentage = (nPlanned/nTotalPurchased)*100
+        binding.progressBarPurchasePlanning.progress = purchasePlanningPercentage.toInt()
+        binding.textPurchasePlanning.text  = DecimalFormat("##0.00").format(purchasePlanningPercentage) + "%"
+
+        if (purchasePlanningPercentage >= 96) {
+            binding.textPurchasePlanningText.text = "Excellent"
+            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.dark_green))
+            binding.tvPurchasePlanningText.text = "Excellent! Your child always plans for their expenses."
+        } else if (purchasePlanningPercentage < 96 && purchasePlanningPercentage >= 86) {
+            binding.textPurchasePlanningText.text = "Amazing"
+            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.amazing_green))
+            binding.tvPurchasePlanningText.text = "Your child is doing an amazing job! They always plan for your expenses."
+        } else if (purchasePlanningPercentage < 86 && purchasePlanningPercentage >= 76) {
+            binding.textPurchasePlanningText.text = "Great"
+            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.green))
+            binding.tvPurchasePlanningText.text = "Your child is doing a great job planning their purchases."
+        } else if (purchasePlanningPercentage < 76 && purchasePlanningPercentage >= 66) {
+            binding.textPurchasePlanningText.text = "Good"
+            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.light_green))
+            binding.tvPurchasePlanningText.text = "Your child is doing a good job! Encourage them to list down the items they wanna buy in their shopping list."
+        } else if (purchasePlanningPercentage < 66 && purchasePlanningPercentage >= 56) {
+            binding.textPurchasePlanningText.text = "Average"
+            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.yellow))
+            binding.tvPurchasePlanningText.text = "Nice Work! To help your child improve, encourage them to plan thei expenses more via the shopping list."
+            showPurchasePlanningButton()
+        } else if (purchasePlanningPercentage < 56 && purchasePlanningPercentage >= 46) {
+            binding.textPurchasePlanningText.text = "Nearly There"
+            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
+            binding.tvPurchasePlanningText.text = "Your child is nearly there! Click the tips button to learn how to help them get there!"
+            showPurchasePlanningButton()
+        }  else if (purchasePlanningPercentage < 46 && purchasePlanningPercentage >= 36) {
+            binding.textPurchasePlanningText.text = "Almost There"
+            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.almost_there_yellow))
+            binding.tvPurchasePlanningText.text = "Almost there! You need to work on your spending. Click review to learn how!"
+            showPurchasePlanningButton()
+        } else if (purchasePlanningPercentage < 36 && purchasePlanningPercentage >= 26) {
+            binding.textPurchasePlanningText.text = "Getting\nThere"
+            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.getting_there_orange))
+            binding.tvPurchasePlanningText.text = "Your child is getting there! Click the tips button to learn how to help them get there!"
+            showPurchasePlanningButton()
+        } else if (purchasePlanningPercentage < 26 && purchasePlanningPercentage >= 16) {
+            binding.textPurchasePlanningText.text  = "Not Quite\nThere"
+            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.not_quite_there_red))
+            binding.tvPurchasePlanningText.text = "Your child is not quite there yet! Click the tips button to learn how to help them get there!"
+            showPurchasePlanningButton()
+        } else if (purchasePlanningPercentage < 15) {
+            binding.textPurchasePlanningText.text = "Needs\nImprovement"
+            binding.textPurchasePlanningText.setTextColor(getResources().getColor(R.color.red))
+            binding.tvPurchasePlanningText.text = "Uh oh! Click the tips button to learn how to help them improve their expense planning!"
+            showPurchasePlanningButton()
+        }
+
+        overallSpending = (((1-overspendingPercentage)*100) + ((nPlanned/nTotalPurchased)*100)) /2
+        binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
+
+        overallPercentage()
     }
 
     private fun overallPercentage() {
@@ -477,6 +474,18 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
         }
         mediaPlayer?.stop()
         mediaPlayer?.release()
+    }
+
+    private suspend fun checkAge() {
+        var child = firestore.collection("Users").document(childID).get().await().toObject<Users>()
+        //compute age
+        val dateFormatter: DateTimeFormatter =  DateTimeFormatter.ofPattern("MM/dd/yyyy")
+        val from = LocalDate.now()
+        val date =  SimpleDateFormat("MM/dd/yyyy").format(child?.birthday?.toDate())
+        val to = LocalDate.parse(date.toString(), dateFormatter)
+        var difference = Period.between(to, from)
+
+        age = difference.years
     }
 
 }

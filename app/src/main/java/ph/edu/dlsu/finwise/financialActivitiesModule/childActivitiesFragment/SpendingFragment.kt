@@ -37,8 +37,6 @@ import kotlin.collections.ArrayList
 
 class SpendingFragment : Fragment(){
 
-    class BudgetItemAmount(var budgetItemID:String, var amount:Float)
-
     private lateinit var binding: FragmentFinactSpendingBinding
     private var firestore = Firebase.firestore
     private lateinit var spendingAdapter: FinactSpendingAdapter
@@ -52,6 +50,7 @@ class SpendingFragment : Fragment(){
 
     private var overSpending = 0.00F
     private var nBudgetItems = 0.00F
+    private var nSpendingCompleted = 0
 
     var nPlanned = 0.00F
     var nTotalPurchased = 0.00F
@@ -97,7 +96,6 @@ class SpendingFragment : Fragment(){
 
                 else {
                     overallSpending = (100-overspendingPercentage)*100
-                    binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
                     if (isAdded)
                         setOverall()
                 }
@@ -158,16 +156,25 @@ class SpendingFragment : Fragment(){
 
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getBudgeting() {
-        //get only completed budgeting activities because they should complete budgeting first before they are able to spend
-        var budgetingActivity = firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().await()
+        var spendingCompleted = firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().await()
+        nSpendingCompleted = spendingCompleted.size()
+        if (nSpendingCompleted > 0) {
+            //get only completed budgeting activities because they should complete budgeting first before they are able to spend
+            var budgetingActivity =
+                firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser)
+                    .whereEqualTo("financialActivityName", "Budgeting")
+                    .whereEqualTo("status", "Completed").get().await()
 
-        for (budgeting in budgetingActivity) {
-            //get budget items
-            var budgetItems = firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgeting.id).whereEqualTo("status", "Active").get().await()
-            nBudgetItems += budgetItems.size()
+            for (budgeting in budgetingActivity) {
+                //get budget items
+                var budgetItems = firestore.collection("BudgetItems")
+                    .whereEqualTo("financialActivityID", budgeting.id)
+                    .whereEqualTo("status", "Active").get().await()
+                nBudgetItems += budgetItems.size()
 
-            for (budgetItem in budgetItems)
-                budgetItemsIDArrayList.add(budgetItem.id)
+                for (budgetItem in budgetItems)
+                    budgetItemsIDArrayList.add(budgetItem.id)
+            }
         }
     }
 
@@ -208,7 +215,6 @@ class SpendingFragment : Fragment(){
 
         val purchasePlanningPercentage = (nPlanned/nTotalPurchased)*100
         overallSpending = (((1-overspendingPercentage)*100) + purchasePlanningPercentage) /2
-        binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
 
         if (isAdded)
             setOverall()
@@ -218,83 +224,101 @@ class SpendingFragment : Fragment(){
     private fun setOverall() {
         println("print overspending " + ((1-overspendingPercentage)*100))
         println("print purchase planning" + (nPlanned/nTotalPurchased)*100)
-        binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
         //TODO: Change audio
         var audio = 0
-        if (overallSpending >= 96) {
-            audio = R.raw.spending_performance_excellent
-            binding.imgFace.setImageResource(R.drawable.excellent)
-            binding.textStatus.text = "Excellent"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
-            binding.tvPerformanceText.text = "Keep up the excellent work! Spending wisely is your strong point. Keep it up!"
-            showSeeMoreButton()
-        } else if (overallSpending < 96 && overallSpending >= 86) {
-            audio = R.raw.spending_performance_amazing
-            binding.imgFace.setImageResource(R.drawable.amazing)
-            binding.textStatus.text = "Amazing"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.green))
-            binding.tvPerformanceText.text = "Amazing job! You are performing well. Spending wisely is your strong point. Keep completing those goals!"
-            showSeeMoreButton()
-        } else if (overallSpending < 86 && overallSpending >= 76) {
-            audio = R.raw.spending_performance_great
-            binding.imgFace.setImageResource(R.drawable.great)
-            binding.textStatus.text = "Great"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.green))
-            binding.tvPerformanceText.text = " Great job! You are performing well. Keep spending wisely!"
-            showSeeMoreButton()
-        } else if (overallSpending < 76 && overallSpending >= 66) {
-            audio = R.raw.spending_performance_good
-            binding.imgFace.setImageResource(R.drawable.good)
-            binding.textStatus.text = "Good"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
-            binding.tvPerformanceText.text = "Good job! With a bit more planning to detail, you’ll surely up your performance!"
-            showSeeMoreButton()
-        } else if (overallSpending < 66 && overallSpending >= 56) {
-            audio = R.raw.spending_performance_good
-            binding.imgFace.setImageResource(R.drawable.average)
-            binding.textStatus.text = "Average"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
-            binding.tvPerformanceText.text = "Nice work! Work on improving your spending performance by always planning ahead. You’ll get there soon!"
-            showSeeMoreButton()
-        } else if (overallSpending < 56 && overallSpending >= 46) {
-            audio = R.raw.spending_performance_nearly_there
-            binding.imgFace.setImageResource(R.drawable.nearly_there)
-            binding.textStatus.text = "Nearly\nThere"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
-            binding.tvPerformanceText.text = "You're nearly there! Click review to learn how to get there!"
-            showSeeMoreButton()
-        }  else if (overallSpending < 46 && overallSpending >= 36) {
-            audio = R.raw.spending_performance_almost_there
-            binding.imgFace.setImageResource(R.drawable.almost_there)
-            binding.textStatus.text = "Almost\nThere"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
-            binding.tvPerformanceText.text = "Almost there! You need to work on your spending. Click review to learn how!"
-            showSeeMoreButton()
-        } else if (overallSpending < 36 && overallSpending >= 26) {
-            audio = R.raw.spending_performance_getting_there
-            binding.imgFace.setImageResource(R.drawable.getting_there)
-            binding.textStatus.text = "Getting\nThere"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
-            binding.tvPerformanceText.text = "Getting there! You need to work on your spending. Click review to learn how!"
-            showSeeMoreButton()
-        } else if (overallSpending < 26 && overallSpending >= 16) {
-            audio = R.raw.spending_performance_not_quite_there_yet
-            binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
-            binding.textStatus.text = "Not Quite\nThere"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
-            binding.tvPerformanceText.text = "Not quite there yet! Don't give up. Click review to learn how to get there!"
-            showSeeMoreButton()
-        } else if (overallSpending < 15) {
-            audio = R.raw.spending_performance_needs_improvement
-            binding.imgFace.setImageResource(R.drawable.bad)
-            binding.textStatus.text = "Needs\nImprovement"
-            binding.textStatus.setTextColor(getResources().getColor(R.color.red))
-            binding.tvPerformanceText.text = "Your spending performance needs a lot of improvement. Click review to learn how!"
-            showSeeMoreButton()
+        println("print nspending completed " +  nSpendingCompleted)
+        if (nSpendingCompleted > 0) {
+            binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
+            binding.tvPerformanceText.visibility = View.VISIBLE
+
+            if (overallSpending >= 96) {
+                audio = R.raw.spending_performance_excellent
+                binding.imgFace.setImageResource(R.drawable.excellent)
+                binding.textStatus.text = "Excellent"
+                binding.textStatus.setTextColor(getResources().getColor(R.color.dark_green))
+                binding.tvPerformanceText.text =
+                    "Keep up the excellent work! Spending wisely is your strong point. Keep it up!"
+                showSeeMoreButton()
+            } else if (overallSpending < 96 && overallSpending >= 86) {
+                audio = R.raw.spending_performance_amazing
+                binding.imgFace.setImageResource(R.drawable.amazing)
+                binding.textStatus.text = "Amazing"
+                binding.textStatus.setTextColor(getResources().getColor(R.color.green))
+                binding.tvPerformanceText.text =
+                    "Amazing job! You are performing well. Spending wisely is your strong point. Keep completing those goals!"
+                showSeeMoreButton()
+            } else if (overallSpending < 86 && overallSpending >= 76) {
+                audio = R.raw.spending_performance_great
+                binding.imgFace.setImageResource(R.drawable.great)
+                binding.textStatus.text = "Great"
+                binding.textStatus.setTextColor(getResources().getColor(R.color.green))
+                binding.tvPerformanceText.text =
+                    " Great job! You are performing well. Keep spending wisely!"
+                showSeeMoreButton()
+            } else if (overallSpending < 76 && overallSpending >= 66) {
+                audio = R.raw.spending_performance_good
+                binding.imgFace.setImageResource(R.drawable.good)
+                binding.textStatus.text = "Good"
+                binding.textStatus.setTextColor(getResources().getColor(R.color.light_green))
+                binding.tvPerformanceText.text =
+                    "Good job! With a bit more planning to detail, you’ll surely up your performance!"
+                showSeeMoreButton()
+            } else if (overallSpending < 66 && overallSpending >= 56) {
+                audio = R.raw.spending_performance_good
+                binding.imgFace.setImageResource(R.drawable.average)
+                binding.textStatus.text = "Average"
+                binding.textStatus.setTextColor(getResources().getColor(R.color.yellow))
+                binding.tvPerformanceText.text =
+                    "Nice work! Work on improving your spending performance by always planning ahead. You’ll get there soon!"
+                showSeeMoreButton()
+            } else if (overallSpending < 56 && overallSpending >= 46) {
+                audio = R.raw.spending_performance_nearly_there
+                binding.imgFace.setImageResource(R.drawable.nearly_there)
+                binding.textStatus.text = "Nearly\nThere"
+                binding.textStatus.setTextColor(getResources().getColor(R.color.nearly_there_yellow))
+                binding.tvPerformanceText.text =
+                    "You're nearly there! Click review to learn how to get there!"
+                showSeeMoreButton()
+            } else if (overallSpending < 46 && overallSpending >= 36) {
+                audio = R.raw.spending_performance_almost_there
+                binding.imgFace.setImageResource(R.drawable.almost_there)
+                binding.textStatus.text = "Almost\nThere"
+                binding.textStatus.setTextColor(getResources().getColor(R.color.almost_there_yellow))
+                binding.tvPerformanceText.text =
+                    "Almost there! You need to work on your spending. Click review to learn how!"
+                showSeeMoreButton()
+            } else if (overallSpending < 36 && overallSpending >= 26) {
+                audio = R.raw.spending_performance_getting_there
+                binding.imgFace.setImageResource(R.drawable.getting_there)
+                binding.textStatus.text = "Getting\nThere"
+                binding.textStatus.setTextColor(getResources().getColor(R.color.getting_there_orange))
+                binding.tvPerformanceText.text =
+                    "Getting there! You need to work on your spending. Click review to learn how!"
+                showSeeMoreButton()
+            } else if (overallSpending < 26 && overallSpending >= 16) {
+                audio = R.raw.spending_performance_not_quite_there_yet
+                binding.imgFace.setImageResource(R.drawable.not_quite_there_yet)
+                binding.textStatus.text = "Not Quite\nThere"
+                binding.textStatus.setTextColor(getResources().getColor(R.color.not_quite_there_red))
+                binding.tvPerformanceText.text =
+                    "Not quite there yet! Don't give up. Click review to learn how to get there!"
+                showSeeMoreButton()
+            } else if (overallSpending < 15) {
+                audio = R.raw.spending_performance_needs_improvement
+                binding.imgFace.setImageResource(R.drawable.bad)
+                binding.textStatus.text = "Needs\nImprovement"
+                binding.textStatus.setTextColor(getResources().getColor(R.color.red))
+                binding.tvPerformanceText.text =
+                    "Your spending performance needs a lot of improvement. Click review to learn how!"
+                showSeeMoreButton()
+            }
+            loadAudio(audio)
+        } else {
+            binding.tvPerformancePercentage.text = "Get\nStarted!"
+            binding.tvPerformanceText.visibility = View.GONE
         }
         binding.layoutLoading.visibility= View.GONE
         binding.mainLayout.visibility = View.VISIBLE
-        loadAudio(audio)
     }
 
     private fun loadAudio(audio: Int) {

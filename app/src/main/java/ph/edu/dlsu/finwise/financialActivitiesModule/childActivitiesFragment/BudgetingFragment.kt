@@ -129,8 +129,10 @@ class BudgetingFragment : Fragment() {
                 var activityObject = activity.toObject<FinancialActivities>()
                 goalIDArrayList.add(activityObject?.financialGoalID.toString())
             }
-            if (!goalIDArrayList.isEmpty())
-                loadRecyclerView(goalIDArrayList)
+            if (!goalIDArrayList.isEmpty()) {
+                if (isAdded)
+                    loadRecyclerView(goalIDArrayList)
+            }
             else {
                 binding.rvViewGoals.visibility = View.GONE
                 binding.layoutEmptyActivity.visibility = View.VISIBLE
@@ -142,31 +144,39 @@ class BudgetingFragment : Fragment() {
         }
     }
 
-    private suspend fun getOverallBudgeting() {
-        var budgetingActivities = firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().await()
-        if (!budgetingActivities.isEmpty) {
-            for (activity in budgetingActivities) {
-                var budgetItems = firestore.collection("BudgetItems").whereEqualTo("financialActivityID", activity.id).whereEqualTo("status", "Active").get().await()
-                println("print number of budget items" + budgetItems.size())
-                for (budgetItem in budgetItems) {
-                    budgetItemCount++
-                    var budgetItemObject = budgetItem.toObject<BudgetItem>()
+    private fun getOverallBudgeting() {
+        firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
 
-                    //parental involvement
-                    var user = firestore.collection("Users").document(budgetItemObject.createdBy.toString()).get().await().toObject<Users>()!!
-                    //parent is the one who added the budget item
-                    if (user.userType == "Parent")
-                        nParent++
+            if (!results.isEmpty) {
+                for (activity in results) {
+                    firestore.collection("BudgetItems")
+                        .whereEqualTo("financialActivityID", activity.id)
+                        .whereEqualTo("status", "Active").get()
+                        .addOnSuccessListener { budgetItems ->
+                            for (budgetItem in budgetItems) {
+                                budgetItemCount++
+                                var budgetItemObject = budgetItem.toObject<BudgetItem>()
 
-                    getBudgetAccuracy(activity.id, budgetItem.id, budgetItemObject)
+                                //parental involvement
+                                firestore.collection("Users")
+                                    .document(budgetItemObject.createdBy.toString()).get()
+                                    .addOnSuccessListener { user ->
+                                        //parent is the one who added the budget item
+                                        if (user.toObject<Users>()!!.userType == "Parent")
+                                            nParent++
+                                    }.continueWith {
+                                        getBudgetAccuracy(activity.id, budgetItem.id, budgetItemObject)
+                                    }
+                            }
+                        }
                 }
+            } else {
+                binding.imgFace.setImageResource(R.drawable.peso_coin)
+                binding.tvPerformancePercentage.text = "Get\nStarted"
+                binding.tvPerformanceText.text = "Your child hasn't completed any budgeting activities. Come back soon!"
+                binding.layoutLoading.visibility = View.GONE
+                binding.mainLayout.visibility = View.VISIBLE
             }
-        } else {
-            binding.imgFace.setImageResource(R.drawable.peso_coin)
-            binding.tvPerformancePercentage.text = "Get\nStarted!"
-            binding.tvPerformanceText.text = "Complete budgeting activities to see your performance!"
-            binding.layoutLoading.visibility = View.GONE
-            binding.mainLayout.visibility = View.VISIBLE
         }
     }
 

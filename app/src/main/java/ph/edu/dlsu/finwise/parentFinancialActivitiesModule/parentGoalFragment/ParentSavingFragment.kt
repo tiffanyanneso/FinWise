@@ -226,8 +226,10 @@ class ParentSavingFragment : Fragment() {
             for (goal in goalFilterArrayList)
                 goalIDArrayList.add(goal.financialGoalID.toString())
 
-            if (!goalIDArrayList.isEmpty())
-                loadRecyclerView(goalIDArrayList)
+            if (!goalIDArrayList.isEmpty()) {
+                if (isAdded)
+                    loadRecyclerView(goalIDArrayList)
+            }
             else {
                 binding.rvViewGoals.visibility = View.GONE
                 binding.layoutEmptyActivity.visibility = View.VISIBLE

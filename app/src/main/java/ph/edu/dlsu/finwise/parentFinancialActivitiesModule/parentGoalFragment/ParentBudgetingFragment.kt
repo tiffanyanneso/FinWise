@@ -80,7 +80,6 @@ class ParentBudgetingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (isAdded) {
-            binding.tvPerformancePercentage.text = "0.00%"
             binding.title.text = "Overall Budgeting Performance"
             coroutineScope.launch {
                 getBudgeting()
@@ -134,8 +133,10 @@ class ParentBudgetingFragment : Fragment() {
                 var budgetingActivity = budgeting.toObject<FinancialActivities>()
                 goalIDArrayList.add(budgetingActivity.financialGoalID.toString())
             }
-            if (!goalIDArrayList.isEmpty())
-                loadRecyclerView(goalIDArrayList)
+            if (!goalIDArrayList.isEmpty()) {
+                if (isAdded)
+                    loadRecyclerView(goalIDArrayList)
+            }
             else {
                 binding.rvViewGoals.visibility = View.GONE
                 binding.layoutEmptyActivity.visibility = View.VISIBLE
@@ -175,9 +176,10 @@ class ParentBudgetingFragment : Fragment() {
                 }
             } else {
                 binding.imgFace.setImageResource(R.drawable.peso_coin)
-                binding.tvPerformancePercentage.visibility = View.GONE
-                binding.tvPerformanceStatus.visibility = View.GONE
+                binding.tvPerformancePercentage.text = "Get\nStarted"
                 binding.tvPerformanceText.text = "Your child hasn't completed any budgeting activities. Come back soon!"
+                binding.layoutLoading.visibility = View.GONE
+                binding.mainLayout.visibility = View.VISIBLE
             }
         }
     }

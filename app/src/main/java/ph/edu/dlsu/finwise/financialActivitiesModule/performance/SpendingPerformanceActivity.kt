@@ -58,6 +58,7 @@ class SpendingPerformanceActivity : AppCompatActivity() {
     var purchasePlanningPercentage = 0.00F
     var overallSpending = 0.00F
 
+    private var nSpendingCompleted = 0
 
     private var age = 0
 
@@ -109,16 +110,25 @@ class SpendingPerformanceActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private suspend fun getBudgeting() {
-        //get only completed budgeting activities because they should complete budgeting first before they are able to spend
-        var budgetingActivity = firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Budgeting").whereEqualTo("status", "Completed").get().await()
+        var spendingCompleted = firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().await()
+        nSpendingCompleted = spendingCompleted.size()
+        if (nSpendingCompleted > 0) {
+            //get only completed budgeting activities because they should complete budgeting first before they are able to spend
+            var budgetingActivity =
+                firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser)
+                    .whereEqualTo("financialActivityName", "Budgeting")
+                    .whereEqualTo("status", "Completed").get().await()
 
-        for (budgeting in budgetingActivity) {
-            //get budget items
-            var budgetItems = firestore.collection("BudgetItems").whereEqualTo("financialActivityID", budgeting.id).whereEqualTo("status", "Active").get().await()
-            nBudgetItems += budgetItems.size()
+            for (budgeting in budgetingActivity) {
+                //get budget items
+                var budgetItems = firestore.collection("BudgetItems")
+                    .whereEqualTo("financialActivityID", budgeting.id)
+                    .whereEqualTo("status", "Active").get().await()
+                nBudgetItems += budgetItems.size()
 
-            for (budgetItem in budgetItems)
-                budgetItemsIDArrayList.add(budgetItem.id)
+                for (budgetItem in budgetItems)
+                    budgetItemsIDArrayList.add(budgetItem.id)
+            }
         }
     }
 
