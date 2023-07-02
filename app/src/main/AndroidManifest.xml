@@ -11,16 +11,20 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:largeHeap="true"
-        android:hardwareAccelerated="false"
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
-        <activity android:name=".personalFinancialManagementModule.ChildNotificationSummary"
-            android:exported="false"/>
+        <activity
+            android:name=".ReconcileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".personalFinancialManagementModule.ChildNotificationSummary"
+            android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.ParentPendingForReviewActivity"
             android:exported="false">
@@ -28,14 +32,13 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".financialActivitiesModule.ActivitySelectBudgetItemTemplate"
             android:exported="false" />
-
         <activity
             android:name=".childDashboardModule.FinancialAssessmentsDetailsActivity"
             android:exported="false" />
+
         <service
             android:name=".services.GoalNotificationServices"
             android:enabled="true"
@@ -220,7 +223,7 @@
             android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.ParentLandingPageActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".parentFinancialActivitiesModule.ParentSettingAGoalActivity"
             android:exported="false" />
@@ -269,7 +272,7 @@
         </activity>
         <activity
             android:name=".financialAssessmentModule.FinancialAssessmentActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".profileModule.ProfileActivity"
             android:exported="false" />
@@ -330,7 +333,7 @@
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.PersonalFinancialManagementActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".financialActivitiesModule.EditGoal"
             android:exported="false" />
@@ -342,7 +345,7 @@
             android:exported="true" />
         <activity
             android:name=".parentFinancialManagementModule.ParentFinancialManagementActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
         <activity
             android:name=".parentFinancialManagementModule.ParentSendMoneyActivity"
             android:exported="false" />
@@ -366,7 +369,7 @@
             android:exported="false" />
         <activity
             android:name=".loginRegisterModule.LoginActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
