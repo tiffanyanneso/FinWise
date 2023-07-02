@@ -5,37 +5,31 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import ph.edu.dlsu.finwise.MainActivity
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.PFMAdapter
+import ph.edu.dlsu.finwise.childDashboardModule.ReconcileActivity
 import ph.edu.dlsu.finwise.databinding.ActivityParentFinancialManagementBinding
 import ph.edu.dlsu.finwise.databinding.DialogPfmParentTipsBinding
-import ph.edu.dlsu.finwise.databinding.DialogPfmReviewBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
 import ph.edu.dlsu.finwise.model.Transactions
 import ph.edu.dlsu.finwise.model.Users
-import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
 import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentPendingForReviewActivity
 import ph.edu.dlsu.finwise.parentFinancialManagementModule.pFMFragments.ExplanationParentFragment
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.CashMayaBalanceBreakdownActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.TransactionHistoryActivity
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.TrendDetailsActivity
 import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.BalanceFragment
-import ph.edu.dlsu.finwise.personalFinancialManagementModule.pFMFragments.SavingsFragment
 import java.text.DecimalFormat
 import java.util.ArrayList
 
@@ -140,6 +134,7 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         initializeDateButtons()
         goToParentTransactions()
         goToEarningActivity()
+        goToReconciliationActivity()
         goToCashMayaBalanceBreakdownParent()
         loadView()
     }
@@ -148,6 +143,16 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         binding.layoutLoading.visibility = View.GONE
         binding.layoutPfm.visibility = View.VISIBLE
         binding.bottomNavParent.visibility = View.VISIBLE
+    }
+
+    private fun goToReconciliationActivity() {
+        binding.btnEarning.setOnClickListener {
+            val goToReconciliationActivity = Intent(this, ReconcileActivity::class.java)
+            bundle.putString("childID", childID)
+            bundle.putString("module", "pfm")
+            goToReconciliationActivity.putExtras(bundle)
+            startActivity(goToReconciliationActivity)
+        }
     }
 
     private fun goToCashMayaBalanceBreakdownParent(){
