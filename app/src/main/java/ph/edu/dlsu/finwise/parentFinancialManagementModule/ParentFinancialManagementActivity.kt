@@ -18,7 +18,6 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.PFMAdapter
-import ph.edu.dlsu.finwise.childDashboardModule.ReconcileActivity
 import ph.edu.dlsu.finwise.databinding.ActivityParentFinancialManagementBinding
 import ph.edu.dlsu.finwise.databinding.DialogPfmParentTipsBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
@@ -81,6 +80,13 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
             showReviewButton()
         }
 
+        binding.btnReconcile.setOnClickListener{
+            var reconcile = Intent (this, ReconcileActivity::class.java)
+            var bundle  = Bundle()
+            bundle.putString("childID", childID)
+            reconcile.putExtras(bundle)
+            startActivity(reconcile)
+        }
     }
 
     private fun initializeChildID() {

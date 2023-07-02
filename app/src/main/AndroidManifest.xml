@@ -20,7 +20,7 @@
         android:theme="@style/Theme.FinWise"
         tools:targetApi="31">
         <activity
-            android:name=".ReconcileActivity"
+            android:name=".parentFinancialManagementModule.ReconcileActivity"
             android:exported="false" />
         <activity
             android:name=".personalFinancialManagementModule.ChildNotificationSummary"
