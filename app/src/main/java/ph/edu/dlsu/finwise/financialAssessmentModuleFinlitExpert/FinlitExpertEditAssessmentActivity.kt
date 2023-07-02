@@ -116,25 +116,22 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
 
     private fun goToFinlitExpertSpecificAssessment() {
         binding.btnCancel.setOnClickListener() {
-            val goToFinlitExpertSpecificAssessmentActivity = Intent(applicationContext, FinlitExpertSpecificAssessmentActivity::class.java)
+            val specificAssessment = Intent(applicationContext, FinancialAssessmentFinlitExpertActivity::class.java)
             var sendBundle = Bundle()
             sendBundle.putString("assessmentID", assessmentID)
-            sendBundle.putString("assessmentCategory", assessmentCategory)
-            sendBundle.putString("assessmentType", assessmentType)
-            goToFinlitExpertSpecificAssessmentActivity.putExtras(sendBundle)
-            startActivity(goToFinlitExpertSpecificAssessmentActivity)
+            specificAssessment.putExtras(sendBundle)
+            startActivity(specificAssessment)
         }
     }
     private fun loadBackButton() {
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(
-            resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24,
-            null)
+            resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
-            FinlitExpertSpecificAssessmentActivity() // Navigate back to FinlitExpertAssessmentTypeActivity
+            onBackPressed()
         }
     }
 
-    private fun FinlitExpertSpecificAssessmentActivity(){
+/*    private fun FinlitExpertSpecificAssessmentActivity(){
         val specificAssessment = Intent(applicationContext, FinlitExpertSpecificAssessmentActivity::class.java)
         var sendBundle = Bundle()
         sendBundle.putString("assessmentID", assessmentID)
@@ -143,15 +140,16 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
         specificAssessment.putExtras(sendBundle)
         startActivity(specificAssessment)
         finish() // Add this line to finish the current activity
-    }
+    }*/
 
- /*   override fun onBackPressed() {
-        val specificAssessment = Intent(applicationContext, FinlitExpertSpecificAssessmentActivity::class.java)
+    override fun onBackPressed() {
+        val specificAssessment = Intent(applicationContext, FinancialAssessmentFinlitExpertActivity::class.java)
         var sendBundle = Bundle()
         sendBundle.putString("assessmentID", assessmentID)
         specificAssessment.putExtras(sendBundle)
         startActivity(specificAssessment)
-    }*/
+       // finish()
+    }
 
 
     class QuestionStatus (var questionID:String, var question:String, var difficulty:String, var isActive:Boolean) {}

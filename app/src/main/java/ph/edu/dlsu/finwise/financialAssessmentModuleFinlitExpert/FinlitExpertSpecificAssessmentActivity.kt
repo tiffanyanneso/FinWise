@@ -107,13 +107,14 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
             onBackPressed()
         }
     }
-/*    override fun onBackPressed() {
+    override fun onBackPressed() {
         val specificAssessment = Intent(applicationContext, FinlitExpertAssessmentTypeActivity::class.java)
         var sendBundle = Bundle()
         sendBundle.putString("assessmentID", assessmentID)
         specificAssessment.putExtras(sendBundle)
         startActivity(specificAssessment)
-    }*/
+        //finish()
+    }
 
 }
 
