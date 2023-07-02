@@ -451,6 +451,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             calculateFinancialActivitiesScore()
             resetFinActVariables()
         }
+        Log.d("kaliper", "finActPerformanceCurrentMonth: +"+finActPerformanceCurrentMonth)
     }
 
 
@@ -489,45 +490,65 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
     private fun getPercentages() {
 
+        // Goal Setting
         if (age in 10..11 && goalRatingObjectArray.isNotEmpty()) {
-            var goalSettingPercentage  = ((overallRating / nRatings)/5)* 100
+            var goalSettingPercentage = 0.0F
+            if (nRatings != 0) {
+                goalSettingPercentage = ((overallRating / nRatings) / 5) * 100
+            }
             goalSettingPercentage = checkIfNaNPercentage(goalSettingPercentage)
             goalSettingPercentageArray.add(goalSettingPercentage)
         }
 
 
-        //Saving
-        var savingPercentage = (nOnTime/nGoals)*100
+        // Saving
+        var savingPercentage = if (nGoals != 0.0F) {
+            (nOnTime / nGoals) * 100
+        } else {
+            0.0F
+        }
         savingPercentage = checkIfNaNPercentage(savingPercentage)
         savingPercentageArray.add(savingPercentage)
 
 
         // Budgeting
-        var budgetingPercentage = if (isSpendingActivityCompleted) {
-            if (purchasedBudgetItemCount != 0.00F)
-                ((totalBudgetAccuracy/purchasedBudgetItemCount)
-                        + ((1 - (nParent.toFloat()/budgetItemCount)) * 100)) /2
-            else
-                ((1 - (nParent.toFloat()/budgetItemCount)) * 100)
-
+        var budgetingPercentage: Float
+        if (isSpendingActivityCompleted) {
+            if (purchasedBudgetItemCount != 0.0F) {
+                budgetingPercentage =
+                    ((totalBudgetAccuracy / purchasedBudgetItemCount) +
+                            ((1 - (nParent.toFloat() / budgetItemCount)) * 100)) / 2
+            } else {
+                budgetingPercentage = ((1 - (nParent.toFloat() / budgetItemCount)) * 100)
+            }
         } else {
-            if (purchasedBudgetItemCount != 0.00F)
-                ((totalBudgetAccuracy/purchasedBudgetItemCount) + ((1 - (nParent.toFloat()/budgetItemCount)) * 100)) /2
-            else
-                ((1 - (nParent.toFloat()/budgetItemCount)) * 100)
+            if (purchasedBudgetItemCount != 0.0F) {
+                budgetingPercentage =
+                    ((totalBudgetAccuracy / purchasedBudgetItemCount) +
+                            ((1 - (nParent.toFloat() / budgetItemCount)) * 100)) / 2
+            } else {
+                budgetingPercentage = ((1 - (nParent.toFloat() / budgetItemCount)) * 100)
+            }
         }
 
         budgetingPercentage = checkIfNaNPercentage(budgetingPercentage)
         budgetingPercentageArray.add(budgetingPercentage)
 
 
-        //Overspending
-        var overspendingPercentage = (overSpending/nBudgetItems)
+        // Overspending
+        var overspendingPercentage = 0.0F
+        if (nBudgetItems.toInt() != 0) {
+            overspendingPercentage = (overSpending / nBudgetItems)
+        }
         overspendingPercentage = checkIfNaNPercentage(overspendingPercentage)
         overspendingPercentageArray.add(overspendingPercentage)
 
-        //Spending
-        var spendingPercentage = ((1-overspendingPercentage)*100 + ((nPlanned/nTotalPurchased)*100)) /2
+// Spending
+        var spendingPercentage = 0.0F
+        if (nTotalPurchased.toInt() != 0) {
+            spendingPercentage =
+                ((1 - overspendingPercentage) * 100 + ((nPlanned / nTotalPurchased) * 100)) / 2
+        }
         spendingPercentage = checkIfNaNPercentage(spendingPercentage)
         spendingPercentageArray.add(spendingPercentage)
 
@@ -741,9 +762,8 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
         // Create a dataset from the data
         val dataSet = LineDataSet(graphData, "Financial Assessments Performance")
-        Log.d("sfsaddafwwwdfwqsdqwe", "onItemSelected: "+graphData)
-        dataSet.color = R.color.red
-        dataSet.setCircleColor(R.color.teal_200)
+        dataSet.color = ContextCompat.getColor(requireContext(), R.color.red)
+        dataSet.setCircleColor(ContextCompat.getColor(requireContext(), R.color.teal_200))
         dataSet.valueTextSize = 12f
 
 
@@ -1028,20 +1048,35 @@ class DashboardFinancialActivitiesFragment : Fragment() {
     private fun calculateFinancialActivitiesScore() {
         checkIfNaNFinancialActivitiesScores()
         var financialActivitiesPerformanceScore = 0F
+
         if (age == 9 || age == 12) {
+
             if (nGoals == 0.00F) {
                 val bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
                 binding.ivScore.setImageBitmap(bitmap)
                 binding.tvPerformanceStatus.visibility = View.GONE
                 binding.tvPerformancePercentage.visibility = View.GONE
                 binding.tvPerformanceText.text = "Complete financial activities to see your score here"
+            } else if (nBudgetingCompleted == 0 && nSpendingCompleted == 0) {
+                financialActivitiesPerformanceScore = savingPercentage
+            } else if (nBudgetingCompleted == 0) {
+                financialActivitiesPerformanceScore = savingPercentage
+            } else if (nSpendingCompleted == 0) {
+                financialActivitiesPerformanceScore = (savingPercentage + budgetingPercentage) / 2
+            } else {
+                financialActivitiesPerformanceScore = (savingPercentage + budgetingPercentage + spendingPercentage) / 3
             }
-            else if (nBudgetingCompleted == 0)
-                financialActivitiesPerformanceScore =  savingPercentage
-            else if (nSpendingCompleted == 0)
-                financialActivitiesPerformanceScore = (savingPercentage + budgetingPercentage)/2
-            else
-                financialActivitiesPerformanceScore = ((savingPercentage + budgetingPercentage + spendingPercentage) / 3)
+
+            if (isCurrentMonth) {
+                Log.d("ponka", "nGoals: +"+nGoals)
+                Log.d("ponka", "nBudgetingCompleted: +"+nBudgetingCompleted)
+                Log.d("ponka", "nSpendingCompleted: +"+nSpendingCompleted)
+                Log.d("ponka", "savingPercentage: +"+savingPercentage)
+                Log.d("ponka", "budgetingPercentage: +"+budgetingPercentage)
+                Log.d("ponka", "spendingPercentage: +"+spendingPercentage)
+                Log.d("ponka", "financialActivitiesPerformanceScore: +"+financialActivitiesPerformanceScore)
+            }
+
         }
         else if (age == 10 || age == 11) {
             if (nGoalSettingCompleted == 0) {
@@ -1066,13 +1101,30 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         val roundedFinancialActivitiesPerformance = (financialActivitiesPerformanceScore * 10).roundToInt() / 10
 
         if (isCurrentMonth) {
+            /*Log.d("ponka", "nGoals: +"+nGoals)
+            Log.d("ponka", "nBudgetingCompleted: +"+nBudgetingCompleted)
+            Log.d("ponka", "nSpendingCompleted: +"+nSpendingCompleted)
+            Log.d("ponka", "savingPercentage: +"+savingPercentage)
+            Log.d("ponka", "budgetingPercentage: +"+budgetingPercentage)
+            Log.d("ponka", "spendingPercentage: +"+spendingPercentage)
+            Log.d("ponka", "financialActivitiesPerformanceScore: +"+financialActivitiesPerformanceScore)
+*/
+            Log.d("kaliper", "financialActivitiesPerformanceScore: +"+financialActivitiesPerformanceScore)
             finActPerformanceCurrentMonth += financialActivitiesPerformanceScore
             goalSettingPercentageAverage += goalSettingPercentage
             savingPercentageTotalAverage += savingPercentage
             budgetingPercentageAverage += budgetingPercentage
             spendingPercentageAverage += spendingPercentage
+            Log.d("rockert", "finActPerformanceCurrentMonth: +"+finActPerformanceCurrentMonth)
+            Log.d("rockert", "goalSettingPercentage: +"+goalSettingPercentage)
+            Log.d("rockert", "savingPercentage: +"+savingPercentage)
+            Log.d("rockert", "budgetingPercentage: +"+budgetingPercentage)
+            Log.d("rockert", "spendingPercentage: +"+spendingPercentage)
+
             graphData.add(Entry(xAxisPoint, roundedFinancialActivitiesPerformance.toFloat()))
             xAxisPoint++
+            Log.d("kamarot", "graphData: +"+graphData)
+
         } else finActPerformancePreviousMonth += financialActivitiesPerformanceScore
 
     }
@@ -1192,7 +1244,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             if (goal.dateCompleted != null) {
                 val targetDate = goal.targetDate!!.toDate()
                 val completedDate = goal.dateCompleted!!.toDate()
-
                 //goal was completed before the target date, meaning it was completed on time
                 if (completedDate.before(targetDate) || completedDate == targetDate)
                     nOnTime++
@@ -1388,6 +1439,8 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else "Keep practicing your goal setting, saving, budgeting, and spending. You’ll get there!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.bad)
         } else {
+            Log.d("avaness", "finActPerformanceCurrentMonth: "+finActPerformanceCurrentMonth)
+            Log.d("avaness", "age: "+age)
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_default
             else
