@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
@@ -59,8 +60,13 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
         binding.dropdownDifficulty.setAdapter(adapter)
 
         binding.btnAddNewChoices.setOnClickListener {
-            //TODO: ADD ALERT IF THERE ARE ALREADY 4 CHOICES
-            addNewChoice()
+            if (choicesArrayList.size < 4) {
+                binding.errorChoices.visibility = View.GONE
+                addNewChoice()
+            } else {
+                binding.errorChoices.text = "Cannot add more than 4 choices"
+                binding.errorChoices.visibility = View.VISIBLE
+            }
         }
 
         binding.btnSave.setOnClickListener {
@@ -70,35 +76,38 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
     }
 
     private fun saveQuestionAndChoices() {
-        var questionObject = hashMapOf(
-             "assessmentID" to assessmentID,
-             "question" to binding.etQuestion.text.toString(),
-             "difficulty" to binding.dropdownDifficulty.text.toString(),
-             "answerAccuracy" to 0.00F,
-             "dateCreated" to Timestamp.now(),
-             "dateModified" to Timestamp.now(),
-             "createdBy" to currentUser,
-             "modifiedBy" to currentUser,
-             "isUsed" to true,
-            "nAssessments" to 0,
-            "nAnsweredCorrectly" to 0
-        )
-        firestore.collection("AssessmentQuestions").add(questionObject).addOnSuccessListener {
-            var questionID = it.id
+        if (isValid()) {
+            binding.errorChoices.visibility = View.GONE
+            var questionObject = hashMapOf(
+                "assessmentID" to assessmentID,
+                "question" to binding.etQuestion.text.toString(),
+                "difficulty" to binding.dropdownDifficulty.text.toString(),
+                "answerAccuracy" to 0.00F,
+                "dateCreated" to Timestamp.now(),
+                "dateModified" to Timestamp.now(),
+                "createdBy" to currentUser,
+                "modifiedBy" to currentUser,
+                "isUsed" to true,
+                "nAssessments" to 0,
+                "nAnsweredCorrectly" to 0
+            )
+            firestore.collection("AssessmentQuestions").add(questionObject).addOnSuccessListener {
+                var questionID = it.id
 
-            for (choiceItem in choicesArrayList)  {
-                var choiceObject = hashMapOf(
-                    "questionID" to questionID,
-                    "choice" to choiceItem.choice,
-                    "isCorrect" to choiceItem.correct
-                )
-                firestore.collection("AssessmentChoices").add(choiceObject)
+                for (choiceItem in choicesArrayList) {
+                    var choiceObject = hashMapOf(
+                        "questionID" to questionID,
+                        "choice" to choiceItem.choice,
+                        "isCorrect" to choiceItem.correct
+                    )
+                    firestore.collection("AssessmentChoices").add(choiceObject)
+                }
+                var editAssessment = Intent(this, FinlitExpertEditAssessmentActivity::class.java)
+                var sendBundle = Bundle()
+                sendBundle.putString("assessmentID", assessmentID)
+                editAssessment.putExtras(sendBundle)
+                this.startActivity(editAssessment)
             }
-            var editAssessment = Intent(this, FinlitExpertEditAssessmentActivity::class.java)
-            var sendBundle = Bundle()
-            sendBundle.putString("assessmentID", assessmentID)
-            editAssessment.putExtras(sendBundle)
-            this.startActivity(editAssessment)
         }
     }
 
@@ -140,6 +149,31 @@ class FinlitExpertAddNewQuestionsActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun isValid() : Boolean{
+        var valid = true
+
+        if (binding.etQuestion.text.toString().isEmpty()) {
+            valid = false
+            binding.containerQuestion.helperText = "Input question"
+        } else
+            binding.containerQuestion.helperText = ""
+
+        if (binding.dropdownDifficulty.text.toString().isEmpty()) {
+            valid = false
+            binding.containerDifficulty.helperText = "Select question difficulty"
+        } else
+            binding.containerDifficulty.helperText = ""
+
+        if (choicesArrayList.size < 2) {
+            valid = false
+            binding.errorChoices.text = "Input at least 2 choices"
+            binding.errorChoices.visibility = View.VISIBLE
+        } else
+            binding.errorChoices.visibility = View.GONE
+
+        return valid
     }
 
     private fun goToFinlitExpertEditAssessment() {

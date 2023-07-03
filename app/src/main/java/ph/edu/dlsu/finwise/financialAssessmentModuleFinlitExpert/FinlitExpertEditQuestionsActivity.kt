@@ -3,6 +3,7 @@ package ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -48,12 +49,18 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
         setFields()
         loadBackButton()
         binding.btnAddNewChoices.setOnClickListener {
-            //TODO: ADD ALERT IF THERE ARE ALREADY 4 CHOICES
-            addNewChoice()
+            if (choicesArrayList.size < 4) {
+                binding.errorChoices.visibility = View.GONE
+                addNewChoice()
+            }  else {
+                binding.errorChoices.text = "Cannot add more than 4 choices"
+                binding.errorChoices.visibility = View.VISIBLE
+            }
         }
 
         binding.btnSave.setOnClickListener {
-            updateQuestion()
+            if (isValid())
+                updateQuestion()
         }
     }
 
@@ -69,14 +76,14 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
             for (choice in results)
                 firestore.collection("AssessmentChoices").document(choice.id).delete()
 
-                for (choiceItem in choicesArrayList)  {
-                    var choiceObject = hashMapOf(
-                        "questionID" to questionID,
-                        "choice" to choiceItem.choice,
-                        "isCorrect" to choiceItem.correct
-                    )
-                    firestore.collection("AssessmentChoices").add(choiceObject)
-                }
+            for (choiceItem in choicesArrayList)  {
+                var choiceObject = hashMapOf(
+                    "questionID" to questionID,
+                    "choice" to choiceItem.choice,
+                    "isCorrect" to choiceItem.correct
+                )
+                firestore.collection("AssessmentChoices").add(choiceObject)
+            }
         }.continueWith {
             Toast.makeText(this, "Question Updated", Toast.LENGTH_SHORT)
             var editAssessment = Intent(this, FinlitExpertEditAssessmentActivity::class.java)
@@ -180,6 +187,32 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
             //finish()
         }
     }
+
+    private fun isValid() : Boolean {
+        var valid = true
+
+        if (binding.etQuestion.text.toString().isEmpty()) {
+            valid = false
+            binding.containerQuestion.helperText = "Input question"
+        } else
+            binding.containerQuestion.helperText = ""
+
+        if (binding.dropdownDifficulty.text.toString().isEmpty()) {
+            valid = false
+            binding.containerDifficulty.helperText = "Select question difficulty"
+        } else
+            binding.containerDifficulty.helperText = ""
+
+        if (choicesArrayList.size < 2) {
+            valid = false
+            binding.errorChoices.text = "Input at least 2 choices"
+            binding.errorChoices.visibility = View.VISIBLE
+        } else
+            binding.errorChoices.visibility = View.GONE
+
+        return valid
+    }
+
     private fun loadBackButton() {
         binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
         binding.topAppBar.setNavigationOnClickListener {
