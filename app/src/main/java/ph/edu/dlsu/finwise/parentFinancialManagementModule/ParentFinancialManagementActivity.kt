@@ -79,14 +79,6 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
         binding.btnReview.setOnClickListener {
             showReviewButton()
         }
-
-        binding.btnReconcile.setOnClickListener{
-            var reconcile = Intent (this, ReconcileActivity::class.java)
-            var bundle  = Bundle()
-            bundle.putString("childID", childID)
-            reconcile.putExtras(bundle)
-            startActivity(reconcile)
-        }
     }
 
     private fun initializeChildID() {
@@ -152,10 +144,9 @@ class ParentFinancialManagementActivity : AppCompatActivity() {
     }
 
     private fun goToReconciliationActivity() {
-        binding.btnEarning.setOnClickListener {
+        binding.btnReconcile.setOnClickListener {
             val goToReconciliationActivity = Intent(this, ReconcileActivity::class.java)
             bundle.putString("childID", childID)
-            bundle.putString("module", "pfm")
             goToReconciliationActivity.putExtras(bundle)
             startActivity(goToReconciliationActivity)
         }

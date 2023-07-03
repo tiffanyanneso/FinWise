@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.widget.doAfterTextChanged
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -27,6 +28,7 @@ import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.ParentLandingPageActi
 import ph.edu.dlsu.finwise.databinding.ActivityParentRegisterChildBinding
 import ph.edu.dlsu.finwise.databinding.DialogParentLoginAgainBinding
 import ph.edu.dlsu.finwise.parentDashboardModule.ParentDashboardActivity
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
@@ -46,6 +48,10 @@ class ParentRegisterChildActivity : AppCompatActivity() {
     lateinit var username : String
     lateinit var birthday : String
 
+    private var cashBalance = 0.0F
+    private var mayaBalance = 0.0F
+    private var totalBalance = 0.0F
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +68,27 @@ class ParentRegisterChildActivity : AppCompatActivity() {
         binding.etBirthday.setOnClickListener{
             showCalendar()
         }
+
+        binding.etCashBalance.doAfterTextChanged { editable ->
+            computeUpdatedBalance()
+        }
+
+        binding.etMayaBalance.doAfterTextChanged { editable ->
+            computeUpdatedBalance()
+        }
+    }
+
+    private fun computeUpdatedBalance() {
+        totalBalance = 0.0F
+
+        if (binding.etCashBalance.text.toString().isNotEmpty())
+            totalBalance += binding.etCashBalance.text.toString().toFloat()
+
+        if (binding.etMayaBalance.text.toString().isNotEmpty())
+            totalBalance += binding.etMayaBalance.text.toString().toFloat()
+
+
+        binding.tVUpdatedTotal.text = "₱ " + DecimalFormat("#,##0.00").format(totalBalance)
     }
 
     private fun save() {
@@ -136,14 +163,14 @@ class ParentRegisterChildActivity : AppCompatActivity() {
 
         var cashWallet = hashMapOf(
             "childID" to childID,
-            "currentBalance" to 0,
+            "currentBalance" to cashBalance,
             "type" to "Cash",
             "lastUpdated" to time
         )
 
         var mayaWallet = hashMapOf(
         "childID" to childID,
-        "currentBalance" to 0,
+        "currentBalance" to mayaBalance,
         "type" to "Maya",
         "lastUpdated" to time
         )
@@ -275,7 +302,7 @@ class ParentRegisterChildActivity : AppCompatActivity() {
 //                (binding.etBirthday.dayOfMonth).toString() + "/" + (binding.etBirthday.year).toString()
 
         if (binding.etBirthday.text.toString().trim().isEmpty()) {
-            binding.dateContainer.helperText = "Select target date."
+            binding.dateContainer.helperText = "Please select your child's birthday."
             valid = false
         } else {
             binding.dateContainer.helperText = ""
@@ -312,9 +339,19 @@ class ParentRegisterChildActivity : AppCompatActivity() {
 
         if (binding.etConfirmPassword.text.toString() != binding.etConfirmPassword.text.toString() && setPW && rePW) {
             binding.etConfirmPassword.error = "Please enter the same password."
-            binding.etConfirmPassword.error = "Please enter the same password."
             valid = false
         } else password = binding.etConfirmPassword.text.toString().trim()
+
+
+        if (binding.etCashBalance.text.toString().trim().isEmpty()) {
+            binding.etCashBalance.error = "Please input a cash balance."
+            valid = false
+        } else cashBalance = binding.etCashBalance.text.toString().trim().toFloat()
+
+        if (binding.etMayaBalance.text.toString().trim().isEmpty()) {
+            binding.etMayaBalance.error = "Please input a cash balance."
+            valid = false
+        } else mayaBalance = binding.etMayaBalance.text.toString().trim().toFloat()
 
         if (binding.radioButtonsOverall.checkedRadioButtonId == -1) {
             binding.tvErrorOverallRadio.visibility = View.VISIBLE
@@ -322,24 +359,6 @@ class ParentRegisterChildActivity : AppCompatActivity() {
         } else
             binding.tvErrorOverallRadio.visibility = View.GONE
 
-        
-//        if (binding.radioButtonsPfm.checkedRadioButtonId == -1) {
-//            binding.tvErrorPfmRadio.visibility = View.VISIBLE
-//            valid = false
-//        } else
-//            binding.tvErrorPfmRadio.visibility = View.GONE
-//
-//        if (binding.radioButtonsFinact.checkedRadioButtonId == -1) {
-//            binding.tvErrorFinactRadio.visibility = View.VISIBLE
-//            valid = false
-//        } else
-//            binding.tvErrorFinactRadio.visibility = View.GONE
-//
-//        if (binding.radioButtonsAssessments.checkedRadioButtonId == -1) {
-//            binding.tvErrorAssessmentsRadio.visibility = View.VISIBLE
-//            valid = false
-//        } else
-//            binding.tvErrorAssessmentsRadio.visibility = View.GONE
 
         return valid
     }

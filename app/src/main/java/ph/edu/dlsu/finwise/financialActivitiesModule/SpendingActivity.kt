@@ -22,6 +22,7 @@ import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.firestore.ktx.toObjects
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
+import ph.edu.dlsu.finwise.NavbarParent
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivitySpendingBinding
 import ph.edu.dlsu.finwise.databinding.DialogTakeAssessmentBinding
@@ -64,11 +65,6 @@ class SpendingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySpendingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Hides actionbar,
-        // and initializes the navbar
-        supportActionBar?.hide()
-        Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
 
         bundle = intent.extras!!
         savingActivityID = bundle.getString("savingActivityID").toString()
@@ -147,9 +143,15 @@ class SpendingActivity : AppCompatActivity() {
     }
 
     private fun checkUser() {
+        // Hides actionbar,
+        // and initializes the navbar
+        supportActionBar?.hide()
         firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
             if (it.toObject<Users>()!!.userType == "Child") {
                 childID = currentUser
+                binding.bottomNav.visibility = View.VISIBLE
+                binding.bottomNavParent.visibility = View.GONE
+                Navbar(findViewById(R.id.bottom_nav), this, R.id.nav_goal)
                 firestore.collection("FinancialActivities").document(spendingActivityID).get().addOnSuccessListener {
                     if (it.toObject<FinancialActivities>()!!.status == "In Progress") {
                         binding.layoutAmount.visibility = View.VISIBLE
@@ -157,6 +159,14 @@ class SpendingActivity : AppCompatActivity() {
                     } else
                         binding.layoutAmount.visibility = View.GONE
                 }
+            } else if (it.toObject<Users>()!!.userType == "Parent") {
+                binding.bottomNav.visibility = View.GONE
+                binding.bottomNavParent.visibility = View.VISIBLE
+                var bundle = intent.extras!!
+                childID = bundle.getString("childID").toString()
+                val bundleNavBar = Bundle()
+                bundleNavBar.putString("childID", childID)
+                NavbarParent(findViewById(R.id.bottom_nav_parent), this, R.id.nav_parent_goal, bundleNavBar)
             }
         }
     }

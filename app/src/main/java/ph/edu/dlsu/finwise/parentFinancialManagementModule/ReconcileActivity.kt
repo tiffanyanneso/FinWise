@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.doAfterTextChanged
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -19,6 +21,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.databinding.ActivityReconcileBinding
 import ph.edu.dlsu.finwise.databinding.DialogConfirmReconcillationBinding
 import ph.edu.dlsu.finwise.model.ChildWallet
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningMenuActivity
 import java.text.DecimalFormat
 
 class ReconcileActivity : AppCompatActivity() {
@@ -41,6 +44,7 @@ class ReconcileActivity : AppCompatActivity() {
         setContentView(binding.root)
         context = this
 
+        loadBackButton()
         var bundle = intent.extras!!
         childID = bundle.getString("childID").toString()
 
@@ -104,6 +108,8 @@ class ReconcileActivity : AppCompatActivity() {
         }
 
         binding.tvCurrentBalanceOfChild.text = "₱ " + DecimalFormat("#,##0.00").format(totalBalance)
+        binding.layoutLoading.visibility = View.GONE
+        binding.mainLayout.visibility = View.VISIBLE
     }
 
     private fun showConfirmationDialog() {
@@ -163,5 +169,12 @@ class ReconcileActivity : AppCompatActivity() {
         bundle.putString("childID", childID)
         parentPfm.putExtras(bundle)
         startActivity(parentPfm)
+    }
+
+    private fun loadBackButton() {
+        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
+        binding.topAppBar.setNavigationOnClickListener {
+           onBackPressed()
+        }
     }
 }

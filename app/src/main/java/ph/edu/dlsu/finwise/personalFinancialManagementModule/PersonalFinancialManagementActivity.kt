@@ -536,12 +536,9 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
     private suspend fun notificationsForNewEarning() {
         var earningActivities = firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("status", "Ongoing").get().await()
 
-        for (earning in earningActivities) {
-            var earningDateAdded = earning.toObject<EarningActivityModel>().dateAdded!!.toDate()
-
-            if (earningDateAdded.after(lastLogin))
+        for (earning in earningActivities)
                 newEarningArrayList.add(earning.id)
-        }
+
     }
 
     private suspend fun notificationForSentEarning() {
