@@ -218,10 +218,10 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 // Do something with the selected month
                 selectedDatesSort = selectedMonth
                 getCurrentAndPreviousMonth(selectedMonth, months)
-               coroutineScope.launch {
+                clearData()
+                coroutineScope.launch {
                     getAssessmentAttempts()
                     getDatesOfAttempts()
-                    clearData()
                     setData()
                     if (isAdded)
                         setPerformanceView()
@@ -236,7 +236,7 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 // Handle case when no month is selected
                 selectedDatesSort = "current"
                 coroutineScope.launch {
-                    resetVariables()
+                    clearData()
                     setData()
                     if (isAdded)
                         setPerformanceView()
@@ -676,6 +676,18 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
     private fun initializeGraph() {
         chart = binding.financialAssessmentChart
 
+        // on below line adding animation
+        chart.animate()
+
+        chart.setPinchZoom(true)
+        chart.setScaleEnabled(false)
+
+        chart.axisRight.isEnabled = false
+
+        chart.description.isEnabled = false
+
+        chart.setNoDataText("You have no data yet. Come back to this module after you have used the app.")
+
         val xAxis = chart.xAxis
         xAxis.granularity = 1f // Set a smaller granularity if there are fewer data points
 
@@ -695,25 +707,10 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
 
         // Create a dataset from the data
         val dataSet = LineDataSet(graphData, "Financial Assessments Performance")
-        dataSet.color = R.color.red
-        dataSet.setCircleColor(R.color.teal_200)
+
+        dataSet.color = ContextCompat.getColor(requireContext(), R.color.black)
+        dataSet.setCircleColor(ContextCompat.getColor(requireContext(), R.color.black))
         dataSet.valueTextSize = 12f
-
-
-        //Set the data on the chart and customize it
-        val lineData = LineData(dataSet)
-        chart.data = lineData
-
-        // on below line adding animation
-        chart.animate()
-
-        chart.setPinchZoom(true)
-        chart.setScaleEnabled(false)
-
-        chart.axisRight.isEnabled = false
-
-        chart.description.isEnabled = false
-
         // Add a Peso sign in the data points in the graph
         dataSet.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
@@ -723,7 +720,11 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
                 return "$formattedValue%"
             }
         }
-        chart.setNoDataText("You have no data yet. Come back to this module after you have used the app.")
+
+        //Set the data on the chart and customize it
+        val lineData = LineData(dataSet)
+        chart.data = lineData
+        Log.d("initknaye", "lineData: "+lineData)
         chart.invalidate()
     }
 
@@ -967,10 +968,6 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
 
     }
 
-    private fun resetVariables() {
-        graphData.clear()
-        xAxisPoint = 0.00F
-    }
 
     private suspend fun getAssessmentAttempts() {
         val assessmentAttemptsDocuments =  firestore.collection("AssessmentAttempts")

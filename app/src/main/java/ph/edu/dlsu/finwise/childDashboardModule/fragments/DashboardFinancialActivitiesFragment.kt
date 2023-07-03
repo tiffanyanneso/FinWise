@@ -261,13 +261,13 @@ class DashboardFinancialActivitiesFragment : Fragment() {
                 selectedDatesSort = selectedMonth
                 getCurrentAndPreviousMonth(selectedMonth, months)
                 coroutineScope.launch {
+                    resetVariables()
                     getFinancialActivities()
                     getUniqueDates()
                     setData()
                     if (isAdded)
                         setPerformanceView()
                     Log.d("sfsaddafwwwdfwqsdqwe", "fsdfsdfdsddd: "+graphData)
-                    resetVariables()
                     loadView()
                     hideLoadingChart()
                 }
@@ -625,7 +625,6 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         val previousMonth = getPreviousMonth(month)
         weeksCurrentMonth = getWeeksOfMonth(sortedDate, month)
         weeksPreviousMonth = getWeeksOfMonth(sortedDate, previousMonth)
-        Log.d("konada", "month: "+month)
         isCurrentMonth = true
         getDataOfWeeksOfCurrentMonth(weeksCurrentMonth!!)
         isCurrentMonth = false
@@ -741,7 +740,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
       }*/
 
     private fun initializeGraph() {
-        chart = binding.financialActivitiesChart
+        chart = view?.findViewById(R.id.financial_activities_chart)!!
 
         val xAxis = chart.xAxis
         xAxis.granularity = 1f // Set a smaller granularity if there are fewer data points
@@ -762,8 +761,9 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
         // Create a dataset from the data
         val dataSet = LineDataSet(graphData, "Financial Assessments Performance")
-        dataSet.color = ContextCompat.getColor(requireContext(), R.color.red)
-        dataSet.setCircleColor(ContextCompat.getColor(requireContext(), R.color.teal_200))
+        Log.d("konada", "month: "+graphData)
+        dataSet.color = ContextCompat.getColor(requireContext(), R.color.black)
+        dataSet.setCircleColor(ContextCompat.getColor(requireContext(), R.color.black))
         dataSet.valueTextSize = 12f
 
 

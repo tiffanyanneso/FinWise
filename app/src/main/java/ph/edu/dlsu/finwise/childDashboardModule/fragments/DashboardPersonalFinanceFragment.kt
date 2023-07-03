@@ -742,8 +742,8 @@ class DashboardPersonalFinanceFragment : Fragment() {
 
         // Create a dataset from the data
         val dataSet = LineDataSet(graphData, "Personal Financial Performance")
-        dataSet.color = R.color.red
-        dataSet.setCircleColor(R.color.teal_200)
+        dataSet.color = ContextCompat.getColor(requireContext(), R.color.black)
+        dataSet.setCircleColor(ContextCompat.getColor(requireContext(), R.color.black))
         dataSet.valueTextSize = 12f
 
 
