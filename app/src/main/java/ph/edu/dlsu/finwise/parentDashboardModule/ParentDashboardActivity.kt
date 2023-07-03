@@ -84,10 +84,11 @@ class ParentDashboardActivity : AppCompatActivity(){
             }
         }
 
-//        binding.btnAddChild.setOnClickListener {
-//            val goToChildRegister = Intent(this, ParentRegisterChildActivity::class.java)
-//            startActivity(goToChildRegister)
-//        }
+
+        binding.btnRegisterChild.setOnClickListener {
+            val goToChildRegister = Intent(this, ParentRegisterChildActivity::class.java)
+            startActivity(goToChildRegister)
+        }
 
         binding.layoutPendingEarning.setOnClickListener {
             var intent = Intent(this, ParentPendingForReviewActivity::class.java)
@@ -274,10 +275,13 @@ class ParentDashboardActivity : AppCompatActivity(){
         var childFilterArrayList = ArrayList<ChildFilter>()
         val adapter = ViewPagerAdapter(supportFragmentManager)
 
-
         lastLogin = firestore.collection("Users").document(currentUser).get().await().toObject<Users>()!!.lastLogin!!
         var children =  firestore.collection("Users").whereEqualTo("userType", "Child").whereEqualTo("parentID", currentUser).get().await()
         if (children.size()!=0) {
+            binding.layoutNoChild.visibility = View.GONE
+            binding.layoutChildren.visibility = View.VISIBLE
+            binding.tabLayout.visibility = View.VISIBLE
+            binding.viewPager.visibility = View.VISIBLE
             for (child in children)
                 childFilterArrayList.add(ChildFilter(child.id, child.toObject<Users>().firstName!!))
 
@@ -301,6 +305,11 @@ class ParentDashboardActivity : AppCompatActivity(){
             childAdapter = ParentChildrenAdapter(this, childIDArrayList)
             binding.rvViewChildren.adapter = childAdapter
             binding.rvViewChildren.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+        } else {
+            binding.layoutNoChild.visibility = View.VISIBLE
+            binding.layoutChildren.visibility = View.GONE
+            binding.tabLayout.visibility = View.GONE
+            binding.viewPager.visibility = View.GONE
         }
     }
 
