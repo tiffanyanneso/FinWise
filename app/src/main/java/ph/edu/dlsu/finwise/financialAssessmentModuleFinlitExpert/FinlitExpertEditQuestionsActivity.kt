@@ -19,6 +19,7 @@ import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.NewChoicesAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertEditQuestionsBinding
 import ph.edu.dlsu.finwise.databinding.DialogAddNewChoiceBinding
+import ph.edu.dlsu.finwise.databinding.DialogEditChoiceBinding
 import ph.edu.dlsu.finwise.model.FinancialAssessmentChoices
 import ph.edu.dlsu.finwise.model.FinancialAssessmentQuestions
 
@@ -50,11 +51,11 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
         loadBackButton()
         binding.btnAddNewChoices.setOnClickListener {
             if (choicesArrayList.size < 4) {
-                binding.errorChoices.visibility = View.GONE
+                binding.errorChoiceQuantity.visibility = View.GONE
                 addNewChoice()
             }  else {
-                binding.errorChoices.text = "Cannot add more than 4 choices"
-                binding.errorChoices.visibility = View.VISIBLE
+                binding.errorChoiceQuantity.text = "Cannot add more than 4 choices"
+                binding.errorChoiceQuantity.visibility = View.VISIBLE
             }
         }
 
@@ -102,10 +103,13 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
         dialog.window!!.setLayout(800, 1000)
 
         dialogBinding.btnSave.setOnClickListener {
-            choicesArrayList.add(FinlitExpertAddNewQuestionsActivity.Choice(dialogBinding.dialogEtNewChoice.text.toString(),
-                dialogBinding.cbCorrect.isChecked))
-            choicesAdapter.notifyDataSetChanged()
-            dialog.dismiss()
+            if (dialogBinding.dialogEtNewChoice.text.toString().isNotEmpty()) {
+                dialogBinding.containerChoice.helperText = ""
+                choicesArrayList.add(FinlitExpertAddNewQuestionsActivity.Choice(dialogBinding.dialogEtNewChoice.text.toString(), dialogBinding.cbCorrect.isChecked))
+                choicesAdapter.notifyDataSetChanged()
+                dialog.dismiss()
+            } else
+                dialogBinding.containerChoice.helperText = "Input a choice"
         }
 
         dialogBinding.btnCancel.setOnClickListener {
@@ -115,17 +119,31 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
     }
 
     private fun editChoiceDialog(position:Int, choice:String, isCorrect:Boolean) {
-        var dialogBinding= DialogAddNewChoiceBinding.inflate(getLayoutInflater())
+        var dialogBinding= DialogEditChoiceBinding.inflate(getLayoutInflater())
         var dialog= Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
         dialogBinding.dialogEtNewChoice.setText(choice)
         dialogBinding.cbCorrect.isChecked = isCorrect
 
-        dialog.window!!.setLayout(800, 1000)
+        dialog.window!!.setLayout(1000, 1000)
 
         dialogBinding.btnSave.setOnClickListener {
-            choicesArrayList.set(position, FinlitExpertAddNewQuestionsActivity.Choice(dialogBinding.dialogEtNewChoice.text.toString(),
-                    dialogBinding.cbCorrect.isChecked))
+            if (dialogBinding.dialogEtNewChoice.text.toString().isNotEmpty()) {
+                dialogBinding.containerChoice.helperText = ""
+                choicesArrayList.set(
+                    position, FinlitExpertAddNewQuestionsActivity.Choice(
+                        dialogBinding.dialogEtNewChoice.text.toString(),
+                        dialogBinding.cbCorrect.isChecked
+                    )
+                )
+                choicesAdapter.notifyDataSetChanged()
+                dialog.dismiss()
+            } else
+                dialogBinding.containerChoice.helperText = "Input a choice"
+        }
+
+        dialogBinding.btnDelete.setOnClickListener {
+            choicesArrayList.removeAt(position)
             choicesAdapter.notifyDataSetChanged()
             dialog.dismiss()
         }
@@ -203,12 +221,20 @@ class FinlitExpertEditQuestionsActivity : AppCompatActivity() {
         } else
             binding.containerDifficulty.helperText = ""
 
+        var correctAnswerCount = choicesArrayList.count{it.correct!!}
+        if (correctAnswerCount != 1) {
+            valid = false
+            binding.errorCorrectAnswer.visibility = View.VISIBLE
+            binding.errorCorrectAnswer.text = "There should be one correct answer"
+        } else
+            binding.errorCorrectAnswer.visibility = View.GONE
+
         if (choicesArrayList.size < 2) {
             valid = false
-            binding.errorChoices.text = "Input at least 2 choices"
-            binding.errorChoices.visibility = View.VISIBLE
+            binding.errorChoiceQuantity.text = "Input at least 2 choices"
+            binding.errorChoiceQuantity.visibility = View.VISIBLE
         } else
-            binding.errorChoices.visibility = View.GONE
+            binding.errorChoiceQuantity.visibility = View.GONE
 
         return valid
     }

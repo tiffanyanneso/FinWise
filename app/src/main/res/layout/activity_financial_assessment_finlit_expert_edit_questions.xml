@@ -157,7 +157,17 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/error_choices"
+                android:id="@+id/error_choice_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Add at least 2 choices"
+                android:textColor="@color/red"
+                android:textSize="16dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/error_correct_answer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"

@@ -10,12 +10,16 @@ import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.NavbarFinlitExpert
 import ph.edu.dlsu.finwise.R
 import ph.edu.dlsu.finwise.adapter.SpecificAssessmentAdapter
 import ph.edu.dlsu.finwise.databinding.ActivityFinancialAssessmentFinlitExpertSpecificAssessmentBinding
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.fragment.AssessmentDetailsFragment
 import ph.edu.dlsu.finwise.financialAssessmentModuleFinlitExpert.fragment.AssessmentQuestionsFragment
+import ph.edu.dlsu.finwise.model.FinancialAssessmentDetails
 
 
 class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
@@ -24,6 +28,8 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
     private lateinit var assessmentID:String
     private lateinit var assessmentCategory: String // Add this line
     private lateinit var assessmentType: String // Add this line
+
+    private var firestore = Firebase.firestore
 
     private val tabIcons = intArrayOf(
         ph.edu.dlsu.finwise.R.drawable.baseline_list_24,
@@ -37,12 +43,11 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         assessmentID = bundle.getString("assessmentID").toString()
-        assessmentCategory = bundle.getString("assessmentCategory").toString() // Initialize assessmentCategory
-        assessmentType = bundle.getString("assessmentType").toString() // Initialize assessmentType
-        binding.tvAssessmentName.text = "$assessmentCategory - $assessmentType"
+        firestore.collection("Assessments").document(assessmentID).get().addOnSuccessListener {
+            var assessment = it.toObject<FinancialAssessmentDetails>()
+            binding.tvAssessmentName.text = "${assessment?.assessmentCategory} - ${assessment?.assessmentType}"
+        }
 
-
-        loadBackButton()
         initializeFragments()
 
         // and initializes the navbar
@@ -95,18 +100,11 @@ class FinlitExpertSpecificAssessmentActivity : AppCompatActivity() {
            val goToFinlitExpertEditAssessmentActivity = Intent(applicationContext, FinlitExpertEditAssessmentActivity::class.java)
            var bundle = Bundle()
            bundle.putString("assessmentID", assessmentID)
-           bundle.putString("assessmentCategory", assessmentCategory)
-           bundle.putString("assessmentType", assessmentType)
            goToFinlitExpertEditAssessmentActivity.putExtras(bundle)
            startActivity(goToFinlitExpertEditAssessmentActivity)
         }
     }
-    private fun loadBackButton() {
-        binding.topAppBar.navigationIcon = ResourcesCompat.getDrawable(resources, ph.edu.dlsu.finwise.R.drawable.baseline_arrow_back_24, null)
-        binding.topAppBar.setNavigationOnClickListener {
-            onBackPressed()
-        }
-    }
+
     override fun onBackPressed() {
         val specificAssessment = Intent(applicationContext, FinlitExpertAssessmentTypeActivity::class.java)
         var sendBundle = Bundle()

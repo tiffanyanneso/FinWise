@@ -27,8 +27,7 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
     private var questionStatusArrayList = ArrayList<QuestionStatus>()
 
     private lateinit var assessmentID:String
-    private lateinit var assessmentCategory: String // Add this line
-    private lateinit var assessmentType: String // Add this line
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFinancialAssessmentFinlitExpertEditAssessmentBinding.inflate(layoutInflater)
@@ -36,8 +35,6 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
 
         var bundle = intent.extras!!
         assessmentID = bundle.getString("assessmentID").toString()
-       assessmentCategory = bundle.getString("assessmentCategory").toString() // Initialize assessmentCategory
-        assessmentType = bundle.getString("assessmentType").toString() // Initialize assessmentType
 
         loadAssessmentDetails()
         loadQuestions()
@@ -49,12 +46,14 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
 
 
         binding.btnSave.setOnClickListener {
-            updateAssessmentDetails()
-            var specificAssessment = Intent(this, FinlitExpertSpecificAssessmentActivity::class.java)
-            var bundle = Bundle()
-            bundle.putString("assessmentID", assessmentID)
-            specificAssessment.putExtras(bundle)
-            this.startActivity(specificAssessment)
+            if (isValid()) {
+                updateAssessmentDetails()
+                var specificAssessment = Intent(this, FinlitExpertSpecificAssessmentActivity::class.java)
+                var bundle = Bundle()
+                bundle.putString("assessmentID", assessmentID)
+                specificAssessment.putExtras(bundle)
+                this.startActivity(specificAssessment)
+            }
         }
     }
 
@@ -68,9 +67,6 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
 
     private fun updateAssessmentDetails() {
         firestore.collection("Assessments").document(assessmentID).update("description", binding.etDescription.text.toString())
-        //TODO: Need to make the number of questions either automatic
-        // or move it edit text below and make it required the adding of question
-        // so the user doesn't forget to input it to avoid bugs
         firestore.collection("Assessments").document(assessmentID).update("nQuestionsInAssessment", binding.etNumberOfQuestions.text.toString().toInt())
 
         for (questionStatus in questionStatusArrayList)
@@ -149,6 +145,23 @@ class FinlitExpertEditAssessmentActivity : AppCompatActivity() {
         specificAssessment.putExtras(sendBundle)
         startActivity(specificAssessment)
        // finish()
+    }
+
+    private fun isValid() : Boolean{
+        var valid = true
+        if (binding.etNumberOfQuestions.text.toString().isEmpty()) {
+            valid = false
+            binding.containerQuestion.helperText = "Input the number of questions"
+        } else
+            binding.containerQuestion.helperText = "Input the number of questions"
+
+        if (binding.etDescription.text.toString().isEmpty()) {
+            valid = false
+            binding.containerDescription.helperText = "Input assessment description"
+        } else
+            binding.containerDescription.helperText = ""
+
+        return valid
     }
 
 
