@@ -207,8 +207,11 @@ class ParentDashboardFragment : Fragment() {
             binding.progressBarFinancialAssessments.progress = assessments.toInt()
 
             if (isAdded) {
-                loadDifferenceFromGoal()
-                setPerformanceView()
+                if (pfm > 0.0 && finact > 0.0 && assessments >0.0) {
+                    loadDifferenceFromGoal()
+                    setPerformanceView()
+                } else
+                    noScoreLayout()
             }
         } else {
             if (isAdded)

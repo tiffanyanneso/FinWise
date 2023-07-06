@@ -536,30 +536,32 @@ class DashboardPersonalFinanceFragment : Fragment() {
         if (!isViewCreated || !isAdded) {
             return
         }
-        val context = requireContext()
 
         val difference: Float
 
-        if (pfmScoreCurrentMonth > pfmScorePreviousMonth) {
-            difference = pfmScoreCurrentMonth - pfmScorePreviousMonth
-//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.dark_green))
-            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
-            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
-            binding.tvPreviousPerformanceStatus.text = "Increase from Last Month"
-        } else if (pfmScoreCurrentMonth < pfmScorePreviousMonth) {
-            difference = pfmScorePreviousMonth - pfmScoreCurrentMonth
-//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.red))
+        if (pfmScoreCurrentMonth != 0.0F && pfmScorePreviousMonth != 0.0F) {
+            if (pfmScoreCurrentMonth > pfmScorePreviousMonth) {
+                difference = pfmScoreCurrentMonth - pfmScorePreviousMonth
+    //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.dark_green))
+                binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
+                binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+                binding.tvPreviousPerformanceStatus.text = "Increase from Last Month"
+            } else if (pfmScoreCurrentMonth < pfmScorePreviousMonth) {
+                difference = pfmScorePreviousMonth - pfmScoreCurrentMonth
+    //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.red))
 
-            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
-            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
-            binding.tvPreviousPerformanceStatus.text = "Decrease from Last Month"
-        } else if (pfmScoreCurrentMonth == pfmScorePreviousMonth && pfmScoreCurrentMonth > 0){
-            difference = 0.0F
-//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.yellow))
+                binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+                binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+                binding.tvPreviousPerformanceStatus.text = "Decrease from Last Month"
+            } else if (pfmScoreCurrentMonth == pfmScorePreviousMonth && pfmScoreCurrentMonth > 0){
+                difference = 0.0F
+    //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.yellow))
 
-            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
-            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
-            binding.tvPreviousPerformanceStatus.text = "No Increase from Last Month"
+                binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
+                binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+                binding.tvPreviousPerformanceStatus.text = "No Increase from Last Month"
+            } else
+                binding.layoutMonthlyIncrease.visibility = View.GONE
         } else
             binding.layoutMonthlyIncrease.visibility = View.GONE
     }

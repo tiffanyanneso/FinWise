@@ -1268,6 +1268,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
 
         computeFinActivitiesPerformance()
         binding.tvPerformancePercentage.visibility = View.VISIBLE
+        binding.layoutMonthlyIncrease.visibility = View.VISIBLE
         if (finActPerformanceCurrentMonth >= 96F) {
             audio = if (userType == "Parent")
                 R.raw.dashboard_parent_financial_activities_excellent
@@ -1453,6 +1454,7 @@ class DashboardFinancialActivitiesFragment : Fragment() {
             else "You haven't accomplished any financial activities. Use the app regularly to see your progress!"
             bitmap = BitmapFactory.decodeResource(resources, R.drawable.peso_coin)
             binding.tvPerformancePercentage.visibility = View.GONE
+            binding.layoutMonthlyIncrease.visibility = View.GONE
         }
 
         imageView.setImageBitmap(bitmap)
@@ -1489,34 +1491,34 @@ class DashboardFinancialActivitiesFragment : Fragment() {
         if (!isViewCreated || !isAdded) {
             return
         }
-        val context = requireContext()
 
-        val performance: String
-        val bitmap: Bitmap
         var difference = 0.00F
         binding.layoutMonthlyIncrease.visibility = View.VISIBLE
 
-        if (finActPerformanceCurrentMonth > finActPerformancePreviousMonth) {
-            difference = finActPerformanceCurrentMonth - finActPerformancePreviousMonth
+        if (finActPerformanceCurrentMonth != 0.0F && finActPerformancePreviousMonth != 0.0F) {
+            if (finActPerformanceCurrentMonth > finActPerformancePreviousMonth) {
+                difference = finActPerformanceCurrentMonth - finActPerformancePreviousMonth
 //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
 //                R.color.dark_green))
-            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
-            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
-            binding.tvPreviousPerformanceStatus.text = "Increase from Last Month"
-        } else if (finActPerformanceCurrentMonth < finActPerformancePreviousMonth) {
-            difference = finActPerformancePreviousMonth - finActPerformanceCurrentMonth
+                binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
+                binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+                binding.tvPreviousPerformanceStatus.text = "Increase from Last Month"
+            } else if (finActPerformanceCurrentMonth < finActPerformancePreviousMonth) {
+                difference = finActPerformancePreviousMonth - finActPerformanceCurrentMonth
 //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
 //                R.color.red))
-            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
-            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
-            binding.tvPreviousPerformanceStatus.text = "Decrease from Last Month"
-        } else if (finActPerformanceCurrentMonth == finActPerformancePreviousMonth && finActPerformancePreviousMonth > 0){
-            difference = 0.0F
+                binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources,R.drawable.down_arrow))
+                binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+                binding.tvPreviousPerformanceStatus.text = "Decrease from Last Month"
+            } else if (finActPerformanceCurrentMonth == finActPerformancePreviousMonth && finActPerformancePreviousMonth > 0) {
+                difference = 0.0F
 //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context,
 //                R.color.yellow))
-            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
-            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
-            binding.tvPreviousPerformanceStatus.text = "No Increase from Last Month"
+                binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal                 ))
+                binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+                binding.tvPreviousPerformanceStatus.text = "No Increase from Last Month"
+            } else
+                binding.layoutMonthlyIncrease.visibility = View.GONE
         } else
             binding.layoutMonthlyIncrease.visibility = View.GONE
     }

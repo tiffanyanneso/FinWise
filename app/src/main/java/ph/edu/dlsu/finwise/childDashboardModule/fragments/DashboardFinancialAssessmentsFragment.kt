@@ -499,26 +499,29 @@ class DashboardFinancialAssessmentsFragment : Fragment() {
 
         val difference: Float
 
-        if (finAssessmentPerformanceCurrentMonth > finAssessmentPerformancePreviousMonth) {
-            difference = finAssessmentPerformanceCurrentMonth - finAssessmentPerformancePreviousMonth
-//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.dark_green))
-            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
-            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
-            binding.tvPreviousPerformanceStatus.text = "Increase from Last Month"
-        } else if (finAssessmentPerformanceCurrentMonth < finAssessmentPerformancePreviousMonth) {
-            difference = finAssessmentPerformancePreviousMonth - finAssessmentPerformanceCurrentMonth
-//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.red))
+        if (finAssessmentPerformanceCurrentMonth != 0.0F && finAssessmentPerformancePreviousMonth != 0.0F) {
+            if (finAssessmentPerformanceCurrentMonth > finAssessmentPerformancePreviousMonth) {
+                difference = finAssessmentPerformanceCurrentMonth - finAssessmentPerformancePreviousMonth
+    //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.dark_green))
+                binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.up_arrow))
+                binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+                binding.tvPreviousPerformanceStatus.text = "Increase from Last Month"
+            } else if (finAssessmentPerformanceCurrentMonth < finAssessmentPerformancePreviousMonth) {
+                difference = finAssessmentPerformancePreviousMonth - finAssessmentPerformanceCurrentMonth
+    //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.red))
 
-            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
-            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
-            binding.tvPreviousPerformanceStatus.text = "Decrease from Last Month"
-        } else if (finAssessmentPerformanceCurrentMonth == finAssessmentPerformancePreviousMonth && finAssessmentPerformanceCurrentMonth > 0){
-            difference = 0.0F
-//            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.yellow))
+                binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.down_arrow))
+                binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+                binding.tvPreviousPerformanceStatus.text = "Decrease from Last Month"
+            } else if (finAssessmentPerformanceCurrentMonth == finAssessmentPerformancePreviousMonth && finAssessmentPerformanceCurrentMonth > 0){
+                difference = 0.0F
+    //            binding.tvPreviousPerformanceStatus.setTextColor(ContextCompat.getColor(context, R.color.yellow))
 
-            binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
-            binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
-            binding.tvPreviousPerformanceStatus.text = "No Increase from Last Month"
+                binding.ivPreviousMonthImg.setImageBitmap(BitmapFactory.decodeResource(resources, R.drawable.icon_equal))
+                binding.tvPreviousPerformancePercentage.text = "${DecimalFormat("#.#").format(difference)}%"
+                binding.tvPreviousPerformanceStatus.text = "No Increase from Last Month"
+            } else
+                binding.layoutMonthlyIncrease.visibility = View.GONE
         } else
             binding.layoutMonthlyIncrease.visibility = View.GONE
     }
