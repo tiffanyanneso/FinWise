@@ -101,7 +101,7 @@ class ParentSpendingFragment : Fragment() {
                     purchasePlanning()
 
                 else {
-                    overallSpending = (100-overspendingPercentage)*100
+                    overallSpending = (1-overspendingPercentage)*100
                     if (isAdded)
                         setOverall()
                 }

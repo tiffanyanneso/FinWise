@@ -137,7 +137,7 @@ class ActivitySelectBudgetItemTemplate : AppCompatActivity() {
         var commonText = ""
         for (budgetItem in budgetItemsList) {
             var budgetAmount = 0.00F
-            var budgetItems = firestore.collection("BudgetItems").whereEqualTo("createdBy", currentUser)
+            var budgetItems = firestore.collection("BudgetItems").whereEqualTo("createdBy", currentUser).whereEqualTo("status", "Active")
                 .whereEqualTo("budgetItemName", budgetItem).whereLessThan("amount", goalAmount).get().await()
 
             //adding the amount spent for a certain budget item
@@ -145,8 +145,9 @@ class ActivitySelectBudgetItemTemplate : AppCompatActivity() {
                 budgetAmount += item.toObject<BudgetItem>().amount!!
             }
 
-            if (!budgetItems.isEmpty && budgetItem!= "Others")
-                commonText += "${budgetItem} : ₱ ${DecimalFormat("#,##0.00").format(budgetAmount/budgetItems.size())} \n"
+            if (!budgetItems.isEmpty && budgetItem!= "Others" && budgetAmount!= 0.0F)
+                commonText += "${budgetItem} : ₱ ${DecimalFormat("#,##0.00").format(budgetAmount / budgetItems.size())} \n"
+
         }
 
         if (commonText.isEmpty())

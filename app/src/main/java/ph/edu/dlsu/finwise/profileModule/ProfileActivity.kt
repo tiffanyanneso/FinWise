@@ -14,6 +14,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import ph.edu.dlsu.finwise.*
 import ph.edu.dlsu.finwise.databinding.ActivityProfileBinding
 import ph.edu.dlsu.finwise.model.Friends
@@ -59,7 +63,13 @@ class ProfileActivity : AppCompatActivity(){
             binding.btnEditProfile.visibility = View.VISIBLE
         }
         setupFragments()
-        getProfileData()
+
+        CoroutineScope(Dispatchers.Main).launch {
+            getProfileData()
+            countFriends()
+            binding.layoutLoading.visibility = View.GONE
+            binding.mainLayout.visibility = View.VISIBLE
+        }
 
         val sharedPrefs = getSharedPreferences("ProfilePrefs", Context.MODE_PRIVATE)
         val color = sharedPrefs.getInt("color", Color.BLACK)
@@ -125,7 +135,7 @@ class ProfileActivity : AppCompatActivity(){
         binding.tabLayout.getTabAt(1)?.setIcon(tabIcons[1])
     }
 
-    private fun getProfileData() {
+    private suspend fun getProfileData() {
         // Retrieve the color value from the "ColorPreferences" collection
         val colorPreferencesRef = firestore.collection("ColorPreferences").document(currentUser)
         colorPreferencesRef.get().addOnSuccessListener { documentSnapshot ->
@@ -135,35 +145,29 @@ class ProfileActivity : AppCompatActivity(){
                 binding.circularImageView.setColorFilter(color.toInt(), PorterDuff.Mode.SRC_IN)
             }
         }
-        firestore.collection("Users").document(childID).get().addOnSuccessListener { documentSnapshot ->
-            var child = documentSnapshot.toObject<Users>()
+
+        var child = firestore.collection("Users").document(childID).get().await().toObject<Users>()
 
             if (child?.username != null)
                 binding.tvUsername.setText("@" + child?.username.toString())
             if (child?.firstName != null && child?.lastName != null)
                 binding.tvName.setText(child?.firstName.toString() + " " + child?.lastName.toString())
-        }
-
-        countFriends()
     }
 
-    private fun countFriends() {
-        firestore.collection("Friends").whereEqualTo("senderID", childID)
-            .whereEqualTo("status", "Accepted").get().addOnSuccessListener { results ->
-            for (friend in results) {
-                var request = friend.toObject<Friends>()
-                friendsUserIDArrayList.add(request.receiverID.toString())
-            }
-        }.continueWith {
-            firestore.collection("Friends").whereEqualTo("receiverID", childID)
-                .whereEqualTo("status", "Accepted").get().addOnSuccessListener { results ->
-                for (friend in results) {
-                    var request = friend.toObject<Friends>()
-                    friendsUserIDArrayList.add(request.senderID.toString())
-                }
-                binding.tvFriends.text = "${friendsUserIDArrayList.size} Friends >"
-            }
+    private suspend fun countFriends() {
+        var sender = firestore.collection("Friends").whereEqualTo("senderID", childID).whereEqualTo("status", "Accepted").get().await()
+        for (friend in sender) {
+            var request = friend.toObject<Friends>()
+            friendsUserIDArrayList.add(request.receiverID.toString())
         }
+
+        var receiver = firestore.collection("Friends").whereEqualTo("receiverID", childID).whereEqualTo("status", "Accepted").get().await()
+        for (friend in receiver) {
+            var request = friend.toObject<Friends>()
+            friendsUserIDArrayList.add(request.senderID.toString())
+        }
+
+        binding.tvFriends.text = "${friendsUserIDArrayList.size} Friends >"
     }
 
     class ViewPagerAdapter(fm : FragmentManager) : FragmentStatePagerAdapter(fm){

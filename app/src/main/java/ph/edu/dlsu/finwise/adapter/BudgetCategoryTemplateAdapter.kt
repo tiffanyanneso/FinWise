@@ -95,7 +95,7 @@ class BudgetCategoryTemplateAdapter : RecyclerView.Adapter<BudgetCategoryTemplat
             val checkbox = itemView.findViewById<CheckBox>(R.id.cb_include)
             val item = itemView.findViewById<TextView>(R.id.tv_budget_item_name).text.toString()
             val amount = itemView.findViewById<TextInputEditText>(R.id.et_amount).text.toString()
-            if (checkbox.isChecked && amount.isEmpty()) {
+            if (checkbox.isChecked && (amount.isEmpty() || amount  == "0")) {
                 valid = false
                 itemView.findViewById<TextView>(R.id.tv_error_amount).visibility = View.VISIBLE
             } else

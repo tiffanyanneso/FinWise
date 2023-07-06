@@ -76,7 +76,7 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
                 purchasePlanning()
             }
             else {
-                overallSpending = (100-overspendingPercentage)*100
+                overallSpending = (1-overspendingPercentage)*100
                 binding.tvPerformancePercentage.text ="${DecimalFormat("##0.0").format(overallSpending)}%"
                 overallPercentage()
                 binding.linearLayoutOverspending.visibility = View.VISIBLE
