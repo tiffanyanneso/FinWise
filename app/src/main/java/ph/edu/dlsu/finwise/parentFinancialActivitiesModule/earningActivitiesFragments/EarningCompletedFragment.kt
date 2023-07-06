@@ -14,6 +14,11 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.EarningCompletedAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentEarningCompletedBinding
 import ph.edu.dlsu.finwise.model.Users
+import com.google.firebase.firestore.Query
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class EarningCompletedFragment : Fragment() {
 
@@ -43,24 +48,26 @@ class EarningCompletedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getCompletedEarning()
+        CoroutineScope(Dispatchers.Main).launch {
+            getCompletedEarning()
+
+        }
     }
 
-    private fun getCompletedEarning() {
+    private suspend fun getCompletedEarning() {
         var earningCompleteArrayList = ArrayList<String>()
-        firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("status", "Completed").get().addOnSuccessListener { results ->
-            for (earning in results)
-                earningCompleteArrayList.add(earning.id)
+        var earningResults = firestore.collection("EarningActivities").whereEqualTo("childID", childID).whereEqualTo("status", "Completed").orderBy("dateCompleted", Query.Direction.DESCENDING).get().await()
+        for (earning in earningResults)
+            earningCompleteArrayList.add(earning.id)
 
-            if (isAdded) {
-                if (!earningCompleteArrayList.isEmpty())
-                    loadRecyclerView(earningCompleteArrayList)
-                else
-                    emptyList()
-                binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
-                binding.loadingItems.stopShimmer()
-                binding.loadingItems.visibility = View.GONE
-            }
+        if (isAdded) {
+            if (!earningCompleteArrayList.isEmpty())
+                loadRecyclerView(earningCompleteArrayList)
+            else
+                emptyList()
+            binding.rvViewActivitiesCompleted.visibility = View.VISIBLE
+            binding.loadingItems.stopShimmer()
+            binding.loadingItems.visibility = View.GONE
         }
     }
 

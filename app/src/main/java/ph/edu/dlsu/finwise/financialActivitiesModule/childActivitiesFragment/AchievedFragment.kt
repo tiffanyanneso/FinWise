@@ -13,6 +13,11 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.FinactAchievedAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentAchievedBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
+import com.google.firebase.firestore.Query
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class AchievedFragment : Fragment() {
 
@@ -37,26 +42,28 @@ class AchievedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (isAdded)
-            getAchievedGoals()
+        if (isAdded) {
+            CoroutineScope(Dispatchers.Main).launch {
+                getAchievedGoals()
+            }
+        }
     }
 
-    private fun getAchievedGoals() {
+    private suspend fun getAchievedGoals() {
         var goalIDArrayList = ArrayList<String>()
         goalIDArrayList.clear()
-        firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "Completed").get().addOnSuccessListener { documents ->
-            for (goal in documents)
-                goalIDArrayList.add(goal.id)
+        var goals = firestore.collection("FinancialGoals").whereEqualTo("childID", currentUser).whereEqualTo("status", "Completed").orderBy("dateCompleted", Query.Direction.DESCENDING).get().await()
+        for (goal in goals)
+            goalIDArrayList.add(goal.id)
 
-            if (!goalIDArrayList.isEmpty())
-                loadRecyclerView(goalIDArrayList)
-            else {
-                binding.rvViewGoals.visibility = View.GONE
-                binding.layoutEmptyActivity.visibility = View.VISIBLE
-            }
-            binding.loadingItems.stopShimmer()
-            binding.loadingItems.visibility = View.GONE
+        if (!goalIDArrayList.isEmpty())
+            loadRecyclerView(goalIDArrayList)
+        else {
+            binding.rvViewGoals.visibility = View.GONE
+            binding.layoutEmptyActivity.visibility = View.VISIBLE
         }
+        binding.loadingItems.stopShimmer()
+        binding.loadingItems.visibility = View.GONE
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {

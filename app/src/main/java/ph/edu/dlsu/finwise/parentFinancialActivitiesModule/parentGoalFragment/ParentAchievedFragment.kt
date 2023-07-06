@@ -11,6 +11,11 @@ import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.adapter.FinactAchievedAdapter
 import ph.edu.dlsu.finwise.adapter.FinactSavingAdapter
 import ph.edu.dlsu.finwise.databinding.FragmentParentAchievedBinding
+import com.google.firebase.firestore.Query
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class ParentAchievedFragment : Fragment() {
 
@@ -38,30 +43,30 @@ class ParentAchievedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (isAdded)
-            getAchievedGoals()
+        if (isAdded) {
+            CoroutineScope(Dispatchers.Main).launch {
+                getAchievedGoals()
+            }
+        }
     }
 
-    private fun getAchievedGoals() {
+    private suspend fun getAchievedGoals() {
         var goalIDArrayList = ArrayList<String>()
         goalIDArrayList.clear()
-
-
-        firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "Completed").get().addOnSuccessListener { documents ->
-            for (goalSnapshot in documents) {
-                //creating the object from list retrieved in db
-                val goalID = goalSnapshot.id
-                goalIDArrayList.add(goalID)
-            }
-            if (!goalIDArrayList.isEmpty())
-                loadRecyclerView(goalIDArrayList)
-            else {
-                binding.rvViewGoals.visibility = View.GONE
-                binding.layoutEmptyActivity.visibility = View.VISIBLE
-            }
-            binding.loadingItems.stopShimmer()
-            binding.loadingItems.visibility = View.GONE
+        var goals = firestore.collection("FinancialGoals").whereEqualTo("childID", childID).whereEqualTo("status", "Completed").orderBy("dateCompleted", Query.Direction.DESCENDING).get().await()
+        for (goalSnapshot in goals) {
+            //creating the object from list retrieved in db
+            val goalID = goalSnapshot.id
+            goalIDArrayList.add(goalID)
         }
+        if (!goalIDArrayList.isEmpty())
+            loadRecyclerView(goalIDArrayList)
+        else {
+            binding.rvViewGoals.visibility = View.GONE
+            binding.layoutEmptyActivity.visibility = View.VISIBLE
+        }
+        binding.loadingItems.stopShimmer()
+        binding.loadingItems.visibility = View.GONE
     }
 
     private fun loadRecyclerView(goalIDArrayList: ArrayList<String>) {
