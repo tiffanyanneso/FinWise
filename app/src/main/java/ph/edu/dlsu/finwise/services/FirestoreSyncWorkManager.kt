@@ -259,9 +259,30 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
             var goalSettingScoreID = firestore.collection("Scores").whereEqualTo("childID", currentUser)
                 .whereEqualTo("type", "goal setting")
                 .orderBy("dateRecorded", Query.Direction.DESCENDING).get().await()
-            if (!goalSettingScoreID.isEmpty)
-                firestore.collection("Scores").document(goalSettingScoreID.documents[0].id).update("score", goalSettingPercentage)
-            else {
+            if (!goalSettingScoreID.isEmpty) {
+                var latestScore = goalSettingScoreID.documents[0]
+                //compute if same day or not
+                val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+                val from = LocalDate.now()
+                val date =
+                    SimpleDateFormat("MM/dd/yyyy").format(latestScore.toObject<ScoreModel>()!!.dateRecorded!!.toDate())
+                val to = LocalDate.parse(date.toString(), dateFormatter)
+                var difference = Period.between(to, from)
+
+                var differenceDays = difference.days
+
+                if (differenceDays > 0) {
+                    var goalSetting = hashMapOf(
+                        "childID" to currentUser,
+                        "score" to goalSettingPercentage,
+                        "type" to "goal setting",
+                        "dateRecorded" to Timestamp.now()
+                    )
+                    firestore.collection("Scores").add(goalSetting)
+                } else
+                    firestore.collection("Scores").document(goalSettingScoreID.documents[0].id)
+                        .update("score", goalSettingPercentage, "dateRecorded", Timestamp.now())
+            } else {
                 var goalSetting = hashMapOf(
                     "childID" to currentUser,
                     "score" to goalSettingPercentage,
@@ -275,9 +296,30 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
         var savingScore = firestore.collection("Scores").whereEqualTo("childID", currentUser)
             .whereEqualTo("type", "saving")
             .orderBy("dateRecorded", Query.Direction.DESCENDING).get().await()
-        if (!savingScore.isEmpty)
-            firestore.collection("Scores").document(savingScore.documents[0].id).update("score", savingPercentage)
-        else {
+        if (!savingScore.isEmpty) {
+            var latestScore = savingScore.documents[0]
+            //compute if same day or not
+            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date =
+                SimpleDateFormat("MM/dd/yyyy").format(latestScore.toObject<ScoreModel>()!!.dateRecorded!!.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            var difference = Period.between(to, from)
+
+            var differenceDays = difference.days
+
+            if (differenceDays > 0) {
+                var saving = hashMapOf(
+                    "childID" to currentUser,
+                    "score" to savingPercentage,
+                    "type" to "saving",
+                    "dateRecorded" to Timestamp.now()
+                )
+                firestore.collection("Scores").add(saving)
+            } else
+                firestore.collection("Scores").document(savingScore.documents[0].id).update("score", savingPercentage, "dateRecorded", Timestamp.now())
+
+        } else {
             var saving = hashMapOf(
                 "childID" to currentUser,
                 "score" to savingPercentage,
@@ -290,9 +332,30 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
         var budgetingScore = firestore.collection("Scores").whereEqualTo("childID", currentUser)
             .whereEqualTo("type", "budgeting")
             .orderBy("dateRecorded", Query.Direction.DESCENDING).get().await()
-        if (!budgetingScore.isEmpty)
-            firestore.collection("Scores").document(budgetingScore.documents[0].id).update("score", budgetingPercentage)
-        else {
+        if (!budgetingScore.isEmpty) {
+            var latestScore = budgetingScore.documents[0]
+            //compute if same day or not
+            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date =
+                SimpleDateFormat("MM/dd/yyyy").format(latestScore.toObject<ScoreModel>()!!.dateRecorded!!.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            var difference = Period.between(to, from)
+
+            var differenceDays = difference.days
+
+            if (differenceDays > 0) {
+                var budgeting = hashMapOf(
+                    "childID" to currentUser,
+                    "score" to budgetingPercentage,
+                    "type" to "budgeting",
+                    "dateRecorded" to Timestamp.now()
+                )
+                firestore.collection("Scores").add(budgeting)
+            } else
+                firestore.collection("Scores").document(budgetingScore.documents[0].id).update("score", budgetingPercentage, "dateRecorded", Timestamp.now())
+
+        } else {
             var budgeting = hashMapOf(
                 "childID" to currentUser,
                 "score" to budgetingPercentage,
@@ -305,9 +368,30 @@ class FirestoreSyncWorkManager (context: Context, workerParams: WorkerParameters
         var spendingScore = firestore.collection("Scores").whereEqualTo("childID", currentUser)
             .whereEqualTo("type", "spending")
             .orderBy("dateRecorded", Query.Direction.DESCENDING).get().await()
-        if (!spendingScore.isEmpty)
-            firestore.collection("Scores").document(spendingScore.documents[0].id).update("score", spendingPercentage)
-        else {
+        if (!spendingScore.isEmpty) {
+            var latestScore = spendingScore.documents[0]
+            //compute if same day or not
+            val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy")
+            val from = LocalDate.now()
+            val date =
+                SimpleDateFormat("MM/dd/yyyy").format(latestScore.toObject<ScoreModel>()!!.dateRecorded!!.toDate())
+            val to = LocalDate.parse(date.toString(), dateFormatter)
+            var difference = Period.between(to, from)
+
+            var differenceDays = difference.days
+
+            if (differenceDays > 0) {
+                var spending = hashMapOf(
+                    "childID" to currentUser,
+                    "score" to spendingPercentage,
+                    "type" to "spending",
+                    "dateRecorded" to Timestamp.now()
+                )
+                firestore.collection("Scores").add(spending)
+            } else
+            firestore.collection("Scores").document(spendingScore.documents[0].id)
+                .update("score", spendingPercentage, "dateRecorded", Timestamp.now())
+        } else {
             var spending = hashMapOf(
                 "childID" to currentUser,
                 "score" to spendingPercentage,

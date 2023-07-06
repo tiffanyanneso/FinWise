@@ -215,11 +215,8 @@ class ParentSpendingPerformanceActivity : AppCompatActivity() {
         var spendingActivities = firestore.collection("FinancialActivities").whereEqualTo("childID", childID).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().await()
 
         for (spendingActivityID in spendingActivities) {
-            var shoppingListItems = firestore.collection("ShoppingListItems").whereEqualTo("spendingActivityID", spendingActivityID.id).get().await().toObjects<ShoppingListItem>()
-            for (shoppingListItem in shoppingListItems) {
-                if (shoppingListItem.status == "Purchased")
-                    nPlanned++
-            }
+            var shoppingListItems = firestore.collection("ShoppingListItems").whereEqualTo("spendingActivityID", spendingActivityID.id).whereEqualTo("status", "Purchased").get().await()
+            nPlanned  += shoppingListItems.size()
 
             nTotalPurchased += firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID.id).whereEqualTo("transactionType", "Expense").get().await().size().toFloat()
         }

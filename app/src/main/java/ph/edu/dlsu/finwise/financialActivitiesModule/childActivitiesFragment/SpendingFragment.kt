@@ -204,11 +204,8 @@ class SpendingFragment : Fragment(){
         var spendingActivities = firestore.collection("FinancialActivities").whereEqualTo("childID", currentUser).whereEqualTo("financialActivityName", "Spending").whereEqualTo("status", "Completed").get().await()
 
         for (spendingActivityID in spendingActivities) {
-            var shoppingListItems = firestore.collection("ShoppingListItems").whereEqualTo("spendingActivityID", spendingActivityID.id).get().await().toObjects<ShoppingListItem>()
-            for (shoppingListItem in shoppingListItems) {
-                if (shoppingListItem.status == "Purchased")
-                    nPlanned++
-            }
+            var shoppingListItems = firestore.collection("ShoppingListItems").whereEqualTo("spendingActivityID", spendingActivityID.id).whereEqualTo("status", "Purchased").get().await()
+            nPlanned  += shoppingListItems.size()
 
             nTotalPurchased += firestore.collection("Transactions").whereEqualTo("financialActivityID", spendingActivityID.id).whereEqualTo("transactionType", "Expense").get().await().size().toFloat()
         }
@@ -222,8 +219,6 @@ class SpendingFragment : Fragment(){
     }
 
     private fun setOverall() {
-        println("print overspending " + ((1-overspendingPercentage)*100))
-        println("print purchase planning" + (nPlanned/nTotalPurchased)*100)
         //TODO: Change audio
         var audio = 0
         println("print nspending completed " +  nSpendingCompleted)
