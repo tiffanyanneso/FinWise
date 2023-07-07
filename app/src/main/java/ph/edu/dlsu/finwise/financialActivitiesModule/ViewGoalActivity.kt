@@ -43,6 +43,7 @@ import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.absoluteValue
 
 class ViewGoalActivity : AppCompatActivity() {
 
@@ -343,7 +344,11 @@ class ViewGoalActivity : AppCompatActivity() {
                     if (goal?.status != "Completed") {
                         var difference = Period.between(from, to)
                         var differenceDays = ((difference.years * 365) + (difference.months * 30) + difference.days)
-                        binding.tvRemaining.text = differenceDays.toString() + " days remaining"
+                        if (differenceDays >0 )
+                            binding.tvRemaining.text = differenceDays.toString() + " days remaining"
+                        else
+                            binding.tvRemaining.text = differenceDays.absoluteValue.toString() + " days pass target date"
+
                     } else
                         binding.tvRemaining.visibility = View.GONE
 

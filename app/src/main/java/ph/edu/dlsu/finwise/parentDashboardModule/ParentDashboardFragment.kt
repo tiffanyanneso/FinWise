@@ -197,14 +197,15 @@ class ParentDashboardFragment : Fragment() {
             else if (pfm == 0.00F && finact ==  0.00F && assessments > 0.00F)
                 overallFinancialHealth = assessments
 
-
-            binding.tvFinancialHealthScore.text = DecimalFormat("##0.0").format(overallFinancialHealth) + "%"
-            binding.tvPersonalFinancePercentage.text = DecimalFormat("##0.0").format(pfm)  + "%"
-            binding.progressBarPersonalFinance.progress = pfm.toInt()
-            binding.tvFinancialActivitiesPercentage.text = DecimalFormat("##0.0").format(finact)  + "%"
-            binding.progressBarFinancialActivities.progress = finact.toInt()
-            binding.tvFinancialAssessmentsPercentage.text = DecimalFormat("##0.0").format(assessments)  + "%"
-            binding.progressBarFinancialAssessments.progress = assessments.toInt()
+            if (isAdded) {
+                binding.tvFinancialHealthScore.text = DecimalFormat("##0.0").format(overallFinancialHealth) + "%"
+                binding.tvPersonalFinancePercentage.text = DecimalFormat("##0.0").format(pfm) + "%"
+                binding.progressBarPersonalFinance.progress = pfm.toInt()
+                binding.tvFinancialActivitiesPercentage.text = DecimalFormat("##0.0").format(finact) + "%"
+                binding.progressBarFinancialActivities.progress = finact.toInt()
+                binding.tvFinancialAssessmentsPercentage.text = DecimalFormat("##0.0").format(assessments) + "%"
+                binding.progressBarFinancialAssessments.progress = assessments.toInt()
+            }
 
             if (isAdded) {
                 if (pfm > 0.0 && finact > 0.0 && assessments >0.0) {
