@@ -125,7 +125,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
                 getIncomeAndExpense(transactionsArrayList)
                 computeIncomeExpenseRatio()
                 loadExplanation()
-                loadView()
+
             }
     }
 
@@ -529,6 +529,7 @@ class PersonalFinancialManagementActivity : AppCompatActivity() {
             notificationsForGoalEdit()
             loadDialogAndRecyclerView()
             updateLastLogin()
+            loadView()
         }
 
     }

@@ -509,7 +509,7 @@ class BudgetingPerformanceActivity : AppCompatActivity() {
         var dialog = Dialog(this);
         dialog.setContentView(dialogBinding.getRoot())
 
-        dialog.window!!.setLayout(1000, 1300)
+        dialog.window!!.setLayout(1000, 1600)
 
         dialogBinding.btnGotIt.setOnClickListener {
             dialog.dismiss()
