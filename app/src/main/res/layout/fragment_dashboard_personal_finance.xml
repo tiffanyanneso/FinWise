@@ -238,7 +238,7 @@
                     android:id="@+id/btn_see_more"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:text="Personal Finance Management"
+                    android:text="Find Out More About Your Performance!"
                     android:textColor="@color/off_white"
                     android:backgroundTint="@color/dark_green"
                     android:background="@drawable/button_border"
