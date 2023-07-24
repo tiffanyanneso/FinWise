@@ -22,6 +22,7 @@ import ph.edu.dlsu.finwise.databinding.ActivityMarkChoreCompletedBinding
 import ph.edu.dlsu.finwise.model.FinancialActivities
 import ph.edu.dlsu.finwise.model.FinancialGoals
 import ph.edu.dlsu.finwise.model.Users
+import ph.edu.dlsu.finwise.parentFinancialActivitiesModule.EarningActivity
 import java.net.URI
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -90,14 +91,25 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
         var storageReference = Firebase.storage.getReference("images/$earningActivityID")
         storageReference.putFile(ImageUri).addOnSuccessListener {
             binding.imageProof.setImageURI(null)
-            val completedEarning = Intent(this, CompletedEarningActivity::class.java)
-            firestore.collection("EarningActivities").document(earningActivityID).update("dateCompleted", Timestamp.now())
+            firestore.collection("EarningActivities").document(earningActivityID).update("dateCompleted", Timestamp.now(), "status", "Pending")
             Toast.makeText(this, "Successfully uploaded picture", Toast.LENGTH_SHORT).show()
+
             val bundle = Bundle()
             bundle.putString("earningActivityID", earningActivityID)
             bundle.putString("childID", childID)
-            completedEarning.putExtras(bundle)
-            startActivity(completedEarning)
+
+            firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
+                if (it.toObject<Users>()?.userType == "Child") {
+                    val completedEarning = Intent(this, CompletedEarningActivity::class.java)
+                    completedEarning.putExtras(bundle)
+                    startActivity(completedEarning)
+                } else {
+                    val completedEarning = Intent(this, EarningActivity::class.java)
+                    completedEarning.putExtras(bundle)
+                    startActivity(completedEarning)
+                }
+            }
+
 
             if (progressDialog.isShowing) progressDialog.dismiss()
         }.addOnFailureListener{
