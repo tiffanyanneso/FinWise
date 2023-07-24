@@ -91,7 +91,6 @@ class EarningSendMoneyActivity : AppCompatActivity() {
         // Initializes the navbar
 
         loadEarningActivityText()
-        loadProofImage()
         loadSendMoneyButton()
         loadEditAmountButton()
     }
@@ -128,6 +127,17 @@ class EarningSendMoneyActivity : AppCompatActivity() {
                 binding.layoutText.visibility = View.GONE
                 binding.layoutButtons.visibility = View.GONE
             }
+
+            if (earning.requirePicture == true) {
+                binding.layoutProof.visibility = View.VISIBLE
+                loadProofImage()
+            }
+            else {
+                binding.layoutProof.visibility = View.GONE
+                binding.layoutLoading.visibility = View.GONE
+                binding.layoutMain.visibility = View.VISIBLE
+            }
+
         }
     }
 

@@ -157,7 +157,8 @@ class NewEarningActivity : AppCompatActivity() {
                 "status" to "Ongoing",
                 "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
                 "depositTo" to binding.dropdownDestination.text.toString(),
-                "dateAdded" to Timestamp.now()
+                "dateAdded" to Timestamp.now(),
+                "requirePicture" to binding.cbRequirePicture.isChecked
             )
             firestore.collection("EarningActivities").add(earningActivity)
                 .addOnSuccessListener {
@@ -175,7 +176,8 @@ class NewEarningActivity : AppCompatActivity() {
                 "status" to "Ongoing",
                 "paymentType" to binding.dropdownTypeOfPayment.text.toString(),
                 "depositTo" to binding.dropdownDestination.text.toString(),
-                "dateAdded" to Timestamp.now()
+                "dateAdded" to Timestamp.now(),
+                "requirePicture" to binding.cbRequirePicture.isChecked
             )
             firestore.collection("EarningActivities").add(earningActivity)
                 .addOnSuccessListener {

@@ -43,7 +43,6 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMarkChoreCompletedBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        checkUser()
         setNavigationBar()
         loadBackButton()
         var bundle = intent.extras!!
@@ -53,6 +52,10 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
         getDetails()
 
         binding.btnCompleted.setOnClickListener {
+            markCompleted()
+        }
+
+        binding.btnUploadProof.setOnClickListener {
             selectImage()
         }
 
@@ -103,6 +106,16 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
         }
     }
 
+    private fun markCompleted() {
+        firestore.collection("EarningActivities").document(earningActivityID).update("dateCompleted", Timestamp.now(), "status", "Pending")
+        val completedEarning = Intent(this, CompletedEarningActivity::class.java)
+        val bundle = Bundle()
+        bundle.putString("earningActivityID", earningActivityID)
+        bundle.putString("childID", childID)
+        completedEarning.putExtras(bundle)
+        startActivity(completedEarning)
+    }
+
 
 
     private fun getDetails() {
@@ -125,16 +138,16 @@ class MarkChoreCompletedActivity : AppCompatActivity() {
                 }
             } else
                 binding.layoutGoalName.visibility = View.GONE
-        }
-    }
 
-    private fun checkUser() {
-        firestore.collection("Users").document(currentUser).get().addOnSuccessListener {
-            //current user is a parent
-            if (it.toObject<Users>()!!.userType == "Parent")
+            if (earning.requirePicture ==  true) {
                 binding.btnCompleted.visibility = View.GONE
-            else if (it.toObject<Users>()!!.userType == "Child")
+                binding.btnUploadProof.visibility = View.VISIBLE
+                binding.layoutProof.visibility = View.VISIBLE
+            } else {
                 binding.btnCompleted.visibility = View.VISIBLE
+                binding.btnUploadProof.visibility = View.GONE
+                binding.layoutProof.visibility = View.GONE
+            }
         }
     }
 
