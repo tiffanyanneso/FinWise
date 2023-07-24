@@ -14,10 +14,13 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import ph.edu.dlsu.finwise.Navbar
 import ph.edu.dlsu.finwise.databinding.ActivityPfmrecordExpenseBinding
+import ph.edu.dlsu.finwise.model.SettingsModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,6 +42,8 @@ class RecordExpenseActivity : AppCompatActivity() {
     lateinit var paymentType: String
     lateinit var goal: String
     lateinit var date: Date
+
+    private var currentUser = FirebaseAuth.getInstance().currentUser!!.uid
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -214,11 +219,20 @@ class RecordExpenseActivity : AppCompatActivity() {
 
         binding.btnConfirm.setOnClickListener {
             if (validateAndSetUserInput() && validAmount()) {
-                setBundle()
-                val goToConfirmTransaction = Intent(this, ConfirmTransactionActivity::class.java)
-                goToConfirmTransaction.putExtras(bundle)
-                goToConfirmTransaction.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(goToConfirmTransaction)
+                firestore.collection("Settings").whereEqualTo("childID", currentUser).get().addOnSuccessListener {
+                    var settings = it.documents[0].toObject<SettingsModel>()
+                    if (amount.toFloat() >= settings?.alertAmount!!)
+                        binding.amountContainer.helperText = "This amount is over the limit set by your parents. Discuss this expense with them first."
+                    else {
+                        binding.amountContainer.helperText = ""
+                        setBundle()
+                        val goToConfirmTransaction = Intent(this, ConfirmTransactionActivity::class.java)
+                        goToConfirmTransaction.putExtras(bundle)
+                        goToConfirmTransaction.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        startActivity(goToConfirmTransaction)
+                    }
+                }
+
             } else {
                 Toast.makeText(
                     baseContext, "Please fill up correctly the form.",
